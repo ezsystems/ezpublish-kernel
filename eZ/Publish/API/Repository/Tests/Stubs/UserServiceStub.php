@@ -18,7 +18,9 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
-use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\UserService}
@@ -34,6 +36,16 @@ class UserServiceStub implements UserService
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    private $userGroups = array();
+
+    /**
+     * @var integer
+     */
+    private $userGroupNextId = 211;
+
+    /**
      * Instantiates a new user service instance.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -41,6 +53,15 @@ class UserServiceStub implements UserService
     public function __construct( Repository $repository )
     {
         $this->repository = $repository;
+
+        $this->userGroups = array(
+            4    =>  new UserGroupStub( array( 'id' => 4,   'parentId' => 0 ) ),
+            11   =>  new UserGroupStub( array( 'id' => 11,  'parentId' => 4 ) ),
+            12   =>  new UserGroupStub( array( 'id' => 12,  'parentId' => 4 ) ),
+            13   =>  new UserGroupStub( array( 'id' => 12,  'parentId' => 4 ) ),
+            211  =>  new UserGroupStub( array( 'id' => 211, 'parentId' => 4 ) ),
+            42   =>  new UserGroupStub( array( 'id' => 42,  'parentId' => 4 ) )
+        );
     }
 
     /**
@@ -62,7 +83,15 @@ class UserServiceStub implements UserService
      */
     public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup )
     {
-        // TODO: Implement createUserGroup() method.
+        $userGroup = new UserGroupStub(
+            array(
+                'id'        =>  ++$this->userGroupNextId,
+                'parentId'  =>  $parentGroup->id,
+            )
+        );
+        $this->userGroups[$userGroup->id] = $userGroup;
+
+        return $userGroup;
     }
 
     /**
@@ -77,7 +106,11 @@ class UserServiceStub implements UserService
      */
     public function loadUserGroup( $id )
     {
-        // TODO: Implement loadUserGroup() method.
+        if ( isset( $this->userGroups[$id] ) )
+        {
+            return $this->userGroups[$id];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -92,7 +125,15 @@ class UserServiceStub implements UserService
      */
     public function loadSubUserGroups( UserGroup $userGroup )
     {
-        // TODO: Implement loadSubUserGroups() method.
+        $subUserGroups = array();
+        foreach ( $this->userGroups as $group )
+        {
+            if ( $group->parentId === $userGroup->id )
+            {
+                $subUserGroups[] = $group;
+            }
+        }
+        return $subUserGroups;
     }
 
     /**
@@ -245,7 +286,7 @@ class UserServiceStub implements UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the user is not in the given user group
      */
-    public function unAssignUssrFromUserGroup( User $user, UserGroup $userGroup )
+    public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup )
     {
         // TODO: Implement unAssignUssrFromUserGroup() method.
     }
