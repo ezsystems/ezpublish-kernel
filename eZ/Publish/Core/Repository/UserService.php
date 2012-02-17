@@ -358,18 +358,26 @@ class UserService implements UserServiceInterface
 
         try
         {
-            $spiUser = $this->persistenceHandler->userHandler()->loadByLogin( $login );
+            $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
         }
         catch ( NotFound $e )
         {
             throw new NotFoundException( "user", $login, $e );
         }
 
+        if ( count( $spiUsers ) > 1 )
+        {
+            // something went wrong, we should not have more than one
+            // user with the same login
+            // @todo: maybe throw BadStateException?
+            return null;
+        }
+
         // @todo: read site name from settings
-        if ( $spiUser->passwordHash !== $this->createPasswordHash( $login, $password, null, $spiUser->hashAlgorithm ) )
+        if ( $spiUsers[0]->passwordHash !== $this->createPasswordHash( $login, $password, null, $spiUsers[0]->hashAlgorithm ) )
             throw new InvalidArgumentValue( "password", $password );
 
-        return $this->buildDomainUserObject( $spiUser );
+        return $this->buildDomainUserObject( $spiUsers[0] );
     }
 
     /**
