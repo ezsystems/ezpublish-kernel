@@ -1,6 +1,8 @@
 <?php
-namespace eZ\Publish\API\Repository\Values\ContentType;
-use eZ\Publish\API\Repository\Values\ValueObject;
+
+namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType;
+
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 /**
  *
  * This class represents a field definition
@@ -19,7 +21,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
  */
-abstract class FieldDefinition extends ValueObject
+class FieldDefinitionStub extends FieldDefinition
 {
     /**
      * the unique id of this field definition
