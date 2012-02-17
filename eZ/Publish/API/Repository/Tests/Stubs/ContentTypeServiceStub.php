@@ -272,6 +272,8 @@ class ContentTypeServiceStub implements ContentTypeService
             $data['fieldDefinitions'][] = $this->createFieldDefinition( $fieldDefinitionCreate );
         }
 
+        $data['contentTypeGroups'] = $contentTypeGroups;
+
         $data['id'] = $this->nextTypeId++;
 
         $type = new ContentTypeDraftStub( new ContentTypeStub( $data ) );

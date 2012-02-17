@@ -794,6 +794,140 @@ class ContentTypeServiceTest extends BaseTest
             'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
             $contentType
         );
+
+        return array(
+            'typeCreate'  => $typeCreate,
+            'contentType' => $contentType,
+            'groups'      => $groups,
+        );
+    }
+
+    /**
+     * Test for the createContentType() method struct values.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     */
+    public function testCreateContentTypeStructValues( array $data )
+    {
+        $typeCreate  = $data['typeCreate'];
+        $contentType = $data['contentType'];
+        $groups      = $data['groups'];
+
+        foreach ( $typeCreate as $propertyName => $propertyValue )
+        {
+            switch ( $propertyName )
+            {
+                case 'fieldDefinitions':
+                    $this->assertFieldDefinitionsCorrect(
+                        $typeCreate->fieldDefinitions,
+                        $contentType->fieldDefinitions
+                    );
+                    break;
+
+                case 'contentTypeGroups':
+                    $this->assertContentTypeGroupsCorrect(
+                        $groups,
+                        $contentType->contentTypeGroups
+                    );
+                    break;
+                default:
+                    $this->assertEquals(
+                        $typeCreate->$propertyName,
+                        $contentType->$propertyName
+                    );
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Asserts field definition creation
+     *
+     * Asserts that all field definitions defined through created structs in
+     * $expectedDefinitionCreates have been correctly created in
+     * $actualDefinitions.
+     *
+     * @param \eZ\Publish\API\Repository\Values\FieldDefinitionCreateStruct[] $expectedDefinitionCreates
+     * @param \eZ\Publish\API\Repository\Values\FieldDefinition[] $actualDefinitions
+     * @return void
+     */
+    protected function assertFieldDefinitionsCorrect( array $expectedDefinitionCreates, array $actualDefinitions )
+    {
+        $this->assertEquals(
+            count( $expectedDefinitionCreates ),
+            count( $actualDefinitions ),
+            'Count of field definition creates did not match count of field definitions.'
+        );
+
+        $sorter = function( $a, $b )
+        {
+            return strcmp( $a->identifier, $b->identifier );
+        };
+
+        usort( $expectedDefinitionCreates, $sorter );
+        usort( $actualDefinitions, $sorter );
+
+        foreach ( $expectedDefinitionCreates as $key => $expectedCreate )
+        {
+            $this->assertFieldDefinitionsEqual(
+                $expectedCreate,
+                $actualDefinitions[$key]
+            );
+        }
+    }
+
+    /**
+     * Asserts that a field definition has been correctly created.
+     *
+     * Asserts that the given $actualDefinition is correctly created from the
+     * create struct in $expectedCreate.
+     *
+     * @param \eZ\Publish\API\Repository\Values\FieldDefinitionCreateStruct $expectedDefinitionCreate
+     * @param \eZ\Publish\API\Repository\Values\FieldDefinition $actualDefinition
+     * @return void
+     */
+    protected function assertFieldDefinitionsEqual( $expectedCreate, $actualDefinition )
+    {
+        foreach ( $expectedCreate as $propertyName => $propertyValue )
+        {
+            $this->assertEquals(
+                $expectedCreate->$propertyName,
+                $actualDefinition->$propertyName
+            );
+        }
+    }
+
+    /**
+     * Asserts that two sets of ContentTypeGroups are equal.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $expectedGroups
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $actualGroups
+     * @return void
+     */
+    protected function assertContentTypeGroupsCorrect( $expectedGroups, $actualGroups )
+    {
+        $sorter = function ( $a, $b )
+        {
+            if ( $a->id == $b->id )
+            {
+                return 0;
+            }
+            return ( $a->id < $b->id ) ? -1 : 1;
+        };
+
+        usort( $expectedGroups, $sorter );
+        usort( $actualGroups, $sorter );
+
+        foreach ( $expectedGroups as $key => $expectedGroup )
+        {
+            $this->assertPropertiesCorrect(
+                $expectedGroup,
+                $actualGroups[$key],
+                $this->groupProperties
+            );
+        }
     }
 
     /**
