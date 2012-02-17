@@ -24,6 +24,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
@@ -56,9 +57,9 @@ class ContentTypeServiceStub implements ContentTypeService
     private $types = array();
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType[]
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft[]
      */
-    private $typesById = array();
+    private $typeDrafts = array();
 
     /**
      * @var int
@@ -273,10 +274,9 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data['id'] = $this->nextTypeId++;
 
-        $type = new ContentTypeStub( $data );
+        $type = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
 
-        $this->types[$type->identifier] = $type;
-        $this->typesById[$type->id]     = $type;
+        $this->typeDrafts[$type->id] = $type;
 
         return $type;
     }
