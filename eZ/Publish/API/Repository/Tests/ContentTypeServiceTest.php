@@ -12,6 +12,8 @@ namespace eZ\Publish\API\Repository\Tests;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
+
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
  *
@@ -705,7 +707,116 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testCreateContentType()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentType() is not implemented." );
+        $groups = $this->createGroups();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $groups is an array of ContentTypeGroup objects
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->mainLanguageCode = 'en_US';
+        $typeCreate->remoteId = '384b94a1bd6bc06826410e284dd9684887bf56fc';
+        $typeCreate->urlAliasSchema = 'url|scheme';
+        $typeCreate->nameSchema = 'name|scheme';
+        $typeCreate->names = array(
+            'en_US' => 'Blog post',
+            'de_DE' => 'Blog-Eintrag',
+        );
+        $typeCreate->descriptions = array(
+            'en_US' => 'A blog post',
+            'de_DE' => 'Ein Blog-Eintrag',
+        );
+        $typeCreate->creatorId = 23;
+        $typeCreate->creationDate = new \DateTime();
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+        $titleFieldCreate->names = array(
+            'en_US' => 'Title',
+            'de_DE' => 'Titel',
+        );
+        $titleFieldCreate->descriptions = array(
+            'en_US' => 'Title of the blog post',
+            'de_DE' => 'Titel des Blog-Eintrages',
+        );
+        $titleFieldCreate->fieldGroup      = 'blog-content';
+        $titleFieldCreate->position        = 1;
+        $titleFieldCreate->isTranslatable  = true;
+        $titleFieldCreate->isRequired      = true;
+        $titleFieldCreate->isInfoCollector = false;
+        $titleFieldCreate->validators      = array(
+            new StringLengthValidatorStub(),
+        );
+        $titleFieldCreate->fieldSettings = array(
+            'textblockheight' => 10
+        );
+        $titleFieldCreate->isSearchable = true;
+
+        $typeCreate->addFieldDefinition( $titleFieldCreate );
+
+        $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'body', 'text'
+        );
+        $bodyFieldCreate->names = array(
+            'en_US' => 'Body',
+            'de_DE' => 'Textkörper',
+        );
+        $bodyFieldCreate->descriptions = array(
+            'en_US' => 'Body of the blog post',
+            'de_DE' => 'Textkörper des Blog-Eintrages',
+        );
+        $bodyFieldCreate->fieldGroup      = 'blog-content';
+        $bodyFieldCreate->position        = 2;
+        $bodyFieldCreate->isTranslatable  = true;
+        $bodyFieldCreate->isRequired      = true;
+        $bodyFieldCreate->isInfoCollector = false;
+        $bodyFieldCreate->validators      = array(
+            new StringLengthValidatorStub(),
+        );
+        $bodyFieldCreate->fieldSettings = array(
+            'textblockheight' => 80
+        );
+        $bodyFieldCreate->isSearchable = true;
+
+        $typeCreate->addFieldDefinition( $bodyFieldCreate );
+
+        $contentType = $contentTypeService->createContentType(
+            $typeCreate,
+            $groups
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
+            $contentType
+        );
+    }
+
+    /**
+     * Creates a number of ContentTypeGroup objects and returns them
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
+     */
+    protected function createGroups()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groups = array();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'first-group'
+        );
+        $groups[] = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        $groupCreate->identifier = 'second-group';
+        $groups[] = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        return $groups;
     }
 
     /**
