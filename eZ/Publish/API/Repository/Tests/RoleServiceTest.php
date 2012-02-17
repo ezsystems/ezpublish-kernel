@@ -208,7 +208,7 @@ class RoleServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
 
-        $this->assertSame( 'roleName', $role->name );
+        $this->assertEquals( 'roleName', $role->name );
     }
 
     /**
@@ -220,7 +220,33 @@ class RoleServiceTest extends BaseTest
      */
     public function testLoadRolesReturnsExpectedSetOfDefaultRoles()
     {
+        $repository = $this->getRepository();
 
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        $roles = $roleService->loadRoles();
+
+        $roleNames = array();
+        foreach ( $roles as $role )
+        {
+            $roleNames[] = $role->name;
+        }
+
+        /* BEGIN: Use Case */
+
+        sort( $roleNames );
+
+        $this->assertEquals(
+            array(
+                'Administrator',
+                'Anonymous',
+                'Editor',
+                'Member',
+                'Partner'
+            ),
+            $roleNames
+        );
     }
 
     /**
