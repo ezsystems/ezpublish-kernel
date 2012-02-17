@@ -37,13 +37,15 @@ class ContentTypeStub extends ContentType
      *
      * @var mixed
      */
-    protected $id;
+    // parent::
+    // protected $id;
 
     /**
      * The status of the content type.
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
-    protected $status;
+    // parent::
+    // protected $status;
 
     /**
      * Contains the human readable name in all provided languages of the
@@ -65,28 +67,32 @@ class ContentTypeStub extends ContentType
      *
      * @var string
      */
-    protected $identifier;
+    // parent::
+    // protected $identifier;
 
     /**
      * Creation date of the content type
      *
      * @var DateTime
      */
-    protected $creationDate;
+    // parent::
+    // protected $creationDate;
 
     /**
      * Modification date of the content type
      *
      * @var DateTime
      */
-    protected $modificationDate;
+    // parent::
+    // protected $modificationDate;
 
     /**
      * Creator user id of the content type
      *
      * @var mixed
      */
-    protected $creatorId;
+    // parent::
+    // protected $creatorId;
 
     /**
      * Modifier user id of the content type
@@ -94,14 +100,16 @@ class ContentTypeStub extends ContentType
      * @var mixed
      *
      */
-    protected $modifierId;
+    // parent::
+    // protected $modifierId;
 
     /**
      * Unique remote ID of the content type
      *
      * @var string
      */
-    protected $remoteId;
+    // protected $remoteId;
+    // parent::
 
     /**
      * URL alias schema. 
@@ -110,7 +118,8 @@ class ContentTypeStub extends ContentType
      *
      * @var string
      */
-    protected $urlAliasSchema;
+    // parent::
+    // protected $urlAliasSchema;
 
     /**
      * Name schema.
@@ -123,21 +132,24 @@ class ContentTypeStub extends ContentType
      *
      * @var string
      */
-    protected $nameSchema;
+    // protected $nameSchema;
+    // parent::
 
     /**
      * Determines if the type is a container
      *
      * @var boolean
      */
-    protected $isContainer;
+    // parent::
+    // protected $isContainer;
 
     /**
      * Main language
      *
      * @var mixed
      */
-    protected $mainLanguageCode;
+    // parent::
+    // protected $mainLanguageCode;
 
     /**
      * if an instance of acontent type is created the always available flag is set
@@ -145,7 +157,8 @@ class ContentTypeStub extends ContentType
      *
      * @var boolean
      */
-    protected $defaultAlwaysAvailable = true;
+    // parent::
+    // protected $defaultAlwaysAvailable = true;
 
     /**
      * Specifies which property the child locations should be sorted on by default when created
@@ -154,7 +167,8 @@ class ContentTypeStub extends ContentType
      *
      * @var mixed
      */
-    protected $defaultSortField;
+    // parent::
+    // protected $defaultSortField;
 
     /**
      * Specifies whether the sort order should be ascending or descending by default when created
@@ -163,7 +177,8 @@ class ContentTypeStub extends ContentType
      *
      * @var mixed
      */
-    protected $defaultSortOrder;
+    // parent::
+    // protected $defaultSortOrder;
 
     /**
      * Contains the content type groups this content type is assigned to
@@ -184,7 +199,7 @@ class ContentTypeStub extends ContentType
      *
      * @var array an array of {@link FieldDefinition}
      */
-    protected $fieldDefinitionsByIdentifier;
+    private $fieldDefinitionsByIdentifier;
 
     function __construct( array $data = array() )
     {

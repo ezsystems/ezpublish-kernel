@@ -28,14 +28,16 @@ class FieldDefinitionStub extends FieldDefinition
      *
      * @var mixed
      */
-    protected $id;
+    // parent::
+    // protected $id;
 
     /**
      * Readable string identifier of a field definition
      *
      * @var string
      */
-    protected $identifier;
+    // parent::
+    // protected $identifier;
 
     /**
      * Contains the human readable name of this field in all provided languages
@@ -57,42 +59,48 @@ class FieldDefinitionStub extends FieldDefinition
      *
      * @var string
      */
-    protected $fieldGroup;
+    // parent::
+    // protected $fieldGroup;
 
     /**
      * the position of the field definition in the content typr
      *
      * @var int
      */
-    protected $position;
+    // parent::
+    // protected $position;
 
     /**
      * String identifier of the field type
      *
      * @var string
      */
-    protected $fieldType;
+    // parent::
+    // protected $fieldType;
 
     /**
      * If the field is translatable
      *
      * @var boolean
      */
-    protected $isTranslatable;
+    // parent::
+    // protected $isTranslatable;
 
     /**
      * Is the field required
      *
      * @var boolean
      */
-    protected $isRequired;
+    // parent::
+    // protected $isRequired;
 
     /**
      * the flag if this field is used for information collection
      *
      * @var boolean
      */
-    protected $isInfoCollector;
+    // parent::
+    // protected $isInfoCollector;
 
     /**
      * Contains the validators of this field definition supported by the field type#
@@ -113,14 +121,16 @@ class FieldDefinitionStub extends FieldDefinition
      *
      * @var mixed
      */
-    protected $defaultValue;
+    // parent::
+    // protected $defaultValue;
 
     /**
      * Indicates if th the content is searchable by this attribute
      *
      * @var boolean
      */
-    protected $isSearchable;
+    // parent::
+    // protected $isSearchable;
 
     function __construct( array $data = array() )
     {
