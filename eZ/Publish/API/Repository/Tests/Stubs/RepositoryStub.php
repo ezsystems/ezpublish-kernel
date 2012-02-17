@@ -243,7 +243,7 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->roleService )
         {
-            $this->roleService = new RoleServiceStub();
+            $this->roleService = new RoleServiceStub( $this );
         }
         return $this->roleService;
     }

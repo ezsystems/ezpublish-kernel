@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
+use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\RoleService;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use \eZ\Publish\API\Repository\Values\User\Policy;
@@ -20,7 +21,9 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
 
 /**
@@ -32,12 +35,55 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
 class RoleServiceStub implements RoleService
 {
     /**
+     * @var integer
+     */
+    private $nextRoleId = 0;
+
+    /**
+     * @var array
+     */
+    private $nameToRoleId = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\User\Role[]
+     */
+    private $roles;
+
+    /**
      * Temporary solution to emulate user policies.
      *
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
      * @todo REMOVE THIS WORKAROUND
      */
     private $userPolicies = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->repository = $repository;
+
+        $this->roles = array(
+            1 => new RoleStub( array( 'id' => 1, 'name' => 'Anonymous' ) ),
+            2 => new RoleStub( array( 'id' => 2, 'name' => 'Administrator' ) ),
+            3 => new RoleStub( array( 'id' => 3, 'name' => 'Editor' ) ),
+            4 => new RoleStub( array( 'id' => 4, 'name' => 'Partner' ) ),
+            5 => new RoleStub( array( 'id' => 5, 'name' => 'Member' ) ),
+        );
+
+        foreach ( $this->roles as $role )
+        {
+            ++$this->nextRoleId;
+
+            $this->nameToRoleId[$role->name] = $role->id;
+        }
+    }
 
     /**
      * Creates a new Role
@@ -51,7 +97,23 @@ class RoleServiceStub implements RoleService
      */
     public function createRole( RoleCreateStruct $roleCreateStruct )
     {
-        // TODO: Implement createRole() method.
+        if ( isset( $this->nameToRoleId[$roleCreateStruct->name] ) )
+        {
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $role = new RoleStub(
+            array(
+                'id'           =>  ++$this->nextRoleId,
+                'name'         =>  $roleCreateStruct->name,
+                'description'  =>  $roleCreateStruct->description
+            )
+        );
+
+        $this->roles[$role->id]          = $role;
+        $this->nameToRoleId[$role->name] = $role->id;
+
+        return $this->roles[$role->id];
     }
 
     /**
@@ -128,7 +190,11 @@ class RoleServiceStub implements RoleService
      */
     public function loadRole( $name )
     {
-        // TODO: Implement loadRole() method.
+        if ( isset( $this->nameToRoleId[$name] ) )
+        {
+            return $this->roles[$this->nameToRoleId[$name]];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -140,7 +206,7 @@ class RoleServiceStub implements RoleService
      */
     public function loadRoles()
     {
-        // TODO: Implement loadRoles() method.
+        return array_values( $this->roles );
     }
 
     /**
