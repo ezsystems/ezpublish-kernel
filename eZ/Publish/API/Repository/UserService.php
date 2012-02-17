@@ -186,7 +186,7 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the user is not in the given user group
      */
-    public function unAssignUssrFromUserGroup( User $user, UserGroup $userGroup );
+    public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup );
 
     /**
      * Instantiate a user create class

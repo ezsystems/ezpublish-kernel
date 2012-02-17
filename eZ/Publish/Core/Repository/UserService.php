@@ -505,7 +505,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the user is not in the given user group
      */
-    public function unAssignUssrFromUserGroup( APIUser $user, APIUserGroup $userGroup )
+    public function unAssignUserFromUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
