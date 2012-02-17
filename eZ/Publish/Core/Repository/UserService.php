@@ -641,38 +641,34 @@ class UserService implements UserServiceInterface
         ) );
     }
 
+    /**
+     * Returns password hash based on user data and site settings
+     *
+     * @param string $login User login
+     * @param string $password User password
+     * @param string $site The name of the site
+     * @param int $type Type of password to generate
+     *
+     * @return string Generated password hash
+     */
     protected function createPasswordHash( $login, $password, $site, $type )
     {
-        $passwordHash = "";
-
         switch ( $type )
         {
-            case User::PASSWORD_HASH_MD5_PASSWORD :
-            {
-                $passwordHash = md5( $password );
-            }
-            break;
-            case User::PASSWORD_HASH_MD5_USER :
-            {
-                $passwordHash = md5( "$login\n$password" );
-            }
-            break;
-            case User::PASSWORD_HASH_MD5_SITE :
-            {
-                $passwordHash = md5( "$login\n$password\n$site" );
-            }
-            break;
-            case User::PASSWORD_HASH_PLAINTEXT :
-            {
-                $passwordHash = $password;
-            }
-            break;
-            default :
-            {
-                $passwordHash = md5( $password );
-            }
-        }
+            case User::PASSWORD_HASH_MD5_PASSWORD:
+                return md5( $password );
 
-        return $passwordHash;
+            case User::PASSWORD_HASH_MD5_USER:
+                return md5( "$login\n$password" );
+
+            case User::PASSWORD_HASH_MD5_SITE:
+                return md5( "$login\n$password\n$site" );
+
+            case User::PASSWORD_HASH_PLAINTEXT:
+                return $password;
+
+            default:
+                return md5( $password );
+        }
     }
 }
