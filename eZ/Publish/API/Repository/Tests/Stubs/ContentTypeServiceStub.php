@@ -23,8 +23,10 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
 
 /**
  * @example Examples/contenttype.php
@@ -47,6 +49,21 @@ class ContentTypeServiceStub implements ContentTypeService
      * @var int
      */
     private $nextGroupId = 0;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType[]
+     */
+    private $types = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType[]
+     */
+    private $typesById = array();
+
+    /**
+     * @var int
+     */
+    private $nextTypeId = 0;
 
     /**
      * Properties of a ContentTypeGroup
@@ -240,7 +257,52 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
-        // TODO: Implement.
+        $data = array();
+        foreach ( $contentTypeCreateStruct as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+
+        $data['fieldDefinitions'] = array();
+
+        $fieldDefinitionCreates = $contentTypeCreateStruct->fieldDefinitions;
+        foreach ( $fieldDefinitionCreates as $fieldDefinitionCreate )
+        {
+            $data['fieldDefinitions'][] = $this->createFieldDefinition( $fieldDefinitionCreate );
+        }
+
+        $data['id'] = $this->nextTypeId++;
+
+        $type = new ContentTypeStub( $data );
+
+        $this->types[$type->identifier] = $type;
+        $this->typesById[$type->id]     = $type;
+
+        return $type;
+    }
+
+    /**
+     * Creates a FieldDefinition from $fieldDefinitionCreate
+     *
+     * @param FieldDefinitionCreateStruct $fieldDefinitionCreate
+     * @return FieldDefinition
+     */
+    protected function createFieldDefinition( FieldDefinitionCreateStruct $fieldDefinitionCreate )
+    {
+        $data = array();
+        foreach ( $fieldDefinitionCreate as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+
+        // FIXME: Work around inconsistency
+        if ( isset( $data['fieldTypeIdentifier'] ) )
+        {
+            $data['fieldType'] = $data['fieldTypeIdentifier'];
+            unset( $data['fieldTypeIdentifier'] );
+        }
+
+        return new FieldDefinitionStub( $data );
     }
 
     /**
