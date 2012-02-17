@@ -12,6 +12,14 @@ class ContentTypeCreateStructStub extends ContentTypeCreateStruct
 {
     protected $fieldDefinitions = array();
 
+    function __construct( array $data = array() )
+    {
+        foreach ( $data as $propertyName => $propertyValue )
+        {
+            $this->$propertyName = $propertyValue;
+        }
+    }
+
     /**
      * adds a new field definition
      *
