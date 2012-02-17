@@ -1,11 +1,7 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\User\User as APIUser,
-    eZ\Publish\API\Repository\Values\Content\Content,
-
-    eZ\Publish\Core\Base\Exceptions\PropertyNotFound,
-    eZ\Publish\Core\Base\Exceptions\PropertyPermission;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 /**
  * This class represents a user value
@@ -34,11 +30,46 @@ class User extends APIUser
     const PASSWORD_HASH_PLAINTEXT = 5;
 
     /**
-     * Instance of Content value object that this user encapsulates
+     * Content info for the user
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    protected $content;
+    protected $contentInfo;
+
+    /**
+     * Content type for the user
+     *
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected $contentType;
+
+    /**
+     * Content id for the user
+     *
+     * @var int
+     */
+    protected $contentId;
+
+    /**
+     * Version info for the user
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     */
+    protected $versionInfo;
+
+    /**
+     * Fields that this user has
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    protected $fields = array();
+
+    /**
+     * Relations from this user to other content
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    protected $relations = array();
 
     /**
      * returns the VersionInfo for this version
@@ -47,7 +78,7 @@ class User extends APIUser
      */
     public function getVersionInfo()
     {
-        return $this->content->getVersionInfo();
+        return $this->versionInfo;
     }
 
     /**
@@ -64,7 +95,7 @@ class User extends APIUser
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        return $this->content->getFieldValue( $fieldDefIdentifier, $languageCode );
+        //@todo: implement
     }
 
     /**
@@ -74,7 +105,7 @@ class User extends APIUser
      */
     public function getRelations()
     {
-        return $this->content->getRelations();
+        return $this->relations;
     }
 
     /**
@@ -84,7 +115,7 @@ class User extends APIUser
      */
     public function getFields()
     {
-        return $this->content->getFields();
+        return $this->fields;
     }
 
     /**
@@ -98,81 +129,6 @@ class User extends APIUser
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
-        return $this->content->getFieldsByLanguage( $languageCode );
-    }
-
-    /**
-     * Magic get function handling read to non public properties
-     * while also encapsulating content value object
-     *
-     * Returns value for all readonly (protected) properties.
-     * Throws PropertyNotFound exception on all reads to undefined properties so typos are not silently accepted.
-     *
-     * @param string $property Name of the property
-     *
-     * @return mixed
-     *
-     * @throws PropertyNotFound When property does not exist
-     */
-    public function __get( $property )
-    {
-        if ( property_exists( $this->content, $property ) )
-            return $this->content->$property;
-        else if ( property_exists( $this, $property ) )
-            return $this->$property;
-
-        throw new PropertyNotFound( $property, get_class( $this ) );
-    }
-
-    /**
-     * Magic set function handling writes to non public properties
-     * while also encapsulating content value object
-     *
-     * Throws PropertyNotFound exception on all writes to undefined properties so typos are not silently accepted and
-     * throws PropertyPermission exception on readonly (protected) properties.
-     *
-     * @param string $property Name of the property
-     * @param string $value
-     *
-     * @throws PropertyNotFound When property does not exist
-     * @throws PropertyPermission When property is readonly (protected)
-     */
-    public function __set( $property, $value )
-    {
-        if ( property_exists( $this->content, $property ) )
-            $this->content->$property = $value;
-        else if ( property_exists( $this, $property ) )
-            throw new PropertyPermission( $property, PropertyPermission::READ, get_class( $this ) );
-
-        throw new PropertyNotFound( $property, get_class( $this ) );
-    }
-
-    /**
-     * Magic isset function handling isset() to non public properties
-     *
-     * Returns true for all (public/)protected/private properties.
-     *
-     * @param string $property Name of the property
-     *
-     * @return boolean
-     */
-    public function __isset( $property )
-    {
-        return property_exists( $this->content, $property ) || property_exists( $this, $property );
-    }
-
-    /**
-     * Magic unset function handling unset() to non public properties
-     *
-     * Throws PropertyNotFound exception on all writes to undefined properties so typos are not silently accepted and
-     * throws PropertyPermission exception on readonly (protected) properties.
-     *
-     * @param string $property Name of the property
-     *
-     * @return boolean
-     */
-    public function __unset( $property )
-    {
-        $this->__set( $property, null );
+        //@todo: implement
     }
 }

@@ -98,12 +98,18 @@ class UserService implements UserServiceInterface
 
         $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
 
         return new UserGroup( array(
-            'id'            => $publishedContent->getVersionInfo()->getContentInfo()->contentId,
+            'contentInfo'   => $publishedContentInfo,
+            'contentType'   => $publishedContentInfo->getContentType(),
+            'contentId'     => $publishedContentInfo->contentId,
+            'versionInfo'   => $publishedContent->getVersionInfo(),
+            'fields'        => $publishedContent->getFields(),
+            'relations'     => $publishedContent->getRelations(),
+            'id'            => $publishedContentInfo->contentId,
             'parentId'      => $mainParentGroupLocation->id,
-            'subGroupCount' => 0,
-            'content'       => $publishedContent
+            'subGroupCount' => 0
         ) );
     }
 
@@ -129,11 +135,16 @@ class UserService implements UserServiceInterface
         $mainLocation = $locationService->loadMainLocation( $contentInfo );
 
         return new UserGroup( array(
-            'id'            => $contentInfo->contentId,
+            'contentInfo'   => $contentInfo,
+            'contentType'   => $contentInfo->getContentType(),
+            'contentId'     => $contentInfo->contentId,
+            'versionInfo'   => $content->getVersionInfo(),
+            'fields'        => $content->getFields(),
+            'relations'     => $content->getRelations(),
+            'id'            => $content->contentId,
             'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
             //@todo: calculate sub group count
-            'subGroupCount' => 0,
-            'content'       => $content
+            'subGroupCount' => 0
         ) );
     }
 
@@ -598,8 +609,15 @@ class UserService implements UserServiceInterface
     protected function buildDomainUserObject( SPIUser $spiUser )
     {
         $content = $this->repository->getContentService()->loadContent( $spiUser->id );
+        $contentInfo = $content->getVersionInfo()->getContentInfo();
 
         return new User( array(
+            'contentInfo'   => $contentInfo,
+            'contentType'   => $contentInfo->getContentType(),
+            'contentId'     => $contentInfo->contentId,
+            'versionInfo'   => $content->getVersionInfo(),
+            'fields'        => $content->getFields(),
+            'relations'     => $content->getRelations(),
             'id'            => $spiUser->id,
             'login'         => $spiUser->login,
             'email'         => $spiUser->email,
@@ -607,7 +625,6 @@ class UserService implements UserServiceInterface
             'hashAlgorithm' => $spiUser->hashAlgorithm,
             'isEnabled'     => $spiUser->isEnabled,
             'maxLogin'      => $spiUser->maxLogin,
-            'content'       => $content
         ) );
     }
 
