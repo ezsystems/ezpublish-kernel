@@ -262,6 +262,16 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
+     * instanciates an object to be used for creating languages
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
+     */
+    public function newLanguageCreateStruct()
+    {
+        return new LanguageCreateStruct;
+    }
+
+    /**
      * Builds Language domain object from ValueObject returned by Persistence API
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language $vo Language value object
