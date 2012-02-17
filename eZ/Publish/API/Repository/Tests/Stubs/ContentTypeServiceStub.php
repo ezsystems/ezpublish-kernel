@@ -277,6 +277,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data['contentTypeGroups'] = $contentTypeGroups;
 
+        // FIXME: Set status to draft
         $data['id'] = $this->nextTypeId++;
 
         $type = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
