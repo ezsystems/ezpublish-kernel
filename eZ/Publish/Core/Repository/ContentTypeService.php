@@ -332,6 +332,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             },
             $contentTypeGroups
         );
+        $fieldDefinitions = array_map(
+            function( $fieldDefinitionCreateStruct )
+            {
+                return $this->buildSPIFieldDefinition( $fieldDefinitionCreateStruct );
+            },
+            $contentTypeCreateStruct->fieldDefinitions
+        );
 
         $spiContentTypeCreateStruct = new SPIContentTypeCreateStruct(
             array(
@@ -351,17 +358,43 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "sortField" => $contentTypeCreateStruct->defaultSortField,
                 "sortOrder" => $contentTypeCreateStruct->defaultSortOrder,
                 "groupIds" => $groupIds,
-                "fieldDefinitions" => $contentTypeCreateStruct->fieldDefinitions,
+                "fieldDefinitions" => $fieldDefinitions,
                 "defaultAlwaysAvailable" => $contentTypeCreateStruct->defaultAlwaysAvailable
             )
         );
 
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->create(
-            $spiContentTypeCreateStruct
+        return $this->buildContentTypeDraftDomainObject(
+            $this->persistenceHandler->contentTypeHandler()->create(
+                $spiContentTypeCreateStruct
+            )
+        );
+    }
+
+    protected function buildSPIFieldDefinition( APIFieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    {
+        $fieldTypeConstraints = new SPIFieldTypeConstraints(
+            array(
+                "validators" => $fieldDefinitionCreateStruct->validators,
+                "fieldSettings" => $fieldDefinitionCreateStruct->fieldSettings
+            )
         );
 
-        return $this->buildContentTypeDraftDomainObject(
-            $spiContentType
+        return new SPIFieldDefinition(
+            array(
+                "id" => null,
+                "name" => $fieldDefinitionCreateStruct->names,
+                "description" => $fieldDefinitionCreateStruct->descriptions,
+                "identifier" => $fieldDefinitionCreateStruct->identifier,
+                "fieldGroup" => $fieldDefinitionCreateStruct->fieldGroup,
+                "position" => $fieldDefinitionCreateStruct->position,
+                "fieldType" => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
+                "isTranslatable" => $fieldDefinitionCreateStruct->isTranslatable,
+                "isRequired" => $fieldDefinitionCreateStruct->isRequired,
+                "isInfoCollector" => $fieldDefinitionCreateStruct->isInfoCollector,
+                "fieldTypeConstraints" => $fieldTypeConstraints,
+                "defaultValue" => $fieldDefinitionCreateStruct->defaultValue,
+                "isSearchable" => $fieldDefinitionCreateStruct->isSearchable
+            )
         );
     }
 
@@ -838,34 +871,12 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $fieldTypeConstraints = new SPIFieldTypeConstraints(
-            array(
-                "validators" => $fieldDefinitionCreateStruct->validators,
-                "fieldSettings" => $fieldDefinitionCreateStruct->fieldSettings
-            )
-        );
-        $spiFieldDefinition = new SPIFieldDefinition(
-            array(
-                "id" => null,
-                "name" => $fieldDefinitionCreateStruct->names,
-                "description" => $fieldDefinitionCreateStruct->descriptions,
-                "identifier" => $fieldDefinitionCreateStruct->identifier,
-                "fieldGroup" => $fieldDefinitionCreateStruct->fieldGroup,
-                "position" => $fieldDefinitionCreateStruct->position,
-                "fieldType" => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
-                "isTranslatable" => $fieldDefinitionCreateStruct->isTranslatable,
-                "isRequired" => $fieldDefinitionCreateStruct->isRequired,
-                "isInfoCollector" => $fieldDefinitionCreateStruct->isInfoCollector,
-                "fieldTypeConstraints" => $fieldTypeConstraints,
-                "defaultValue" => $fieldDefinitionCreateStruct->defaultValue,
-                "isSearchable" => $fieldDefinitionCreateStruct->isSearchable
-            )
-        );
-
         $this->persistenceHandler->contentTypeHandler()->addFieldDefinition(
             $contentTypeDraft->id,
             $contentTypeDraft->status,
-            $spiFieldDefinition
+            $this->buildSPIFieldDefinition(
+                $fieldDefinitionCreateStruct
+            )
         );
     }
 
