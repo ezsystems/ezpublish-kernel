@@ -1008,6 +1008,237 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
+     * 
+     */
+    public function testLoadContentTypeDraft()
+    {
+        $createdDraft = $this->createContentTypeDraft();
+        $draftId = $createdDraft->id;
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $draftId contains the ID of the draft to load
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $createdDraft,
+            $contentTypeDraft
+        );
+    }
+
+    /**
+     * Creates a fully functional ContentTypeDraft and returns it.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     */
+    protected function createContentTypeDraft()
+    {
+        // Actually equals @see testCreateContentType()
+        $repository = $this->getRepository();
+
+        $groups = $this->createGroups();
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->mainLanguageCode = 'en_US';
+        $typeCreate->remoteId = '384b94a1bd6bc06826410e284dd9684887bf56fc';
+        $typeCreate->urlAliasSchema = 'url|scheme';
+        $typeCreate->nameSchema = 'name|scheme';
+        $typeCreate->names = array(
+            'en_US' => 'Blog post',
+            'de_DE' => 'Blog-Eintrag',
+        );
+        $typeCreate->descriptions = array(
+            'en_US' => 'A blog post',
+            'de_DE' => 'Ein Blog-Eintrag',
+        );
+        $typeCreate->creatorId = 23;
+        $typeCreate->creationDate = new \DateTime();
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+        $titleFieldCreate->names = array(
+            'en_US' => 'Title',
+            'de_DE' => 'Titel',
+        );
+        $titleFieldCreate->descriptions = array(
+            'en_US' => 'Title of the blog post',
+            'de_DE' => 'Titel des Blog-Eintrages',
+        );
+        $titleFieldCreate->fieldGroup      = 'blog-content';
+        $titleFieldCreate->position        = 1;
+        $titleFieldCreate->isTranslatable  = true;
+        $titleFieldCreate->isRequired      = true;
+        $titleFieldCreate->isInfoCollector = false;
+        $titleFieldCreate->validators      = array(
+            new StringLengthValidatorStub(),
+        );
+        $titleFieldCreate->fieldSettings = array(
+            'textblockheight' => 10
+        );
+        $titleFieldCreate->isSearchable = true;
+
+        $typeCreate->addFieldDefinition( $titleFieldCreate );
+
+        $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'body', 'text'
+        );
+        $bodyFieldCreate->names = array(
+            'en_US' => 'Body',
+            'de_DE' => 'Textkörper',
+        );
+        $bodyFieldCreate->descriptions = array(
+            'en_US' => 'Body of the blog post',
+            'de_DE' => 'Textkörper des Blog-Eintrages',
+        );
+        $bodyFieldCreate->fieldGroup      = 'blog-content';
+        $bodyFieldCreate->position        = 2;
+        $bodyFieldCreate->isTranslatable  = true;
+        $bodyFieldCreate->isRequired      = true;
+        $bodyFieldCreate->isInfoCollector = false;
+        $bodyFieldCreate->validators      = array(
+            new StringLengthValidatorStub(),
+        );
+        $bodyFieldCreate->fieldSettings = array(
+            'textblockheight' => 80
+        );
+        $bodyFieldCreate->isSearchable = true;
+
+        $typeCreate->addFieldDefinition( $bodyFieldCreate );
+
+        return $contentTypeService->createContentType(
+            $typeCreate,
+            $groups
+        );
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * 
+     */
+    public function testUpdateContentTypeDraft()
+    {
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
+        $typeUpdate->identifier = 'news-article';
+        $typeUpdate->remoteId = '4cf35f5166fd31bf0cda859dc837e095daee9833';
+        $typeUpdate->urlAliasSchema = 'url@alias|scheme';
+        $typeUpdate->nameSchema = '@name@scheme@';
+        $typeUpdate->isContainer = true;
+        $typeUpdate->mainLanguageCode = 'de_DE';
+        $typeUpdate->defaultAlwaysAvailable = false;
+        $typeUpdate->modifierId = 42;
+        $typeUpdate->modificationDate = new \DateTime();
+        $typeUpdate->names = array(
+            'en_US' => 'News article',
+            'de_DE' => 'Nachrichten-Artikel',
+        );
+        $typeUpdate->descriptions = array(
+            'en_US' => 'A news article',
+            'de_DE' => 'Ein Nachrichten-Artikenl',
+        );
+
+        $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
+        /* END: Use Case */
+
+        $updatedType = $contentTypeService->loadContentTypeDraft(
+            $contentTypeDraft->id
+        );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
+            $updatedType
+        );
+
+        return array(
+            'originalType' => $contentTypeDraft,
+            'updateStruct' => $typeUpdate,
+            'updatedType'  => $updatedType,
+        );
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
+     */
+    public function testUpdateContentTypeDraftStructValues( $data )
+    {
+        $originalType = $data['originalType'];
+        $updateStruct = $data['updateStruct'];
+        $updatedType  = $data['updatedType'];
+
+        $expectedValues = array(
+            'id'                => $originalType->id,
+            'names'             => $updateStruct->names,
+            'descriptions'      => $updateStruct->descriptions,
+            'identifier'        => $updateStruct->identifier,
+            'creationDate'      => $originalType->creationDate,
+            'modificationDate'  => $updateStruct->modificationDate,
+            'creatorId'         => $originalType->creatorId,
+            'modifierId'        => $updateStruct->modifierId,
+            'urlAliasSchema'    => $updateStruct->urlAliasSchema,
+            'nameSchema'        => $updateStruct->nameSchema,
+            'isContainer'       => $updateStruct->isContainer,
+            'mainLanguageCode'  => $updateStruct->mainLanguageCode,
+            'contentTypeGroups' => $originalType->contentTypeGroups,
+            'fieldDefinitions'  => $originalType->fieldDefinitions,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedValues,
+            $updatedType
+        );
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateContentTypeDraftThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testUpdateContentTypeDraftThrowsIllegalArgumentException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
+    }
+
+    /**
      * Test for the loadContentType() method.
      *
      * @return void
@@ -1084,18 +1315,6 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
-     * 
-     */
-    public function testLoadContentTypeDraft()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentTypeDraftThrowsNotFoundException()
@@ -1149,42 +1368,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * 
-     */
-    public function testUpdateContentTypeDraft()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateContentTypeDraftThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testUpdateContentTypeDraftThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
     }
 
     /**

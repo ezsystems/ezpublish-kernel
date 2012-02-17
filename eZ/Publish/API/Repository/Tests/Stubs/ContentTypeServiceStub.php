@@ -311,6 +311,71 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
+     * Get a Content Type object draft by id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
+     *
+     * @param int $contentTypeId
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     */
+    public function loadContentTypeDraft( $contentTypeId )
+    {
+        if ( isset( $this->typeDrafts[$contentTypeId] ) )
+        {
+            return $this->typeDrafts[$contentTypeId];
+        }
+    }
+
+    /**
+     * Update a Content Type object
+     *
+     * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update a content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
+     */
+    public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
+    {
+        $data = array(
+            'id'                     => $contentTypeDraft->id,
+            'status'                 => $contentTypeDraft->status,
+            'names'                  => $contentTypeDraft->names,
+            'descriptions'           => $contentTypeDraft->descriptions,
+            'identifier'             => $contentTypeDraft->identifier,
+            'creationDate'           => $contentTypeDraft->creationDate,
+            'modificationDate'       => $contentTypeDraft->modificationDate,
+            'creatorId'              => $contentTypeDraft->creatorId,
+            'modifierId'             => $contentTypeDraft->modifierId,
+            'remoteId'               => $contentTypeDraft->remoteId,
+            'urlAliasSchema'         => $contentTypeDraft->urlAliasSchema,
+            'nameSchema'             => $contentTypeDraft->nameSchema,
+            'isContainer'            => $contentTypeDraft->isContainer,
+            'mainLanguageCode'       => $contentTypeDraft->mainLanguageCode,
+            'defaultAlwaysAvailable' => $contentTypeDraft->defaultAlwaysAvailable,
+            'defaultSortField'       => $contentTypeDraft->defaultSortField,
+            'defaultSortOrder'       => $contentTypeDraft->defaultSortOrder,
+            'contentTypeGroups'      => $contentTypeDraft->contentTypeGroups,
+            'fieldDefinitions'       => $contentTypeDraft->fieldDefinitions,
+        );
+
+        foreach ( array_keys( $data ) as $propertyName )
+        {
+            if ( isset( $contentTypeUpdateStruct->$propertyName ) )
+            {
+                $data[$propertyName] = $contentTypeUpdateStruct->$propertyName;
+            }
+        }
+
+        $this->typeDrafts[$contentTypeDraft->id] = new ContentTypeDraftStub(
+            new ContentTypeStub( $data )
+        );
+    }
+
+    /**
      * Get a Content Type object by id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
@@ -353,20 +418,6 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Get a Content Type object draft by id
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
-     *
-     * @param int $contentTypeId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
-    public function loadContentTypeDraft( $contentTypeId )
-    {
-        // TODO: Implement.
-    }
-
-    /**
      * Get Content Type objects which belong to the given content type group
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
@@ -392,22 +443,6 @@ class ContentTypeServiceStub implements ContentTypeService
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
     public function createContentTypeDraft( ContentType $contentType )
-    {
-        // TODO: Implement.
-    }
-
-    /**
-     * Update a Content Type object
-     *
-     * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
-     */
-    public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
         // TODO: Implement.
     }
