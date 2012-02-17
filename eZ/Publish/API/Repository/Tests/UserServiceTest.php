@@ -19,6 +19,30 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class UserServiceTest extends BaseTest
 {
     /**
+     * Test for the newUserGroupCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
+     */
+    public function testNewUserGroupCreateStruct()
+    {
+        $this->markTestIncomplete( "Test for UserService::newUserGroupCreateStruct() is not implemented." );
+    }
+
+    /**
+     * Test for the newUserGroupCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct($mainLanguageCode, $contentType)
+     * @eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
+     */
+    public function testNewUserGroupCreateStructWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for UserService::newUserGroupCreateStruct() is not implemented." );
+    }
+
+    /**
      * Test for the createUserGroup() method.
      *
      * @return void
@@ -532,30 +556,6 @@ class UserServiceTest extends BaseTest
     public function testNewUserCreateStructWithFifthParameter()
     {
         $this->markTestIncomplete( "Test for UserService::newUserCreateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newUserGroupCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct()
-     * 
-     */
-    public function testNewUserGroupCreateStruct()
-    {
-        $this->markTestIncomplete( "Test for UserService::newUserGroupCreateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newUserGroupCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct($mainLanguageCode, $contentType)
-     * 
-     */
-    public function testNewUserGroupCreateStructWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for UserService::newUserGroupCreateStruct() is not implemented." );
     }
 
     /**

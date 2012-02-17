@@ -37,6 +37,11 @@ class RepositoryStub implements Repository
     private $languageService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\UserServiceStub
+     */
+    private $userService;
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RoleServiceStub
      */
     private $roleService;
@@ -231,7 +236,11 @@ class RepositoryStub implements Repository
      */
     public function getUserService()
     {
-        // TODO: Implement getUserService() method.
+        if ( null === $this->userService )
+        {
+            $this->userService = new UserServiceStub( $this );
+        }
+        return $this->userService;
     }
 
     /**
