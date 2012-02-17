@@ -374,7 +374,7 @@ class UserService implements UserServiceInterface
         }
 
         // @todo: read site name from settings
-        if ( $spiUsers[0]->passwordHash !== $this->createPasswordHash( $login, $password, null, $spiUsers[0]->hashAlgorithm ) )
+        if ( $spiUsers[0]->passwordHash !== $this->createPasswordHash( $login, $password, 'eZ Publish', $spiUsers[0]->hashAlgorithm ) )
             throw new InvalidArgumentValue( "password", $password );
 
         return $this->buildDomainUserObject( $spiUsers[0] );
@@ -438,7 +438,7 @@ class UserService implements UserServiceInterface
             'email'         => $userUpdateStruct->email !== null ? trim( $userUpdateStruct->email ) : $loadedUser->email,
             // @todo: read password hash algorithm and site from INI settings
             'passwordHash'  => $userUpdateStruct->password !== null ?
-                $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, null, null ) :
+                $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, 'eZ Publish', User::PASSWORD_HASH_MD5_USER ) :
                 $loadedUser->passwordHash,
             'hashAlgorithm' => null,
             'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->enabled,
@@ -643,7 +643,7 @@ class UserService implements UserServiceInterface
             'login'         => $userCreateStruct->login,
             'email'         => $userCreateStruct->email,
             // @todo: read password hash algorithm and site from INI settings
-            'passwordHash'  => $this->createPasswordHash( $userCreateStruct->login, $userCreateStruct->password, null, null ),
+            'passwordHash'  => $this->createPasswordHash( $userCreateStruct->login, $userCreateStruct->password, 'eZ Publish', User::PASSWORD_HASH_MD5_USER ),
             'hashAlgorithm' => null,
             'isEnabled'     => $userCreateStruct->enabled
         ) );
