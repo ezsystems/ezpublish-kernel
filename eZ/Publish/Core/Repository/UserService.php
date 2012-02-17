@@ -90,20 +90,18 @@ class UserService implements UserServiceInterface
         $loadedParentGroup = $this->loadUserGroup( $parentGroup->id );
         $mainParentGroupLocation = $locationService->loadMainLocation( $loadedParentGroup->getVersionInfo()->getContentInfo() );
 
-        $locationCreateStructs = array();
-        if ( $mainParentGroupLocation !== null )
-        {
-            $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
-            $locationCreateStruct->isMainLocation = true;
-            $locationCreateStructs[] = $locationCreateStruct;
-        }
+        if ( $mainParentGroupLocation === null )
+            throw new IllegalArgumentException( "parentGroup", "parent user group has no main location" );
 
-        $contentDraft = $contentService->createContent( $userGroupCreateStruct, $locationCreateStructs );
+        $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
+        $locationCreateStruct->isMainLocation = true;
+
+        $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         return new UserGroup( array(
             'id'            => $publishedContent->getVersionInfo()->getContentInfo()->contentId,
-            'parentId'      => $mainParentGroupLocation !== null ? $mainParentGroupLocation->id : null,
+            'parentId'      => $mainParentGroupLocation->id,
             'subGroupCount' => 0,
             'content'       => $publishedContent
         ) );
@@ -475,32 +473,15 @@ class UserService implements UserServiceInterface
             $existingGroupIds[] = $userLocation->parentId;
         }
 
-        $groupLocations = $locationService->loadLocations( $loadedGroup->contentInfo );
-        if ( empty( $groupLocations ) )
-            // user group has no locations, nowhere to assign user to
-            // @todo: maybe throw BadStateException?
+        $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
+        if ( $groupMainLocation === null )
+            throw new IllegalArgumentException( "userGroup", "user group has no main location or no locations" );
+
+        if ( in_array( $groupMainLocation->id, $existingGroupIds ) )
+            // user is already assigned to the user group
             return;
 
-        $newGroupIds = array();
-        $mainLocationId = 0;
-        foreach ( $groupLocations as $groupLocation )
-        {
-            $newGroupIds[] = $groupLocation->id;
-
-            if ( $groupLocation->id === $groupLocation->mainLocationId )
-                $mainLocationId = $groupLocation->id;
-        }
-
-        if ( $mainLocationId === 0 )
-            // user group has no main location
-            // @todo: maybe throw BadStateException, or use first location from the list?
-            return;
-
-        if ( count( array_intersect( $existingGroupIds, $newGroupIds ) ) > 0 )
-            // user is already below one of the locations of the user group, do nothing
-            return;
-
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $mainLocationId );
+        $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
         $locationService->createLocation( $loadedUser->getVersionInfo()->getContentInfo(), $locationCreateStruct );
     }
 
@@ -527,25 +508,18 @@ class UserService implements UserServiceInterface
 
         $userLocations = $locationService->loadLocations( $loadedUser->contentInfo );
         if ( empty( $userLocations ) )
-            // user has no locations, nothing to remove
-            // @todo: maybe throw BadStateException?
-            return;
+            throw new IllegalArgumentException( "user", "user has no locations, cannot unassign from group" );
 
-        $groupLocations = $locationService->loadLocations( $loadedGroup->contentInfo );
-        if ( empty( $groupLocations ) )
-            // user group has no locations
-            // @todo: maybe throw BadStateException?
-            return;
+        $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
+        if ( $groupMainLocation === null )
+            throw new IllegalArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
 
         foreach ( $userLocations as $userLocation )
         {
-            foreach ( $groupLocations as $groupLocation )
+            if ( $userLocation->parentId === $groupMainLocation->id )
             {
-                if ( $userLocation->parentId === $groupLocation->id )
-                {
-                    $locationService->deleteLocation( $userLocation );
-                    return;
-                }
+                $locationService->deleteLocation( $userLocation );
+                return;
             }
         }
 
