@@ -21,13 +21,18 @@ use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 class PolicyUpdateStructStub extends PolicyUpdateStruct
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    private $limitations;
+
+    /**
      * Returns list of limitations added to policy
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     public function getLimitations()
     {
-        // TODO: Implement getLimitations() method.
+        return $this->limitations;
     }
 
     /**
@@ -39,7 +44,7 @@ class PolicyUpdateStructStub extends PolicyUpdateStruct
      */
     public function addLimitation( Limitation $limitation )
     {
-        // TODO: Implement addLimitation() method.
+        $this->limitations[] = $limitation;
     }
 
 }

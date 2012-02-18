@@ -121,7 +121,11 @@ class RoleServiceStub implements RoleService
         $this->roles[$role->id]          = $role;
         $this->nameToRoleId[$role->name] = $role->id;
 
-        return $this->roles[$role->id];
+        foreach ( $roleCreateStruct->getPolicies() as $policy )
+        {
+            $role = $this->addPolicy( $role, $policy );
+        }
+        return $role;
     }
 
     /**
@@ -172,25 +176,23 @@ class RoleServiceStub implements RoleService
      */
     public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct )
     {
+        $policies   = $role->getPolicies();
+        $policies[] = new PolicyStub(
+            array(
+                'id'        =>  ++$this->nextPolicyId,
+                'roleId'    =>  $role->id,
+                'module'    =>  $policyCreateStruct->module,
+                'function'  =>  $policyCreateStruct->function
+            )
+        );
+
         $this->roles[$role->id] = new RoleStub(
             array(
                 'id'           =>  $role->id,
                 'name'         =>  $role->name,
                 'description'  =>  $role->description,
             ),
-            array_merge(
-                $role->policies,
-                array(
-                    new PolicyStub(
-                        array(
-                            'id'        =>  ++$this->nextPolicyId,
-                            'roleId'    =>  $role->id,
-                            'module'    =>  $policyCreateStruct->module,
-                            'function'  =>  $policyCreateStruct->function
-                        )
-                    )
-                )
-            )
+            $policies
         );
 
         return $this->roles[$role->id];
@@ -224,7 +226,38 @@ class RoleServiceStub implements RoleService
      */
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct )
     {
-        // TODO: Implement updatePolicy() method.
+        $newPolicy = new PolicyStub(
+            array(
+                'id'           =>  $policy->id,
+                'roleId'       =>  $policy->roleId,
+                'module'       =>  $policy->module,
+                'function'     =>  $policy->function,
+                'limitations'  =>  $policyUpdateStruct->getLimitations()
+            )
+        );
+
+        $policies = $this->roles[$policy->roleId]->getPolicies();
+        foreach ( $policies as $i => $rolePolicy )
+        {
+            if ( $rolePolicy->id !== $policy->id )
+            {
+                continue;
+            }
+
+            $policies[$i] = $newPolicy;
+            break;
+        }
+
+        $this->roles[$policy->roleId] = new RoleStub(
+            array(
+                'id'           =>  $this->roles[$policy->roleId]->id,
+                'name'         =>  $this->roles[$policy->roleId]->name,
+                'description'  =>  $this->roles[$policy->roleId]->description
+            ),
+            $policies
+        );
+
+        return $newPolicy;
     }
 
     /**
