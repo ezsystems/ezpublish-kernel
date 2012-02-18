@@ -524,6 +524,18 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the addPolicy() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testAddPolicyThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for RoleService::addPolicy() is not implemented." );
+    }
+
+    /**
      * Test for the createRole() method.
      *
      * @return void
@@ -704,18 +716,6 @@ class RoleServiceTest extends BaseTest
     public function testUpdatePolicyThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for RoleService::updatePolicy() is not implemented." );
-    }
-
-    /**
-     * Test for the addPolicy() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAddPolicyThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for RoleService::addPolicy() is not implemented." );
     }
 
     /**
