@@ -5,11 +5,10 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 
 /**
  * This class is used to create a new role
- *
- * @property-read array $policies Policies associated with the role
  */
 abstract class RoleCreateStruct extends ValueObject
 {
+
     /**
      * Name of the role
      *
