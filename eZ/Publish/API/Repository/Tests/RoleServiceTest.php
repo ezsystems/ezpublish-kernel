@@ -663,7 +663,35 @@ class RoleServiceTest extends BaseTest
      */
     public function testUpdatePolicyUpdatesRole()
     {
-        $this->markTestIncomplete( "Test for RoleService::updatePolicy() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService  = $repository->getRoleService();
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'translate' );
+        $policyCreate->addLimitation( new LanguageLimitation( array( 'limitationValues' => array( 28, 29 ) ) ) );
+
+        $roleCreate = $roleService->newRoleCreateStruct( 'myRole' );
+        $roleCreate->addPolicy( $policyCreate );
+
+        $role = $roleService->createRole( $roleCreate );
+
+        $policy = $role->getPolicy( 'content', 'translate' );
+
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation( new ContentTypeLimitation( array( 'limitationValues' => array( 29, 30 ) ) ) );
+
+        $roleService->updatePolicy( $policy, $policyUpdate );
+
+        $role = $roleService->loadRole( 'myRole' );
+
+        $policy = $role->getPolicy( 'content', 'translate' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array( new ContentTypeLimitation( array( 'limitationValues' => array( 29, 30 ) ) ) ),
+            $policy->getLimitations()
+        );
     }
 
     /**
