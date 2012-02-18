@@ -23,6 +23,9 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyUpdateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
 
@@ -56,6 +59,11 @@ class RoleServiceStub implements RoleService
      * @todo REMOVE THIS WORKAROUND
      */
     private $userPolicies = array();
+
+    /**
+     * @var integer
+     */
+    private $nextPolicyId = 0;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -129,7 +137,27 @@ class RoleServiceStub implements RoleService
      */
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        // TODO: Implement updateRole() method.
+        $roleName = $roleUpdateStruct->name ?: $role->name;
+
+        if ( isset( $this->nameToRoleId[$roleName] ) && $this->nameToRoleId[$roleName] !== $role->id )
+        {
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $updatedRole = new RoleStub(
+            array(
+                'id'           =>  $role->id,
+                'name'         =>  $roleName,
+                'description'  =>  $roleUpdateStruct->description ?: $role->description
+            )
+        );
+
+        unset( $this->roles[$role->id], $this->nameToRoleId[$role->name] );
+
+        $this->roles[$updatedRole->id]          = $updatedRole;
+        $this->nameToRoleId[$updatedRole->name] = $updatedRole->id;
+
+        return $this->roles[$updatedRole->id];
     }
 
     /**
@@ -144,7 +172,28 @@ class RoleServiceStub implements RoleService
      */
     public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct )
     {
-        // TODO: Implement addPolicy() method.
+        $this->roles[$role->id] = new RoleStub(
+            array(
+                'id'           =>  $role->id,
+                'name'         =>  $role->name,
+                'description'  =>  $role->description,
+            ),
+            array_merge(
+                $role->policies,
+                array(
+                    new PolicyStub(
+                        array(
+                            'id'        =>  ++$this->nextPolicyId,
+                            'roleId'    =>  $role->id,
+                            'module'    =>  $policyCreateStruct->module,
+                            'function'  =>  $policyCreateStruct->function
+                        )
+                    )
+                )
+            )
+        );
+
+        return $this->roles[$role->id];
     }
 
     /**
@@ -218,7 +267,7 @@ class RoleServiceStub implements RoleService
      */
     public function deleteRole( Role $role )
     {
-        // TODO: Implement deleteRole() method.
+        unset( $this->roles[$role->id], $this->nameToRoleId[$role->name] );
     }
 
     /**
@@ -362,7 +411,7 @@ class RoleServiceStub implements RoleService
      */
     public function newPolicyCreateStruct( $module, $function )
     {
-        // TODO: Implement newPolicyCreateStruct() method.
+        return new PolicyCreateStructStub( $module, $function );
     }
 
     /**
@@ -372,7 +421,7 @@ class RoleServiceStub implements RoleService
      */
     public function newPolicyUpdateStruct()
     {
-        // TODO: Implement newPolicyUpdateStruct() method.
+        return new PolicyUpdateStructStub();
     }
 
     /**
@@ -382,7 +431,7 @@ class RoleServiceStub implements RoleService
      */
     public function newRoleUpdateStruct()
     {
-        // TODO: Implement newRoleUpdateStruct() method.
+        return new RoleUpdateStruct();
     }
 
     /**

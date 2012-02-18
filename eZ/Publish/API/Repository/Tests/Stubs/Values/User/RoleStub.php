@@ -21,12 +21,30 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
 class RoleStub extends Role
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\Policy[]
+     */
+    protected $policies;
+
+    /**
+     * Instantiates a role stub instance.
+     *
+     * @param array $properties
+     * @param \eZ\Publish\API\Repository\Values\User\Policy[] $policies
+     */
+    public function __construct( array $properties = array(), array $policies = array() )
+    {
+        parent::__construct( $properties );
+
+        $this->policies = $policies;
+    }
+
+    /**
      * returns the list of policies of this role
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Policy}
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function getPolicies()
     {
-        // TODO: Implement getPolicies() method.
+        return $this->policies;
     }
 
     /**
@@ -38,6 +56,13 @@ class RoleStub extends Role
      */
     public function getPolicy( $module, $function )
     {
+        foreach ( $this->policies as $policy )
+        {
+            if ( $policy->module === $module && $policy->function === $function )
+            {
+                return $policy;
+            }
+        }
         // TODO: Implement getPolicy() method.
     }
 }

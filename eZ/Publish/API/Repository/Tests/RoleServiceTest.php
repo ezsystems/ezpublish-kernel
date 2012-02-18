@@ -23,7 +23,7 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::newRoleCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetRoleService
      */
     public function testNewRoleCreateStruct()
     {
@@ -216,7 +216,7 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::loadRoles()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoles
      */
     public function testLoadRolesReturnsExpectedSetOfDefaultRoles()
     {
@@ -232,7 +232,6 @@ class RoleServiceTest extends BaseTest
         {
             $roleNames[] = $role->name;
         }
-
         /* BEGIN: Use Case */
 
         sort( $roleNames );
@@ -262,15 +261,52 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the newRoleUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::newRoleUpdateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetRoleService
+     */
+    public function testNewRoleUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+        $roleUpdate  = $roleService->newRoleUpdateStruct( 'newRole' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleUpdateStruct', $roleUpdate );
+    }
+
+    /**
      * Test for the updateRole() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
      */
     public function testUpdateRole()
     {
-        $this->markTestIncomplete( "Test for RoleService::updateRole() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+        $roleCreate  = $roleService->newRoleCreateStruct( 'newRole' );
+
+        $role = $roleService->createRole( $roleCreate );
+
+        $roleUpdate       = $roleService->newRoleUpdateStruct();
+        $roleUpdate->name = 'updatedRole';
+
+        $updatedRole = $roleService->updateRole( $role, $roleUpdate );
+        /* END: Use Case */
+
+        // Now verify that our change was saved
+        $role = $roleService->loadRole( 'updatedRole' );
+
+        $this->assertEquals( $role->id, $updatedRole->id );
     }
 
     /**
@@ -279,6 +315,7 @@ class RoleServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
      */
     public function testUpdateRoleThrowsUnauthorizedException()
     {
@@ -291,10 +328,102 @@ class RoleServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
      */
     public function testUpdateRoleThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for RoleService::updateRole() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+        $roleCreate  = $roleService->newRoleCreateStruct( 'newRole' );
+
+        $role = $roleService->createRole( $roleCreate );
+
+        $roleUpdate       = $roleService->newRoleUpdateStruct();
+        $roleUpdate->name = 'Editor';
+
+        // This call will fail with an IllegalArgumentException, because Editor is a predefined role
+        $roleService->updateRole( $role, $roleUpdate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the deleteRole() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::deleteRole()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoles
+     */
+    public function testDeleteRole()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+        $roleCreate  = $roleService->newRoleCreateStruct( 'newRole' );
+
+        $role = $roleService->createRole( $roleCreate );
+
+        $roleService->deleteRole( $role );
+        /* END: Use Case */
+
+        $this->assertEquals( 5, count( $roleService->loadRoles() ) );
+    }
+
+    /**
+     * Test for the deleteRole() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::deleteRole()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testDeleteRole
+     */
+    public function testDeleteRoleThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for RoleService::deleteRole() is not implemented." );
+    }
+
+    /**
+     * Test for the newPolicyCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::newPolicyCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetRoleService
+     */
+    public function testNewPolicyCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService  = $repository->getRoleService();
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\PolicyCreateStruct', $policyCreate );
+    }
+
+    /**
+     * Test for the newPolicyCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::newPolicyCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
+     */
+    public function testNewPolicyCreateStructSetsStructProperties()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService  = $repository->getRoleService();
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array( 'content', 'create' ),
+            array( $policyCreate->module, $policyCreate->function )
+        );
     }
 
     /**
@@ -302,11 +431,98 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
      */
     public function testAddPolicy()
     {
-        $this->markTestIncomplete( "Test for RoleService::addPolicy() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $role       = $roleService->createRole( $roleCreate );
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $role         = $roleService->addPolicy( $role, $policyCreate );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+    }
+
+    /**
+     * Test for the addPolicy() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
+     */
+    public function testAddPolicyUpdatesRole()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $role       = $roleService->createRole( $roleCreate );
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $role         = $roleService->addPolicy( $role, $policyCreate );
+
+        $policy = $role->getPolicy( 'content', 'create' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
+    }
+
+    /**
+     * Test for the addPolicy() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyUpdatesRole
+     */
+    public function testAddPolicySetsPolicyProperties()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $role       = $roleService->createRole( $roleCreate );
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $role         = $roleService->addPolicy( $role, $policyCreate );
+
+        $policy = $role->getPolicy( 'content', 'create' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array( $role->id, 'content', 'create' ),
+            array( $policy->roleId, $policy->module, $policy->function )
+        );
+    }
+
+    /**
+     * Test for the newPolicyUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::newPolicyUpdateStruct()
+     *
+     */
+    public function testNewPolicyUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService  = $repository->getRoleService();
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct', $policyUpdate );
     }
 
     /**
@@ -367,30 +583,6 @@ class RoleServiceTest extends BaseTest
     public function testUpdatePolicyThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for RoleService::updatePolicy() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteRole() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::deleteRole()
-     * 
-     */
-    public function testDeleteRole()
-    {
-        $this->markTestIncomplete( "Test for RoleService::deleteRole() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteRole() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::deleteRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteRoleThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for RoleService::deleteRole() is not implemented." );
     }
 
     /**
@@ -655,41 +847,5 @@ class RoleServiceTest extends BaseTest
     public function testGetRoleAssignmentsForUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for RoleService::getRoleAssignmentsForUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the newPolicyCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::newPolicyCreateStruct()
-     * 
-     */
-    public function testNewPolicyCreateStruct()
-    {
-        $this->markTestIncomplete( "Test for RoleService::newPolicyCreateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newPolicyUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::newPolicyUpdateStruct()
-     * 
-     */
-    public function testNewPolicyUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for RoleService::newPolicyUpdateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newRoleUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::newRoleUpdateStruct()
-     * 
-     */
-    public function testNewRoleUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for RoleService::newRoleUpdateStruct() is not implemented." );
     }
 }
