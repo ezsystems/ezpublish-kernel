@@ -82,7 +82,7 @@ class RoleService implements RoleServiceInterface
 
         try
         {
-            $existingRole = $this->loadRole( $roleCreateStruct->name );
+            $existingRole = $this->loadRoleByName( $roleCreateStruct->name );
             if ( $existingRole !== null )
                 throw new IllegalArgumentException( "name", $roleCreateStruct->name );
         }
@@ -114,14 +114,14 @@ class RoleService implements RoleServiceInterface
         {
             try
             {
-                $existingRole = $this->loadRole( $roleUpdateStruct->name );
+                $existingRole = $this->loadRoleByName( $roleUpdateStruct->name );
                 if ( $existingRole !== null )
                     throw new IllegalArgumentException( "name", $roleUpdateStruct->name );
             }
             catch ( NotFoundException $e ) {}
         }
 
-        $loadedRole = $this->loadRoleById( $role->id );
+        $loadedRole = $this->loadRole( $role->id );
 
         $this->persistenceHandler->userHandler()->updateRole( new SPIRoleUpdateStruct( array(
             'id'          => $role->id,
@@ -130,7 +130,7 @@ class RoleService implements RoleServiceInterface
             // 'description' => !empty( $roleUpdateStruct->description ) ? $roleUpdateStruct->description : $loadedRole->description,
         ) ) );
 
-        return $this->loadRoleById( $role->id );
+        return $this->loadRole( $role->id );
     }
 
     /**
@@ -158,7 +158,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
         // load role to check existence
-        $this->loadRoleById( $role->id );
+        $this->loadRole( $role->id );
 
         $spiPolicy = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
                                                           $policyCreateStruct->function,
@@ -166,7 +166,7 @@ class RoleService implements RoleServiceInterface
 
         $this->persistenceHandler->userHandler()->addPolicy( $role->id, $spiPolicy );
 
-        return $this->loadRoleById( $role->id );
+        return $this->loadRole( $role->id );
     }
 
     /**
@@ -188,11 +188,11 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
 
         // load role to check existence
-        $this->loadRoleById( $role->id );
+        $this->loadRole( $role->id );
 
         $this->persistenceHandler->userHandler()->removePolicy( $role->id, $policy->id );
 
-        return $this->loadRoleById( $role->id );
+        return $this->loadRole( $role->id );
     }
 
     /**
@@ -230,27 +230,27 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads a role for the given ID
+     * loads a role for the given id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
      *
-     * @param int $roleId
+     * @param mixed $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    protected function loadRoleById( $roleId )
+    */
+    public function loadRole( $id )
     {
-        if ( empty( $roleId ) )
-            throw new InvalidArgumentValue( "roleId", $roleId );
+        if ( empty( $id ) )
+            throw new InvalidArgumentValue( "id", $id );
 
         try
         {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $roleId );
+            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $id );
         }
         catch( NotFound $e )
         {
-            throw new NotFoundException( "role", $roleId, $e );
+            throw new NotFoundException( "role", $id, $e );
         }
 
         return $this->buildDomainRoleObject( $spiRole );
@@ -266,7 +266,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRole( $name )
+    public function loadRoleByName( $name )
     {
         if ( empty( $name ) )
             throw new InvalidArgumentValue( "name", $name );
@@ -291,7 +291,10 @@ class RoleService implements RoleServiceInterface
      *
      * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Role}
      */
-    public function loadRoles(){}
+    public function loadRoles()
+    {
+        //@todo: implement
+    }
 
     /**
      * deletes the given role
@@ -306,7 +309,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
         // load role to check existence
-        $this->loadRoleById( $role->id );
+        $this->loadRole( $role->id );
 
         $this->persistenceHandler->userHandler()->deleteRole( $role->id );
     }
