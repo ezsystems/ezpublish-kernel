@@ -76,6 +76,15 @@ interface Handler
     public function loadByIdentifier( $identifier );
 
     /**
+     * Load a (defined) content type by remote id
+     *
+     * @param mixed $remoteId
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByRemoteId( $remoteId );
+
+    /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */

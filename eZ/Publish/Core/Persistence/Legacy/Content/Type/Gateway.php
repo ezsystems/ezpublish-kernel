@@ -177,7 +177,17 @@ abstract class Gateway
      * @param int $version
      * @return array(int=>array(string=>mixed)) Data rows.
      */
-    abstract public function loadTypeDataByIdentifier( $identifier, $version );
+    abstract public function loadTypeDataByIdentifier( $identifier, $status );
+
+    /**
+     * Loads an array with data about the type referred to by $remoteId in
+     * $status.
+     *
+     * @param mixed $remoteId
+     * @param int $status
+     * @return array(int=>array(string=>mixed)) Data rows.
+     */
+    abstract public function loadTypeDataByRemoteId( $remoteId, $status );
 
     /**
      * Counts the number of instances that exists of the identified type.

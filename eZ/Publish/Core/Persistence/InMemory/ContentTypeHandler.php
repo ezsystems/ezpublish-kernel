@@ -196,6 +196,32 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
+     * Load a (defined) content type by remote id
+     *
+     * @param mixed $remoteId
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByRemoteId( $remoteId )
+    {
+        $type = $this->backend->find(
+            'Content\\Type',
+            array( 'remoteId' => $remoteId, 'status' => Type::STATUS_DEFINED ),
+            array(
+                'fieldDefinitions' => array(
+                    'type' => 'Content\\Type\\FieldDefinition',
+                    'match' => array( '_typeId' => 'id', '_status' => 'status' )
+                )
+            )
+        );
+
+        if ( !$type )
+            throw new NotFound( 'Content\\Type', "{$remoteId}' and status '" . Type::STATUS_DEFINED );
+
+        return $type[0];
+    }
+
+    /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */

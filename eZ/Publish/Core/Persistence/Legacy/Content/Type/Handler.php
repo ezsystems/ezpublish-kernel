@@ -170,6 +170,21 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
+     * Load a (defined) content type by remote id
+     *
+     * @param mixed $remoteId
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByRemoteId( $remoteId )
+    {
+        $rows = $this->contentTypeGateway->loadTypeDataByRemoteId(
+            $remoteId, Type::STATUS_DEFINED
+        );
+        return $this->loadFromRows( $rows, $remoteId, Type::STATUS_DEFINED );
+    }
+
+    /**
      * Loads a single Type from $rows
      *
      * @param array $rows
