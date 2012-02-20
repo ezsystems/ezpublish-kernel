@@ -8,7 +8,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * This class represents a user group
  * 
  * @property-read mixed $id
- * @property-read int $parentId
+ * @property-read mixed $parentId
  * @property-read int $subGroupCount
  */
 abstract class UserGroup extends Content
@@ -16,21 +16,21 @@ abstract class UserGroup extends Content
     /**
      * The id of the user group
      *
-     * @var integer
+     * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      *
      * the parent id of the user group
-     * @var integer
+     * @var mixed
      */
-    public $parentId;
+    protected $parentId;
 
     /**
      *
      * The number of sub groups
      * @var integer
      */
-    public $subGroupCount;
+    protected $subGroupCount;
 }
