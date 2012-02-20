@@ -106,11 +106,17 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param int $groupId
      * @return Group
+     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
      */
     public function loadGroup( $groupId )
     {
         $rows = $this->contentTypeGateway->loadGroupData( $groupId );
         $groups = $this->mapper->extractGroupsFromRows( $rows );
+
+        if ( count( $groups ) !== 1 )
+        {
+            throw new Exception\TypeGroupNotFound( $groupId );
+        }
 
         return $groups[0];
     }

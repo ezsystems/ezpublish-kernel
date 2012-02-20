@@ -108,6 +108,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @param mixed $groupId
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
      */
     public function loadGroup( $groupId )
     {
