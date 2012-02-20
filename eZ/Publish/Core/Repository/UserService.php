@@ -459,9 +459,13 @@ class UserService implements UserServiceInterface
         if ( $userUpdateStruct->maxLogin !== null && !is_numeric( $userUpdateStruct->maxLogin ) )
             throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
 
+        $contentService = $this->repository->getContentService();
+
         $loadedUser = $this->loadUser( $user->id );
 
-        $this->repository->getContentService()->updateContent( $loadedUser->getVersionInfo(), $userUpdateStruct->contentUpdateStruct );
+        $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
+        $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userUpdateStruct->contentUpdateStruct );
+        $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         $this->persistenceHandler->userHandler()->update( new SPIUser( array(
             'id'            => $loadedUser->id,
