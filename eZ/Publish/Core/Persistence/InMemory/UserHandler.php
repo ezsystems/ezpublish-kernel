@@ -167,6 +167,25 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
+     * Load all roles
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role[]
+     */
+    public function loadRoles()
+    {
+        return $this->backend->find(
+            'User\\Role',
+            array(),
+            array(
+                'policies' => array(
+                    'type' => 'User\\Policy',
+                    'match' => array( 'roleId' => 'id' )
+                )
+            )
+        );
+    }
+
+    /**
      * Load roles assigned to a user/group
      *
      * @param mixed $groupId

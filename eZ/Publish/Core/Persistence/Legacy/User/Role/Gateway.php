@@ -34,6 +34,13 @@ abstract class Gateway
     abstract public function loadRole( $roleId );
 
     /**
+     * Load all roles
+     *
+     * @return array
+     */
+    abstract public function loadRoles();
+
+    /**
      * Load all roles associated with the given content objects
      *
      * @param array $contentIds
