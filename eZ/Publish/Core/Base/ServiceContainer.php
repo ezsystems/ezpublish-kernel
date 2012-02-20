@@ -21,14 +21,14 @@ use eZ\Publish\Core\Base\ConfigurationManager,
  *
  * Usage:
  *
- *     $sc = new eZ\Publish\Core\Base\ServiceContainer( Configuration::getInstance('service')->getAll() );
+ *     $sc = new eZ\Publish\Core\Base\ServiceContainer( $configManager->getConfiguration('service')->getAll() );
  *     $sc->getRepository->getContentService()...;
  *
  * Or overriding $dependencies (in unit tests):
  * ( $dependencies keys should have same value as service.ini "arguments" values explained bellow )
  *
  *     $sc = new eZ\Publish\Core\Base\ServiceContainer(
- *         Configuration::getInstance('service')->getAll(),
+ *         $configManager->getConfiguration('service')->getAll(),
  *         array(
  *             '@persistence_handler' => new \eZ\Publish\Core\Persistence\InMemory\Handler()
  *         )
@@ -98,10 +98,10 @@ class ServiceContainer
      */
     public function getConfigurationManager()
     {
-        if ( isset( $this->dependencies['@configuration'] ) )
-            return $this->dependencies['@configuration'];
+        if ( isset( $this->dependencies['@configurationManager'] ) )
+            return $this->dependencies['@configurationManager'];
         // will not work as ConfigurationManager has dependencies on config.php settings at least
-        return $this->get( 'configuration' );
+        throw new \Exception( '@configurationManager missing, usually setup in bootstrap.php!' );
     }
 
     /**

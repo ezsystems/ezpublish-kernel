@@ -53,7 +53,7 @@ $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
     array(
         '@classLoader' => $loader,
-        '@configuration' => $configManager,
+        '@configurationManager' => $configManager,
     )
 );
 

@@ -251,6 +251,7 @@ class LanguageService implements LanguageServiceInterface
      * returns a configured default language code
      *
      * @return string
+     * @todo This should use dependency injection instead (service.ini settings instead of reusing legacy ezp settings)
      */
     public function getDefaultLanguageCode()
     {

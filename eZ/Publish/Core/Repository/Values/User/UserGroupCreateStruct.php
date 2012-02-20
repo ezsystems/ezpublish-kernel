@@ -33,7 +33,7 @@ class UserGroupCreateStruct extends APIUserGroupCreateStruct
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
         if ( $language === null )
-            $this->fields[$fieldDefIdentifier] = $value;
+            $this->fields[$fieldDefIdentifier][$this->mainLanguageCode] = $value;
         else
             $this->fields[$fieldDefIdentifier][$language] = $value;
     }
