@@ -27,6 +27,7 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup,
     eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPIContentTypeGroupCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPIContentTypeGroupUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints as SPIFieldTypeConstraints,
@@ -88,7 +89,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->loadContentTypeGroupByIdentifier( $contentTypeGroupCreateStruct->identifier );
 
             throw new IllegalArgumentException(
-                '$contentTypeGroupCreateStruct',
+                '$contentTypeGroupCreateStruct->identifier',
                 "a group with the same identifier already exists"
             );
         }
@@ -258,10 +259,12 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup
      */
-    protected function buildContentTypeGroupDomainObject( $spiGroup )
+    protected function buildContentTypeGroupDomainObject( SPIContentTypeGroup $spiGroup )
     {
-        $modificationDate = new DateTime( "@{$spiGroup->modified}" );
-        $creationDate = new DateTime( "@{$spiGroup->created}" );
+        $modificationDate = new DateTime();
+        $modificationDate->setTimestamp( $spiGroup->modified );
+        $creationDate = new DateTime();
+        $creationDate->setTimestamp( $spiGroup->created );
 
         return new ContentTypeGroup(
             array(
@@ -269,8 +272,10 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "identifier" => $spiGroup->identifier,
                 "creationDate" => $creationDate,
                 "modificationDate" => $modificationDate,
-                "creatorId" => $creationDate,
-                "modifierId" => $spiGroup->modifierId
+                "creatorId" => $spiGroup->creatorId,
+                "modifierId" => $spiGroup->modifierId,
+                "names" => $spiGroup->name,
+                "descriptions" => $spiGroup->description
             )
         );
     }
@@ -405,7 +410,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    protected function buildContentTypeDomainObject( $spiContentType )
+    protected function buildContentTypeDomainObject( SPIContentType $spiContentType )
     {
         $modifiedDate = new DateTime( "@{$spiContentType->modified}" );
         $createdDate = new DateTime( "@{$spiContentType->created}" );
@@ -453,7 +458,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    protected function buildContentTypeDraftDomainObject( $spiContentType )
+    protected function buildContentTypeDraftDomainObject( SPIContentType $spiContentType )
     {
         return new ContentTypeDraft(
             array(
