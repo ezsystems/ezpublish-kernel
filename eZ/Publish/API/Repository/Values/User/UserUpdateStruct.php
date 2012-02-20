@@ -43,13 +43,14 @@ class UserUpdateStruct extends ValueObject
 
     /**
      * the update structure  for the profile version
-     * @var VersionUpdateStruct
+     * @var eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public $versionUpdateStruct = null;
 
     /**
      * the update structure  for the profile meta data
-     * @var ContentUpdateStruct
+     * @var eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct
      */
     public $contentUpdateStruct = null;
+    
 }
