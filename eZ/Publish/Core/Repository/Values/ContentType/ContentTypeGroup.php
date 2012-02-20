@@ -33,7 +33,7 @@ class ContentTypeGroup extends APIContentTypeGroup
      *
      * @var array
      */
-    public $names;
+    protected $names;
 
 
     /**
@@ -41,7 +41,7 @@ class ContentTypeGroup extends APIContentTypeGroup
      *
      * @var array
      */
-    public $descriptions;
+    protected $descriptions;
 
     /**
      *
