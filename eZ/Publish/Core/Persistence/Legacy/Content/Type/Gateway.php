@@ -96,33 +96,33 @@ abstract class Gateway
      * Insert assignement of $typeId to $groupId.
      *
      * @param mixed $typeId
-     * @param int $version
+     * @param int $status
      * @param mixed $groupId
      * @return void
      */
-    abstract public function insertGroupAssignement( $typeId, $version, $groupId );
+    abstract public function insertGroupAssignement( $typeId, $status, $groupId );
 
     /**
      * Deletes a group assignements for a Type.
      *
      * @param mixed $groupId
      * @param mixed $typeId
-     * @param int $version
+     * @param int $status
      * @return void
      */
-    abstract public function deleteGroupAssignement( $groupId, $typeId, $version );
+    abstract public function deleteGroupAssignement( $groupId, $typeId, $status );
 
     /**
      * Inserts a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId
-     * @param int $version
+     * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
      */
     abstract public function insertFieldDefinition(
-        $typeId, $version, FieldDefinition $fieldDefinition,
+        $typeId, $status, FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
     );
 
@@ -130,51 +130,51 @@ abstract class Gateway
      * Deletes a field definition.
      *
      * @param mixed $typeId
-     * @param int $version
+     * @param int $status
      * @param mixed $fieldDefinitionId
      * @return void
      */
-    abstract public function deleteFieldDefinition( $typeId, $version, $fieldDefinitionId );
+    abstract public function deleteFieldDefinition( $typeId, $status, $fieldDefinitionId );
 
     /**
      * Updates a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId
-     * @param int $version
+     * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      */
     abstract public function updateFieldDefinition(
-        $typeId, $version, FieldDefinition $fieldDefinition,
+        $typeId, $status, FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
     );
 
     /**
      * Update a type with $updateStruct.
      *
-     * @param mixed $type
-     * @param int $version
+     * @param mixed $typeId
+     * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
      * @return void
      */
-    abstract public function updateType( $typeId, $version, UpdateStruct $updateStruct );
+    abstract public function updateType( $typeId, $status, UpdateStruct $updateStruct );
 
     /**
-     * Loads an array with data about $typeId in $version.
+     * Loads an array with data about $typeId in $status.
      *
      * @param mixed $typeId
-     * @param int $version
+     * @param int $status
      * @return array(int=>array(string=>mixed)) Data rows.
      */
-    abstract public function loadTypeData( $typeId, $version );
+    abstract public function loadTypeData( $typeId, $status );
 
     /**
      * Loads an array with data about the type referred to by $identifier in
-     * $version.
+     * $status.
      *
      * @param string $identifier
-     * @param int $version
+     * @param int $status
      * @return array(int=>array(string=>mixed)) Data rows.
      */
     abstract public function loadTypeDataByIdentifier( $identifier, $status );
@@ -193,18 +193,19 @@ abstract class Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
-     * @param int $version
+     * @param int $status
      * @return int
      */
-    abstract public function countInstancesOfType( $typeId, $version );
+    abstract public function countInstancesOfType( $typeId, $status );
 
     /**
      * Deletes all field definitions of a Type.
      *
      * @param mixed $typeId
+     * @param int $status
      * @return void
      */
-    abstract public function deleteFieldDefinitionsForType( $typeId, $version );
+    abstract public function deleteFieldDefinitionsForType( $typeId, $status );
 
     /**
      * Deletes a the Type.
@@ -212,28 +213,30 @@ abstract class Gateway
      * Does no delete the field definitions!
      *
      * @param mixed $typeId
+     * @param int $status
      * @return void
      */
-    abstract public function deleteType( $typeId, $version );
+    abstract public function deleteType( $typeId, $status );
 
     /**
      * Deletes all group assignements for a Type.
      *
      * @param mixed $typeId
+     * @param int $status
      * @return void
      */
-    abstract public function deleteGroupAssignementsForType( $typeId, $version );
+    abstract public function deleteGroupAssignementsForType( $typeId, $status );
 
     /**
      * Publishes the Type with $typeId from $sourceVersion to $targetVersion,
      * including its fields
      *
      * @param int $typeId
-     * @param int $sourceVersion
-     * @param int $targetVersion
+     * @param int $sourceStatus
+     * @param int $targetStatus
      * @return void
      */
-    abstract public function publishTypeAndFields( $typeId, $sourceVersion, $targetVersion );
+    abstract public function publishTypeAndFields( $typeId, $sourceStatus, $targetStatus );
 
     /**
      * Returns if the field identified by $fieldDefinitionId and $status is

@@ -1085,7 +1085,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a mapper mock
      *
-     * @return eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper
+     * @param array $methods
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper
      */
     protected function getMapperMock( $methods = array() )
     {
