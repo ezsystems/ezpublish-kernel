@@ -141,7 +141,7 @@ class UserService implements UserServiceInterface
             'versionInfo'   => $content->getVersionInfo(),
             'fields'        => $content->getFields(),
             'relations'     => $content->getRelations(),
-            'id'            => $content->contentId,
+            'id'            => $contentInfo->contentId,
             'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
             //@todo: calculate sub group count
             'subGroupCount' => 0
@@ -261,9 +261,29 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        $this->repository->getContentService()->updateContent( $loadedUserGroup->getVersionInfo(), $userGroupUpdateStruct->contentUpdateStruct );
+        $contentService = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
 
-        return $this->loadUserGroup( $loadedUserGroup->id );
+        $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+        $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userGroupUpdateStruct->contentUpdateStruct );
+
+        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
+
+        $mainLocation = $locationService->loadMainLocation( $publishedContentInfo );
+
+        return new UserGroup( array(
+            'contentInfo'   => $publishedContentInfo,
+            'contentType'   => $publishedContentInfo->getContentType(),
+            'contentId'     => $publishedContentInfo->contentId,
+            'versionInfo'   => $publishedContent->getVersionInfo(),
+            'fields'        => $publishedContent->getFields(),
+            'relations'     => $publishedContent->getRelations(),
+            'id'            => $publishedContentInfo->contentId,
+            'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
+            //@todo: calculate sub group count
+            'subGroupCount' => 0
+        ) );
     }
 
     /**
