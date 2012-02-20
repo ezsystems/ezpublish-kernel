@@ -300,6 +300,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
+        $createStruct->identifier .= '_' . ( $createStruct->remoteId = md5( uniqid( get_class( $createStruct ), true ) ) );
 
         return $this->create( $createStruct );
     }
