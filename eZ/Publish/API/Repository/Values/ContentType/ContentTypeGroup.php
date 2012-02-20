@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  *
  * @property-read $names calls getNames() or on access getName($language)
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
- * @property-read int $id the id of the content type group
+ * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
  * @property-read \DateTime $creationDate the date of the creation of this content type group
  * @property-read \DateTime $modificationDate the date of the last modification of this content type group

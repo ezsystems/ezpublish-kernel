@@ -6,7 +6,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 /**
  * This class represents a user value
  *
- * @property-read int $id the user id which is equal to the underlying content id
+ * @property-read mixed $id the user id which is equal to the underlying content id
  * @property-read string $login
  * @property-read string $email
  * @property-read string $passwordHash

@@ -26,7 +26,7 @@ abstract class ContentInfo extends ValueObject
 {
     /**
      * The unique id of the content object
-     * @var int
+     * @var mixed
      */
     protected $contentId;
 

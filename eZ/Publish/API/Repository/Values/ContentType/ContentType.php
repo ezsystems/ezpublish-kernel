@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
  * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read array $contentTypeGroups calls getContentTypeGroups
  * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
- * @property-read int $id the id of the content type
+ * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
  * @property-read DateTime $creationDate the date of the creation of this content type

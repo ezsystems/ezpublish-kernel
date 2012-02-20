@@ -8,7 +8,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read $fieldSettings calls getFieldSettings()
  * @property-read $validators calls getValidators()
- * @property-read int $id the id of the field definition
+ * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
  * @property-read int $position the position of the field definition in the content typr

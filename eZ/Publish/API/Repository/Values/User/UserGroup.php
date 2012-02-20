@@ -7,7 +7,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 /**
  * This class represents a user group
  * 
- * @property-read int $id
+ * @property-read mixed $id
  * @property-read int $parentId
  * @property-read int $subGroupCount
  */
