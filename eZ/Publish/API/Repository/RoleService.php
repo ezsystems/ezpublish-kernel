@@ -84,6 +84,18 @@ interface RoleService
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct );
 
     /**
+     * loads a role for the given id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
+     *
+     * @param mixed $id
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     */
+    public function loadRole( $id );
+
+    /**
      * loads a role for the given name
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
@@ -93,8 +105,8 @@ interface RoleService
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRole( $name );
-
+    
+    public function loadRoleByName( $name );
     /**
      * loads all roles
      *
