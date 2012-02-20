@@ -200,6 +200,8 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
+        //@todo: what happens to sub user groups and users below sub user groups
+
         $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
     }
 
