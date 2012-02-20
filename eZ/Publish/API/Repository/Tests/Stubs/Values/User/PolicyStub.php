@@ -20,12 +20,16 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
 class PolicyStub extends Policy
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    protected $limitations = array();
+
+    /**
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Limitation }
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     public function getLimitations()
     {
-        return array();
-        // TODO: Implement getLimitations() method.
+        return $this->limitations;
     }
 }

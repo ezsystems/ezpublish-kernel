@@ -15,6 +15,7 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
  * Test case for operations in the Repository using in memory storage.
  *
  * @see eZ\Publish\API\Repository\Repository
+ * @group integration
  */
 class RepositoryTest extends BaseTest
 {
@@ -160,11 +161,11 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getUserService()
-     * 
      */
     public function testGetUserService()
     {
-        $this->markTestIncomplete( "Test for Repository::getUserService() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\UserService', $repository->getUserService() );
     }
 
     /**

@@ -5,13 +5,13 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * This class represents a user value
- * 
+ *
  * @property-read int $id the user id which is equal to the underlying content id
- * @property-read string $login 
+ * @property-read string $login
  * @property-read string $email
- * @property-read string $passwordHash 
+ * @property-read string $passwordHash
  * @property-read string $hashAlgorithm Hash algorithm used to has the password
- * @property-read boolean $enabled User can not login if false
+ * @property-read boolean $isEnabled User can not login if false
  * @property-read int $maxLogin Max number of time user is allowed to login
  */
 abstract class User extends Content

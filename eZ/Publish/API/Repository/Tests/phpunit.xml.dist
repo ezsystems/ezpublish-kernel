@@ -6,17 +6,16 @@
     <testsuites>
         <testsuite name="PublicAPI TestSuite">
             <file>RepositoryTest.php</file>
+            <file>UserServiceTest.php</file>
+            <file>RoleServiceTest.php</file>
             <file>SectionServiceTest.php</file>
             <file>LanguageServiceTest.php</file>
             <file>ContentServiceTest.php</file>
             <file>ContentTypeServiceTest.php</file>
             <file>IOServiceTest.php</file>
             <file>LocationServiceTest.php</file>
-            <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>
-            <file>UserServiceTest.php</file>
             <directory>./Exceptions</directory>
-            <directory>./Values</directory>
         </testsuite>
     </testsuites>
     <filter>

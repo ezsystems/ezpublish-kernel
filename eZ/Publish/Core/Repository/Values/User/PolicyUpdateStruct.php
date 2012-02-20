@@ -14,7 +14,7 @@ class PolicyUpdateStruct extends APIPolicyUpdateStruct
      *
      * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    private $limitations = array();
+    protected $limitations = array();
 
     /**
      * Returns list of limitations added to policy

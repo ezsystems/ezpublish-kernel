@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
+use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\RoleService;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use \eZ\Publish\API\Repository\Values\User\Policy;
@@ -20,7 +21,12 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyUpdateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
 
 /**
@@ -32,12 +38,60 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
 class RoleServiceStub implements RoleService
 {
     /**
+     * @var integer
+     */
+    private $nextRoleId = 0;
+
+    /**
+     * @var array
+     */
+    private $nameToRoleId = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\User\Role[]
+     */
+    private $roles;
+
+    /**
      * Temporary solution to emulate user policies.
      *
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
      * @todo REMOVE THIS WORKAROUND
      */
     private $userPolicies = array();
+
+    /**
+     * @var integer
+     */
+    private $nextPolicyId = 0;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->repository = $repository;
+
+        $this->roles = array(
+            1 => new RoleStub( array( 'id' => 1, 'name' => 'Anonymous' ) ),
+            2 => new RoleStub( array( 'id' => 2, 'name' => 'Administrator' ) ),
+            3 => new RoleStub( array( 'id' => 3, 'name' => 'Editor' ) ),
+            4 => new RoleStub( array( 'id' => 4, 'name' => 'Partner' ) ),
+            5 => new RoleStub( array( 'id' => 5, 'name' => 'Member' ) ),
+        );
+
+        foreach ( $this->roles as $role )
+        {
+            ++$this->nextRoleId;
+
+            $this->nameToRoleId[$role->name] = $role->id;
+        }
+    }
 
     /**
      * Creates a new Role
@@ -51,7 +105,27 @@ class RoleServiceStub implements RoleService
      */
     public function createRole( RoleCreateStruct $roleCreateStruct )
     {
-        // TODO: Implement createRole() method.
+        if ( isset( $this->nameToRoleId[$roleCreateStruct->name] ) )
+        {
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $role = new RoleStub(
+            array(
+                'id'           =>  ++$this->nextRoleId,
+                'name'         =>  $roleCreateStruct->name,
+                'description'  =>  $roleCreateStruct->description
+            )
+        );
+
+        $this->roles[$role->id]          = $role;
+        $this->nameToRoleId[$role->name] = $role->id;
+
+        foreach ( $roleCreateStruct->getPolicies() as $policy )
+        {
+            $role = $this->addPolicy( $role, $policy );
+        }
+        return $role;
     }
 
     /**
@@ -67,7 +141,27 @@ class RoleServiceStub implements RoleService
      */
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        // TODO: Implement updateRole() method.
+        $roleName = $roleUpdateStruct->name ?: $role->name;
+
+        if ( isset( $this->nameToRoleId[$roleName] ) && $this->nameToRoleId[$roleName] !== $role->id )
+        {
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $updatedRole = new RoleStub(
+            array(
+                'id'           =>  $role->id,
+                'name'         =>  $roleName,
+                'description'  =>  $roleUpdateStruct->description ?: $role->description
+            )
+        );
+
+        unset( $this->roles[$role->id], $this->nameToRoleId[$role->name] );
+
+        $this->roles[$updatedRole->id]          = $updatedRole;
+        $this->nameToRoleId[$updatedRole->name] = $updatedRole->id;
+
+        return $this->roles[$updatedRole->id];
     }
 
     /**
@@ -82,7 +176,26 @@ class RoleServiceStub implements RoleService
      */
     public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct )
     {
-        // TODO: Implement addPolicy() method.
+        $policies   = $role->getPolicies();
+        $policies[] = new PolicyStub(
+            array(
+                'id'        =>  ++$this->nextPolicyId,
+                'roleId'    =>  $role->id,
+                'module'    =>  $policyCreateStruct->module,
+                'function'  =>  $policyCreateStruct->function
+            )
+        );
+
+        $this->roles[$role->id] = new RoleStub(
+            array(
+                'id'           =>  $role->id,
+                'name'         =>  $role->name,
+                'description'  =>  $role->description,
+            ),
+            $policies
+        );
+
+        return $this->roles[$role->id];
     }
 
     /**
@@ -113,7 +226,38 @@ class RoleServiceStub implements RoleService
      */
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct )
     {
-        // TODO: Implement updatePolicy() method.
+        $newPolicy = new PolicyStub(
+            array(
+                'id'           =>  $policy->id,
+                'roleId'       =>  $policy->roleId,
+                'module'       =>  $policy->module,
+                'function'     =>  $policy->function,
+                'limitations'  =>  $policyUpdateStruct->getLimitations()
+            )
+        );
+
+        $policies = $this->roles[$policy->roleId]->getPolicies();
+        foreach ( $policies as $i => $rolePolicy )
+        {
+            if ( $rolePolicy->id !== $policy->id )
+            {
+                continue;
+            }
+
+            $policies[$i] = $newPolicy;
+            break;
+        }
+
+        $this->roles[$policy->roleId] = new RoleStub(
+            array(
+                'id'           =>  $this->roles[$policy->roleId]->id,
+                'name'         =>  $this->roles[$policy->roleId]->name,
+                'description'  =>  $this->roles[$policy->roleId]->description
+            ),
+            $policies
+        );
+
+        return $newPolicy;
     }
 
     /**
@@ -128,7 +272,11 @@ class RoleServiceStub implements RoleService
      */
     public function loadRole( $name )
     {
-        // TODO: Implement loadRole() method.
+        if ( isset( $this->nameToRoleId[$name] ) )
+        {
+            return $this->roles[$this->nameToRoleId[$name]];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -140,7 +288,7 @@ class RoleServiceStub implements RoleService
      */
     public function loadRoles()
     {
-        // TODO: Implement loadRoles() method.
+        return array_values( $this->roles );
     }
 
     /**
@@ -152,7 +300,7 @@ class RoleServiceStub implements RoleService
      */
     public function deleteRole( Role $role )
     {
-        // TODO: Implement deleteRole() method.
+        unset( $this->roles[$role->id], $this->nameToRoleId[$role->name] );
     }
 
     /**
@@ -296,7 +444,7 @@ class RoleServiceStub implements RoleService
      */
     public function newPolicyCreateStruct( $module, $function )
     {
-        // TODO: Implement newPolicyCreateStruct() method.
+        return new PolicyCreateStructStub( $module, $function );
     }
 
     /**
@@ -306,7 +454,7 @@ class RoleServiceStub implements RoleService
      */
     public function newPolicyUpdateStruct()
     {
-        // TODO: Implement newPolicyUpdateStruct() method.
+        return new PolicyUpdateStructStub();
     }
 
     /**
@@ -316,7 +464,7 @@ class RoleServiceStub implements RoleService
      */
     public function newRoleUpdateStruct()
     {
-        // TODO: Implement newRoleUpdateStruct() method.
+        return new RoleUpdateStruct();
     }
 
     /**

@@ -13,56 +13,16 @@ use eZ\Publish\API\Repository\Tests\Tools\ImmutableArrayObject;
 
 class ContentTypeGroupStub extends ContentTypeGroup
 {
-    private $names;
+    protected $names;
 
-    private $descriptions;
+    protected $descriptions;
 
-    public function __construct( array $values = array() )
+    function __construct( array $data = array() )
     {
-        $this->names = new ImmutableArrayObject(
-            ( isset( $values['names'] ) ? $values['names'] : array() )
-        );
-        unset( $values['names'] );
-
-        $this->descriptions = new ImmutableArrayObject(
-            ( isset( $values['descriptions'] ) ? $values['descriptions'] : array() )
-        );
-        unset( $values['descriptions'] );
-
-        foreach ( $values as $propertyName => $propertyValue )
+        foreach ( $data as $propertyName => $propertyValue )
         {
             $this->$propertyName = $propertyValue;
         }
-    }
-
-    public function __get( $propertyName )
-    {
-        switch ( $propertyName )
-        {
-            case 'names':
-            case 'descriptions':
-                return $this->$propertyName;
-
-            case 'name':
-                return $this->getName();
-
-            case 'description':
-                return $this->getDescription();
-        }
-        return parent::__get( $propertyName );
-    }
-
-    public function __isset( $propertyName )
-    {
-        switch( $propertyName )
-        {
-            case 'names':
-            case 'name':
-            case 'descriptions':
-            case 'description':
-                return true;
-        }
-        return parent::__isset( $propertyName );
     }
 
     /**
@@ -79,7 +39,7 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getNames()
     {
-        return $this->names->getArrayCopy();
+        return $this->names;
     }
 
     /**
@@ -105,7 +65,7 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getDescriptions()
     {
-        return $this->descriptions->getArrayCopy();
+        return $this->descriptions;
     }
 
     /**

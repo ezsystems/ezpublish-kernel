@@ -44,6 +44,9 @@ abstract class Role extends ValueObject
 
     /**
      * returns the policy for the given module and function
+     *
+     * @param string $module
+     * @param string $function
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
     abstract public function getPolicy( $module, $function );

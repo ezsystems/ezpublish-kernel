@@ -51,7 +51,7 @@ class RoleService implements RoleServiceInterface
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
-    public $persistenceHandler;
+    protected $persistenceHandler;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler

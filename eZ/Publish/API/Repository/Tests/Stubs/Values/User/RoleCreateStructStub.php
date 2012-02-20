@@ -21,6 +21,11 @@ use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 class RoleCreateStructStub extends RoleCreateStruct
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
+     */
+    private $policies = array();
+
+    /**
      * instanciates a role create class
      *
      * @param string $name
@@ -37,7 +42,7 @@ class RoleCreateStructStub extends RoleCreateStruct
      */
     public function getPolicies()
     {
-        // TODO: Implement getPolicies() method.
+        return $this->policies;
     }
 
     /**
@@ -47,6 +52,6 @@ class RoleCreateStructStub extends RoleCreateStruct
      */
     public function addPolicy( PolicyCreateStruct $policyCreateStruct )
     {
-        // TODO: Implement addPolicy() method.
+        $this->policies[] = $policyCreateStruct;
     }
 }

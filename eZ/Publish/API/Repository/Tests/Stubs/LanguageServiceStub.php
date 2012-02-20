@@ -16,6 +16,7 @@ use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
@@ -71,6 +72,10 @@ class LanguageServiceStub implements LanguageService
         {
             throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
+        if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
 
         $language = new Language(
             array(
@@ -120,6 +125,11 @@ class LanguageServiceStub implements LanguageService
      */
     public function enableLanguage( Language $language )
     {
+        if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $this->languages[$language->id] = new Language(
             array(
                 'id'            =>  $language->id,
@@ -139,6 +149,11 @@ class LanguageServiceStub implements LanguageService
      */
     public function disableLanguage( Language $language )
     {
+        if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $this->languages[$language->id] = new Language(
             array(
                 'id'            =>  $language->id,
@@ -207,6 +222,10 @@ class LanguageServiceStub implements LanguageService
      */
     public function deleteLanguage( Language $language )
     {
+        if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         unset( $this->languages[$language->id], $this->codes[$language->languageCode] );
     }
 
@@ -227,6 +246,6 @@ class LanguageServiceStub implements LanguageService
      */
     public function newLanguageCreateStruct()
     {
-        // TODO: Implement.
+        return new LanguageCreateStruct();
     }
 }
