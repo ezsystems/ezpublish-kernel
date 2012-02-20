@@ -44,6 +44,8 @@ interface LanguageService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
+     * 
+     * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
     public function enableLanguage( Language $language );
 
@@ -53,6 +55,8 @@ interface LanguageService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
+     * 
+     * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
     public function disableLanguage( Language $language );
 
