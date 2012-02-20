@@ -19,7 +19,7 @@ abstract class RoleAssignment extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
-    abstract public function getLimitation();
+    abstract public function getRoleLimitation();
 
     /**
      * returns the role to which the user or user group is assigned to
