@@ -12,24 +12,19 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
  */
 class ContentTypeDraft extends APIContentTypeDraft
 {
-    public function __get( $property )
+    public function __get( $propertyName )
     {
-        if ( property_exists( $this->contentType, $property ) )
-            return $this->contentType->$property;
-        else if ( property_exists( $this, $property ) )
-            return $this->$property;
-
-        throw new PropertyNotFound( $property, get_class( $this ) );
+        return $this->innerContentType->$propertyName;
     }
 
-    public function __set( $property, $value )
+    public function __set( $propertyName, $propertyValue )
     {
-        if ( property_exists( $this->contentType, $property ) )
-            $this->contentType->$property = $value;
-        else if ( property_exists( $this, $property ) )
-            throw new PropertyPermission( $property, PropertyPermission::READ, get_class( $this ) );
+        $this->innerContentType->$propertyName = $propertyValue;
+    }
 
-        throw new PropertyNotFound( $property, get_class( $this ) );
+    public function __isset( $propertyName )
+    {
+        return isset( $this->innerContentType->$propertyName );
     }
 
     /**
@@ -38,7 +33,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      * @todo document
      */
-    protected $contentType;
+    protected $innerContentType;
 
     /**
      * This method returns the human readable name in all provided languages
@@ -53,7 +48,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function getNames()
     {
-        return $this->contentType->getNames();
+        return $this->innerContentType->getNames();
     }
 
     /**
@@ -64,7 +59,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function getName( $languageCode )
     {
-        return $this->contentType->getName( $languageCode );
+        return $this->innerContentType->getName( $languageCode );
     }
 
     /**
@@ -79,7 +74,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function getDescriptions()
     {
-        return $this->contentType->getDescriptions();
+        return $this->innerContentType->getDescriptions();
     }
 
     /**
@@ -89,7 +84,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function getDescription( $languageCode )
     {
-        return $this->contentType->getDescription( $languageCode );
+        return $this->innerContentType->getDescription( $languageCode );
     }
 
     /**
@@ -98,7 +93,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function getContentTypeGroups()
     {
-        return $this->contentType->contentTypeGroups;
+        return $this->innerContentType->contentTypeGroups;
     }
 
     /**
@@ -108,7 +103,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function getFieldDefinitions()
     {
-        return $this->contentType->getFieldDefinitions();
+        return $this->innerContentType->getFieldDefinitions();
     }
 
     /**
@@ -119,6 +114,6 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
-        return $this->contentType->getFieldDefinition( $fieldDefinitionIdentifier );
+        return $this->innerContentType->getFieldDefinition( $fieldDefinitionIdentifier );
     }
 }
