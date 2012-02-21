@@ -14,6 +14,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
+    eZ\Publish\API\Repository\Values\Content\Location,
 
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
@@ -136,6 +137,13 @@ class UserService implements UserServiceInterface
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         $mainLocation = $locationService->loadMainLocation( $contentInfo );
 
+        $subGroupCount = 0;
+        if ( $mainLocation !== null )
+        {
+            $subGroups = $this->searchSubGroups( $mainLocation );
+            $subGroupCount = $subGroups->count;
+        }
+
         return new UserGroup( array(
             'contentInfo'   => $contentInfo,
             'contentType'   => $contentInfo->getContentType(),
@@ -145,8 +153,7 @@ class UserService implements UserServiceInterface
             'relations'     => $content->getRelations(),
             'id'            => $contentInfo->contentId,
             'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
-            //@todo: calculate sub group count
-            'subGroupCount' => 0
+            'subGroupCount' => $subGroupCount
         ) );
     }
 
@@ -165,30 +172,26 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
+        $locationService = $this->repository->getLocationService();
+
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
-        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+        $mainGroupLocation = $locationService->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
 
         if ( $mainGroupLocation === null )
             return array();
 
-        $searchQuery = new Query();
-        $searchQuery->criterion = new CriterionLogicalAnd( array(
-            //@todo: read user group type ID from INI settings
-            new CriterionContentTypeId( 3 ),
-            new CriterionParentLocationId( $mainGroupLocation->id ),
-            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
-        ) );
-
-        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
-
+        $searchResult = $this->searchSubGroups( $mainGroupLocation );
         if ( !is_array( $searchResult->items ) || empty( $searchResult->items ) )
             return array();
 
         $subUserGroups = array();
         foreach ( $searchResult->items as $resultItem )
         {
-            /** @var \eZ\Publish\API\Repository\Values\Content\Content $resultItem */
             $resultItemContentInfo = $resultItem->getVersionInfo()->getContentInfo();
+            $subSubGroupMainLocation = $locationService->loadMainLocation( $resultItemContentInfo );
+            $subSubGroups = $this->searchSubGroups( $subSubGroupMainLocation );
+
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $resultItem */
             $subUserGroups[] = new UserGroup( array(
                 'contentInfo'   => $resultItemContentInfo,
                 'contentType'   => $resultItemContentInfo->getContentType(),
@@ -198,12 +201,24 @@ class UserService implements UserServiceInterface
                 'relations'     => $resultItem->getRelations(),
                 'id'            => $resultItemContentInfo->contentId,
                 'parentId'      => $mainGroupLocation->id,
-                //@todo: calculate sub group count
-                'subGroupCount' => 0
+                'subGroupCount' => $subSubGroups->count
             ) );
         }
 
         return $subUserGroups;
+    }
+
+    protected function searchSubGroups( Location $location )
+    {
+        $searchQuery = new Query();
+        $searchQuery->criterion = new CriterionLogicalAnd( array(
+            //@todo: read user group type ID from INI settings
+            new CriterionContentTypeId( 3 ),
+            new CriterionParentLocationId( $location->id ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+        ) );
+
+        return $this->repository->getContentService()->findContent( $searchQuery, array() );
     }
 
     /**
@@ -298,6 +313,13 @@ class UserService implements UserServiceInterface
 
         $mainLocation = $locationService->loadMainLocation( $publishedContentInfo );
 
+        $subGroupCount = 0;
+        if ( $mainLocation !== null )
+        {
+            $subGroups = $this->searchSubGroups( $mainLocation );
+            $subGroupCount = $subGroups->count;
+        }
+
         return new UserGroup( array(
             'contentInfo'   => $publishedContentInfo,
             'contentType'   => $publishedContentInfo->getContentType(),
@@ -307,8 +329,7 @@ class UserService implements UserServiceInterface
             'relations'     => $publishedContent->getRelations(),
             'id'            => $publishedContentInfo->contentId,
             'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
-            //@todo: calculate sub group count
-            'subGroupCount' => 0
+            'subGroupCount' => $subGroupCount
         ) );
     }
 
