@@ -208,6 +208,15 @@ class UserService implements UserServiceInterface
         return $subUserGroups;
     }
 
+
+
+    /**
+     * Returns (searches) subgroups of a user group described by its main location
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     */
     protected function searchSubGroups( Location $location )
     {
         $searchQuery = new Query();
@@ -680,6 +689,13 @@ class UserService implements UserServiceInterface
         ) );
     }
 
+    /**
+     * Builds the domain user object from provided persistence user object
+     *
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
     protected function buildDomainUserObject( SPIUser $spiUser )
     {
         $content = $this->repository->getContentService()->loadContent( $spiUser->id );
@@ -702,6 +718,13 @@ class UserService implements UserServiceInterface
         ) );
     }
 
+    /**
+     * Builds the persistence user object from provided user create struct
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
     protected function buildPersistenceUserObject( APIUserCreateStruct $userCreateStruct )
     {
         return new SPIUser( array(
