@@ -70,7 +70,7 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertEquals( 'roleName', $roleCreate->name );
+        $this->assertEquals( 'roleName', $roleCreate->identifier );
     }
 
     /**
@@ -155,7 +155,7 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertEquals( 'roleName', $role->name );
+        $this->assertEquals( 'roleName', $role->identifier );
     }
 
     /**
@@ -216,7 +216,7 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertEquals( 'roleName', $role->name );
+        $this->assertEquals( 'roleName', $role->identifier );
     }
 
     /**
@@ -278,7 +278,7 @@ class RoleServiceTest extends BaseTest
 
         foreach ( $roles as $role )
         {
-            if ( $role->name === 'roleName' )
+            if ( $role->identifier === 'roleName' )
             {
                 break;
             }
@@ -286,7 +286,7 @@ class RoleServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
 
-        $this->assertEquals( 'roleName', $role->name );
+        $this->assertEquals( 'roleName', $role->identifier );
     }
 
     /**
@@ -308,7 +308,7 @@ class RoleServiceTest extends BaseTest
         $roleNames = array();
         foreach ( $roles as $role )
         {
-            $roleNames[] = $role->name;
+            $roleNames[] = $role->identifier;
         }
         /* BEGIN: Use Case */
 
@@ -375,8 +375,8 @@ class RoleServiceTest extends BaseTest
 
         $role = $roleService->createRole( $roleCreate );
 
-        $roleUpdate       = $roleService->newRoleUpdateStruct();
-        $roleUpdate->name = 'updatedRole';
+        $roleUpdate             = $roleService->newRoleUpdateStruct();
+        $roleUpdate->identifier = 'updatedRole';
 
         $updatedRole = $roleService->updateRole( $role, $roleUpdate );
         /* END: Use Case */
@@ -418,8 +418,8 @@ class RoleServiceTest extends BaseTest
 
         $role = $roleService->createRole( $roleCreate );
 
-        $roleUpdate       = $roleService->newRoleUpdateStruct();
-        $roleUpdate->name = 'Editor';
+        $roleUpdate             = $roleService->newRoleUpdateStruct();
+        $roleUpdate->identifier = 'Editor';
 
         // This call will fail with an IllegalArgumentException, because Editor is a predefined role
         $roleService->updateRole( $role, $roleUpdate );

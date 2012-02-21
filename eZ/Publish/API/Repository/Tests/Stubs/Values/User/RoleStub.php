@@ -20,6 +20,10 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
  */
 class RoleStub extends Role
 {
+    protected $names;
+
+    protected $descriptions;
+
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
      */
