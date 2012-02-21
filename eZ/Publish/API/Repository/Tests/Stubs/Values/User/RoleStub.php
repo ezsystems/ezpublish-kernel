@@ -58,7 +58,7 @@ class RoleStub extends Role
      */
     public function getNames()
     {
-        // TODO: Implement getNames() method.
+        return $this->names;
     }
 
     /**
@@ -89,7 +89,7 @@ class RoleStub extends Role
      */
     public function getDescriptions()
     {
-        // TODO: Implement getDescriptions() method.
+        return $this->descriptions;
     }
 
     /**
@@ -99,7 +99,7 @@ class RoleStub extends Role
      *
      * @param string $languageCode
      *
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription($languageCode)
     {
