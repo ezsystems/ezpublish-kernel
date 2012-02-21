@@ -19,6 +19,63 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class ContentServiceTest extends BaseTest
 {
     /**
+     * Test for the newContentCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::newContentCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::createLanguage
+     */
+    public function testNewContentCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // First create a language
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->name         = 'German (Germany)';
+        $languageCreate->enabled      = true;
+        $languageCreate->languageCode = 'ger-DE';
+
+        $language = $languageService->createLanguage( $languageCreate );
+
+        // Second create a content type group and a content type
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'test-group' );
+        $group       = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+
+        $typeCreate->mainLanguageCode = 'eng-GB';
+        $typeCreate->remoteId         = '384b94a1bd6bc06826410e284dd9684887bf56fc';
+        $typeCreate->urlAliasSchema   = 'url|scheme';
+        $typeCreate->nameSchema       = 'name|scheme';
+        $typeCreate->names            = array(
+            'eng-GB' => 'Blog post',
+            'ger-DE' => 'Blog-Eintrag',
+        );
+        $typeCreate->descriptions     = array(
+            'eng-GB' => 'A blog post',
+            'ger-DE' => 'Ein Blog-Eintrag',
+        );
+        $typeCreate->creatorId = 10;
+        $typeCreate->creationDate = new \DateTime();
+
+        $contentType = $contentTypeService->createContentType( $typeCreate, array( $group ) );
+
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentCreateStruct', $contentCreate );
+    }
+
+    /**
      * Test for the loadContentInfo() method.
      *
      * @return void
@@ -1504,18 +1561,6 @@ class ContentServiceTest extends BaseTest
     public function testLoadTranslationInfosThrowsUnauthorizedExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadTranslationInfos() is not implemented." );
-    }
-
-    /**
-     * Test for the newContentCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::newContentCreateStruct()
-     * 
-     */
-    public function testNewContentCreateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentService::newContentCreateStruct() is not implemented." );
     }
 
     /**
