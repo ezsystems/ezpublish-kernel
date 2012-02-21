@@ -259,22 +259,10 @@ class LanguageServiceStub implements LanguageService
      */
     private function initFromFixture()
     {
-        $fixture = $this->repository->loadFixtureByTable( 'ezcontent_language' );
-        foreach ( $fixture as $data )
-        {
-            $language = new Language(
-                array(
-                    'id'            =>  $data['id'],
-                    'name'          =>  $data['name'],
-                    'enabled'       =>  !$data['disabled'],
-                    'languageCode'  =>  $data['locale']
-                )
-            );
-
-            $this->codes[$language->languageCode] = $language->id;
-            $this->languages[$language->id]       = $language;
-
-            $this->nextId = max( $this->nextId, $language->id );
-        }
+        list(
+            $this->languages,
+            $this->codes,
+            $this->nextId
+        ) = $this->repository->loadFixture( 'Language' );
     }
 }

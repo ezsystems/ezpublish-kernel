@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\SectionService;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\Content\Section;
@@ -30,7 +29,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 class SectionServiceStub implements SectionService
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
 
@@ -55,9 +54,9 @@ class SectionServiceStub implements SectionService
     private $assignedContents = array();
 
     /**
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
 
@@ -295,24 +294,10 @@ class SectionServiceStub implements SectionService
      */
     private function initFromFixture()
     {
-        $fixture = $this->repository->loadFixtureByTable( 'ezsection' );
-        foreach ( $fixture as $data )
-        {
-            $section = new Section(
-                array(
-                    'id'          =>  $data['id'],
-                    'name'        =>  $data['name'],
-                    'identifier'  =>  $data['identifier'],
-                )
-            );
-
-            if ( $section->identifier )
-            {
-                $this->identifiers[$section->identifier] = $section->id;
-            }
-            $this->sections[$section->id] = $section;
-
-            $this->nextId = max( $this->nextId, $section->id );
-        }
+        list(
+            $this->sections,
+            $this->identifiers,
+            $this->nextId
+        ) = $this->repository->loadFixture( 'Section' );
     }
 }

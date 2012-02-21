@@ -24,7 +24,7 @@ class RepositoryStub implements Repository
     /**
      * @var string
      */
-    private $fixtureFile;
+    private $fixtureDir;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
@@ -62,11 +62,13 @@ class RepositoryStub implements Repository
     private $contentTypeService;
 
     /**
-     * @param $fixtureFile
+     * Instantiates the stubbed repository.
+     *
+     * @param string $fixtureDir
      */
-    public function __construct( $fixtureFile )
+    public function __construct( $fixtureDir )
     {
-        $this->fixtureFile = $fixtureFile;
+        $this->fixtureDir = $fixtureDir;
     }
 
     /**
@@ -309,29 +311,13 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * Internally helper method that returns the test data for the given legacy
-     * table name.
+     * Internally helper method that returns pre defined test data.
      *
-     * @param string $tableName
+     * @param string $fixtureName
      * @return array
      */
-    public function loadFixtureByTable( $tableName )
+    public function loadFixture( $fixtureName )
     {
-        $fixture = $this->loadFixture();
-        if ( isset( $fixture[$tableName] ) )
-        {
-            return $fixture[$tableName];
-        }
-        return array();
-    }
-
-    /**
-     * Loads the main test fixture also used for the legacy storage.
-     *
-     * @return array
-     */
-    private function loadFixture()
-    {
-        return include $this->fixtureFile;
+        return include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
     }
 }

@@ -120,7 +120,7 @@ class UserServiceStub implements UserService
         $subUserGroups = array();
         foreach ( $this->userGroups as $group )
         {
-            if ( $group->parentId === $userGroup->id )
+            if ( (string) $group->parentId === (string) $userGroup->id )
             {
                 $subUserGroups[] = $group;
             }
@@ -340,35 +340,9 @@ class UserServiceStub implements UserService
      */
     private function initFromFixture()
     {
-        $classId = null;
-        foreach ( $this->repository->loadFixtureByTable( 'ezcontentclass' ) as $data )
-        {
-            if ( 'user_group' === $data['identifier'] )
-            {
-                $classId = $data['id'];
-                break;
-            }
-
-        }
-
-        foreach ( $this->repository->loadFixtureByTable( 'ezcontentobject' ) as $data )
-        {
-            if ( $data['contentclass_id'] != $classId )
-            {
-                continue;
-            }
-
-            $group = new UserGroupStub(
-                array(
-                    'id'             =>  $data['id'],
-                    'parentId'       =>  '/* TODO */',
-                    'subGroupCount'  =>  0
-                )
-            );
-
-            $this->userGroups[$group->id] = $group;
-
-            $this->userGroupNextId = max( $this->userGroupNextId, $group->id );
-        }
+        list(
+            $this->userGroups,
+            $this->userGroupNextId
+        ) = $this->repository->loadFixture( 'UserGroup' );
     }
 }
