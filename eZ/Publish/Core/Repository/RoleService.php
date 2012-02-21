@@ -293,7 +293,18 @@ class RoleService implements RoleServiceInterface
      */
     public function loadRoles()
     {
-        //@todo: implement
+        $spiRoles = $this->persistenceHandler->userHandler()->loadRoles();
+
+        if ( !is_array( $spiRoles ) || empty( $spiRoles ) )
+            return array();
+
+        $rolesToReturn = array();
+        foreach ( $spiRoles as $spiRole )
+        {
+            $rolesToReturn[] = $this->buildDomainRoleObject( $spiRole );
+        }
+
+        return $rolesToReturn;
     }
 
     /**

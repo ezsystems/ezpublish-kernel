@@ -371,7 +371,6 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testLoadAllRoles()
     {
-        self::markTestSkipped( "@todo: enable when RoleService::loadRoles implementation is done" );
         $roleService = $this->repository->getRoleService();
 
         $roles = $roleService->loadRoles();
