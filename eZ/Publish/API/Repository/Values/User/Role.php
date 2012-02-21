@@ -8,8 +8,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * 
  * @property-read mixed $id the internal id of the role
  * @property-read string $identifier the identifier of the role
- * @property-read 5.0 $names calls getNames() or on access getName($language)
- * @property-read 5.0 $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read 5.0 string $mainLanguageCode  the main language of the role names and description used for fallback.
  * @property-read array $policies an array of the policies {@link \eZ\Publish\API\Repository\Values\User\Policy} of the role.
  */

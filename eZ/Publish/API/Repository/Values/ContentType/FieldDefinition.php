@@ -4,8 +4,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  *
  * This class represents a field definition
- * @property-read $names calls getNames() or on access getName($language)
- * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read $fieldSettings calls getFieldSettings()
  * @property-read $validators calls getValidators()
  * @property-read mixed $id the id of the field definition

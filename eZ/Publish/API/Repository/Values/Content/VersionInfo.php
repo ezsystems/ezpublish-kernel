@@ -9,7 +9,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
  * This class holds version information data. It also contains the coresponding {@link Content} to
  * which the version belongs to.
  *
- * @property-read array $names returns an array with language code keys and name values
  * @property-read ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $id the internal id of the version
  * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
@@ -52,13 +51,23 @@ abstract class VersionInfo extends ValueObject
 
     /**
      *
+     * Returns the names computed from the name schema in the available languages.
+     *
+     * @return string[]
+     */
+    abstract public function getNames();
+
+    /**
+     *
      * Returns the name computed from the name schema in the given language.
      * If no language is given the name in initial language of the version if present, otherwise null.
      *
      * @param string $languageCode
+     * 
+     * @return string
      */
     abstract public function getName( $languageCode = null );
-
+    
     /**
      * the last modified date of this version
      * 

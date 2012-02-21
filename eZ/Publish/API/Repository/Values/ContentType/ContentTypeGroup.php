@@ -13,8 +13,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class represents a content type group value
  *
- * @property-read $names calls getNames() or on access getName($language)
- * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
  * @property-read \DateTime $creationDate the date of the creation of this content type group

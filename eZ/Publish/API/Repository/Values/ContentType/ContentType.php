@@ -10,8 +10,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 /**
  * this class represents a content type value
  * 
- * @property-read array $names calls getNames() or on access getName($language)
- * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read array $contentTypeGroups calls getContentTypeGroups
  * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
  * @property-read mixed $id the id of the content type

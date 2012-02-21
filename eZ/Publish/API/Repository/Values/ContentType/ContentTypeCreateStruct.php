@@ -2,9 +2,7 @@
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
-
 use eZ\Publish\API\Repository\Values\ValueObject;
-
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
