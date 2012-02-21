@@ -9,17 +9,37 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class RoleUpdateStruct extends ValueObject
 {
     /**
-     * Name of the role
+     * Readable string identifier of a role
      *
      * @var string
      */
-    public $name;
+    public $identifier;
+    
+    /**
+     * the main language code
+     *
+     * @since 5.0
+     *
+     * @var string
+     */
+    public $mainLanguageCode;
+    
+   /**
+     * An array of names with languageCode keys
+     * 
+     * @since 5.0
+     *
+     * @var array an array of string
+     */
+    public $names;
 
     /**
-     * The description of the role
+     * An array of descriptions with languageCode keys
+     * 
+     * @since 5.0
      *
-     * @since 5.x
-     * @var string
+     * @var array an array of string
      */
-    public $description;
+    public $descriptions;
+    
 }

@@ -20,21 +20,75 @@ abstract class Role extends ValueObject
      */
     protected $id;
 
-    /**
-     * Name of the role
+     /**
+     * Readable string identifier of a role
+     * in 4.x. this is mapped to the role name
      *
      * @var string
      */
-    protected $name;
+    protected $identifier;
+    
+   /**
+     * the main language code
+     *
+     * @since 5.0
+     *
+     * @var string
+     */
+    public $mainLanguageCode;
 
     /**
-     * The description of the role
-     * 
-     * @since 5.0 
      *
-     * @var string
+     * This method returns the human readable name in all provided languages
+     * of the role
+     *
+     * The structure of the return value is:
+     * <code>
+     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
+     * </code>
+     *
+     * @since 5.0
+     *
+     * @return string[]
      */
-    protected $description;
+    abstract public function getNames();
+
+    /**
+     * this method returns the name of the role in the given language
+     *
+     * @since 5.0
+     *
+     * @param string $languageCode
+     *
+     * @return string the name for the given language or null if none exists.
+     */
+    abstract public function getName( $languageCode );
+
+    /**
+     * This method returns the human readable description of the role
+     *
+     * The structure of this field is:
+     * <code>
+     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
+     * </code>
+     *
+     * @since 5.0
+     *
+     * @return string[]
+     */
+    abstract public function getDescriptions();
+
+    /**
+     * this method returns the name of the role in the given language
+     *
+     * @since 5.0
+     *
+     * @param string $languageCode
+     *
+     * @return string the description for the given language or null if none existis.
+     */
+    abstract public function getDescription( $languageCode );
+    
 
     /**
      * returns the list of policies of this role

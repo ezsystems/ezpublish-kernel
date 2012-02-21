@@ -96,17 +96,17 @@ interface RoleService
     public function loadRole( $id );
 
     /**
-     * loads a role for the given name
+     * loads a role for the given identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
      *
-     * @param string $name
+     * @param string $identifier
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     
-    public function loadRoleByName( $name );
+    public function loadRoleByIdentifer( $identifier );
     /**
      * loads all roles
      *

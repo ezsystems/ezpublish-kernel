@@ -8,21 +8,39 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
  */
 abstract class RoleCreateStruct extends ValueObject
 {
-
     /**
-     * Name of the role
+     * Readable string identifier of a role
      *
      * @var string
      */
-    public $name;
+    public $identifier;
 
     /**
-     * The description of the role
+     * the main language code
      *
-     * @since 5.x
+     * @since 5.0
+     *
      * @var string
      */
-    public $description;
+    public $mainLanguageCode;
+    
+   /**
+     * An array of names with languageCode keys
+     * 
+     * @since 5.0
+     *
+     * @var array an array of string
+     */
+    public $names;
+
+    /**
+     * An array of descriptions with languageCode keys
+     * 
+     * @since 5.0
+     *
+     * @var array an array of string
+     */
+    public $descriptions;
 
     /**
      * Returns policies associated with the role
