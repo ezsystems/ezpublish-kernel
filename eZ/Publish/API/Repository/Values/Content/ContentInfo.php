@@ -9,7 +9,6 @@ use DateTime;
 /**
  * This class provides all version independent information of the content object.
  * 
- * @property-read eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType calls {@link getContentType()}
  * @property-read int $contentId The unique id of the content object
  * @property-read string $name the computed name (via name schema) in the main language of the content object
  * @property-read int $sectionId the section to which the content is assigned
@@ -21,6 +20,7 @@ use DateTime;
  * @property-read boolean $alwaysAvailable Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $mainLanguageCode The main language code of the content. If the available flag is set to true the content is shown in this language if the requested language does not exist.
+ * @property-read mixed $mainLocationId Identifier of the main location.
  */
 abstract class ContentInfo extends ValueObject
 {

@@ -7,8 +7,6 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * this clss is used for creating content types
- *
- * @property $fieldDefinitions the collection of field definitions
  */
 abstract class ContentTypeCreateStruct extends ValueObject
 {
@@ -94,6 +92,12 @@ abstract class ContentTypeCreateStruct extends ValueObject
      */
     public $descriptions;
     
+    /**
+     * returns the list of field definitions
+     *
+     * @return array an array of {@link FieldDefinitionCreateStruct}
+     */
+    abstract public function getFieldDefinitions();
 
     /**
      * adds a new field definition

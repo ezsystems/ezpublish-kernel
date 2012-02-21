@@ -9,7 +9,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id the internal id of the role
  * @property-read string $identifier the identifier of the role
  * @property-read string $mainLanguageCode 5.0, the main language of the role names and description used for fallback.
- * @property-read array $policies an array of the policies {@link \eZ\Publish\API\Repository\Values\User\Policy} of the role.
  */
 abstract class Role extends ValueObject
 {

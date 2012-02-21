@@ -5,8 +5,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This value object is used for adding a translation to a version
- *
- * @property-write FieldCollection $fields
  */
 abstract class TranslationValues extends ValueObject
 {

@@ -6,25 +6,40 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
- *
  * this class represents a content object in a specific version
- *
- * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
- * @property-read ContentType $contentType convenience getter for $contentInfo->contentType
- * @property-read int $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
- * @property-read VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields
- * @property-read array $relations calls getRelations()
- *
  */
 abstract class Content extends ValueObject
 {
+    /**
+     * returns the id of this content
+     * convenience getter for getVersionInfo()->getContentInfo()->contentId
+     *
+     * @return int
+     */
+    abstract public function getContentId();
+
     /**
      * returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     abstract public function getVersionInfo();
+
+    /**
+     * returns the ContentInfo for this version
+     * convenience getter for getVersionInfo()->getContentInfo()
+     *
+     * @return ContentInfo
+     */
+    abstract public function getContentInfo();
+
+    /**
+     * returns the ContentType for content to which this version belongs
+     * convenience getter for getContentInfo()->getContentType()
+     *
+     * @return ContentType
+     */
+    abstract public function getContentType();
 
     /**
      * returns a field value for the given value

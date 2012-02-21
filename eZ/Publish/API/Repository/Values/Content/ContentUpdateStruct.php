@@ -3,8 +3,6 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class is used for updating the fields of a content object draft
- *
- * @property-write array $fields
  */
 abstract class ContentUpdateStruct extends ValueObject
 {

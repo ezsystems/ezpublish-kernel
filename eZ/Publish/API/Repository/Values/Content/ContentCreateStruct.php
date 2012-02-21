@@ -6,7 +6,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used for creating a new content object
- * @property-write \eZ\Publish\API\Repository\Values\Content\Field[] $fields an array of {@link Field}
  */
 abstract class ContentCreateStruct extends ValueObject
 {

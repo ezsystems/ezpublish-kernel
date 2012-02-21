@@ -4,13 +4,12 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  *
  * This class represents a field definition
- * @property-read $fieldSettings calls getFieldSettings()
- * @property-read $validators calls getValidators()
+ *
  * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
  * @property-read int $position the position of the field definition in the content typr
- * @property-read string $fieldType String identifier of the field type
+ * @property-read string $fieldTypeIdentifier String identifier of the field type
  * @property-read boolean $isTranslatable indicatats if fields of this definition are translatable
  * @property-read boolean $isRequired indicates if this field is required in the content object
  * @property-read boolean $isSearchable indicates if the field is searchable

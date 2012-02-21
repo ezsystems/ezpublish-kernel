@@ -9,7 +9,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
  * This class holds version information data. It also contains the coresponding {@link Content} to
  * which the version belongs to.
  *
- * @property-read ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $id the internal id of the version
  * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
  * @property-read DateTime $modificationDate the last modified date of this version
