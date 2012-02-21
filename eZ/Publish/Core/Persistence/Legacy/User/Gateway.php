@@ -31,6 +31,23 @@ abstract class Gateway
     abstract public function deleteUser( $userId );
 
     /**
+     * Load user with user ID.
+     *
+     * @param mixed $userId
+     * @return array
+     */
+    abstract public function load( $userId );
+
+    /**
+     * Load user with user ID.
+     *
+     * @param string $login
+     * @param string|null $email
+     * @return array
+     */
+     abstract public function loadByLoginOrMail( $login, $email = null );
+
+    /**
      * Update the user information specified by the user struct
      *
      * @param User $user

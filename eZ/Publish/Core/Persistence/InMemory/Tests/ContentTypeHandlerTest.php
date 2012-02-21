@@ -158,6 +158,57 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test load function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        $obj = $this->persistenceHandler->ContentTypeHandler()->loadByIdentifier( 'folder' );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type', $obj );
+        $this->assertEquals( 1, $obj->id );
+        $this->assertEquals( 'folder', $obj->identifier );
+        $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
+    }
+
+    /**
+     * Test load function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadByIdentifier
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadByIdentifierUnExistingType()
+    {
+        // eZ Publish does not now about this unless you teach it
+        $this->persistenceHandler->ContentTypeHandler()->loadByIdentifier( 'kamasutra' );
+    }
+
+    /**
+     * Test load function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadByRemoteId
+     */
+    public function testLoadByRemoteId()
+    {
+        $obj = $this->persistenceHandler->ContentTypeHandler()->loadByRemoteId( 'remoteIDForType1' );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type', $obj );
+        $this->assertEquals( 1, $obj->id );
+        $this->assertEquals( 'folder', $obj->identifier );
+        $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
+    }
+
+    /**
+     * Test load function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadByRemoteId
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadByRemoteIdUnExistingType()
+    {
+        $this->persistenceHandler->ContentTypeHandler()->loadByRemoteId( 'l33t' );
+    }
+
+    /**
      * Test create function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::create

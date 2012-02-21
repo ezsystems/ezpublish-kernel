@@ -422,6 +422,41 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadByRemoteId
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
+     */
+    public function testLoadByRemoteId()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadTypeDataByRemoteId' )
+            ->with(
+                $this->equalTo( 'someLongHash' ),
+                $this->equalTo( 0 )
+            )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock = $this->getMapperMock();
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractTypesFromRows' )
+            ->will(
+                $this->returnValue(
+                    array( new Type() )
+                )
+            );
+
+        $handler = $this->getHandler();
+        $type = $handler->loadByRemoteId( 'someLongHash' );
+
+        $this->assertEquals(
+            new Type(),
+            $type,
+            'Type not loaded correctly'
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::create
      */
     public function testCreate()
@@ -1050,7 +1085,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a mapper mock
      *
-     * @return eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper
+     * @param array $methods
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper
      */
     protected function getMapperMock( $methods = array() )
     {

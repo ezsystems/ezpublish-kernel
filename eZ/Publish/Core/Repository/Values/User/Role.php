@@ -25,17 +25,4 @@ class Role extends APIRole
     {
         return $this->policies;
     }
-
-    /**
-     * Returns the policy for the given module and function
-     *
-     * @param string $module
-     * @param string $function
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
-    public function getPolicy( $module, $function )
-    {
-        // @todo implement
-    }
 }

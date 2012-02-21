@@ -89,9 +89,7 @@ abstract class UserBase extends BaseServiceTest
         {
             $userGroup = new UserGroup();
             $userGroup->id = 42;
-            // user group properties are (erroneously) public
-            // @todo: enable when changed
-            // self::fail( "Succeeded setting read only property" );
+            self::fail( "Succeeded setting read only property" );
         }
         catch( PropertyPermission $e ) {}
     }
@@ -115,9 +113,7 @@ abstract class UserBase extends BaseServiceTest
         self::assertEquals( false, $value );
 
         $value = isset( $userGroup->id );
-        // user group properties are (erroneously) public
-        // @todo: enable when changed
-        // self::assertEquals( true, $value );
+        self::assertEquals( true, $value );
     }
 
     /**
@@ -139,9 +135,7 @@ abstract class UserBase extends BaseServiceTest
         try
         {
             unset( $userGroup->id );
-            // user group properties are (erroneously) public
-            // @todo: enable when changed
-            // self::fail( 'Unsetting read-only property succeeded' );
+            self::fail( 'Unsetting read-only property succeeded' );
         }
         catch ( PropertyPermission $e ) {}
     }

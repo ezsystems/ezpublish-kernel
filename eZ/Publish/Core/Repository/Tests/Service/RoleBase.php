@@ -393,7 +393,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $roleService->deleteRole( $role );
 
-        $role = $roleService->loadRole( 1 );
+        $roleService->loadRole( 1 );
     }
 
     /**
@@ -406,7 +406,7 @@ abstract class RoleBase extends BaseServiceTest
         self::markTestSkipped( "@todo: enable when UserService::loadUser implementation is done" );
         $roleService = $this->repository->getRoleService();
 
-        $policies = $roleService->loadPoliciesByUserId( 99999999 );
+        $roleService->loadPoliciesByUserId( PHP_INT_MAX );
     }
 
     /**

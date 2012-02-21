@@ -39,7 +39,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
-    public function getLimitation()
+    public function getRoleLimitation()
     {
         return $this->limitation;
     }

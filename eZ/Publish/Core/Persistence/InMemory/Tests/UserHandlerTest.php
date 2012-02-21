@@ -206,7 +206,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test load function
+     * Test load role function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRole
      */
@@ -230,6 +230,24 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->userHandler();
         $handler->loadRole( 999 );//exception
+    }
+
+    /**
+     * Test load roles function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoles
+     */
+    public function testLoadRoles()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+        $roles = $handler->loadRoles();
+        $this->assertCount( 2, $roles );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $roles[0] );
+
+        $obj = $handler->createRole( self::getRole() );
+        $roles = $handler->loadRoles();
+        $this->assertCount( 3, $roles );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $roles[0] );
     }
 
     /**

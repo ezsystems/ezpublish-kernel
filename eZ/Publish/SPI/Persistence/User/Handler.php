@@ -82,6 +82,13 @@ interface Handler
     public function loadRole( $roleId );
 
     /**
+     * Load all roles
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role[]
+     */
+    public function loadRoles();
+
+    /**
      * Load roles assigned to a user/group (not including inherited roles)
      *
      * @param mixed $groupId

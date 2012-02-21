@@ -403,7 +403,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeDataByIdentifier
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
      */
@@ -415,6 +415,31 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
         $rows = $gateway->loadTypeDataByIdentifier( 'folder', 0 );
+
+        $this->assertEquals(
+            5,
+            count( $rows )
+        );
+        $this->assertEquals(
+            45,
+            count( $rows[0] )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeDataByRemoteId
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
+     */
+    public function testLoadTypeDataByRemoteId()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = $this->getGateway();
+        $rows = $gateway->loadTypeDataByRemoteId( 'a3d405b81be900468eb153d774f4f0d2', 0 );
 
         $this->assertEquals(
             5,

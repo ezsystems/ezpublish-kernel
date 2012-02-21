@@ -1,8 +1,6 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\Content\VersionUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -12,14 +10,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class UserUpdateStruct extends ValueObject
 {
     /**
-     * if set the email address is updated with this value
+     * If set the email address is updated with this value
      *
      * @var string
      */
     public $email = null;
 
     /**
-     * if set the password is updated with this plain password
+     * If set the password is updated with this plain password
      *
      * @var string
      */
@@ -36,21 +34,24 @@ class UserUpdateStruct extends ValueObject
     /**
      * Max number of time user is allowed to login
      * If set the maximal number of logins is changed to this value
+     *
      * @var int
      */
     public $maxLogin = null;
 
 
     /**
-     * the update structure  for the profile version
-     * @var eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
-     */
-    public $versionUpdateStruct = null;
-
-    /**
-     * the update structure  for the profile meta data
-     * @var eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct
+     * The update structure for the profile content
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public $contentUpdateStruct = null;
+
+    /**
+     * The update structure  for the profile meta data
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct
+     */
+    public $contentMetaDataUpdateStruct = null;
     
 }

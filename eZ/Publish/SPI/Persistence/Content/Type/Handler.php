@@ -40,6 +40,7 @@ interface Handler
     /**
      * @param mixed $groupId
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
      */
     public function loadGroup( $groupId );
 
@@ -73,6 +74,15 @@ interface Handler
      * @throws \ezp\Base\Exception\NotFound If defined type is not found
      */
     public function loadByIdentifier( $identifier );
+
+    /**
+     * Load a (defined) content type by remote id
+     *
+     * @param mixed $remoteId
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByRemoteId( $remoteId );
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType

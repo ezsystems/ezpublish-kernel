@@ -758,7 +758,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Deletes all name data for $typeId in $version.
+     * Deletes all name data for $typeId in $typeStatus.
      *
      * @param int $typeId
      * @param int $typeStatus
@@ -848,10 +848,10 @@ class EzcDatabase extends Gateway
 
     /**
      * Loads an array with data about the type referred to by $identifier in
-     * $version.
+     * $status.
      *
      * @param string $identifier
-     * @param int $version
+     * @param int $status
      * @return array(int=>array(string=>mixed)) Data rows.
      */
     public function loadTypeDataByIdentifier( $identifier, $status )
@@ -862,6 +862,35 @@ class EzcDatabase extends Gateway
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass' ),
                     $q->bindValue( $identifier )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
+                    $q->bindValue( $status )
+                )
+            )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Loads an array with data about the type referred to by $remoteId in
+     * $status.
+     *
+     * @param mixed $remoteId
+     * @param int $status
+     * @return array(int=>array(string=>mixed)) Data rows.
+     */
+    public function loadTypeDataByRemoteId( $remoteId, $status )
+    {
+        $q = $this->getLoadTypeQuery();
+        $q->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'remote_id', 'ezcontentclass' ),
+                    $q->bindValue( $remoteId )
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
@@ -952,10 +981,10 @@ class EzcDatabase extends Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
-     * @param int $version
+     * @param int $status @todo Remove or implement
      * @return int
      */
-    public function countInstancesOfType( $typeId, $version )
+    public function countInstancesOfType( $typeId, $status )
     {
         $q = $this->dbHandler->createSelectQuery();
         $q->select(

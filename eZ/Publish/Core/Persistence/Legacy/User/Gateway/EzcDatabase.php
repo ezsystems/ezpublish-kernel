@@ -140,7 +140,8 @@ class EzcDatabase extends Gateway
     /**
      * Load user with user ID.
      *
-     * @param mixed $userId
+     * @param string $login
+     * @param string|null $email
      * @return array
      */
     public function loadByLoginOrMail( $login, $email = null )

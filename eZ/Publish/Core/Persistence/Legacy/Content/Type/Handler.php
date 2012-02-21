@@ -106,11 +106,17 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param int $groupId
      * @return Group
+     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
      */
     public function loadGroup( $groupId )
     {
         $rows = $this->contentTypeGateway->loadGroupData( $groupId );
         $groups = $this->mapper->extractGroupsFromRows( $rows );
+
+        if ( count( $groups ) !== 1 )
+        {
+            throw new Exception\TypeGroupNotFound( $groupId );
+        }
 
         return $groups[0];
     }
@@ -161,6 +167,21 @@ class Handler implements BaseContentTypeHandler
             $identifier, Type::STATUS_DEFINED
         );
         return $this->loadFromRows( $rows, $identifier, Type::STATUS_DEFINED );
+    }
+
+    /**
+     * Load a (defined) content type by remote id
+     *
+     * @param mixed $remoteId
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByRemoteId( $remoteId )
+    {
+        $rows = $this->contentTypeGateway->loadTypeDataByRemoteId(
+            $remoteId, Type::STATUS_DEFINED
+        );
+        return $this->loadFromRows( $rows, $remoteId, Type::STATUS_DEFINED );
     }
 
     /**
@@ -300,6 +321,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
+        $createStruct->identifier .= '_' . ( $createStruct->remoteId = md5( uniqid( get_class( $createStruct ), true ) ) );
 
         return $this->create( $createStruct );
     }

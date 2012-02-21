@@ -167,6 +167,18 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Load all roles
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role[]
+     */
+    public function loadRoles()
+    {
+        $data = $this->roleGateway->loadRoles();
+
+        return $this->mapper->mapRoles( $data );
+    }
+
+    /**
      * Load roles assigned to a user/group (not including inherited roles)
      *
      * @param mixed $groupId
