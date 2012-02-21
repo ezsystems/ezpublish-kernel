@@ -66,31 +66,18 @@ class RoleServiceStub implements RoleService
     private $nextPolicyId = 0;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
 
     /**
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
 
-        $this->roles = array(
-            1 => new RoleStub( array( 'id' => 1, 'identifier' => 'Anonymous' ) ),
-            2 => new RoleStub( array( 'id' => 2, 'identifier' => 'Administrator' ) ),
-            3 => new RoleStub( array( 'id' => 3, 'identifier' => 'Editor' ) ),
-            4 => new RoleStub( array( 'id' => 4, 'identifier' => 'Partner' ) ),
-            5 => new RoleStub( array( 'id' => 5, 'identifier' => 'Member' ) ),
-        );
-
-        foreach ( $this->roles as $role )
-        {
-            ++$this->nextRoleId;
-
-            $this->nameToRoleId[$role->identifier] = $role->id;
-        }
+        $this->initFromFixture();
     }
 
     /**
@@ -502,5 +489,20 @@ class RoleServiceStub implements RoleService
     public function setPoliciesForUser( User $user, array $policies )
     {
         $this->userPolicies[$user->id] = $policies;
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $this->roles,
+            $this->nameToRoleId,
+            $this->nextRoleId
+            ) = $this->repository->loadFixture( 'Role' );
     }
 }

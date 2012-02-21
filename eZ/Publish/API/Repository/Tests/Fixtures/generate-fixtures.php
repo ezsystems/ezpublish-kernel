@@ -22,6 +22,7 @@ $fixture = include $argv[1];
 writeFixtureFile( generateSectionFixture( $fixture ), 'Section', $argv[2] );
 writeFixtureFile( generateLanguageFixture( $fixture ), 'Language', $argv[2] );
 writeFixtureFile( generateUserGroupFixture( $fixture ), 'UserGroup', $argv[2] );
+writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
 
 function generateSectionFixture( array $fixture )
 {
@@ -138,6 +139,31 @@ function generateUserGroupFixture( array $fixture )
 
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub', $groups ),
+        $nextId
+    );
+}
+
+function generateRoleFixture( array $fixture )
+{
+    $nextId = 0;
+    $names  = array();
+    $roles  = array();
+
+    foreach ( getFixtureTable( 'ezrole', $fixture ) as $data )
+    {
+        $roles[$data['id']] = array(
+            'id'            =>  $data['id'],
+            'identifier'    =>  $data['name']
+        );
+
+        $names[$data['name']] = $data['id'];
+
+        $nextId = max( $nextId, $data['id'] );
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub', $roles ),
+        generateMapping( $names ),
         $nextId
     );
 }
