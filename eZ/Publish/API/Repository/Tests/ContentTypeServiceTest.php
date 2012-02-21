@@ -1471,9 +1471,25 @@ class ContentTypeServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
-    public function testAddFieldDefinitionThrowsIllegalArgumentException()
+    public function testAddFieldDefinitionThrowsIllegalArgumentExceptionDuplicateFieldIdentifier()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft
+        // $contentTypeDraft has a field "title"
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        // Throws an exception
+        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -1481,6 +1497,7 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @depens eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testAddFieldDefinitionThrowsUnauthorizedException()

@@ -461,6 +461,14 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
+        foreach ( $contentTypeDraft->fieldDefinitions as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier == $fieldDefinitionCreateStruct->identifier )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
+
         $data = $this->getTypeAsArray( $contentTypeDraft );
 
         $data['fieldDefinitions'][] = $this->createFieldDefinition( $fieldDefinitionCreateStruct );
