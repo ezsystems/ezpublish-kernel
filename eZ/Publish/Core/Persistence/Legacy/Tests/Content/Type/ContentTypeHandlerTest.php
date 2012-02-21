@@ -232,6 +232,33 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroupByIdentifier
+     */
+    public function testLoadGroupByIdentifier()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadGroupDataByIdentifier' )
+            ->with( $this->equalTo( 'content' ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock = $this->getMapperMock();
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractGroupsFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will( $this->returnValue( array( new Group() ) ) );
+
+        $handler = $this->getHandler();
+        $res = $handler->loadGroupByIdentifier( 'content' );
+
+        $this->assertEquals(
+            new Group(),
+            $res
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadAllGroups
      */
     public function testLoadAllGroups()

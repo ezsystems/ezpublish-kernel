@@ -17,6 +17,7 @@ class CreateStruct extends ValueObject
     /**
      * Name
      *
+     * @since 5.0
      * @var string[]
      */
     public $name;
@@ -24,6 +25,7 @@ class CreateStruct extends ValueObject
     /**
      * Description
      *
+     * @since 5.0
      * @var string[]
      */
     public $description;

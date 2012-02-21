@@ -959,10 +959,84 @@ class ContentTypeServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
-    public function testCreateContentTypeThrowsIllegalArgumentException()
+    public function testCreateContentTypeThrowsIllegalArgumentExceptionDuplicateIdentifier()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentType() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+
+        $firstType = $contentTypeService->createContentType( $typeCreate, array() );
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+
+        // Throws exception
+        $secondType = $contentTypeService->createContentType( $typeCreate, array() );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     */
+    public function testCreateContentTypeThrowsIllegalArgumentExceptionDuplicateRemoteId()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->remoteId = 'duplicate-id';
+
+        $firstType = $contentTypeService->createContentType( $typeCreate, array() );
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'news-article' );
+        $typeCreate->remoteId = 'duplicate-id';
+
+        // Throws exception
+        $secondType = $contentTypeService->createContentType( $typeCreate, array() );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     */
+    public function testCreateContentTypeThrowsIllegalArgumentExceptionDuplicateFieldIdentifier()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+
+        $firstFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+        $typeCreate->addFieldDefinition( $firstFieldCreate );
+
+        $secondFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'text'
+        );
+        $typeCreate->addFieldDefinition( $secondFieldCreate );
+
+        // Throws exception
+        $secondType = $contentTypeService->createContentType( $typeCreate, array() );
+        /* END: Use Case */
     }
 
     /**
@@ -1232,10 +1306,76 @@ class ContentTypeServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
-    public function testUpdateContentTypeDraftThrowsIllegalArgumentException()
+    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionDuplicateIdentifier()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct(
+            'news-article'
+        );
+        $contentTypeService->createContentType( $typeCreate, array() );
+
+        $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
+        $typeUpdate->identifier = 'news-article';
+
+        // Throws exception
+        $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
+     */
+    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionDuplicateRemoteId()
+    {
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct(
+            'some-content-type'
+        );
+        $typeCreate->remoteId = 'will-be-duplicated';
+        $contentTypeService->createContentType( $typeCreate, array() );
+
+        $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
+        $typeUpdate->remoteId = 'will-be-duplicated';
+
+        // Throws exception
+        $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
+     */
+    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionIncorrectUser()
+    {
+        $this->markTestIncomplete( "Is not implemented." );
     }
 
     /**

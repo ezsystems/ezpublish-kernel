@@ -93,6 +93,19 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test load group by identifier function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadGroupByIdentifier
+     */
+    public function testLoadGroupByIdentifier()
+    {
+        $obj = $this->persistenceHandler->ContentTypeHandler()->loadGroupByIdentifier( 'content' );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group', $obj );
+        $this->assertEquals( 1, $obj->id );
+        $this->assertEquals( array( 'eng-GB' => 'Content' ), $obj->name );
+    }
+
+    /**
      * Test load all groups function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadAllGroups

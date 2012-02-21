@@ -488,6 +488,27 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data about Group with $identifier.
+     *
+     * @param mixed $identifier
+     * @return string[][]
+     */
+    public function loadGroupDataByIdentifier( $identifier )
+    {
+        $q = $this->createGroupLoadQuery();
+        $q->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'name' ),
+                $q->bindValue( $identifier, null, \PDO::PARAM_STR )
+            )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Returns an array with data about all Group objects.
      *
      * @return string[][]

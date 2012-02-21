@@ -24,6 +24,7 @@ class Group extends ValueObject
     /**
      * Name
      *
+     * @since 5.0
      * @var string[]
      */
     public $name;
@@ -31,12 +32,15 @@ class Group extends ValueObject
     /**
      * Description
      *
+     * @since 5.0
      * @var string[]
      */
     public $description = array();
 
     /**
      * Readable string identifier of a group
+     *
+     * Legacy note: Maps to existing name property
      *
      * @var string
      */

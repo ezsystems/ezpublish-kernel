@@ -45,6 +45,17 @@ interface Handler
     public function loadGroup( $groupId );
 
     /**
+     * Load Type Group by identifer
+     *
+     * Legacy note: Uses name for identifier.
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
+     */
+    public function loadGroupByIdentifier( $identifier );
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     public function loadAllGroups();

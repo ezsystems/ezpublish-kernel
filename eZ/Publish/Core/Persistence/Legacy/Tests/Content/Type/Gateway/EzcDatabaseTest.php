@@ -317,6 +317,35 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupDataByIdentifier
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
+     * @return void
+     */
+    public function testLoadGroupDataByIdentifier()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_groups.php'
+        );
+
+        $gateway = $this->getGateway();
+        $data = $gateway->loadGroupDataByIdentifier( 'Users' );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'created' => '1031216941',
+                    'creator_id' => '14',
+                    'id' => '2',
+                    'modified' => '1033922113',
+                    'modifier_id' => '14',
+                    'name' => 'Users',
+                )
+            ),
+            $data
+        );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadAllGroupsData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
      * @return void

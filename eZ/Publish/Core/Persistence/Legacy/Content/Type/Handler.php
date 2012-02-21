@@ -104,9 +104,9 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param int $groupId
+     * @param mixed $groupId
      * @return Group
-     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
+     * @throws \ezp\Base\Exception\NotFound If type group with $groupId is not found
      */
     public function loadGroup( $groupId )
     {
@@ -116,6 +116,24 @@ class Handler implements BaseContentTypeHandler
         if ( count( $groups ) !== 1 )
         {
             throw new Exception\TypeGroupNotFound( $groupId );
+        }
+
+        return $groups[0];
+    }
+
+    /**
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     * @throws \ezp\Base\Exception\NotFound If type group with $identifier is not found
+     */
+    public function loadGroupByIdentifier( $identifier )
+    {
+        $rows = $this->contentTypeGateway->loadGroupDataByIdentifier( $identifier );
+        $groups = $this->mapper->extractGroupsFromRows( $rows );
+
+        if ( count( $groups ) !== 1 )
+        {
+            throw new Exception\TypeGroupNotFound( $identifier );
         }
 
         return $groups[0];
