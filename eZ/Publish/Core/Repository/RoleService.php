@@ -77,14 +77,14 @@ class RoleService implements RoleServiceInterface
      */
     public function createRole( APIRoleCreateStruct $roleCreateStruct )
     {
-        if ( empty( $roleCreateStruct->name ) )
-            throw new InvalidArgumentValue( "name", $roleCreateStruct->name, "RoleCreateStruct" );
+        if ( empty( $roleCreateStruct->identifier ) )
+            throw new InvalidArgumentValue( "identifier", $roleCreateStruct->identifier, "RoleCreateStruct" );
 
         try
         {
-            $existingRole = $this->loadRoleByName( $roleCreateStruct->name );
+            $existingRole = $this->loadRoleByIdentifier( $roleCreateStruct->identifier );
             if ( $existingRole !== null )
-                throw new IllegalArgumentException( "name", $roleCreateStruct->name );
+                throw new IllegalArgumentException( "identifier", $roleCreateStruct->identifier );
         }
         catch ( NotFoundException $e ) {}
 
@@ -110,25 +110,26 @@ class RoleService implements RoleServiceInterface
         if ( empty( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( !empty( $roleUpdateStruct->name ) )
+        if ( !empty( $roleUpdateStruct->identifier ) )
         {
             try
             {
-                $existingRole = $this->loadRoleByName( $roleUpdateStruct->name );
+                $existingRole = $this->loadRoleByIdentifier( $roleUpdateStruct->identifier );
                 if ( $existingRole !== null )
-                    throw new IllegalArgumentException( "name", $roleUpdateStruct->name );
+                    throw new IllegalArgumentException( "identifier", $roleUpdateStruct->identifier );
             }
             catch ( NotFoundException $e ) {}
         }
 
         $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->updateRole( new SPIRoleUpdateStruct( array(
-            'id'          => $role->id,
-            'name'        => !empty( $roleUpdateStruct->name ) ? $roleUpdateStruct->name : $loadedRole->name,
-            // @todo: add description
-            // 'description' => !empty( $roleUpdateStruct->description ) ? $roleUpdateStruct->description : $loadedRole->description,
-        ) ) );
+        $spiRoleUpdateStruct = new SPIRoleUpdateStruct();
+        $spiRoleUpdateStruct->id = $loadedRole->id;
+        $spiRoleUpdateStruct->identifier = $roleUpdateStruct->identifier !== null ? $roleUpdateStruct->identifier : $role->identifier;
+        $spiRoleUpdateStruct->name = $roleUpdateStruct->names !== null ? $roleUpdateStruct->names : $role->getNames();
+        $spiRoleUpdateStruct->description = $roleUpdateStruct->descriptions !== null ? $roleUpdateStruct->descriptions : $role->getDescriptions();
+
+        $this->persistenceHandler->userHandler()->updateRole( $spiRoleUpdateStruct );
 
         return $this->loadRole( $role->id );
     }
@@ -257,28 +258,27 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads a role for the given name
+     * loads a role for the given identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
      *
-     * @param string $name
+     * @param string $identifier
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRoleByName( $name )
+    public function loadRoleByIdentifier( $identifier )
     {
-        if ( empty( $name ) )
-            throw new InvalidArgumentValue( "name", $name );
+        if ( empty( $identifier ) )
+            throw new InvalidArgumentValue( "identifier", $identifier );
 
         try
         {
-            // @todo: use loadRoleByName when implemented
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $name );
+            $spiRole = $this->persistenceHandler->userHandler()->loadRoleByIdentifier( $identifier );
         }
         catch( NotFound $e )
         {
-            throw new NotFoundException( "role", $name, $e );
+            throw new NotFoundException( "role", $identifier, $e );
         }
 
         return $this->buildDomainRoleObject( $spiRole );
@@ -617,10 +617,10 @@ class RoleService implements RoleServiceInterface
     public function newRoleCreateStruct( $name )
     {
         return new RoleCreateStruct( array(
-            'name'        => $name,
-            // @todo: add description
-            // 'description' => '',
-            'policies'    => array()
+            'identifier'   => $name,
+            'names'        => array(),
+            'descriptions' => array(),
+            'policies'     => array()
         ) );
     }
 
@@ -679,11 +679,13 @@ class RoleService implements RoleServiceInterface
         }
 
         return new Role( array(
-            'id'          => $role->id,
-            'name'        => $role->name,
-            // @todo: add description
-            // 'description' => null,
-            'policies'    => $rolePolicies
+            'id'               => $role->id,
+            'identifier'       => $role->identifier,
+            //@todo: add main language code
+            'mainLanguageCode' => null,
+            'names'            => $role->name,
+            'descriptions'     => $role->description,
+            'policies'         => $rolePolicies
         ) );
     }
 
@@ -809,8 +811,11 @@ class RoleService implements RoleServiceInterface
         }
 
         return new SPIRole( array(
-            'name'     => $roleCreateStruct->name,
-            'policies' => $policiesToCreate
+            'identifier'  => $roleCreateStruct->identifier,
+            //@todo: main language code ?
+            'name'        => $roleCreateStruct->names,
+            'description' => $roleCreateStruct->descriptions,
+            'policies'    => $policiesToCreate
         ) );
     }
 

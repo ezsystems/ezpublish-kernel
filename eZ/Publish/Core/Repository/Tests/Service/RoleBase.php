@@ -32,8 +32,7 @@ abstract class RoleBase extends BaseServiceTest
     {
         $role = new Role();
         self::assertEquals( null, $role->id );
-        self::assertEquals( null, $role->name );
-        self::assertEquals( null, $role->description );
+        self::assertEquals( null, $role->identifier );
         self::assertInternalType( "array", $role->policies );
         self::assertEmpty( $role->policies );
 
@@ -167,7 +166,7 @@ abstract class RoleBase extends BaseServiceTest
 
         self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
-        self::assertEquals( $roleCreateStruct->name, $createdRole->name );
+        self::assertEquals( $roleCreateStruct->identifier, $createdRole->identifier );
         self::assertEmpty( $createdRole->getPolicies() );
     }
 
@@ -207,7 +206,7 @@ abstract class RoleBase extends BaseServiceTest
 
         self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
-        self::assertEquals( $roleCreateStruct->name, $createdRole->name );
+        self::assertEquals( $roleCreateStruct->identifier, $createdRole->identifier );
 
         self::assertCount( 2, $createdRole->getPolicies() );
     }
@@ -225,7 +224,7 @@ abstract class RoleBase extends BaseServiceTest
         $role = new Role( array( "id" => 2 ) );
 
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-        $roleUpdateStruct->name = "Anonymous";
+        $roleUpdateStruct->identifier = "Anonymous";
 
         $roleService->updateRole( $role, $roleUpdateStruct );
     }
@@ -241,11 +240,11 @@ abstract class RoleBase extends BaseServiceTest
         $role = new Role( array( "id" => 1 ) );
 
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-        $roleUpdateStruct->name = "Anonymous 2";
+        $roleUpdateStruct->identifier = "Anonymous 2";
 
         $updatedRole = $roleService->updateRole( $role, $roleUpdateStruct );
         self::assertEquals( $role->id, $updatedRole->id );
-        self::assertEquals( $roleUpdateStruct->name, $updatedRole->name );
+        self::assertEquals( $roleUpdateStruct->identifier, $updatedRole->identifier );
     }
 
     /**
@@ -362,7 +361,7 @@ abstract class RoleBase extends BaseServiceTest
         $role = $roleService->loadRole( "Anonymous" );
         self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $role );
         self::assertGreaterThan( 0, $role->id );
-        self::assertEquals( "Anonymous", $role->name );
+        self::assertEquals( "Anonymous", $role->identifier );
     }
 
     /**
@@ -511,7 +510,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $roleCreateStruct = $roleService->newRoleCreateStruct( "Ultimate permissions" );
-        self::assertEquals( "Ultimate permissions", $roleCreateStruct->name );
+        self::assertEquals( "Ultimate permissions", $roleCreateStruct->identifier );
         self::assertInternalType( "array", $roleCreateStruct->getPolicies() );
         self::assertEmpty( $roleCreateStruct->getPolicies() );
     }
@@ -540,7 +539,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-        self::assertNull( $roleUpdateStruct->name );
+        self::assertNull( $roleUpdateStruct->identifier );
     }
 
     /**
