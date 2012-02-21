@@ -30,7 +30,8 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException;
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * This service provides methods for managing users and user groups
@@ -425,8 +426,7 @@ class UserService implements UserServiceInterface
         {
             // something went wrong, we should not have more than one
             // user with the same login
-            // @todo: maybe throw BadStateException?
-            return null;
+            throw new InvalidArgumentException( "login", "there are multiple users with the same login" );
         }
 
         // @todo: read site name from settings
