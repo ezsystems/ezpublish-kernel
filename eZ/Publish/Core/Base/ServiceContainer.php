@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base;
-use eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\Exceptions\BadConfiguration,
+use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\MissingClass,
     ReflectionClass;
 
@@ -91,7 +91,7 @@ class ServiceContainer
     /**
      * Service function to get ConfigurationManager object
      *
-     * Alias with type hints for $repo->get( 'configuration' );
+     * Alias with type hints for $repo->get( 'configurationManager' );
      *
      * @uses get()
      * @return \eZ\Publish\Core\Base\ConfigurationManager
@@ -116,19 +116,33 @@ class ServiceContainer
     {
         if ( isset( $this->dependencies['@repository'] ) )
             return $this->dependencies['@repository'];
-        return $this->get( 'repository' );
+        return $this->internalGet( 'repository' );
     }
 
     /**
      * Get service by name
      *
-     * @uses lookupArguments()
-     * @throws BadConfiguration
-     * @throws MissingClass
+     * @uses internalGet()
      * @param string $serviceName
      * @return object
      */
     public function get( $serviceName )
+    {
+        return $this->internalGet( $serviceName );
+    }
+
+    /**
+     * Get service by name (internal variant, exposes possibility to allow private services as used by dependencies)
+     *
+     * @uses lookupArguments()
+     * @throws BadConfiguration
+     * @throws MissingClass
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If dependency is private & !$allowPrivate
+     * @param string $serviceName
+     * @param bool $allowPrivate
+     * @return object
+     */
+    protected function internalGet( $serviceName, $allowPrivate = false )
     {
         $serviceKey = "@{$serviceName}";
 
@@ -144,10 +158,18 @@ class ServiceContainer
             throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
 
-        $settings = $this->settings[$serviceName] + array( 'shared' => false );
+        $settings = $this->settings[$serviceName] + array( 'shared' => false, 'public' => false );
         if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "service\\[{$serviceName}]\\class", 'class setting is not defined' );
+        }
+
+        if ( $allowPrivate === false && $settings['public'] === false )
+        {
+            throw new InvalidArgumentException(
+                "service\\[{$serviceName}]",
+                'It is marked as private & can only be used as a dependency'
+            );
         }
 
         if ( !class_exists( $settings['class'] ) )
@@ -191,7 +213,7 @@ class ServiceContainer
     /**
      * Lookup arguments for variable, service or arrays for recursive lookup
      *
-     * @throws InvalidArgumentValue
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If undefined variable is used.
      * @param array $arguments
      * @param array &$keys Optional, keys in array will be appended in the order they are found (but not recursively)
      * @return array
@@ -221,7 +243,7 @@ class ServiceContainer
                 else
                 {
                     // Try to load a @service dependency
-                    $builtArguments[$key] = $this->get( ltrim( $argument, '@' ) );
+                    $builtArguments[$key] = $this->internalGet( ltrim( $argument, '@' ), true );
                 }
             }
             else if ( is_array( $argument ) )
