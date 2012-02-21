@@ -23,6 +23,7 @@ abstract class Gateway
     /**
      * Inserts the given $group.
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
      * @return mixed Group ID
      */
     abstract public function insertGroup( Group $group );
@@ -69,6 +70,14 @@ abstract class Gateway
     abstract public function loadGroupData( $groupId );
 
     /**
+     * Returns an array with data about the Group with $identifier.
+     *
+     * @param int $identifier
+     * @return array
+     */
+    abstract public function loadGroupDataByIdentifier( $identifier );
+
+    /**
      * Returns an array with data about all Group objects.
      *
      * @return array
@@ -87,7 +96,7 @@ abstract class Gateway
     /**
      * Inserts a new conten type.
      *
-     * @param Type $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      * @return mixed Type ID
      */
     abstract public function insertType( Type $type );

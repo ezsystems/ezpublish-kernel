@@ -116,6 +116,20 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
+     */
+    public function loadGroupByIdentifier( $identifier )
+    {
+        $group = $this->backend->find( 'Content\\Type\\Group', array( 'identifier' => $identifier ) );
+        if ( !$group )
+            throw new NotFound( 'Content\\Type\\Group', $identifier );
+
+        return $group[0];
+    }
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     public function loadAllGroups()

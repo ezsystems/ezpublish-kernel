@@ -65,8 +65,8 @@
         {"id": 3, "name": {"eng-GB": "Name"}, "description": {"eng-GB": "User name"}, "identifier": "name", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "New User", "_typeId": 4, "_status": 0}
     ],
     "Content\\Type\\Group" : [
-        {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}},
-        {"id": 2, "name": {"eng-GB": "Users"}, "description": {"eng-GB": "User content type group"}}
+        {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}, "identifier": "content" },
+        {"id": 2, "name": {"eng-GB": "Users"}, "description": {"eng-GB": "User content type group"}, "identifier": "users" }
     ],
     "Content\\Relation": [],
     "User": [
