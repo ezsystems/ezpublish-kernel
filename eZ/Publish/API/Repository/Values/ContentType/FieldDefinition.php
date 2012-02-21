@@ -92,7 +92,7 @@ abstract class FieldDefinition extends ValueObject
      *
      * @var string
      */
-    protected $fieldType;
+    protected $fieldTypeIdentifier;
 
     /**
      * If the field is translatable
