@@ -22,19 +22,6 @@
     <testsuite name="eZ\Publish\Core\Io">
       <directory>eZ/Publish/Core/Io/Tests</directory>
     </testsuite>
-      <testsuite name="eZ\Publish\API\Repository">
-          <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/UserServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/RoleServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/ContentServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/IOServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/LocationServiceTest.php</file>
-          <file>eZ/Publish/API/Repository/Tests/TrashServiceTest.php</file>
-          <directory>eZ/Publish/API/Repository/Tests/Exceptions</directory>
-      </testsuite>
   </testsuites>
   <filter>
     <whitelist>
