@@ -6,7 +6,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
     <php>
-        <env name="repositoryInit" value="common.php" />
+        <env name="repositoryInit" value="../../../Core/Repository/Tests/Service/Legacy/common.php" />
     </php>
     <testsuites>
         <testsuite name="PublicAPI TestSuite">
