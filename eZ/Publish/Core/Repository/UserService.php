@@ -270,6 +270,9 @@ class UserService implements UserServiceInterface
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
         $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
 
+        $publishedContent = $contentService->updateContentMetadata( $publishedContentInfo, $userGroupUpdateStruct->contentMetaDataUpdateStruct );
+        $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
+
         $mainLocation = $locationService->loadMainLocation( $publishedContentInfo );
 
         return new UserGroup( array(
@@ -465,7 +468,9 @@ class UserService implements UserServiceInterface
 
         $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
         $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userUpdateStruct->contentUpdateStruct );
-        $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+        $contentService->updateContentMetadata( $publishedContent->getVersionInfo()->getContentInfo(), $userUpdateStruct->contentMetaDataUpdateStruct );
 
         $this->persistenceHandler->userHandler()->update( new SPIUser( array(
             'id'            => $loadedUser->id,
