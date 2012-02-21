@@ -1510,11 +1510,63 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * 
+     * @depens eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testRemoveFieldDefinition()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $draftId = $contentTypeDraft->id;
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $draftId contains the ID of a content type draft
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
+
+        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $bodyField );
+        /* END: Use Case */
+
+        $loadedType = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
+            $loadedType
+        );
+
+        return array(
+            'removedFieldDefinition' => $bodyField,
+            'loadedType'             => $loadedType,
+        );
+    }
+
+    /**
+     * Test for the removeFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
+     */
+    public function testRemoveFieldDefinitionRemoved( array $data )
+    {
+        $removedFieldDefinition = $data['removedFieldDefinition'];
+        $loadedType = $data['loadedType'];
+
+        foreach ( $loadedType->fieldDefinitions as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier == $removedFieldDefinition->identifier )
+            {
+                $this->fail(
+                    sprintf(
+                        'Field definition with identifier "%s" not removed.',
+                        $removedFieldDefinition->identifier
+                    )
+                );
+            }
+        }
     }
 
     /**

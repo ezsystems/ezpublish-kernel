@@ -282,11 +282,7 @@ class ContentTypeServiceStub implements ContentTypeService
         // FIXME: Set status to draft
         $data['id'] = $this->nextTypeId++;
 
-        $type = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
-
-        $this->typeDrafts[$type->id] = $type;
-
-        return $type;
+        return $this->setContentTypeDraft( $data );
     }
 
     /**
@@ -383,9 +379,7 @@ class ContentTypeServiceStub implements ContentTypeService
             }
         }
 
-        $this->typeDrafts[$contentTypeDraft->id] = new ContentTypeDraftStub(
-            new ContentTypeStub( $data )
-        );
+        $this->setContentTypeDraft( $data );
     }
 
     /**
@@ -473,9 +467,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data['fieldDefinitions'][] = $this->createFieldDefinition( $fieldDefinitionCreateStruct );
 
-        $newType = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
-
-        $this->typeDrafts[$newType->id] = $newType;
+        $this->setContentTypeDraft( $data );
     }
 
     /**
@@ -489,7 +481,32 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition )
     {
-        // TODO: Implement.
+        $data = $this->getTypeAsArray( $contentTypeDraft );
+
+        $fieldDefinitions = array();
+        foreach ( $contentTypeDraft->fieldDefinitions as $existingDefinition )
+        {
+            if ( $existingDefinition->id != $fieldDefinition->id )
+            {
+                $fieldDefinitions[] = $existingDefinition;
+            }
+        }
+        $data['fieldDefinitions'] = $fieldDefinitions;
+
+        $this->setContentTypeDraft( $data );
+    }
+
+    /**
+     * Creates and sets a new ContentTypeDraft from $data
+     *
+     * @param array $data
+     * @return \eZ\Publish\API\Repository\Values\ContentTypeDraft
+     */
+    protected function setContentTypeDraft( array $data )
+    {
+        $newType = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
+        $this->typeDrafts[$newType->id] = $newType;
+        return $newType;
     }
 
     /**
