@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\UserService;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -31,7 +30,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub
 class UserServiceStub implements UserService
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
 
@@ -48,20 +47,13 @@ class UserServiceStub implements UserService
     /**
      * Instantiates a new user service instance.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
 
-        $this->userGroups = array(
-            4    =>  new UserGroupStub( array( 'id' => 4,   'parentId' => 0 ) ),
-            11   =>  new UserGroupStub( array( 'id' => 11,  'parentId' => 4 ) ),
-            12   =>  new UserGroupStub( array( 'id' => 12,  'parentId' => 4 ) ),
-            13   =>  new UserGroupStub( array( 'id' => 12,  'parentId' => 4 ) ),
-            211  =>  new UserGroupStub( array( 'id' => 211, 'parentId' => 4 ) ),
-            42   =>  new UserGroupStub( array( 'id' => 42,  'parentId' => 4 ) )
-        );
+        $this->initFromFixture();
     }
 
     /**
@@ -338,5 +330,45 @@ class UserServiceStub implements UserService
     public function newUserGroupUpdateStruct()
     {
         // TODO: Implement newUserGroupUpdateStruct() method.
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        $classId = null;
+        foreach ( $this->repository->loadFixtureByTable( 'ezcontentclass' ) as $data )
+        {
+            if ( 'user_group' === $data['identifier'] )
+            {
+                $classId = $data['id'];
+                break;
+            }
+
+        }
+
+        foreach ( $this->repository->loadFixtureByTable( 'ezcontentobject' ) as $data )
+        {
+            if ( $data['contentclass_id'] != $classId )
+            {
+                continue;
+            }
+
+            $group = new UserGroupStub(
+                array(
+                    'id'             =>  $data['id'],
+                    'parentId'       =>  '/* TODO */',
+                    'subGroupCount'  =>  0
+                )
+            );
+
+            $this->userGroups[$group->id] = $group;
+
+            $this->userGroupNextId = max( $this->userGroupNextId, $group->id );
+        }
     }
 }
