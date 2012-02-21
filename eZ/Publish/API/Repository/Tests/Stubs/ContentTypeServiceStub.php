@@ -483,15 +483,20 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         $data = $this->getTypeAsArray( $contentTypeDraft );
 
-        $fieldDefinitions = array();
-        foreach ( $contentTypeDraft->fieldDefinitions as $existingDefinition )
+        $removed = false;
+        foreach ( $data['fieldDefinitions'] as $index => $existingDefinition )
         {
-            if ( $existingDefinition->id != $fieldDefinition->id )
+            if ( $existingDefinition->id == $fieldDefinition->id )
             {
-                $fieldDefinitions[] = $existingDefinition;
+                unset( $data['fieldDefinitions'][$index] );
+                $removed = true;
             }
         }
-        $data['fieldDefinitions'] = $fieldDefinitions;
+
+        if ( !$removed )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
 
         $this->setContentTypeDraft( $data );
     }

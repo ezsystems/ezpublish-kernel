@@ -1575,10 +1575,28 @@ class ContentTypeServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
      */
     public function testRemoveFieldDefinitionThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $draftId = $contentTypeDraft->id;
+
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        // $draftId contains the ID of a content type draft
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
+        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $bodyField );
+
+        $loadedDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        // Throws exception
+        $contentTypeService->removeFieldDefinition( $loadedDraft, $bodyField );
+        /* END: Use Case */
     }
 
     /**
