@@ -208,8 +208,6 @@ class UserService implements UserServiceInterface
         return $subUserGroups;
     }
 
-
-
     /**
      * Returns (searches) subgroups of a user group described by its main location
      *
