@@ -21,7 +21,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
 
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId as CriterionContentId,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\Status as CriterionStatus,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
 
@@ -248,18 +247,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $limit ) )
             throw new InvalidArgumentValue( "limit", $limit );
 
-        $searchCriterion = new CriterionLogicalAnd( array(
-            new CriterionParentLocationId( $location->id ),
-            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-        ) );
-
-        $searchResult = $this->persistenceHandler->searchHandler()->find(
-            $searchCriterion,
-            $offset,
-            $limit > 0 ? $limit : null,
-            array( $this->getSortClauseBySortField( $location->sortField, $location->sortOrder ) )
-        );
-
+        $searchResult = $this->searchChildrenLocations( $location->id, $location->sortField, $location->sortOrder, $offset, $limit );
         if ( !$searchResult || $searchResult->count == 0 )
             return array();
 
@@ -277,6 +265,34 @@ class LocationService implements LocationServiceInterface
         }
 
         return $childLocations;
+    }
+
+
+
+    /**
+     * Searches children locations of the provided parent location id
+     *
+     * @param int $parentLocationId
+     * @param int $sortField
+     * @param int $sortOrder
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
+     */
+    protected function searchChildrenLocations( $parentLocationId, $sortField, $sortOrder, $offset = 0, $limit = -1 )
+    {
+        $searchCriterion = new CriterionLogicalAnd( array(
+            new CriterionParentLocationId( $parentLocationId ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+        ) );
+
+        return $this->persistenceHandler->searchHandler()->find(
+            $searchCriterion,
+            $offset,
+            $limit > 0 ? $limit : null,
+            array( $this->getSortClauseBySortField( $sortField, $sortOrder ) )
+        );
     }
 
     /**
@@ -613,6 +629,7 @@ class LocationService implements LocationServiceInterface
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
+        $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, $spiLocation->sortField, $spiLocation->sortOrder );
 
         return new Location( array(
             'contentInfo'              => $contentInfo,
@@ -629,8 +646,7 @@ class LocationService implements LocationServiceInterface
             'depth'                    => $spiLocation->depth,
             'sortField'                => $spiLocation->sortField,
             'sortOrder'                => $spiLocation->sortOrder,
-            //@todo: calculate childrenCount
-            'childrenCount'            => 0
+            'childrenCount'            => $childrenLocations ? $childrenLocations->count : 0
         ) );
     }
 
