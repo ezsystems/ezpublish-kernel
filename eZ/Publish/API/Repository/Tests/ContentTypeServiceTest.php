@@ -1379,6 +1379,200 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * 
+     */
+    public function testAddFieldDefinition()
+    {
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'tags', 'string'
+        );
+        $fieldDefCreate->names = array(
+            'en_US' => 'Tags',
+            'de_DE' => 'Schlagworte',
+        );
+        $fieldDefCreate->descriptions = array(
+            'en_US' => 'Tags of the blog post',
+            'de_DE' => 'Schlagworte des Blog-Eintrages',
+        );
+        $fieldDefCreate->fieldGroup      = 'blog-meta';
+        $fieldDefCreate->position        = 1;
+        $fieldDefCreate->isTranslatable  = true;
+        $fieldDefCreate->isRequired      = true;
+        $fieldDefCreate->isInfoCollector = false;
+        $fieldDefCreate->validators      = array(
+            new StringLengthValidatorStub(),
+        );
+        $fieldDefCreate->fieldSettings = array(
+            'textblockheight' => 10
+        );
+        $fieldDefCreate->isSearchable = true;
+
+        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
+        /* END: Use Case */
+
+        $loadedType = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
+            $loadedType
+        );
+        return array(
+            'loadedType'     => $loadedType,
+            'fieldDefCreate' => $fieldDefCreate,
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
+     */
+    public function testAddFieldDefinitionStructValues( array $data )
+    {
+        $loadedType     = $data['loadedType'];
+        $fieldDefCreate = $data['fieldDefCreate'];
+
+        foreach ( $loadedType->fieldDefinitions as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier == $fieldDefCreate->identifier )
+            {
+                $this->assertFieldDefinitionsEqual( $fieldDefCreate, $fieldDefinition );
+                return;
+            }
+        }
+
+        $this->fail(
+            sprintf(
+                'Field definition with identifier "%s" not create.',
+                $fieldDefCreate->identifier
+            )
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testAddFieldDefinitionThrowsIllegalArgumentException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testAddFieldDefinitionThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the removeFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     * 
+     */
+    public function testRemoveFieldDefinition()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the removeFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testRemoveFieldDefinitionThrowsIllegalArgumentException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the removeFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemoveFieldDefinitionThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the updateFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
+     * 
+     */
+    public function testUpdateFieldDefinition()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the updateFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateFieldDefinitionThrowsInvalidArgumentException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the updateFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateFieldDefinitionThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+    }
+
+    /**
+     * Test for the updateFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testUpdateFieldDefinitionThrowsIllegalArgumentException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+    }
+
+    /**
      * Test for the loadContentType() method.
      *
      * @return void
@@ -1712,126 +1906,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testUnassignContentTypeGroupThrowsBadStateException()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the addFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
-     * 
-     */
-    public function testAddFieldDefinition()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the addFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testAddFieldDefinitionThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the addFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAddFieldDefinitionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the removeFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * 
-     */
-    public function testRemoveFieldDefinition()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the removeFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testRemoveFieldDefinitionThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the removeFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testRemoveFieldDefinitionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the updateFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * 
-     */
-    public function testUpdateFieldDefinition()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the updateFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testUpdateFieldDefinitionThrowsInvalidArgumentException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the updateFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateFieldDefinitionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the updateFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testUpdateFieldDefinitionThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
     }
 
     /**
