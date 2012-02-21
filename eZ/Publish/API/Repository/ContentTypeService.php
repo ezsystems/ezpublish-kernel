@@ -93,7 +93,7 @@ interface ContentTypeService
      * The content type is created in the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier
+     *         or there is a dublicate field identifier or the array of groups is empty
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
