@@ -105,8 +105,8 @@ interface RoleService
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    
     public function loadRoleByIdentifier( $identifier );
+    
     /**
      * loads all roles
      *
