@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
+use eZ\Publish\API\Repository\Values\Content\Section;
+
 /**
  * Test case for operations in the SectionService using in memory storage.
  *
@@ -354,7 +356,7 @@ class SectionServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        $this->assertEquals( 2, count( $sections ) );
+        $this->assertEquals( 3, count( $sections ) );
     }
 
     /**
@@ -364,13 +366,24 @@ class SectionServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
-    public function testLoadSectionsReturnsAnEmptyArrayByDefault()
+    public function testLoadSectionsReturnsStandardSectionByDefault()
     {
         $repository = $this->getRepository();
 
         $sectionService = $repository->getSectionService();
 
-        $this->assertSame( array(), $sectionService->loadSections() );
+        $this->assertEquals(
+            array(
+                new Section(
+                    array(
+                        'id'          =>  1,
+                        'name'        =>  'Standard',
+                        'identifier'  =>  'standard'
+                    )
+                )
+            ),
+            $sectionService->loadSections()
+        );
     }
 
     /**
@@ -565,7 +578,7 @@ class SectionServiceTest extends BaseTest
         $sectionService->deleteSection( $section );
         /* END: Use Case */
 
-        $this->assertEquals( 0, count( $sectionService->loadSections() ) );
+        $this->assertEquals( 1, count( $sectionService->loadSections() ) );
     }
 
     /**

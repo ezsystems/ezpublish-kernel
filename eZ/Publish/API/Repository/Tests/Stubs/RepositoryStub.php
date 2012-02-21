@@ -47,6 +47,11 @@ class RepositoryStub implements Repository
     private $roleService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub
+     */
+    private $contentService;
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentTypeServiceStub
      */
     private $contentTypeService;
@@ -122,11 +127,6 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
-    function foo() {}
-
-    /**
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects
      *
@@ -145,12 +145,15 @@ class RepositoryStub implements Repository
      *
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
-     *
      * @return \eZ\Publish\API\Repository\ContentService
      */
     public function getContentService()
     {
-        // TODO: Implement getContentService() method.
+        if ( null === $this->contentService )
+        {
+            $this->contentService = new ContentServiceStub( $this );
+        }
+        return $this->contentService;
     }
 
     /**

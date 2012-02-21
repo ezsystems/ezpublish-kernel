@@ -153,8 +153,8 @@ class RoleServiceStub implements RoleService
             array(
                 'id'            =>  $role->id,
                 'identifier'    =>  $roleName,
-                'names'         =>  $roleUpdateStruct->names ?: $role->names,
-                'descriptions'  =>  $roleUpdateStruct->descriptions ?: $role->descriptions
+                'names'         =>  $roleUpdateStruct->names ?: $role->getNames(),
+                'descriptions'  =>  $roleUpdateStruct->descriptions ?: $role->getDescriptions()
             )
         );
 
@@ -192,8 +192,8 @@ class RoleServiceStub implements RoleService
             array(
                 'id'            =>  $role->id,
                 'identifier'    =>  $role->identifier,
-                'names'         =>  $role->names,
-                'descriptions'  =>  $role->descriptions
+                'names'         =>  $role->getNames(),
+                'descriptions'  =>  $role->getDescriptions()
             ),
             $policies
         );
@@ -255,8 +255,8 @@ class RoleServiceStub implements RoleService
             array(
                 'id'            =>  $this->roles[$policy->roleId]->id,
                 'identifier'    =>  $this->roles[$policy->roleId]->identifier,
-                'names'         =>  $this->roles[$policy->roleId]->names,
-                'descriptions'  =>  $this->roles[$policy->roleId]->descriptions
+                'names'         =>  $this->roles[$policy->roleId]->getNames(),
+                'descriptions'  =>  $this->roles[$policy->roleId]->getDescriptions()
             ),
             $policies
         );
