@@ -261,6 +261,25 @@ class RoleServiceStub implements RoleService
     }
 
     /**
+     * loads a role for the given id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
+     *
+     * @param mixed $id
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     */
+    public function loadRole( $id )
+    {
+        if ( isset( $this->roles[$id] ) )
+        {
+            return $this->roles[$id];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+    }
+
+    /**
      * loads a role for the given name
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
@@ -270,7 +289,7 @@ class RoleServiceStub implements RoleService
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRole( $name )
+    public function loadRoleByName( $name )
     {
         if ( isset( $this->nameToRoleId[$name] ) )
         {

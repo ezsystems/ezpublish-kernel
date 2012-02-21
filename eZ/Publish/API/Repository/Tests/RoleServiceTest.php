@@ -148,10 +148,10 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
 
-        $roleService->createRole( $roleCreate );
+        $roleId = $roleService->createRole( $roleCreate )->id;
 
         // Load the newly create role by it's name
-        $role = $roleService->loadRole( 'roleName' );
+        $role = $roleService->loadRole( $roleId );
 
         /* END: Use Case */
 
@@ -188,7 +188,68 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         // This call will fail with a NotFoundException, because no such role exists.
-        $roleService->loadRole( 'MissingRole' );
+        $roleService->loadRole( PHP_INT_MAX );
+
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadRoleByName() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::loadRoleByName()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
+     */
+    public function testLoadRoleByName()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+
+        $roleService = $repository->getRoleService();
+        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+
+        $roleService->createRole( $roleCreate );
+
+        // Load the newly create role by it's name
+        $role = $roleService->loadRoleByName( 'roleName' );
+
+        /* END: Use Case */
+
+        $this->assertEquals( 'roleName', $role->name );
+    }
+
+    /**
+     * Test for the loadRoleByName() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::loadRoleByName()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByName
+     */
+    public function testLoadRoleByNameThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for RoleService::loadRoleByName() is not implemented." );
+    }
+
+    /**
+     * Test for the loadRoleByName() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::loadRoleByName()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByName
+     */
+    public function testLoadRoleByNameThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+
+        $roleService = $repository->getRoleService();
+
+        // This call will fail with a NotFoundException, because no such role exists.
+        $roleService->loadRoleByName( 'MissingRole' );
 
         /* END: Use Case */
     }
@@ -302,7 +363,7 @@ class RoleServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleUpdateStruct
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByName
      */
     public function testUpdateRole()
     {
@@ -321,7 +382,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         // Now verify that our change was saved
-        $role = $roleService->loadRole( 'updatedRole' );
+        $role = $roleService->loadRoleByName( 'updatedRole' );
 
         $this->assertEquals( $role->id, $updatedRole->id );
     }
@@ -448,7 +509,7 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByName
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
      */
     public function testAddPolicy()
@@ -695,7 +756,7 @@ class RoleServiceTest extends BaseTest
 
         $roleService->updatePolicy( $policy, $policyUpdate );
 
-        $role = $roleService->loadRole( 'myRole' );
+        $role = $roleService->loadRoleByName( 'myRole' );
 
         $policy = $role->getPolicy( 'content', 'translate' );
         /* END: Use Case */
