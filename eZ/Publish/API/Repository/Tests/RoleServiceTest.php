@@ -549,7 +549,14 @@ class RoleServiceTest extends BaseTest
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
         $role         = $roleService->addPolicy( $role, $policyCreate );
 
-        $policy = $role->getPolicy( 'content', 'create' );
+        $policies = $role->getPolicies();
+        foreach ( $policies as $policy )
+        {
+            if ( $policy->module === 'content' && $policy->function === 'create' )
+            {
+                break;
+            }
+        }
         /* END: Use Case */
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
@@ -575,7 +582,14 @@ class RoleServiceTest extends BaseTest
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
         $role         = $roleService->addPolicy( $role, $policyCreate );
 
-        $policy = $role->getPolicy( 'content', 'create' );
+        $policies = $role->getPolicies();
+        foreach ( $policies as $policy )
+        {
+            if ( $policy->module === 'content' && $policy->function === 'create' )
+            {
+                break;
+            }
+        }
         /* END: Use Case */
 
         $this->assertEquals(
@@ -680,7 +694,14 @@ class RoleServiceTest extends BaseTest
 
         $role = $roleService->createRole( $roleCreate );
 
-        $policy = $role->getPolicy( 'content', 'translate' );
+        $policies = $role->getPolicies();
+        foreach ( $policies as $policy )
+        {
+            if ( $policy->module === 'content' && $policy->function === 'translate' )
+            {
+                break;
+            }
+        }
 
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation( new ContentTypeLimitation( array( 'limitationValues' => array( 29, 30 ) ) ) );
@@ -713,7 +734,14 @@ class RoleServiceTest extends BaseTest
 
         $role = $roleService->createRole( $roleCreate );
 
-        $policy = $role->getPolicy( 'content', 'translate' );
+        $policies = $role->getPolicies();
+        foreach ( $policies as $policy )
+        {
+            if ( $policy->module === 'content' && $policy->function === 'translate' )
+            {
+                break;
+            }
+        }
 
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation( new ContentTypeLimitation( array( 'limitationValues' => array( 29, 30 ) ) ) );
@@ -749,7 +777,14 @@ class RoleServiceTest extends BaseTest
 
         $role = $roleService->createRole( $roleCreate );
 
-        $policy = $role->getPolicy( 'content', 'translate' );
+        $policies = $role->getPolicies();
+        foreach ( $policies as $policy )
+        {
+            if ( $policy->module === 'content' && $policy->function === 'translate' )
+            {
+                break;
+            }
+        }
 
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation( new ContentTypeLimitation( array( 'limitationValues' => array( 29, 30 ) ) ) );
@@ -758,7 +793,14 @@ class RoleServiceTest extends BaseTest
 
         $role = $roleService->loadRoleByName( 'myRole' );
 
-        $policy = $role->getPolicy( 'content', 'translate' );
+        $policies = $role->getPolicies();
+        foreach ( $policies as $policy )
+        {
+            if ( $policy->module === 'content' && $policy->function === 'translate' )
+            {
+                break;
+            }
+        }
         /* END: Use Case */
 
         $this->assertEquals(

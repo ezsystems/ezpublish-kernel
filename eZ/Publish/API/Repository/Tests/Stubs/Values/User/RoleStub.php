@@ -46,23 +46,4 @@ class RoleStub extends Role
     {
         return $this->policies;
     }
-
-    /**
-     * returns the policy for the given module and function
-     *
-     * @param string $module
-     * @param string $function
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
-    public function getPolicy( $module, $function )
-    {
-        foreach ( $this->policies as $policy )
-        {
-            if ( $policy->module === $module && $policy->function === $function )
-            {
-                return $policy;
-            }
-        }
-        // TODO: Implement getPolicy() method.
-    }
 }
