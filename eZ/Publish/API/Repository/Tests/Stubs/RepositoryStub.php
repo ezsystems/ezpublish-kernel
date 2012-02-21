@@ -22,6 +22,11 @@ use \eZ\Publish\API\Repository\Values\ValueObject;
 class RepositoryStub implements Repository
 {
     /**
+     * @var string
+     */
+    private $fixtureFile;
+
+    /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
     private $currentUser;
@@ -55,6 +60,14 @@ class RepositoryStub implements Repository
      * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentTypeServiceStub
      */
     private $contentTypeService;
+
+    /**
+     * @param $fixtureFile
+     */
+    public function __construct( $fixtureFile )
+    {
+        $this->fixtureFile = $fixtureFile;
+    }
 
     /**
      * Get current user
@@ -293,5 +306,32 @@ class RepositoryStub implements Repository
     public function rollback()
     {
         // TODO: Implement rollback() method.
+    }
+
+    /**
+     * Internally helper method that returns the test data for the given legacy
+     * table name.
+     *
+     * @param string $tableName
+     * @return array
+     */
+    public function loadFixtureByTable( $tableName )
+    {
+        $fixture = $this->loadFixture();
+        if ( isset( $fixture[$tableName] ) )
+        {
+            return $fixture[$tableName];
+        }
+        return array();
+    }
+
+    /**
+     * Loads the main test fixture also used for the legacy storage.
+     *
+     * @return array
+     */
+    private function loadFixture()
+    {
+        return include $this->fixtureFile;
     }
 }

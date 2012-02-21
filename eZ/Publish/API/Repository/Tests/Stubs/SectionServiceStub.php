@@ -61,13 +61,7 @@ class SectionServiceStub implements SectionService
     {
         $this->repository = $repository;
 
-        $this->sections[] = new Section(
-            array(
-                'id'          =>  ++$this->nextId,
-                'name'        =>  'Standard',
-                'identifier'  =>  'standard',
-            )
-        );
+        $this->initFromFixture();
     }
 
     /**
@@ -293,4 +287,32 @@ class SectionServiceStub implements SectionService
         return new SectionUpdateStruct();
     }
 
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        $fixture = $this->repository->loadFixtureByTable( 'ezsection' );
+        foreach ( $fixture as $data )
+        {
+            $section = new Section(
+                array(
+                    'id'          =>  $data['id'],
+                    'name'        =>  $data['name'],
+                    'identifier'  =>  $data['identifier'],
+                )
+            );
+
+            if ( $section->identifier )
+            {
+                $this->identifiers[$section->identifier] = $section->id;
+            }
+            $this->sections[$section->id] = $section;
+
+            $this->nextId = max( $this->nextId, $section->id );
+        }
+    }
 }

@@ -27,6 +27,11 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 class LanguageServiceStub implements LanguageService
 {
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
+    /**
      * @var integer
      */
     private $nextId = 0;
@@ -42,44 +47,15 @@ class LanguageServiceStub implements LanguageService
     private $codes = array();
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
-
-    /**
      * Instantiates the language service.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
 
-        $this->languages = array(
-            2  =>  new Language(
-                array(
-                    'id'            =>  2,
-                    'enabled'       =>  true,
-                    'name'          =>  'English (American)',
-                    'languageCode'  =>  'eng-US',
-                )
-            ),
-            4  =>  new Language(
-                array(
-                    'id'            =>  4,
-                    'enabled'       =>  true,
-                    'name'          =>  'English (United Kingdom)',
-                    'languageCode'  =>  'eng-GB',
-                )
-            ),
-        );
-
-        $this->codes = array(
-            'eng-US'  =>  2,
-            'eng-GB'  =>  4,
-        );
-
-        $this->nextId = 4;
+        $this->initFromFixture();
     }
 
     /**
@@ -273,5 +249,32 @@ class LanguageServiceStub implements LanguageService
     public function newLanguageCreateStruct()
     {
         return new LanguageCreateStruct();
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        $fixture = $this->repository->loadFixtureByTable( 'ezcontent_language' );
+        foreach ( $fixture as $data )
+        {
+            $language = new Language(
+                array(
+                    'id'            =>  $data['id'],
+                    'name'          =>  $data['name'],
+                    'enabled'       =>  !$data['disabled'],
+                    'languageCode'  =>  $data['locale']
+                )
+            );
+
+            $this->codes[$language->languageCode] = $language->id;
+            $this->languages[$language->id]       = $language;
+
+            $this->nextId = max( $this->nextId, $language->id );
+        }
     }
 }

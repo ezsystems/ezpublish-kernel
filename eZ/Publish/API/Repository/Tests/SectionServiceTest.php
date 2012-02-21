@@ -356,7 +356,7 @@ class SectionServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        $this->assertEquals( 3, count( $sections ) );
+        $this->assertEquals( 8, count( $sections ) );
     }
 
     /**
@@ -366,7 +366,7 @@ class SectionServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
-    public function testLoadSectionsReturnsStandardSectionByDefault()
+    public function testLoadSectionsReturnsDefaultSectionsByDefault()
     {
         $repository = $this->getRepository();
 
@@ -380,7 +380,42 @@ class SectionServiceTest extends BaseTest
                         'name'        =>  'Standard',
                         'identifier'  =>  'standard'
                     )
-                )
+                ),
+                new Section(
+                    array(
+                        'id'          =>  2,
+                        'name'        =>  'Users',
+                        'identifier'  =>  'users'
+                    )
+                ),
+                new Section(
+                    array(
+                        'id'          =>  3,
+                        'name'        =>  'Media',
+                        'identifier'  =>  'media'
+                    )
+                ),
+                new Section(
+                    array(
+                        'id'          =>  4,
+                        'name'        =>  'Setup',
+                        'identifier'  =>  'setup'
+                    )
+                ),
+                new Section(
+                    array(
+                        'id'          =>  5,
+                        'name'        =>  'Design',
+                        'identifier'  =>  'design'
+                    )
+                ),
+                new Section(
+                    array(
+                        'id'          =>  6,
+                        'name'        =>  'Restricted',
+                        'identifier'  =>  ''
+                    )
+                ),
             ),
             $sectionService->loadSections()
         );
@@ -578,7 +613,7 @@ class SectionServiceTest extends BaseTest
         $sectionService->deleteSection( $section );
         /* END: Use Case */
 
-        $this->assertEquals( 1, count( $sectionService->loadSections() ) );
+        $this->assertEquals( 6, count( $sectionService->loadSections() ) );
     }
 
     /**
