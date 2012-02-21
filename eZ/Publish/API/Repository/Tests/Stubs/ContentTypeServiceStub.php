@@ -258,6 +258,8 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
+        $this->checkContentTypeCreate( $contentTypeCreateStruct );
+
         $data = array();
         foreach ( $contentTypeCreateStruct as $propertyName => $propertyValue )
         {
@@ -285,6 +287,41 @@ class ContentTypeServiceStub implements ContentTypeService
         $this->typeDrafts[$type->id] = $type;
 
         return $type;
+    }
+
+    /**
+     * Checks that the given $contentTypeCreateStruct is valid
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
+     *         or there is a dublicate field identifier
+     *
+     * @param ContentTypeCreateStruct $contentTypeCreateStruct
+     * @return void
+     */
+    protected function checkContentTypeCreate( ContentTypeCreateStruct $contentTypeCreateStruct )
+    {
+        $types = array_merge( $this->types, $this->typeDrafts );
+        foreach ( $types as $type )
+        {
+            if ( $type->identifier == $contentTypeCreateStruct->identifier )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+            if ( $type->remoteId == $contentTypeCreateStruct->remoteId )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
+
+        $fieldIdentifiers = array();
+        foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreate )
+        {
+            if ( isset( $fieldIdentifiers[$fieldDefinitionCreate->identifier] ) )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+            $fieldIdentifiers[$fieldDefinitionCreate->identifier] = true;
+        }
     }
 
     /**
