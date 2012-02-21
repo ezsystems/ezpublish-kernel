@@ -1230,7 +1230,7 @@ class ContentTypeServiceTest extends BaseTest
         );
         $typeUpdate->descriptions = array(
             'en_US' => 'A news article',
-            'de_DE' => 'Ein Nachrichten-Artikenl',
+            'de_DE' => 'Ein Nachrichten-Artikel',
         );
 
         $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );

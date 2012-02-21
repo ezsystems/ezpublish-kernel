@@ -21,6 +21,8 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
+
 /**
  * @example Examples/contenttype.php
  */
@@ -510,6 +512,7 @@ class ContentServiceStub implements ContentService
      */
     public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode )
     {
+        return new ContentCreateStructStub( $contentType, $mainLanguageCode );
         // TODO: Implement newContentCreateStruct() method.
     }
 

@@ -24,24 +24,14 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::createLanguage
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguage
      */
     public function testNewContentCreateStruct()
     {
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        // First create a language
-        $languageService = $repository->getContentLanguageService();
-
-        $languageCreate = $languageService->newLanguageCreateStruct();
-        $languageCreate->name         = 'German (Germany)';
-        $languageCreate->enabled      = true;
-        $languageCreate->languageCode = 'ger-DE';
-
-        $language = $languageService->createLanguage( $languageCreate );
-
-        // Second create a content type group and a content type
+        // Create a content type
         $contentTypeService = $repository->getContentTypeService();
 
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'test-group' );
@@ -55,11 +45,11 @@ class ContentServiceTest extends BaseTest
         $typeCreate->nameSchema       = 'name|scheme';
         $typeCreate->names            = array(
             'eng-GB' => 'Blog post',
-            'ger-DE' => 'Blog-Eintrag',
+            'eng-US' => 'Blog post',
         );
         $typeCreate->descriptions     = array(
             'eng-GB' => 'A blog post',
-            'ger-DE' => 'Ein Blog-Eintrag',
+            'eng-US' => 'A blog post...',
         );
         $typeCreate->creatorId = 10;
         $typeCreate->creationDate = new \DateTime();
@@ -69,7 +59,7 @@ class ContentServiceTest extends BaseTest
 
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct();
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         /* END: Use Case */
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentCreateStruct', $contentCreate );

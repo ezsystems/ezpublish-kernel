@@ -341,8 +341,8 @@ class ContentTypeServiceStub implements ContentTypeService
         // FIXME: Work around inconsistency
         if ( isset( $data['fieldTypeIdentifier'] ) )
         {
-            $data['fieldType'] = $data['fieldTypeIdentifier'];
-            unset( $data['fieldTypeIdentifier'] );
+            //$data['fieldType'] = $data['fieldTypeIdentifier'];
+            //unset( $data['fieldTypeIdentifier'] );
         }
 
         return new FieldDefinitionStub( $data );
