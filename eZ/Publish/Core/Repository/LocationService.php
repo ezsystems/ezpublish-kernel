@@ -603,6 +603,13 @@ class LocationService implements LocationServiceInterface
         return new LocationUpdateStruct();
     }
 
+    /**
+     * Builds domain location object from provided persistence location
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
