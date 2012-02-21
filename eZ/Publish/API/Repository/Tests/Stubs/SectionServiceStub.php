@@ -60,6 +60,14 @@ class SectionServiceStub implements SectionService
     public function __construct( Repository $repository )
     {
         $this->repository = $repository;
+
+        $this->sections[] = new Section(
+            array(
+                'id'          =>  ++$this->nextId,
+                'name'        =>  'Standard',
+                'identifier'  =>  'standard',
+            )
+        );
     }
 
     /**
