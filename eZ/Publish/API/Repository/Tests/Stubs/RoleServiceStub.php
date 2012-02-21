@@ -289,7 +289,7 @@ class RoleServiceStub implements RoleService
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRoleByName( $name )
+    public function loadRoleByIdentifier( $name )
     {
         if ( isset( $this->nameToRoleId[$name] ) )
         {
