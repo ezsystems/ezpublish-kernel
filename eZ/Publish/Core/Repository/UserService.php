@@ -20,10 +20,11 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\UserService as UserServiceInterface,
 
     eZ\Publish\SPI\Persistence\User as SPIUser,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Status as CriterionStatus,
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
@@ -169,18 +170,39 @@ class UserService implements UserServiceInterface
         if ( $mainGroupLocation === null )
             return array();
 
-        $searchResult = $this->persistenceHandler->searchHandler()->find(
-            new CriterionLogicalAnd( array(
-                //@todo: read user group type ID from INI settings
-                new CriterionContentTypeId( 3 ),
-                new CriterionParentLocationId( $mainGroupLocation->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
-            ) )
-        );
+        $searchQuery = new Query();
+        $searchQuery->criterion = new CriterionLogicalAnd( array(
+            //@todo: read user group type ID from INI settings
+            new CriterionContentTypeId( 3 ),
+            new CriterionParentLocationId( $mainGroupLocation->id ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+        ) );
 
-        // @todo: hm... we need to convert SPI\Content to API\Content
-        // such method already exists in content service but is private
-        // return $searchResult->content;
+        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+
+        if ( !is_array( $searchResult->items ) || empty( $searchResult->items ) )
+            return array();
+
+        $subUserGroups = array();
+        foreach ( $searchResult->items as $resultItem )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $resultItem */
+            $resultItemContentInfo = $resultItem->getVersionInfo()->getContentInfo();
+            $subUserGroups[] = new UserGroup( array(
+                'contentInfo'   => $resultItemContentInfo,
+                'contentType'   => $resultItemContentInfo->getContentType(),
+                'contentId'     => $resultItemContentInfo->contentId,
+                'versionInfo'   => $resultItem->getVersionInfo(),
+                'fields'        => $resultItem->getFields(),
+                'relations'     => $resultItem->getRelations(),
+                'id'            => $resultItemContentInfo->contentId,
+                'parentId'      => $mainGroupLocation->id,
+                //@todo: calculate sub group count
+                'subGroupCount' => 0
+            ) );
+        }
+
+        return $subUserGroups;
     }
 
     /**
