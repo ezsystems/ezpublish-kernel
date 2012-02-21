@@ -11,9 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \PHPUnit_Framework_TestCase;
 use \eZ\Publish\API\Repository\Repository;
-use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
+
 
 use \eZ\Publish\API\Repository\Values\ValueObject;
 
@@ -24,9 +22,16 @@ use \eZ\Publish\API\Repository\Values\ValueObject;
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var string
+     */
+    private $repositoryInit;
+
+    /**
      * @var \eZ\Publish\API\Repository\Repository
      */
     private $repository;
+
+
 
     /**
      * Resets the temporary used repository between each test run.
@@ -36,6 +41,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->repository = null;
+
+        chdir( __DIR__ );
 
         parent::tearDown();
     }
@@ -47,40 +54,40 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if ( null === $this->repository )
         {
-            // TODO: REMOVE THIS WORKAROUND AND CREATE A FRESH USER
-            $user   = new UserStub( array( 'id' => 1 ) );
-            $policy = new PolicyStub( array( 'module' => '*', 'function' => '*' ) );
+            $file = $this->getRepositoryInit();
 
-            $this->repository = new RepositoryStub();
-            $this->repository->setCurrentUser( $user );
-            // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
-            $this->repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );
+            // Change working directory to project root. This is required by the
+            // current legacy implementation.
+            $count = substr_count( __NAMESPACE__, '\\' ) + 1;
+
+            chdir( realpath( str_repeat( '../', $count ) ) );
+
+            $this->repository = include $file;
+            return $this->repository;
+
+
         }
         return $this->repository;
     }
 
-    /**
-     * Workaround to emulate user policies.
-     *
-     * @param string $module
-     * @param string $function
-     *
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepositoryWithRestriction( $module, $function )
+    private function getRepositoryInit()
     {
-        if ( null === $this->repository )
+        if ( null === $this->repositoryInit )
         {
-            $this->repository = $this->getRepository();
+            if ( false === isset( $_ENV['repositoryInit'] ) )
+            {
+                throw new \ErrorException( 'Missing mandatory setting $_ENV["repositoryInit"].' );
+            }
+
+            $file = realpath( $_ENV['repositoryInit'] );
+            if ( false === file_exists( $file ) )
+            {
+                throw new \ErrorException( '$_ENV["repositoryInit"] does not reference an existing file.' );
+            }
+
+            $this->repositoryInit = $file;
         }
-
-        // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
-        $this->repository->getRoleService()->setPoliciesForUser(
-            $this->repository->getCurrentUser(),
-            array( new PolicyStub( array( 'module' => $module, 'function' => $function ) ) )
-        );
-
-        return $this->repository;
+        return $this->repositoryInit;
     }
 
     /**
