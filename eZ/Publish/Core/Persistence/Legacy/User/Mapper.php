@@ -98,7 +98,8 @@ class Mapper
             if ( empty( $role->id ) )
             {
                 $role->id = $row['ezrole_id'];
-                $role->name = $row['ezrole_name'];
+                $role->identifier = $row['ezrole_name'];
+                // skip name and description as they don't exist in legacy
             }
 
             $role->groupIds[] = $row['ezuser_role_contentobject_id'];

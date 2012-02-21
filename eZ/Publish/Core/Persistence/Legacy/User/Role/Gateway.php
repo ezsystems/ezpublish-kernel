@@ -26,12 +26,20 @@ abstract class Gateway
     abstract public function createRole( Role $role );
 
     /**
-     * Load a specified role by id
+     * Load a specified role by $roleId
      *
      * @param mixed $roleId
      * @return array
      */
     abstract public function loadRole( $roleId );
+
+    /**
+     * Load a specified role by $identifier
+     *
+     * @param string $identifier
+     * @return array
+     */
+    abstract public function loadRoleByIdentifier( $identifier );
 
     /**
      * Load all roles

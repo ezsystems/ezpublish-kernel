@@ -43,6 +43,8 @@ interface Handler
     /**
      * Load user(s) with user login / email.
      *
+     * Optimized for login use (hence the possibility to match email and resturn several users).
+     *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
      * @return \eZ\Publish\SPI\Persistence\User[]
@@ -73,13 +75,22 @@ interface Handler
     public function createRole( Role $role );
 
     /**
-     * Load a specified role by id
+     * Load a specified role by $roleId
      *
      * @param mixed $roleId
      * @return \eZ\Publish\SPI\Persistence\User\Role
      * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRole( $roleId );
+
+    /**
+     * Load a specified role by $identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @throws \ezp\Base\Exception\NotFound If role is not found
+     */
+    public function loadRoleByIdentifier( $identifier );
 
     /**
      * Load all roles

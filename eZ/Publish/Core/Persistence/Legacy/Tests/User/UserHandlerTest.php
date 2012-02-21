@@ -226,7 +226,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $handler->createRole( $role );
 
@@ -242,7 +242,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -254,7 +254,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -269,7 +269,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -288,7 +288,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -315,7 +315,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -350,7 +350,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -390,7 +390,7 @@ class UserHandlerTest extends TestCase
         );
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -405,13 +405,13 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
         $update = new Persistence\User\RoleUpdateStruct();
         $update->id = $role->id;
-        $update->name = 'Changed';
+        $update->identifier = 'Changed';
 
         $handler->updateRole( $update );
 
@@ -427,7 +427,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
 
         $role = $handler->createRole( $role );
 
@@ -445,7 +445,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
@@ -466,7 +466,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
@@ -483,7 +483,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
@@ -511,7 +511,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
@@ -555,7 +555,7 @@ class UserHandlerTest extends TestCase
         );
 
         $role = new Persistence\User\Role();
-        $role->name = 'Test';
+        $role->identifier = 'Test';
         $role->policies = array( $policy1, $policy2 );
         return $handler->createRole( $role );
     }
@@ -745,7 +745,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role1 = new Persistence\User\Role();
-        $role1->name = 'Test role 1';
+        $role1->identifier = 'Test role 1';
         $handler->createRole( $role1 );
 
         $policy = new Persistence\User\Policy();
@@ -758,7 +758,7 @@ class UserHandlerTest extends TestCase
         $handler->addPolicy( $role1->id, $policy );
 
         $role2 = new Persistence\User\Role();
-        $role2->name = 'Test role 2';
+        $role2->identifier = 'Test role 2';
         $handler->createRole( $role2 );
 
         $policy = new Persistence\User\Policy();
@@ -788,7 +788,7 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\Role( array(
                     'id' => 1,
-                    'name' => 'Test role 1',
+                    'identifier' => 'Test role 1',
                     'policies' => array(
                         new Persistence\User\Policy( array(
                             'id' => 1,
@@ -804,7 +804,7 @@ class UserHandlerTest extends TestCase
                 ) ),
                 new Persistence\User\Role( array(
                     'id' => 2,
-                    'name' => 'Test role 2',
+                    'identifier' => 'Test role 2',
                     'policies' => array(
                         new Persistence\User\Policy( array(
                             'id' => 2,
