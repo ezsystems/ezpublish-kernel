@@ -20,6 +20,10 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
  */
 class RoleStub extends Role
 {
+    protected $names;
+
+    protected $descriptions;
+
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
      */
@@ -36,6 +40,70 @@ class RoleStub extends Role
         parent::__construct( $properties );
 
         $this->policies = $policies;
+    }
+
+    /**
+     *
+     * This method returns the human readable name in all provided languages
+     * of the role
+     *
+     * The structure of the return value is:
+     * <code>
+     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
+     * </code>
+     *
+     * @since 5.0
+     *
+     * @return string[]
+     */
+    public function getNames()
+    {
+        // TODO: Implement getNames() method.
+    }
+
+    /**
+     * this method returns the name of the role in the given language
+     *
+     * @since 5.0
+     *
+     * @param string $languageCode
+     *
+     * @return string the name for the given language or null if none exists.
+     */
+    public function getName($languageCode)
+    {
+        // TODO: Implement getName() method.
+    }
+
+    /**
+     * This method returns the human readable description of the role
+     *
+     * The structure of this field is:
+     * <code>
+     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
+     * </code>
+     *
+     * @since 5.0
+     *
+     * @return string[]
+     */
+    public function getDescriptions()
+    {
+        // TODO: Implement getDescriptions() method.
+    }
+
+    /**
+     * this method returns the name of the role in the given language
+     *
+     * @since 5.0
+     *
+     * @param string $languageCode
+     *
+     * @return string the description for the given language or null if none existis.
+     */
+    public function getDescription($languageCode)
+    {
+        // TODO: Implement getDescription() method.
     }
 
     /**

@@ -148,7 +148,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load a specified role by id
+     * Load a specified role by $roleId
      *
      * @param mixed $roleId
      * @return \eZ\Publish\SPI\Persistence\User\Role
@@ -161,6 +161,25 @@ class Handler implements BaseUserHandler
         if ( empty( $data ) )
         {
             throw new \ezp\Base\Exception\NotFound( 'role', $roleId );
+        }
+
+        return $this->mapper->mapRole( $data );
+    }
+
+    /**
+     * Load a specified role by $identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @throws \ezp\Base\Exception\NotFound If role is not found
+     */
+    public function loadRoleByIdentifier( $identifier )
+    {
+        $data = $this->roleGateway->loadRoleByIdentifier( $identifier );
+
+        if ( empty( $data ) )
+        {
+            throw new \ezp\Base\Exception\NotFound( 'role', $identifier );
         }
 
         return $this->mapper->mapRole( $data );

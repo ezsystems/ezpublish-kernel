@@ -131,6 +131,15 @@ class UserHandler implements UserHandlerInterface
      */
     public function createRole( Role $role )
     {
+        if ( !$role->identifier )
+            throw new InvalidArgumentValue( '$role->identifier', $role->identifier );
+
+        if ( !is_array( $role->name ) )
+            throw new InvalidArgumentValue( '$role->name', $role->name );
+
+        if ( !is_array( $role->description ) )
+            throw new InvalidArgumentValue( '$role->description', $role->description );
+
         $roleArr = (array)$role;
         $roleArr['policies'] = array();
         $newRole = $this->backend->create( 'User\\Role', $roleArr );
@@ -162,6 +171,31 @@ class UserHandler implements UserHandlerInterface
         );
         if ( !$list )
             throw new NotFound( 'User\\Role', $roleId );
+
+        return $list[0];
+    }
+
+    /**
+     * Load a specified role by $identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @throws \ezp\Base\Exception\NotFound If role is not found
+     */
+    public function loadRoleByIdentifier( $identifier )
+    {
+        $list = $this->backend->find(
+            'User\\Role',
+            array( 'identifier' => $identifier ),
+            array(
+                'policies' => array(
+                    'type' => 'User\\Policy',
+                    'match' => array( 'roleId' => 'id' )
+                )
+            )
+        );
+        if ( !$list )
+            throw new NotFound( 'User\\Role', $identifier );
 
         return $list[0];
     }
@@ -221,6 +255,18 @@ class UserHandler implements UserHandlerInterface
      */
     public function updateRole( RoleUpdateStruct $role )
     {
+        if ( !$role->id )
+            throw new InvalidArgumentValue( '$role->id', $role->id );
+
+        if ( !$role->identifier )
+            throw new InvalidArgumentValue( '$role->identifier', $role->identifier );
+
+        if ( !is_array( $role->name ) )
+            throw new InvalidArgumentValue( '$role->name', $role->name );
+
+        if ( !is_array( $role->description ) )
+            throw new InvalidArgumentValue( '$role->description', $role->description );
+
         $roleArr = (array)$role;
         $this->backend->update( 'User\\Role', $roleArr['id'], $roleArr );
     }

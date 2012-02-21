@@ -31,8 +31,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     private $repository;
 
-
-
     /**
      * Resets the temporary used repository between each test run.
      *
@@ -63,9 +61,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             chdir( realpath( str_repeat( '../', $count ) ) );
 
             $this->repository = include $file;
-            return $this->repository;
-
-
         }
         return $this->repository;
     }

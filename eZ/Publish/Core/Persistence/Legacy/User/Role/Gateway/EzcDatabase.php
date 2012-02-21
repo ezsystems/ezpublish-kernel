@@ -61,7 +61,7 @@ class EzcDatabase extends Gateway
                 0
             )->set(
                 $this->handler->quoteColumn( 'name' ),
-                $query->bindValue( $role->name )
+                $query->bindValue( $role->identifier )
             )->set(
                 $this->handler->quoteColumn( 'value' ),
                 0
@@ -124,6 +124,63 @@ class EzcDatabase extends Gateway
             $query->expr->eq(
                 $this->handler->quoteColumn( 'id', 'ezrole' ),
                 $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Load a specified role by $identifier
+     *
+     * @param string $identifier
+     * @return array
+     */
+    public function loadRoleByIdentifier( $identifier )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->aliasedColumn( $query, 'id', 'ezrole' ),
+            $this->handler->aliasedColumn( $query, 'name', 'ezrole' ),
+            $this->handler->aliasedColumn( $query, 'contentobject_id', 'ezuser_role' ),
+            $this->handler->aliasedColumn( $query, 'id', 'ezpolicy' ),
+            $this->handler->aliasedColumn( $query, 'function_name', 'ezpolicy' ),
+            $this->handler->aliasedColumn( $query, 'module_name', 'ezpolicy' ),
+            $this->handler->aliasedColumn( $query, 'identifier', 'ezpolicy_limitation' ),
+            $this->handler->aliasedColumn( $query, 'value', 'ezpolicy_limitation_value' )
+        )->from(
+            $this->handler->quoteTable( 'ezrole' )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezuser_role' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'role_id', 'ezuser_role' ),
+                $this->handler->quoteColumn( 'id', 'ezrole' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'role_id', 'ezpolicy' ),
+                $this->handler->quoteColumn( 'id', 'ezrole' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy_limitation' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'policy_id', 'ezpolicy_limitation' ),
+                $this->handler->quoteColumn( 'id', 'ezpolicy' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy_limitation_value' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'limitation_id', 'ezpolicy_limitation_value' ),
+                $this->handler->quoteColumn( 'id', 'ezpolicy_limitation' )
+            )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'name', 'ezrole' ),
+                $query->bindValue( $identifier, null, \PDO::PARAM_STR )
             )
         );
 
@@ -348,7 +405,7 @@ class EzcDatabase extends Gateway
             ->update( $this->handler->quoteTable( 'ezrole' ) )
             ->set(
                 $this->handler->quoteColumn( 'name' ),
-                $query->bindValue( $role->name )
+                $query->bindValue( $role->identifier )
             )->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'id' ),

@@ -200,7 +200,9 @@ class UserHandlerTest extends HandlerTest
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
-        $this->assertEquals( 'test', $obj->name );
+        $this->assertEquals( array( 'eng-GB' => 'Test' ), $obj->name );
+        $this->assertEquals( array( 'eng-GB' => 'Test role' ), $obj->description );
+        $this->assertEquals( 'test', $obj->identifier );
         $this->assertEquals( 3, count( $obj->policies ) );
         $this->assertEquals( $obj->id, $obj->policies[0]->roleId );
     }
@@ -216,7 +218,9 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( self::getRole() );
         $obj = $handler->loadRole( $obj->id );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
-        $this->assertEquals( 'test', $obj->name );
+        $this->assertEquals( array( 'eng-GB' => 'Test' ), $obj->name );
+        $this->assertEquals( array( 'eng-GB' => 'Test role' ), $obj->description );
+        $this->assertEquals( 'test', $obj->identifier );
         $this->assertEquals( 3, count( $obj->policies ) );
     }
 
@@ -230,6 +234,35 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->userHandler();
         $handler->loadRole( 999 );//exception
+    }
+
+    /**
+     * Test load role function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleByIdentifier
+     */
+    public function testLoadRoleByIdentifier()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $obj = $handler->loadRoleByIdentifier( $obj->identifier );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
+        $this->assertEquals( array( 'eng-GB' => 'Test' ), $obj->name );
+        $this->assertEquals( array( 'eng-GB' => 'Test role' ), $obj->description );
+        $this->assertEquals( 'test', $obj->identifier );
+        $this->assertEquals( 3, count( $obj->policies ) );
+    }
+
+    /**
+     * Test load function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleByIdentifier
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadRoleByIdentifierNotFound()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+        $handler->loadRoleByIdentifier( 'lima' );//exception
     }
 
     /**
@@ -327,12 +360,14 @@ class UserHandlerTest extends HandlerTest
 
         $struct = new RoleUpdateStruct();
         $struct->id = $id;
-        $struct->name = 'newName';
+        $struct->identifier = $obj->identifier;
+        $struct->name = array( 'eng-GB' => 'newName' );
+        $struct->description = $obj->description;
         $handler->updateRole( $struct );
         $obj = $handler->loadRole( $id );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( $id, $obj->id );
-        $this->assertEquals( 'newName', $obj->name );
+        $this->assertEquals( array( 'eng-GB' => 'newName' ), $obj->name );
         $this->assertEquals( 3, count( $obj->policies ) );
     }
 
@@ -610,7 +645,9 @@ class UserHandlerTest extends HandlerTest
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
         $role = new Role();
-        $role->name = 'test2';
+        $role->identifier = 'test2';
+        $role->name = array( 'eng-GB' => 'Test2' );
+        $role->description = array( 'eng-GB' => 'Test2 role' );
         $role->policies = array(
             new Policy( array( 'module' => 'tag', 'function' => '*', 'limitations' => '*' ) ),
         );
@@ -682,7 +719,9 @@ class UserHandlerTest extends HandlerTest
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
         $role = new Role();
-        $role->name = 'test2';
+        $role->identifier = 'test2';
+        $role->name = array( 'eng-GB' => 'Test2' );
+        $role->description = array( 'eng-GB' => 'Test2 role' );
         $role->policies = array(
             new Policy( array( 'module' => $obj->policies[2]->module,
                                'function' => $obj->policies[2]->function,
@@ -703,7 +742,9 @@ class UserHandlerTest extends HandlerTest
     protected static function getRole()
     {
         $role = new Role();
-        $role->name = 'test';
+        $role->identifier = 'test';
+        $role->name = array( 'eng-GB' => 'Test' );
+        $role->description = array( 'eng-GB' => 'Test role' );
         $role->policies = array(
             new Policy( array( 'module' => 'content', 'function' => 'write', 'limitations' => array( 'SubTree' => array( '/1/2/' ) ) ) ),
             new Policy( array( 'module' => 'content', 'function' => 'read', 'limitations' => '*' ) ),

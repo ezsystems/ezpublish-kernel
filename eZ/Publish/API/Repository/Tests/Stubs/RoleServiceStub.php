@@ -78,18 +78,18 @@ class RoleServiceStub implements RoleService
         $this->repository = $repository;
 
         $this->roles = array(
-            1 => new RoleStub( array( 'id' => 1, 'name' => 'Anonymous' ) ),
-            2 => new RoleStub( array( 'id' => 2, 'name' => 'Administrator' ) ),
-            3 => new RoleStub( array( 'id' => 3, 'name' => 'Editor' ) ),
-            4 => new RoleStub( array( 'id' => 4, 'name' => 'Partner' ) ),
-            5 => new RoleStub( array( 'id' => 5, 'name' => 'Member' ) ),
+            1 => new RoleStub( array( 'id' => 1, 'identifier' => 'Anonymous' ) ),
+            2 => new RoleStub( array( 'id' => 2, 'identifier' => 'Administrator' ) ),
+            3 => new RoleStub( array( 'id' => 3, 'identifier' => 'Editor' ) ),
+            4 => new RoleStub( array( 'id' => 4, 'identifier' => 'Partner' ) ),
+            5 => new RoleStub( array( 'id' => 5, 'identifier' => 'Member' ) ),
         );
 
         foreach ( $this->roles as $role )
         {
             ++$this->nextRoleId;
 
-            $this->nameToRoleId[$role->name] = $role->id;
+            $this->nameToRoleId[$role->identifier] = $role->id;
         }
     }
 
@@ -105,21 +105,22 @@ class RoleServiceStub implements RoleService
      */
     public function createRole( RoleCreateStruct $roleCreateStruct )
     {
-        if ( isset( $this->nameToRoleId[$roleCreateStruct->name] ) )
+        if ( isset( $this->nameToRoleId[$roleCreateStruct->identifier] ) )
         {
             throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $role = new RoleStub(
             array(
-                'id'           =>  ++$this->nextRoleId,
-                'name'         =>  $roleCreateStruct->name,
-                'description'  =>  $roleCreateStruct->description
+                'id'            =>  ++$this->nextRoleId,
+                'identifier'    =>  $roleCreateStruct->identifier,
+                'names'         =>  $roleCreateStruct->names,
+                'descriptions'  =>  $roleCreateStruct->descriptions
             )
         );
 
-        $this->roles[$role->id]          = $role;
-        $this->nameToRoleId[$role->name] = $role->id;
+        $this->roles[$role->id]                = $role;
+        $this->nameToRoleId[$role->identifier] = $role->id;
 
         foreach ( $roleCreateStruct->getPolicies() as $policy )
         {
@@ -141,7 +142,7 @@ class RoleServiceStub implements RoleService
      */
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        $roleName = $roleUpdateStruct->name ?: $role->name;
+        $roleName = $roleUpdateStruct->identifier ?: $role->identifier;
 
         if ( isset( $this->nameToRoleId[$roleName] ) && $this->nameToRoleId[$roleName] !== $role->id )
         {
@@ -150,16 +151,17 @@ class RoleServiceStub implements RoleService
 
         $updatedRole = new RoleStub(
             array(
-                'id'           =>  $role->id,
-                'name'         =>  $roleName,
-                'description'  =>  $roleUpdateStruct->description ?: $role->description
+                'id'            =>  $role->id,
+                'identifier'    =>  $roleName,
+                'names'         =>  $roleUpdateStruct->names ?: $role->names,
+                'descriptions'  =>  $roleUpdateStruct->descriptions ?: $role->descriptions
             )
         );
 
-        unset( $this->roles[$role->id], $this->nameToRoleId[$role->name] );
+        unset( $this->roles[$role->id], $this->nameToRoleId[$role->identifier] );
 
-        $this->roles[$updatedRole->id]          = $updatedRole;
-        $this->nameToRoleId[$updatedRole->name] = $updatedRole->id;
+        $this->roles[$updatedRole->id]                = $updatedRole;
+        $this->nameToRoleId[$updatedRole->identifier] = $updatedRole->id;
 
         return $this->roles[$updatedRole->id];
     }
@@ -188,9 +190,10 @@ class RoleServiceStub implements RoleService
 
         $this->roles[$role->id] = new RoleStub(
             array(
-                'id'           =>  $role->id,
-                'name'         =>  $role->name,
-                'description'  =>  $role->description,
+                'id'            =>  $role->id,
+                'identifier'    =>  $role->identifier,
+                'names'         =>  $role->names,
+                'descriptions'  =>  $role->descriptions
             ),
             $policies
         );
@@ -250,9 +253,10 @@ class RoleServiceStub implements RoleService
 
         $this->roles[$policy->roleId] = new RoleStub(
             array(
-                'id'           =>  $this->roles[$policy->roleId]->id,
-                'name'         =>  $this->roles[$policy->roleId]->name,
-                'description'  =>  $this->roles[$policy->roleId]->description
+                'id'            =>  $this->roles[$policy->roleId]->id,
+                'identifier'    =>  $this->roles[$policy->roleId]->identifier,
+                'names'         =>  $this->roles[$policy->roleId]->names,
+                'descriptions'  =>  $this->roles[$policy->roleId]->descriptions
             ),
             $policies
         );
@@ -289,7 +293,7 @@ class RoleServiceStub implements RoleService
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRoleByName( $name )
+    public function loadRoleByIdentifier( $name )
     {
         if ( isset( $this->nameToRoleId[$name] ) )
         {
@@ -319,7 +323,7 @@ class RoleServiceStub implements RoleService
      */
     public function deleteRole( Role $role )
     {
-        unset( $this->roles[$role->id], $this->nameToRoleId[$role->name] );
+        unset( $this->roles[$role->id], $this->nameToRoleId[$role->identifier] );
     }
 
     /**

@@ -22,11 +22,29 @@ class Role extends ValueObject
     public $id;
 
     /**
-     * Name of the role
+     * Identifier of the role
+     *
+     * Legacy note: Maps to name in 4.x.
      *
      * @var string
      */
+    public $identifier;
+
+    /**
+     * Name of the role
+     *
+     * @since 5.0
+     * @var string[]
+     */
     public $name;
+
+    /**
+     * Name of the role
+     *
+     * @since 5.0
+     * @var string[]
+     */
+    public $description = array();
 
     /**
      * Policies associated with the role

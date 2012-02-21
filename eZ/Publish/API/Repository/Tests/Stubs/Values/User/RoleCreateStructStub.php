@@ -32,7 +32,7 @@ class RoleCreateStructStub extends RoleCreateStruct
      */
     public function __construct( $name )
     {
-        parent::__construct( array( 'name' => $name ) );
+        parent::__construct( array( 'identifier' => $name ) );
     }
 
     /**
