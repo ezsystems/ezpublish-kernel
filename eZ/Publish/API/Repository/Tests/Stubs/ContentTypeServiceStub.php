@@ -378,6 +378,8 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
+        $this->checkContentTypeUpdate( $contentTypeDraft, $contentTypeUpdateStruct );
+
         $data = array(
             'id'                     => $contentTypeDraft->id,
             'status'                 => $contentTypeDraft->status,
@@ -411,6 +413,35 @@ class ContentTypeServiceStub implements ContentTypeService
         $this->typeDrafts[$contentTypeDraft->id] = new ContentTypeDraftStub(
             new ContentTypeStub( $data )
         );
+    }
+
+    /**
+     * Checks that the given $contentTypeUpdateStruct is valid
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
+     *         or there is a dublicate field identifier
+     *
+     * @param ContentTypeCreateStruct $contentTypeCreateStruct
+     * @return void
+     */
+    protected function checkContentTypeUpdate( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
+    {
+        $types = array_merge( $this->types, $this->typeDrafts );
+        foreach ( $types as $type )
+        {
+            if ( $type->id == $contentTypeDraft->id )
+            {
+                continue;
+            }
+            if ( $type->identifier == $contentTypeUpdateStruct->identifier )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+            if ( $type->remoteId == $contentTypeUpdateStruct->remoteId )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
     }
 
     /**

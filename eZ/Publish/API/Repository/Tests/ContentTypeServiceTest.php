@@ -1306,10 +1306,76 @@ class ContentTypeServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
-    public function testUpdateContentTypeDraftThrowsIllegalArgumentException()
+    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionDuplicateIdentifier()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct(
+            'news-article'
+        );
+        $contentTypeService->createContentType( $typeCreate, array() );
+
+        $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
+        $typeUpdate->identifier = 'news-article';
+
+        // Throws exception
+        $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
+     */
+    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionDuplicateRemoteId()
+    {
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct(
+            'some-content-type'
+        );
+        $typeCreate->remoteId = 'will-be-duplicated';
+        $contentTypeService->createContentType( $typeCreate, array() );
+
+        $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
+        $typeUpdate->remoteId = 'will-be-duplicated';
+
+        // Throws exception
+        $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
+     */
+    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionIncorrectUser()
+    {
+        $this->markTestIncomplete( "Is not implemented." );
     }
 
     /**
