@@ -54,6 +54,32 @@ class LanguageServiceStub implements LanguageService
     public function __construct( Repository $repository )
     {
         $this->repository = $repository;
+
+        $this->languages = array(
+            2  =>  new Language(
+                array(
+                    'id'            =>  2,
+                    'enabled'       =>  true,
+                    'name'          =>  'English (American)',
+                    'languageCode'  =>  'eng-US',
+                )
+            ),
+            4  =>  new Language(
+                array(
+                    'id'            =>  4,
+                    'enabled'       =>  true,
+                    'name'          =>  'English (United Kingdom)',
+                    'languageCode'  =>  'eng-GB',
+                )
+            ),
+        );
+
+        $this->codes = array(
+            'eng-US'  =>  2,
+            'eng-GB'  =>  4,
+        );
+
+        $this->nextId = 4;
     }
 
     /**
