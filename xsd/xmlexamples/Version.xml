@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:Version xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ez.no/API/Values Version.xsd ">
+  <VersionInfo>
+    <id>0</id>
+    <versionNo>0</versionNo>
+    <status>DRAFT</status>
+    <modificationDate>2001-12-31T12:00:00</modificationDate>
+    <creator href="" media-type=""/>
+    <creationDate>2001-12-31T12:00:00</creationDate>
+    <initialLanguageCode>initialLanguageCode</initialLanguageCode>
+    <languageCodes>array()</languageCodes>
+    <Content href="" media-type=""/>
+  </VersionInfo>
+  <Fields>
+    <field>
+      <id>0</id>
+      <fieldDefinitionIdentifer>fieldDefinitionIdentifer</fieldDefinitionIdentifer>
+      <languageCode>languageCode</languageCode>
+      <value xsi:type="anyType"/>
+    </field>
+  </Fields>
+  <Relations>
+    <Relation href="" media-type="">
+      <SourceContent href="" media-type=""/>
+      <DestinationContent href="" media-type=""/>
+      <RelationType>COMMON</RelationType>
+      <SourceFieldDefinitionIdentifier>SourceFieldDefinitionIdentifier</SourceFieldDefinitionIdentifier>
+    </Relation>
+  </Relations>
+</p:Version>

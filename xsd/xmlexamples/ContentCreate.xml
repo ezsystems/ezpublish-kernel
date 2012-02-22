@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentCreate>
+  <ContentType href="/content/types/10"/>
+  <mainLanguageCode>eng-US</mainLanguageCode>
+  <ParentLocation href="/content/locations/17"/>
+  <Section href="/content/sections/4"/>
+  <alwaysAvailable>true</alwaysAvailable>
+  <remoteId>remoteId12345678</remoteId>
+  <fields>
+    <field>
+      <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>This is a title</value>
+    </field>
+    <field>
+      <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>This is a summary</value>
+    </field>
+    <field>
+      <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>
+        <authors>
+          <author name="John Doe" email="john.doe@example.net"/>
+          <author name="Bruce Willis" email="bruce.willis@example.net"/>
+        </authors>
+      </value>
+    </field>
+  </fields>
+</ContentCreate>

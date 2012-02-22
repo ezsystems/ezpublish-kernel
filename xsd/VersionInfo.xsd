@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://ez.no/API/Values/VersionInfo"
-  xmlns="http://ez.no/API/Common"
-  targetNamespace="http://ez.no/API/Values/VersionInfo">
-  <xsd:import namespace="http://ez.no/API/Values" schemaLocation="CommonDefinitions.xsd"/>
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
   <xsd:simpleType name="versionStatus">
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="DRAFT" />
@@ -17,14 +15,13 @@
         <xsd:annotation>
           <xsd:documentation>
             The version id.
-                </xsd:documentation>
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="versionNo" type="xsd:int">
         <xsd:annotation>
           <xsd:documentation>
             The version number.
-
             This is the version
             number, which only
             increments in scope of a single Content
@@ -32,7 +29,7 @@
                 </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="Status" type="versionStatus"/>
+      <xsd:element name="status" type="versionStatus" />
       <xsd:element name="modificationDate" type="xsd:dateTime">
         <xsd:annotation>
           <xsd:documentation>
@@ -41,7 +38,7 @@
                 </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="creator" type="ref">
+      <xsd:element name="Creator" type="ref">
         <xsd:annotation>
           <xsd:documentation>
             The user which has created this version
@@ -61,7 +58,7 @@
             In 4.x this is the language code which is
             used for labeling a
             translation.
-                </xsd:documentation>
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="languageCodes" type="xsd:string"
@@ -74,10 +71,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="Content" type="ref">
-      </xsd:element>
+      <xsd:element name="Content" type="ref" />
     </xsd:all>
   </xsd:complexType>
-  
-  <xsd:element name="Version" type="versionInfoType"></xsd:element>
 </xsd:schema>
