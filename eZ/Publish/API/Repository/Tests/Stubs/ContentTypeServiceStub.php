@@ -715,7 +715,20 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup )
     {
-        // TODO: Implement.
+        $typesInGroup = array();
+
+        foreach ( $this->types as $type )
+        {
+            foreach ( $type->contentTypeGroups as $group )
+            {
+                if ( $group->id == $contentTypeGroup->id )
+                {
+                    $typesInGroup[] = $type;
+                }
+            }
+        }
+
+        return $typesInGroup;
     }
 
     /**

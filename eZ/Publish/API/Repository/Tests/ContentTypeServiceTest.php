@@ -2180,7 +2180,41 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypes()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypes() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroup( 2 );
+
+        $types = $contentTypeService->loadContentTypes( $contentTypeGroup );
+        /* END: Use Case */
+
+        $this->assertInternalType( 'array', $types );
+
+        return $types;
+        // 3, 4
+    }
+
+    /**
+     * Test for the loadContentTypes() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypes()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypes
+     */
+    public function testLoadContentTypesContent( array $types )
+    {
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $this->assertEquals(
+            array(
+                $contentTypeService->loadContentType( 3 ),
+                $contentTypeService->loadContentType( 4 ),
+            ),
+            $types
+        );
     }
 
     /**
