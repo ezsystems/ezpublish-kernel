@@ -872,9 +872,11 @@ class ContentTypeServiceStub implements ContentTypeService
 
         list(
             $this->types,
-            $this->nextTypeId
+            $this->nextTypeId,
+            $this->nextFieldDefinitionId
         ) = $this->repository->loadFixture( 'ContentType', array( 'groups' => $contentTypeGroups ) );
 
         ++$this->nextTypeId;
+        ++$this->nextFieldDefinitionId;
     }
 }

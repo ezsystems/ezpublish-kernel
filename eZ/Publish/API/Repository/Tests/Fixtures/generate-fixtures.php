@@ -79,12 +79,13 @@ function generateContentTypeFixture( array $fixture )
         $typeGroups[$data['contentclass_id']][] = '$scopeValues["groups"][' . valueToString( $data['group_id'] ) . ']';
     }
 
-    $fieldDefinitions = array();
+    $nextFieldId = 0;
+    $fieldDef    = array();
     foreach ( getFixtureTable( 'ezcontentclass_attribute', $fixture ) as $data )
     {
-        if ( false === isset( $fieldDefinitions[$data['contentclass_id']] ) )
+        if ( false === isset( $fieldDef[$data['contentclass_id']] ) )
         {
-            $fieldDefinitions[$data['contentclass_id']] = array();
+            $fieldDef[$data['contentclass_id']] = array();
         }
 
         $names = unserialize( $data['serialized_name_list'] );
@@ -93,7 +94,7 @@ function generateContentTypeFixture( array $fixture )
         $description = unserialize( $data['serialized_description_list'] );
         unset( $description['always-available'] );
 
-        $fieldDefinitions[$data['contentclass_id']][$data['id']] = array(
+        $fieldDef[$data['contentclass_id']][$data['id']] = array(
             'id'                        =>  (int) $data['id'],
             'identifier'                =>  $data['identifier'],
             'fieldGroup'                =>  $data['category'],
@@ -108,10 +109,12 @@ function generateContentTypeFixture( array $fixture )
             'names'                     =>  $names,
             'descriptions'              =>  $description,
         );
+
+        $nextFieldId = max( $nextFieldId, $data['id'] );
     }
 
-    $nextId = 0;
-    $types  = array();
+    $nextTypeId = 0;
+    $types      = array();
     foreach ( getFixtureTable( 'ezcontentclass', $fixture ) as $data )
     {
         $types[$data['id']] = array(
@@ -134,17 +137,17 @@ function generateContentTypeFixture( array $fixture )
             'defaultSortField'        =>  $data['sort_field'],
             'defaultSortOrder'        =>  $data['sort_order'],
 
-            'fieldDefinitions'        =>  trim ( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDefinitions[$data['id']] ) ? $fieldDefinitions[$data['id']] : array() ) ),
-            //'fieldDefinitions'        =>  '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDefinitions[$data['id']] ) ? $fieldDefinitions[$data['id']] : array(),
+            'fieldDefinitions'        =>  trim ( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDef[$data['id']] ) ? $fieldDef[$data['id']] : array() ) ),
             'contentTypeGroups'       =>  isset( $typeGroups[$data['id']] ) ? $typeGroups[$data['id']] : array(),
         );
 
-        $nextId = max( $nextId, $data['id'] );
+        $nextTypeId = max( $nextTypeId, $data['id'] );
     }
 
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub', $types ),
-        $nextId
+        $nextTypeId,
+        $nextFieldId
     );
 }
 
