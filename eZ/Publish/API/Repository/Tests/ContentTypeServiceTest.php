@@ -1638,6 +1638,29 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
+     * Test for the newFieldDefinitionUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionUpdateStruct()
+     * 
+     */
+    public function testNewFieldDefinitionUpdateStruct()
+    {
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        // $draftId contains the ID of a content type draft
+        $contentTypeService = $repository->getContentTypeService();
+
+        $updateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinitionUpdateStruct',
+            $updateStruct
+        );
+    }
+
+    /**
      * Test for the updateFieldDefinition() method.
      *
      * @return void
@@ -2171,18 +2194,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the newFieldDefinitionUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionUpdateStruct()
-     * 
-     */
-    public function testNewFieldDefinitionUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::newFieldDefinitionUpdateStruct() is not implemented." );
     }
 
 }
