@@ -2361,35 +2361,12 @@ class ContentTypeServiceTest extends BaseTest
      * Test for the deleteContentType() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType($contentType, $deleteObjects)
-     * 
-     */
-    public function testDeleteContentTypeWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteContentType() method.
-     *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testDeleteContentTypeThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteContentType() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType($contentType, $deleteObjects)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testDeleteContentTypeThrowsBadStateExceptionWithSecondParameter()
-    {
+        // TODO: Needs existsing content objects
         $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
     }
 
@@ -2401,18 +2378,6 @@ class ContentTypeServiceTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteContentTypeThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteContentType() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType($contentType, $deleteObjects)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteContentTypeThrowsUnauthorizedExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
     }
