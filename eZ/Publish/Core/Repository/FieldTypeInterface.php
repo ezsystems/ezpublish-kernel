@@ -18,6 +18,13 @@ use ezp\Content\Field,
 interface FieldTypeInterface
 {
     /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier();
+
+    /**
      * Sets $value for $settingName on field type.
      * Allowed options are in {@link \eZ\Publish\Core\Repository\FieldType::$allowedSettings}
      *

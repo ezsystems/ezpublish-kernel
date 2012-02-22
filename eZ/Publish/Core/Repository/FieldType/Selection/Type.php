@@ -20,7 +20,15 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezselection";
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return "ezselection";
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

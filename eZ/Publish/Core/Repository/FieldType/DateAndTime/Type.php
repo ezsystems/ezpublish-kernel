@@ -16,8 +16,6 @@ use eZ\Publish\Core\Repository\FieldType,
 
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezdatetime";
-
     /**
      * Default value types
      */
@@ -35,6 +33,16 @@ class Type extends FieldType
          */
         'dateInterval' => null
     );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return "ezdatetime";
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

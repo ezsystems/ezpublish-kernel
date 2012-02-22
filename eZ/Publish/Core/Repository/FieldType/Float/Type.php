@@ -20,11 +20,19 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = 'ezfloat';
-
     protected $allowedValidators = array(
         'eZ\\Publish\\Core\\Repository\\FieldType\\Float\\FloatValueValidator'
     );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return 'ezfloat';
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

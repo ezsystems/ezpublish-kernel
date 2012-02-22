@@ -21,7 +21,15 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezcountry";
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return "ezcountry";
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

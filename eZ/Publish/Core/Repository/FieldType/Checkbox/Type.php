@@ -20,11 +20,19 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezboolean";
-
     protected $allowedSettings = array(
         'defaultValue' => false
     );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return "ezboolean";
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

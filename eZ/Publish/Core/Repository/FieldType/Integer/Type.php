@@ -20,8 +20,6 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = 'ezinteger';
-
     protected $allowedValidators = array(
         'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\IntegerValueValidator'
     );
@@ -29,6 +27,16 @@ class Type extends FieldType
     protected $allowedSettings = array(
         'defaultValue' => 0
     );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return 'ezinteger';
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

@@ -28,8 +28,6 @@ use ezp\Base\Repository,
  */
 class Type extends FieldType implements OnPublish, OnCreate
 {
-    const FIELD_TYPE_IDENTIFIER = "ezxmltext";
-
     /**
      * List of settings available for this FieldType
      *
@@ -42,6 +40,16 @@ class Type extends FieldType implements OnPublish, OnCreate
         'tagPreset' => null,
         'defaultText' => '',
     );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return "ezxmltext";
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

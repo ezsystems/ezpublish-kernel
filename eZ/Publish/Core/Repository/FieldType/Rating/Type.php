@@ -20,8 +20,6 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezsrrating";
-
     protected $allowedSettings = array();
 
     /**
@@ -33,6 +31,16 @@ class Type extends FieldType
     public function getDefaultDefaultValue()
     {
         return new Value();
+    }
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return "ezsrrating";
     }
 
     /**

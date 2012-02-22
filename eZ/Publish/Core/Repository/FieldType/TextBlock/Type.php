@@ -20,11 +20,19 @@ use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
  */
 class Type extends TextLine
 {
-    const FIELD_TYPE_IDENTIFIER = "eztext";
-
     protected $allowedValidators = array();
 
     protected $allowedSettings = array( 'textColumns' => 10 );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return "eztext";
+    }
 
     /**
      * Returns the fallback default value of field type when no such default

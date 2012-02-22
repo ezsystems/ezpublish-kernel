@@ -20,14 +20,22 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = 'ezimage';
-
     /**
      * @see eZ\Publish\Core\Repository\FieldType::$allowedValidators
      */
     protected $allowedValidators = array(
         'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator'
     );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return 'ezimage';
+    }
 
     /**
      * @return \eZ\Publish\Core\Repository\FieldType\Image\Value

@@ -23,8 +23,6 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = 'ezmedia';
-
     const TYPE_FLASH = 'flash',
           TYPE_QUICKTIME = 'quick_time',
           TYPE_REALPLAYER = 'real_player',
@@ -52,6 +50,16 @@ class Type extends FieldType
     protected $allowedSettings = array(
         'mediaType' => self::TYPE_HTML5_VIDEO
     );
+
+    /**
+     * Return the field type identifier for this field type
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return 'ezmedia';
+    }
 
     /**
      * Returns the fallback default value of field type when no such default
