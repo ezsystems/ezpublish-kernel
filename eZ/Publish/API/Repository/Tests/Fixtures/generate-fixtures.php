@@ -20,6 +20,8 @@ if ( false === isset( $argv[1] ) || false === isset( $argv[2] ) )
 $fixture = include $argv[1];
 
 writeFixtureFile( generateContentTypeGroupFixture( $fixture ), 'ContentTypeGroup', $argv[2] );
+echo generateContentTypeFixture( $fixture );
+writeFixtureFile( generateContentTypeFixture( $fixture ), 'ContentType', $argv[2] );
 writeFixtureFile( generateSectionFixture( $fixture ), 'Section', $argv[2] );
 writeFixtureFile( generateLanguageFixture( $fixture ), 'Language', $argv[2] );
 writeFixtureFile( generateUserFixture( $fixture ), 'User', $argv[2] );
@@ -45,6 +47,71 @@ function generateContentTypeGroupFixture( array $fixture )
 
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub', $groups ),
+        $nextId
+    );
+}
+
+function generateContentTypeFixture( array $fixture )
+{
+    $languageCodes = array();
+    foreach ( getFixtureTable( 'ezcontent_language', $fixture ) as $data )
+    {
+        $languageCodes[$data['id']] = $data['locale'];
+    }
+
+    $typeNames = array();
+    foreach ( getFixtureTable( 'ezcontentclass_name', $fixture ) as $data )
+    {
+        if ( false === isset( $typeNames[$data['contentclass_id']] ) )
+        {
+            $typeNames[$data['contentclass_id']] = array();
+        }
+        $typeNames[$data['contentclass_id']][$data['language_locale']] = $data['name'];
+    }
+
+    $typeGroups = array();
+    foreach ( getFixtureTable( 'ezcontentclass_classgroup', $fixture ) as $data )
+    {
+        if ( false === isset( $typeGroups[$data['contentclass_id']] ) )
+        {
+            $typeGroups[$data['contentclass_id']] = array();
+        }
+        $typeGroups[$data['contentclass_id']][] = '$scopeValues["groups"][' . valueToString( $data['group_id'] ) . ']';
+    }
+//var_dump($typeGroups);exit;
+    $nextId = 0;
+    $types  = array();
+    foreach ( getFixtureTable( 'ezcontentclass', $fixture ) as $data )
+    {
+        $types[$data['id']] = array(
+            'id'                      =>  $data['id'],
+            'status'                  =>  0, // Type::STATUS_DEFINED
+            'identifier'              =>  $data['identifier'],
+            'creationDate'            =>  'new \DateTime( "@' . $data['created'] . '" )',
+            'modificationDate'        =>  'new \DateTime( "@' . $data['modified'] . '" )',
+            'creatorId'               =>  $data['creator_id'],
+            'modifierId'              =>  $data['modifier_id'],
+            'remoteId'                =>  $data['remote_id'],
+            // TODO: How do we build the userAliasSchema?
+            //'urlAliasSchema'          =>  $data[]
+            'names'                   =>  $typeNames[$data['id']],
+            'descriptions'            =>  array(),
+            'nameSchema'              =>  $data['contentobject_name'],
+            'isContainer'             =>  (boolean) $data['is_container'],
+            'mainLanguageCode'        =>  $languageCodes[$data['initial_language_id']],
+            'defaultAlwaysAvailable'  =>  (boolean) $data['always_available'],
+            'defaultSortField'        =>  $data['sort_field'],
+            'defaultSortOrder'        =>  $data['sort_order'],
+
+            'fieldDefinitions'        =>  array(),
+            'contentTypeGroups'       =>  isset( $typeGroups[$data['id']] ) ? $typeGroups[$data['id']] : array(),
+        );
+
+        $nextId = max( $nextId, $data['id'] );
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub', $types ),
         $nextId
     );
 }
@@ -264,7 +331,7 @@ function generateValueObject( $class, array $object )
     return $code;
 }
 
-function valueToString( $value )
+function valueToString( $value, $indent = 4 )
 {
     if ( is_numeric( $value ) )
     {
@@ -278,10 +345,24 @@ function valueToString( $value )
     {
         $value = 'null';
     }
-    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) )
+    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) && 0 !== strpos( $value, '$scopeValues[' ) )
     {
         $value = '"' . $value . '"';
     }
+    else if ( is_array( $value ) )
+    {
+        $code = 'array(' . PHP_EOL;
+        foreach ( $value as $key => $val )
+        {
+            $code .= str_repeat( '    ', $indent + 1 ) .
+                     valueToString( $key ) .
+                     ' => ' .
+                     valueToString( $val, $indent + 1 ) .
+                     ',' . PHP_EOL;
+        }
+        $value = $code . str_repeat( '    ', $indent ) . ')';
+    }
+
     return $value;
 }
 

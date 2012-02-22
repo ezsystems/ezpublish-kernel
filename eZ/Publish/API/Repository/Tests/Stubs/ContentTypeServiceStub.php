@@ -860,14 +860,21 @@ class ContentTypeServiceStub implements ContentTypeService
     private function initFromFixture()
     {
         list(
-            $groups,
+            $contentTypeGroups,
             $this->nextGroupId
         ) = $this->repository->loadFixture( 'ContentTypeGroup' );
 
         ++$this->nextGroupId;
-        foreach ( $groups as $group )
+        foreach ( $contentTypeGroups as $group )
         {
             $this->setGroup( $group );
         }
+
+        list(
+            $this->types,
+            $this->nextTypeId
+        ) = $this->repository->loadFixture( 'ContentType', array( 'groups' => $contentTypeGroups ) );
+
+        ++$this->nextTypeId;
     }
 }

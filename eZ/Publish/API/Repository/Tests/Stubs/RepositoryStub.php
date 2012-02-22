@@ -314,9 +314,11 @@ class RepositoryStub implements Repository
      * Internally helper method that returns pre defined test data.
      *
      * @param string $fixtureName
+     * @param mixed[] $scopeValues
+     *
      * @return array
      */
-    public function loadFixture( $fixtureName )
+    public function loadFixture( $fixtureName, array $scopeValues = array() )
     {
         return include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
     }

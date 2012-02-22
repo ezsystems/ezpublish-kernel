@@ -34,8 +34,8 @@ class ContentServiceTest extends BaseTest
         // Create a content type
         $contentTypeService = $repository->getContentTypeService();
 
-        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'test-group' );
-        $group       = $contentTypeService->createContentTypeGroup( $groupCreate );
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
+
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
 
@@ -54,7 +54,7 @@ class ContentServiceTest extends BaseTest
         $typeCreate->creatorId = 10;
         $typeCreate->creationDate = new \DateTime();
 
-        $contentType = $contentTypeService->createContentType( $typeCreate, array( $group ) );
+        $contentType = $contentTypeService->createContentType( $typeCreate, array( $contentTypeGroup ) );
 
 
         $contentService = $repository->getContentService();
