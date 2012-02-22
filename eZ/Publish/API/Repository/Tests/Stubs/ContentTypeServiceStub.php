@@ -750,6 +750,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeDraft( ContentType $contentType )
     {
+        if ( isset( $this->typeDrafts[$contentType->id] ) )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
         $data = $this->getTypeAsArray( $this->types[$contentType->id] );
         return $this->setContentTypeDraft( $data );
     }

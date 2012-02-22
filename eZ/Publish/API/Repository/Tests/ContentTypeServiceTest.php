@@ -2312,7 +2312,18 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeDraft() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        $typeDraft = $contentTypeService->createContentTypeDraft( $commentType );
+
+        // Throws exception, since type draft already exists
+        $invalidTypeDraft = $contentTypeService->createContentTypeDraft( $commentType );
+        /* END: Use Case */
     }
 
     /**
