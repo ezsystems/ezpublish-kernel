@@ -68,39 +68,39 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
-    public function testCanParseValueInvalidType()
+    public function testAcceptValueInvalidType()
     {
         $ft = new AuthorType;
-        $ft->setValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
+        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::canParseValue
-     * @expectedException \ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new AuthorType;
         $value = new AuthorValue;
         $value->authors = 'This is not a valid author collection';
-        $ft->setValue( $value );
+        $ft->acceptValue( $value );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new AuthorType;
         $author = new Author;
         $author->name = 'Boba Fett';
         $author->email = 'boba.fett@bountyhunters.com';
         $value = new AuthorValue( array( $author ) );
-        $ft->setValue( $value );
-        self::assertSame( $value, $ft->getValue() );
+        $newValue = $ft->acceptValue( $value );
+        self::assertSame( $value, $newValue );
     }
 
     /**

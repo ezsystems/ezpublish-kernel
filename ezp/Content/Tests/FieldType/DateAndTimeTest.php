@@ -82,31 +82,31 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
      * @expectedException ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group dateTime
      */
-    public function testCanParseInvalidValue()
+    public function testAcceptInvalidValue()
     {
         $ft = new DateAndTime();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      * @group dateTime
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new DateAndTime();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $invalidValue = new DateAndTimeValue;
         $invalidValue->value = 'This is not a DateTime object';
@@ -116,13 +116,13 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new DateAndTime();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
 
         $value = new DateAndTimeValue( new DateTime( '@1048633200' ) );

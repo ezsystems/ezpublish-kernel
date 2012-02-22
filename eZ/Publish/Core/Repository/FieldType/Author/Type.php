@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Repository\FieldType\Author;
 use eZ\Publish\Core\Repository\FieldType,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Base\Exception\InvalidArgumentType;
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Exception\InvalidArgumentValue;
 
 /**
  * Author field type.
@@ -35,21 +35,28 @@ class Type extends FieldType
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType::canParseValue()
+     * Checks the type and structure of the $Value.
+     *
+     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
-    protected function canParseValue( BaseValue $inputValue )
+    public function acceptValue( BaseValue $inputValue )
     {
-        if ( $inputValue instanceof Value )
+        if ( !$inputValue instanceof Value )
         {
-            if ( !$inputValue->authors instanceof AuthorCollection )
-            {
-                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
-            }
-
-            return $inputValue;
+            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value' );
         }
 
-        throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value' );
+        if ( !$inputValue->authors instanceof AuthorCollection )
+        {
+            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+        }
+
+        return $inputValue;
     }
 
     /**

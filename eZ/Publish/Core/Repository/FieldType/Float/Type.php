@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Repository\FieldType\Float;
 use eZ\Publish\Core\Repository\FieldType,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\BadFieldTypeInput;
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * Float field types
@@ -37,20 +38,27 @@ class Type extends FieldType
     }
 
     /**
-     * Checks if value can be parsed.
+     * Checks the type and structure of the $Value.
      *
-     * If the value actually can be parsed, the value is returned.
+     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
      *
-     * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param mixed $inputValue
-     * @return mixed
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
-    protected function canParseValue( BaseValue $inputValue )
+    public function acceptValue( BaseValue $inputValue )
     {
+        if ( !$inputValue instanceof Value )
+        {
+            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Float\\Value' );
+        }
+
         if ( !is_float( $inputValue->value ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
         }
+
         return $inputValue;
     }
 

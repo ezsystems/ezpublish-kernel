@@ -52,21 +52,21 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::acceptValue
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
-    public function testCanParseValueInvalidType()
+    public function testAcceptValueInvalidType()
     {
         $ft = new XmlTextType;
         $ft->setValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::canParseValue
-     * @expectedException \ezp\Base\Exception\BadFieldTypeInput
-     * @dataProvider providerForTestCanParseValueInvalidFormat
+     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::acceptValue
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @dataProvider providerForTestAcceptValueInvalidFormat
      */
-    public function testCanParseValueInvalidFormat( $text, $format )
+    public function testAcceptValueInvalidFormat( $text, $format )
     {
         $ft = new XmlTextType;
         $value = new XmlTextValue( $text, $format );
@@ -74,15 +74,14 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::canParseValue
-     * @dataProvider providerForTestCanParseValueValidFormat
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
+     * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testCanParseValueValidFormat( $text, $format )
+    public function testAcceptValueValidFormat( $text, $format )
     {
         $ft = new XmlTextType;
         $value = new XmlTextValue( $text, $format );
         $ft->setValue( $value );
-        self::assertSame( $value, $ft->getValue() );
     }
 
     /**
@@ -100,7 +99,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
         self::assertSame( "", $fieldValue->data );
     }
 
-    public function providerForTestCanParseValueInvalidFormat()
+    public function providerForTestAcceptValueInvalidFormat()
     {
         return array(
 
@@ -112,7 +111,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public static function providerForTestCanParseValueValidFormat()
+    public static function providerForTestAcceptValueValidFormat()
     {
         return array(
 

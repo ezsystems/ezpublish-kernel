@@ -87,33 +87,33 @@ class MediaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      * @group ezmedia
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new MediaType;
         $invalidValue = new MediaValue;
         $invalidValue->file = 'This is definitely not a binary file !';
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $invalidValue );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
      * @expectedException ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group ezmedia
      */
-    public function testCanParseInvalidValue()
+    public function testAcceptInvalidValue()
     {
         $ft = new MediaType;
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
@@ -121,13 +121,13 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new MediaType;
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
 
         $handler = new MediaHandler;

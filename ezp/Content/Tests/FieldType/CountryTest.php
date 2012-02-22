@@ -44,13 +44,13 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::acceptValue
      */
-    public function testCanParseValueValidFormatSingle()
+    public function testAcceptValueValidFormatSingle()
     {
         $ft = new Country();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new CountryValue( "Belgium" );
@@ -59,13 +59,13 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::acceptValue
      */
-    public function testCanParseValueValidFormatMultiple()
+    public function testAcceptValueValidFormatMultiple()
     {
         $ft = new Country();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new CountryValue( array( "Belgium", "Norway" ) );

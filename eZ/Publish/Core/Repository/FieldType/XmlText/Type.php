@@ -17,7 +17,7 @@ use ezp\Base\Repository,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\Core\Repository\FieldType\XmlText\Value as Value,
     ezp\Content\Type\FieldDefinition,
-    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType;
 
 /**
@@ -61,35 +61,35 @@ EOF;
     }
 
     /**
-     * Checks if $inputValue can be parsed.
-     * If the $inputValue actually can be parsed, the value is returned.
-     * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
+     * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $inputValue
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
-    protected function canParseValue( BaseValue $inputValue )
+    public function acceptValue( BaseValue $inputValue )
     {
-        if ( $inputValue instanceof Value )
+        if ( !$inputValue instanceof Value )
         {
-
-            if ( !is_string( $inputValue->text ) )
-            {
-                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
-            }
-
-            $handler = $inputValue->getInputHandler();
-            if ( !$handler->isXmlValid( $inputValue->text, false ) )
-            {
-                // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
-                throw new BadFieldTypeInput( $inputValue, get_class() );
-            }
-
-            return $inputValue;
+            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' );
         }
 
-        throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' );
+        if ( !is_string( $inputValue->text ) )
+        {
+            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+        }
+
+        $handler = $inputValue->getInputHandler();
+        if ( !$handler->isXmlValid( $inputValue->text, false ) )
+        {
+            // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
+            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+        }
+
+        return $inputValue;
     }
 
     /**

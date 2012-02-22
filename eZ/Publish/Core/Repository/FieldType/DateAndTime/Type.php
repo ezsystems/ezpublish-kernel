@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\FieldType\DateAndTime;
 use eZ\Publish\Core\Repository\FieldType,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType,
     DateTime;
 
@@ -48,25 +48,28 @@ class Type extends FieldType
     }
 
     /**
-     * Checks if value can be parsed.
+     * Checks the type and structure of the $Value.
      *
-     * If the value actually can be parsed, the value is returned.
+     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
      *
-     * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param mixed $inputValue
-     * @return mixed
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
-    protected function canParseValue( BaseValue $inputValue )
+    public function acceptValue( BaseValue $inputValue )
     {
-        if ( $inputValue instanceof Value )
+        if ( !$inputValue instanceof Value )
         {
-            if ( isset( $inputValue->value ) && !$inputValue->value instanceof DateTime )
-                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
-
-            return $inputValue;
+            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value' );
         }
 
-        throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value' );
+        if ( isset( $inputValue->value ) && !$inputValue->value instanceof DateTime )
+        {
+            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+        }
+
+        return $inputValue;
     }
 
     /**

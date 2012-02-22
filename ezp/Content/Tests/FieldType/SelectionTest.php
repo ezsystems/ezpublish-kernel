@@ -50,16 +50,16 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new Selection();
         $invalidValue = new SelectionValue;
         $invalidValue->selection = "This should be an array instead!";
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $invalidValue );
     }
@@ -67,13 +67,13 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
      */
-    public function testCanParseValueValidStringFormat()
+    public function testAcceptValueValidStringFormat()
     {
         $ft = new Selection();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new SelectionValue( "Choice1" );
@@ -83,13 +83,13 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
      */
-    public function testCanParseValueValidArrayFormat()
+    public function testAcceptValueValidArrayFormat()
     {
         $ft = new Selection();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new SelectionValue( array( "Choice1", "Choice2" ) );

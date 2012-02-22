@@ -64,16 +64,16 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      * @group textLine
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new TextLine();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, new TextLineValue( 42 ) );
     }
@@ -81,13 +81,13 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new TextLine();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
 
         $value = new TextLineValue( 'Strings work just fine.' );

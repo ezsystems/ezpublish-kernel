@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Repository\FieldType\Image;
 use eZ\Publish\Core\Repository\FieldType,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     ezp\Content\Field,
-    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Observable;
 
 /**
@@ -36,17 +37,29 @@ class Type extends FieldType
         return new Value;
     }
 
-    protected function canParseValue( BaseValue $inputValue )
+    /**
+     * Checks the type and structure of the $Value.
+     *
+     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     */
+    public function acceptValue( BaseValue $inputValue )
     {
-        if ( $inputValue instanceof Value )
+        if ( !$inputValue instanceof Value )
         {
-            if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
-                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
-
-            return $inputValue;
+            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Value' );
         }
 
-        throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Value' );
+        if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
+        {
+            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+        }
+
+        return $inputValue;
     }
 
     /**

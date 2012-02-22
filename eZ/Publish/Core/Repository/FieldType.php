@@ -38,7 +38,7 @@ use ezp\Content\Field,
  *
  * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
-abstract class FieldType
+abstract class FieldType implements FieldTypeInterface
 {
     /**
      * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings Custom properties which are specific to the field
@@ -156,18 +156,6 @@ abstract class FieldType
     }
 
     /**
-     * Checks if $inputValue can be parsed.
-     * If the $inputValue actually can be parsed, the value is returned.
-     * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
-     *
-     * @abstract
-     * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    abstract protected function canParseValue( Value $inputValue );
-
-    /**
      * Injects the value of a field in the field type.
      *
      * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
@@ -175,7 +163,7 @@ abstract class FieldType
      */
     public function setValue( Value $inputValue )
     {
-        $this->value = $this->canParseValue( $inputValue );
+        $this->value = $this->acceptValue( $inputValue );
     }
 
     /**

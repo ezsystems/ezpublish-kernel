@@ -72,33 +72,33 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      * @group binaryFile
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new BinaryFileType;
         $invalidValue = new BinaryFileValue;
         $invalidValue->file = 'This is definitely not a binary file !';
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $invalidValue );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
      * @expectedException ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group binaryFile
      */
-    public function testCanParseInvalidValue()
+    public function testAcceptInvalidValue()
     {
         $ft = new BinaryFileType;
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
@@ -106,13 +106,13 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new BinaryFileType;
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
 
         $handler = new BinaryFileHandler;

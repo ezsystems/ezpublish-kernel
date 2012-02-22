@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\TextBlock;
 use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine;
+    eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * The TextBlock field type.
@@ -33,6 +35,31 @@ class Type extends TextLine
     public function getDefaultValue()
     {
         return new Value( "" );
+    }
+
+    /**
+     * Checks the type and structure of the $Value.
+     *
+     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     */
+    public function acceptValue( BaseValue $inputValue )
+    {
+        if ( !$inputValue instanceof Value )
+        {
+            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock\\Value' );
+        }
+
+        if ( !is_string( $inputValue->text ) )
+        {
+            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+        }
+
+        return $inputValue;
     }
 
     /**

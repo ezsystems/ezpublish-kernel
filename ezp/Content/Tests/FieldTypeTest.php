@@ -12,7 +12,7 @@ use eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
     eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator,
     ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Type\FieldDefinition,
-    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -118,58 +118,6 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::setValue
-     */
-    public function testSetValue()
-    {
-        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
-        $mockValue->bountyHunter = 'Boba Fett';
-        $mockValue->jediMaster = 'Obi-Wan Kenobi';
-        $this->stub
-            ->expects( $this->once() )
-            ->method( 'canParseValue' )
-            ->will( $this->returnArgument( 0 ) );
-
-        $this->stub->setValue( $mockValue );
-        self::assertEquals( $mockValue, $this->stub->getValue() );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::setValue
-     * @expectedException \ezp\Base\Exception\BadFieldTypeInput
-     */
-    public function testSetValueInvalid()
-    {
-        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
-        $this->stub
-            ->expects( $this->once() )
-            ->method( 'canParseValue' )
-            ->will( $this->throwException( new BadFieldTypeInput( $mockValue ) ) );
-
-        $this->stub->setValue( $mockValue );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::getValue
-     */
-    public function testGetValue()
-    {
-        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
-        $mockValue->bountyHunter = 'Han Solo';
-        $mockValue->jediMaster = 'Yoda';
-        $this->stub
-            ->expects( $this->once() )
-            ->method( 'canParseValue' )
-            ->will( $this->returnArgument( 0 ) );
-
-        $this->stub->setValue( $mockValue );
-        self::assertEquals( $mockValue, $this->stub->getValue() );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType::fillConstraintsFromValidator
      */
     public function testFillConstraintsFromValidator()
@@ -211,29 +159,6 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
         $validator = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\Repository\\FieldType\\Validator' );
         $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef->fieldTypeConstraints, $validator );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::update
-     */
-    public function testUpdateFieldSetValueEvent()
-    {
-        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
-        $mockValue->foo = 'bar';
-        $this->stub
-            ->expects( $this->once() )
-            ->method( 'canParseValue' )
-            ->with( $mockValue )
-            ->will( $this->returnArgument( 0 ) );
-
-        $this->stub->update(
-            $this->getMock( 'ezp\\Base\\Observable' ),
-            'field/setValue',
-            array( 'value' => $mockValue )
-        );
-
-        self::assertEquals( $mockValue, $this->stub->getValue() );
     }
 
     /**

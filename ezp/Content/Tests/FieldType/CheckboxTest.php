@@ -80,31 +80,31 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::canParseValue
-     * @expectedException \ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      * @group ezboolean
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new Checkbox();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, new CheckboxValue( 'I am definitely not a boolean' ) );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group ezboolean
      */
-    public function testCanParseValueInvalidValue()
+    public function testAcceptValueInvalidValue()
     {
         $ft = new Checkbox();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
@@ -112,13 +112,13 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new Checkbox();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
 
         $value = new CheckboxValue( true );
