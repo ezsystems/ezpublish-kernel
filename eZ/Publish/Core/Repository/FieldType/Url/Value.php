@@ -57,7 +57,7 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
-        return $this->link;
+        return (string)$this->link;
     }
 
     /**
