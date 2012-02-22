@@ -19,11 +19,35 @@ if ( false === isset( $argv[1] ) || false === isset( $argv[2] ) )
 
 $fixture = include $argv[1];
 
+writeFixtureFile( generateContentTypeGroupFixture( $fixture ), 'ContentTypeGroup', $argv[2] );
 writeFixtureFile( generateSectionFixture( $fixture ), 'Section', $argv[2] );
 writeFixtureFile( generateLanguageFixture( $fixture ), 'Language', $argv[2] );
 writeFixtureFile( generateUserFixture( $fixture ), 'User', $argv[2] );
 writeFixtureFile( generateUserGroupFixture( $fixture ), 'UserGroup', $argv[2] );
 writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
+
+function generateContentTypeGroupFixture( array $fixture )
+{
+    $nextId = 0;
+    $groups = array();
+    foreach ( getFixtureTable( 'ezcontentclassgroup', $fixture ) as $data )
+    {
+        $groups[$data['id']] = array(
+            'id'                =>  $data['id'],
+            'identifier'        =>  $data['name'],
+            'creationDate'      =>  'new \DateTime( "@' . $data['created'] . '" )',
+            'modificationDate'  =>  'new \DateTime( "@' . $data['modified'] . '" )',
+            'creatorId'         =>  $data['creator_id'],
+            'modifierId'        =>  $data['modifier_id']
+        );
+        $nextId = max( $nextId, $data['id'] );
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub', $groups ),
+        $nextId
+    );
+}
 
 function generateSectionFixture( array $fixture )
 {
@@ -254,7 +278,7 @@ function valueToString( $value )
     {
         $value = 'null';
     }
-    else
+    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) )
     {
         $value = '"' . $value . '"';
     }

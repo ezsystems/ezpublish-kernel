@@ -360,4 +360,25 @@ class UserServiceStub implements UserService
             $this->userNextId
         ) = $this->repository->loadFixture( 'User' );
     }
+
+    private function createHash( $login, $password, $type )
+    {
+        switch ( $type )
+        {
+            case 2:
+                /* PASSWORD_HASH_MD5_USER */
+                return md5( "{$login}\n{$password}" );
+
+            case 3:
+                /* PASSWORD_HASH_MD5_SITE */
+                $site = null;
+                return md5( "{$login}\n{$password}\n{$site}" );
+
+            case 5:
+                /* PASSWORD_HASH_PLAINTEXT */
+                return $password;
+        }
+        /* PASSWORD_HASH_MD5_PASSWORD (1) */
+        return md5( $password );
+    }
 }
