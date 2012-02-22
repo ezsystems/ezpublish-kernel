@@ -351,9 +351,16 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeGroupsIdentifiers( $groups )
     {
-        $this->assertEquals( 2, count( $groups ) );
+        $this->assertEquals( 6, count( $groups ) );
 
-        $expecteIdentifiers = array( 'new-group' => true, 'second-group' => true );
+        $expecteIdentifiers = array(
+            'new-group'    => true,
+            'second-group' => true,
+            'Content'      => true,
+            'Users'        => true,
+            'Media'        => true,
+            'Setup'        => true,
+        );
         $actualIdentifiers  = array( 'new-group' => false, 'second-group' => false );
 
         foreach ( $groups as $group )

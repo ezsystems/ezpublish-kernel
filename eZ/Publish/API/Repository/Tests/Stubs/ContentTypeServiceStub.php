@@ -79,11 +79,22 @@ class ContentTypeServiceStub implements ContentTypeService
     private $groupProperties;
 
     /**
-     *
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
-    public function __construct()
+    private $repository;
+
+    /**
+     * Instantiates a new content type service stub.
+     *
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     */
+    public function __construct( RepositoryStub $repository )
     {
         $this->initGroupProperties();
+
+        $this->repository = $repository;
+
+        $this->initFromFixture();
     }
 
     /**
@@ -836,4 +847,23 @@ class ContentTypeServiceStub implements ContentTypeService
         return new FieldDefinitionUpdateStruct();
     }
 
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $groups,
+            $this->nextGroupId
+        ) = $this->repository->loadFixture( 'ContentTypeGroup' );
+
+        ++$this->nextGroupId;
+        foreach ( $groups as $group )
+        {
+            $this->setGroup( $group );
+        }
+    }
 }
