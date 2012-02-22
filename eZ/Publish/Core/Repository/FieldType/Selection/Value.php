@@ -46,6 +46,9 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
+        if ( !is_array( $this->selection ) )
+            return "";
+
         return implode( ",", $this->selection );
     }
 
