@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
+use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
@@ -20,6 +21,11 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
  */
 class ContentCreateStructStub extends ContentCreateStruct
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    protected $fields = array();
+
     /**
      * Instantiates a new content create struct.
      *
@@ -52,6 +58,12 @@ class ContentCreateStructStub extends ContentCreateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        // TODO: Implement setField() method.
+        $this->fields[] = new Field(
+            array(
+                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
+                'value'               =>  $value,
+                'languageCode'        =>  $language
+            )
+        );
     }
 }
