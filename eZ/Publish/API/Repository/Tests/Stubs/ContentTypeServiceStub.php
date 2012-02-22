@@ -256,8 +256,36 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup )
     {
+        if ( $this->groupHasTypes( $contentTypeGroup ) )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+
         unset( $this->groups[$contentTypeGroup->identifier] );
         unset( $this->groupsById[$contentTypeGroup->id] );
+    }
+
+    /**
+     * Checks of $contentTypeGroup has types assigned
+     *
+     * @param ContentTypeGroup $contentTypeGroup
+     * @return bool
+     */
+    protected function groupHasTypes( ContentTypeGroup $contentTypeGroup )
+    {
+        $types = array_merge( $this->types, $this->typeDrafts );
+
+        foreach ( $types as $type )
+        {
+            foreach ( $type->contentTypeGroups as $assignedGroup )
+            {
+                if ( $assignedGroup->id == $contentTypeGroup->id )
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

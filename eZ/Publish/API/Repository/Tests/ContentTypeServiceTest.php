@@ -703,8 +703,16 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testDeleteContentTypeGroupThrowsIllegalArgumentException()
     {
-        // TODO: Implement create content type
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
+
+        // Throws exception, group contains types
+        $contentTypeService->deleteContentTypeGroup( $contentGroup );
+        /* END: Use Case */
     }
 
     /**
