@@ -78,7 +78,38 @@ function generateContentTypeFixture( array $fixture )
         }
         $typeGroups[$data['contentclass_id']][] = '$scopeValues["groups"][' . valueToString( $data['group_id'] ) . ']';
     }
-//var_dump($typeGroups);exit;
+
+    $fieldDefinitions = array();
+    foreach ( getFixtureTable( 'ezcontentclass_attribute', $fixture ) as $data )
+    {
+        if ( false === isset( $fieldDefinitions[$data['contentclass_id']] ) )
+        {
+            $fieldDefinitions[$data['contentclass_id']] = array();
+        }
+
+        $names = unserialize( $data['serialized_name_list'] );
+        unset( $names['always-available'] );
+
+        $description = unserialize( $data['serialized_description_list'] );
+        unset( $description['always-available'] );
+
+        $fieldDefinitions[$data['contentclass_id']][$data['id']] = array(
+            'id'                        =>  (int) $data['id'],
+            'identifier'                =>  $data['identifier'],
+            'fieldGroup'                =>  $data['category'],
+            'position'                  =>  (int) $data['placement'],
+            'fieldTypeIdentifier'       =>  $data['data_type_string'],
+            'isTranslatable'            =>  (boolean) $data['can_translate'],
+            'isRequired'                =>  (boolean) $data['is_required'],
+            'isInfoCollector'           =>  (boolean) $data['is_information_collector'],
+            'isSearchable'              =>  (boolean) $data['is_searchable'],
+            'defaultValue'              =>  null,
+
+            'names'                     =>  $names,
+            'descriptions'              =>  $description,
+        );
+    }
+
     $nextId = 0;
     $types  = array();
     foreach ( getFixtureTable( 'ezcontentclass', $fixture ) as $data )
@@ -103,7 +134,8 @@ function generateContentTypeFixture( array $fixture )
             'defaultSortField'        =>  $data['sort_field'],
             'defaultSortOrder'        =>  $data['sort_order'],
 
-            'fieldDefinitions'        =>  array(),
+            'fieldDefinitions'        =>  trim ( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDefinitions[$data['id']] ) ? $fieldDefinitions[$data['id']] : array() ) ),
+            //'fieldDefinitions'        =>  '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDefinitions[$data['id']] ) ? $fieldDefinitions[$data['id']] : array(),
             'contentTypeGroups'       =>  isset( $typeGroups[$data['id']] ) ? $typeGroups[$data['id']] : array(),
         );
 
@@ -345,9 +377,9 @@ function valueToString( $value, $indent = 4 )
     {
         $value = 'null';
     }
-    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) && 0 !== strpos( $value, '$scopeValues[' ) )
+    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) && 0 !== strpos( $value, '$scopeValues[' ) && 0 !== strpos( $value, 'array(' ) )
     {
-        $value = '"' . $value . '"';
+        $value = '"' . str_replace( '"', '\"', $value ) . '"';
     }
     else if ( is_array( $value ) )
     {

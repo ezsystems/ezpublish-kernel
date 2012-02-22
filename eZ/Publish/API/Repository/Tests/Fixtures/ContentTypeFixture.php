@@ -23,7 +23,147 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        4  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  4,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Name",
                 ),
+                "descriptions"  =>  array(
+                    "eng-GB" => "",
+                ),
+            )
+        ),
+        119  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  119,
+                "identifier"  =>  "short_description",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Summary",
+                ),
+                "descriptions"  =>  array(
+                    "eng-GB" => "",
+                ),
+            )
+        ),
+        155  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  155,
+                "identifier"  =>  "short_name",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Short name",
+                ),
+                "descriptions"  =>  array(
+                    "eng-GB" => "",
+                ),
+            )
+        ),
+        156  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  156,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Description",
+                ),
+                "descriptions"  =>  array(
+                    "eng-GB" => "",
+                ),
+            )
+        ),
+        158  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  158,
+                "identifier"  =>  "show_children",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Display sub items",
+                ),
+                "descriptions"  =>  array(
+                    "eng-GB" => "",
+                ),
+            )
+        ),
+        181  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  181,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                    "eng-GB" => "",
+                ),
+            )
+        ),
+        182  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  182,
+                "identifier"  =>  "publish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Publish date",
+                ),
+                "descriptions"  =>  array(
+                    "eng-GB" => "",
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -51,7 +191,47 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        6  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  6,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Name",
                 ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        7  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  7,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Description",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][2],
                 ),
@@ -79,7 +259,107 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        8  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  8,
+                "identifier"  =>  "first_name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "First name",
                 ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        9  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  9,
+                "identifier"  =>  "last_name",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Last name",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        12  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  12,
+                "identifier"  =>  "user_account",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezuser",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "User account",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        179  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  179,
+                "identifier"  =>  "signature",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Signature",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        180  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  180,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Image",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][2],
                 ),
@@ -107,7 +387,67 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        149  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  149,
+                "identifier"  =>  "subject",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Subject",
                 ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        150  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  150,
+                "identifier"  =>  "author",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Author",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        151  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  151,
+                "identifier"  =>  "message",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Message",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -135,7 +475,267 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        159  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  159,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Name",
                 ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        160  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  160,
+                "identifier"  =>  "indexpage",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Index Page",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        161  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  161,
+                "identifier"  =>  "defaultpage",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Default Page",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        162  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  162,
+                "identifier"  =>  "debugoutput",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Debug Output",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        163  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  163,
+                "identifier"  =>  "debugbyip",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Debug By IP",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        164  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  164,
+                "identifier"  =>  "debugiplist",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Debug IP List",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        165  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  165,
+                "identifier"  =>  "debugredirection",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Debug Redirection",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        166  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  166,
+                "identifier"  =>  "viewcaching",
+                "fieldGroup"  =>  "",
+                "position"  =>  8,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "View Caching",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        167  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  167,
+                "identifier"  =>  "templatecache",
+                "fieldGroup"  =>  "",
+                "position"  =>  9,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Template Cache",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        168  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  168,
+                "identifier"  =>  "templatecompile",
+                "fieldGroup"  =>  "",
+                "position"  =>  10,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Template Compile",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        169  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  169,
+                "identifier"  =>  "imagesmall",
+                "fieldGroup"  =>  "",
+                "position"  =>  11,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Image Small Size",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        170  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  170,
+                "identifier"  =>  "imagemedium",
+                "fieldGroup"  =>  "",
+                "position"  =>  12,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Image Medium Size",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        171  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  171,
+                "identifier"  =>  "imagelarge",
+                "fieldGroup"  =>  "",
+                "position"  =>  13,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Image Large Size",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][4],
                 ),
@@ -163,7 +763,367 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        172  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  172,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Title",
                 ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        173  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  173,
+                "identifier"  =>  "meta_data",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Meta data",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        174  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  174,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Image",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        175  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  175,
+                "identifier"  =>  "sitestyle",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezpackage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Sitestyle",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        177  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  177,
+                "identifier"  =>  "email",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Email",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        178  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  178,
+                "identifier"  =>  "siteurl",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezinisetting",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Site URL",
+                ),
+                "descriptions"  =>  array(
+                    0 => "",
+                ),
+            )
+        ),
+        329  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  329,
+                "identifier"  =>  "site_map_url",
+                "fieldGroup"  =>  "",
+                "position"  =>  8,
+                "fieldTypeIdentifier"  =>  "ezurl",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Site map URL",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        330  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  330,
+                "identifier"  =>  "tag_cloud_url",
+                "fieldGroup"  =>  "",
+                "position"  =>  9,
+                "fieldTypeIdentifier"  =>  "ezurl",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Tag Cloud URL",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        331  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  331,
+                "identifier"  =>  "login_label",
+                "fieldGroup"  =>  "",
+                "position"  =>  10,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Login (label)",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        332  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  332,
+                "identifier"  =>  "logout_label",
+                "fieldGroup"  =>  "",
+                "position"  =>  11,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Logout (label)",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        333  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  333,
+                "identifier"  =>  "my_profile_label",
+                "fieldGroup"  =>  "",
+                "position"  =>  12,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "My profile (label)",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        334  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  334,
+                "identifier"  =>  "register_user_label",
+                "fieldGroup"  =>  "",
+                "position"  =>  13,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Register new user (label)",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        335  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  335,
+                "identifier"  =>  "rss_feed",
+                "fieldGroup"  =>  "",
+                "position"  =>  14,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "RSS feed",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        336  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  336,
+                "identifier"  =>  "shopping_basket_label",
+                "fieldGroup"  =>  "",
+                "position"  =>  15,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Shopping basket (label)",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        337  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  337,
+                "identifier"  =>  "site_settings_label",
+                "fieldGroup"  =>  "",
+                "position"  =>  16,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Site settings (label)",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        338  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  338,
+                "identifier"  =>  "footer_text",
+                "fieldGroup"  =>  "",
+                "position"  =>  17,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Footer text",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        339  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  339,
+                "identifier"  =>  "hide_powered_by",
+                "fieldGroup"  =>  "",
+                "position"  =>  18,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Hide \"Powered by\"",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+        340  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  340,
+                "identifier"  =>  "footer_script",
+                "fieldGroup"  =>  "",
+                "position"  =>  19,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-US" => "Footer Javascript",
+                ),
+                "descriptions"  =>  array(
+                    "eng-US" => "",
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][4],
                 ),
@@ -191,7 +1151,235 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        183  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  183,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        184  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  184,
+                "identifier"  =>  "short_title",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Short title",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        185  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  185,
+                "identifier"  =>  "author",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezauthor",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Author",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        186  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  186,
+                "identifier"  =>  "intro",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Summary",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        187  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  187,
+                "identifier"  =>  "body",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Body",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        188  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  188,
+                "identifier"  =>  "enable_comments",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Enable comments",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        189  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  189,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        190  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  190,
+                "identifier"  =>  "caption",
+                "fieldGroup"  =>  "",
+                "position"  =>  8,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Caption (Image)",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        191  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  191,
+                "identifier"  =>  "publish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  9,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Publish date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        192  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  192,
+                "identifier"  =>  "unpublish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  10,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Unpublish date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        193  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  193,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  11,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        194  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  194,
+                "identifier"  =>  "star_rating",
+                "fieldGroup"  =>  "",
+                "position"  =>  12,
+                "fieldTypeIdentifier"  =>  "ezsrrating",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Star Rating",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -219,7 +1407,235 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        195  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  195,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        196  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  196,
+                "identifier"  =>  "short_title",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Short title",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        197  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  197,
+                "identifier"  =>  "index_title",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Index title",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        198  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  198,
+                "identifier"  =>  "author",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezauthor",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Author",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        199  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  199,
+                "identifier"  =>  "intro",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Summary",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        200  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  200,
+                "identifier"  =>  "body",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Body",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        201  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  201,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        202  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  202,
+                "identifier"  =>  "caption",
+                "fieldGroup"  =>  "",
+                "position"  =>  8,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Caption (Image)",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        203  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  203,
+                "identifier"  =>  "publish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  9,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Publish date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        204  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  204,
+                "identifier"  =>  "unpublish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  10,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Unpublish date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        205  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  205,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  11,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        206  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  206,
+                "identifier"  =>  "enable_comments",
+                "fieldGroup"  =>  "",
+                "position"  =>  12,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Enable comments",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -247,7 +1663,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        207  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  207,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        208  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  208,
+                "identifier"  =>  "index_title",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Index title",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        209  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  209,
+                "identifier"  =>  "body",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "body",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        210  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  210,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -275,7 +1767,64 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        211  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  211,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        212  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  212,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        213  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  213,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -303,7 +1852,121 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        214  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  214,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        215  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  215,
+                "identifier"  =>  "body",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Body",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        216  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  216,
+                "identifier"  =>  "publication_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Publication date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        217  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  217,
+                "identifier"  =>  "unpublish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Unpublish date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        218  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  218,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        219  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  219,
+                "identifier"  =>  "enable_comments",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Enable comments",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -331,7 +1994,178 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        220  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  220,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        221  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  221,
+                "identifier"  =>  "product_number",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Product number",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        222  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  222,
+                "identifier"  =>  "short_description",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Short description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        223  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  223,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        224  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  224,
+                "identifier"  =>  "price",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezprice",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Price",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        225  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  225,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        226  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  226,
+                "identifier"  =>  "caption",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Caption (Image)",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        227  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  227,
+                "identifier"  =>  "additional_options",
+                "fieldGroup"  =>  "",
+                "position"  =>  8,
+                "fieldTypeIdentifier"  =>  "ezmultioption",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Additional options",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        228  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  228,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  9,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -359,7 +2193,140 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        229  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  229,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        230  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  230,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        231  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  231,
+                "identifier"  =>  "sender_name",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  true,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Sender name",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        232  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  232,
+                "identifier"  =>  "subject",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  true,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Subject",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        233  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  233,
+                "identifier"  =>  "message",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  true,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Message",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        234  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  234,
+                "identifier"  =>  "email",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezemail",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  true,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Email",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        235  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  235,
+                "identifier"  =>  "recipient",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezemail",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Recipient",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -387,7 +2354,140 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        236  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  236,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        237  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  237,
+                "identifier"  =>  "billboard",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezobjectrelation",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Billboard",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        238  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  238,
+                "identifier"  =>  "left_column",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Left column",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        239  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  239,
+                "identifier"  =>  "center_column",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Center column",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        240  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  240,
+                "identifier"  =>  "right_column",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Right column",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        241  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  241,
+                "identifier"  =>  "bottom_column",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Bottom column",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        242  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  242,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -415,7 +2515,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        243  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  243,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        244  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  244,
+                "identifier"  =>  "body",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Body",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        245  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  245,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        246  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  246,
+                "identifier"  =>  "show_children",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Display sub items",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -443,7 +2619,102 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        247  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  247,
+                "identifier"  =>  "header",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Header",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        248  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  248,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        249  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  249,
+                "identifier"  =>  "image_url",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "URL (image)",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        250  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  250,
+                "identifier"  =>  "content",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Content",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        251  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  251,
+                "identifier"  =>  "url",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezurl",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "URL",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -471,7 +2742,64 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        252  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  252,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        253  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  253,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        254  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  254,
+                "identifier"  =>  "calendars",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezobjectrelationlist",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Calendars",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -499,7 +2827,64 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        255  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  255,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        256  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  256,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        257  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  257,
+                "identifier"  =>  "question",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezoption",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  true,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Question",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -527,7 +2912,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        258  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  258,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        259  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  259,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        260  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  260,
+                "identifier"  =>  "file",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezbinaryfile",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "File",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        261  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  261,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][3],
                 ),
@@ -555,7 +3016,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        262  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  262,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        263  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  263,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        264  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  264,
+                "identifier"  =>  "file",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezmedia",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "File",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        265  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  265,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][3],
                 ),
@@ -583,7 +3120,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        266  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  266,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        267  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  267,
+                "identifier"  =>  "caption",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Caption",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        268  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  268,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        269  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  269,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][3],
                 ),
@@ -611,7 +3224,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        270  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  270,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        271  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  271,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        272  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  272,
+                "identifier"  =>  "location",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezurl",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Location",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        273  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  273,
+                "identifier"  =>  "open_in_new_window",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Open in new window",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -639,7 +3328,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        274  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  274,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        275  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  275,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        276  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  276,
+                "identifier"  =>  "file",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezmedia",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "File",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        277  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  277,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][3],
                 ),
@@ -667,7 +3432,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        278  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  278,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        279  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  279,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        280  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  280,
+                "identifier"  =>  "file",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezmedia",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "File",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        281  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  281,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][3],
                 ),
@@ -695,7 +3536,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        282  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  282,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        283  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  283,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        284  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  284,
+                "identifier"  =>  "file",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezmedia",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "File",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        285  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  285,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][3],
                 ),
@@ -723,7 +3640,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        286  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  286,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        287  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  287,
+                "identifier"  =>  "short_description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Short description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        288  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  288,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        289  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  289,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezobjectrelation",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -751,7 +3744,235 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        290  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  290,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        291  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  291,
+                "identifier"  =>  "short_title",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Short title",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        292  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  292,
+                "identifier"  =>  "author",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezauthor",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Author",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        293  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  293,
+                "identifier"  =>  "intro",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Summary",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        294  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  294,
+                "identifier"  =>  "body",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Body",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        295  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  295,
+                "identifier"  =>  "enable_comments",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Enable comments",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        296  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  296,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  7,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        297  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  297,
+                "identifier"  =>  "caption",
+                "fieldGroup"  =>  "",
+                "position"  =>  8,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Caption (Image)",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        298  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  298,
+                "identifier"  =>  "publish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  9,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Publish date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        299  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  299,
+                "identifier"  =>  "unpublish_date",
+                "fieldGroup"  =>  "",
+                "position"  =>  10,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Unpublish date",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        300  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  300,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  11,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        301  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  301,
+                "identifier"  =>  "location",
+                "fieldGroup"  =>  "",
+                "position"  =>  12,
+                "fieldTypeIdentifier"  =>  "ezgmaplocation",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Location",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -779,7 +4000,45 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        302  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  302,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        303  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  303,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -807,7 +4066,83 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        304  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  304,
+                "identifier"  =>  "subject",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Subject",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        305  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  305,
+                "identifier"  =>  "message",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Message",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        306  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  306,
+                "identifier"  =>  "sticky",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezboolean",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Sticky",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        307  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  307,
+                "identifier"  =>  "notify_me",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezsubtreesubscription",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Notify me about updates",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -835,7 +4170,45 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        308  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  308,
+                "identifier"  =>  "subject",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Subject",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        309  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  309,
+                "identifier"  =>  "message",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Message",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -863,7 +4236,121 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        310  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  310,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Full title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        311  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  311,
+                "identifier"  =>  "short_title",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Short title",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        312  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  312,
+                "identifier"  =>  "text",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Text",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        313  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  313,
+                "identifier"  =>  "category",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Category",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        314  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  314,
+                "identifier"  =>  "from_time",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "From Time",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        315  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  315,
+                "identifier"  =>  "to_time",
+                "fieldGroup"  =>  "",
+                "position"  =>  6,
+                "fieldTypeIdentifier"  =>  "ezdatetime",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "To Time",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -891,7 +4378,64 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        316  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  316,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Full Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        317  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  317,
+                "identifier"  =>  "short_title",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Short Title",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        318  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  318,
+                "identifier"  =>  "view",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezselection",
+                "isTranslatable"  =>  false,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "View",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -919,7 +4463,102 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        319  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  319,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        320  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  320,
+                "identifier"  =>  "url",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "URL",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        321  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  321,
+                "identifier"  =>  "image",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezimage",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  true,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        322  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  322,
+                "identifier"  =>  "image_map",
+                "fieldGroup"  =>  "",
+                "position"  =>  4,
+                "fieldTypeIdentifier"  =>  "eztext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Image map",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        323  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  323,
+                "identifier"  =>  "tags",
+                "fieldGroup"  =>  "",
+                "position"  =>  5,
+                "fieldTypeIdentifier"  =>  "ezkeyword",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Tags",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -947,7 +4586,45 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        324  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  324,
+                "identifier"  =>  "title",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Title",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        325  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  325,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][1],
                 ),
@@ -975,7 +4652,64 @@ return array(
                 "defaultSortField"  =>  1,
                 "defaultSortOrder"  =>  1,
                 "fieldDefinitions"  =>  array(
+        326  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  326,
+                "identifier"  =>  "name",
+                "fieldGroup"  =>  "",
+                "position"  =>  1,
+                "fieldTypeIdentifier"  =>  "ezstring",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Name",
                 ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        327  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  327,
+                "identifier"  =>  "description",
+                "fieldGroup"  =>  "",
+                "position"  =>  2,
+                "fieldTypeIdentifier"  =>  "ezxmltext",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  true,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "Description",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+        328  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+            array(
+                "id"  =>  328,
+                "identifier"  =>  "file",
+                "fieldGroup"  =>  "",
+                "position"  =>  3,
+                "fieldTypeIdentifier"  =>  "ezmedia",
+                "isTranslatable"  =>  true,
+                "isRequired"  =>  false,
+                "isInfoCollector"  =>  false,
+                "isSearchable"  =>  false,
+                "defaultValue"  =>  null,
+                "names"  =>  array(
+                    "eng-GB" => "File",
+                ),
+                "descriptions"  =>  array(
+                ),
+            )
+        ),
+    ),
                 "contentTypeGroups"  =>  array(
                     0 => $scopeValues["groups"][3],
                 ),
