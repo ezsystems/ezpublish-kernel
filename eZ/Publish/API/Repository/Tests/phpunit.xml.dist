@@ -15,8 +15,8 @@
             <file>RoleServiceTest.php</file>
             <file>SectionServiceTest.php</file>
             <file>LanguageServiceTest.php</file>
-            <file>ContentServiceTest.php</file>
             <file>ContentTypeServiceTest.php</file>
+            <file>ContentServiceTest.php</file>
             <file>IOServiceTest.php</file>
             <file>LocationServiceTest.php</file>
             <file>TrashServiceTest.php</file>

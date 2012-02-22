@@ -24,7 +24,7 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguage
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testNewContentCreateStruct()
     {
@@ -42,6 +42,126 @@ class ContentServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentCreateStruct', $contentCreate );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     *
+     */
+    public function testCreateContent()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     *
+     */
+    public function testCreateContentWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateContentThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateContentThrowsUnauthorizedExceptionWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateContentThrowsInvalidArgumentException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateContentThrowsInvalidArgumentExceptionWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     */
+    public function testCreateContentThrowsContentFieldValidationException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     */
+    public function testCreateContentThrowsContentFieldValidationExceptionWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     */
+    public function testCreateContentThrowsContentValidationException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     */
+    public function testCreateContentThrowsContentValidationExceptionWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -630,126 +750,6 @@ class ContentServiceTest extends BaseTest
     public function testLoadVersionByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * 
-     */
-    public function testCreateContent()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * 
-     */
-    public function testCreateContentWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCreateContentThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCreateContentThrowsUnauthorizedExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testCreateContentThrowsInvalidArgumentException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testCreateContentThrowsInvalidArgumentExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testCreateContentThrowsContentFieldValidationException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testCreateContentThrowsContentFieldValidationExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testCreateContentThrowsContentValidationException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testCreateContentThrowsContentValidationExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
     }
 
     /**
