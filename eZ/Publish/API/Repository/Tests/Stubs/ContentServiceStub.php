@@ -23,6 +23,7 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
 
 /**
@@ -207,7 +208,12 @@ class ContentServiceStub implements ContentService
     {
         $content = new ContentStub(
             array(
-                'contentId'  =>  ++$this->contentNextId
+                'contentId'    =>  ++$this->contentNextId,
+                'contentInfo'  =>  new ContentInfoStub(
+                    array(
+                        'contentId'  =>  $this->contentNextId
+                    )
+                )
             )
         );
 
