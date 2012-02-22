@@ -88,6 +88,9 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
+        if ( !$this->value instanceof DateTime )
+            return "";
+
         return $this->value->format( $this->stringFormat );
     }
 
