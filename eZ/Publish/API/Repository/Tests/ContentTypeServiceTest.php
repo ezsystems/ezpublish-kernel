@@ -1918,7 +1918,110 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentType()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentType() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $userGroupType = $contentTypeService->loadContentType( 3 );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
+            $userGroupType
+        );
+
+        return $userGroupType;
+    }
+
+    /**
+     * Test for the loadContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
+     */
+    public function testLoadContentTypeStructValues( $userGroupType )
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'               => 3,
+                'status'           => 0,
+                'identifier'       => 'user_group',
+                'creationDate'     => new \DateTime( '@1024392098' ),
+                'modificationDate' => new \DateTime( '@1048494743' ),
+                'creatorId'        => 14,
+                'modifierId'       => 14,
+                'remoteId'         => '25b4268cdcd01921b808a0d854b877ef',
+                'names'            => array(
+                    'eng-US' => 'User group',
+                ),
+                'descriptions' => array(
+                ),
+                'nameSchema'             => '<name>',
+                'isContainer'            => true,
+                'mainLanguageCode'       => 'eng-US',
+                'defaultAlwaysAvailable' => true,
+                'defaultSortField'       => 1,
+                'defaultSortOrder'       => 1,
+                'fieldDefinitions'       => array(
+                    6 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+                        array(
+                            'id'                  => 6,
+                            'identifier'          => 'name',
+                            'fieldGroup'          => '',
+                            'position'            => 1,
+                            'fieldTypeIdentifier' => 'ezstring',
+                            'isTranslatable'      => true,
+                            'isRequired'          => true,
+                            'isInfoCollector'     => false,
+                            'isSearchable'        => true,
+                            'defaultValue'        => null,
+                            'names'               => array(
+                                'eng-US' => 'Name',
+                            ),
+                            'descriptions' => array(
+                                0 => '',
+                            ),
+                            'fieldSettings' => array(
+                            ),
+                            'validators' => array(
+                            ),
+                        )
+                    ),
+                    7 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
+                        array(
+                            'id'                  => 7,
+                            'identifier'          => 'description',
+                            'fieldGroup'          => '',
+                            'position'            => 2,
+                            'fieldTypeIdentifier' => 'ezstring',
+                            'isTranslatable'      => true,
+                            'isRequired'          => false,
+                            'isInfoCollector'     => false,
+                            'isSearchable'        => true,
+                            'defaultValue'        => null,
+                            'names'               => array(
+                                'eng-US' => 'Description',
+                            ),
+                            'descriptions' => array(
+                                0 => '',
+                            ),
+                            'fieldSettings' => array(
+                            ),
+                            'validators' => array(
+                            ),
+                        )
+                    ),
+                ),
+                'contentTypeGroups' => array(
+                    0 => $contentTypeService->loadContentTypeGroup( 2 )
+                ),
+            ),
+            $userGroupType
+        );
     }
 
     /**
