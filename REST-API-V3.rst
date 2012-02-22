@@ -79,106 +79,13 @@ This paragraph describes the relationchips between content, versions, drafts, la
   e.g. the source language has changed and the destination language has to be updated. (Note that in the current kernel
   there are some restrictions - source language cannot be stored yet but this will change in the future)
 
-To create a new content object do:
-
-.. parsed-literal::
-
-    POST <URI>/content/objects
-    [ContentCreate_]
-
-This method creates a new draft assigned to a user given in the body or to the authenticated user (if not given).
-It returns a Version_ which contains the content metadata, version meta data and the fields. 
-
-To update a draft call:
-
-.. parsed-literal::
-
-    PUT <URI>/content/objects/<ID>/versions/<version_nr>
-    [ContentVersionInput_]
-
-To publish the draft call:
-
-.. parsed-literal::
-
-    POST <URI>/content/objects/<ID>/versions/<version_nr>
-    or
-    PUBLISH <URI>/content/objects/<ID>/versions/<version_nr>
-
-To list the drafts assigned to a user call:
-
-.. parsed-literal::
-
-    GET <URI>/users/<ID>/drafts
-
-which returns a list of [VersionInfo_]
-
-To create and update a new draft for an existing content object call:
-
-.. parsed-literal::
-
-    POST <URI>/content/objects/<ID>/versions
-    [ContentVersionInput_]
-
-To register a translation (not in eZ publish 4.6)
-
-.. parsed-literal::
-
-    POST <URI>/content/objects/<ID>/translations
-    [TranslationInfo_]
-
-This is usually done by a workflow which has updated the draft before.
-
-To retrieve the current version of a content object in one language call:
-
-::
-
-    GET <URI>/content/objects/<ID>/languages/<language_code>
-
-or:
-
-::
-
-     GET <URI>/content/objects/<ID>?languages=<language_code>,...
-
-In the second it is possible to retrieve more than one language.
-
-
-To update the content meta data (version independent) call:
-
-.. parsed-literal::
-
-    PUT <URI>/content/objects/<ID>
-    [ContentUpdate_]
-
 
 General considerations
 ----------------------
 
-PUT vs. POST
-~~~~~~~~~~~~
-
-In this specification we consider a method as idempotent if the result or side effect 
-(see `HTTP/1.1 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html>`_ 9.1.2) of the 
-operation is the same if called twice on the same resource.
-This means that we do not require that the response of the operation is identical if called twice. This leads to use less POST
-requests for creating entities which cant created twice due to constraints in the eZ publish data model.
-
 
 Actions and Parameters
 ~~~~~~~~~~~~~~~~~~~~~~
-
-In this specification an approach is taken which provides easy intuitive resources and tries to hide complexity in parameters. There are also some
-actions which are triggered via POST and parameters. It is avoided to have complex resources and responses containing action urls for
-given resources. Examples:
-
-- The publish operation is realized by making an empty POST on
-  /content/objects/<ID>/versions/<nr>
-
-- Trashing a content object or location is not realized with (an academic) POST on the trash items but on on the DELETE
-  operation with a parameter indicating to delete permanently or moving to trash.
-
-- Copying is realized with a POST and src and destination parameters.
-
 
 
 Overview
@@ -199,6 +106,7 @@ In the content module there are the root collections objects, locations, trash a
 /content/objects/<ID>/versions                        create a new draft  load all versions       -                            -            
                                                       from an existing    (version infos)
                                                       version 
+/content/objects/<ID>/currentversion                  -                   redirect to current v.  -                            -             
 /content/objects/<ID>/versions/<no>                   -                   get a specific version  update a version/draft       delete version
 /content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. -                            -              
 /content/objects/<ID>/versions/<no>/relations/<ID>    -                   load relation details   -                            delete relation
@@ -327,9 +235,9 @@ XML Example
       <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
       <Name>This is a title</Name>
       <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
-      <CurrentVersion href="/content/objects/23/versions/1"
+      <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml">
-        <Version>
+        <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
           <VersionInfo>
             <id>123</id>
             <versionNo>1</versionNo>
@@ -376,9 +284,6 @@ XML Example
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
 
-    
-
- 
 JSON Example
 ''''''''''''
 
@@ -462,9 +367,11 @@ JSON Example
           "_media-type": "application/vnd.ez.api.VersionList+json"
         },
         "CurrentVersion": {
-          "_href": "/content/objects/23/versions/1",
+          "_href": "/content/objects/23/currentversion",
           "_media-type": "application/vnd.ez.api.Version+json",
           "Version": {
+            "_href": "/content/objects/23/versions/1",
+            "_media-type": "application/vnd.ez.api.Version+json",
             "VersionInfo": {
               "id": "123",
               "versionNo": "1",
@@ -573,7 +480,17 @@ Load Content
     :fields: comma separated list of fields which should be returned in the response (see Content_)
     :responseGroups: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
-:Response: 200 Content_
+:Response: 
+
+::
+
+      HTTP/1.1 200 OK
+      Etag: "<new etag>"
+      Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
+      Content-Type: <depending on accept header>
+      Content-Length: <length>
+      Content_      
+      
 :Error Codes:
     :401: If the user is not authorized to read  this object. This could also happen if there is no published version yet and another user owns a draft of this content
     :404: If the ID is not found
@@ -585,7 +502,7 @@ XML Example
 
     GET /content/objects/23 HTTP/1.1
     Accept: application/vnd.ez.api.ContentInfo+xml
-    Content_length: 0
+    Content-length: 0
 
     HTTP/1.1 200 OK
     Etag: "12345678"
@@ -599,7 +516,7 @@ XML Example
       <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
       <Name>This is a title</Name>
       <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
-      <CurrentVersion href="/content/objects/23/versions/1"
+      <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml"/>
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/65" media-type="application/vnd.ez.api.Location+xml" />
@@ -687,7 +604,7 @@ In this example
       <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
       <Name>This is a title</Name>
       <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
-      <CurrentVersion href="/content/objects/23/versions/1"
+      <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml"/>
       <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/55" media-type="application/vnd.ez.api.Location+xml" />
@@ -729,6 +646,20 @@ Copy content
 Managing Versions
 ~~~~~~~~~~~~~~~~~
 
+Get Current Version
+```````````````````
+:Resource: /content/objects/<ID>/currentversion
+:Method: GET
+:Description: Redirects to the current version of the content object
+:Response: ::
+
+    HTTP/1.1 307 Temporary Redirect
+    Location: /content/objects/<ID>/version/<current_version_no>
+
+:Error Codes:
+     :404: If the resource does not exist
+
+
 List Versions
 `````````````
 :Resource: /content/objects/<ID>/versions
@@ -737,6 +668,8 @@ List Versions
 :Response: 200 array of VersionInfo_
 :Error Codes:
      :401: If the user has no permission to read the versions
+
+
 
 Load Content Version
 ````````````````````
