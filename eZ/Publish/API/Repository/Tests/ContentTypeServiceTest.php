@@ -2501,6 +2501,7 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testCopyContentTypeWithSecondParameter()
     {
+        // TODO: Needs UserService
         $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
     }
 
@@ -2537,7 +2538,32 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testAssignContentTypeGroup()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::assignContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+
+        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        /* END: Use Case */
+
+        $loadedType = $contentTypeService->loadContentType( $folderType->id );
+
+        foreach ( $loadedType->contentTypeGroups as $loadedGroup )
+        {
+            if ( $mediaGroup->id == $loadedGroup->id )
+            {
+                return;
+            }
+        }
+        $this->fail(
+            sprintf(
+                'Group with ID "%s" not assigned to content type.',
+                $mediaGroup->id
+            )
+        );
     }
 
     /**

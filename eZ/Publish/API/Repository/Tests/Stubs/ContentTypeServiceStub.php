@@ -821,7 +821,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
-        // TODO: Implement.
+        $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
+        $typeData['contentTypeGroups'][] = $contentTypeGroup;
+        $this->types[$contentType->id] = new ContentTypeStub( $typeData );
     }
 
     /**
