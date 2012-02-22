@@ -1715,7 +1715,29 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateFieldDefinitionThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $draftId = $contentTypeDraft->id;
+
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        // $draftId contains the ID of a content type draft
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        $bodyField  = $contentTypeDraft->getFieldDefinition( 'body' );
+        $titleField = $contentTypeDraft->getFieldDefinition( 'title' );
+
+        $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $bodyUpdateStruct->identifier = $titleField->identifier;
+
+        // Throws exception
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $bodyField,
+            $bodyUpdateStruct
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -1739,7 +1761,30 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateFieldDefinitionThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $draftId = $contentTypeDraft->id;
+
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        // $draftId contains the ID of a content type draft
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
+        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $bodyField );
+
+        $loadedDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+
+        // Throws exception
+        $contentTypeService->updateFieldDefinition(
+            $loadedDraft,
+            $bodyField,
+            $bodyUpdateStruct
+        );
+        /* END: Use Case */
     }
 
     /**

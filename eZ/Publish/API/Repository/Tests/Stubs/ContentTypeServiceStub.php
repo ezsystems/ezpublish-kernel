@@ -67,6 +67,11 @@ class ContentTypeServiceStub implements ContentTypeService
     private $nextTypeId = 0;
 
     /**
+     * @var int
+     */
+    private $nextFieldDefinitionId = 0;
+
+    /**
      * Properties of a ContentTypeGroup
      *
      * @var string[]
@@ -333,6 +338,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             $data[$propertyName] = $propertyValue;
         }
+        $data['id'] = $this->nextFieldDefinitionId++;
 
         return new FieldDefinitionStub( $data );
     }
@@ -527,6 +533,8 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
+        $this->checkFieldDefinitionUpdate( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct );
+
         $fieldData = $this->getFieldDefinitionAsArray( $fieldDefinition );
         foreach ( $fieldData as $propertyName => $propertyValue )
         {
@@ -547,6 +555,34 @@ class ContentTypeServiceStub implements ContentTypeService
         }
 
         $this->setContentTypeDraft( $typeData );
+    }
+
+    /**
+     * Checks the given update combination for validity
+     *
+     * @param ContentTypeDraft $contentTypeDraft
+     * @param FieldDefinition $fieldDefinition
+     * @param FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+     * @return void
+     */
+    protected function checkFieldDefinitionUpdate( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
+    {
+        $foundFieldId = false;
+        foreach ( $contentTypeDraft->fieldDefinitions as $existingFieldDefinition )
+        {
+            if ( $existingFieldDefinition->id == $fieldDefinition->id )
+            {
+                $foundFieldId = true;
+            }
+            else if ( $existingFieldDefinition->identifier == $fieldDefinitionUpdateStruct->identifier )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub;
+            }
+        }
+        if ( !$foundFieldId )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
     }
 
     /**
