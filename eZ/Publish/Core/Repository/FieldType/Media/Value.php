@@ -133,6 +133,9 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
+        if ( !isset( $this->file->path ) )
+            return "";
+
         return $this->file->path;
     }
 
