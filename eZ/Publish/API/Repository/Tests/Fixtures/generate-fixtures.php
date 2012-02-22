@@ -21,6 +21,7 @@ $fixture = include $argv[1];
 
 writeFixtureFile( generateSectionFixture( $fixture ), 'Section', $argv[2] );
 writeFixtureFile( generateLanguageFixture( $fixture ), 'Language', $argv[2] );
+writeFixtureFile( generateUserFixture( $fixture ), 'User', $argv[2] );
 writeFixtureFile( generateUserGroupFixture( $fixture ), 'UserGroup', $argv[2] );
 writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
 
@@ -76,6 +77,29 @@ function generateLanguageFixture( array $fixture )
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Language', $languages ),
         generateMapping( $languageCodes ),
+        $nextId
+    );
+}
+
+function generateUserFixture( array $fixture )
+{
+    $nextId = 0;
+    $users  = array();
+    foreach ( getFixtureTable( 'ezuser', $fixture ) as $data )
+    {
+        $users[] = array(
+            'id'             =>  $data['contentobject_id'],
+            'login'          =>  $data['login'],
+            'email'          =>  $data['email'],
+            'passwordHash'   =>  $data['password_hash'],
+            'hashAlgorithm'  =>  $data['password_hash_type'],
+            'isEnabled'      =>  true
+        );
+        $nextId = max( $nextId, $data['contentobject_id'] );
+    }
+    
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub', $users ),
         $nextId
     );
 }

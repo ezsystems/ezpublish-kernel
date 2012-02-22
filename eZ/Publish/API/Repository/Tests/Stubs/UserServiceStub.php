@@ -35,14 +35,24 @@ class UserServiceStub implements UserService
     private $repository;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     * @var \eZ\Publish\API\Repository\Values\User\User[]
      */
-    private $userGroups = array();
+    private $users;
 
     /**
      * @var integer
      */
-    private $userGroupNextId = 211;
+    private $userNextId;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    private $userGroups;
+
+    /**
+     * @var integer
+     */
+    private $userGroupNextId;
 
     /**
      * Instantiates a new user service instance.
@@ -344,5 +354,10 @@ class UserServiceStub implements UserService
             $this->userGroups,
             $this->userGroupNextId
         ) = $this->repository->loadFixture( 'UserGroup' );
+
+        list(
+            $this->users,
+            $this->userNextId
+        ) = $this->repository->loadFixture( 'User' );
     }
 }
