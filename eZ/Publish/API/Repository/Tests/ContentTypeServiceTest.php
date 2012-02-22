@@ -1620,7 +1620,90 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateFieldDefinition()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $draftId = $contentTypeDraft->id;
+
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        // $draftId contains the ID of a content type draft
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
+
+        $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $bodyUpdateStruct->identifier = 'blog-body';
+        $bodyUpdateStruct->names = array(
+            'en_US' => 'Blog post body',
+            'de_DE' => 'Blog-Eintrags-Textkörper',
+        );
+        $bodyUpdateStruct->descriptions = array(
+            'en_US' => 'Blog post body of the blog post',
+            'de_DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
+        );
+        $bodyUpdateStruct->fieldGroup      = 'updated-blog-content';
+        $bodyUpdateStruct->position        = 3;
+        $bodyUpdateStruct->isTranslatable  = false;
+        $bodyUpdateStruct->isRequired      = false;
+        $bodyUpdateStruct->isInfoCollector = true;
+        $bodyUpdateStruct->validators      = array();
+        $bodyUpdateStruct->fieldSettings = array(
+            'textblockheight' => 60
+        );
+        $bodyUpdateStruct->isSearchable = false;
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $bodyField,
+            $bodyUpdateStruct
+        );
+        /* END: Use Case */
+
+        $loadedDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
+            ( $loadedField = $loadedDraft->getFieldDefinition( 'blog-body' ) )
+        );
+
+        return array(
+            'originalField' => $bodyField,
+            'updatedField'  => $loadedField,
+            'updateStruct'  => $bodyUpdateStruct,
+        );
+    }
+
+    /**
+     * Test for the updateFieldDefinition() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateFieldDefinition
+     */
+    public function testUpdateFieldDefinitionStructValues( array $data )
+    {
+        $originalField = $data['originalField'];
+        $updatedField  = $data['updatedField'];
+        $updateStruct  = $data['updateStruct'];
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                  => $originalField->id,
+                'identifier'          => $updateStruct->identifier,
+                'names'               => $updateStruct->names,
+                'descriptions'        => $updateStruct->descriptions,
+                'fieldGroup'          => $updateStruct->fieldGroup,
+                'position'            => $updateStruct->position,
+                'fieldTypeIdentifier' => $originalField->fieldTypeIdentifier,
+                'isTranslatable'      => $updateStruct->isTranslatable,
+                'isRequired'          => $updateStruct->isRequired,
+                'isInfoCollector'     => $updateStruct->isInfoCollector,
+                'validators'          => $updateStruct->validators,
+                'defaultValue'        => $originalField->defaultValue,
+                'isSearchable'        => $updateStruct->isSearchable,
+            ),
+            $updatedField
+        );
     }
 
     /**

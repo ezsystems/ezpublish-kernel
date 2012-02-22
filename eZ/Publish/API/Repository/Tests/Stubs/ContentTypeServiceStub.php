@@ -527,7 +527,51 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
-        // TODO: Implement.
+        $fieldData = $this->getFieldDefinitionAsArray( $fieldDefinition );
+        foreach ( $fieldData as $propertyName => $propertyValue )
+        {
+            if ( isset( $fieldDefinitionUpdateStruct->$propertyName ) )
+            {
+                $fieldData[$propertyName] = $fieldDefinitionUpdateStruct->$propertyName;
+            }
+        }
+        $newFieldDefinition = new FieldDefinitionStub( $fieldData );
+
+        $typeData  = $this->getTypeAsArray( $contentTypeDraft );
+        foreach ( $typeData['fieldDefinitions'] as $index => $existingFieldDefinition )
+        {
+            if ( $existingFieldDefinition->id == $newFieldDefinition->id )
+            {
+                $typeData['fieldDefinitions'][$index] = $newFieldDefinition;
+            }
+        }
+
+        $this->setContentTypeDraft( $typeData );
+    }
+
+    /**
+     * Returns the data of $fieldDefinition as an array
+     *
+     * @param FieldDefinition $fieldDefinition
+     * @return array
+     */
+    protected function getFieldDefinitionAsArray( FieldDefinition $fieldDefinition )
+    {
+        return array(
+            'id'                  => $fieldDefinition->id,
+            'identifier'          => $fieldDefinition->identifier,
+            'names'               => $fieldDefinition->names,
+            'descriptions'        => $fieldDefinition->descriptions,
+            'fieldGroup'          => $fieldDefinition->fieldGroup,
+            'position'            => $fieldDefinition->position,
+            'fieldTypeIdentifier' => $fieldDefinition->fieldTypeIdentifier,
+            'isTranslatable'      => $fieldDefinition->isTranslatable,
+            'isRequired'          => $fieldDefinition->isRequired,
+            'isInfoCollector'     => $fieldDefinition->isInfoCollector,
+            'validators'          => $fieldDefinition->validators,
+            'defaultValue'        => $fieldDefinition->defaultValue,
+            'isSearchable'        => $fieldDefinition->isSearchable,
+        );
     }
 
     /**
@@ -752,7 +796,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newFieldDefinitionUpdateStruct()
     {
-        // TODO: Implement.
+        return new FieldDefinitionUpdateStruct();
     }
 
 }
