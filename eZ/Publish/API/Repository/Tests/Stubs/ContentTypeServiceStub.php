@@ -788,7 +788,26 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function copyContentType( ContentType $contentType, User $user = null )
     {
-        // TODO: Implement.
+        $contentTypeData = $this->getTypeAsArray( $contentType );
+
+        $contentTypeData['id'] = $this->nextTypeId++;
+        $contentTypeData['identifier'] = $contentTypeData['identifier'] . '_' . uniqid();
+        $contentTypeData['remoteId'] = $contentTypeData['remoteId'] . '_' . uniqid();
+        $contentTypeData['creationDate'] = new \DateTime();
+        $contentTypeData['modificationDate'] = new \DateTime();
+
+        $newFieldDefinitions = array();
+        foreach ( $contentTypeData['fieldDefinitions'] as $fieldDefinition )
+        {
+            $definitionData = $this->getFieldDefinitionAsArray( $fieldDefinition );
+            $definitionData['id'] = $this->nextFieldDefinitionId++;
+            $newFieldDefinitions[] = new FieldDefinitionStub( $definitionData );
+        }
+        $contentTypeData['fieldDefinitions'] = $newFieldDefinitions;
+
+        $newType = new ContentTypeStub( $contentTypeData );
+        $this->types[$contentTypeData['id']] = $newType;
+        return $newType;
     }
 
     /**

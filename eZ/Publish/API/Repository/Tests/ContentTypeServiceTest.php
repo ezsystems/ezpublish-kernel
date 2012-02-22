@@ -2391,7 +2391,105 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testCopyContentType()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        $copiedType = $contentTypeService->copyContentType( $commentType );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
+            $copiedType
+        );
+
+        return array(
+            'originalType' => $commentType,
+            'copiedType'   => $copiedType,
+        );
+    }
+
+    /**
+     * Test for the copyContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
+     */
+    public function testCopyContentTypeStructValues( array $data )
+    {
+        $originalType = $data['originalType'];
+        $copiedType   = $data['copiedType'];
+
+        $this->assertStructPropertiesCorrect(
+            $originalType,
+            $copiedType,
+            array(
+                'names',
+                'descriptions',
+                'creatorId',
+                'modifierId',
+                'urlAliasSchema',
+                'nameSchema',
+                'isContainer',
+                'mainLanguageCode',
+                'contentTypeGroups',
+            )
+        );
+
+        $this->assertNotEquals(
+            $originalType->id,
+            $copiedType->id
+        );
+        $this->assertNotEquals(
+            $originalType->remoteId,
+            $copiedType->remoteId
+        );
+        $this->assertNotEquals(
+            $originalType->identifier,
+            $copiedType->identifier
+        );
+        $this->assertNotEquals(
+            $originalType->creationDate,
+            $copiedType->creationDate
+        );
+        $this->assertNotEquals(
+            $originalType->modificationDate,
+            $copiedType->modificationDate
+        );
+
+        foreach ( $originalType->fieldDefinitions as $originalFieldDefinition )
+        {
+            $copiedFieldDefinition = $copiedType->getFieldDefinition(
+                $originalFieldDefinition->identifier
+            );
+
+            $this->assertStructPropertiesCorrect(
+                $originalFieldDefinition,
+                $copiedFieldDefinition,
+                array(
+                    'identifier',
+                    'names',
+                    'descriptions',
+                    'fieldGroup',
+                    'position',
+                    'fieldTypeIdentifier',
+                    'isTranslatable',
+                    'isRequired',
+                    'isInfoCollector',
+                    'validators',
+                    'defaultValue',
+                    'isSearchable',
+                )
+            );
+            $this->assertNotEquals(
+                $originalFieldDefinition->id,
+                $copiedFieldDefinition->id
+            );
+        }
     }
 
     /**
