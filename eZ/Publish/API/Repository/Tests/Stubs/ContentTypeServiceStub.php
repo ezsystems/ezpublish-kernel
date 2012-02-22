@@ -770,7 +770,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function deleteContentType( ContentType $contentType )
     {
-        // TODO: Implement.
+        unset( $this->types[$contentType->id] );
     }
 
     /**

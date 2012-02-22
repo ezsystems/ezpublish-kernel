@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use \eZ\Publish\API\Repository\Exceptions;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
 
@@ -2335,7 +2336,25 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testDeleteContentType()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        $contentTypeService->deleteContentType( $commentType );
+        /* END: Use Case */
+
+        try
+        {
+            $contentTypeService->loadContentType( $commentType->id );
+            $this->fail( 'Content type could be loaded after delete.' );
+        }
+        catch( Exceptions\NotFoundException $e )
+        {
+            // All fine
+        }
     }
 
     /**
