@@ -290,8 +290,6 @@ class LocationService implements LocationServiceInterface
         return $childLocations;
     }
 
-
-
     /**
      * Searches children locations of the provided parent location id
      *
