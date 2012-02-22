@@ -1109,6 +1109,25 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadContentTypeDraftThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Throws exception, since 2342 does not exist
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( 2342 );
+        /* END: Use Case */
+    }
+
+    /**
      * Creates a fully functional ContentTypeDraft and returns it.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
@@ -1857,18 +1876,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testLoadContentTypeByRemoteIdThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeByRemoteId() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadContentTypeDraftThrowsNotFoundException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeDraft() is not implemented." );
     }
 
     /**
