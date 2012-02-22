@@ -95,19 +95,21 @@ function generateContentTypeFixture( array $fixture )
         unset( $description['always-available'] );
 
         $fieldDef[$data['contentclass_id']][$data['id']] = array(
-            'id'                        =>  (int) $data['id'],
-            'identifier'                =>  $data['identifier'],
-            'fieldGroup'                =>  $data['category'],
-            'position'                  =>  (int) $data['placement'],
-            'fieldTypeIdentifier'       =>  $data['data_type_string'],
-            'isTranslatable'            =>  (boolean) $data['can_translate'],
-            'isRequired'                =>  (boolean) $data['is_required'],
-            'isInfoCollector'           =>  (boolean) $data['is_information_collector'],
-            'isSearchable'              =>  (boolean) $data['is_searchable'],
-            'defaultValue'              =>  null,
+            'id'                   =>  (int) $data['id'],
+            'identifier'           =>  $data['identifier'],
+            'fieldGroup'           =>  $data['category'],
+            'position'             =>  (int) $data['placement'],
+            'fieldTypeIdentifier'  =>  $data['data_type_string'],
+            'isTranslatable'       =>  (boolean) $data['can_translate'],
+            'isRequired'           =>  (boolean) $data['is_required'],
+            'isInfoCollector'      =>  (boolean) $data['is_information_collector'],
+            'isSearchable'         =>  (boolean) $data['is_searchable'],
+            'defaultValue'         =>  null,
 
-            'names'                     =>  $names,
-            'descriptions'              =>  $description,
+            'names'                =>  $names,
+            'descriptions'         =>  $description,
+            'fieldSettings'        =>  array(),
+            'validators'           =>  array(),
         );
 
         $nextFieldId = max( $nextFieldId, $data['id'] );

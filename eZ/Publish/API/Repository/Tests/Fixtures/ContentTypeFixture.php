@@ -41,6 +41,10 @@ return array(
                             "descriptions" => array(
                                 "eng-GB" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     119 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -60,6 +64,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-GB" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -81,6 +89,10 @@ return array(
                             "descriptions" => array(
                                 "eng-GB" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     156 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -100,6 +112,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-GB" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -121,6 +137,10 @@ return array(
                             "descriptions" => array(
                                 "eng-GB" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     181 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -141,6 +161,10 @@ return array(
                             "descriptions" => array(
                                 "eng-GB" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     182 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -160,6 +184,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-GB" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -209,6 +237,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     7 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -228,6 +260,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -277,6 +313,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     9 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -296,6 +336,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -317,6 +361,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     179 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -337,6 +385,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     180 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -356,6 +408,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -405,6 +461,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     150 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -425,6 +485,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     151 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -444,6 +508,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -493,6 +561,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     160 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -512,6 +584,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -533,6 +609,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     162 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -552,6 +632,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -573,6 +657,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     164 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -592,6 +680,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -613,6 +705,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     166 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -632,6 +728,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -653,6 +753,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     168 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -672,6 +776,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -693,6 +801,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     170 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -713,6 +825,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     171 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -732,6 +848,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -781,6 +901,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     173 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -800,6 +924,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -821,6 +949,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     175 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -840,6 +972,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -861,6 +997,10 @@ return array(
                             "descriptions" => array(
                                 0 => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     178 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -880,6 +1020,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 0 => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -901,6 +1045,10 @@ return array(
                             "descriptions" => array(
                                 "eng-US" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     330 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -920,6 +1068,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-US" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -941,6 +1093,10 @@ return array(
                             "descriptions" => array(
                                 "eng-US" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     332 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -960,6 +1116,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-US" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -981,6 +1141,10 @@ return array(
                             "descriptions" => array(
                                 "eng-US" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     334 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1000,6 +1164,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-US" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1021,6 +1189,10 @@ return array(
                             "descriptions" => array(
                                 "eng-US" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     336 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1040,6 +1212,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-US" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1061,6 +1237,10 @@ return array(
                             "descriptions" => array(
                                 "eng-US" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     338 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1080,6 +1260,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-US" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1101,6 +1285,10 @@ return array(
                             "descriptions" => array(
                                 "eng-US" => "",
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     340 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1120,6 +1308,10 @@ return array(
                             ),
                             "descriptions" => array(
                                 "eng-US" => "",
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1168,6 +1360,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     184 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1186,6 +1382,10 @@ return array(
                                 "eng-GB" => "Short title",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1206,6 +1406,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     186 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1224,6 +1428,10 @@ return array(
                                 "eng-GB" => "Summary",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1244,6 +1452,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     188 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1262,6 +1474,10 @@ return array(
                                 "eng-GB" => "Enable comments",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1282,6 +1498,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     190 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1300,6 +1520,10 @@ return array(
                                 "eng-GB" => "Caption (Image)",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1320,6 +1544,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     192 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1338,6 +1566,10 @@ return array(
                                 "eng-GB" => "Unpublish date",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1358,6 +1590,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     194 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1376,6 +1612,10 @@ return array(
                                 "eng-GB" => "Star Rating",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1424,6 +1664,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     196 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1442,6 +1686,10 @@ return array(
                                 "eng-GB" => "Short title",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1462,6 +1710,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     198 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1480,6 +1732,10 @@ return array(
                                 "eng-GB" => "Author",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1500,6 +1756,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     200 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1518,6 +1778,10 @@ return array(
                                 "eng-GB" => "Body",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1538,6 +1802,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     202 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1556,6 +1824,10 @@ return array(
                                 "eng-GB" => "Caption (Image)",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1576,6 +1848,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     204 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1594,6 +1870,10 @@ return array(
                                 "eng-GB" => "Unpublish date",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1614,6 +1894,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     206 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1632,6 +1916,10 @@ return array(
                                 "eng-GB" => "Enable comments",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1680,6 +1968,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     208 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1698,6 +1990,10 @@ return array(
                                 "eng-GB" => "Index title",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1718,6 +2014,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     210 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1736,6 +2036,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1784,6 +2088,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     212 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1803,6 +2111,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     213 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1821,6 +2133,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1869,6 +2185,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     215 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1887,6 +2207,10 @@ return array(
                                 "eng-GB" => "Body",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1907,6 +2231,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     217 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1925,6 +2253,10 @@ return array(
                                 "eng-GB" => "Unpublish date",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -1945,6 +2277,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     219 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -1963,6 +2299,10 @@ return array(
                                 "eng-GB" => "Enable comments",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2011,6 +2351,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     221 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2029,6 +2373,10 @@ return array(
                                 "eng-GB" => "Product number",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2049,6 +2397,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     223 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2067,6 +2419,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2087,6 +2443,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     225 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2105,6 +2465,10 @@ return array(
                                 "eng-GB" => "Image",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2125,6 +2489,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     227 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2144,6 +2512,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     228 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2162,6 +2534,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2210,6 +2586,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     230 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2228,6 +2608,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2248,6 +2632,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     232 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2266,6 +2654,10 @@ return array(
                                 "eng-GB" => "Subject",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2286,6 +2678,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     234 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2305,6 +2701,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     235 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2323,6 +2723,10 @@ return array(
                                 "eng-GB" => "Recipient",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2371,6 +2775,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     237 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2389,6 +2797,10 @@ return array(
                                 "eng-GB" => "Billboard",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2409,6 +2821,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     239 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2427,6 +2843,10 @@ return array(
                                 "eng-GB" => "Center column",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2447,6 +2867,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     241 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2466,6 +2890,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     242 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2484,6 +2912,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2532,6 +2964,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     244 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2550,6 +2986,10 @@ return array(
                                 "eng-GB" => "Body",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2570,6 +3010,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     246 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2588,6 +3032,10 @@ return array(
                                 "eng-GB" => "Display sub items",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2636,6 +3084,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     248 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2654,6 +3106,10 @@ return array(
                                 "eng-GB" => "Image",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2674,6 +3130,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     250 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2693,6 +3153,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     251 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2711,6 +3175,10 @@ return array(
                                 "eng-GB" => "URL",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2759,6 +3227,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     253 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2778,6 +3250,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     254 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2796,6 +3272,10 @@ return array(
                                 "eng-GB" => "Calendars",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2844,6 +3324,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     256 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2863,6 +3347,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     257 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2881,6 +3369,10 @@ return array(
                                 "eng-GB" => "Question",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2929,6 +3421,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     259 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2947,6 +3443,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -2967,6 +3467,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     261 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -2985,6 +3489,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3033,6 +3541,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     263 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3051,6 +3563,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3071,6 +3587,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     265 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3089,6 +3609,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3137,6 +3661,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     267 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3155,6 +3683,10 @@ return array(
                                 "eng-GB" => "Caption",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3175,6 +3707,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     269 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3193,6 +3729,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3241,6 +3781,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     271 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3259,6 +3803,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3279,6 +3827,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     273 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3297,6 +3849,10 @@ return array(
                                 "eng-GB" => "Open in new window",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3345,6 +3901,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     275 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3363,6 +3923,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3383,6 +3947,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     277 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3401,6 +3969,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3449,6 +4021,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     279 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3467,6 +4043,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3487,6 +4067,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     281 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3505,6 +4089,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3553,6 +4141,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     283 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3571,6 +4163,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3591,6 +4187,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     285 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3609,6 +4209,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3657,6 +4261,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     287 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3675,6 +4283,10 @@ return array(
                                 "eng-GB" => "Short description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3695,6 +4307,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     289 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3713,6 +4329,10 @@ return array(
                                 "eng-GB" => "Image",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3761,6 +4381,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     291 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3779,6 +4403,10 @@ return array(
                                 "eng-GB" => "Short title",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3799,6 +4427,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     293 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3817,6 +4449,10 @@ return array(
                                 "eng-GB" => "Summary",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3837,6 +4473,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     295 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3855,6 +4495,10 @@ return array(
                                 "eng-GB" => "Enable comments",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3875,6 +4519,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     297 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3893,6 +4541,10 @@ return array(
                                 "eng-GB" => "Caption (Image)",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3913,6 +4565,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     299 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3931,6 +4587,10 @@ return array(
                                 "eng-GB" => "Unpublish date",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -3951,6 +4611,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     301 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -3969,6 +4633,10 @@ return array(
                                 "eng-GB" => "Location",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4017,6 +4685,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     303 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4035,6 +4707,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4083,6 +4759,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     305 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4101,6 +4781,10 @@ return array(
                                 "eng-GB" => "Message",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4121,6 +4805,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     307 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4139,6 +4827,10 @@ return array(
                                 "eng-GB" => "Notify me about updates",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4187,6 +4879,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     309 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4205,6 +4901,10 @@ return array(
                                 "eng-GB" => "Message",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4253,6 +4953,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     311 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4271,6 +4975,10 @@ return array(
                                 "eng-GB" => "Short title",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4291,6 +4999,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     313 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4309,6 +5021,10 @@ return array(
                                 "eng-GB" => "Category",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4329,6 +5045,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     315 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4347,6 +5067,10 @@ return array(
                                 "eng-GB" => "To Time",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4395,6 +5119,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     317 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4414,6 +5142,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     318 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4432,6 +5164,10 @@ return array(
                                 "eng-GB" => "View",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4480,6 +5216,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     320 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4498,6 +5238,10 @@ return array(
                                 "eng-GB" => "URL",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4518,6 +5262,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     322 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4537,6 +5285,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     323 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4555,6 +5307,10 @@ return array(
                                 "eng-GB" => "Tags",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4603,6 +5359,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     325 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4621,6 +5381,10 @@ return array(
                                 "eng-GB" => "Description",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
@@ -4669,6 +5433,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     327 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4688,6 +5456,10 @@ return array(
                             ),
                             "descriptions" => array(
                             ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
+                            ),
                         )
                     ),
                     328 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
@@ -4706,6 +5478,10 @@ return array(
                                 "eng-GB" => "File",
                             ),
                             "descriptions" => array(
+                            ),
+                            "fieldSettings" => array(
+                            ),
+                            "validators" => array(
                             ),
                         )
                     ),
