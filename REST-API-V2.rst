@@ -189,17 +189,13 @@ In the content module there are the root collections objects, locations, trash a
 ===================================================== =================== ======================= ============================ ================
         :Resource:                                          POST                GET                  PUT                         DELETE
 ----------------------------------------------------- ------------------- ----------------------- ---------------------------- ----------------
+/                                                     -                   list root resources     -                            -            
 /content/objects                                      create new content  list/find content       -                            -            
-/content/objects/views                                -                   list views              create a new view and return -            
-                                                                                                  the results
-/content/objects/view/<ID>                            -                   get view results        replace view                 delete view
-/content/objects/<ID>                                 -                   load content info       update content meta data     delete content
+/content/objects/<ID>                                 -                   load content            update content meta data     delete content
 /content/objects/<ID>/translations                    create translation  list translations       -                            -            
 /content/objects/<ID>/languages                       -                   list languages of cont. -                            -              
 /content/objects/<ID>/languages/<lang_code>           -                   load content in the     -                            delete language
                                                                           given language                                       from content   
-/content/objects/<ID>/currentversion                  -                   load content in current -                            -             
-                                                                          version
 /content/objects/<ID>/versions                        create a new draft  load all versions       -                            -            
                                                       from an existing    (version infos)
                                                       version 
@@ -215,6 +211,9 @@ In the content module there are the root collections objects, locations, trash a
                                                                           of current version
 /content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. -                            -              
 /content/objects/<ID>/versions/<no>/relations/<ID>    -                   load relation details   -                            delete relation
+/content/views                                        -                   list views              create a new view and return -            
+                                                                                                  the results
+/content/view/<ID>                                    -                   get view results        replace view                 delete view
 /content/locations                                    -                   list/find locations     create a new location refer- -            
                                                                                                   ing to an existing content 
                                                                                                   and a parent
@@ -241,7 +240,7 @@ General Error Codes
 :500: The server encountered an unexpected condition which prevented it from fulfilling the request - e.g. database down etc.
 :501: The requested method was not implemented yet
 :404: Requested resource was not found
-:405: The request method is -             - the methods available are returned for this resource
+:405: The request method is not available.  The available methods are returned for this resource
 	
 Operations using RemoteId
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -313,15 +312,20 @@ Alternatively:
 	
 Load Content
 ````````````
-:Resource: - /content/objects/<ID> 
-           - /content/locations/<locationId>/content
+:Resource: /content/objects/<ID> 
 :Method: GET
-:Description: Loads the content object for the given id in its current version (i.e the current published version or if not exists the draft of the authenticated user)
+:Description: Loads the content object for the given id. Depending on the Accept header the current version is embedded (i.e the current published version or if not exists the draft of the authenticated user)
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Content+xml:  if set all informations for the content object including the embedded current version are returned in xml format (see Content_)
+         :application/vnd.ez.api.Content+json:  if set all informations for the content object including the embedded current version are returned in json format (see Content_)
+         :application/vnd.ez.api.ContentInfo+xml:  if set all informations for the content object (excluding the current version) are returned in xml format (see Content_)
+         :application/vnd.ez.api.ContentInfo+json:  if set all informations for the content object (excluding the current version) are returned in json format (see Content_)
 :Parameters:
-    :fields: comma separated list of fields which should be returned in the response (see Version_)
+    :fields: comma separated list of fields which should be returned in the response (see Content_)
     :responseGroups: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
-:Response: 200 Version_
+:Response: 200 Content_
 :Error Codes:
     :401: If the user is not authorized to read  this object. This could also happen if there is no published version yet and another user owns a draft of this content
     :404: If the ID is not found
@@ -1607,7 +1611,7 @@ Create or Update Policy
 
 Delete Policy
 `````````````
-:Resource: /user/roles/<ID>/policies/<module>/function
+:Resource: /user/roles/<ID>/policies/<module>/<function>
 :Method: DELETE
 :Description: the given policy is deleted
 :Parameters: 
@@ -1665,6 +1669,20 @@ ContentInfo JSON Schema
 -----------------------
 
 ::
+
+    <contentInfo link="/content/objects/23" id="23" remoteId="xndbfdhgutjd">
+         <contentType link="/content/type/66"/> 
+         <name>myname</name>
+         <owner link="/user/34" id="34">
+         <isPublished>true</isPublished>
+         <section link="/sections/3" id="3"/>
+         <mainLocation link="/locations/78" id="78"/>
+         <currentVersion link="/content/objects/23/versions/3"/>
+         <publishedDate>true</publishedDate>
+         <lastModifiedDate>20120211T15:30:45Z</lastModifiedDate>
+         <isAlwaysAvailable>true</isAlwaysAvailable>
+         <mainLanguage link="/languages/eng-UK" code="eng-UK"/>
+    </contentInfo>
 
     {
         "name":"ContentInfo",

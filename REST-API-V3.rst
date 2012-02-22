@@ -1,5 +1,5 @@
 ==============================
-eZ Publish REST API DRAFT 1.06
+eZ Publish REST API DRAFT 1.50
 ==============================
 
 .. sectnum::
@@ -554,7 +554,7 @@ List/Search Content
     :offset:          offset of the result set
     :sortField:       the field used for sorting TBD.
     :sortOrder:       DESC or ASC
-:Response: 200 array of Version_
+:Response: TBD
 :Error codes:
     :400: If the query string does not match the lucene query string format, In this case the response contains an ErrorMessage_
 	
@@ -582,6 +582,7 @@ XML Example
 '''''''''''
 
 ::
+
     GET /content/objects/23 HTTP/1.1
     Accept: application/vnd.ez.api.ContentInfo+xml
     Content_length: 0
@@ -626,6 +627,7 @@ Update Content
          :application/vnd.ez.api.ContentUpdate+json: the ContentUpdate_ schema encoded in json
          :application/vnd.ez.api.ContentUpdate+xml: the ContentUpdate_ schema encoded in xml
 :Response: 
+
 .. parsed-literal::
 
       HTTP/1.1 200 OK
@@ -647,12 +649,12 @@ Update Content
 XML Example
 '''''''''''
 In this example
-- the main language is changed
-- a new section is assigned
-- the main location is changed
-- the always avalable flag is changed
-- the remoteId is changed
-- the owner of the content object is changed
+    - the main language is changed
+    - a new section is assigned
+    - the main location is changed
+    - the always avalable flag is changed
+    - the remoteId is changed
+    - the owner of the content object is changed
 
 ::
  
@@ -715,6 +717,7 @@ Copy content
 :Headers:
     :Destination: A location resource to which the content object should be copied.
 :Response: ::
+
       HTTP/1.1 201 Created
       Location: /content/objects/<newId>
 
