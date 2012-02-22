@@ -2587,7 +2587,18 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testAssignContentTypeGroupThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::assignContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $assignedGroups = $folderType->contentTypeGroups;
+        $assignedGroup = reset( $assignedGroups );
+
+        // Throws an exception
+        $contentTypeService->assignContentTypeGroup( $folderType, $assignedGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -2599,7 +2610,32 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUnassignContentTypeGroup()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $assignedGroups = $folderType->contentTypeGroups;
+        $groupToUnassign = reset( $assignedGroups );
+
+        $contentTypeService->unassignContentTypeGroup( $folderType, $groupToUnassign );
+        /* END: Use Case */
+
+        $loadedType = $contentTypeService->loadContentType( $folderType->id );
+
+        foreach ( $loadedType->contentTypeGroups as $assignedGroup )
+        {
+            if ( $assignedGroup->id == $groupToUnassign->id )
+            {
+                $this->fail(
+                    sprintf(
+                        'Group with ID "%s" not unassigned.',
+                        $groupToUnassign->id
+                    )
+                );
+            }
+        }
     }
 
     /**

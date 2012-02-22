@@ -821,6 +821,15 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
+        $assignedGroups = $this->types[$contentType->id]->contentTypeGroups;
+        foreach ( $assignedGroups as $assignedGroup )
+        {
+            if ( $assignedGroup->id == $contentTypeGroup->id )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
+
         $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
         $typeData['contentTypeGroups'][] = $contentTypeGroup;
         $this->types[$contentType->id] = new ContentTypeStub( $typeData );
@@ -838,7 +847,17 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
-        // TODO: Implement.
+        $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
+
+        foreach ( $typeData['contentTypeGroups'] as $index => $assignedGroup )
+        {
+            if ( $assignedGroup->id == $contentTypeGroup->id )
+            {
+                unset( $typeData['contentTypeGroups'][$index] );
+            }
+        }
+
+        $this->types[$contentType->id] = new ContentTypeStub( $typeData );
     }
 
     /**
