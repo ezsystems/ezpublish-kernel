@@ -23,6 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId as CriterionContentId,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\Status as CriterionStatus,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
 
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
@@ -134,7 +135,29 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocationByRemoteId( $remoteId )
     {
-        //@todo: implement
+        if ( !is_string( $remoteId ) )
+            throw new InvalidArgumentValue( "remoteId", $remoteId );
+
+        $searchCriterion = new CriterionLogicalAnd( array(
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+            new CriterionLocationRemoteId( $remoteId )
+        ) );
+
+        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
+
+        if ( !$searchResult || $searchResult->count != 1 )
+            throw new NotFoundException( "location", $remoteId );
+
+        if ( is_array( $searchResult->content[0]->locations ) )
+        {
+            foreach ( $searchResult->content[0]->locations as $spiLocation )
+            {
+                if ( $spiLocation->remoteId == $remoteId )
+                    return $this->buildDomainLocationObject( $spiLocation );
+            }
+        }
+
+        throw new NotFoundException( "location", $remoteId );
     }
 
     /**
