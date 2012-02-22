@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
 
@@ -2226,7 +2227,68 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testCreateContentTypeDraft()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeDraft() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        $typeDraft = $contentTypeService->createContentTypeDraft( $commentType );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
+            $typeDraft
+        );
+
+        return array(
+            'originalType' => $commentType,
+            'typeDraft'    => $typeDraft,
+        );
+    }
+
+    /**
+     * Test for the createContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeDraft
+     */
+    public function testCreateContentTypeDraftStructValues( array $data )
+    {
+        $originalType = $data['originalType'];
+        $typeDraft    = $data['typeDraft'];
+
+        $this->assertStructPropertiesCorrect(
+            $originalType,
+            $typeDraft,
+            array(
+                'id',
+                'names',
+                'descriptions',
+                'identifier',
+                'creationDate',
+                'modificationDate',
+                'creatorId',
+                'modifierId',
+                'remoteId',
+                'urlAliasSchema',
+                'nameSchema',
+                'isContainer',
+                'mainLanguageCode',
+                'defaultAlwaysAvailable',
+                'defaultSortField',
+                'defaultSortOrder',
+                'contentTypeGroups',
+                'fieldDefinitions',
+            )
+        );
+
+        $this->assertEquals(
+            ContentType::STATUS_DRAFT,
+            $typeDraft->status
+        );
     }
 
     /**

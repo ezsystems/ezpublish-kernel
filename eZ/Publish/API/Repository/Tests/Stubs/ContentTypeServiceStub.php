@@ -528,8 +528,12 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     protected function setContentTypeDraft( array $data )
     {
+        $data['status'] = ContentType::STATUS_DRAFT;
+
         $newType = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
+
         $this->typeDrafts[$newType->id] = $newType;
+
         return $newType;
     }
 
@@ -746,7 +750,8 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeDraft( ContentType $contentType )
     {
-        // TODO: Implement.
+        $data = $this->getTypeAsArray( $this->types[$contentType->id] );
+        return $this->setContentTypeDraft( $data );
     }
 
     /**
