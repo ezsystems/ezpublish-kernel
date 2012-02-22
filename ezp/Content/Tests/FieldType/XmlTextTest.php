@@ -58,7 +58,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     public function testAcceptValueInvalidType()
     {
         $ft = new XmlTextType;
-        $ft->setValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
+        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
@@ -70,7 +70,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     {
         $ft = new XmlTextType;
         $value = new XmlTextValue( $text, $format );
-        $ft->setValue( $value );
+        $ft->acceptValue( $value );
     }
 
     /**
@@ -81,7 +81,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     {
         $ft = new XmlTextType;
         $value = new XmlTextValue( $text, $format );
-        $ft->setValue( $value );
+        $ft->acceptValue( $value );
     }
 
     /**

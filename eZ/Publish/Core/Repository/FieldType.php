@@ -73,13 +73,6 @@ abstract class FieldType implements FieldTypeInterface
     protected $allowedValidators = array();
 
     /**
-     * Value of field type.
-     *
-     * @var \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    private $value;
-
-    /**
      * Constructs field type object, initializing internal data structures.
      */
     public function __construct()
@@ -153,30 +146,6 @@ abstract class FieldType implements FieldTypeInterface
     public function allowedValidators()
     {
         return $this->allowedValidators;
-    }
-
-    /**
-     * Injects the value of a field in the field type.
-     *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
-     * @return void
-     */
-    public function setValue( Value $inputValue )
-    {
-        $this->value = $this->acceptValue( $inputValue );
-    }
-
-    /**
-     * Returns the value of associated field.
-     *
-     * If no value has yet been set, the default value of that field type is
-     * returned.
-     *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value|null
-     */
-    public function getValue()
-    {
-        return $this->value ?: $this->getDefaultDefaultValue();
     }
 
     /**
