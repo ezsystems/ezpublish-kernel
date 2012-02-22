@@ -22,6 +22,7 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
 
 /**
@@ -29,6 +30,16 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStu
  */
 class ContentServiceStub implements ContentService
 {
+    /**
+     * @var integer
+     */
+    private $contentNextId = 0;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    private $contents = array();
+
     /**
      * Loads a content info object.
      *
@@ -194,7 +205,15 @@ class ContentServiceStub implements ContentService
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
-        // TODO: Implement createContent() method.
+        $content = new ContentStub(
+            array(
+                'contentId'  =>  ++$this->contentNextId
+            )
+        );
+
+        $this->contents[$content->contentId] = $content;
+
+        return $content;
     }
 
     /**

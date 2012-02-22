@@ -22,7 +22,7 @@ abstract class Content extends ValueObject
     /**
      * returns the VersionInfo for this version
      *
-     * @return VersionInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     abstract public function getVersionInfo();
 

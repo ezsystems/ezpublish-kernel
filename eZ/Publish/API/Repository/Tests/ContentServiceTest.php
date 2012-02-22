@@ -49,11 +49,27 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
      */
     public function testCreateContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Create a content type
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $content = $contentService->createContent( $contentCreate );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Content', $content );
     }
 
     /**
