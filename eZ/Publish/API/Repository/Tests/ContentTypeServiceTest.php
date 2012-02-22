@@ -2161,7 +2161,14 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // This call will fail with a NotFoundException
+        $contentTypeService->loadContentTypeByRemoteId( 'not-exists' );
+        /* END: Use Case */
     }
 
     /**
