@@ -22,12 +22,13 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * @example Examples/contenttype.php
@@ -666,7 +667,14 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeByIdentifier( $identifier )
     {
-        // TODO: Implement.
+        foreach ( $this->types as $contentType )
+        {
+            if ( $identifier === $contentType->identifier )
+            {
+                return $contentType;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**

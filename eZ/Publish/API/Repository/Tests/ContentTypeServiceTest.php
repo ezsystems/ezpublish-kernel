@@ -1924,11 +1924,34 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testLoadContentTypeByIdentifier()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeByIdentifier() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\ContentType\ContentType', $contentType );
+
+        return $contentType;
+    }
+
+    /**
+     * Test for the loadContentTypeByIdentifier() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     */
+    public function testLoadContentTypeByIdentifierReturnsCorrectInstance( $contentType )
+    {
+        $this->assertEquals( 'article', $contentType->identifier );
     }
 
     /**
@@ -1937,10 +1960,18 @@ class ContentTypeServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testLoadContentTypeByIdentifierThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeByIdentifier() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // This call will fail with a NotFoundException
+        $contentTypeService->loadContentTypeByIdentifier( 'sindelfingen' );
+        /* END: Use Case */
     }
 
     /**
