@@ -635,8 +635,15 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
     {
-        $this->types[$contentTypeDraft->id] = $contentTypeDraft->getInnerContentType();
+        if ( !isset( $this->typeDrafts[$contentTypeDraft->id] ) )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
+
+        $this->types[$contentTypeDraft->id] = $this->typeDrafts[$contentTypeDraft->id]
+            ->getInnerContentType();
         unset( $this->typeDrafts[$contentTypeDraft->id] );
+
     }
 
     /**
