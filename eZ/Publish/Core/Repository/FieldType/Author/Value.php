@@ -51,9 +51,13 @@ class Value extends BaseValue implements ValueInterface
             return "";
 
         $authorNames = array();
-        foreach ( $this->authors as $author )
+
+        if ( $this->authors instanceof AuthorCollection )
         {
-            $authorNames[] = $author->name;
+            foreach ( $this->authors as $author )
+            {
+                $authorNames[] = $author->name;
+            }
         }
 
         return implode( ', ', $authorNames );
