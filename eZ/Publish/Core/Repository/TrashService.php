@@ -10,10 +10,16 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
     eZ\Publish\SPI\Persistence\Handler,
 
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\TrashItem,
+    eZ\Publish\Core\Repository\Values\Content\TrashItem,
+    eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Query;
+    eZ\Publish\API\Repository\Values\Content\Query,
+
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
+
+    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 /**
  * Trash service, used for managing trashed content
@@ -56,7 +62,22 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function loadTrashItem( $trashItemId ){}
+    public function loadTrashItem( $trashItemId )
+    {
+        if ( !is_numeric( $trashItemId ) )
+            throw new InvalidArgumentValue( "trashItemId", $trashItemId );
+
+        try
+        {
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->load( $trashItemId );
+        }
+        catch ( NotFound $e )
+        {
+            throw new NotFoundException( "trashed location", $trashItemId, $e );
+        }
+
+        return $this->buildDomainTrashItemObject( $spiTrashItem );
+    }
 
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item.
@@ -69,7 +90,22 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function trash( Location $location ){}
+    public function trash( Location $location )
+    {
+        if ( !is_numeric( $location->id ) )
+            throw new InvalidArgumentValue( "id", $location->id, "Location" );
+
+        try
+        {
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
+        }
+        catch ( NotFound $e )
+        {
+            throw new NotFoundException( "location", $location->id, $e );
+        }
+
+        return $this->buildDomainTrashItemObject( $spiTrashItem );
+    }
 
     /**
      * Recovers the $trashedLocation at its original place if possible.
@@ -83,7 +119,29 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, LocationCreateStruct $newParentLocation = null ){}
+    public function recover( APITrashItem $trashItem, LocationCreateStruct $newParentLocation = null )
+    {
+        if ( !is_numeric( $trashItem->id ) )
+            throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
+
+        if ( $newParentLocation === null && !is_numeric( $trashItem->parentId ) )
+            throw new InvalidArgumentValue( "parentId", $trashItem->parentId, "TrashItem" );
+
+        if ( $newParentLocation !== null && !is_numeric( $newParentLocation->parentLocationId ) )
+            throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->parentLocationId, "LocationCreateStruct" );
+
+        try
+        {
+            $locationParentId = $newParentLocation !== null ? $newParentLocation->parentLocationId : $trashItem->parentId;
+            $newLocationId = $this->persistenceHandler->trashHandler()->untrashLocation( $trashItem->id, $locationParentId );
+        }
+        catch ( NotFound $e )
+        {
+            throw new NotFoundException( $e->what, $e->identifier, $e );
+        }
+
+        return $this->repository->getLocationService()->loadLocation( $newLocationId );
+    }
 
     /**
      * Empties trash.
@@ -93,7 +151,11 @@ class TrashService implements TrashServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to empty the trash
      */
-    public function emptyTrash(){}
+    public function emptyTrash()
+    {
+        // Persistence layer takes care of deleting content objects
+        $this->persistenceHandler->trashHandler()->emptyTrash();
+    }
 
     /**
      * Deletes a trash item.
@@ -104,7 +166,21 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( TrashItem $trashItem ){}
+    public function deleteTrashItem( APITrashItem $trashItem )
+    {
+        if ( !is_numeric( $trashItem->id ) )
+            throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
+
+        try
+        {
+            // Persistence layer takes care of deleting corresponding content object
+            $this->persistenceHandler->trashHandler()->emptyOne( $trashItem->id );
+        }
+        catch ( NotFound $e )
+        {
+            throw new NotFoundException( "trashed location", $trashItem->id, $e );
+        }
+    }
 
     /**
      * Returns a collection of Trashed locations contained in the trash.
@@ -115,5 +191,38 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findTrashItems( Query $query ){}
+    public function findTrashItems( Query $query )
+    {
+        //@todo: implement
+    }
+
+    /**
+     * Builds the domain TrashItem object from provided persistence trash item
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $spiTrashItem
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     */
+    protected function buildDomainTrashItemObject( Trashed $spiTrashItem )
+    {
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
+
+        return new TrashItem( array(
+            'contentInfo'              => $contentInfo,
+            'contentId'                => $contentInfo->contentId,
+            'id'                       => $spiTrashItem->id,
+            'priority'                 => $spiTrashItem->priority,
+            'hidden'                   => $spiTrashItem->hidden,
+            'invisible'                => $spiTrashItem->invisible,
+            'remoteId'                 => $spiTrashItem->remoteId,
+            'parentId'                 => $spiTrashItem->parentId,
+            'pathString'               => $spiTrashItem->pathString,
+            'modifiedSubLocationDate'  => new \DateTime("{@$spiTrashItem->modifiedSubLocation}"),
+            'mainLocationId'           => $spiTrashItem->mainLocationId,
+            'depth'                    => $spiTrashItem->depth,
+            'sortField'                => $spiTrashItem->sortField,
+            'sortOrder'                => $spiTrashItem->sortOrder,
+            'childrenCount'            => 0
+        ) );
+    }
 }
