@@ -661,6 +661,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             return $this->types[$contentTypeId];
         }
+        throw new Exceptions\NotFoundExceptionStub;
     }
 
     /**

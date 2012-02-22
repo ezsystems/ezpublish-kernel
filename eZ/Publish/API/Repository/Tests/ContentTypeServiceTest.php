@@ -2033,7 +2033,14 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentType() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Throws exception if type with ID 2342 does not exist
+        $userGroupType = $contentTypeService->loadContentType( 2342 );
+        /* END: Use Case */
     }
 
     /**
