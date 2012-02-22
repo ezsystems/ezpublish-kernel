@@ -32,7 +32,7 @@ class Type extends FieldType
     /**
      * @return \eZ\Publish\Core\Repository\FieldType\Image\Value
      */
-    public function getDefaultValue()
+    public function getDefaultDefaultValue()
     {
         return new Value;
     }

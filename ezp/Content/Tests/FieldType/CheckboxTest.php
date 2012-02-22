@@ -66,7 +66,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::getDefaultValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::getDefaultDefaultValue
      */
     public function testDefaultValueWithDefaultSetting()
     {
@@ -74,7 +74,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         self::assertFalse( $ft->getFieldSetting( 'defaultValue' ) );
         $ft->setFieldSetting( 'defaultValue', true );
         self::assertTrue(
-            $ft->getDefaultValue()->bool,
+            $ft->getDefaultDefaultValue()->bool,
             'defaultValue setting should be reflected in default value object'
         );
     }

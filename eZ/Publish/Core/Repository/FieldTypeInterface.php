@@ -85,7 +85,7 @@ interface FieldTypeInterface
      *
      * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
-    public function getDefaultValue();
+    public function getDefaultDefaultValue();
 
     /**
      * Converts a $value to a persistence value

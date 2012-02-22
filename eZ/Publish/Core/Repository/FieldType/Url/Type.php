@@ -34,7 +34,7 @@ class Type extends FieldType
      *       Shouldn't an exception be used?
      * @return \eZ\Publish\Core\Repository\FieldType\Url\Value
      */
-    public function getDefaultValue()
+    public function getDefaultDefaultValue()
     {
         return new Value( $this->fieldSettings["defaultText"] );
     }

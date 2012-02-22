@@ -32,7 +32,7 @@ class Type extends TextLine
      *
      * @return \eZ\Publish\Core\Repository\FieldType\TextBlock\Value
      */
-    public function getDefaultValue()
+    public function getDefaultDefaultValue()
     {
         return new Value( "" );
     }

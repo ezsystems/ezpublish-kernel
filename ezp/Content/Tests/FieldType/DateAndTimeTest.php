@@ -67,12 +67,12 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::getDefaultValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::getDefaultDefaultValue
      */
     public function testDefaultValue()
     {
         $ft = new DateAndTime();
-        $value = $ft->getDefaultValue();
+        $value = $ft->getDefaultDefaultValue();
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value',
             $value

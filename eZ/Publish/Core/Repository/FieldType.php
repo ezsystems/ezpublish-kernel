@@ -176,16 +176,8 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function getValue()
     {
-        return $this->value ?: $this->getDefaultValue();
+        return $this->value ?: $this->getDefaultDefaultValue();
     }
-
-    /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
-     *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    abstract public function getDefaultValue();
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.

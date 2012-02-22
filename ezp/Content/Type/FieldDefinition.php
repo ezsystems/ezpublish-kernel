@@ -106,7 +106,7 @@ class FieldDefinition extends Model
             )
         );
         $this->properties->fieldTypeConstraints->fieldSettings = $this->type->getFieldTypeSettings();
-        $this->defaultValue = $this->type->getDefaultValue();
+        $this->defaultValue = $this->type->getDefaultDefaultValue();
     }
 
     /**

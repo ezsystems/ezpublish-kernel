@@ -49,7 +49,7 @@ class Type extends FieldType implements OnPublish, OnCreate
      *
      * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
      */
-    public function getDefaultValue()
+    public function getDefaultDefaultValue()
     {
         $value = <<< EOF
 <?xml version="1.0" encoding="utf-8"?>

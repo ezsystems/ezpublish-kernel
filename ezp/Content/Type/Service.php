@@ -162,7 +162,7 @@ class Service extends BaseService
                 throw new InvalidArgumentValue( '$field->identifier', "{$fieldDefinition->identifier} (already exists)" );
 
             $fieldDefStruct = $fieldDefinition->getState( 'properties' );
-            $fieldDefStruct->defaultValue = $fieldDefinition->type->getDefaultValue();
+            $fieldDefStruct->defaultValue = $fieldDefinition->type->getDefaultDefaultValue();
             $struct->fieldDefinitions[] = $fieldDefStruct;
             $identifiers[] = $fieldDefStruct->identifier;
         }
@@ -449,7 +449,7 @@ class Service extends BaseService
         }
 
         $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->getDefaultValue();
+        $fieldDefStruct->defaultValue = $field->type->getDefaultDefaultValue();
         $fieldDefStruct = $this->handler->contentTypeHandler()->addFieldDefinition(
             $type->id,
             $type->status,
@@ -522,7 +522,7 @@ class Service extends BaseService
         }
 
         $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->getDefaultValue();
+        $fieldDefStruct->defaultValue = $field->type->getDefaultDefaultValue();
         $this->handler->contentTypeHandler()->updateFieldDefinition(
             $type->id,
             $type->status,

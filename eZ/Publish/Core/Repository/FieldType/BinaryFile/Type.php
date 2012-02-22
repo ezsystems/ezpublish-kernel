@@ -33,7 +33,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value
      */
-    public function getDefaultValue()
+    public function getDefaultDefaultValue()
     {
         return new Value;
     }
