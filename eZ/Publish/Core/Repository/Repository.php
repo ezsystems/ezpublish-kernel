@@ -16,6 +16,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\Core\Repository\ContentService,
     eZ\Publish\Core\Repository\LanguageService,
+    eZ\Publish\Core\Repository\TrashService,
     eZ\Publish\Core\Repository\LocationService,
     eZ\Publish\Core\Repository\SectionService,
     eZ\Publish\Core\Repository\ContentTypeService,
@@ -93,6 +94,13 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\API\Repository\LocationService
      */
     protected $locationService;
+
+    /**
+     * Instance of Trash service
+     *
+     * @var \eZ\Publish\API\Repository\TrashService
+     */
+    protected $trashService;
 
     /**
      * Instance of content type service
@@ -305,7 +313,14 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\TrashService
      */
-    public function getTrashService(){}
+    public function getTrashService()
+    {
+        if ( $this->trashService !== null )
+            return $this->trashService;
+
+        $this->trashService = new TrashService( $this, $this->persistenceHandler );
+        return $this->trashService;
+    }
 
     /**
      * Get Content Section Service
