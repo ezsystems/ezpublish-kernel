@@ -19,7 +19,14 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+
+    eZ\Publish\API\Repository\Values\Content\SearchResult,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator,
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause\FieldSortClause;
 
 /**
  * Trash service, used for managing trashed content
@@ -193,7 +200,37 @@ class TrashService implements TrashServiceInterface
      */
     public function findTrashItems( Query $query )
     {
-        //@todo: implement
+        $criterion = null;
+        if ( $query->criterion instanceof Criterion )
+            $criterion = $this->convertCriterion( $query->criterion );
+
+        $sortClauses = null;
+        if ( is_array( $query->sortClauses ) )
+        {
+            $sortClauses = array();
+            foreach ( $query->sortClauses as $sortClause )
+            {
+                $sortClauses[] = $this->convertSortClause( $sortClause );
+            }
+        }
+
+        $offset = $query->offset >= 0 ? (int) $query->offset : 0;
+        $limit = $query->limit > 0 ? (int) $query->limit : null;
+
+        $spiTrashItems = $this->persistenceHandler->trashHandler()->listTrashed( $criterion, $offset, $limit, $sortClauses );
+
+        $trashItems = array();
+        foreach ( $spiTrashItems as $spiTrashItem )
+        {
+            $trashItems[] = $this->buildDomainTrashItemObject( $spiTrashItem );
+        }
+
+        $searchResult = new SearchResult();
+        $searchResult->count = count( $trashItems );
+        $searchResult->items = $trashItems;
+        $searchResult->query = $query;
+
+        return $searchResult;
     }
 
     /**
@@ -224,5 +261,72 @@ class TrashService implements TrashServiceInterface
             'sortOrder'                => $spiTrashItem->sortOrder,
             'childrenCount'            => 0
         ) );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\Criterion
+     */
+    protected function convertCriterion( Criterion $criterion )
+    {
+        $criterionClass = get_class( $criterion );
+        $persistenceCriterionClass = explode( "\\", $criterionClass );
+        $persistenceCriterionClass = "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\" .
+                                     $persistenceCriterionClass[count( $persistenceCriterionClass ) - 1];
+
+        /** @var $persistenceCriterionClass \eZ\Publish\SPI\Persistence\Content\Query\Criterion */
+        if ( !class_exists( $persistenceCriterionClass ) )
+            throw new InvalidArgumentException( "criterion", "Criterion $persistenceCriterionClass not found" );
+
+        if ( $criterion instanceof LogicalOperator )
+        {
+            /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+            $reflectionMethod = new \ReflectionMethod( $persistenceCriterionClass, "__construct" );
+            $params = $reflectionMethod->getParameters();
+            if ( empty( $params ) )
+                return new $persistenceCriterionClass();
+
+            if ( $params[0]->isArray() )
+            {
+                $criteria = array();
+                foreach ( $criterion->criteria as $singleCriterion )
+                {
+                    $criteria[] = $this->convertCriterion( $singleCriterion );
+                }
+            }
+            else
+            {
+                $criteria = $this->convertCriterion( $criterion->criteria[0] );
+            }
+
+            return new $persistenceCriterionClass( $criteria );
+        }
+
+        return $persistenceCriterionClass::createFromQueryBuilder( $criterion->target, $criterion->operator, $criterion->value );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\SortClause
+     */
+    protected function convertSortClause( SortClause $sortClause )
+    {
+        $sortClauseClass = get_class( $sortClause );
+        $persistenceSortClauseClass = explode( "\\", $sortClauseClass );
+        $persistenceSortClauseClass = "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause\\" .
+                                      $persistenceSortClauseClass[count( $persistenceSortClauseClass ) - 1];
+
+        if ( !class_exists( $persistenceSortClauseClass ) )
+            throw new InvalidArgumentException( "sort clause", "Sort clause $persistenceSortClauseClass not found" );
+
+        if ( $sortClause instanceof FieldSortClause )
+        {
+            $targetData = $sortClause->targetData;
+            return new $persistenceSortClauseClass( $targetData->typeIdentifier, $targetData->fieldIdentifier, $sortClause->direction );
+        }
+
+        return new $persistenceSortClauseClass( $sortClause->direction );
     }
 }
