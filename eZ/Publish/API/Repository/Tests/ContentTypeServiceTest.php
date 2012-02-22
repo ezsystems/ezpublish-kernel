@@ -1837,6 +1837,65 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
+     * Test for the publishContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
+     * 
+     */
+    public function testPublishContentTypeDraft()
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $draftId = $contentTypeDraft->id;
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        /* END: Use Case */
+
+        $publishedType = $contentTypeService->loadContentType( $draftId );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
+            $publishedType
+        );
+        $this->assertNotInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
+            $publishedType
+        );
+    }
+
+    /**
+     * Test for the publishContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testPublishContentTypeDraftThrowsBadStateException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
+    }
+
+    /**
+     * Test for the publishContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testPublishContentTypeDraftThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
+    }
+
+
+    /**
      * Test for the loadContentType() method.
      *
      * @return void
@@ -2159,41 +2218,4 @@ class ContentTypeServiceTest extends BaseTest
     {
         $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
     }
-
-    /**
-     * Test for the publishContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
-     * 
-     */
-    public function testPublishContentTypeDraft()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the publishContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testPublishContentTypeDraftThrowsBadStateException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the publishContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testPublishContentTypeDraftThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
-    }
-
 }

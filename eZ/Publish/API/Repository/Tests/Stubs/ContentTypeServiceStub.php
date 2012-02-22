@@ -623,6 +623,22 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
+     * Publish the content type and update content objects.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
+     *
+     * This method updates content objects, depending on the changed field definitions.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     */
+    public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
+    {
+        $this->types[$contentTypeDraft->id] = $contentTypeDraft->getInnerContentType();
+        unset( $this->typeDrafts[$contentTypeDraft->id] );
+    }
+
+    /**
      * Get a Content Type object by id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
@@ -633,7 +649,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentType( $contentTypeId )
     {
-        // TODO: Implement.
+        if ( isset( $this->types[$contentTypeId] ) )
+        {
+            return $this->types[$contentTypeId];
+        }
     }
 
     /**
@@ -752,21 +771,6 @@ class ContentTypeServiceStub implements ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
     public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
-    {
-        // TODO: Implement.
-    }
-
-    /**
-     * Publish the content type and update content objects.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
-     *
-     * This method updates content objects, depending on the changed field definitions.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     */
-    public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
     {
         // TODO: Implement.
     }
