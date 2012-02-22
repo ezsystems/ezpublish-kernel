@@ -849,12 +849,23 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
 
+        $unassigned = false;
         foreach ( $typeData['contentTypeGroups'] as $index => $assignedGroup )
         {
             if ( $assignedGroup->id == $contentTypeGroup->id )
             {
                 unset( $typeData['contentTypeGroups'][$index] );
+                $unassigned = true;
             }
+        }
+
+        if ( !$unassigned )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+        if ( count( $typeData['contentTypeGroups'] ) == 0 )
+        {
+            throw new Exceptions\BadStateExceptionStub;
         }
 
         $this->types[$contentType->id] = new ContentTypeStub( $typeData );

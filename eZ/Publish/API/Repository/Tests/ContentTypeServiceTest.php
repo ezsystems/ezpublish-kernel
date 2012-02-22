@@ -2616,17 +2616,21 @@ class ContentTypeServiceTest extends BaseTest
         $contentTypeService = $repository->getContentTypeService();
 
         $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
-        $assignedGroups = $folderType->contentTypeGroups;
-        $groupToUnassign = reset( $assignedGroups );
 
-        $contentTypeService->unassignContentTypeGroup( $folderType, $groupToUnassign );
+        $mediaGroup   = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
+
+        // May not unassign last group
+        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+
+        $contentTypeService->unassignContentTypeGroup( $folderType, $contentGroup );
         /* END: Use Case */
 
         $loadedType = $contentTypeService->loadContentType( $folderType->id );
 
         foreach ( $loadedType->contentTypeGroups as $assignedGroup )
         {
-            if ( $assignedGroup->id == $groupToUnassign->id )
+            if ( $assignedGroup->id == $contentGroup->id )
             {
                 $this->fail(
                     sprintf(
@@ -2659,7 +2663,17 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUnassignContentTypeGroupThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $notAssignedGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
+
+        // Throws an exception
+        $contentTypeService->unassignContentTypeGroup( $folderType, $notAssignedGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -2671,6 +2685,17 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUnassignContentTypeGroupThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $folderTypeGroups = $folderType->contentTypeGroups;
+        $lastFolderGroup = reset( $folderTypeGroups );
+
+        // Throws an exception
+        $contentTypeService->unassignContentTypeGroup( $folderType, $lastFolderGroup );
+        /* END: Use Case */
     }
 }
