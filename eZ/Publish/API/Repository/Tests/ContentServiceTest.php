@@ -34,28 +34,7 @@ class ContentServiceTest extends BaseTest
         // Create a content type
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
-
-
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
-
-        $typeCreate->mainLanguageCode = 'eng-GB';
-        $typeCreate->remoteId         = '384b94a1bd6bc06826410e284dd9684887bf56fc';
-        $typeCreate->urlAliasSchema   = 'url|scheme';
-        $typeCreate->nameSchema       = 'name|scheme';
-        $typeCreate->names            = array(
-            'eng-GB' => 'Blog post',
-            'eng-US' => 'Blog post',
-        );
-        $typeCreate->descriptions     = array(
-            'eng-GB' => 'A blog post',
-            'eng-US' => 'A blog post...',
-        );
-        $typeCreate->creatorId = 10;
-        $typeCreate->creationDate = new \DateTime();
-
-        $contentType = $contentTypeService->createContentType( $typeCreate, array( $contentTypeGroup ) );
-
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
 
         $contentService = $repository->getContentService();
 

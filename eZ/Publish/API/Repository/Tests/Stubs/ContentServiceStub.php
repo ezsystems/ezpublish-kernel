@@ -514,7 +514,6 @@ class ContentServiceStub implements ContentService
     public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode )
     {
         return new ContentCreateStructStub( $contentType, $mainLanguageCode );
-        // TODO: Implement newContentCreateStruct() method.
     }
 
     /**
