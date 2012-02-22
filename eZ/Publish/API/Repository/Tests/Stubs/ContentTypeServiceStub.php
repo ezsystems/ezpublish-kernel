@@ -696,7 +696,14 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
-        // TODO: Implement.
+        foreach ( $this->types as $contentType )
+        {
+            if ( $remoteId === $contentType->remoteId )
+            {
+                return $contentType;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**

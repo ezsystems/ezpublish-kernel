@@ -2048,7 +2048,7 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService;
      */
     public function testLoadContentTypeByIdentifier()
     {
@@ -2060,7 +2060,10 @@ class ContentTypeServiceTest extends BaseTest
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\ContentType\ContentType', $contentType );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentType',
+            $contentType
+        );
 
         return $contentType;
     }
@@ -2075,7 +2078,13 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeByIdentifierReturnsCorrectInstance( $contentType )
     {
-        $this->assertEquals( 'article', $contentType->identifier );
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $this->assertEquals(
+            $contentTypeService->loadContentType( $contentType->id ),
+            $contentType
+        );
     }
 
     /**
@@ -2107,7 +2116,40 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeByRemoteId()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByRemoteId(
+            '25b4268cdcd01921b808a0d854b877ef'
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentType',
+            $contentType
+        );
+
+        return $contentType;
+    }
+
+    /**
+     * Test for the loadContentTypeByRemoteId() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByRemoteId()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByRemoteId
+     */
+    public function testLoadContentTypeByRemoteIdReturnsCorrectInstance( $contentType )
+    {
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $this->assertEquals(
+            $contentTypeService->loadContentType( $contentType->id ),
+            $contentType
+        );
     }
 
     /**
