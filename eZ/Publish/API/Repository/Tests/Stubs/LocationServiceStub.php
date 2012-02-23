@@ -25,22 +25,32 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 class LocationService implements LocationService
 {
     /**
-     * Copies the subtree starting from $subtree as a new subtree of $targetLocation
+     * Instantiates a new location create class
      *
-     * Only the items on which the user has read access are copied.
+     * @param int $parentLocationId the parent under which the new location should be created
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the target location is a sub location of the given location
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
-     *
-     * @todo enhancement - this method should return a result structure containing the new location and a list
-     *       of locations which are not copied due to permission denials.
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function copySubtree( Location $subtree,  Location $targetParentLocation )
+    public function newLocationCreateStruct( $parentLocationId )
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
+     * Creates the new $location in the content repository for the given content
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the content is already below the specified parent
+     *                                        or the parent is a sub location of the location the content
+     *                                        or if set the remoteId exists already
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
+     *
+     */
+    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -71,6 +81,32 @@ class LocationService implements LocationService
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     public function loadLocationByRemoteId( $remoteId )
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
+     * Instantiates a new location update class
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
+     */
+    public function newLocationUpdateStruct()
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
+     * Updates $location in the content repository
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId exists already
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
+     */
+    public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -124,41 +160,6 @@ class LocationService implements LocationService
     }
 
     /**
-     * Creates the new $location in the content repository for the given content
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the content is already below the specified parent
-     *                                        or the parent is a sub location of the location the content
-     *                                        or if set the remoteId exists already
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
-     *
-     */
-    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
-    {
-        throw new \RuntimeException( "Not implemented, yet." );
-    }
-
-    /**
-     * Updates $location in the content repository
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId exists already
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
-     */
-    public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
-    {
-        throw new \RuntimeException( "Not implemented, yet." );
-    }
-
-    /**
      * Swaps the contents hold by the $location1 and $location2
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to swap content
@@ -203,6 +204,39 @@ class LocationService implements LocationService
     }
 
     /**
+     * Deletes $location and all its descendants.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     */
+    public function deleteLocation( Location $location )
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
+     * Copies the subtree starting from $subtree as a new subtree of $targetLocation
+     *
+     * Only the items on which the user has read access are copied.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the target location is a sub location of the given location
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
+     *
+     * @todo enhancement - this method should return a result structure containing the new location and a list
+     *       of locations which are not copied due to permission denials.
+     */
+    public function copySubtree( Location $subtree,  Location $targetParentLocation )
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
      * Moves the subtree to $newParentLocation
      *
      * If a user has the permission to move the location to a target location
@@ -218,39 +252,5 @@ class LocationService implements LocationService
         throw new \RuntimeException( "Not implemented, yet." );
     }
 
-    /**
-     * Deletes $location and all its descendants.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     */
-    public function deleteLocation( Location $location )
-    {
-        throw new \RuntimeException( "Not implemented, yet." );
-    }
-
-
-    /**
-     * Instantiates a new location create class
-     *
-     * @param int $parentLocationId the parent under which the new location should be created
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
-     */
-    public function newLocationCreateStruct( $parentLocationId )
-    {
-        throw new \RuntimeException( "Not implemented, yet." );
-    }
-
-    /**
-     * Instantiates a new location update class
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
-     */
-    public function newLocationUpdateStruct()
-    {
-        throw new \RuntimeException( "Not implemented, yet." );
-    }
 }
 
