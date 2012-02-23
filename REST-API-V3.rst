@@ -165,6 +165,7 @@ Creating Content
          :application/vnd.ez.api.ContentCreate+json: the ContentCreate_ schema encoded in json
          :application/vnd.ez.api.ContentCreate+xml: the ContentCreate_ schema encoded in xml
 :Response: 
+
 .. parsed-literal::
 
       HTTP/1.1 201 Created  
@@ -482,7 +483,7 @@ Load Content
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Response: 
 
-::
+.. parsed-literal::
 
       HTTP/1.1 200 OK
       Etag: "<new etag>"
@@ -548,7 +549,6 @@ Update Content
 .. parsed-literal::
 
       HTTP/1.1 200 OK
-      Content-Location: /content/objects/<newID>
       Etag: "<new etag>"
       Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
       Content-Type: <depending on accept header>
@@ -558,7 +558,7 @@ Update Content
 
 :Error Codes:
     :400: If the Input does not match the input schema definition.
-    :401: If the user is not authorized to update this object  
+    :401: If the user is not authorized to update this object
     :404: If the content id does not exist
     :412: If the current Etag does not match with the provided one in the If-Match header
     :415: If the media-type is not one of those specified in Headers
@@ -633,7 +633,9 @@ Copy content
 :Description: Creates a new content object as copy under the given parent location given in the destination header. 
 :Headers:
     :Destination: A location resource to which the content object should be copied.
-:Response: ::
+:Response: 
+
+::
 
       HTTP/1.1 201 Created
       Location: /content/objects/<newId>
@@ -641,6 +643,18 @@ Copy content
 :Error codes: 
        :401: If the user is not authorized to copy this object to the given location
        :404: If the source or destination resource do not exist.  
+
+Example
+'''''''
+
+::
+
+    COPY /content/objects/23 HTTP/1.1
+    Host: api.example.com
+    Destination: /content/locations/78
+
+    HTTP/1.1 201 Created
+    Location: /content/objects/<newId>
 
 
 Managing Versions
@@ -651,7 +665,9 @@ Get Current Version
 :Resource: /content/objects/<ID>/currentversion
 :Method: GET
 :Description: Redirects to the current version of the content object
-:Response: ::
+:Response: 
+
+::
 
     HTTP/1.1 307 Temporary Redirect
     Location: /content/objects/<ID>/version/<current_version_no>
@@ -664,45 +680,302 @@ List Versions
 `````````````
 :Resource: /content/objects/<ID>/versions
 :Method: GET
-:Description: Returns a list of all versions of the content
-:Response: 200 array of VersionInfo_
+:Description: Returns a list of all versions of the content. This method does not include fields and relations int the Version elements of the response.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.VersionList+xml:  if set the version list is returned in xml format (see VersionList_)
+         :application/vnd.ez.api.VersionList+json:  if set the version list is returned in json format 
+:Response: 
+
+.. parsed-literal::
+
+    HTTP/1.1 200 OK
+    Content-Type: <depending on accept header>
+    Content-Length: <length>
+    VersionList_
+
 :Error Codes:
      :401: If the user has no permission to read the versions
 
+XML Example
+'''''''''''
 
+::
 
-Load Content Version
-````````````````````
+    GET /content/objects/23/versions HTTP/1.1
+    Host: api.example.com
+    Accept: application/vnd.ez.api.VersionList+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.VersionList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <VersionList href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
+      <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
+        <VersionInfo>
+          <id>12</id>
+          <versionNo>1</versionNo>
+          <status>ARCHIVED</status>
+          <modificationDate>2012-02-15T12:00:00</modificationDate>
+          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml"/>
+          <creationDate>22012-02-15T12:00:00</creationDate>
+          <initialLanguageCode>eng-US</initialLanguageCode>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+        </VersionInfo>
+      </Version>
+      <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
+        <VersionInfo>
+          <id>22</id>
+          <versionNo>2</versionNo>
+          <status>PUBLISHED</status>
+          <modificationDate>2012-02-17T12:00:00</modificationDate>
+          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml"/>
+          <creationDate>22012-02-17T12:00:00</creationDate>
+          <initialLanguageCode>eng-US</initialLanguageCode>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+        </VersionInfo>
+      </Version>
+      <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml">
+        <VersionInfo>
+          <id>44</id>
+          <versionNo>3</versionNo>
+          <status>DRAFT</status>
+          <modificationDate>2012-02-19T12:00:00</modificationDate>
+          <Creator href="/users/user/65" media-type="application/vnd.ez.api.User+xml"/>
+          <creationDate>22012-02-19T12:00:00</creationDate>
+          <initialLanguageCode>fra-FR</initialLanguageCode>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+        </VersionInfo>
+      </Version>
+      <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+        <VersionInfo>
+          <id>45</id>
+          <versionNo>4</versionNo>
+          <status>DRAFT</status>
+          <modificationDate>2012-02-20T12:00:00</modificationDate>
+          <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml"/>
+          <creationDate>22012-02-20T12:00:00</creationDate>
+          <initialLanguageCode>ger-DE</initialLanguageCode>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+        </VersionInfo>
+      </Version>
+    <VersionList>
+
+Load Version
+````````````
 :Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: GET
-:Description: Loads a specific version of a content object
+:Description: Loads a specific version of a content object. This method returns  fields and relations
 :Parameters: 
     :fields: comma separated list of fields which should be returned in the response (see Content)
     :responseGroups: alternative: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
-:Response: 200 Version_
+:Headers:
+    :If-Match: <etag> Only return the version if the <etag> is the current one
+    :Accept:
+         :application/vnd.ez.api.Version+xml:  if set the version list is returned in xml format (see VersionList_)
+         :application/vnd.ez.api.Version+json:  if set the version list is returned in json format 
+:Response: 
+
+.. parsed-literal::
+
+    HTTP/1.1 200 OK
+    Content-Type: <depending on accept header>
+    Content-Length: <length>
+    Version_
+
 :Error Codes:
     :401: If the user is not authorized to read  this object
     :404: If the ID or version is not found
-	
+    :304: If the etag does not match the current one
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/objects/23/versions/4 HTTP/1.1
+    Host: api.example.com
+    Accept: application/vnd.ez.api.Version+xml
+       
+    HTTP/1.1 200 OK
+    Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
+    ETag: "a3f2e5b7"
+    Content-Type: application/vnd.ez.api.Version+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+      <VersionInfo>
+        <id>45</id>
+        <versionNo>4</versionNo>
+        <status>DRAFT</status>
+        <modificationDate>2012-02-20T12:00:00</modificationDate>
+        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <creationDate>22012-02-20T12:00:00</creationDate>
+        <initialLanguageCode>ger-DE</initialLanguageCode>
+        <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+      </VersionInfo>
+      <Fields>
+        <field>
+          <id>1234</id>
+          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>Titel</value>
+        </field>
+        <field>
+          <id>1235</id>
+          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>Dies ist eine Zusammenfassungy</value>
+        </field>
+        <field>
+          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>
+            <authors>
+              <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
+            </authors>
+          </value>
+        </field>
+      </Fields>
+      <Relations>
+        <Relation href="/content/objects/23/relations" media-type="application/vnd.ez.api.RelationList+xml">
+          <SourceContent href="/content/objects/23"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <DestinationContent href="/content/objects/45"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <RelationType>COMMON</RelationType>
+        </Relation>
+      </Relations>
+    </Version>
+
+
+            
 Update Version
 ``````````````
 :Resource: /content/objects/<ID>/version/<versionNo>
-:Method: PUT
+:Method: PATCH or POST with X-eZ-Method: PATCH
 :Description: A specific draft is updated. 
-:Request Format: application/json
 :Parameters: 
     :fields: comma separated list of fields which should be returned in the response (see Content)
     :responseGroups: alternative: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
-:Inputschema: ContentVersionInput_
-:Response: 200 Version_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Version+xml:  if set the updated version is returned in xml format (see Version_)
+         :application/vnd.ez.api.Version+json:  if set the updated version returned in json format (see Version_)
+    :If-Match: Causes to patch only if the specified etag is the current one
+    :Content-Type: 
+         :application/vnd.ez.api.VersionUpdate+json: the VersionUpdate_ schema encoded in json
+         :application/vnd.ez.api.VersionUpdate+xml: the VersionUpdate_ schema encoded in xml
+:Response: 
+
+.. parsed-literal::
+
+      HTTP/1.1 200 OK
+      Etag: "<new etag>"
+      Accept-Patch: application/vnd.ez.api.VersionUpdate+(json|xml)
+      Content-Type: <depending on accept header>
+      Content-Length: <length>
+      Version_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update this version  
     :403: If the version is not allowed to change - i.e is not a DRAFT
-    :404: If the content id or location id does not exist
+    :404: If the content id or version id does not exist
+    :412: If the current Etag does not match with the provided one in the If-Match header
+    :415: If the media-type is not one of those specified in Headers
 	
+
+XML Example
+'''''''''''
+
+::
+
+    PATCH /content/objects/23/versions/4 HTTP/1.1
+    Host: www.example.net
+    If-Match: "a3f2e5b7"
+    Accept: application/vnd.ez.api.Version+xml
+    Content-Type: application/vnd.ez.api.VersionUpdate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <VersionUpdate xmlns:p="http://ez.no/API/Values"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://ez.no/API/Values ../VersionUpdate.xsd ">
+      <modificationDate>2001-12-31T12:00:00</modificationDate>
+      <fields>
+        <field>
+          <id>1234</id>
+          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>Neuer Titel</value>
+        </field>
+        <field>
+          <id>1235</id>
+          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>Dies ist eine neue Zusammenfassungy</value>
+        </field>
+      </fields>
+    </VersionUpdate>
+
+    HTTP/1.1 200 OK
+    Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
+    ETag: "a3f2e5b9"
+    Content-Type: application/vnd.ez.api.Version+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+      <VersionInfo>
+        <id>45</id>
+        <versionNo>4</versionNo>
+        <status>DRAFT</status>
+        <modificationDate>2012-02-20T12:00:00</modificationDate>
+        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <creationDate>22012-02-20T12:00:00</creationDate>
+        <initialLanguageCode>ger-DE</initialLanguageCode>
+        <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+      </VersionInfo>
+      <Fields>
+        <field>
+          <id>1234</id>
+          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>Neuer Titel</value>
+        </field>
+        <field>
+          <id>1235</id>
+          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>Dies ist eine neuse Zusammenfassungy</value>
+        </field>
+        <field>
+          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value>
+            <authors>
+              <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
+            </authors>
+          </value>
+        </field>
+      </Fields>
+      <Relations>
+        <Relation href="/content/objects/23/relations" media-type="application/vnd.ez.api.RelationList+xml">
+          <SourceContent href="/content/objects/23"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <DestinationContent href="/content/objects/45"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <RelationType>COMMON</RelationType>
+        </Relation>
+      </Relations>
+    </Version>
+
+END OF CURRENT WORK
 
 Create a Draft from an archived or published Version
 ````````````````````````````````````````````````````
@@ -2006,104 +2279,233 @@ Content XML Schema
     </xsd:schema>
 
 
-.. _VersionInfo:
+.. _Relation:
 
-VersionInfo JSON Schema
------------------------
-
-::
-
-    {
-        "name":"VersionInfo",
-        "properties": 
-        {
-            "state": 
-            {
-                "type":"string",
-                "enum": ["DRAFT","PUBLISHED","ARCHIVED"]
-            },
-            "versionNo": {
-                "type":"integer"
-            },
-            "contentInfo": {
-                "type": { "$ref":"#ContentInfo" }
-            },
-            "creatorId": {
-                "type":"integer"
-            },
-            "createdDate": {
-                "type":"string",
-                "format":"date-time"
-            },
-            "lastModifiedDate": {
-                "type":"string",
-                "format":"date-time"
-            },   
-            "names": {
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "languageCode": {
-                 "description","the main lanugage code for the version",
-                 "type":"string",
-            },
-            "languages": {
-                 "description":"the languages occuring in fields",
-                 "type":"array",
-                 "items": {
-                     "type":"string"
-                 }
-            }
-        }
-    }
-
-.. _Version:
-
-Version JSON Schema
+Relation XML Schema
 -------------------
 
 ::
 
-    {
-        "name":"Version",
-        "properties": 
-        {
-            "versionInfo": {
-                "type": { "$ref":"#VersionInfo" }
-            },
-            "fields": {
-                "description":"the collection of fields",
-                "type":"array",
-                "items": {
-                    "type":{
-                        "name":"Field",
-                        "properties": {
-                            "fieldDef": {
-                                "type":"string",
-                            }
-                            "id": {
-                                "type":"integer"
-                            }
-                            "value": {
-                                "type":"any"
-                            }
-                            "language": {
-                                "type":"string"
-                            }
-                        }
-                    }
-                }
-            },
-            "relations": {
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#Relation" }
-                }
-            }
-        }
-    }
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values"
+      targetNamespace="http://ez.no/API/Values">
+
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:simpleType name="relationType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="COMMON" />
+          <xsd:enumeration value="LINK" />
+          <xsd:enumeration value="EMBED" />
+          <xsd:enumeration value="ATTRIBUTE" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:complexType name="relationValueType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="SourceContent" type="ref" />
+              <xsd:element name="DestinationContent" type="ref" />
+              <xsd:element name="RelationType" type="relationType" />
+              <xsd:element name="SourceFieldDefinitionIdentifier"
+                type="xsd:string" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="Realtion" type="relationValueType"></xsd:element>
+    </xsd:schema>
+
+
+.. _Version:
+
+Version XML Schema
+------------------
+
+VersionInfo
+~~~~~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:simpleType name="versionStatus">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="DRAFT" />
+          <xsd:enumeration value="PUBLISHED" />
+          <xsd:enumeration value="ARCHIVED" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="versionInfoType">
+        <xsd:all>
+          <xsd:element name="id" type="xsd:int">
+            <xsd:annotation>
+              <xsd:documentation>
+                The version id.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="versionNo" type="xsd:int">
+            <xsd:annotation>
+              <xsd:documentation>
+                The version number.
+                This is the version
+                number, which only
+                increments in scope of a single Content
+                object.
+                    </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="status" type="versionStatus" />
+          <xsd:element name="modificationDate" type="xsd:dateTime">
+            <xsd:annotation>
+              <xsd:documentation>
+                The date of the last modification of this
+                version
+                    </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="Creator" type="ref">
+            <xsd:annotation>
+              <xsd:documentation>
+                The user which has created this version
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="creationDate" type="xsd:dateTime">
+            <xsd:annotation>
+              <xsd:documentation>
+                The date this version was created
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="initialLanguageCode" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                In 4.x this is the language code which is
+                used for labeling a
+                translation.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="languageCodes" type="xsd:string"
+            minOccurs="0" maxOccurs="1" default="array()">
+            <xsd:annotation>
+              <xsd:documentation>
+                List of languages in this version
+                Reflects
+                which languages fields exists in for this version.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="Content" type="ref" />
+        </xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+
+Version
+~~~~~~~
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="VersionInfo.xsd" />
+      <xsd:include schemaLocation="Relation.xsd" />
+      <xsd:complexType name="fieldValueType">
+        <xsd:all>
+          <xsd:element name="id" type="xsd:integer" />
+          <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+          <xsd:element name="languageCode" type="xsd:string" />
+          <xsd:element name="value" type="xsd:anyType" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="versionType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="VersionInfo" type="versionInfoType" />
+              <xsd:element name="Fields" minOccurs="0">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="field" type="fieldValueType"
+                      minOccurs="1" maxOccurs="unbounded" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="Relations" minOccurs="0">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Relation" type="relationValueType"
+                      minOccurs="0" maxOccurs="unbounded" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="Version" type="versionType"></xsd:element>
+    </xsd:schema>
+
+.. _VersionList:
+
+VersionList XML Schema
+----------------------
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="Version.xsd" />
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="versionListType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="Version" type="versionType"/>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="VersionList" type="versionListType"></xsd:element>
+    </xsd:schema>
+
+
+
+.. _VersionUpdate:
+
+VersionUpdate XML Schema
+------------------------
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="versionUpdateType">
+        <xsd:all>
+          <xsd:element name="User" type="ref" minOccurs="0" />
+          <xsd:element name="modificationDate" type="xsd:dateTime"
+            minOccurs="0" />
+          <xsd:element name="fields">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="field" type="fieldInputValueType" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="VersionUpdate" type="versionUpdateType"></xsd:element>
+    </xsd:schema>
+
 
 .. _ContentCreate:
 
@@ -2140,95 +2542,36 @@ ContentCreate XML Schema
       <xsd:element name="ContentCreate" type="contentCreateType"></xsd:element>
     </xsd:schema>
 
-
 .. _ContentUpdate:
 
-ContentUpdate JSON Schema
--------------------------
+ContentUpdate XML Schema
+------------------------
 
 ::
 
-    {
-        "name":"ContentUpdate",
-        "properties": {
-            "initialLanguage" : 
-            {
-                "description":"if fields are provided in multiple languages this attribute 
-                               indicates the initial language",
-                "type":"string",
-            },
-            "alwaysAvailable": 
-            {
-                "description":"defines if the content object is always shown even it is 
-                               not translated in the requested language"
-                "type":"boolean",
-                "default": "false"
-            },
-            "remoteId": 
-            {
-                "description":"the remoteId - if missing the system creates a new one"
-                "type":"string"
-            },
-            "ownerId": {
-                "type":"integer"
-            },
-            "modified": {
-                "type":"string",
-                "format":"date-time"
-            }
-        }
-    }
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="contentUpdateType">
+        <xsd:all>
+          <xsd:element name="mainLanguageCode" type="xsd:string" minOccurs="0" />
+          <xsd:element name="Section" type="ref" minOccurs="0" />
+          <xsd:element name="MainLocation" type="ref" minOccurs="0" />
+          <xsd:element name="Owner" type="ref" minOccurs="0" />
+          <xsd:element name="alwaysAvailable" type="xsd:boolean"
+            default="true" minOccurs="0" />
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="modificationDate" type="xsd:dateTime"
+            minOccurs="0" />
+          <xsd:element name="publishDate" type="xsd:dateTime"
+            minOccurs="0" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ContentUpdate" type="contentUpdateType"></xsd:element>
+    </xsd:schema>
 
-.. _ContentVersionInput:
-
-ContentVersionInput JSON Schema
--------------------------------
-
-::
-
-    {
-        "name":"ContentVersionInput",
-        "properties": {
-            "userId": {
-                "description":"if not given the current authenticated user is used",
-                "type":"integer"
-            },
-            "date": {
-                "description":"if not given the current date is used as creation date or modified date",
-                "type":"string",
-                "format":"date-time"
-            },
-            "fields": 
-            {
-                "description":"the collection of fields",
-                "type":"array",
-                "items": 
-                {
-                    "type":
-                     {
-                        "name":"FieldValue",
-                         "properties": 
-                         {
-                             "fieldDef": 
-                             {
-                                 "type":"string",
-                                 "required":true
-                             }
-                             "value": {
-                                 "description":"The value in a format according to the 
-                                                field type of the field definition"
-                                 "type":"any"
-                             }
-                             "language": {
-                                 "type":"string"
-                             }
-                         }
-                      
-                     }
-                }
-            }
-        }
-    }
 
 Specific Field type formats
 ---------------------------
@@ -2774,38 +3117,6 @@ Section JSON Schema
                   "type":"string"
                }
       }
-    }
-
-.. _Relation:
-
-Relation JSON Schema
---------------------
-
-::
-
-    {
-       "name":"Relation",
-       "properties": {
-               "relationType": {
-                   "type":"string",
-                   "enum": ["COMMON","EMBED","LINK","ATTRIBUTE"]
-                },
-               "id": {
-                   "type":"integer"
-                },
-               "contentId": {
-                   "type":"integer"
-                },
-               "versionId": {
-                   "type":"integer"
-                },
-               "destinationContentId": {
-                   "type":"integer"
-                },
-               "fieldDefinitionId": {
-                   "type":"integer"
-                }
-       }
     }
 
 .. _ContentTypeGroup:
