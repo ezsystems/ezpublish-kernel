@@ -3,6 +3,7 @@ namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+
 /**
  * This class represents a user group to role assignment
  */

@@ -12,7 +12,7 @@ abstract class ContentCreateStruct extends ValueObject
     /**
      * The content type for which the new content is created
      *
-     * @var ContentType
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public $contentType;
 

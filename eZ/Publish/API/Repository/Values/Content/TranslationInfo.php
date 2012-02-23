@@ -6,11 +6,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
- *
- * 5.x this class is used for reading and writing translation informations into the repository
- *
+ * 5.x this class is used for reading and writing translation information into the repository
  */
-class TranslationInfo extends ValueObject
+abstract class TranslationInfo extends ValueObject
 {
     /**
      * the language code of the source language of the translation
@@ -29,21 +27,21 @@ class TranslationInfo extends ValueObject
     /**
      * the source version this translation is based on
      *
-     * @var VersionInfo
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public $srcVersionInfo;
 
     /**
      * the destination version this translation is placed in
      *
-     * @var VersionInfo
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public $destinationVersionInfo;
 
     /**
      * Returns $srcVersionInfo->getContentInfo()
      *
-     * @return ContentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     abstract public function getContentInfo();
 }

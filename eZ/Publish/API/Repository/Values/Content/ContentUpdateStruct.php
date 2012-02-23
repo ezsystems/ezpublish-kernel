@@ -1,13 +1,17 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\Content;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This class is used for updating the fields of a content object draft
  */
 abstract class ContentUpdateStruct extends ValueObject
 {
     /**
-     * @var integer modifier of the new version. If not set the current authenticated user is used.
+     * modifier of the new version. If not set the current authenticated user is used.
+     *
+     * @var integer
      */
     public $userId;
 

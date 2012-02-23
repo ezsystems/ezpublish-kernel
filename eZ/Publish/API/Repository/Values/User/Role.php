@@ -1,11 +1,11 @@
 <?php
-
 namespace eZ\Publish\API\Repository\Values\User;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a role
- * 
+ *
  * @property-read mixed $id the internal id of the role
  * @property-read string $identifier the identifier of the role
  * @property-read string $mainLanguageCode 5.0, the main language of the role names and description used for fallback.
@@ -26,7 +26,7 @@ abstract class Role extends ValueObject
      * @var string
      */
     protected $identifier;
-    
+
    /**
      * the main language code
      *
@@ -37,7 +37,6 @@ abstract class Role extends ValueObject
     protected $mainLanguageCode;
 
     /**
-     *
      * This method returns the human readable name in all provided languages
      * of the role
      *
@@ -87,11 +86,11 @@ abstract class Role extends ValueObject
      * @return string the description for the given language or null if none exists.
      */
     abstract public function getDescription( $languageCode );
-    
 
     /**
      * returns the list of policies of this role
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Policy}
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     abstract public function getPolicies();
 }

@@ -5,7 +5,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a policy value
- * 
+ *
  * @property-read int $id internal id of the policy
  * @property-read int $roleId the role id this policy belongs to
  * @property-read string $module Name of module, associated with the Policy
@@ -46,8 +46,7 @@ abstract class Policy extends ValueObject
     protected $function;
 
     /**
-     *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Limitation }
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     abstract public function getLimitations();
 }

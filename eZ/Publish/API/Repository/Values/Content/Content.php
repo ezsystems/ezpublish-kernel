@@ -29,7 +29,7 @@ abstract class Content extends ValueObject
      * returns the ContentInfo for this version
      * convenience getter for getVersionInfo()->getContentInfo()
      *
-     * @return ContentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     abstract public function getContentInfo();
 
@@ -37,7 +37,7 @@ abstract class Content extends ValueObject
      * returns the ContentType for content to which this version belongs
      * convenience getter for getContentInfo()->getContentType()
      *
-     * @return ContentType
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     abstract public function getContentType();
 
@@ -49,7 +49,7 @@ abstract class Content extends ValueObject
      * On non translatable fields this method ignores the languageCode parameter.
      *
      * @param string $fieldDefIdentifier
-     * @param string $languageCode
+     * @param string|null $languageCode
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
@@ -58,14 +58,14 @@ abstract class Content extends ValueObject
     /**
      * returns the outgoing relations
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     abstract public function getRelations();
 
     /**
      * This method returns the complete fields collection
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[]
      */
     abstract public function getFields();
 
@@ -76,7 +76,7 @@ abstract class Content extends ValueObject
      *
      * @param string $languageCode
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[]
      */
     abstract public function getFieldsByLanguage( $languageCode = null );
 }

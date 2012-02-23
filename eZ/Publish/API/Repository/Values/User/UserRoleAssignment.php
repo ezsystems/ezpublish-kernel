@@ -4,7 +4,6 @@ namespace eZ\Publish\API\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- *
  * This class represents a user to role assignment
  */
 abstract class UserRoleAssignment extends RoleAssignment
