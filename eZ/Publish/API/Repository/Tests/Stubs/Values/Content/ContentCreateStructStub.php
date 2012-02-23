@@ -58,6 +58,11 @@ class ContentCreateStructStub extends ContentCreateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
+        if ( null === $language && $this->contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable )
+        {
+            $language = $this->mainLanguageCode;
+        }
+
         $this->fields[] = new Field(
             array(
                 'fieldDefIdentifier'  =>  $fieldDefIdentifier,
