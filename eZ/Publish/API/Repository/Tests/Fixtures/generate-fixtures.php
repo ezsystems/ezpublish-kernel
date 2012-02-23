@@ -20,13 +20,14 @@ if ( false === isset( $argv[1] ) || false === isset( $argv[2] ) )
 $fixture = include $argv[1];
 
 writeFixtureFile( generateContentTypeGroupFixture( $fixture ), 'ContentTypeGroup', $argv[2] );
-echo generateContentTypeFixture( $fixture );
+// echo generateContentTypeFixture( $fixture );
 writeFixtureFile( generateContentTypeFixture( $fixture ), 'ContentType', $argv[2] );
 writeFixtureFile( generateSectionFixture( $fixture ), 'Section', $argv[2] );
 writeFixtureFile( generateLanguageFixture( $fixture ), 'Language', $argv[2] );
 writeFixtureFile( generateUserFixture( $fixture ), 'User', $argv[2] );
 writeFixtureFile( generateUserGroupFixture( $fixture ), 'UserGroup', $argv[2] );
 writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
+writeFixtureFile( generateContentInfoFixture( $fixture ), 'ContentInfo', $argv[2] );
 
 function generateContentTypeGroupFixture( array $fixture )
 {
@@ -179,6 +180,61 @@ function generateSectionFixture( array $fixture )
         generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Section', $sections ),
         generateMapping( $identifiers ),
         $nextId
+    );
+}
+
+function generateContentInfoFixture( array $fixture )
+{
+    $nextId       = 0;
+    $contentInfos = array();
+
+    $languageCodes = array();
+    foreach ( getFixtureTable( 'ezcontent_language', $fixture ) as $data )
+    {
+        $languageCodes[$data['id']] = $data['locale'];
+    }
+
+    foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
+    {
+        $contentInfos[$data['id']] = array(
+            'contentId' => $data['id'],
+            'name' => $data['name'],
+            'contentType' => createRepoCall(
+                'ContentTypeService',
+                'getContentTypeById',
+                array( $data['contentclass_id'] )
+            ),
+            'sectionId' => $data['section_id'],
+            'currentVersionNo' => $data['current_version'],
+            'published' => ( $data['published'] != 0 ),
+            'ownerId' => $data['owner_id'],
+            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'publishedDate' => 'new \DateTime( "@' . $data['published'] . '" )',
+            'alwaysAvailable' => (boolean) ( $data['language_mask'] & 1 ),
+            'remoteId' => $data['remote_id'],
+            'mainLanguageCode' => $languageCodes[$data['initial_language_id']],
+        );
+        $nextId = max( $nextId, $data['id'] );
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $contentInfos ),
+        generateMapping( $languageCodes ),
+        $nextId
+    );
+}
+
+function createRepoCall( $serviceName, $methodName, array $params )
+{
+    foreach ( $params as $id => $param )
+    {
+        $params[$id] = valueToString( $param );
+    }
+    return sprintf(
+        '$this->repository->get%s->%s( %s )',
+        $serviceName,
+        $methodName,
+        implode( ', ', $params )
     );
 }
 
@@ -354,7 +410,8 @@ function generateValueObjects( $class, array $objects )
 
 function generateValueObject( $class, array $object )
 {
-    $code = '        ' . $object['id'] . '  =>  new ' . $class . '(' . PHP_EOL .
+    $id = isset( $object['id'] ) ? $object['id'] : $object['contentId'];
+    $code = '        ' . $id . '  =>  new ' . $class . '(' . PHP_EOL .
             '            array(' . PHP_EOL;
     foreach ( $object as $name => $value )
     {
@@ -382,7 +439,7 @@ function valueToString( $value, $indent = 4 )
     {
         $value = 'null';
     }
-    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) && 0 !== strpos( $value, '$scopeValues[' ) && 0 !== strpos( $value, 'array(' ) )
+    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) && 0 !== strpos( $value, '$scopeValues[' ) && 0 !== strpos( $value, 'array(' ) && 0 !== strpos( $value, '$this->' ) )
     {
         $value = '"' . str_replace( '"', '\"', $value ) . '"';
     }
