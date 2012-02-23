@@ -5,7 +5,7 @@ return array(
             array(
                 "contentId"  =>  4,
                 "name"  =>  "Users",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 3 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 3 ),
                 "sectionId"  =>  2,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -21,7 +21,7 @@ return array(
             array(
                 "contentId"  =>  10,
                 "name"  =>  "Anonymous User",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 4 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 4 ),
                 "sectionId"  =>  2,
                 "currentVersionNo"  =>  2,
                 "published"  =>  true,
@@ -37,7 +37,7 @@ return array(
             array(
                 "contentId"  =>  11,
                 "name"  =>  "Members",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 3 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 3 ),
                 "sectionId"  =>  2,
                 "currentVersionNo"  =>  2,
                 "published"  =>  true,
@@ -53,7 +53,7 @@ return array(
             array(
                 "contentId"  =>  12,
                 "name"  =>  "Administrator users",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 3 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 3 ),
                 "sectionId"  =>  2,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -69,7 +69,7 @@ return array(
             array(
                 "contentId"  =>  13,
                 "name"  =>  "Editors",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 3 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 3 ),
                 "sectionId"  =>  2,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -85,7 +85,7 @@ return array(
             array(
                 "contentId"  =>  14,
                 "name"  =>  "Administrator User",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 4 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 4 ),
                 "sectionId"  =>  2,
                 "currentVersionNo"  =>  4,
                 "published"  =>  true,
@@ -101,7 +101,7 @@ return array(
             array(
                 "contentId"  =>  41,
                 "name"  =>  "Media",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -117,7 +117,7 @@ return array(
             array(
                 "contentId"  =>  42,
                 "name"  =>  "Anonymous Users",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 3 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 3 ),
                 "sectionId"  =>  2,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -133,7 +133,7 @@ return array(
             array(
                 "contentId"  =>  45,
                 "name"  =>  "Setup",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  4,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -149,7 +149,7 @@ return array(
             array(
                 "contentId"  =>  49,
                 "name"  =>  "Images",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -165,7 +165,7 @@ return array(
             array(
                 "contentId"  =>  50,
                 "name"  =>  "Files",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -181,7 +181,7 @@ return array(
             array(
                 "contentId"  =>  51,
                 "name"  =>  "Multimedia",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -197,7 +197,7 @@ return array(
             array(
                 "contentId"  =>  52,
                 "name"  =>  "Common INI settings",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 14 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 14 ),
                 "sectionId"  =>  4,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -213,7 +213,7 @@ return array(
             array(
                 "contentId"  =>  54,
                 "name"  =>  "Website Interface",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 15 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 15 ),
                 "sectionId"  =>  5,
                 "currentVersionNo"  =>  2,
                 "published"  =>  true,
@@ -229,7 +229,7 @@ return array(
             array(
                 "contentId"  =>  56,
                 "name"  =>  "Design",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  5,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -245,7 +245,7 @@ return array(
             array(
                 "contentId"  =>  57,
                 "name"  =>  "Banners",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -261,7 +261,7 @@ return array(
             array(
                 "contentId"  =>  58,
                 "name"  =>  "Woman (Communities)",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 42 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 42 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -277,7 +277,7 @@ return array(
             array(
                 "contentId"  =>  59,
                 "name"  =>  "Woman (Frontpage)",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 42 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 42 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -293,7 +293,7 @@ return array(
             array(
                 "contentId"  =>  60,
                 "name"  =>  "Woman (Products)",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 42 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 42 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -309,7 +309,7 @@ return array(
             array(
                 "contentId"  =>  61,
                 "name"  =>  "Woman (Partners)",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 42 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 42 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -325,7 +325,7 @@ return array(
             array(
                 "contentId"  =>  62,
                 "name"  =>  "Pencils (Support)",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 42 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 42 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -341,7 +341,7 @@ return array(
             array(
                 "contentId"  =>  63,
                 "name"  =>  "Woman (Training)",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 42 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 42 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -357,7 +357,7 @@ return array(
             array(
                 "contentId"  =>  64,
                 "name"  =>  "Woman (Solutions)",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 42 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 42 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -373,7 +373,7 @@ return array(
             array(
                 "contentId"  =>  65,
                 "name"  =>  "Home",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 23 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 23 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -389,7 +389,7 @@ return array(
             array(
                 "contentId"  =>  66,
                 "name"  =>  "rest_api",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -405,7 +405,7 @@ return array(
             array(
                 "contentId"  =>  67,
                 "name"  =>  "Products",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 23 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 23 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -421,7 +421,7 @@ return array(
             array(
                 "contentId"  =>  68,
                 "name"  =>  "Software",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -437,7 +437,7 @@ return array(
             array(
                 "contentId"  =>  69,
                 "name"  =>  "OS Type I",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 21 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 21 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -453,7 +453,7 @@ return array(
             array(
                 "contentId"  =>  70,
                 "name"  =>  "Boxes",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -469,7 +469,7 @@ return array(
             array(
                 "contentId"  =>  71,
                 "name"  =>  "CD/DVD Box I",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 21 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 21 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -485,7 +485,7 @@ return array(
             array(
                 "contentId"  =>  72,
                 "name"  =>  "CD/DVD Box II",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 21 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 21 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -501,7 +501,7 @@ return array(
             array(
                 "contentId"  =>  73,
                 "name"  =>  "CD/DVD Box III",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 21 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 21 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -517,7 +517,7 @@ return array(
             array(
                 "contentId"  =>  74,
                 "name"  =>  "Products sheets",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -533,7 +533,7 @@ return array(
             array(
                 "contentId"  =>  75,
                 "name"  =>  "Solutions",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 23 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 23 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -549,7 +549,7 @@ return array(
             array(
                 "contentId"  =>  76,
                 "name"  =>  "Web publishing",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -565,7 +565,7 @@ return array(
             array(
                 "contentId"  =>  77,
                 "name"  =>  "Fusce sagittis sagittis",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -581,7 +581,7 @@ return array(
             array(
                 "contentId"  =>  78,
                 "name"  =>  "Etiam posuere sodales arcu",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -597,7 +597,7 @@ return array(
             array(
                 "contentId"  =>  79,
                 "name"  =>  "In hac habitasse platea",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -613,7 +613,7 @@ return array(
             array(
                 "contentId"  =>  80,
                 "name"  =>  "Content management",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -629,7 +629,7 @@ return array(
             array(
                 "contentId"  =>  81,
                 "name"  =>  "Fusce sagittis sagittis urna",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -645,7 +645,7 @@ return array(
             array(
                 "contentId"  =>  82,
                 "name"  =>  "Class aptent taciti sociosqu",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -661,7 +661,7 @@ return array(
             array(
                 "contentId"  =>  83,
                 "name"  =>  "Aenean malesuada ligula",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -677,7 +677,7 @@ return array(
             array(
                 "contentId"  =>  84,
                 "name"  =>  "Training",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 23 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 23 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -693,7 +693,7 @@ return array(
             array(
                 "contentId"  =>  85,
                 "name"  =>  "Certification",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -709,7 +709,7 @@ return array(
             array(
                 "contentId"  =>  86,
                 "name"  =>  "Professional workshops",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -725,7 +725,7 @@ return array(
             array(
                 "contentId"  =>  87,
                 "name"  =>  "Etiam sodales mauris",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -741,7 +741,7 @@ return array(
             array(
                 "contentId"  =>  88,
                 "name"  =>  "Class aptent taciti",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -757,7 +757,7 @@ return array(
             array(
                 "contentId"  =>  89,
                 "name"  =>  "Duis auctor vehicula erat",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -773,7 +773,7 @@ return array(
             array(
                 "contentId"  =>  90,
                 "name"  =>  "Events and seminars",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 41 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 41 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -789,7 +789,7 @@ return array(
             array(
                 "contentId"  =>  91,
                 "name"  =>  "Self-paced courses",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -805,7 +805,7 @@ return array(
             array(
                 "contentId"  =>  92,
                 "name"  =>  "Instructor-led courses",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -821,7 +821,7 @@ return array(
             array(
                 "contentId"  =>  93,
                 "name"  =>  "Additional learning resources",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -837,7 +837,7 @@ return array(
             array(
                 "contentId"  =>  94,
                 "name"  =>  "Support",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 23 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 23 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -853,7 +853,7 @@ return array(
             array(
                 "contentId"  =>  95,
                 "name"  =>  "Knowledgebase",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -869,7 +869,7 @@ return array(
             array(
                 "contentId"  =>  96,
                 "name"  =>  "Sed suscipit",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -885,7 +885,7 @@ return array(
             array(
                 "contentId"  =>  97,
                 "name"  =>  "Ut interdum",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -901,7 +901,7 @@ return array(
             array(
                 "contentId"  =>  98,
                 "name"  =>  "Documentation",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -917,7 +917,7 @@ return array(
             array(
                 "contentId"  =>  99,
                 "name"  =>  "Mauris pretium",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -933,7 +933,7 @@ return array(
             array(
                 "contentId"  =>  100,
                 "name"  =>  "Aliquam posuere",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -949,7 +949,7 @@ return array(
             array(
                 "contentId"  =>  101,
                 "name"  =>  "Books",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -965,7 +965,7 @@ return array(
             array(
                 "contentId"  =>  102,
                 "name"  =>  "Aliquam pulvinar suscipit tellus",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -981,7 +981,7 @@ return array(
             array(
                 "contentId"  =>  103,
                 "name"  =>  "Customer Service",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -997,7 +997,7 @@ return array(
             array(
                 "contentId"  =>  104,
                 "name"  =>  "Support Programs",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1013,7 +1013,7 @@ return array(
             array(
                 "contentId"  =>  105,
                 "name"  =>  "Getting started",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1029,7 +1029,7 @@ return array(
             array(
                 "contentId"  =>  106,
                 "name"  =>  "Tutorials for",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1045,7 +1045,7 @@ return array(
             array(
                 "contentId"  =>  107,
                 "name"  =>  "Get involved",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1061,7 +1061,7 @@ return array(
             array(
                 "contentId"  =>  108,
                 "name"  =>  "How to use eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1077,7 +1077,7 @@ return array(
             array(
                 "contentId"  =>  109,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1093,7 +1093,7 @@ return array(
             array(
                 "contentId"  =>  110,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1109,7 +1109,7 @@ return array(
             array(
                 "contentId"  =>  111,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1125,7 +1125,7 @@ return array(
             array(
                 "contentId"  =>  112,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1141,7 +1141,7 @@ return array(
             array(
                 "contentId"  =>  113,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1157,7 +1157,7 @@ return array(
             array(
                 "contentId"  =>  114,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1173,7 +1173,7 @@ return array(
             array(
                 "contentId"  =>  115,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1189,7 +1189,7 @@ return array(
             array(
                 "contentId"  =>  116,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1205,7 +1205,7 @@ return array(
             array(
                 "contentId"  =>  117,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1221,7 +1221,7 @@ return array(
             array(
                 "contentId"  =>  118,
                 "name"  =>  "How to manage eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1237,7 +1237,7 @@ return array(
             array(
                 "contentId"  =>  119,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1253,7 +1253,7 @@ return array(
             array(
                 "contentId"  =>  120,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1269,7 +1269,7 @@ return array(
             array(
                 "contentId"  =>  121,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1285,7 +1285,7 @@ return array(
             array(
                 "contentId"  =>  122,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1301,7 +1301,7 @@ return array(
             array(
                 "contentId"  =>  123,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1317,7 +1317,7 @@ return array(
             array(
                 "contentId"  =>  124,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1333,7 +1333,7 @@ return array(
             array(
                 "contentId"  =>  125,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1349,7 +1349,7 @@ return array(
             array(
                 "contentId"  =>  126,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1365,7 +1365,7 @@ return array(
             array(
                 "contentId"  =>  127,
                 "name"  =>  "How to develop with eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1381,7 +1381,7 @@ return array(
             array(
                 "contentId"  =>  128,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1397,7 +1397,7 @@ return array(
             array(
                 "contentId"  =>  129,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1413,7 +1413,7 @@ return array(
             array(
                 "contentId"  =>  130,
                 "name"  =>  "Adding Siteaccesses in eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1429,7 +1429,7 @@ return array(
             array(
                 "contentId"  =>  131,
                 "name"  =>  "New features",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1445,7 +1445,7 @@ return array(
             array(
                 "contentId"  =>  132,
                 "name"  =>  "Improved user registration workflow",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1461,7 +1461,7 @@ return array(
             array(
                 "contentId"  =>  133,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1477,7 +1477,7 @@ return array(
             array(
                 "contentId"  =>  134,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1493,7 +1493,7 @@ return array(
             array(
                 "contentId"  =>  135,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1509,7 +1509,7 @@ return array(
             array(
                 "contentId"  =>  136,
                 "name"  =>  "Improved block editing",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1525,7 +1525,7 @@ return array(
             array(
                 "contentId"  =>  137,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1541,7 +1541,7 @@ return array(
             array(
                 "contentId"  =>  138,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1557,7 +1557,7 @@ return array(
             array(
                 "contentId"  =>  139,
                 "name"  =>  "Improved front-end editing",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1573,7 +1573,7 @@ return array(
             array(
                 "contentId"  =>  140,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1589,7 +1589,7 @@ return array(
             array(
                 "contentId"  =>  141,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1605,7 +1605,7 @@ return array(
             array(
                 "contentId"  =>  142,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1621,7 +1621,7 @@ return array(
             array(
                 "contentId"  =>  143,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1637,7 +1637,7 @@ return array(
             array(
                 "contentId"  =>  144,
                 "name"  =>  "FastCGI",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1653,7 +1653,7 @@ return array(
             array(
                 "contentId"  =>  145,
                 "name"  =>  "Support for Red Hat Enterprise",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1669,7 +1669,7 @@ return array(
             array(
                 "contentId"  =>  146,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1685,7 +1685,7 @@ return array(
             array(
                 "contentId"  =>  147,
                 "name"  =>  "Canonical links",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1701,7 +1701,7 @@ return array(
             array(
                 "contentId"  =>  148,
                 "name"  =>  "Asynchronous publishing",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1717,7 +1717,7 @@ return array(
             array(
                 "contentId"  =>  149,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1733,7 +1733,7 @@ return array(
             array(
                 "contentId"  =>  150,
                 "name"  =>  "REST API interface",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1749,7 +1749,7 @@ return array(
             array(
                 "contentId"  =>  151,
                 "name"  =>  "eZ Publish Enterprise",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1765,7 +1765,7 @@ return array(
             array(
                 "contentId"  =>  152,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1781,7 +1781,7 @@ return array(
             array(
                 "contentId"  =>  153,
                 "name"  =>  "graphics1",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1797,7 +1797,7 @@ return array(
             array(
                 "contentId"  =>  154,
                 "name"  =>  "Partners",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 23 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 23 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1813,7 +1813,7 @@ return array(
             array(
                 "contentId"  =>  155,
                 "name"  =>  "Partner News",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1829,7 +1829,7 @@ return array(
             array(
                 "contentId"  =>  156,
                 "name"  =>  "Pellentesque quam mauris",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1845,7 +1845,7 @@ return array(
             array(
                 "contentId"  =>  157,
                 "name"  =>  "Penatibus et magnis dis",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1861,7 +1861,7 @@ return array(
             array(
                 "contentId"  =>  158,
                 "name"  =>  "News",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1877,7 +1877,7 @@ return array(
             array(
                 "contentId"  =>  159,
                 "name"  =>  "Curabitur hendrerit dignissim",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1893,7 +1893,7 @@ return array(
             array(
                 "contentId"  =>  160,
                 "name"  =>  "Proin condimentum risus",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1909,7 +1909,7 @@ return array(
             array(
                 "contentId"  =>  161,
                 "name"  =>  "Morbi tristique senectus",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1925,7 +1925,7 @@ return array(
             array(
                 "contentId"  =>  162,
                 "name"  =>  "Partner Products",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1941,7 +1941,7 @@ return array(
             array(
                 "contentId"  =>  163,
                 "name"  =>  "Partners",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1957,7 +1957,7 @@ return array(
             array(
                 "contentId"  =>  164,
                 "name"  =>  "Neque orci malesuada felis",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  6,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1973,7 +1973,7 @@ return array(
             array(
                 "contentId"  =>  165,
                 "name"  =>  "Community",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 23 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 23 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -1989,7 +1989,7 @@ return array(
             array(
                 "contentId"  =>  166,
                 "name"  =>  "Forum",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 37 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 37 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2005,7 +2005,7 @@ return array(
             array(
                 "contentId"  =>  167,
                 "name"  =>  "Nulla vitae tellus sit amet",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 38 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 38 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2021,7 +2021,7 @@ return array(
             array(
                 "contentId"  =>  168,
                 "name"  =>  "Ut mollis sodales nibh",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 38 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 38 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2037,7 +2037,7 @@ return array(
             array(
                 "contentId"  =>  169,
                 "name"  =>  "Nam risus leo",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 38 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 38 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2053,7 +2053,7 @@ return array(
             array(
                 "contentId"  =>  170,
                 "name"  =>  "Wiki",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2069,7 +2069,7 @@ return array(
             array(
                 "contentId"  =>  171,
                 "name"  =>  "Sed suscipit",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2085,7 +2085,7 @@ return array(
             array(
                 "contentId"  =>  172,
                 "name"  =>  "Ut interdum",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2101,7 +2101,7 @@ return array(
             array(
                 "contentId"  =>  173,
                 "name"  =>  "Fusce pulvinar",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2117,7 +2117,7 @@ return array(
             array(
                 "contentId"  =>  174,
                 "name"  =>  "Duis id tortor",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2133,7 +2133,7 @@ return array(
             array(
                 "contentId"  =>  175,
                 "name"  =>  "Curabitur lacinia",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 24 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 24 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2149,7 +2149,7 @@ return array(
             array(
                 "contentId"  =>  176,
                 "name"  =>  "Pictures",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 35 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 35 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2165,7 +2165,7 @@ return array(
             array(
                 "contentId"  =>  177,
                 "name"  =>  "Ivo on eZ Tags",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2181,7 +2181,7 @@ return array(
             array(
                 "contentId"  =>  178,
                 "name"  =>  "Are you ready for the Community day?",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2197,7 +2197,7 @@ return array(
             array(
                 "contentId"  =>  179,
                 "name"  =>  "Let's work together!",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2213,7 +2213,7 @@ return array(
             array(
                 "contentId"  =>  180,
                 "name"  =>  "The Mediterranean seen from Nice!",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2229,7 +2229,7 @@ return array(
             array(
                 "contentId"  =>  181,
                 "name"  =>  "Hotel lobby at Isola2000",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2245,7 +2245,7 @@ return array(
             array(
                 "contentId"  =>  182,
                 "name"  =>  "Alexander on the past, Gaby on today and tomorrow",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2261,7 +2261,7 @@ return array(
             array(
                 "contentId"  =>  183,
                 "name"  =>  "Isola2000 in white - beautiful skiing!",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2277,7 +2277,7 @@ return array(
             array(
                 "contentId"  =>  184,
                 "name"  =>  "CEO future pitch - Adaptable, open, reliable!",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2293,7 +2293,7 @@ return array(
             array(
                 "contentId"  =>  185,
                 "name"  =>  "Blog",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 19 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 19 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2309,7 +2309,7 @@ return array(
             array(
                 "contentId"  =>  186,
                 "name"  =>  "Visit Paris",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 20 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 20 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2325,7 +2325,7 @@ return array(
             array(
                 "contentId"  =>  187,
                 "name"  =>  "Paris in France",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 20 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 20 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2341,7 +2341,7 @@ return array(
             array(
                 "contentId"  =>  188,
                 "name"  =>  "Company",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2357,7 +2357,7 @@ return array(
             array(
                 "contentId"  =>  189,
                 "name"  =>  "About company",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2373,7 +2373,7 @@ return array(
             array(
                 "contentId"  =>  190,
                 "name"  =>  "New features",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2389,7 +2389,7 @@ return array(
             array(
                 "contentId"  =>  191,
                 "name"  =>  "Separate content & design in eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2405,7 +2405,7 @@ return array(
             array(
                 "contentId"  =>  192,
                 "name"  =>  "separation_of_content_and_design",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2421,7 +2421,7 @@ return array(
             array(
                 "contentId"  =>  193,
                 "name"  =>  "How to use eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2437,7 +2437,7 @@ return array(
             array(
                 "contentId"  =>  194,
                 "name"  =>  "openoffice_import_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2453,7 +2453,7 @@ return array(
             array(
                 "contentId"  =>  195,
                 "name"  =>  "translation_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2469,7 +2469,7 @@ return array(
             array(
                 "contentId"  =>  196,
                 "name"  =>  "multiupload_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2485,7 +2485,7 @@ return array(
             array(
                 "contentId"  =>  197,
                 "name"  =>  "gallery_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2501,7 +2501,7 @@ return array(
             array(
                 "contentId"  =>  198,
                 "name"  =>  "search_result_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2517,7 +2517,7 @@ return array(
             array(
                 "contentId"  =>  199,
                 "name"  =>  "ez_tool_bar_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2533,7 +2533,7 @@ return array(
             array(
                 "contentId"  =>  200,
                 "name"  =>  "quicktime_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2549,7 +2549,7 @@ return array(
             array(
                 "contentId"  =>  201,
                 "name"  =>  "web_2_0_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  3,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2565,7 +2565,7 @@ return array(
             array(
                 "contentId"  =>  202,
                 "name"  =>  "How to manage eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2581,7 +2581,7 @@ return array(
             array(
                 "contentId"  =>  203,
                 "name"  =>  "usermanagement_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2597,7 +2597,7 @@ return array(
             array(
                 "contentId"  =>  204,
                 "name"  =>  "workflow_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2613,7 +2613,7 @@ return array(
             array(
                 "contentId"  =>  205,
                 "name"  =>  "versioning_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2629,7 +2629,7 @@ return array(
             array(
                 "contentId"  =>  206,
                 "name"  =>  "datatypes_attributes_content_class_and_objects_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2645,7 +2645,7 @@ return array(
             array(
                 "contentId"  =>  207,
                 "name"  =>  "multiple_location_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2661,7 +2661,7 @@ return array(
             array(
                 "contentId"  =>  208,
                 "name"  =>  "multisite_deployment_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2677,7 +2677,7 @@ return array(
             array(
                 "contentId"  =>  209,
                 "name"  =>  "seo_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2693,7 +2693,7 @@ return array(
             array(
                 "contentId"  =>  210,
                 "name"  =>  "admin_site_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2709,7 +2709,7 @@ return array(
             array(
                 "contentId"  =>  211,
                 "name"  =>  "How to develop with eZ Publish",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2725,7 +2725,7 @@ return array(
             array(
                 "contentId"  =>  212,
                 "name"  =>  "datatypes_attributes_content_class_and_objects_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2741,7 +2741,7 @@ return array(
             array(
                 "contentId"  =>  213,
                 "name"  =>  "site_style_large",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2757,7 +2757,7 @@ return array(
             array(
                 "contentId"  =>  214,
                 "name"  =>  "REST API interface",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2773,7 +2773,7 @@ return array(
             array(
                 "contentId"  =>  215,
                 "name"  =>  "Asynchronous Publishing",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2789,7 +2789,7 @@ return array(
             array(
                 "contentId"  =>  216,
                 "name"  =>  "Canonical links",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2805,7 +2805,7 @@ return array(
             array(
                 "contentId"  =>  217,
                 "name"  =>  "Support for Red Hat Enterprise",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2821,7 +2821,7 @@ return array(
             array(
                 "contentId"  =>  218,
                 "name"  =>  "FastCGI",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 16 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 16 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2837,7 +2837,7 @@ return array(
             array(
                 "contentId"  =>  219,
                 "name"  =>  "Events",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 26 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 26 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2853,7 +2853,7 @@ return array(
             array(
                 "contentId"  =>  220,
                 "name"  =>  "Career",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2869,7 +2869,7 @@ return array(
             array(
                 "contentId"  =>  221,
                 "name"  =>  "Investors Relation",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 1 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 1 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2885,7 +2885,7 @@ return array(
             array(
                 "contentId"  =>  222,
                 "name"  =>  "Contact",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 22 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 22 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2901,7 +2901,7 @@ return array(
             array(
                 "contentId"  =>  223,
                 "name"  =>  "Morbi neque",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 25 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 25 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2917,7 +2917,7 @@ return array(
             array(
                 "contentId"  =>  224,
                 "name"  =>  "Company banner",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 30 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 30 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,
@@ -2933,7 +2933,7 @@ return array(
             array(
                 "contentId"  =>  225,
                 "name"  =>  "Partners",
-                "contentType"  =>  $this->repository->getContentTypeService->getContentTypeById( 3 ),
+                "contentType"  =>  $this->getContentTypeService()->loadContentType( 3 ),
                 "sectionId"  =>  1,
                 "currentVersionNo"  =>  1,
                 "published"  =>  true,

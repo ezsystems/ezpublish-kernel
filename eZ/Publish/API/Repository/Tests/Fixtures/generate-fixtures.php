@@ -202,7 +202,7 @@ function generateContentInfoFixture( array $fixture )
             'name' => $data['name'],
             'contentType' => createRepoCall(
                 'ContentTypeService',
-                'getContentTypeById',
+                'loadContentType',
                 array( $data['contentclass_id'] )
             ),
             'sectionId' => $data['section_id'],
@@ -269,7 +269,7 @@ function createRepoCall( $serviceName, $methodName, array $params )
         $params[$id] = valueToString( $param );
     }
     return sprintf(
-        '$this->repository->get%s->%s( %s )',
+        '$this->get%s()->%s( %s )',
         $serviceName,
         $methodName,
         implode( ', ', $params )
