@@ -206,6 +206,18 @@ class ContentServiceStub implements ContentService
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
+        $fields = array();
+        foreach ( $contentCreateStruct->fields as $field )
+        {
+            if ( false === isset( $fields[$field->fieldDefIdentifier] ) )
+            {
+                $fields[$field->fieldDefIdentifier] = array();
+            }
+            $fields[$field->fieldDefIdentifier][] = $field;
+        }
+
+        //foreach ( $contentCreateStruct->contentType->getFieldDefinitions() )
+
         $content = new ContentStub(
             array(
                 'contentId'    =>  ++$this->contentNextId,
