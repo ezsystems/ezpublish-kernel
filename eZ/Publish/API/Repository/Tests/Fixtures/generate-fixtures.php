@@ -28,6 +28,7 @@ writeFixtureFile( generateUserFixture( $fixture ), 'User', $argv[2] );
 writeFixtureFile( generateUserGroupFixture( $fixture ), 'UserGroup', $argv[2] );
 writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
 writeFixtureFile( generateContentInfoFixture( $fixture ), 'ContentInfo', $argv[2] );
+writeFixtureFile( generateLocationFixture( $fixture ), 'Location', $argv[2] );
 
 function generateContentTypeGroupFixture( array $fixture )
 {
@@ -220,6 +221,43 @@ function generateContentInfoFixture( array $fixture )
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $contentInfos ),
         generateMapping( $languageCodes ),
+        $nextId
+    );
+}
+
+function generateLocationFixture( array $fixture )
+{
+    $nextId    = 0;
+    $locations = array();
+
+    foreach ( getFixtureTable( 'ezcontentobject_tree', $fixture ) as $data )
+    {
+        $locations[$data['node_id']] = array(
+            'id'          => $data['node_id'],
+            'priority'    => $data['priority'],
+            'hidden'      => (bool) $data['is_hidden'],
+            'invisible'   => (bool) $data['is_invisible'],
+            'remoteId'    => $data['remote_id'],
+            'contentInfo' => createRepoCall(
+                'Content',
+                'loadContentInfo',
+                array( $data['contentobject_id'] )
+            ),
+            'parentId'                => $data['parent_node_id'],
+            'pathString'              => $data['path_string'],
+            'modifiedSubLocationDate' => $data['modified_subnode'],
+            'mainLocationId'          => $data['main_node_id'],
+            'depth'                   => $data['depth'],
+            'sortField'               => $data['sort_field'],
+            'sortOrder'               => $data['sort_order'],
+            'childrenCount'           => null, // Cannot be easily calculated
+
+        );
+        $nextId = max( $nextId, $data['node_id'] );
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Location', $locations ),
         $nextId
     );
 }
