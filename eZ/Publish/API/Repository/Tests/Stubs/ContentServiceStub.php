@@ -22,6 +22,7 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
@@ -216,7 +217,22 @@ class ContentServiceStub implements ContentService
             $fields[$field->fieldDefIdentifier][] = $field;
         }
 
-        //foreach ( $contentCreateStruct->contentType->getFieldDefinitions() )
+        // Now validate that all required fields
+        foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( isset( $fields[$fieldDefinition->identifier] ) )
+            {
+
+            }
+            else if ( $fieldDefinition->isRequired )
+            {
+                throw new ContentValidationExceptionStub( '@TODO: What error code should be used?' );
+            }
+            else
+            {
+
+            }
+        }
 
         $content = new ContentStub(
             array(
