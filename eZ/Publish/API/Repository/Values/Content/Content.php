@@ -43,7 +43,7 @@ abstract class Content extends ValueObject
     /**
      * returns the outgoing relations
      *
-     * @return array an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
      */
     abstract public function getRelations();
 
