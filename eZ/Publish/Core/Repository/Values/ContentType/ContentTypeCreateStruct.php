@@ -30,6 +30,6 @@ class ContentTypeCreateStruct extends APIContentTypeCreateStruct
      */
     public function addFieldDefinition( FieldDefinitionCreateStruct $fieldDef )
     {
-        $this->fieldDefinitions[$fieldDef->identifier] = $fieldDef;
+        $this->fieldDefinitions[] = $fieldDef;
     }
 }
