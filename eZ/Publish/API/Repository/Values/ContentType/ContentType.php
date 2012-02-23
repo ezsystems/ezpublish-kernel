@@ -212,7 +212,7 @@ abstract class ContentType extends ValueObject
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return array an array of {@link FieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] An array of {@link FieldDefinition}
      */
     abstract public function getFieldDefinitions();
 
@@ -220,7 +220,7 @@ abstract class ContentType extends ValueObject
      *
      * this method returns the field definition for the given identifier
      * @param $fieldDefinitionIdentifier
-     * @return FieldDefinition
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     abstract public function getFieldDefinition( $fieldDefinitionIdentifier );
 }
