@@ -338,7 +338,7 @@ class ContentServiceStub implements ContentService
                 'status'               =>  VersionInfo::STATUS_DRAFT,
                 'versionNo'            =>  1,
                 'creatorId'            =>  $this->repository->getCurrentUser()->id,
-                'creationDate'         =>  $contentCreateStruct->modificationDate,
+                'creationDate'         =>  new \DateTime(),
                 'modificationDate'     =>  $contentCreateStruct->modificationDate,
                 'languageCodes'        =>  $languageCodes,
                 'initialLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,

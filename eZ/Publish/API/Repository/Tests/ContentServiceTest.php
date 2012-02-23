@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+
 /**
  * Test case for operations in the ContentService using in memory storage.
  *
@@ -102,7 +104,7 @@ class ContentServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentSetsContentType
      */
-    public function testCreateContentSetsCorrectContentType( $content )
+    public function testCreateContentSetsExpectedContentType( $content )
     {
         $this->assertEquals( 'article_subpage', $content->contentType->identifier );
     }
@@ -128,6 +130,39 @@ class ContentServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentSetsContentInfo
+     */
+    public function testCreateContentSetsExpectedContentInfo( $content )
+    {
+        $this->assertEquals(
+            array(
+                $content->contentId,
+                true,
+                1,
+                'abcdef0123456789abcdef0123456789',
+                'eng-GB',
+                $this->getRepository()->getCurrentUser()->id,
+                false
+            ),
+            array(
+                $content->contentInfo->contentId,
+                $content->contentInfo->alwaysAvailable,
+                $content->contentInfo->currentVersionNo,
+                $content->contentInfo->remoteId,
+                $content->contentInfo->mainLanguageCode,
+                $content->contentInfo->ownerId,
+                $content->contentInfo->published
+            )
+        );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
@@ -137,6 +172,35 @@ class ContentServiceTest extends BaseTest
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\VersionInfo', $content->getVersionInfo() );
 
         return $content;
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentSetsVersionInfo
+     */
+    public function testCreateContentSetsExpectedVersionInfo( $content )
+    {
+        $this->assertEquals(
+            array(
+                'id'                   =>  $content->contentId,
+                'status'               =>  VersionInfo::STATUS_DRAFT,
+                'versionNo'            =>  1,
+                'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
+                'initialLanguageCode'  =>  'eng-GB',
+            ),
+            array(
+                'id'                   =>  $content->getVersionInfo()->id,
+                'status'               =>  $content->getVersionInfo()->status,
+                'versionNo'            =>  $content->getVersionInfo()->versionNo,
+                'creatorId'            =>  $content->getVersionInfo()->creatorId,
+                'initialLanguageCode'  =>  $content->getVersionInfo()->initialLanguageCode,
+            )
+        );
     }
 
     /**
