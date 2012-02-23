@@ -219,7 +219,7 @@ function generateContentInfoFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $contentInfos ),
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub', $contentInfos ),
         generateMapping( $languageCodes ),
         $nextId
     );
@@ -257,7 +257,7 @@ function generateLocationFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Location', $locations ),
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub', $locations ),
         $nextId
     );
 }

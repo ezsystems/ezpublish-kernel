@@ -1,7 +1,7 @@
 <?php
 return array(
     array(
-        1  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        1  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  1,
                 "priority"  =>  0,
@@ -19,7 +19,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        2  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        2  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  2,
                 "priority"  =>  0,
@@ -37,7 +37,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        5  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        5  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  5,
                 "priority"  =>  0,
@@ -55,7 +55,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        12  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        12  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  12,
                 "priority"  =>  0,
@@ -73,7 +73,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        13  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        13  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  13,
                 "priority"  =>  0,
@@ -91,7 +91,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        14  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        14  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  14,
                 "priority"  =>  0,
@@ -109,7 +109,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        15  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        15  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  15,
                 "priority"  =>  0,
@@ -127,7 +127,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        43  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        43  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  43,
                 "priority"  =>  0,
@@ -145,7 +145,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        44  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        44  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  44,
                 "priority"  =>  0,
@@ -163,7 +163,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        45  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        45  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  45,
                 "priority"  =>  0,
@@ -181,7 +181,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        48  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        48  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  48,
                 "priority"  =>  0,
@@ -199,7 +199,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        51  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        51  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  51,
                 "priority"  =>  0,
@@ -217,7 +217,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        52  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        52  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  52,
                 "priority"  =>  0,
@@ -235,7 +235,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        53  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        53  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  53,
                 "priority"  =>  0,
@@ -253,7 +253,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        54  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        54  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  54,
                 "priority"  =>  0,
@@ -271,7 +271,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        56  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        56  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  56,
                 "priority"  =>  0,
@@ -289,7 +289,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        58  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        58  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  58,
                 "priority"  =>  0,
@@ -307,7 +307,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        59  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        59  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  59,
                 "priority"  =>  0,
@@ -325,7 +325,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        60  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        60  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  60,
                 "priority"  =>  0,
@@ -343,7 +343,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        61  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        61  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  61,
                 "priority"  =>  0,
@@ -361,7 +361,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        62  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        62  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  62,
                 "priority"  =>  0,
@@ -379,7 +379,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        63  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        63  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  63,
                 "priority"  =>  0,
@@ -397,7 +397,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        64  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        64  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  64,
                 "priority"  =>  0,
@@ -415,7 +415,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        65  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        65  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  65,
                 "priority"  =>  0,
@@ -433,7 +433,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        66  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        66  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  66,
                 "priority"  =>  0,
@@ -451,7 +451,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        68  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        68  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  68,
                 "priority"  =>  0,
@@ -469,7 +469,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        69  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        69  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  69,
                 "priority"  =>  0,
@@ -487,7 +487,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        70  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        70  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  70,
                 "priority"  =>  0,
@@ -505,7 +505,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        71  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        71  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  71,
                 "priority"  =>  0,
@@ -523,7 +523,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        72  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        72  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  72,
                 "priority"  =>  0,
@@ -541,7 +541,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        73  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        73  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  73,
                 "priority"  =>  0,
@@ -559,7 +559,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        74  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        74  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  74,
                 "priority"  =>  0,
@@ -577,7 +577,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        75  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        75  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  75,
                 "priority"  =>  0,
@@ -595,7 +595,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        76  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        76  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  76,
                 "priority"  =>  0,
@@ -613,7 +613,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        77  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        77  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  77,
                 "priority"  =>  0,
@@ -631,7 +631,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        78  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        78  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  78,
                 "priority"  =>  0,
@@ -649,7 +649,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        79  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        79  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  79,
                 "priority"  =>  0,
@@ -667,7 +667,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        80  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        80  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  80,
                 "priority"  =>  0,
@@ -685,7 +685,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        81  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        81  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  81,
                 "priority"  =>  0,
@@ -703,7 +703,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        82  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        82  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  82,
                 "priority"  =>  0,
@@ -721,7 +721,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        83  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        83  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  83,
                 "priority"  =>  0,
@@ -739,7 +739,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        84  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        84  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  84,
                 "priority"  =>  0,
@@ -757,7 +757,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        85  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        85  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  85,
                 "priority"  =>  0,
@@ -775,7 +775,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        86  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        86  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  86,
                 "priority"  =>  0,
@@ -793,7 +793,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        87  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        87  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  87,
                 "priority"  =>  0,
@@ -811,7 +811,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        88  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        88  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  88,
                 "priority"  =>  0,
@@ -829,7 +829,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        89  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        89  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  89,
                 "priority"  =>  0,
@@ -847,7 +847,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        90  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        90  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  90,
                 "priority"  =>  0,
@@ -865,7 +865,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        91  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        91  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  91,
                 "priority"  =>  0,
@@ -883,7 +883,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        92  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        92  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  92,
                 "priority"  =>  0,
@@ -901,7 +901,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        93  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        93  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  93,
                 "priority"  =>  0,
@@ -919,7 +919,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        94  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        94  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  94,
                 "priority"  =>  0,
@@ -937,7 +937,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        95  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        95  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  95,
                 "priority"  =>  0,
@@ -955,7 +955,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        96  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        96  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  96,
                 "priority"  =>  0,
@@ -973,7 +973,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        97  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        97  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  97,
                 "priority"  =>  0,
@@ -991,7 +991,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        98  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        98  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  98,
                 "priority"  =>  0,
@@ -1009,7 +1009,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        99  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        99  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  99,
                 "priority"  =>  0,
@@ -1027,7 +1027,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        100  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        100  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  100,
                 "priority"  =>  0,
@@ -1045,7 +1045,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        101  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        101  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  101,
                 "priority"  =>  0,
@@ -1063,7 +1063,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        102  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        102  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  102,
                 "priority"  =>  0,
@@ -1081,7 +1081,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        103  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        103  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  103,
                 "priority"  =>  0,
@@ -1099,7 +1099,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        104  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        104  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  104,
                 "priority"  =>  0,
@@ -1117,7 +1117,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        105  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        105  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  105,
                 "priority"  =>  0,
@@ -1135,7 +1135,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        106  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        106  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  106,
                 "priority"  =>  0,
@@ -1153,7 +1153,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        107  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        107  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  107,
                 "priority"  =>  0,
@@ -1171,7 +1171,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        108  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        108  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  108,
                 "priority"  =>  0,
@@ -1189,7 +1189,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        109  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        109  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  109,
                 "priority"  =>  0,
@@ -1207,7 +1207,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        110  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        110  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  110,
                 "priority"  =>  0,
@@ -1225,7 +1225,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        111  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        111  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  111,
                 "priority"  =>  0,
@@ -1243,7 +1243,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        112  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        112  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  112,
                 "priority"  =>  0,
@@ -1261,7 +1261,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        113  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        113  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  113,
                 "priority"  =>  0,
@@ -1279,7 +1279,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        114  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        114  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  114,
                 "priority"  =>  0,
@@ -1297,7 +1297,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        115  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        115  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  115,
                 "priority"  =>  0,
@@ -1315,7 +1315,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        116  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        116  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  116,
                 "priority"  =>  0,
@@ -1333,7 +1333,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        117  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        117  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  117,
                 "priority"  =>  0,
@@ -1351,7 +1351,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        118  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        118  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  118,
                 "priority"  =>  0,
@@ -1369,7 +1369,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        119  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        119  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  119,
                 "priority"  =>  0,
@@ -1387,7 +1387,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        120  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        120  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  120,
                 "priority"  =>  0,
@@ -1405,7 +1405,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        121  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        121  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  121,
                 "priority"  =>  0,
@@ -1423,7 +1423,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        122  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        122  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  122,
                 "priority"  =>  0,
@@ -1441,7 +1441,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        123  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        123  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  123,
                 "priority"  =>  0,
@@ -1459,7 +1459,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        124  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        124  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  124,
                 "priority"  =>  0,
@@ -1477,7 +1477,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        125  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        125  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  125,
                 "priority"  =>  0,
@@ -1495,7 +1495,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        126  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        126  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  126,
                 "priority"  =>  0,
@@ -1513,7 +1513,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        127  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        127  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  127,
                 "priority"  =>  0,
@@ -1531,7 +1531,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        128  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        128  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  128,
                 "priority"  =>  0,
@@ -1549,7 +1549,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        129  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        129  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  129,
                 "priority"  =>  0,
@@ -1567,7 +1567,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        130  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        130  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  130,
                 "priority"  =>  0,
@@ -1585,7 +1585,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        131  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        131  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  131,
                 "priority"  =>  0,
@@ -1603,7 +1603,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        132  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        132  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  132,
                 "priority"  =>  0,
@@ -1621,7 +1621,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        133  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        133  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  133,
                 "priority"  =>  0,
@@ -1639,7 +1639,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        134  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        134  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  134,
                 "priority"  =>  0,
@@ -1657,7 +1657,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        135  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        135  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  135,
                 "priority"  =>  0,
@@ -1675,7 +1675,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        136  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        136  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  136,
                 "priority"  =>  0,
@@ -1693,7 +1693,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        137  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        137  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  137,
                 "priority"  =>  0,
@@ -1711,7 +1711,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        138  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        138  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  138,
                 "priority"  =>  0,
@@ -1729,7 +1729,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        139  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        139  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  139,
                 "priority"  =>  0,
@@ -1747,7 +1747,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        140  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        140  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  140,
                 "priority"  =>  0,
@@ -1765,7 +1765,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        141  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        141  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  141,
                 "priority"  =>  0,
@@ -1783,7 +1783,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        142  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        142  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  142,
                 "priority"  =>  0,
@@ -1801,7 +1801,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        143  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        143  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  143,
                 "priority"  =>  0,
@@ -1819,7 +1819,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        144  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        144  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  144,
                 "priority"  =>  0,
@@ -1837,7 +1837,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        145  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        145  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  145,
                 "priority"  =>  0,
@@ -1855,7 +1855,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        146  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        146  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  146,
                 "priority"  =>  0,
@@ -1873,7 +1873,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        147  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        147  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  147,
                 "priority"  =>  0,
@@ -1891,7 +1891,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        148  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        148  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  148,
                 "priority"  =>  0,
@@ -1909,7 +1909,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        149  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        149  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  149,
                 "priority"  =>  0,
@@ -1927,7 +1927,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        150  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        150  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  150,
                 "priority"  =>  0,
@@ -1945,7 +1945,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        151  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        151  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  151,
                 "priority"  =>  0,
@@ -1963,7 +1963,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        152  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        152  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  152,
                 "priority"  =>  0,
@@ -1981,7 +1981,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        153  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        153  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  153,
                 "priority"  =>  0,
@@ -1999,7 +1999,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        154  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        154  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  154,
                 "priority"  =>  0,
@@ -2017,7 +2017,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        155  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        155  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  155,
                 "priority"  =>  0,
@@ -2035,7 +2035,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        156  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        156  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  156,
                 "priority"  =>  3,
@@ -2053,7 +2053,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        157  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        157  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  157,
                 "priority"  =>  0,
@@ -2071,7 +2071,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        158  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        158  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  158,
                 "priority"  =>  0,
@@ -2089,7 +2089,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        159  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        159  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  159,
                 "priority"  =>  0,
@@ -2107,7 +2107,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        160  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        160  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  160,
                 "priority"  =>  0,
@@ -2125,7 +2125,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        161  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        161  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  161,
                 "priority"  =>  0,
@@ -2143,7 +2143,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        162  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        162  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  162,
                 "priority"  =>  0,
@@ -2161,7 +2161,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        163  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        163  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  163,
                 "priority"  =>  0,
@@ -2179,7 +2179,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        164  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        164  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  164,
                 "priority"  =>  0,
@@ -2197,7 +2197,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        165  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        165  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  165,
                 "priority"  =>  0,
@@ -2215,7 +2215,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        166  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        166  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  166,
                 "priority"  =>  0,
@@ -2233,7 +2233,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        167  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        167  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  167,
                 "priority"  =>  4,
@@ -2251,7 +2251,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        168  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        168  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  168,
                 "priority"  =>  0,
@@ -2269,7 +2269,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        169  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        169  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  169,
                 "priority"  =>  0,
@@ -2287,7 +2287,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        170  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        170  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  170,
                 "priority"  =>  0,
@@ -2305,7 +2305,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        171  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        171  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  171,
                 "priority"  =>  0,
@@ -2323,7 +2323,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        172  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        172  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  172,
                 "priority"  =>  0,
@@ -2341,7 +2341,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        173  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        173  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  173,
                 "priority"  =>  0,
@@ -2359,7 +2359,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        174  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        174  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  174,
                 "priority"  =>  0,
@@ -2377,7 +2377,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        175  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        175  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  175,
                 "priority"  =>  0,
@@ -2395,7 +2395,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        176  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        176  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  176,
                 "priority"  =>  0,
@@ -2413,7 +2413,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        177  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        177  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  177,
                 "priority"  =>  0,
@@ -2431,7 +2431,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        178  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        178  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  178,
                 "priority"  =>  0,
@@ -2449,7 +2449,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        179  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        179  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  179,
                 "priority"  =>  0,
@@ -2467,7 +2467,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        180  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        180  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  180,
                 "priority"  =>  0,
@@ -2485,7 +2485,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        181  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        181  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  181,
                 "priority"  =>  0,
@@ -2503,7 +2503,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        182  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        182  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  182,
                 "priority"  =>  0,
@@ -2521,7 +2521,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        183  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        183  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  183,
                 "priority"  =>  0,
@@ -2539,7 +2539,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        184  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        184  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  184,
                 "priority"  =>  0,
@@ -2557,7 +2557,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        185  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        185  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  185,
                 "priority"  =>  0,
@@ -2575,7 +2575,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        186  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        186  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  186,
                 "priority"  =>  0,
@@ -2593,7 +2593,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        187  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        187  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  187,
                 "priority"  =>  0,
@@ -2611,7 +2611,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        188  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        188  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  188,
                 "priority"  =>  0,
@@ -2629,7 +2629,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        189  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        189  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  189,
                 "priority"  =>  0,
@@ -2647,7 +2647,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        190  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        190  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  190,
                 "priority"  =>  6,
@@ -2665,7 +2665,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        191  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        191  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  191,
                 "priority"  =>  0,
@@ -2683,7 +2683,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        192  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        192  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  192,
                 "priority"  =>  0,
@@ -2701,7 +2701,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        193  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        193  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  193,
                 "priority"  =>  0,
@@ -2719,7 +2719,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        194  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        194  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  194,
                 "priority"  =>  0,
@@ -2737,7 +2737,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        195  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        195  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  195,
                 "priority"  =>  0,
@@ -2755,7 +2755,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        196  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        196  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  196,
                 "priority"  =>  0,
@@ -2773,7 +2773,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        197  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        197  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  197,
                 "priority"  =>  0,
@@ -2791,7 +2791,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        198  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        198  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  198,
                 "priority"  =>  0,
@@ -2809,7 +2809,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        199  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        199  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  199,
                 "priority"  =>  0,
@@ -2827,7 +2827,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        200  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        200  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  200,
                 "priority"  =>  0,
@@ -2845,7 +2845,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        201  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        201  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  201,
                 "priority"  =>  0,
@@ -2863,7 +2863,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        202  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        202  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  202,
                 "priority"  =>  0,
@@ -2881,7 +2881,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        203  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        203  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  203,
                 "priority"  =>  0,
@@ -2899,7 +2899,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        204  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        204  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  204,
                 "priority"  =>  0,
@@ -2917,7 +2917,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        205  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        205  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  205,
                 "priority"  =>  0,
@@ -2935,7 +2935,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        206  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        206  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  206,
                 "priority"  =>  0,
@@ -2953,7 +2953,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        207  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        207  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  207,
                 "priority"  =>  0,
@@ -2971,7 +2971,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        208  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        208  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  208,
                 "priority"  =>  0,
@@ -2989,7 +2989,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        209  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        209  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  209,
                 "priority"  =>  0,
@@ -3007,7 +3007,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        210  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        210  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  210,
                 "priority"  =>  0,
@@ -3025,7 +3025,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        211  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        211  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  211,
                 "priority"  =>  0,
@@ -3043,7 +3043,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        212  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        212  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  212,
                 "priority"  =>  0,
@@ -3061,7 +3061,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        213  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        213  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  213,
                 "priority"  =>  0,
@@ -3079,7 +3079,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        214  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        214  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  214,
                 "priority"  =>  0,
@@ -3097,7 +3097,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        215  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        215  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  215,
                 "priority"  =>  0,
@@ -3115,7 +3115,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        216  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        216  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  216,
                 "priority"  =>  0,
@@ -3133,7 +3133,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        217  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        217  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  217,
                 "priority"  =>  0,
@@ -3151,7 +3151,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        218  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        218  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  218,
                 "priority"  =>  0,
@@ -3169,7 +3169,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        219  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        219  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  219,
                 "priority"  =>  0,
@@ -3187,7 +3187,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        220  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        220  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  220,
                 "priority"  =>  0,
@@ -3205,7 +3205,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        221  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        221  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  221,
                 "priority"  =>  0,
@@ -3223,7 +3223,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        222  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        222  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  222,
                 "priority"  =>  0,
@@ -3241,7 +3241,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        223  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        223  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  223,
                 "priority"  =>  0,
@@ -3259,7 +3259,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        224  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        224  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  224,
                 "priority"  =>  0,
@@ -3277,7 +3277,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        225  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        225  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  225,
                 "priority"  =>  0,
@@ -3295,7 +3295,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        226  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        226  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  226,
                 "priority"  =>  0,
@@ -3313,7 +3313,7 @@ return array(
                 "childrenCount"  =>  null,
             )
         ),
-        227  =>  new \eZ\Publish\API\Repository\Values\Content\Location(
+        227  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
             array(
                 "id"  =>  227,
                 "priority"  =>  0,

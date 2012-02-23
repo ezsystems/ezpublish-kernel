@@ -1,7 +1,7 @@
 <?php
 return array(
     array(
-        4  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        4  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  4,
                 "name"  =>  "Users",
@@ -17,7 +17,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        10  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        10  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  10,
                 "name"  =>  "Anonymous User",
@@ -33,7 +33,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        11  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        11  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  11,
                 "name"  =>  "Members",
@@ -49,7 +49,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        12  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        12  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  12,
                 "name"  =>  "Administrator users",
@@ -65,7 +65,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        13  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        13  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  13,
                 "name"  =>  "Editors",
@@ -81,7 +81,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        14  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        14  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  14,
                 "name"  =>  "Administrator User",
@@ -97,7 +97,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        41  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        41  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  41,
                 "name"  =>  "Media",
@@ -113,7 +113,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        42  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        42  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  42,
                 "name"  =>  "Anonymous Users",
@@ -129,7 +129,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        45  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        45  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  45,
                 "name"  =>  "Setup",
@@ -145,7 +145,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        49  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        49  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  49,
                 "name"  =>  "Images",
@@ -161,7 +161,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        50  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        50  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  50,
                 "name"  =>  "Files",
@@ -177,7 +177,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        51  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        51  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  51,
                 "name"  =>  "Multimedia",
@@ -193,7 +193,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        52  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        52  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  52,
                 "name"  =>  "Common INI settings",
@@ -209,7 +209,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        54  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        54  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  54,
                 "name"  =>  "Website Interface",
@@ -225,7 +225,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        56  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        56  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  56,
                 "name"  =>  "Design",
@@ -241,7 +241,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        57  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        57  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  57,
                 "name"  =>  "Banners",
@@ -257,7 +257,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        58  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        58  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  58,
                 "name"  =>  "Woman (Communities)",
@@ -273,7 +273,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        59  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        59  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  59,
                 "name"  =>  "Woman (Frontpage)",
@@ -289,7 +289,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        60  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        60  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  60,
                 "name"  =>  "Woman (Products)",
@@ -305,7 +305,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        61  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        61  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  61,
                 "name"  =>  "Woman (Partners)",
@@ -321,7 +321,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        62  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        62  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  62,
                 "name"  =>  "Pencils (Support)",
@@ -337,7 +337,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        63  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        63  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  63,
                 "name"  =>  "Woman (Training)",
@@ -353,7 +353,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        64  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        64  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  64,
                 "name"  =>  "Woman (Solutions)",
@@ -369,7 +369,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        65  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        65  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  65,
                 "name"  =>  "Home",
@@ -385,7 +385,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        66  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        66  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  66,
                 "name"  =>  "rest_api",
@@ -401,7 +401,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        67  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        67  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  67,
                 "name"  =>  "Products",
@@ -417,7 +417,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        68  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        68  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  68,
                 "name"  =>  "Software",
@@ -433,7 +433,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        69  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        69  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  69,
                 "name"  =>  "OS Type I",
@@ -449,7 +449,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        70  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        70  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  70,
                 "name"  =>  "Boxes",
@@ -465,7 +465,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        71  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        71  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  71,
                 "name"  =>  "CD/DVD Box I",
@@ -481,7 +481,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        72  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        72  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  72,
                 "name"  =>  "CD/DVD Box II",
@@ -497,7 +497,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        73  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        73  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  73,
                 "name"  =>  "CD/DVD Box III",
@@ -513,7 +513,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        74  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        74  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  74,
                 "name"  =>  "Products sheets",
@@ -529,7 +529,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        75  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        75  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  75,
                 "name"  =>  "Solutions",
@@ -545,7 +545,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        76  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        76  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  76,
                 "name"  =>  "Web publishing",
@@ -561,7 +561,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        77  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        77  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  77,
                 "name"  =>  "Fusce sagittis sagittis",
@@ -577,7 +577,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        78  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        78  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  78,
                 "name"  =>  "Etiam posuere sodales arcu",
@@ -593,7 +593,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        79  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        79  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  79,
                 "name"  =>  "In hac habitasse platea",
@@ -609,7 +609,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        80  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        80  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  80,
                 "name"  =>  "Content management",
@@ -625,7 +625,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        81  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        81  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  81,
                 "name"  =>  "Fusce sagittis sagittis urna",
@@ -641,7 +641,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        82  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        82  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  82,
                 "name"  =>  "Class aptent taciti sociosqu",
@@ -657,7 +657,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        83  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        83  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  83,
                 "name"  =>  "Aenean malesuada ligula",
@@ -673,7 +673,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        84  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        84  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  84,
                 "name"  =>  "Training",
@@ -689,7 +689,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        85  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        85  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  85,
                 "name"  =>  "Certification",
@@ -705,7 +705,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        86  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        86  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  86,
                 "name"  =>  "Professional workshops",
@@ -721,7 +721,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        87  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        87  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  87,
                 "name"  =>  "Etiam sodales mauris",
@@ -737,7 +737,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        88  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        88  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  88,
                 "name"  =>  "Class aptent taciti",
@@ -753,7 +753,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        89  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        89  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  89,
                 "name"  =>  "Duis auctor vehicula erat",
@@ -769,7 +769,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        90  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        90  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  90,
                 "name"  =>  "Events and seminars",
@@ -785,7 +785,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        91  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        91  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  91,
                 "name"  =>  "Self-paced courses",
@@ -801,7 +801,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        92  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        92  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  92,
                 "name"  =>  "Instructor-led courses",
@@ -817,7 +817,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        93  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        93  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  93,
                 "name"  =>  "Additional learning resources",
@@ -833,7 +833,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        94  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        94  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  94,
                 "name"  =>  "Support",
@@ -849,7 +849,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        95  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        95  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  95,
                 "name"  =>  "Knowledgebase",
@@ -865,7 +865,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        96  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        96  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  96,
                 "name"  =>  "Sed suscipit",
@@ -881,7 +881,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        97  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        97  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  97,
                 "name"  =>  "Ut interdum",
@@ -897,7 +897,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        98  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        98  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  98,
                 "name"  =>  "Documentation",
@@ -913,7 +913,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        99  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        99  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  99,
                 "name"  =>  "Mauris pretium",
@@ -929,7 +929,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        100  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        100  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  100,
                 "name"  =>  "Aliquam posuere",
@@ -945,7 +945,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        101  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        101  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  101,
                 "name"  =>  "Books",
@@ -961,7 +961,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        102  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        102  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  102,
                 "name"  =>  "Aliquam pulvinar suscipit tellus",
@@ -977,7 +977,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        103  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        103  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  103,
                 "name"  =>  "Customer Service",
@@ -993,7 +993,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        104  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        104  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  104,
                 "name"  =>  "Support Programs",
@@ -1009,7 +1009,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        105  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        105  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  105,
                 "name"  =>  "Getting started",
@@ -1025,7 +1025,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        106  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        106  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  106,
                 "name"  =>  "Tutorials for",
@@ -1041,7 +1041,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        107  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        107  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  107,
                 "name"  =>  "Get involved",
@@ -1057,7 +1057,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        108  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        108  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  108,
                 "name"  =>  "How to use eZ Publish",
@@ -1073,7 +1073,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        109  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        109  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  109,
                 "name"  =>  "graphics1",
@@ -1089,7 +1089,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        110  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        110  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  110,
                 "name"  =>  "graphics1",
@@ -1105,7 +1105,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        111  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        111  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  111,
                 "name"  =>  "graphics1",
@@ -1121,7 +1121,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        112  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        112  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  112,
                 "name"  =>  "graphics1",
@@ -1137,7 +1137,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        113  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        113  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  113,
                 "name"  =>  "graphics1",
@@ -1153,7 +1153,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        114  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        114  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  114,
                 "name"  =>  "graphics1",
@@ -1169,7 +1169,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        115  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        115  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  115,
                 "name"  =>  "graphics1",
@@ -1185,7 +1185,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        116  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        116  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  116,
                 "name"  =>  "graphics1",
@@ -1201,7 +1201,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        117  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        117  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  117,
                 "name"  =>  "graphics1",
@@ -1217,7 +1217,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        118  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        118  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  118,
                 "name"  =>  "How to manage eZ Publish",
@@ -1233,7 +1233,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        119  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        119  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  119,
                 "name"  =>  "graphics1",
@@ -1249,7 +1249,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        120  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        120  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  120,
                 "name"  =>  "graphics1",
@@ -1265,7 +1265,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        121  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        121  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  121,
                 "name"  =>  "graphics1",
@@ -1281,7 +1281,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        122  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        122  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  122,
                 "name"  =>  "graphics1",
@@ -1297,7 +1297,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        123  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        123  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  123,
                 "name"  =>  "graphics1",
@@ -1313,7 +1313,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        124  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        124  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  124,
                 "name"  =>  "graphics1",
@@ -1329,7 +1329,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        125  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        125  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  125,
                 "name"  =>  "graphics1",
@@ -1345,7 +1345,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        126  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        126  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  126,
                 "name"  =>  "graphics1",
@@ -1361,7 +1361,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        127  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        127  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  127,
                 "name"  =>  "How to develop with eZ Publish",
@@ -1377,7 +1377,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        128  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        128  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  128,
                 "name"  =>  "graphics1",
@@ -1393,7 +1393,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        129  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        129  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  129,
                 "name"  =>  "graphics1",
@@ -1409,7 +1409,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        130  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        130  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  130,
                 "name"  =>  "Adding Siteaccesses in eZ Publish",
@@ -1425,7 +1425,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        131  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        131  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  131,
                 "name"  =>  "New features",
@@ -1441,7 +1441,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        132  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        132  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  132,
                 "name"  =>  "Improved user registration workflow",
@@ -1457,7 +1457,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        133  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        133  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  133,
                 "name"  =>  "graphics1",
@@ -1473,7 +1473,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        134  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        134  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  134,
                 "name"  =>  "graphics1",
@@ -1489,7 +1489,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        135  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        135  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  135,
                 "name"  =>  "graphics1",
@@ -1505,7 +1505,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        136  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        136  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  136,
                 "name"  =>  "Improved block editing",
@@ -1521,7 +1521,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        137  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        137  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  137,
                 "name"  =>  "graphics1",
@@ -1537,7 +1537,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        138  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        138  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  138,
                 "name"  =>  "graphics1",
@@ -1553,7 +1553,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        139  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        139  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  139,
                 "name"  =>  "Improved front-end editing",
@@ -1569,7 +1569,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        140  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        140  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  140,
                 "name"  =>  "graphics1",
@@ -1585,7 +1585,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        141  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        141  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  141,
                 "name"  =>  "graphics1",
@@ -1601,7 +1601,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        142  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        142  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  142,
                 "name"  =>  "graphics1",
@@ -1617,7 +1617,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        143  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        143  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  143,
                 "name"  =>  "graphics1",
@@ -1633,7 +1633,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        144  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        144  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  144,
                 "name"  =>  "FastCGI",
@@ -1649,7 +1649,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        145  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        145  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  145,
                 "name"  =>  "Support for Red Hat Enterprise",
@@ -1665,7 +1665,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        146  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        146  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  146,
                 "name"  =>  "graphics1",
@@ -1681,7 +1681,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        147  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        147  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  147,
                 "name"  =>  "Canonical links",
@@ -1697,7 +1697,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        148  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        148  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  148,
                 "name"  =>  "Asynchronous publishing",
@@ -1713,7 +1713,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        149  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        149  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  149,
                 "name"  =>  "graphics1",
@@ -1729,7 +1729,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        150  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        150  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  150,
                 "name"  =>  "REST API interface",
@@ -1745,7 +1745,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        151  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        151  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  151,
                 "name"  =>  "eZ Publish Enterprise",
@@ -1761,7 +1761,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        152  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        152  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  152,
                 "name"  =>  "graphics1",
@@ -1777,7 +1777,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        153  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        153  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  153,
                 "name"  =>  "graphics1",
@@ -1793,7 +1793,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        154  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        154  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  154,
                 "name"  =>  "Partners",
@@ -1809,7 +1809,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        155  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        155  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  155,
                 "name"  =>  "Partner News",
@@ -1825,7 +1825,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        156  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        156  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  156,
                 "name"  =>  "Pellentesque quam mauris",
@@ -1841,7 +1841,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        157  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        157  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  157,
                 "name"  =>  "Penatibus et magnis dis",
@@ -1857,7 +1857,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        158  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        158  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  158,
                 "name"  =>  "News",
@@ -1873,7 +1873,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        159  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        159  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  159,
                 "name"  =>  "Curabitur hendrerit dignissim",
@@ -1889,7 +1889,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        160  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        160  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  160,
                 "name"  =>  "Proin condimentum risus",
@@ -1905,7 +1905,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        161  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        161  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  161,
                 "name"  =>  "Morbi tristique senectus",
@@ -1921,7 +1921,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        162  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        162  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  162,
                 "name"  =>  "Partner Products",
@@ -1937,7 +1937,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        163  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        163  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  163,
                 "name"  =>  "Partners",
@@ -1953,7 +1953,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        164  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        164  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  164,
                 "name"  =>  "Neque orci malesuada felis",
@@ -1969,7 +1969,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        165  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        165  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  165,
                 "name"  =>  "Community",
@@ -1985,7 +1985,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        166  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        166  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  166,
                 "name"  =>  "Forum",
@@ -2001,7 +2001,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        167  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        167  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  167,
                 "name"  =>  "Nulla vitae tellus sit amet",
@@ -2017,7 +2017,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        168  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        168  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  168,
                 "name"  =>  "Ut mollis sodales nibh",
@@ -2033,7 +2033,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        169  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        169  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  169,
                 "name"  =>  "Nam risus leo",
@@ -2049,7 +2049,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        170  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        170  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  170,
                 "name"  =>  "Wiki",
@@ -2065,7 +2065,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        171  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        171  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  171,
                 "name"  =>  "Sed suscipit",
@@ -2081,7 +2081,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        172  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        172  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  172,
                 "name"  =>  "Ut interdum",
@@ -2097,7 +2097,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        173  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        173  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  173,
                 "name"  =>  "Fusce pulvinar",
@@ -2113,7 +2113,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        174  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        174  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  174,
                 "name"  =>  "Duis id tortor",
@@ -2129,7 +2129,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        175  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        175  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  175,
                 "name"  =>  "Curabitur lacinia",
@@ -2145,7 +2145,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        176  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        176  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  176,
                 "name"  =>  "Pictures",
@@ -2161,7 +2161,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        177  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        177  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  177,
                 "name"  =>  "Ivo on eZ Tags",
@@ -2177,7 +2177,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        178  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        178  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  178,
                 "name"  =>  "Are you ready for the Community day?",
@@ -2193,7 +2193,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        179  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        179  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  179,
                 "name"  =>  "Let's work together!",
@@ -2209,7 +2209,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        180  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        180  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  180,
                 "name"  =>  "The Mediterranean seen from Nice!",
@@ -2225,7 +2225,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        181  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        181  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  181,
                 "name"  =>  "Hotel lobby at Isola2000",
@@ -2241,7 +2241,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        182  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        182  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  182,
                 "name"  =>  "Alexander on the past, Gaby on today and tomorrow",
@@ -2257,7 +2257,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        183  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        183  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  183,
                 "name"  =>  "Isola2000 in white - beautiful skiing!",
@@ -2273,7 +2273,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        184  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        184  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  184,
                 "name"  =>  "CEO future pitch - Adaptable, open, reliable!",
@@ -2289,7 +2289,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        185  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        185  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  185,
                 "name"  =>  "Blog",
@@ -2305,7 +2305,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        186  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        186  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  186,
                 "name"  =>  "Visit Paris",
@@ -2321,7 +2321,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        187  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        187  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  187,
                 "name"  =>  "Paris in France",
@@ -2337,7 +2337,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        188  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        188  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  188,
                 "name"  =>  "Company",
@@ -2353,7 +2353,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        189  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        189  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  189,
                 "name"  =>  "About company",
@@ -2369,7 +2369,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        190  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        190  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  190,
                 "name"  =>  "New features",
@@ -2385,7 +2385,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        191  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        191  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  191,
                 "name"  =>  "Separate content & design in eZ Publish",
@@ -2401,7 +2401,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        192  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        192  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  192,
                 "name"  =>  "separation_of_content_and_design",
@@ -2417,7 +2417,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        193  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        193  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  193,
                 "name"  =>  "How to use eZ Publish",
@@ -2433,7 +2433,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        194  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        194  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  194,
                 "name"  =>  "openoffice_import_large",
@@ -2449,7 +2449,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        195  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        195  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  195,
                 "name"  =>  "translation_large",
@@ -2465,7 +2465,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        196  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        196  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  196,
                 "name"  =>  "multiupload_large",
@@ -2481,7 +2481,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        197  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        197  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  197,
                 "name"  =>  "gallery_large",
@@ -2497,7 +2497,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        198  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        198  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  198,
                 "name"  =>  "search_result_large",
@@ -2513,7 +2513,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        199  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        199  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  199,
                 "name"  =>  "ez_tool_bar_large",
@@ -2529,7 +2529,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        200  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        200  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  200,
                 "name"  =>  "quicktime_large",
@@ -2545,7 +2545,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        201  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        201  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  201,
                 "name"  =>  "web_2_0_large",
@@ -2561,7 +2561,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        202  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        202  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  202,
                 "name"  =>  "How to manage eZ Publish",
@@ -2577,7 +2577,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        203  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        203  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  203,
                 "name"  =>  "usermanagement_large",
@@ -2593,7 +2593,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        204  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        204  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  204,
                 "name"  =>  "workflow_large",
@@ -2609,7 +2609,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        205  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        205  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  205,
                 "name"  =>  "versioning_large",
@@ -2625,7 +2625,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        206  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        206  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  206,
                 "name"  =>  "datatypes_attributes_content_class_and_objects_large",
@@ -2641,7 +2641,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        207  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        207  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  207,
                 "name"  =>  "multiple_location_large",
@@ -2657,7 +2657,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        208  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        208  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  208,
                 "name"  =>  "multisite_deployment_large",
@@ -2673,7 +2673,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        209  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        209  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  209,
                 "name"  =>  "seo_large",
@@ -2689,7 +2689,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        210  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        210  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  210,
                 "name"  =>  "admin_site_large",
@@ -2705,7 +2705,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        211  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        211  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  211,
                 "name"  =>  "How to develop with eZ Publish",
@@ -2721,7 +2721,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        212  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        212  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  212,
                 "name"  =>  "datatypes_attributes_content_class_and_objects_large",
@@ -2737,7 +2737,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        213  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        213  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  213,
                 "name"  =>  "site_style_large",
@@ -2753,7 +2753,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        214  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        214  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  214,
                 "name"  =>  "REST API interface",
@@ -2769,7 +2769,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        215  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        215  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  215,
                 "name"  =>  "Asynchronous Publishing",
@@ -2785,7 +2785,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        216  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        216  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  216,
                 "name"  =>  "Canonical links",
@@ -2801,7 +2801,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        217  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        217  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  217,
                 "name"  =>  "Support for Red Hat Enterprise",
@@ -2817,7 +2817,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        218  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        218  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  218,
                 "name"  =>  "FastCGI",
@@ -2833,7 +2833,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        219  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        219  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  219,
                 "name"  =>  "Events",
@@ -2849,7 +2849,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        220  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        220  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  220,
                 "name"  =>  "Career",
@@ -2865,7 +2865,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        221  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        221  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  221,
                 "name"  =>  "Investors Relation",
@@ -2881,7 +2881,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        222  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        222  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  222,
                 "name"  =>  "Contact",
@@ -2897,7 +2897,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        223  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        223  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  223,
                 "name"  =>  "Morbi neque",
@@ -2913,7 +2913,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        224  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        224  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  224,
                 "name"  =>  "Company banner",
@@ -2929,7 +2929,7 @@ return array(
                 "mainLanguageCode"  =>  "eng-US",
             )
         ),
-        225  =>  new \eZ\Publish\API\Repository\Values\Content\ContentInfo(
+        225  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
                 "contentId"  =>  225,
                 "name"  =>  "Partners",
