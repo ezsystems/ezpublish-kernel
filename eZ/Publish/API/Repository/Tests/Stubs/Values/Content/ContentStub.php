@@ -65,7 +65,7 @@ class ContentStub extends Content
     /**
      * returns the outgoing relations
      *
-     * @return array an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
      */
     public function getRelations()
     {
@@ -75,11 +75,11 @@ class ContentStub extends Content
     /**
      * This method returns the complete fields collection
      *
-     * @return array an array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field}
      */
     public function getFields()
     {
-        // TODO: Implement getFields() method.
+        return $this->fields;
     }
 
     /**
@@ -89,7 +89,7 @@ class ContentStub extends Content
      *
      * @param string $languageCode
      *
-     * @return array an array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field} with field identifier as keys
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
