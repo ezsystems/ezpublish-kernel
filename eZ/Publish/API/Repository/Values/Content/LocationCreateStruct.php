@@ -7,7 +7,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * This class is used to create a new Location for a content object
  *
  */
-abstract class LocationCreateStruct extends ValueObject
+class LocationCreateStruct extends ValueObject
 {
     /**
      * Location priority
