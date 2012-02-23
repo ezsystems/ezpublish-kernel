@@ -5,7 +5,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
-    eZ\Publish\Core\Repository\Values\Content\LocationCreateStruct,
+    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct as APILocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Repository\Values\Content\Location,
