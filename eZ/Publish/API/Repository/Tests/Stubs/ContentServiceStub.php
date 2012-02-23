@@ -52,7 +52,7 @@ class ContentServiceStub implements ContentService
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[]
      */
-    private $contentInfos = array();
+    private $contentInfo = array();
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
@@ -89,9 +89,9 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfo( $contentId )
     {
-        if ( isset( $this->contentInfos[$contentId] ) )
+        if ( isset( $this->contentInfo[$contentId] ) )
         {
-            return $this->contentInfos[$contentId];
+            return $this->contentInfo[$contentId];
         }
     }
 
@@ -127,6 +127,10 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
+        if ( isset( $this->versionInfo[$contentInfo->contentId] ) )
+        {
+            return end( $this->versionInfo[$contentInfo->contentId] );
+        }
         // TODO: Implement loadVersionInfo() method.
     }
 
@@ -344,9 +348,9 @@ class ContentServiceStub implements ContentService
         );
 
 
-        $this->contents[$content->contentId]     = $content;
-        $this->contentInfos[$content->contentId] = $contentInfo;
-        $this->versionInfo[$content->contentId]  = array( 1 => $versionInfo );
+        $this->contents[$content->contentId]    = $content;
+        $this->contentInfo[$content->contentId] = $contentInfo;
+        $this->versionInfo[$content->contentId] = array( 1 => $versionInfo );
 
         return $content;
     }
@@ -667,7 +671,14 @@ class ContentServiceStub implements ContentService
      */
     public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode )
     {
-        return new ContentCreateStructStub( $contentType, $mainLanguageCode );
+        return new ContentCreateStructStub(
+            array(
+                'contentType'       =>  $contentType,
+                'mainLanguageCode'  =>  $mainLanguageCode,
+                'modificationDate'  =>  new \DateTime(),
+                'ownerId'           =>  $this->repository->getCurrentUser()->id
+            )
+        );
     }
 
     /**
@@ -724,7 +735,7 @@ class ContentServiceStub implements ContentService
         ++$this->contentNextId;
         foreach ( $contentInfos as $contentInfo )
         {
-            $this->contentInfos[$contentInfo->contentId] = $contentInfo;
+            $this->contentInfo[$contentInfo->contentId] = $contentInfo;
         }
     }
 }

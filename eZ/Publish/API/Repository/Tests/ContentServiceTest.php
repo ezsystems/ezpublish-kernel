@@ -47,7 +47,7 @@ class ContentServiceTest extends BaseTest
     /**
      * Test for the createContent() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
      */
@@ -66,10 +66,77 @@ class ContentServiceTest extends BaseTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
         $content = $contentService->createContent( $contentCreate );
         /* END: Use Case */
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Content', $content );
+
+        return $content;
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentSetsContentType( $content )
+    {
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\ContentType\ContentType', $content->contentType );
+
+        return $content;
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentSetsContentType
+     */
+    public function testCreateContentSetsCorrectContentType( $content )
+    {
+        $this->assertEquals( 'article_subpage', $content->contentType->identifier );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentSetsContentInfo( $content )
+    {
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $content->contentInfo );
+
+        return $content;
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentSetsVersionInfo( $content )
+    {
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\VersionInfo', $content->getVersionInfo() );
+
+        return $content;
     }
 
     /**

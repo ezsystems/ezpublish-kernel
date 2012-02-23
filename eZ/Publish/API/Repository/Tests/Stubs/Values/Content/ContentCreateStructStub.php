@@ -27,22 +27,6 @@ class ContentCreateStructStub extends ContentCreateStruct
     protected $fields = array();
 
     /**
-     * Instantiates a new content create struct.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param string $mainLanguageCode
-     */
-    public function __construct( ContentType $contentType, $mainLanguageCode )
-    {
-        parent::__construct(
-            array(
-                'contentType'       =>  $contentType,
-                'mainLanguageCode'  =>  $mainLanguageCode
-            )
-        );
-    }
-
-    /**
      * Adds a field to the field collection.
      *
      * This method could also be implemented by a magic setter so that
