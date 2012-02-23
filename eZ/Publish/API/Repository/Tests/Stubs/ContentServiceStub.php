@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\ContentService;
+use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
@@ -41,6 +42,11 @@ class ContentServiceStub implements ContentService
      * @var \eZ\Publish\API\Repository\Values\Content\Content[]
      */
     private $contents = array();
+
+    /**
+     * @var integer
+     */
+    private $fieldNextId = 0;
 
     /**
      * Loads a content info object.
@@ -218,11 +224,24 @@ class ContentServiceStub implements ContentService
         }
 
         // Now validate that all required fields
+        $allFields = array();
         foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
             if ( isset( $fields[$fieldDefinition->identifier] ) )
             {
+                foreach ( $fields[$fieldDefinition->identifier] as $field )
+                {
+                    $fieldId = ++$this->fieldNextId;
 
+                    $allFields[$fieldId] = new Field(
+                        array(
+                            'id'                  =>  $fieldId,
+                            'value'               =>  $field->value,
+                            'languageCode'        =>  $field->languageCode,
+                            'fieldDefIdentifier'  =>  $fieldDefinition->identifier
+                        )
+                    );
+                }
             }
             else if ( $fieldDefinition->isRequired )
             {
@@ -230,13 +249,23 @@ class ContentServiceStub implements ContentService
             }
             else
             {
+                $fieldId = ++$this->fieldNextId;
 
+                $allFields[$fieldId] = new Field(
+                    array(
+                        'id'                  =>  $fieldId,
+                        'value'               =>  $fieldDefinition->defaultValue,
+                        'languageCode'        =>  $contentCreateStruct->contentType->mainLanguageCode,
+                        'fieldDefIdentifier'  =>  $fieldDefinition->identifier
+                    )
+                );
             }
         }
 
         $content = new ContentStub(
             array(
                 'contentId'    =>  ++$this->contentNextId,
+                'fields'       =>  $allFields,
                 'contentInfo'  =>  new ContentInfoStub(
                     array(
                         'contentId'  =>  $this->contentNextId
