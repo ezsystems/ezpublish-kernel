@@ -9,8 +9,8 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct as APIFieldDefinitionCreateStruct,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct,
     eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup,
@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Repository\Values\ContentType\ContentType,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct,
-    eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCreateStruct,
+    eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\Type as SPIContentType,
     eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct,
@@ -39,6 +39,7 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty,
     eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound,
+    eZ\Publish\Core\Persistence\Legacy\Exception\TypeGroupNotFound,
     eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent,
     eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType,
     DateTime;
@@ -96,13 +97,14 @@ class ContentTypeService implements ContentTypeServiceInterface
         catch ( NotFoundException $e ) {}
 
         if ( $contentTypeGroupCreateStruct->creationDate === null )
-        {
             $timestamp = time();
-        }
         else
-        {
             $timestamp = $contentTypeGroupCreateStruct->creationDate->getTimestamp();
-        }
+
+        if ( $contentTypeGroupCreateStruct->creatorId === null )
+            $userId = $this->repository->getCurrentUser()->id;
+        else
+            $userId = $contentTypeGroupCreateStruct->creatorId;
 
         $spiGroupCreateStruct = new SPIContentTypeGroupCreateStruct(
             array(
@@ -111,8 +113,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "identifier" => $contentTypeGroupCreateStruct->identifier,
                 "created" => $timestamp,
                 "modified" => $timestamp,
-                "creatorId" => $contentTypeGroupCreateStruct->creatorId,
-                "modifierId" => $contentTypeGroupCreateStruct->creatorId
+                "creatorId" => $userId,
+                "modifierId" => $userId
             )
         );
 
@@ -139,11 +141,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeGroupId', $contentTypeGroupId );
         }
 
-        $spiGroup = $this->persistenceHandler->contentTypeHandler()->loadGroup(
-            $contentTypeGroupId
-        );
-
-        if ( $spiGroup === null )
+        try
+        {
+            $spiGroup = $this->persistenceHandler->contentTypeHandler()->loadGroup(
+                $contentTypeGroupId
+            );
+        }
+        catch ( TypeGroupNotFound $e )
         {
             throw new NotFoundException( 'ContentTypeGroup', $contentTypeGroupId );
         }
@@ -162,25 +166,35 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
     {
-        // @todo is group identifier 5.x feature? db does not support this yet (PS)
+        $groups = $this->loadContentTypeGroups();
+
+        foreach ( $groups as $group )
+        {
+            if ( $group->identifier === $contentTypeGroupIdentifier )
+            {
+                return $group;
+            }
+        }
+
+        throw new NotFoundException( 'ContentTypeGroup', $contentTypeGroupIdentifier );
     }
 
     /**
      * Get all Content Type Groups
      *
-     * @return array an array of {@link ContentTypeGroup}
+     * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function loadContentTypeGroups()
     {
         $spiGroups = $this->persistenceHandler->contentTypeHandler()->loadAllGroups();
 
-        return array_map(
-            function( $spiGroup )
-            {
-                return $this->buildContentTypeGroupDomainObject( $spiGroup );
-            },
-            $spiGroups
-        );
+        $groups = array();
+        foreach ( $spiGroups as $spiGroup )
+        {
+            $groups[] = $this->buildContentTypeGroupDomainObject( $spiGroup );
+        }
+
+        return $groups;
     }
 
     /**
@@ -194,14 +208,16 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateContentTypeGroup( APIContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
-        // @todo db does not support this yet (5.x)
-        if ( false )
+        try
         {
+            $this->loadContentTypeGroupByIdentifier( $contentTypeGroupUpdateStruct->identifier );
+
             throw new IllegalArgumentException(
                 '$contentTypeGroupUpdateStruct->identifier',
                 "given identifier already exists"
             );
         }
+        catch ( NotFoundException $e ) {}
 
         if ( $contentTypeGroupUpdateStruct->modificationDate !== null )
             $modifiedTimestamp = $contentTypeGroupUpdateStruct->modificationDate->getTimestamp();
@@ -292,13 +308,12 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     * @todo validating remoteid requires loadByRemoteId in persistence handler (5.x)
      */
     public function createContentType( APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
         if ( count( $contentTypeGroups ) === 0 )
         {
-            throw new InvalidArgumentException(
+            throw new IllegalArgumentException(
                 '$contentTypeGroups',
                 "array must contain at least one contentTypeGroup"
             );
@@ -311,8 +326,21 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
 
             throw new IllegalArgumentException(
-                "contentTypeCreateStruct->identifier",
+                '$contentTypeCreateStruct->identifier',
                 "identifier in the content type create struct already exists"
+            );
+        }
+        catch ( TypeNotFound $e ) {}
+
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->loadByRemoteId(
+                $contentTypeCreateStruct->remoteId
+            );
+
+            throw new IllegalArgumentException(
+                '$contentTypeCreateStruct->remoteId',
+                "remoteId in the content type create struct already exists"
             );
         }
         catch ( TypeNotFound $e ) {}
@@ -323,13 +351,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             $userId = $contentTypeCreateStruct->creatorId;
 
         if ( $contentTypeCreateStruct->creationDate === null )
-            $timestamp = $contentTypeCreateStruct->creationDate->getTimestamp();
-        else
             $timestamp = time();
+        else
+            $timestamp = $contentTypeCreateStruct->creationDate->getTimestamp();
 
-        $initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->load(
+        $initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
             $contentTypeCreateStruct->mainLanguageCode
-        );
+        )->id;
         $groupIds = array_map(
             function( $contentTypeGroup )
             {
@@ -337,13 +365,11 @@ class ContentTypeService implements ContentTypeServiceInterface
             },
             $contentTypeGroups
         );
-        $fieldDefinitions = array_map(
-            function( $fieldDefinitionCreateStruct )
-            {
-                return $this->buildSPIFieldDefinition( $fieldDefinitionCreateStruct );
-            },
-            $contentTypeCreateStruct->fieldDefinitions
-        );
+        $fieldDefinitions = array();
+        foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
+        {
+            $fieldDefinitions[] = $this->buildSPIFieldDefinition( $fieldDefinitionCreateStruct );
+        }
 
         $spiContentTypeCreateStruct = new SPIContentTypeCreateStruct(
             array(
@@ -375,7 +401,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
     }
 
-    protected function buildSPIFieldDefinition( APIFieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    protected function buildSPIFieldDefinition( FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
         $fieldTypeConstraints = new SPIFieldTypeConstraints(
             array(
@@ -384,23 +410,30 @@ class ContentTypeService implements ContentTypeServiceInterface
             )
         );
 
-        return new SPIFieldDefinition(
+        $spiFieldDefinition = new SPIFieldDefinition(
             array(
-                "id" => null,
-                "name" => $fieldDefinitionCreateStruct->names,
-                "description" => $fieldDefinitionCreateStruct->descriptions,
-                "identifier" => $fieldDefinitionCreateStruct->identifier,
-                "fieldGroup" => $fieldDefinitionCreateStruct->fieldGroup,
-                "position" => $fieldDefinitionCreateStruct->position,
-                "fieldType" => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
-                "isTranslatable" => $fieldDefinitionCreateStruct->isTranslatable,
-                "isRequired" => $fieldDefinitionCreateStruct->isRequired,
-                "isInfoCollector" => $fieldDefinitionCreateStruct->isInfoCollector,
-                "fieldTypeConstraints" => $fieldTypeConstraints,
-                "defaultValue" => $fieldDefinitionCreateStruct->defaultValue,
-                "isSearchable" => $fieldDefinitionCreateStruct->isSearchable
+                "id"                   => null,
+                "name"                 => $fieldDefinitionCreateStruct->names,
+                "description"          => $fieldDefinitionCreateStruct->descriptions,
+                "identifier"           => $fieldDefinitionCreateStruct->identifier,
+                "fieldGroup"           => $fieldDefinitionCreateStruct->fieldGroup,
+                "position"             => $fieldDefinitionCreateStruct->position,
+                "fieldType"            => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
+                "isTranslatable"       => $fieldDefinitionCreateStruct->isTranslatable,
+                "isRequired"           => $fieldDefinitionCreateStruct->isRequired,
+                "isInfoCollector"      => $fieldDefinitionCreateStruct->isInfoCollector,
+                //"fieldTypeConstraints" => $fieldTypeConstraints,
+                "defaultValue"         => $fieldDefinitionCreateStruct->defaultValue,
+                "isSearchable"         => $fieldDefinitionCreateStruct->isSearchable
             )
         );
+        $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validators;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionCreateStruct->fieldSettings;
+        //$spiFieldDefinition->defaultValue->data
+        //$spiFieldDefinition->defaultValue->fieldSettings
+        //$spiFieldDefinition->defaultValue->sortKey
+
+        return $spiFieldDefinition;
     }
 
     /**
@@ -412,40 +445,77 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function buildContentTypeDomainObject( SPIContentType $spiContentType )
     {
-        $modifiedDate = new DateTime( "@{$spiContentType->modified}" );
-        $createdDate = new DateTime( "@{$spiContentType->created}" );
+        $modifiedDate = new DateTime;
+        $modifiedDate->setTimestamp( $spiContentType->modified );
+        $createdDate = new DateTime();
+        $createdDate->setTimestamp( $spiContentType->created );
+
         $mainLanguageCode = $this->persistenceHandler->contentLanguageHandler()->load(
             $spiContentType->initialLanguageId
-        );
-        $contentTypeGroups = array_map(
-            function( $groupId )
-            {
-                return $this->loadContentTypeGroup( $groupId );
-            },
-            $spiContentType->groupIds
-        );
+        )->languageCode;
+
+        $contentTypeGroups = array();
+        foreach ( $spiContentType->groupIds as $groupId )
+        {
+            $contentTypeGroups[] = $this->loadContentTypeGroup( $groupId );
+        }
+
+        $fieldDefinitions = array();
+        foreach ( $spiContentType->fieldDefinitions as $spiFieldDefinition )
+        {
+            $fieldDefinitions[] = $this->buildFieldDefinitionDomainObject( $spiFieldDefinition );
+        }
 
         return new ContentType(
             array(
-                "names" => $spiContentType->name,
-                "descriptions" => $spiContentType->description,
-                "contentTypeGroups" => $contentTypeGroups,
-                "fieldDefinitions" => $spiContentType->fieldDefinitions,
-                "id" => $spiContentType->id,
-                "status" => $spiContentType->status,
-                "identifier" => $spiContentType->identifier,
-                "creationDate" => $createdDate,
-                "modificationDate" => $modifiedDate,
-                "creatorId" => $spiContentType->creatorId,
-                "modifierId" => $spiContentType->modifierId,
-                "remoteId" => $spiContentType->remoteId,
-                "urlAliasSchema" => $spiContentType->urlAliasSchema,
-                "nameSchema" => $spiContentType->nameSchema,
-                "isContainer" => $spiContentType->isContainer,
-                "mainLanguageCode" => $mainLanguageCode,
+                "names"                  => $spiContentType->name,
+                "descriptions"           => $spiContentType->description,
+                "contentTypeGroups"      => $contentTypeGroups,
+                "fieldDefinitions"       => $fieldDefinitions,
+                "id"                     => $spiContentType->id,
+                "status"                 => $spiContentType->status,
+                "identifier"             => $spiContentType->identifier,
+                "creationDate"           => $createdDate,
+                "modificationDate"       => $modifiedDate,
+                "creatorId"              => $spiContentType->creatorId,
+                "modifierId"             => $spiContentType->modifierId,
+                "remoteId"               => $spiContentType->remoteId,
+                "urlAliasSchema"         => $spiContentType->urlAliasSchema,
+                "nameSchema"             => $spiContentType->nameSchema,
+                "isContainer"            => $spiContentType->isContainer,
+                "mainLanguageCode"       => $mainLanguageCode,
                 "defaultAlwaysAvailable" => $spiContentType->defaultAlwaysAvailable,
-                "defaultSortField" => $spiContentType->sortField,
-                "defaultSortOrder" => $spiContentType->sortOrder
+                "defaultSortField"       => $spiContentType->sortField,
+                "defaultSortOrder"       => $spiContentType->sortOrder
+            )
+        );
+    }
+
+    /**
+     *
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $spiFieldDefinition
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     * @todo document
+     */
+    protected function buildFieldDefinitionDomainObject( SPIFieldDefinition $spiFieldDefinition )
+    {
+        return new FieldDefinition(
+            array(
+                "names"                     => $spiFieldDefinition->name,
+                "descriptions"              => $spiFieldDefinition->description,
+                "fieldSettings"             => $spiFieldDefinition->fieldTypeConstraints->fieldSettings,
+                "validators"                => $spiFieldDefinition->fieldTypeConstraints->validators,
+                "id"                        => $spiFieldDefinition->id,
+                "identifier"                => $spiFieldDefinition->identifier,
+                "fieldGroup"                => $spiFieldDefinition->fieldGroup,
+                "position"                  => $spiFieldDefinition->position,
+                "fieldTypeIdentifier"       => $spiFieldDefinition->fieldType,
+                "isTranslatable"            => $spiFieldDefinition->isTranslatable,
+                "isRequired"                => $spiFieldDefinition->isRequired,
+                "isInfoCollector"           => $spiFieldDefinition->isInfoCollector,
+                "defaultValue"              => $spiFieldDefinition->defaultValue,
+                "isSearchable"              => $spiFieldDefinition->isSearchable
             )
         );
     }
@@ -462,7 +532,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         return new ContentTypeDraft(
             array(
-                "contentType" => $this->buildContentTypeDomainObject( $spiContentType )
+                "innerContentType" => $this->buildContentTypeDomainObject( $spiContentType )
             )
         );
     }
@@ -528,7 +598,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $identifier
             );
         }
-        catch ( BaseNotFound $e )
+        catch ( TypeNotFound $e )
         {
             throw new NotFoundException(
                 "contentType",
@@ -553,7 +623,22 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
-        // @todo needs loadByRemoteId in persistence handler
+        try
+        {
+            $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
+        }
+        catch ( BaseNotFound $e )
+        {
+            throw new NotFoundException(
+                "contentType",
+                $remoteId,
+                $e
+            );
+        }
+
+        return $this->buildContentTypeDomainObject(
+            $spiContentType
+        );
     }
 
     /**
@@ -564,6 +649,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param int $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @todo enable user check
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
@@ -591,12 +677,14 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
+        /*
         $currentUser = $this->repository->getCurrentUser();
 
         if ( $spiContentType->modifierId !== $currentUser->id )
         {
             throw new NotFoundException( "contentType", $contentTypeId );
         }
+        */
 
         return $this->buildContentTypeDraftDomainObject(
             $spiContentType
@@ -616,14 +704,14 @@ class ContentTypeService implements ContentTypeServiceInterface
             $contentTypeGroup->id,
             SPIContentType::STATUS_DEFINED
         );
+        $contentTypes = array();
 
-        return array_map(
-            function( $spiContentType )
-            {
-                $this->buildContentTypeDomainObject( $spiContentType );
-            },
-            $spiContentTypes
-        );
+        foreach ( $spiContentTypes as $spiContentType )
+        {
+            $contentTypes[] = $this->buildContentTypeDomainObject( $spiContentType );
+        }
+
+        return $contentTypes;
     }
 
     /**
@@ -763,7 +851,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user if null the current user is used
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     * @todo updating identifier and remoteid not performed in persistence
      */
     public function copyContentType( APIContentType $contentType, User $user = null )
     {
@@ -864,7 +951,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      */
-    public function addFieldDefinition( APIContentTypeDraft $contentTypeDraft, APIFieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    public function addFieldDefinition( APIContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
         $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
 
@@ -894,7 +981,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      */
-    public function removeFieldDefinition( APIContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition )
+    public function removeFieldDefinition( APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition )
     {
         $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
 
@@ -924,7 +1011,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      */
-    public function updateFieldDefinition( APIContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
+    public function updateFieldDefinition( APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
         $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
 
@@ -1029,7 +1116,11 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$identifier', $identifier );
         }
 
-        return new ContentTypeCreateStruct;
+        return new ContentTypeCreateStruct(
+            array(
+                "identifier" => $identifier
+            )
+        );
     }
 
     /**
@@ -1074,8 +1165,8 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return new FieldDefinitionCreateStruct(
             array(
-                "fieldTypeIdentifier" => $identifier,
-                "identifier" => $fieldTypeIdentifier
+                "identifier" => $identifier,
+                "fieldTypeIdentifier" => $fieldTypeIdentifier
             )
         );
     }
