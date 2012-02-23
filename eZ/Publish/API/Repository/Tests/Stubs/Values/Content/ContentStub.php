@@ -21,9 +21,19 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 class ContentStub extends Content
 {
     /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
      * @var integer
      */
     protected $contentId;
+
+    /**
+     * @var integer
+     */
+    protected $contentTypeId;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[]
@@ -31,9 +41,9 @@ class ContentStub extends Content
     protected $fields;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    protected $contentInfo;
+    protected $relations;
 
     /**
      * returns the VersionInfo for this version
@@ -42,7 +52,7 @@ class ContentStub extends Content
      */
     public function getVersionInfo()
     {
-        // TODO: Implement getVersionInfo() method.
+        return $this->repository->getContentService()->loadVersionInfo( $this->getContentInfo() );
     }
 
     /**
@@ -69,7 +79,7 @@ class ContentStub extends Content
      */
     public function getRelations()
     {
-        // TODO: Implement getRelations() method.
+        return $this->relations;
     }
 
     /**
@@ -95,4 +105,43 @@ class ContentStub extends Content
     {
         // TODO: Implement getFieldsByLanguage() method.
     }
+
+    /**
+     * Returns the underlying ContentType for this content object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    private function getContentType()
+    {
+        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
+    }
+
+    /**
+     * Returns the content info for this concrete content.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    private function getContentInfo()
+    {
+        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+    }
+
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentType':
+                return $this->getContentType();
+
+            case 'contentInfo':
+                return $this->getContentInfo();
+
+            case 'versionInfo':
+                return $this->getVersionInfo();
+        }
+
+        return parent::__get( $property );
+    }
+
+
 }

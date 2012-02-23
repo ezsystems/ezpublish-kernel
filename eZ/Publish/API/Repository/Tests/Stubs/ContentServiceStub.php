@@ -27,12 +27,18 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationException
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
 
 /**
  * @example Examples/contenttype.php
  */
 class ContentServiceStub implements ContentService
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
     /**
      * @var integer
      */
@@ -44,9 +50,24 @@ class ContentServiceStub implements ContentService
     private $contents = array();
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[]
+     */
+    private $contentInfos = array();
+
+    /**
      * @var integer
      */
     private $fieldNextId = 0;
+
+    /**
+     * Instantiates a new content service object.
+     *
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     */
+    public function __construct( RepositoryStub $repository )
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * Loads a content info object.
@@ -264,17 +285,35 @@ class ContentServiceStub implements ContentService
 
         $content = new ContentStub(
             array(
-                'contentId'    =>  ++$this->contentNextId,
-                'fields'       =>  $allFields,
-                'contentInfo'  =>  new ContentInfoStub(
-                    array(
-                        'contentId'  =>  $this->contentNextId
-                    )
-                )
+                'contentId'      =>  ++$this->contentNextId,
+                'contentTypeId'  =>  $contentCreateStruct->contentType->id,
+                'fields'         =>  $allFields,
+                'relations'      =>  array(),
+
+                'repository'     =>  $this->repository
             )
         );
 
-        $this->contents[$content->contentId] = $content;
+        $contentInfo = new ContentInfoStub(
+            array(
+                'contentId'         =>  $this->contentNextId,
+                'contentTypeId'     =>  $contentCreateStruct->contentType->id,
+                'remoteId'          =>  $contentCreateStruct->remoteId,
+                'sectionId'         =>  $contentCreateStruct->sectionId,
+                'alwaysAvailable'   =>  $contentCreateStruct->alwaysAvailable,
+                'currentVersionNo'  =>  1,
+                'mainLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,
+                'modificationDate'  =>  $contentCreateStruct->modificationDate,
+                'ownerId'           =>  $this->repository->getCurrentUser()->id,
+                'published'         =>  false,
+                'publishedDate'     =>  null,
+
+                'repository'      =>  $this->repository
+            )
+        );
+
+        $this->contents[$content->contentId]     = $content;
+        $this->contentInfos[$content->contentId] = $contentInfo;
 
         return $content;
     }

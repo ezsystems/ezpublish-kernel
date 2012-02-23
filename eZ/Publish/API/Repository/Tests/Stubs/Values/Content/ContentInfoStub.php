@@ -21,9 +21,14 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 class ContentInfoStub extends ContentInfo
 {
     /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    protected $contentType;
+    protected $repository;
+
+    /**
+     * @var integer
+     */
+    protected $contentTypeId;
 
     /**
      * The content type of this content object
@@ -31,7 +36,18 @@ class ContentInfoStub extends ContentInfo
      */
     public function getContentType()
     {
-        return $this->contentType;
+        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
     }
+
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentType':
+                return $this->getContentType();
+        }
+        return parent::__get( $property );
+    }
+
 
 }
