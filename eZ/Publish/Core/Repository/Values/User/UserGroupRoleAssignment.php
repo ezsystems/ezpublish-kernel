@@ -5,10 +5,6 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment as APIUserGrou
 
 /**
  * This class represents a user group to role assignment
- *
- * @property-read \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $limitation the limitation of this role assignment
- * @property-read \eZ\Publish\API\Repository\Values\User\Role $role the role which is assigned to the user group
- * @property-read \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup user group to which the role is assigned to
  */
 class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
 {

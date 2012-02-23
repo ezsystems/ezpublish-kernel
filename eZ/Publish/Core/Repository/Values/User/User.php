@@ -5,7 +5,6 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 /**
  * This class represents a user value
- *
  */
 class User extends APIUser
 {
@@ -125,7 +124,7 @@ class User extends APIUser
      *
      * @param string $languageCode
      *
-     * @return array an array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] with field identifier as keys
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
