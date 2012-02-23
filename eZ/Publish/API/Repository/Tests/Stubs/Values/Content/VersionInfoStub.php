@@ -19,7 +19,10 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
  */
 class VersionInfoStub extends VersionInfo
 {
-    private $repository;
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
 
     /**
      * Content of the content this version belongs to.
@@ -28,7 +31,7 @@ class VersionInfoStub extends VersionInfo
      */
     public function getContentInfo()
     {
-        // TODO: Implement getContentInfo() method.
+        return $this->repository->getContentService()->loadContentInfo( $this->id );
     }
 
     /**
