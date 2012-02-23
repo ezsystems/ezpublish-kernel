@@ -200,11 +200,7 @@ function generateContentInfoFixture( array $fixture )
         $contentInfos[$data['id']] = array(
             'contentId' => $data['id'],
             'name' => $data['name'],
-            'contentType' => createRepoCall(
-                'ContentTypeService',
-                'loadContentType',
-                array( $data['contentclass_id'] )
-            ),
+            'contentTypeId' => $data['contentclass_id'],
             'sectionId' => $data['section_id'],
             'currentVersionNo' => $data['current_version'],
             'published' => ( $data['published'] != 0 ),
