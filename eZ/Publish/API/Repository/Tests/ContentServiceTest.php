@@ -352,45 +352,45 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadContentInfoThrowsNotFoundExceptoin()
+    public function testLoadContentInfoThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContentInfo() is not implemented." );
     }
 
     /**
-     * Test for the loadContenInfotByRemoteId() method.
+     * Test for the loadContentInfoByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContenInfotByRemoteId()
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
      * 
      */
-    public function testLoadContenInfotByRemoteId()
+    public function testLoadContentInfoByRemoteId()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContenInfotByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadContenInfotByRemoteId() method.
+     * Test for the loadContentInfoByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContenInfotByRemoteId()
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testLoadContenInfotByRemoteIdThrowsUnauthorizedException()
+    public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContenInfotByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadContenInfotByRemoteId() method.
+     * Test for the loadContentInfoByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContenInfotByRemoteId()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadContenInfotByRemoteIdThrowsNotFoundExceptoin()
+    public function testLoadContentInfoByRemoteIdThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContenInfotByRemoteId() is not implemented." );
     }
@@ -424,9 +424,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionInfoThrowsNotFoundExceptoin()
+    public function testLoadVersionInfoThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
     }
@@ -436,9 +436,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionInfoThrowsNotFoundExceptoinWithSecondParameter()
+    public function testLoadVersionInfoThrowsNotFoundExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
     }
@@ -496,9 +496,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionInfoByIdThrowsNotFoundExceptoin()
+    public function testLoadVersionInfoByIdThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionInfoById() is not implemented." );
     }
@@ -508,9 +508,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionInfoByIdThrowsNotFoundExceptoinWithSecondParameter()
+    public function testLoadVersionInfoByIdThrowsNotFoundExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionInfoById() is not implemented." );
     }
@@ -736,9 +736,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadContentThrowsNotFoundExceptoin()
+    public function testLoadContentThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
     }
@@ -748,9 +748,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadContentThrowsNotFoundExceptoinWithSecondParameter()
+    public function testLoadContentThrowsNotFoundExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
     }
@@ -760,9 +760,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadContentThrowsNotFoundExceptoinWithThirdParameter()
+    public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
     }
@@ -844,9 +844,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundExceptoin()
+    public function testLoadVersionByRemoteIdThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
     }
@@ -856,9 +856,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundExceptoinWithSecondParameter()
+    public function testLoadVersionByRemoteIdThrowsNotFoundExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
     }
@@ -868,9 +868,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundExceptoinWithThirdParameter()
+    public function testLoadVersionByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
     {
         $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
     }
