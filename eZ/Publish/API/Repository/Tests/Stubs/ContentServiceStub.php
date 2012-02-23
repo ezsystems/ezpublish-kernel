@@ -60,13 +60,14 @@ class ContentServiceStub implements ContentService
     private $fieldNextId = 0;
 
     /**
-     * Instantiates a new content service object.
+     * Instantiates a new content service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
     public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
+        $this->initFromFixture();
     }
 
     /**
@@ -83,7 +84,10 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfo( $contentId )
     {
-        // TODO: Implement loadContentInfo() method.
+        if ( isset( $this->contentInfos[$contentId] ) )
+        {
+            return $this->contentInfos[$contentId];
+        }
     }
 
     /**
@@ -672,5 +676,26 @@ class ContentServiceStub implements ContentService
     public function newTranslationValues()
     {
         // TODO: Implement newTranslationValues() method.
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $contentInfos,
+            $languageMap,
+            $this->contentNextId
+        ) = $this->repository->loadFixture( 'ContentInfo' );
+
+        ++$this->contentNextId;
+        foreach ( $contentInfos as $contentInfo )
+        {
+            $this->contentInfos[$contentInfo->contentId] = $contentInfo;
+        }
     }
 }

@@ -189,7 +189,19 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentInfo()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $content = $contentService->loadContentInfo( 10 );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentInfo',
+            $content
+        );
     }
 
     /**
