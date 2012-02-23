@@ -9,14 +9,14 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 /**
  * this class represents a content type value
- * 
+ *
  * @property-read array $contentTypeGroups calls getContentTypeGroups
  * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
  * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
- * @property-read DateTime $creationDate the date of the creation of this content type
- * @property-read DateTime $modificationDate the date of the last modification of this content type
+ * @property-read \DateTime $creationDate the date of the creation of this content type
+ * @property-read \DateTime $modificationDate the date of the last modification of this content type
  * @property-read int $creatorId the user id of the creator of this content type
  * @property-read int $modifierId the user id of the user which has last modified this content type
  * @property-read string $remoteId a global unique id of the content object
@@ -142,8 +142,8 @@ abstract class ContentType extends ValueObject
     protected $remoteId;
 
     /**
-     * URL alias schema. 
-     * 
+     * URL alias schema.
+     *
      * If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
@@ -152,7 +152,7 @@ abstract class ContentType extends ValueObject
 
     /**
      * Name schema.
-     * 
+     *
      * Can be composed of FieldDefinition identifier place holders.
      * These place holders must comply this pattern : <field_definition_identifier>.
      * An OR condition can be used :

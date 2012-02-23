@@ -81,20 +81,20 @@ class ContentTypeUpdateStruct extends ValueObject
     /**
      * If set this value overrides the current time for creation
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $modificationDate = null;
 
     /**
      * If set this array of names with languageCode keys replace the complete name collection
-     * 
+     *
      * @var array an array of string
      */
     public $names;
 
     /**
      * If set this array of descriptions with languageCode keys replace the complete description collection
-     * 
+     *
      * @var array an array of string
      */
     public $descriptions;
