@@ -108,25 +108,6 @@ class Type extends FieldType
     }
 
     /**
-     * Fills in $value->type and $value->pluginspage according to field settings set in FieldDefinition
-     *
-     * @see \eZ\Publish\Core\Repository\FieldType::onFieldSetValue()
-     * @param \ezp\Base\Observable $subject
-     * @param \eZ\Publish\Core\Repository\FieldType\Media\Value $value
-     */
-    protected function onFieldSetValue( Observable $subject, BaseValue $value )
-    {
-        parent::onFieldSetValue( $subject, $value );
-        if ( $subject instanceof Field )
-        {
-            if ( !isset( $value->pluginspage ) )
-            {
-                $value->pluginspage = $value->getHandler()->getPluginspageByType( $this->fieldSettings['mediaType'] );
-            }
-        }
-    }
-
-    /**
      * Converts an $hash to the Value defined by the field type
      *
      * @param mixed $hash

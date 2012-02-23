@@ -201,49 +201,4 @@ class MediaTest extends PHPUnit_Framework_TestCase
         $value = MediaValue::fromString( $this->mediaPath );
         $value->nonExistingProperty;
     }
-
-    /**
-     * @group fieldType
-     * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::onFieldSetValue
-     */
-    public function testOnFieldSetValue()
-    {
-        $this->markTestSkipped( 'Test to refactor' );
-        $defaultValue = new MediaValue;
-        $value = MediaValue::fromString( $this->mediaPath );
-        $ft = new MediaType;
-        $ft->setFieldSetting( 'mediaType', MediaType::TYPE_QUICKTIME );
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'onFieldSetValue' );
-        $refMethod->setAccessible( true );
-
-        $fieldDefMock = $this->getMockBuilder( 'ezp\\Content\\Type\\FieldDefinition' )
-            ->setConstructorArgs(
-                array(
-                    $this->getMock( 'ezp\\Content\\Type' ),
-                    'ezmedia'
-                )
-            )
-            ->getMock();
-        $fieldDefMock
-            ->expects( $this->once() )
-            ->method( 'getType' )
-            ->will( $this->returnValue( $ft ) );
-
-        $fieldMock = $this->getMockBuilder( 'ezp\\Content\\Field' )
-            ->setConstructorArgs(
-                array(
-                    $this->getMockBuilder( 'ezp\\Content\\Version' )
-                        ->disableOriginalConstructor()
-                        ->getMock(),
-                    $fieldDefMock
-                )
-            )
-            ->getMock();
-
-        $refMethod->invoke( $ft, $fieldMock, $value );
-        self::assertSame( $ft->getValue(), $value );
-        self::assertSame( MediaHandler::PLUGINSPAGE_QUICKTIME, $ft->getValue()->pluginspage );
-    }
 }

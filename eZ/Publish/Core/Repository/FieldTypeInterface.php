@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\Repository;
 use ezp\Content\Field,
     eZ\Publish\Core\Repository\FieldType\Value,
+    ezp\Base\Repository as BaseRepository,
+    ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\FieldValue;
 
 /**
@@ -23,6 +25,16 @@ interface FieldTypeInterface
      * @return string
      */
     public function getFieldTypeIdentifier();
+
+    /**
+     * This method is called on occuring events. Implementations can perform corresponding actions
+     *
+     * @param string $event - prePublish, postPublish, preCreate, postCreate
+     * @param Repository $repository
+     * @param $fieldDef - the field definition of the field
+     * @param $field - the field for which an action is performed
+     */
+    public function handleEvent( $event, BaseRepository $repository, FieldDefinition $fieldDef, Field $field );
 
     /**
      * Sets $value for $settingName on field type.

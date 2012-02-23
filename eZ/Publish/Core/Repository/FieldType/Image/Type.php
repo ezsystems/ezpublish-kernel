@@ -80,30 +80,6 @@ class Type extends FieldType
     }
 
     /**
-     *
-     * @param \ezp\Base\Observable $subject
-     * @param \eZ\Publish\Core\Repository\FieldType\Image\Value $value
-     */
-    protected function onFieldSetValue( Observable $subject, BaseValue $value )
-    {
-        parent::onFieldSetValue( $subject, $value );
-        if ( $subject instanceof Field )
-        {
-            // Here inject $fieldId, $contentId, $versionNo, $status (publication status), $languageCode, $isTranslatable
-            $this->getValue()->setState(
-                array(
-                    'fieldId' => $subject->id,
-                    'contentId' => $subject->getVersion()->contentId,
-                    'versionNo' => $subject->getVersion()->versionNo,
-                    'versionStatus' => $subject->getVersion()->status,
-                    'languageCode' => $subject->language,
-                    'isTranslatable' => $subject->getFieldDefinition()->isTranslatable
-                )
-            );
-        }
-    }
-
-    /**
      * Converts an $hash to the Value defined by the field type
      *
      * @param mixed $hash

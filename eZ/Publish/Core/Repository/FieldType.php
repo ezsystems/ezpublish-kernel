@@ -14,6 +14,7 @@ use ezp\Content\Field,
     eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
+    ezp\Content\Type\FieldDefinition,
     ezp\Base\Observable,
     ezp\Base\Repository as BaseRepository,
     ezp\Base\Exception\InvalidArgumentValue,
@@ -78,6 +79,18 @@ abstract class FieldType implements FieldTypeInterface
     public function __construct()
     {
         $this->fieldSettings = new FieldSettings( $this->allowedSettings );
+    }
+
+    /**
+     * This method is called on occuring events. Implementations can perform corresponding actions
+     *
+     * @param string $event - prePublish, postPublish, preCreate, postCreate
+     * @param Repository $repository
+     * @param $fieldDef - the field definition of the field
+     * @param $field - the field for which an action is performed
+     */
+    public function handleEvent( $event, BaseRepository $repository, FieldDefinition $fieldDef, Field $field )
+    {
     }
 
     /**
@@ -197,82 +210,6 @@ abstract class FieldType implements FieldTypeInterface
         $fieldTypeConstraints->validators = array(
             $validatorClass => $validator->getValidatorConstraints()
         ) + $fieldTypeConstraints->validators;
-    }
-
-    /**
-     * Called when subject has been updated
-     * Supported events:
-     *   - field/setValue Should be triggered when a field has been set a value. Will inject the value in the field type
-     *
-     * @param \ezp\Base\Observable $subject
-     * @param string $event
-     * @param array $arguments
-     * @throws \ezp\Base\Exception\InvalidArgumentValue
-     */
-    public function update( Observable $subject, $event = 'update', array $arguments = null )
-    {
-        switch ( $event )
-        {
-            case 'field/setValue':
-                if ( $arguments === null || !isset( $arguments['value'] ) )
-                throw new InvalidArgumentValue( 'arguments', $arguments, get_class( $this ) );
-
-                $this->onFieldSetValue( $subject, $arguments['value'] );
-                break;
-
-            case 'pre_publish':
-                if ( !$subject instanceof Field )
-                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
-                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof BaseRepository )
-                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
-                $this->onPrePublish( $arguments['repository'], $subject );
-                break;
-
-            case 'post_publish':
-                if ( !$subject instanceof Field )
-                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
-                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof BaseRepository )
-                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
-                $this->onPostPublish( $arguments['repository'], $subject );
-                break;
-
-            case 'pre_create':
-                if ( !$subject instanceof Field )
-                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
-                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof BaseRepository )
-                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
-                $this->onPreCreate( $arguments['repository'], $subject );
-                break;
-
-            case 'post_create':
-                if ( !$subject instanceof Field )
-                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
-                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof BaseRepository )
-                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
-                $this->onPostCreate( $arguments['repository'], $subject );
-                break;
-        }
-    }
-
-    /**
-     * This method is called when a "field/setValue" event is triggered by $subject.
-     * Override this method if you need to manipulate $value when "field/setValue" event is triggered.
-     * By default, it injects $value in the field type, without any manipulation.
-     * When overriding this method, the parent must always be called:
-     * <code>
-     * protected function onFieldSetValue( Observable $subject, Value $value )
-     * {
-     *     parent::onFieldSetValue( $subject, $value );
-     *     // Do something with $value and $subject
-     * }
-     * </code>
-     *
-     * @param \ezp\Base\Observable $subject
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
-     */
-    protected function onFieldSetValue( Observable $subject, Value $value )
-    {
-        $this->setValue( $value );
     }
 
     /**

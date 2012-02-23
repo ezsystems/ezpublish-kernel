@@ -18,9 +18,7 @@ use ezp\Base\Model,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\Field as FieldVO,
-    eZ\Publish\Core\Repository\FieldType\Value as FieldValue,
-    eZ\Publish\Core\Repository\FieldType\OnPublish as OnPublishFieldType,
-    eZ\Publish\Core\Repository\FieldType\OnCreate as OnCreateFieldType;
+    eZ\Publish\Core\Repository\FieldType\Value as FieldValue;
 
 /**
  * This class represents a Content's field
@@ -82,21 +80,6 @@ class Field extends Model implements Observer
     {
         $this->version = $contentVersion;
         $this->fieldDefinition = $fieldDefinition;
-
-        // Observer setup
-        $fieldType = $this->fieldDefinition->getType();
-
-        if ( $fieldType instanceof OnPublishFieldType )
-        {
-            $this->attach( $fieldType, 'pre_publish' );
-            $this->attach( $fieldType, 'post_publish' );
-        }
-
-        if ( $fieldType instanceof OnCreateFieldType )
-        {
-            $this->attach( $fieldType, 'pre_create' );
-            $this->attach( $fieldType, 'post_create' );
-        }
 
         $this->properties = new FieldVO(
             array(
@@ -194,6 +177,13 @@ class Field extends Model implements Observer
      */
     public function update( Observable $subject, $event = 'update', array $arguments = null )
     {
+        $eventMap = array(
+            "pre_create" => "preCreate",
+            "post_create" => "postCreate",
+            "pre_publish" => "prePublish",
+            "post_publish" => "postPublish",
+        );
+
         switch ( $event )
         {
             case 'pre_create':
@@ -210,6 +200,8 @@ class Field extends Model implements Observer
                     throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
                 }
 
+                $fieldDefinition = $this->fieldDefinition;
+                $fieldDefinition->getType()->handleEvent( $eventMap[$event], $arguments['repository'], $fieldDefinition, $this );
                 // notify FieldTypes about the event
                 $this->notify( $event, array( 'repository' => $arguments['repository'] ) );
                 break;

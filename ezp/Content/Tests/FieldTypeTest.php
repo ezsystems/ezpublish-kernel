@@ -160,31 +160,4 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $validator = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\Repository\\FieldType\\Validator' );
         $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef->fieldTypeConstraints, $validator );
     }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::update
-     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
-     */
-    public function testUpdateFieldSetValueEventWithoutValue()
-    {
-        $this->stub->update(
-            $this->getMock( 'ezp\\Base\\Observable' ),
-            'field/setValue'
-        );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::update
-     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
-     */
-    public function testUpdateFieldSetValueEventWithoutValidValue()
-    {
-        $this->stub->update(
-            $this->getMock( 'ezp\\Base\\Observable' ),
-            'field/setValue',
-            array( 'foo' => 'bar' )
-        );
-    }
 }

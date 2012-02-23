@@ -12,8 +12,6 @@ use ezp\Base\Repository,
     ezp\Content\Field,
     ezp\Content\Version,
     eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\OnPublish,
-    eZ\Publish\Core\Repository\FieldType\OnCreate,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\Core\Repository\FieldType\XmlText\Value as Value,
     ezp\Content\Type\FieldDefinition,
@@ -26,7 +24,7 @@ use ezp\Base\Repository,
  * This field
  * @package
  */
-class Type extends FieldType implements OnPublish, OnCreate
+class Type extends FieldType
 {
     /**
      * List of settings available for this FieldType
@@ -132,42 +130,19 @@ EOF;
     }
 
     /**
-     * Event handler for pre_publish
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Version $version
-     * @param \ezp\Content\Field $field
+     * This method is called on occuring events. Implementations can perform corresponding actions
+     *
+     * @param string $event - prePublish, postPublish, preCreate, postCreate
+     * @param Repository $repository
+     * @param $fieldDef - the field definition of the field
+     * @param $field - the field for which an action is performed
      */
-    public function onPrePublish( Repository $repository, Field $field )
+    public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field )
     {
-    }
-
-    /**
-     * Event handler for post_publish
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Version $version
-     * @param \ezp\Content\Field $field
-     */
-    public function onPostPublish( Repository $repository, Field $field )
-    {
-    }
-
-    /**
-     * Event handler for pre_create
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Field $field
-     */
-    public function onPreCreate( Repository $repository, Field $field )
-    {
-        $this->convertValueToRawValue( $field->value, $repository, $field );
-    }
-
-    /**
-     * Event handler for pre_create
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Field $field
-     */
-    public function onPostCreate( Repository $repository, Field $field )
-    {
+        if ( $event === "preCreate" )
+        {
+            $this->convertValueToRawValue( $field->value, $repository, $field );
+        }
     }
 
     /**
