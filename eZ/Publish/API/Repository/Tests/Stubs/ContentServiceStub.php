@@ -55,6 +55,11 @@ class ContentServiceStub implements ContentService
     private $contentInfos = array();
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
+     */
+    private $versionInfo = array();
+
+    /**
      * @var integer
      */
     private $fieldNextId = 0;
@@ -287,6 +292,13 @@ class ContentServiceStub implements ContentService
             }
         }
 
+        $languageCodes = array( $contentCreateStruct->mainLanguageCode );
+        foreach ( $allFields as $field )
+        {
+            $languageCodes[] = $field->languageCode;
+        }
+        $languageCodes = array_unique( $languageCodes );
+
         $content = new ContentStub(
             array(
                 'contentId'      =>  ++$this->contentNextId,
@@ -316,8 +328,25 @@ class ContentServiceStub implements ContentService
             )
         );
 
+        $versionInfo = new VersionInfoStub(
+            array(
+                'id'                   =>  $this->contentNextId,
+                'status'               =>  VersionInfo::STATUS_DRAFT,
+                'versionNo'            =>  1,
+                'creatorId'            =>  $this->repository->getCurrentUser()->id,
+                'creationDate'         =>  $contentCreateStruct->modificationDate,
+                'modificationDate'     =>  $contentCreateStruct->modificationDate,
+                'languageCodes'        =>  $languageCodes,
+                'initialLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,
+
+                'repository'           =>  $this->repository
+            )
+        );
+
+
         $this->contents[$content->contentId]     = $content;
         $this->contentInfos[$content->contentId] = $contentInfo;
+        $this->versionInfo[$content->contentId]  = array( 1 => $versionInfo );
 
         return $content;
     }

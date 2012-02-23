@@ -19,6 +19,8 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
  */
 class VersionInfoStub extends VersionInfo
 {
+    private $repository;
+
     /**
      * Content of the content this version belongs to.
      *
