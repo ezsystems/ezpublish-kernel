@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @property-read boolean $hidden Indicates that the Location is implicitly marked as hidden by a parent location.
  * @property-read boolean $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
  * @property-read string $remoteId a global unique id of the content object
- * @property-read int $parentId the id of the parent location
+ * @property-read int $parentLocationId the id of the parent location
  * @property-read string $pathString the path to this location e.g. /1/2/4/23
  * @property-read \DateTime $modifiedSubLocationDate Date of the latest update of a content object in a sub location.
  * @property-read int $mainLocationId the id of the main location of the content of this location (if equals to $id it indicates that this location is the main location)
@@ -94,7 +94,7 @@ abstract class Location extends ValueObject
      *
      * @var mixed Location ID.
      */
-    protected $parentId;
+    protected $parentLocationId;
 
     /**
      * The materialized path of the location entry, eg: /1/2/
