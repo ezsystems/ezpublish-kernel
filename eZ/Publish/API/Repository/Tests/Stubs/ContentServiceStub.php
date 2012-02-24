@@ -24,6 +24,7 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
@@ -93,6 +94,7 @@ class ContentServiceStub implements ContentService
         {
             return $this->contentInfo[$contentId];
         }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -109,7 +111,14 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
-        // TODO: Implement loadContentInfoByRemoteId() method.
+        foreach ( $this->contentInfo as $contentInfo )
+        {
+            if ( $remoteId === $contentInfo->remoteId )
+            {
+                return $contentInfo;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**

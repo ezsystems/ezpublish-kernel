@@ -292,7 +292,7 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadContentInfo()
     {
@@ -317,10 +317,18 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testLoadContentInfoThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // This call will fail with a NotFoundException
+        $contentService->loadContentInfo( PHP_INT_MAX );
+        /* END: Use Case */
     }
 
     /**
@@ -328,11 +336,20 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadContentInfoByRemoteId()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContenInfotByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $content = $contentService->loadContentInfoByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $content );
     }
 
     /**
@@ -341,10 +358,18 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
      */
     public function testLoadContentInfoByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContenInfotByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // This call will fail with a NotFoundException
+        $contentService->loadContentInfoByRemoteId( 'abcdefghijklmnopqrstuvwxyz0123456789' );
+        /* END: Use Case */
     }
 
     /**
