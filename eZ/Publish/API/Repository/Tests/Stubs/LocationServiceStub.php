@@ -22,8 +22,25 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  *
  * @package eZ\Publish\API\Repository
  */
-class LocationService implements LocationService
+class LocationServiceStub implements LocationService
 {
+    /**
+     * Repository stub
+     *
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    protected $repository;
+
+    /**
+     * Creates a new LocationServiceStub
+     *
+     * @param RepositoryStub $repository
+     */
+    public function __construct( RepositoryStub $repository )
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Instantiates a new location create class
      *
@@ -33,7 +50,9 @@ class LocationService implements LocationService
      */
     public function newLocationCreateStruct( $parentLocationId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return new LocationCreateStruct(
+            array( 'parentLocationId' => $parentLocationId )
+        );
     }
 
     /**

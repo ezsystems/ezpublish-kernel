@@ -11,6 +11,9 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
+use \eZ\Publish\API\Repository\Values\Content\Location;
+use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+
 /**
  * Test case for operations in the LocationService using in memory storage.
  *
@@ -23,13 +26,50 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testNewLocationCreateStruct()
     {
-        $this->markTestIncomplete( "Test for LocationService::newLocationCreateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $locationCreate = $locationService->newLocationCreateStruct(
+            1
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct',
+            $locationCreate
+        );
+
+        return $locationCreate;
     }
 
+    /**
+     * Test for the newLocationCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
+     */
+    public function testNewLocationCreateStructValues( LocationCreateStruct $locationCreate )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'priority'         => 0,
+                'hidden'           => false,
+                'remoteId'         => null,
+                'isMainLocation'   => false,
+                'sortField'        => Location::SORT_FIELD_NAME,
+                'sortOrder'        => Location::SORT_ORDER_ASC,
+                'parentLocationId' => 1,
+            ),
+            $locationCreate
+        );
+    }
     /**
      * Test for the createLocation() method.
      *
