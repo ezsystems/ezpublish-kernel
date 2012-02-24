@@ -134,18 +134,6 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCreateContentTypeGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentTypeGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
@@ -457,18 +445,6 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateContentTypeGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContentTypeGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
@@ -636,18 +612,6 @@ class ContentTypeServiceTest extends BaseTest
             ),
             $createStruct
         );
-    }
-
-    /**
-     * Test for the deleteContentTypeGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteContentTypeGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
     }
 
     /**
@@ -1255,18 +1219,6 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateContentTypeDraftThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
@@ -1444,19 +1396,6 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
-     * Test for the addFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
-     * @depens eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAddFieldDefinitionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
-    }
-
-    /**
      * Test for the removeFieldDefinition() method.
      *
      * @return void
@@ -1548,18 +1487,6 @@ class ContentTypeServiceTest extends BaseTest
         // Throws exception, sine "body" has already been removed
         $contentTypeService->removeFieldDefinition( $loadedDraft, $bodyField );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the removeFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testRemoveFieldDefinitionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
     }
 
     /**
@@ -1719,18 +1646,6 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateFieldDefinitionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
-    }
-
-    /**
-     * Test for the updateFieldDefinition() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
     public function testUpdateFieldDefinitionThrowsIllegalArgumentException()
@@ -1820,19 +1735,6 @@ class ContentTypeServiceTest extends BaseTest
         $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
         /* END: Use Case */
     }
-
-    /**
-     * Test for the publishContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testPublishContentTypeDraftThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
-    }
-
 
     /**
      * Test for the loadContentType() method.
@@ -2222,18 +2124,6 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCreateContentTypeDraftThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testCreateContentTypeDraftThrowsBadStateException()
@@ -2292,18 +2182,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testDeleteContentTypeThrowsBadStateException()
     {
         // TODO: Needs existsing content objects
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteContentType() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteContentTypeThrowsUnauthorizedException()
-    {
         $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
     }
 
@@ -2432,30 +2310,6 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
-     * Test for the copyContentType() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCopyContentTypeThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
-    }
-
-    /**
-     * Test for the copyContentType() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType($contentType, $user)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCopyContentTypeThrowsUnauthorizedExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
-    }
-
-    /**
      * Test for the assignContentTypeGroup() method.
      *
      * @return void
@@ -2490,18 +2344,6 @@ class ContentTypeServiceTest extends BaseTest
                 $mediaGroup->id
             )
         );
-    }
-
-    /**
-     * Test for the assignContentTypeGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAssignContentTypeGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::assignContentTypeGroup() is not implemented." );
     }
 
     /**
@@ -2568,18 +2410,6 @@ class ContentTypeServiceTest extends BaseTest
                 );
             }
         }
-    }
-
-    /**
-     * Test for the unassignContentTypeGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::unassignContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUnassignContentTypeGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
     }
 
     /**

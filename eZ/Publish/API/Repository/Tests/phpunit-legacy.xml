@@ -23,6 +23,7 @@
             <file>IOServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
+            <file>ContentTypeServiceAuthorizationTest.php</file>
             <file>ContentServiceAuthorizationTest.php</file>
             <directory>./Exceptions</directory>
         </testsuite>
