@@ -432,6 +432,7 @@ class UserService implements UserServiceInterface
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if multiple users with same login were found
      */
     public function loadUserByCredentials( $login, $password )
     {
@@ -454,7 +455,7 @@ class UserService implements UserServiceInterface
         {
             // something went wrong, we should not have more than one
             // user with the same login
-            throw new InvalidArgumentException( "login", "there are multiple users with the same login" );
+            throw new BadStateException( "login" );
         }
 
         // @todo: read site name from settings
