@@ -413,7 +413,7 @@ class LocationService implements LocationServiceInterface
         {
             try
             {
-                $parentParentLocation = $this->loadLocation( $loadedParentLocation->parentId );
+                $parentParentLocation = $this->loadLocation( $loadedParentLocation->parentLocationId );
                 if ( $parentParentLocation->hidden || $parentParentLocation->invisible )
                     $createStruct->invisible = true;
             }
@@ -660,7 +660,7 @@ class LocationService implements LocationServiceInterface
             'hidden'                   => $spiLocation->hidden,
             'invisible'                => $spiLocation->invisible,
             'remoteId'                 => $spiLocation->remoteId,
-            'parentId'                 => $spiLocation->parentId,
+            'parentLocationId'         => $spiLocation->parentId,
             'pathString'               => $spiLocation->pathString,
             'modifiedSubLocationDate'  => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
             'mainLocationId'           => $spiLocation->mainLocationId,

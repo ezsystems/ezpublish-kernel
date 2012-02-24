@@ -152,7 +152,7 @@ class UserService implements UserServiceInterface
             'fields'        => $content->getFields(),
             'relations'     => $content->getRelations(),
             'id'            => $contentInfo->contentId,
-            'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
+            'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
             'subGroupCount' => $subGroupCount
         ) );
     }
@@ -335,7 +335,7 @@ class UserService implements UserServiceInterface
             'fields'        => $publishedContent->getFields(),
             'relations'     => $publishedContent->getRelations(),
             'id'            => $publishedContentInfo->contentId,
-            'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
+            'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
             'subGroupCount' => $subGroupCount
         ) );
     }
@@ -562,7 +562,7 @@ class UserService implements UserServiceInterface
         $userLocations = $locationService->loadLocations( $loadedUser->contentInfo );
         foreach ( $userLocations as $userLocation )
         {
-            $existingGroupIds[] = $userLocation->parentId;
+            $existingGroupIds[] = $userLocation->parentLocationId;
         }
 
         $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
@@ -608,7 +608,7 @@ class UserService implements UserServiceInterface
 
         foreach ( $userLocations as $userLocation )
         {
-            if ( $userLocation->parentId === $groupMainLocation->id )
+            if ( $userLocation->parentLocationId === $groupMainLocation->id )
             {
                 $locationService->deleteLocation( $userLocation );
                 return;

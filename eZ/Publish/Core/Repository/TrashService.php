@@ -131,15 +131,15 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
 
-        if ( $newParentLocation === null && !is_numeric( $trashItem->parentId ) )
-            throw new InvalidArgumentValue( "parentId", $trashItem->parentId, "TrashItem" );
+        if ( $newParentLocation === null && !is_numeric( $trashItem->parentLocationId ) )
+            throw new InvalidArgumentValue( "parentLocationId", $trashItem->parentLocationId, "TrashItem" );
 
         if ( $newParentLocation !== null && !is_numeric( $newParentLocation->parentLocationId ) )
             throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->parentLocationId, "LocationCreateStruct" );
 
         try
         {
-            $locationParentId = $newParentLocation !== null ? $newParentLocation->parentLocationId : $trashItem->parentId;
+            $locationParentId = $newParentLocation !== null ? $newParentLocation->parentLocationId : $trashItem->parentLocationId;
             $newLocationId = $this->persistenceHandler->trashHandler()->untrashLocation( $trashItem->id, $locationParentId );
         }
         catch ( NotFound $e )
@@ -252,7 +252,7 @@ class TrashService implements TrashServiceInterface
             'hidden'                   => $spiTrashItem->hidden,
             'invisible'                => $spiTrashItem->invisible,
             'remoteId'                 => $spiTrashItem->remoteId,
-            'parentId'                 => $spiTrashItem->parentId,
+            'parentLocationId'         => $spiTrashItem->parentId,
             'pathString'               => $spiTrashItem->pathString,
             'modifiedSubLocationDate'  => new \DateTime("{@$spiTrashItem->modifiedSubLocation}"),
             'mainLocationId'           => $spiTrashItem->mainLocationId,

@@ -34,7 +34,7 @@ abstract class TrashBase extends BaseServiceTest
         self::assertNull( $trashItem->hidden );
         self::assertNull( $trashItem->invisible );
         self::assertNull( $trashItem->remoteId );
-        self::assertNull( $trashItem->parentId );
+        self::assertNull( $trashItem->parentLocationId );
         self::assertNull( $trashItem->pathString );
         self::assertNull( $trashItem->modifiedSubLocationDate );
         self::assertNull( $trashItem->mainLocationId );
@@ -164,7 +164,7 @@ abstract class TrashBase extends BaseServiceTest
         $recoveredLocation = $trashService->recover( $trashItem );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $recoveredLocation );
-        self::assertEquals( $location->parentId, $recoveredLocation->parentId );
+        self::assertEquals( $location->parentLocationId, $recoveredLocation->parentLocationId );
     }
 
     /**
@@ -176,7 +176,7 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem( array( "id" => PHP_INT_MAX, "parentId" => PHP_INT_MAX ) );
+        $trashItem = new TrashItem( array( "id" => PHP_INT_MAX, "parentLocationId" => PHP_INT_MAX ) );
         $trashService->recover( $trashItem );
     }
 
@@ -198,7 +198,7 @@ abstract class TrashBase extends BaseServiceTest
         $recoveredLocation = $trashService->recover( $trashItem, $locationCreateStruct );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $recoveredLocation );
-        self::assertEquals( $locationCreateStruct->parentLocationId, $recoveredLocation->parentId );
+        self::assertEquals( $locationCreateStruct->parentLocationId, $recoveredLocation->parentLocationId );
     }
 
     /**
