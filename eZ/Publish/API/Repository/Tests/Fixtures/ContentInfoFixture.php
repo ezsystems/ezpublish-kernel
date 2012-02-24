@@ -15,6 +15,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "f5c88a2209584891056f987fd965b0ba",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         10  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -31,6 +32,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "faaeb9be3bd98ed09f606fc16d144eca",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         11  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -47,6 +49,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "5f7f0bdb3381d6a461d8c29ff53d908f",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         12  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -63,6 +66,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "9b47a45624b023b1a76c73b74d704acf",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         13  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -79,6 +83,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "3c160cca19fb135f83bd02d911f04db2",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         14  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -95,6 +100,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "1bb4fe25487f05527efa8bfd394cecc7",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         41  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -111,6 +117,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "a6e35cbcb7cd6ae4b691f3eee30cd262",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         42  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -127,6 +134,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "15b256dbea2ae72418ff5facc999e8f9",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         45  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -143,6 +151,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "241d538ce310074e602f29f49e44e938",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         49  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -159,6 +168,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "e7ff633c6b8e0fd3531e74c6e712bead",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         50  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -175,6 +185,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "732a5acd01b51a6fe6eab448ad4138a9",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         51  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -191,6 +202,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "09082deb98662a104f325aaa8c4933d3",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         52  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -207,6 +219,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "27437f3547db19cf81a33c92578b2c89",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         54  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -223,6 +236,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "8b8b22fe3c6061ed500fbd2b377b885f",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         56  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -239,6 +253,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "08799e609893f7aba22f10cb466d9cc8",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         57  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -255,6 +270,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "f1826ada5e88c8f79e7048b2145040b2",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         58  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -271,6 +287,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "99730850bd806030c4ae9ea92571bdd0",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         59  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -287,6 +304,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "52f728d4880ca5def392e4f2e782ee6d",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         60  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -303,6 +321,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ec19f2662ebb0f930ce024a48f17f7ee",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         61  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -319,6 +338,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "55e6c9acf534ff2f3564290cb38ffddc",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         62  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -335,6 +355,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "768a04778081c6e08db5d77dd01f98a9",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         63  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -351,6 +372,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "a7c0be8039efe452ca7d1e7ec1d28dcf",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         64  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -367,6 +389,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "1000aa14a05b968a2faa3def83aa1994",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         65  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -383,6 +406,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "8a9c9c761004866fb458d89910f52bee",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         66  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -399,6 +423,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "800a632abc6258f5e0a6229c2ff55b46",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         67  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -415,6 +440,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "5dba9f5125423db2eda9ba8858a38775",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         68  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -431,6 +457,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "02d35489c12bcbff3239c3b739823678",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         69  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -447,6 +474,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "2995f126f24a5ef2b937c63ecae2ffc0",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         70  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -463,6 +491,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "7e60420c152b5b1821ff8dda1d5002aa",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         71  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -479,6 +508,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "c0e62f667c7edf5b69f3131c98292387",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         72  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -495,6 +525,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "71692736085cf6f8a36cdbb082249764",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         73  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -511,6 +542,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "14f969f0d7f75f507394372c22919d00",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         74  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -527,6 +559,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "3524ea164ee11e7e102c9aaa56d02488",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         75  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -543,6 +576,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "3388409c96f37a7974f35befa5a14650",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         76  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -559,6 +593,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "f21f7c41fd73c70814c46cb26b0851ed",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         77  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -575,6 +610,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "91ac81d846554a305a4029b19ba52d31",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         78  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -591,6 +627,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "f20f40a2f49aeec1ec40e9fb5d7cb86c",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         79  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -607,6 +644,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "b703033b4165a4e5b13a5b8d36b02cd1",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         80  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -623,6 +661,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "7dfe6d524e63a6759fd31db11a3e1490",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         81  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -639,6 +678,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "4179733ef0b35e2608ce72158ffe3893",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         82  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -655,6 +695,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "5e182ad2a35120c9579c3f6d61e143cc",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         83  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -671,6 +712,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "a771e29e5157372b4798dd69a3f3eaaf",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         84  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -687,6 +729,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "79c3b8005e960653895177d765421342",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         85  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -703,6 +746,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "6a18ed16e2ea7618cc57b45791287408",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         86  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -719,6 +763,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "895d89a8052f65834296b66318586044",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         87  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -735,6 +780,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "926e4fa2734f1fb6c73865417d374fea",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         88  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -751,6 +797,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "4014d37e72cee9e4dd45ab83b8b487ad",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         89  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -767,6 +814,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "93d52b9e156bd0fcd8b04cc3848e6399",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         90  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -783,6 +831,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "8ce63c01bab6005a389b7bde97f67dae",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         91  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -799,6 +848,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "bafe7b5d33ea8ff41c0b8eab1bf8fc04",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         92  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -815,6 +865,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "b2b0a9addbbe01a7cb0160e70e42645c",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         93  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -831,6 +882,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "34ceeed46f3ff3a5b29b8f96eb5d0d81",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         94  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -847,6 +899,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "affc99e41128c1475fa4f23dafb7159b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         95  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -863,6 +916,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "c4d3b3ee85f36777a744015c7f234387",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         96  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -879,6 +933,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "c8294dd0b321e556905fa73df3d7ca8e",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         97  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -895,6 +950,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "9ca41b0930e91ae61b2d67bab735ea76",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         98  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -911,6 +967,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "8366aa92a2a1b25e6f3ffc09e6fb6ce4",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         99  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -927,6 +984,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "89a584d09ab2f7dbc3374aad02839f21",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         100  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -943,6 +1001,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "f6e9707b5c57b6559f71d1c208452586",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         101  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -959,6 +1018,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "e9aacd027d83d0c7f938521743cd7c98",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         102  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -975,6 +1035,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ec2989a9d3928f616fc3f9a8230928a2",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         103  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -991,6 +1052,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "6a972b9a9541a2cb8a1947f222c8a629",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         104  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1007,6 +1069,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "be5e492565ceefe997010cec6518103e",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         105  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1023,6 +1086,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "5eeb942341753fc43a2c03c64e86f849",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         106  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1039,6 +1103,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "fe77fde45a90fa16043f39d3e3e87e4b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         107  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1055,6 +1120,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "5bae6a310785e4f43fcc592e28eb7fd0",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         108  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1071,6 +1137,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "2ded978c269bba85013b86c2964009be",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         109  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1087,6 +1154,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-500ab8787316f4299c770900bf0b0361",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         110  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1103,6 +1171,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-ad2898c2625326a0d31d18153febbd23",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         111  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1119,6 +1188,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-56d3f1d0fc6fc6833653e95d50ac37fe",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         112  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1135,6 +1205,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-108ac92f1474159b11e596f43a621a50",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         113  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1151,6 +1222,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-ceba80e058bbe31bd6c34bb0e4b70bb7",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         114  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1167,6 +1239,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-9c4764dca2a879664b1d6d78275e3bf5",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         115  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1183,6 +1256,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-1ade41acf96c3c4b1a12860e1b273f34",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         116  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1199,6 +1273,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-7ba827c696f3e1a2f1346541ce006bc9",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         117  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1215,6 +1290,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-807f36478d500837a867f092f16d2edb",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         118  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1231,6 +1307,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "90ee91c224c69f28aa775cf9edc34ef3",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         119  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1247,6 +1324,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-6dd0f99f173ac80b7a02278b7a16d591",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         120  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1263,6 +1341,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-9a1aaccfcceb5f0c6deed712dc3e8ad2",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         121  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1279,6 +1358,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-833ab68985a7f8c1684b267b30a559c6",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         122  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1295,6 +1375,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-93e2315c451c7126eae706b473b1c52a",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         123  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1311,6 +1392,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-23e06358318331a1c2106d7c33a58418",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         124  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1327,6 +1409,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-04a89e84e1f234c3c994d9d4c0e97427",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         125  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1343,6 +1426,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-074e119f8e73af31122dbb65c5e2e051",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         126  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1359,6 +1443,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-523ece70d73d5d9181766024536432ac",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         127  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1375,6 +1460,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "564f94afa87f70227199e951450b19a4",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         128  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1391,6 +1477,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-0766000124cbc5f97cbc2ab2a866d211",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         129  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1407,6 +1494,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-e6d52e4230c6537bb443681a3e2227f1",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         130  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1423,6 +1511,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "e02b80d7cd9059cf469aafbe7d2d1969",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         131  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1439,6 +1528,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "5602aa2e97cc42199dbdf09d39602fa1",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         132  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1455,6 +1545,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "b3a55b313b9dcc062b0a72d353a061f0",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         133  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1471,6 +1562,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-824ecec8d77eacebe80a14de50be1407",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         134  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1487,6 +1579,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-be5800de6f1768c0246c98fb8ab82ae8",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         135  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1503,6 +1596,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-898e714f495796d827e14fabcad39004",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         136  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1519,6 +1613,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "600871786c620b262ed880d0712cf9e0",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         137  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1535,6 +1630,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-786d2237126858b0ae103bba831194c5",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         138  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1551,6 +1647,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-30636a746c10b209d065b6236322cae9",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         139  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1567,6 +1664,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "c04fb6e7abdfcf2c032389cfb246df10",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         140  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1583,6 +1681,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-25c6a6c4283f817e868846e4e4e047bc",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         141  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1599,6 +1698,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-e8c8e5be0ab861883249f1f140645d1b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         142  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1615,6 +1715,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-d91c6b1b2436f599b0c235f1d49bffe6",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         143  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1631,6 +1732,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-834c4dc12c2470e235dfca5a9b56a751",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         144  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1647,6 +1749,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "726413c0a78a8b4d75e6681d7f9883f6",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         145  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1663,6 +1766,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "8377bca8d648a3cab863ef09de4a33ba",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         146  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1679,6 +1783,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-312c7da896e31f74afa5bdfcf2ec3c4b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         147  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1695,6 +1800,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "56d03ef66308781ea1bda4adbd10fed5",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         148  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1711,6 +1817,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "15450851f4f20dbd0f7e612f3355c4a4",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         149  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1727,6 +1834,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-341682c9084fad2fd8ec02129a427721",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         150  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1743,6 +1851,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "a7bf7875d4f020de21f7fd6281eb7922",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         151  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1759,6 +1868,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "bea2aa5ed17c617531344b6c71aff596",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         152  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1775,6 +1885,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-0b8f65be2b80b4a7138990b335736563",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         153  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1791,6 +1902,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ezoo-db3fcade578f2fc9da52a81f503394c2",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         154  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1807,6 +1919,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "4ce71da8102ee02db016158cd06895ed",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         155  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1823,6 +1936,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "96525aef27696fa39e69d43481ffc2b1",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         156  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1839,6 +1953,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "2803bc1a519d7a60567721200db49d27",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         157  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1855,6 +1970,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "b76742278b7144f55c8c8dddc496d762",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         158  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1871,6 +1987,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "9e60cb050cfd8faf02af8fed62e37d94",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         159  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1887,6 +2004,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "95edc648f6300157ecd3749b2adf8ab0",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         160  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1903,6 +2021,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "3bcff60495f6c4b165d15f47628f7245",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         161  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1919,6 +2038,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "54965750523a6caf827bd255ab4833bb",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         162  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1935,6 +2055,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "3f1c8e4d7736f54032138ea330ee461a",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         163  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1951,6 +2072,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "18ed8ae5378a8a1431fc5c8f88f0a86a",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         164  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1967,6 +2089,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "cc72df346e00e35cc78d5c6b466a2c11",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         165  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1983,6 +2106,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "378acc2bc7a52400701956047a2f7d45",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         166  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -1999,6 +2123,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "219ca29549fe687005593716f9fe5d68",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         167  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2015,6 +2140,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "c5976544daefad2cf0855dbe54a4e748",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         168  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2031,6 +2157,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "e6ce013587fd32057017c4459c03b681",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         169  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2047,6 +2174,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "bd4ff900964c8b09694478f5432afc41",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         170  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2063,6 +2191,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "27c68e844e2663ddd20dfb59961d5268",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         171  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2079,6 +2208,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ee8e3c6f437198adaa073a9e2b4dc338",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         172  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2095,6 +2225,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "4ce7df1966ec83aadb0901ed6162bf9b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         173  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2111,6 +2242,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "fa54ccddf28481b513b60c68911baef8",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         174  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2127,6 +2259,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "e20a6ec858de6a28a7ba14c26164753a",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         175  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2143,6 +2276,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "5a3d6806ccd2f6edd86f6219ddc51525",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         176  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2159,6 +2293,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "c0180d604d5f5d273702b7d675d6c0cd",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         177  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2175,6 +2310,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "32709d6df489b5debc03caddec908363",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         178  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2191,6 +2327,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "36e3a053ea7c2eb0270f7e814db08437",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         179  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2207,6 +2344,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "94b6dac5fe7da860b3d1517c50fe778c",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         180  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2223,6 +2361,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "3563d8cdc914573dcff797de2e6e19e1",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         181  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2239,6 +2378,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "d1d0d736feaffd107778d8a7f980f262",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         182  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2255,6 +2395,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "18be5e657fce9d909d0e5662d4ce2455",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         183  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2271,6 +2412,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "a1375875fc7657d934d402e20b76bce2",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         184  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2287,6 +2429,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "0caf4e0ea84c4919570def36f782ef6d",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         185  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2303,6 +2446,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "6a715c29ec67ed5e13ded872e1615690",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         186  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2319,6 +2463,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "bfe5bf501b832f165089c8d1c0ee959f",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         187  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2335,6 +2480,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "e88c60fabc96a9dc0a5d429b1a9872ed",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         188  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2351,6 +2497,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "b4668ac60d726ddfb655c3895cb0cae5",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         189  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2367,6 +2514,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "10705bd08a74c34556ffee6a70d0be0b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         190  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2383,6 +2531,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "dc3e2c928288ee4773493fe16db9ec08",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         191  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2399,6 +2548,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "932072228b62943d3d3521e7712b54e9",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         192  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2415,6 +2565,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "5e5d7350606f50f5b2e9c85080ef83a3",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         193  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2431,6 +2582,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "afad8dfca54311e15bfd241ef09da280",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         194  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2447,6 +2599,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "0df4432f360b63cc55331524bea095bc",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         195  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2463,6 +2616,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "632542f33d621670300a843c2c3d7790",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         196  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2479,6 +2633,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "be4b68a49195b504f7854e38ee97c9e6",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         197  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2495,6 +2650,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "9737ed22471ac3baf2dbbb45fcb3af5c",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         198  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2511,6 +2667,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "2ff25f3949e9c4d49442170ca0726fea",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         199  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2527,6 +2684,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ab7ed2ea1e71e7ec0479195fc0dc5440",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         200  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2543,6 +2701,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "4cf0621be70d809727b8a3581343dee1",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         201  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2559,6 +2718,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "fad6a8133332373683847f76158e8719",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         202  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2575,6 +2735,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "81d949fde405dbe3e5bc6d83452bd927",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         203  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2591,6 +2752,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "344e4197cdaf6ad6f06e0c99ad81dbed",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         204  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2607,6 +2769,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ffc4840fd5b1f8c7ec21d569787252ed",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         205  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2623,6 +2786,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "3e192eaaaaaceea57be51f2fec5b4abd",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         206  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2639,6 +2803,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ee5ad7e637d4da303960cc8800ced740",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         207  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2655,6 +2820,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "59a7ab331d043dddcf9011a8ef32a32b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         208  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2671,6 +2837,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "e9ba83a65cdaf91039bbffbbfdc5d77b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         209  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2687,6 +2854,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "46683944a42aefbbb42cf615489f3627",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         210  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2703,6 +2871,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "58f0b7745496ec9ba4e3238dbd481a4b",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         211  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2719,6 +2888,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "96a6b67d897f8dda1053f2a56a734941",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         212  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2735,6 +2905,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "9bf3262d95b411ed99b6efb704aba830",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         213  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2751,6 +2922,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "a1dc5eaa5bb06066e033df54ecd76180",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         214  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2767,6 +2939,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "e14eb9cc916fd2f8e0e5660cdda0f25d",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         215  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2783,6 +2956,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "e56b267f79afc37b624d3348a0e85f6e",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         216  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2799,6 +2973,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "df9492099e7fc03de8823726eb7c5b56",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         217  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2815,6 +2990,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "ce7a6712771252619b2a32e277ea7aac",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         218  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2831,6 +3007,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "83d9df9fbe02ae449c2208625b6803e0",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         219  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2847,6 +3024,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "36a66a1bf73a17b098642b52c7b62c35",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         220  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2863,6 +3041,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "493a855d8565518e07369352e295facc",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         221  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2879,6 +3058,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "c9822f47546396138c1318d3e0dcbdfe",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         222  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2895,6 +3075,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "c8e19a5426d741de3d587579de89c91e",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         223  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2911,6 +3092,7 @@ return array(
                 "alwaysAvailable"  =>  false,
                 "remoteId"  =>  "73ab8d14922e13d67ef3c295d0663fa9",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         224  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2927,6 +3109,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "a457bec5fb0afe243c16fe254e2fbcdf",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
         225  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
@@ -2943,6 +3126,7 @@ return array(
                 "alwaysAvailable"  =>  true,
                 "remoteId"  =>  "713e1709ba03bf1fde1396d2a0451e28",
                 "mainLanguageCode"  =>  "eng-US",
+                "repository"  =>  $this,
             )
         ),
     ),

@@ -198,18 +198,19 @@ function generateContentInfoFixture( array $fixture )
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
         $contentInfos[$data['id']] = array(
-            'contentId' => $data['id'],
-            'name' => $data['name'],
-            'contentTypeId' => $data['contentclass_id'],
-            'sectionId' => $data['section_id'],
-            'currentVersionNo' => $data['current_version'],
-            'published' => ( $data['published'] != 0 ),
-            'ownerId' => $data['owner_id'],
-            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
-            'publishedDate' => 'new \DateTime( "@' . $data['published'] . '" )',
-            'alwaysAvailable' => (boolean) ( $data['language_mask'] & 1 ),
-            'remoteId' => $data['remote_id'],
-            'mainLanguageCode' => $languageCodes[$data['initial_language_id']],
+            'contentId'         =>  $data['id'],
+            'name'              =>  $data['name'],
+            'contentTypeId'     =>  $data['contentclass_id'],
+            'sectionId'         =>  $data['section_id'],
+            'currentVersionNo'  =>  $data['current_version'],
+            'published'         =>  ( $data['published'] != 0 ),
+            'ownerId'           =>  $data['owner_id'],
+            'modificationDate'  =>  'new \DateTime( "@' . $data['modified'] . '" )',
+            'publishedDate'     =>  'new \DateTime( "@' . $data['published'] . '" )',
+            'alwaysAvailable'   =>  (boolean) ( $data['language_mask'] & 1 ),
+            'remoteId'          =>  $data['remote_id'],
+            'mainLanguageCode'  =>  $languageCodes[$data['initial_language_id']],
+            'repository'        =>  '$this'
         );
         $nextId = max( $nextId, $data['id'] );
     }
