@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
+
 /**
  * Location service, used for complex subtree operations
  *
@@ -32,6 +34,16 @@ class LocationServiceStub implements LocationService
     protected $repository;
 
     /**
+     * @var int
+     */
+    protected $nextLocationId = 0;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub
+     */
+    protected $locations = array();
+
+    /**
      * Creates a new LocationServiceStub
      *
      * @param RepositoryStub $repository
@@ -39,6 +51,7 @@ class LocationServiceStub implements LocationService
     public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
+        $this->initFromFixture();
     }
 
     /**
@@ -271,5 +284,24 @@ class LocationServiceStub implements LocationService
         throw new \RuntimeException( "Not implemented, yet." );
     }
 
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $locations,
+            $this->nextLocationId
+        ) = $this->repository->loadFixture( 'Location' );
+
+        ++$this->nextGroupId;
+        foreach ( $locations as $location )
+        {
+            $this->locations[$location->id] = $location;
+        }
+    }
 }
 

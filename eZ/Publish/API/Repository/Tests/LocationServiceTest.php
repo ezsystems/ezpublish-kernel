@@ -70,6 +70,7 @@ class LocationServiceTest extends BaseTest
             $locationCreate
         );
     }
+
     /**
      * Test for the createLocation() method.
      *
