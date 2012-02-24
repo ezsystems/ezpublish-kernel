@@ -48,6 +48,4 @@ class ContentInfoStub extends ContentInfo
         }
         return parent::__get( $property );
     }
-
-
 }

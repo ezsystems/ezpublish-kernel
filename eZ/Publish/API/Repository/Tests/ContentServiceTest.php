@@ -187,14 +187,12 @@ class ContentServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'id'                   =>  $content->contentId,
                 'status'               =>  VersionInfo::STATUS_DRAFT,
                 'versionNo'            =>  1,
                 'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
                 'initialLanguageCode'  =>  'eng-GB',
             ),
             array(
-                'id'                   =>  $content->getVersionInfo()->id,
                 'status'               =>  $content->getVersionInfo()->status,
                 'versionNo'            =>  $content->getVersionInfo()->versionNo,
                 'creatorId'            =>  $content->getVersionInfo()->creatorId,

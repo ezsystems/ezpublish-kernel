@@ -25,13 +25,18 @@ class VersionInfoStub extends VersionInfo
     protected $repository;
 
     /**
+     * @var integer
+     */
+    protected $contentId;
+
+    /**
      * Content of the content this version belongs to.
      *
      * @return ContentInfo
      */
     public function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->id );
+        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
     }
 
     /**

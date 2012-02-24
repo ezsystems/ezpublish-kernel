@@ -63,6 +63,11 @@ class ContentServiceStub implements ContentService
     /**
      * @var integer
      */
+    private $versionNextId = 0;
+
+    /**
+     * @var integer
+     */
     private $fieldNextId = 0;
 
     /**
@@ -136,9 +141,12 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
-        if ( isset( $this->versionInfo[$contentInfo->contentId] ) )
+        foreach ( $this->versionInfo as $versionInfo )
         {
-            return end( $this->versionInfo[$contentInfo->contentId] );
+            if ( $versionInfo->contentId === $contentInfo->contentId )
+            {
+                return $versionInfo;
+            }
         }
         // TODO: Implement loadVersionInfo() method.
     }
@@ -343,7 +351,8 @@ class ContentServiceStub implements ContentService
 
         $versionInfo = new VersionInfoStub(
             array(
-                'id'                   =>  $this->contentNextId,
+                'id'                   =>  ++$this->versionNextId,
+                'contentId'            =>  $this->contentNextId,
                 'status'               =>  VersionInfo::STATUS_DRAFT,
                 'versionNo'            =>  1,
                 'creatorId'            =>  $this->repository->getCurrentUser()->id,
@@ -359,7 +368,7 @@ class ContentServiceStub implements ContentService
 
         $this->contents[$content->contentId]    = $content;
         $this->contentInfo[$content->contentId] = $contentInfo;
-        $this->versionInfo[$content->contentId] = array( 1 => $versionInfo );
+        $this->versionInfo[$versionInfo->id]    = $versionInfo;
 
         return $content;
     }
@@ -736,15 +745,10 @@ class ContentServiceStub implements ContentService
     private function initFromFixture()
     {
         list(
-            $contentInfos,
-            $languageMap,
-            $this->contentNextId
+            $this->contentInfo,
+            $this->contentNextId,
+            $this->versionInfo,
+            $this->versionNextId,
         ) = $this->repository->loadFixture( 'ContentInfo' );
-
-        ++$this->contentNextId;
-        foreach ( $contentInfos as $contentInfo )
-        {
-            $this->contentInfo[$contentInfo->contentId] = $contentInfo;
-        }
     }
 }

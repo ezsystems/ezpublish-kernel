@@ -3130,9 +3130,2798 @@ return array(
             )
         ),
     ),
+    225,
     array(
-        "2"  =>  "eng-US",
-        "4"  =>  "eng-GB",
+        4  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  4,
+                "contentId"  =>  4,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@0" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@0" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        474  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  474,
+                "contentId"  =>  10,
+                "status"  =>  1,
+                "versionNo"  =>  2,
+                "modificationDate"  =>  new \DateTime( "@1072180405" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1072180337" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        674  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  674,
+                "contentId"  =>  11,
+                "status"  =>  1,
+                "versionNo"  =>  2,
+                "modificationDate"  =>  new \DateTime( "@1311154215" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1311154215" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        439  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  439,
+                "contentId"  =>  11,
+                "status"  =>  3,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1033920746" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1033920737" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        440  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  440,
+                "contentId"  =>  12,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1033920775" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1033920760" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        441  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  441,
+                "contentId"  =>  13,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1033920794" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1033920786" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        672  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  672,
+                "contentId"  =>  14,
+                "status"  =>  1,
+                "versionNo"  =>  4,
+                "modificationDate"  =>  new \DateTime( "@1311154214" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1311154214" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        499  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  499,
+                "contentId"  =>  14,
+                "status"  =>  3,
+                "versionNo"  =>  3,
+                "modificationDate"  =>  new \DateTime( "@1301062024" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1301061783" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        472  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  472,
+                "contentId"  =>  41,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1060695457" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1060695450" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        473  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  473,
+                "contentId"  =>  42,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1072180330" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1072180278" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        477  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  477,
+                "contentId"  =>  45,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1079684190" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1079684084" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        488  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  488,
+                "contentId"  =>  49,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1080220197" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1080220181" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        489  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  489,
+                "contentId"  =>  50,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1080220220" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1080220211" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        490  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  490,
+                "contentId"  =>  51,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1080220233" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1080220225" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        491  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  491,
+                "contentId"  =>  52,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1082016591" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1082016497" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        500  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  500,
+                "contentId"  =>  54,
+                "status"  =>  1,
+                "versionNo"  =>  2,
+                "modificationDate"  =>  new \DateTime( "@1301062375" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1301062300" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        495  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  495,
+                "contentId"  =>  56,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1103023120" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1103023120" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        504  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  504,
+                "contentId"  =>  57,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1168428357" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1168428357" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        505  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  505,
+                "contentId"  =>  58,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175499903" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175499884" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        506  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  506,
+                "contentId"  =>  59,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175499932" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175499919" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        507  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  507,
+                "contentId"  =>  60,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175499959" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175499947" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        508  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  508,
+                "contentId"  =>  61,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175500074" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175500068" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        509  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  509,
+                "contentId"  =>  62,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175500182" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175500086" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        510  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  510,
+                "contentId"  =>  63,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175500542" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175500520" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        511  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  511,
+                "contentId"  =>  64,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175500602" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175500561" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        512  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  512,
+                "contentId"  =>  65,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299780998" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299780934" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        513  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  513,
+                "contentId"  =>  66,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299781436" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299781436" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        514  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  514,
+                "contentId"  =>  67,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174567474" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174567458" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        515  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  515,
+                "contentId"  =>  68,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174302360" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174302333" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        516  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  516,
+                "contentId"  =>  69,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174303791" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174303659" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        517  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  517,
+                "contentId"  =>  70,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174302388" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174302380" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        518  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  518,
+                "contentId"  =>  71,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174303350" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174303300" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        519  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  519,
+                "contentId"  =>  72,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174303441" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174303407" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        520  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  520,
+                "contentId"  =>  73,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174304934" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174304926" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        521  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  521,
+                "contentId"  =>  74,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174302417" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174302401" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        522  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  522,
+                "contentId"  =>  75,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175500673" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175500667" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        523  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  523,
+                "contentId"  =>  76,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175069345" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175069333" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        524  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  524,
+                "contentId"  =>  77,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174643989" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174643924" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        525  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  525,
+                "contentId"  =>  78,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174644139" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174644062" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        526  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  526,
+                "contentId"  =>  79,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174644713" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174644699" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        527  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  527,
+                "contentId"  =>  80,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175069361" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175069353" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        528  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  528,
+                "contentId"  =>  81,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174645183" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174645164" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        529  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  529,
+                "contentId"  =>  82,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174645301" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174645280" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        530  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  530,
+                "contentId"  =>  83,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174645360" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174645353" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        531  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  531,
+                "contentId"  =>  84,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175513914" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175513890" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        532  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  532,
+                "contentId"  =>  85,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175238155" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175238144" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        533  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  533,
+                "contentId"  =>  86,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175069183" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175069166" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        534  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  534,
+                "contentId"  =>  87,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175236156" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175236143" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        535  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  535,
+                "contentId"  =>  88,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175236181" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175236170" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        536  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  536,
+                "contentId"  =>  89,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175238552" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175238540" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        537  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  537,
+                "contentId"  =>  90,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174389633" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174389626" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        538  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  538,
+                "contentId"  =>  91,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175238194" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175238182" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        539  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  539,
+                "contentId"  =>  92,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175238222" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175238211" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        540  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  540,
+                "contentId"  =>  93,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175069321" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175069305" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        541  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  541,
+                "contentId"  =>  94,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175496901" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175496885" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        542  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  542,
+                "contentId"  =>  95,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175258817" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175258807" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        543  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  543,
+                "contentId"  =>  96,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175253354" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175253354" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        544  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  544,
+                "contentId"  =>  97,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175253355" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175253355" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        545  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  545,
+                "contentId"  =>  98,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175082041" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175082027" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        546  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  546,
+                "contentId"  =>  99,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175082005" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175082005" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        547  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  547,
+                "contentId"  =>  100,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175082007" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175082007" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        548  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  548,
+                "contentId"  =>  101,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175253508" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175253486" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        549  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  549,
+                "contentId"  =>  102,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175496958" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175496936" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        550  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  550,
+                "contentId"  =>  103,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175253665" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175253638" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        551  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  551,
+                "contentId"  =>  104,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175253697" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175253680" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        552  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  552,
+                "contentId"  =>  105,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299158749" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299158726" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        553  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  553,
+                "contentId"  =>  106,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299826201" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299826193" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        554  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  554,
+                "contentId"  =>  107,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299782490" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299782457" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        555  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  555,
+                "contentId"  =>  108,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299782140" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299782077" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        556  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  556,
+                "contentId"  =>  109,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        557  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  557,
+                "contentId"  =>  110,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        558  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  558,
+                "contentId"  =>  111,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        559  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  559,
+                "contentId"  =>  112,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        560  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  560,
+                "contentId"  =>  113,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        561  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  561,
+                "contentId"  =>  114,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        562  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  562,
+                "contentId"  =>  115,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        563  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  563,
+                "contentId"  =>  116,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        564  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  564,
+                "contentId"  =>  117,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772463" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772463" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        565  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  565,
+                "contentId"  =>  118,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        566  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  566,
+                "contentId"  =>  119,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        567  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  567,
+                "contentId"  =>  120,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        568  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  568,
+                "contentId"  =>  121,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        569  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  569,
+                "contentId"  =>  122,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        570  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  570,
+                "contentId"  =>  123,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        571  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  571,
+                "contentId"  =>  124,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        572  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  572,
+                "contentId"  =>  125,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        573  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  573,
+                "contentId"  =>  126,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772545" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772545" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        574  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  574,
+                "contentId"  =>  127,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299782177" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299782157" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        575  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  575,
+                "contentId"  =>  128,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772637" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772637" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        576  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  576,
+                "contentId"  =>  129,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299772637" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299772637" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        577  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  577,
+                "contentId"  =>  130,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1284398357" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1284398171" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        578  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  578,
+                "contentId"  =>  131,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299780749" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299780740" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        579  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  579,
+                "contentId"  =>  132,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299782001" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299781985" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        580  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  580,
+                "contentId"  =>  133,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773631" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773631" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        581  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  581,
+                "contentId"  =>  134,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773631" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773631" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        582  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  582,
+                "contentId"  =>  135,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773631" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773631" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        583  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  583,
+                "contentId"  =>  136,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773644" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773644" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        584  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  584,
+                "contentId"  =>  137,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773644" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773644" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        585  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  585,
+                "contentId"  =>  138,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773644" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773644" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        586  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  586,
+                "contentId"  =>  139,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299781914" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299781873" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        587  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  587,
+                "contentId"  =>  140,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773656" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773656" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        588  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  588,
+                "contentId"  =>  141,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773656" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773656" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        589  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  589,
+                "contentId"  =>  142,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773656" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773656" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        590  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  590,
+                "contentId"  =>  143,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773656" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773656" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        591  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  591,
+                "contentId"  =>  144,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299781605" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299781559" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        592  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  592,
+                "contentId"  =>  145,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299826223" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299826213" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        593  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  593,
+                "contentId"  =>  146,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773676" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773676" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        594  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  594,
+                "contentId"  =>  147,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773690" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773690" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        595  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  595,
+                "contentId"  =>  148,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773704" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773704" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        596  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  596,
+                "contentId"  =>  149,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773703" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773703" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        597  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  597,
+                "contentId"  =>  150,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299781476" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299781471" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        598  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  598,
+                "contentId"  =>  151,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299780653" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299780633" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        599  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  599,
+                "contentId"  =>  152,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299780355" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299780355" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        600  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  600,
+                "contentId"  =>  153,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299780355" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299780355" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        601  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  601,
+                "contentId"  =>  154,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175499365" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175499320" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        602  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  602,
+                "contentId"  =>  155,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175498179" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175498170" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        603  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  603,
+                "contentId"  =>  156,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175497937" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175497864" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        604  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  604,
+                "contentId"  =>  157,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175499136" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175499122" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        605  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  605,
+                "contentId"  =>  158,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175497280" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175497254" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        606  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  606,
+                "contentId"  =>  159,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175498242" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175498224" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        607  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  607,
+                "contentId"  =>  160,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175498746" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175498737" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        608  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  608,
+                "contentId"  =>  161,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175498940" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175498890" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        609  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  609,
+                "contentId"  =>  162,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175497237" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175497211" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        610  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  610,
+                "contentId"  =>  163,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175497203" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175497171" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        611  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  611,
+                "contentId"  =>  164,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175499563" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175499551" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        612  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  612,
+                "contentId"  =>  165,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193915732" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193915715" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        613  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  613,
+                "contentId"  =>  166,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193915707" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193915699" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        614  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  614,
+                "contentId"  =>  167,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906039" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906039" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        615  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  615,
+                "contentId"  =>  168,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906579" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906579" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        616  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  616,
+                "contentId"  =>  169,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906040" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906040" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        617  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  617,
+                "contentId"  =>  170,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906045" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906045" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        618  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  618,
+                "contentId"  =>  171,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299779688" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299779680" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        619  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  619,
+                "contentId"  =>  172,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906046" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906046" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        620  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  620,
+                "contentId"  =>  173,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906046" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906046" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        621  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  621,
+                "contentId"  =>  174,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906047" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906047" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        622  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  622,
+                "contentId"  =>  175,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193906047" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193906047" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        623  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  623,
+                "contentId"  =>  176,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773449" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773437" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        624  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  624,
+                "contentId"  =>  177,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773210" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773204" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        625  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  625,
+                "contentId"  =>  178,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773237" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773232" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        626  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  626,
+                "contentId"  =>  179,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773259" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773245" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        627  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  627,
+                "contentId"  =>  180,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773275" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773266" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        628  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  628,
+                "contentId"  =>  181,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773344" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773330" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        629  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  629,
+                "contentId"  =>  182,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773383" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773379" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        630  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  630,
+                "contentId"  =>  183,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773410" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773397" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        631  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  631,
+                "contentId"  =>  184,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299773429" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299773419" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        632  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  632,
+                "contentId"  =>  185,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193915424" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193915419" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        633  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  633,
+                "contentId"  =>  186,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193915590" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193915476" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        634  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  634,
+                "contentId"  =>  187,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193915639" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193915617" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        635  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  635,
+                "contentId"  =>  188,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175242706" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175242696" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        636  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  636,
+                "contentId"  =>  189,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174305524" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174305514" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        637  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  637,
+                "contentId"  =>  190,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299159424" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299159416" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        638  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  638,
+                "contentId"  =>  191,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193935923" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193907125" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        639  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  639,
+                "contentId"  =>  192,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010589" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010589" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        640  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  640,
+                "contentId"  =>  193,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193914551" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193914499" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        641  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  641,
+                "contentId"  =>  194,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253009641" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253009641" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        642  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  642,
+                "contentId"  =>  195,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253009692" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253009692" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        643  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  643,
+                "contentId"  =>  196,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253009743" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253009743" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        644  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  644,
+                "contentId"  =>  197,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253009784" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253009784" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        645  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  645,
+                "contentId"  =>  198,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253009879" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253009879" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        646  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  646,
+                "contentId"  =>  199,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010805" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010805" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        647  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  647,
+                "contentId"  =>  200,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253009816" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253009816" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        648  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  648,
+                "contentId"  =>  201,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253009848" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253009848" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        649  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  649,
+                "contentId"  =>  202,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299782207" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299782198" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        650  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  650,
+                "contentId"  =>  203,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010223" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010223" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        651  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  651,
+                "contentId"  =>  204,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010249" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010249" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        652  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  652,
+                "contentId"  =>  205,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010272" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010272" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        653  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  653,
+                "contentId"  =>  206,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010315" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010315" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        654  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  654,
+                "contentId"  =>  207,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010343" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010343" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        655  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  655,
+                "contentId"  =>  208,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010367" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010367" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        656  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  656,
+                "contentId"  =>  209,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010401" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010401" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        657  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  657,
+                "contentId"  =>  210,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253010921" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253010921" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        658  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  658,
+                "contentId"  =>  211,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1193914399" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1193914345" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        659  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  659,
+                "contentId"  =>  212,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253011179" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253011179" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        660  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  660,
+                "contentId"  =>  213,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1253011241" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1253011241" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        661  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  661,
+                "contentId"  =>  214,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299159460" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299159430" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        662  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  662,
+                "contentId"  =>  215,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299159490" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299159470" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        663  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  663,
+                "contentId"  =>  216,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299159523" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299159503" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        664  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  664,
+                "contentId"  =>  217,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299159553" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299159538" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        665  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  665,
+                "contentId"  =>  218,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1299216558" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1299216456" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        666  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  666,
+                "contentId"  =>  219,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174305643" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174305636" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        667  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  667,
+                "contentId"  =>  220,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175069794" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175069781" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        668  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  668,
+                "contentId"  =>  221,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175069741" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175069727" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        669  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  669,
+                "contentId"  =>  222,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174308756" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174308738" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        670  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  670,
+                "contentId"  =>  223,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1174654830" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1174654820" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        671  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  671,
+                "contentId"  =>  224,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1175242960" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1175242951" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
+        673  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
+            array(
+                "id"  =>  673,
+                "contentId"  =>  225,
+                "status"  =>  1,
+                "versionNo"  =>  1,
+                "modificationDate"  =>  new \DateTime( "@1311154215" ),
+                "creatorId"  =>  14,
+                "creationDate"  =>  new \DateTime( "@1311154215" ),
+                "initialLanguageCode"  =>  "eng-US",
+                "languageCodes"  =>  array(
+                ),
+                "repository"  =>  $this,
+            )
+        ),
     ),
-    225
+    674
 );

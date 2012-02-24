@@ -215,10 +215,39 @@ function generateContentInfoFixture( array $fixture )
         $nextId = max( $nextId, $data['id'] );
     }
 
+    $versionInfo   = array();
+    $versionNextId = 0;
+    foreach ( getFixtureTable( 'ezcontentobject_version', $fixture ) as $data )
+    {
+        $versionInfo[$data['id']] = array(
+            'id'                   =>  $data['id'],
+            'contentId'            =>  $data['contentobject_id'],
+            'status'               =>  $data['status'],
+            'versionNo'            =>  $data['version'],
+            'modificationDate'     =>  'new \DateTime( "@' . $data['modified'] . '" )',
+            'creatorId'            =>  $data['creator_id'],
+            'creationDate'         =>  'new \DateTime( "@' . $data['created'] . '" )',
+            'initialLanguageCode'  =>  $languageCodes[$data['initial_language_id']],
+            'languageCodes'        =>  array(), // TODO: Extract language codes from fields
+            'repository'           =>  '$this',
+        );
+
+        $versionNextId = max( $versionNextId, $data['id'] );
+    }
+
+    uasort( $versionInfo, function( $versionInfo1, $versionInfo2 ) {
+        if ( $versionInfo1['contentId'] === $versionInfo2['contentId'] )
+        {
+            return $versionInfo2['versionNo'] - $versionInfo1['versionNo'];
+        }
+        return $versionInfo1['contentId'] - $versionInfo2['contentId'];
+    } );
+
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub', $contentInfos ),
-        generateMapping( $languageCodes ),
-        $nextId
+        $nextId,
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub', $versionInfo ),
+        $versionNextId
     );
 }
 
