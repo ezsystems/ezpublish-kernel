@@ -235,11 +235,11 @@ function generateLocationFixture( array $fixture )
             'hidden'      => (bool) $data['is_hidden'],
             'invisible'   => (bool) $data['is_invisible'],
             'remoteId'    => $data['remote_id'],
-            'contentInfo' => createRepoCall(
+            'contentInfo' => ( $data['node_id'] == 1 ? null :createRepoCall(
                 'ContentService',
                 'loadContentInfo',
                 array( $data['contentobject_id'] )
-            ),
+            ) ),
             'parentLocationId'        => $data['parent_node_id'],
             'pathString'              => $data['path_string'],
             'modifiedSubLocationDate' => $data['modified_subnode'],

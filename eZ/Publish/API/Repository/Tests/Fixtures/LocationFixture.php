@@ -8,7 +8,7 @@ return array(
                 "hidden"  =>  false,
                 "invisible"  =>  false,
                 "remoteId"  =>  "629709ba256fe317c3ddcee35453a96a",
-                "contentInfo"  =>  $this->getContentService()->loadContentInfo( 0 ),
+                "contentInfo"  =>  null,
                 "parentLocationId"  =>  1,
                 "pathString"  =>  "/1/",
                 "modifiedSubLocationDate"  =>  1311154216,
