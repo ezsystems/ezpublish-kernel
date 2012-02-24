@@ -87,18 +87,6 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCreateLocationThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
-    }
-
-    /**
-     * Test for the createLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
     public function testCreateLocationThrowsIllegalArgumentException()
@@ -123,18 +111,6 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadLocationThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::loadLocation() is not implemented." );
-    }
-
-    /**
-     * Test for the loadLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadLocationThrowsNotFoundException()
@@ -150,18 +126,6 @@ class LocationServiceTest extends BaseTest
      * 
      */
     public function testLoadLocationByRemoteId()
-    {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationByRemoteId() is not implemented." );
-    }
-
-    /**
-     * Test for the loadLocationByRemoteId() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadLocationByRemoteIdThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for LocationService::loadLocationByRemoteId() is not implemented." );
     }
@@ -207,18 +171,6 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateLocationThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
-    }
-
-    /**
-     * Test for the updateLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
     public function testUpdateLocationThrowsIllegalArgumentException()
@@ -234,18 +186,6 @@ class LocationServiceTest extends BaseTest
      * 
      */
     public function testLoadMainLocation()
-    {
-        $this->markTestIncomplete( "Test for LocationService::loadMainLocation() is not implemented." );
-    }
-
-    /**
-     * Test for the loadMainLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadMainLocationThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for LocationService::loadMainLocation() is not implemented." );
     }
@@ -359,18 +299,6 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Test for the swapLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testSwapLocationThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::swapLocation() is not implemented." );
-    }
-
-    /**
      * Test for the hideLocation() method.
      *
      * @return void
@@ -378,18 +306,6 @@ class LocationServiceTest extends BaseTest
      * 
      */
     public function testHideLocation()
-    {
-        $this->markTestIncomplete( "Test for LocationService::hideLocation() is not implemented." );
-    }
-
-    /**
-     * Test for the hideLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testHideLocationThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for LocationService::hideLocation() is not implemented." );
     }
@@ -407,18 +323,6 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Test for the unhideLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUnhideLocationThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::unhideLocation() is not implemented." );
-    }
-
-    /**
      * Test for the deleteLocation() method.
      *
      * @return void
@@ -431,18 +335,6 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Test for the deleteLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteLocationThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::deleteLocation() is not implemented." );
-    }
-
-    /**
      * Test for the copySubtree() method.
      *
      * @return void
@@ -450,18 +342,6 @@ class LocationServiceTest extends BaseTest
      * 
      */
     public function testCopySubtree()
-    {
-        $this->markTestIncomplete( "Test for LocationService::copySubtree() is not implemented." );
-    }
-
-    /**
-     * Test for the copySubtree() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCopySubtreeThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for LocationService::copySubtree() is not implemented." );
     }
@@ -486,18 +366,6 @@ class LocationServiceTest extends BaseTest
      * 
      */
     public function testMoveSubtree()
-    {
-        $this->markTestIncomplete( "Test for LocationService::moveSubtree() is not implemented." );
-    }
-
-    /**
-     * Test for the moveSubtree() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testMoveSubtreeThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for LocationService::moveSubtree() is not implemented." );
     }
