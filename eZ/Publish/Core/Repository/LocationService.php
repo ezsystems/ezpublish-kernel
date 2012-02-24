@@ -363,8 +363,9 @@ class LocationService implements LocationServiceInterface
         {
             try
             {
-                $this->loadLocationByRemoteId( $locationCreateStruct->remoteId );
-                throw new IllegalArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
+                $existingLocation = $this->loadLocationByRemoteId( $locationCreateStruct->remoteId );
+                if ( $existingLocation !== null )
+                    throw new IllegalArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -471,8 +472,9 @@ class LocationService implements LocationServiceInterface
         {
             try
             {
-                $this->loadLocationByRemoteId( $locationUpdateStruct->remoteId );
-                throw new IllegalArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
+                $existingLocation = $this->loadLocationByRemoteId( $locationUpdateStruct->remoteId );
+                if ( $existingLocation !== null )
+                    throw new IllegalArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -484,6 +486,8 @@ class LocationService implements LocationServiceInterface
         $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? (int) $locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
 
         $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
+
+        return $this->loadLocation( $loadedLocation->id );
     }
 
     /**
