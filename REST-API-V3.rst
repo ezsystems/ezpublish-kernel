@@ -168,14 +168,14 @@ Creating Content
 
 .. parsed-literal::
 
-      HTTP/1.1 201 Created  
-      Location: /content/objects/<newID>
-      Etag: "<new etag>"
-      Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
-      Content-Type: <depending on accept header>
-      Content-Length: <length>
-      Content_      
-      
+          HTTP/1.1 201 Created  
+          Location: /content/objects/<newID>
+          Etag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Content_      
+          
 :Error codes: 
        :400: If the Input does not match the input schema definition or the validation on a field fails, 
        :401: If the user is not authorized to create this object in this location
@@ -273,7 +273,7 @@ XML Example
               </value>
             </field>
           </fields>
-          <Relations />
+          <Relations href="/content/objects/23/versions/1/relations" media-type="application/vnd.ez.api.RelationList+xml" />
         </Version>
       </CurrentVersion>
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
@@ -534,7 +534,7 @@ XML Example
 Update Content
 ``````````````
 :Resource: /content/objects/<ID> 
-:Method: PATCH or POST with header: X-eZ-method: PATCH
+:Method: PATCH or POST with header: X-HTTP-Method-Override: PATCH
 :Description: this method updates the content metadata which is independent from a version.
 :Headers:
     :Accept:
@@ -840,8 +840,8 @@ XML Example
           </value>
         </field>
       </Fields>
-      <Relations>
-        <Relation href="/content/objects/23/relations" media-type="application/vnd.ez.api.RelationList+xml">
+      <Relations  href="/content/objects/23/relations"  media-type="application/vnd.ez.api.RelationList+xml">>
+        <Relation href="/content/objects/23/relations/32" media-type="application/vnd.ez.api.Relation+xml">
           <SourceContent href="/content/objects/23"
             media-type="application/vnd.ez.api.ContentInfo+xml" />
           <DestinationContent href="/content/objects/45"
@@ -856,7 +856,7 @@ XML Example
 Update Version
 ``````````````
 :Resource: /content/objects/<ID>/version/<versionNo>
-:Method: PATCH or POST with X-eZ-Method: PATCH
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
 :Description: A specific draft is updated. 
 :Parameters: 
     :fields: comma separated list of fields which should be returned in the response (see Content)
@@ -965,7 +965,7 @@ XML Example
         </field>
       </Fields>
       <Relations>
-        <Relation href="/content/objects/23/relations" media-type="application/vnd.ez.api.RelationList+xml">
+        <Relation href="/content/object/32/versions/2/relations/43" media-type="application/vnd.ez.api.Relation+xml">
           <SourceContent href="/content/objects/23"
             media-type="application/vnd.ez.api.ContentInfo+xml" />
           <DestinationContent href="/content/objects/45"
@@ -975,20 +975,23 @@ XML Example
       </Relations>
     </Version>
 
-END OF CURRENT WORK
 
 Create a Draft from an archived or published Version
 ````````````````````````````````````````````````````
-:Resource: /content/objects/<ID>/versions
-:Method: POST
+:Resource: /content/objects/<ID>/versions/<no>
+:Method: COPY or POST with header X-HTTP-Method-Override: COPY
 :Description: The system creates a new draft version as a copy from the given version
-:Request Format: 
-:Parameters:
-    :srcVersion: the source version from which data is copied to the new draft - if not given the current published version is used
-:Inputschema:
-:Response: 201 Location: /content/objects/<ID>/versions/<new-versionNo> VersionInfo_
+:Response:
+
+.. parsed-literal::
+ 
+    HTTP/1.1 201 Created
+    Location: /content/objects/<ID>/versions/<new-versionNo> 
+    Version_
+
 :Error Codes:
     :401: If the user is not authorized to update this object  
+    :403: If the given version is in status DRAFT
     :404: If the content object was not found
 
 Delete Content Version
@@ -996,7 +999,12 @@ Delete Content Version
 :Resource: /content/objects/<ID>/version/<versionNo>
 :Method: DELETE
 :Description: The content  version is deleted
-:Response: 204
+:Response: 
+
+::
+
+    HTTP/1.1 204 No Content
+    
 :Error Codes:
     :404: if the content object or version nr was not found
     :401: If the user is not authorized to delete this version 
@@ -1005,9 +1013,14 @@ Delete Content Version
 Publish a content version
 `````````````````````````
 :Resource: /content/objects/<ID>/version/<versionNo>
-:Method: POST or PUBLISH
+:Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
 :Description: The content version is published
-:Response: 204
+:Response: 
+
+::
+
+    HTTP/1.1 204 No Content
+
 :Error Codes:
     :404: if the content object or version nr was not found
     :401: If the user is not authorized to publish this version
@@ -1016,51 +1029,169 @@ Publish a content version
 Managing Relations
 ~~~~~~~~~~~~~~~~~~
 
-Load all outgoing relations
-```````````````````````````
+Load relations of content
+`````````````````````````
 :Resource: /content/objects/<ID>/relations
 :Method: GET
-:Description: loads all outgoing relations  for the given content object in the current version
-:Parameters: 
+:Description: redirects to the relations of the current version
+:Response: 
+
+::
+
+    HTTP/1.1 307 Temporary Redirect
+    Location: /content/objects/<ID>/versions/<currentversion>/relations
+
+:Error Codes:
+:401: If the user is not authorized to read  this object
+:404: If the content object was not found
+
+Load relations of version
+`````````````````````````
+:Resource: /content/objects/<ID>/versions/<no>/relations
+:Method: GET
+:Description: loads the relations of the given version
+:Parameters:
     :offset: the offset of the result set
     :limit: the number of relations returned
-:Response: 200 array of Relation_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.RelationList+xml:  if set the relation is returned in xml format (see Relation_)
+         :application/vnd.ez.api.RelationList+json:  if set the relation is returned in json format (see Relation_)
+:Response: 
+
+.. parsed-literal::
+
+    HTTP/1.1 200 OK
+    Content-Type: <depending on Accept header>
+    Content-Length: xxx
+    Relation_ (relationListType)
+
 :Error Codes:
-    :401: If the user is not authorized to read  this object
-    :404: If the content object was not found
+:401: If the user is not authorized to read  this object
+:404: If the content object was not found
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/objects/23/versions/2/relations HTTP/1.1
+    Accept: application/vnd.ez.api.RelationList+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.RelationList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Relations href="/content/object/32/versions/2/relations" media-type="application/vnd.ez.api.RelationList+xml">
+        <Relation href="/content/object/32/versions/2/relations/43" media-type="application/vnd.ez.api.Relation+xml">
+          <SourceContent href="/content/objects/23"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <DestinationContent href="/content/objects/45"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <RelationType>COMMON</RelationType>
+        </Relation>
+        <Relation href="/content/object/32/versions/2/relations/98" media-type="application/vnd.ez.api.Relation+xml">
+          <SourceContent href="/content/objects/23"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <DestinationContent href="/content/objects/87"
+            media-type="application/vnd.ez.api.ContentInfo+xml" />
+          <sourceFieldDefinitionIdentifier>body</sourceFieldDefinitionIdentifier>  
+          <RelationType>EMBED</RelationType>
+        </Relation>
+    </Relations>
+
+
 
 Load a relation
 ```````````````
-:Resource: /content/objects/<ID>/relations/<ID>
+:Resource: /content/objects/<ID>/versions/<no>/relations/<ID>
 :Method: GET
 :Description: loads a relation for the given content object
-:Parameters:
-:Response: 200 Relation
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Relation+xml:  if set the relation is returned in xml format (see Relation_)
+         :application/vnd.ez.api.Relation+json:  if set the relation is returned in json format (see Relation_)
+:Response: 
+
+.. parsed-literal::
+
+    HTTP/1.1 200 OK
+    Content-Type: <depending on Accept header>
+    Content-Length: xxx
+    Relation_ (relationValueType(
+
 :Error Codes:
     :404: If the  object with the given id or the relation does not exist
     :401: If the user is not authorized to read this object  
 	
 Create a new Relation
 `````````````````````
-:Resource: /content/objects/<ID>/versions/<versionNo>/relations
-:Method: PUT
+:Resource: /content/objects/<ID>/versions/<no>/relations
+:Method: POST
 :Description: Creates a new relation of type COMMON for the given draft. 
-:Request Format: application/json
-:Parameters: destId (required): the destinationId for new created relation
-:Inputschema:
-:Response: 201 Relation_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Relation+xml:  if set the updated version is returned in xml format (see Relation_)
+         :application/vnd.ez.api.Relation+json:  if set the updated version returned in json format (see Relation_)
+    :Content-Type: 
+         :application/vnd.ez.api.RelationCreate+xml: the RelationCreate (see Relation_) schema encoded in xml
+         :application/vnd.ez.api.RelationCreate+json: the RelationCreate (see Relation_) schema encoded in json
+:Response: 
+
+.. parsed-literal::
+
+    HTTP/1.1 201 Created
+    Location: /content/objects/<ID>/versions/<no>/relations/<newId>
+    Content-Type: <depending on Accept header>
+    Content-Length: xxx
+    Relation_ (relationValueType(
+
 :Error Codes:
     :401: If the user is not authorized to update this content object
     :403: If a relation to the destId already exists or the destId does not exist or the version is not a draft.
     :404: If the  object or version with the given id does not exist
+
+XML Example
+'''''''''''
+
+::
+
+    POST /content/objects/23/versions/4/relations
+    Accept: application/vnd.ez.api.Relation+xml
+    Content-Type: application/vnd.ez.api.RelationCreate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RelationCreate>
+      <Destination href="/content/objects/66"/>
+    </RelationCreate>
+
+    HTTP/1.1 201 Created
+    Location: /content/objects/23/versions/4/relations
+    Content-Type: application/vnd.ez.api.RelationCreate+xml
+    Content-Length: xxx
+    
+    <Relation href="/content/object/32/versions/2/relations/66" media-type="application/vnd.ez.api.Relation+xml">
+      <SourceContent href="/content/objects/23"
+        media-type="application/vnd.ez.api.ContentInfo+xml" />
+      <DestinationContent href="/content/objects/66"
+        media-type="application/vnd.ez.api.ContentInfo+xml" />
+      <RelationType>COMMON</RelationType>
+    </Relation>
+ 
 
 Delete a relation
 `````````````````
 :Resource: /content/objects/<ID>/versions/<versionNo>/relations/<ID>
 :Method: DELETE
 :Description: Deletes a relation of the given draft.
-:Parameters:
-:Response: 204
+:Response: 
+
+    ::
+
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :404: content object was not found or the relation was not found in the given version
     :401: If the user is not authorized to delete this relation 
@@ -1068,6 +1199,7 @@ Delete a relation
 	
 
 
+END OF CURRENT WORK
 
 Views
 ~~~~~
@@ -2288,8 +2420,7 @@ Relation XML Schema
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values"
-      targetNamespace="http://ez.no/API/Values">
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
 
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
       <xsd:simpleType name="relationType">
@@ -2314,7 +2445,23 @@ Relation XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:element name="Realtion" type="relationValueType"></xsd:element>
+      <xsd:complexType name="relationListType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="Relation" type="relationValueType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="relationCreateType">
+        <xsd:all>
+          <xsd:element name="Destination" type="ref" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="Relation" type="relationValueType"></xsd:element>
+      <xsd:element name="RelationList" type="relationListType"></xsd:element>
+      <xsd:element name="RelationCreate" type="relationCreateType"></xsd:element>
     </xsd:schema>
 
 
