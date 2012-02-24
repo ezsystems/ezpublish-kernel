@@ -473,7 +473,7 @@ function valueToString( $value, $indent = 4 )
     {
         $value = 'null';
     }
-    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) && 0 !== strpos( $value, '$scopeValues[' ) && 0 !== strpos( $value, 'array(' ) && 0 !== strpos( $value, '$this->' ) )
+    else if ( is_string( $value ) && 0 !== strpos( $value, 'new \\' ) && 0 !== strpos( $value, '$scopeValues[' ) && 0 !== strpos( $value, 'array(' ) && 0 !== strpos( $value, '$this' ) )
     {
         $value = '"' . str_replace( '"', '\"', $value ) . '"';
     }
