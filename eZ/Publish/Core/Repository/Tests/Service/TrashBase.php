@@ -38,7 +38,6 @@ abstract class TrashBase extends BaseServiceTest
         self::assertNull( $trashItem->parentLocationId );
         self::assertNull( $trashItem->pathString );
         self::assertNull( $trashItem->modifiedSubLocationDate );
-        self::assertNull( $trashItem->mainLocationId );
         self::assertNull( $trashItem->depth );
         self::assertNull( $trashItem->sortField );
         self::assertNull( $trashItem->sortOrder );

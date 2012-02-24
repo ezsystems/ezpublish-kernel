@@ -663,7 +663,6 @@ class LocationService implements LocationServiceInterface
             'parentLocationId'         => $spiLocation->parentId,
             'pathString'               => $spiLocation->pathString,
             'modifiedSubLocationDate'  => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
-            'mainLocationId'           => $spiLocation->mainLocationId,
             'depth'                    => $spiLocation->depth,
             'sortField'                => $spiLocation->sortField,
             'sortOrder'                => $spiLocation->sortOrder,
