@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\Location}
