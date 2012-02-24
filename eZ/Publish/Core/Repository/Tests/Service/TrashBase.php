@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\Content\TrashItem,
+    eZ\Publish\API\Repository\Values\Content\Query,
 
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
@@ -220,15 +221,6 @@ abstract class TrashBase extends BaseServiceTest
     }
 
     /**
-     * Test emptying the trash
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::emptyTrash
-     */
-    public function testEmptyTrash()
-    {
-        self::markTestIncomplete( "@todo: implement" );
-    }
-
-    /**
      * Test deleting a trash item
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::deleteTrashItem
      */
@@ -267,9 +259,28 @@ abstract class TrashBase extends BaseServiceTest
     /**
      * Test searching for trash items
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::findTrashItems
+     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::emptyTrash
      */
-    public function testFindTrashItems()
+    public function testFindTrashItemsAndEmptyTrash()
     {
-        self::markTestIncomplete( "@todo: implement" );
+        self::markTestSkipped( "enable when content service is implemented" );
+        $locationService = $this->repository->getLocationService();
+        $trashService = $this->repository->getTrashService();
+
+        $searchResult = $trashService->findTrashItems( new Query() );
+        $countBeforeTrashing = $searchResult->count;
+
+        $location = $locationService->loadLocation( 5 );
+        $trashService->trash( $location );
+
+        $searchResult = $trashService->findTrashItems( new Query() );
+        $countAfterTrashing = $searchResult->count;
+
+        self::assertGreaterThan( $countBeforeTrashing, $countAfterTrashing );
+
+        $trashService->emptyTrash();
+        $searchResult = $trashService->findTrashItems( new Query() );
+
+        self::assertEquals( 0, $searchResult->count );
     }
 }
