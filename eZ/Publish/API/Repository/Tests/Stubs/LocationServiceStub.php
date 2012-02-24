@@ -95,9 +95,25 @@ class LocationServiceStub implements LocationService
 
         $data['id'] = $this->nextLocationId++;
 
+        $data['pathString'] = $this->materializePath(
+            $data['parentLocationId']
+        ) . $data['id'] . '/';
+
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
         return $location;
+    }
+
+    protected function materializePath( $locationId )
+    {
+        $location = $this->loadLocation( $locationId );
+
+        if ( null === $location->contentInfo )
+        {
+            return '/' . $locationId . '/';
+        }
+
+        return $this->materializePath( $location->parentLocationId ) . $locationId . '/';
     }
 
     /**
@@ -112,7 +128,10 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocation( $locationId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( isset( $this->locations[$locationId] ) )
+        {
+            return $this->locations[$locationId];
+        }
     }
 
     /**

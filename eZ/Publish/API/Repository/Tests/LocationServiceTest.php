@@ -136,7 +136,7 @@ class LocationServiceTest extends BaseTest
                 'remoteId'                => $locationCreate->remoteId,
                 'contentInfo'             => $contentInfo,
                 'parentLocationId'        => $locationCreate->parentLocationId,
-                'pathString'              => null, // TODO: '/1/2/' . $createdLocation->id . '/',
+                'pathString'              => '/1/2/' . $createdLocation->id . '/',
                 'modifiedSubLocationDate' => null, // TODO: Should be DateTime
                 'mainLocationId'          => 0, // TODO: Root node ID
                 'depth'                   => 0, // TODO: Needs to be calculated
