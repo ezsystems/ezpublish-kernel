@@ -62,6 +62,11 @@ class RepositoryStub implements Repository
     private $contentTypeService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\LocationServiceStub
+     */
+    private $locationService;
+
+    /**
      * Instantiates the stubbed repository.
      *
      * @param string $fixtureDir
@@ -213,7 +218,11 @@ class RepositoryStub implements Repository
      */
     public function getLocationService()
     {
-        // TODO: Implement getLocationService() method.
+        if ( null === $this->locationService )
+        {
+            $this->locationService = new LocationServiceStub( $this );
+        }
+        return $this->locationService;
     }
 
     /**

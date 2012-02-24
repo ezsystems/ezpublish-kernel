@@ -129,7 +129,8 @@ class RepositoryTest extends BaseTest
      */
     public function testGetLocationService()
     {
-        $this->markTestIncomplete( "Test for Repository::getLocationService() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\LocationService', $repository->getLocationService() );
     }
 
     /**
