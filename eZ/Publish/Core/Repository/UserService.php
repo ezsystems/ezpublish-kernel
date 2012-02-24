@@ -15,6 +15,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\API\Repository\Values\Content\Content,
 
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
@@ -101,19 +102,8 @@ class UserService implements UserServiceInterface
 
         $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
-        $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
 
-        return new UserGroup( array(
-            'contentInfo'   => $publishedContentInfo,
-            'contentType'   => $publishedContentInfo->getContentType(),
-            'contentId'     => $publishedContentInfo->contentId,
-            'versionInfo'   => $publishedContent->getVersionInfo(),
-            'fields'        => $publishedContent->getFields(),
-            'relations'     => $publishedContent->getRelations(),
-            'id'            => $publishedContentInfo->contentId,
-            'parentId'      => $mainParentGroupLocation->id,
-            'subGroupCount' => 0
-        ) );
+        return $this->buildDomainUserGroupObject( $publishedContent );
     }
 
     /**
@@ -131,30 +121,9 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $id ) )
             throw new InvalidArgumentValue( "id", $id );
 
-        $locationService = $this->repository->getLocationService();
-
         $content = $this->repository->getContentService()->loadContent( $id );
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $mainLocation = $locationService->loadMainLocation( $contentInfo );
 
-        $subGroupCount = 0;
-        if ( $mainLocation !== null )
-        {
-            $subGroups = $this->searchSubGroups( $mainLocation );
-            $subGroupCount = $subGroups->count;
-        }
-
-        return new UserGroup( array(
-            'contentInfo'   => $contentInfo,
-            'contentType'   => $contentInfo->getContentType(),
-            'contentId'     => $contentInfo->contentId,
-            'versionInfo'   => $content->getVersionInfo(),
-            'fields'        => $content->getFields(),
-            'relations'     => $content->getRelations(),
-            'id'            => $contentInfo->contentId,
-            'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
-            'subGroupCount' => $subGroupCount
-        ) );
+        return $this->buildDomainUserGroupObject( $content );
     }
 
     /**
@@ -181,28 +150,13 @@ class UserService implements UserServiceInterface
             return array();
 
         $searchResult = $this->searchSubGroups( $mainGroupLocation );
-        if ( !is_array( $searchResult->items ) || empty( $searchResult->items ) )
+        if ( $searchResult->count == 0 )
             return array();
 
         $subUserGroups = array();
         foreach ( $searchResult->items as $resultItem )
         {
-            $resultItemContentInfo = $resultItem->getVersionInfo()->getContentInfo();
-            $subSubGroupMainLocation = $locationService->loadMainLocation( $resultItemContentInfo );
-            $subSubGroups = $this->searchSubGroups( $subSubGroupMainLocation );
-
-            /** @var \eZ\Publish\API\Repository\Values\Content\Content $resultItem */
-            $subUserGroups[] = new UserGroup( array(
-                'contentInfo'   => $resultItemContentInfo,
-                'contentType'   => $resultItemContentInfo->getContentType(),
-                'contentId'     => $resultItemContentInfo->contentId,
-                'versionInfo'   => $resultItem->getVersionInfo(),
-                'fields'        => $resultItem->getFields(),
-                'relations'     => $resultItem->getRelations(),
-                'id'            => $resultItemContentInfo->contentId,
-                'parentId'      => $mainGroupLocation->id,
-                'subGroupCount' => $subSubGroups->count
-            ) );
+            $subUserGroups[] = $this->buildDomainUserGroupObject( $resultItem );
         }
 
         return $subUserGroups;
@@ -304,40 +258,20 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
-        $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
-
         $contentService = $this->repository->getContentService();
-        $locationService = $this->repository->getLocationService();
+
+        $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
         $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
         $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userGroupUpdateStruct->contentUpdateStruct );
-
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
-        $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
 
-        $publishedContent = $contentService->updateContentMetadata( $publishedContentInfo, $userGroupUpdateStruct->contentMetaDataUpdateStruct );
-        $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
+        $publishedContent = $contentService->updateContentMetadata(
+            $publishedContent->getVersionInfo()->getContentInfo(),
+            $userGroupUpdateStruct->contentMetaDataUpdateStruct
+        );
 
-        $mainLocation = $locationService->loadMainLocation( $publishedContentInfo );
-
-        $subGroupCount = 0;
-        if ( $mainLocation !== null )
-        {
-            $subGroups = $this->searchSubGroups( $mainLocation );
-            $subGroupCount = $subGroups->count;
-        }
-
-        return new UserGroup( array(
-            'contentInfo'   => $publishedContentInfo,
-            'contentType'   => $publishedContentInfo->getContentType(),
-            'contentId'     => $publishedContentInfo->contentId,
-            'versionInfo'   => $publishedContent->getVersionInfo(),
-            'fields'        => $publishedContent->getFields(),
-            'relations'     => $publishedContent->getRelations(),
-            'id'            => $publishedContentInfo->contentId,
-            'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
-            'subGroupCount' => $subGroupCount
-        ) );
+        return $this->buildDomainUserGroupObject( $publishedContent );
     }
 
     /**
@@ -390,11 +324,23 @@ class UserService implements UserServiceInterface
         }
 
         $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
-        $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
-        $spiUser = $this->buildPersistenceUserObject( $userCreateStruct );
-        $spiUser = $this->persistenceHandler->userHandler()->create( $spiUser );
-        return $this->buildDomainUserObject( $spiUser );
+        $spiUser = $this->persistenceHandler->userHandler()->create( new SPIUser( array(
+            'login'         => $userCreateStruct->login,
+            'email'         => $userCreateStruct->email,
+            // @todo: read password hash algorithm and site from INI settings
+            'passwordHash'  => $this->createPasswordHash(
+                $userCreateStruct->login,
+                $userCreateStruct->password,
+                'ez.no',
+                User::PASSWORD_HASH_MD5_USER ),
+            'hashAlgorithm' => null,
+            'isEnabled'     => $userCreateStruct->enabled,
+            'maxLogin'      => 0
+        ) ) );
+
+        return $this->buildDomainUserObject( $spiUser, $publishedContent );
     }
 
     /**
@@ -459,7 +405,7 @@ class UserService implements UserServiceInterface
         }
 
         // @todo: read site name from settings
-        if ( $spiUsers[0]->passwordHash !== $this->createPasswordHash( $login, $password, 'eZ Publish', $spiUsers[0]->hashAlgorithm ) )
+        if ( $spiUsers[0]->passwordHash !== $this->createPasswordHash( $login, $password, 'ez.no', $spiUsers[0]->hashAlgorithm ) )
             throw new InvalidArgumentValue( "password", $password );
 
         return $this->buildDomainUserObject( $spiUsers[0] );
@@ -477,9 +423,9 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
-        $user = $this->loadUser( $user->id );
+        $loadedUser = $this->loadUser( $user->id );
 
-        $this->repository->getContentService()->deleteContent( $user->getVersionInfo()->getContentInfo() );
+        $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
     }
 
     /**
@@ -521,15 +467,18 @@ class UserService implements UserServiceInterface
         $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userUpdateStruct->contentUpdateStruct );
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
-        $contentService->updateContentMetadata( $publishedContent->getVersionInfo()->getContentInfo(), $userUpdateStruct->contentMetaDataUpdateStruct );
+        $contentService->updateContentMetadata(
+            $publishedContent->getVersionInfo()->getContentInfo(),
+            $userUpdateStruct->contentMetaDataUpdateStruct
+        );
 
         $this->persistenceHandler->userHandler()->update( new SPIUser( array(
             'id'            => $loadedUser->id,
             'login'         => $loadedUser->login,
-            'email'         => $userUpdateStruct->email !== null ? trim( $userUpdateStruct->email ) : $loadedUser->email,
+            'email'         => $userUpdateStruct->email !== null ? $userUpdateStruct->email : $loadedUser->email,
             // @todo: read password hash algorithm and site from INI settings
             'passwordHash'  => $userUpdateStruct->password !== null ?
-                $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, 'eZ Publish', User::PASSWORD_HASH_MD5_USER ) :
+                $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, 'ez.no', User::PASSWORD_HASH_MD5_USER ) :
                 $loadedUser->passwordHash,
             'hashAlgorithm' => null,
             'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
@@ -575,6 +524,8 @@ class UserService implements UserServiceInterface
             return;
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
+        $locationCreateStruct->isMainLocation = empty( $existingGroupIds );
+
         $locationService->createLocation( $loadedUser->getVersionInfo()->getContentInfo(), $locationCreateStruct );
     }
 
@@ -695,15 +646,50 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Builds the domain UserGroup object from provided Content object
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     */
+    protected function buildDomainUserGroupObject( Content $content )
+    {
+        $contentInfo = $content->getVersionInfo()->getContentInfo();
+        $mainLocation = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
+
+        $subGroupCount = 0;
+        if ( $mainLocation !== null )
+        {
+            $subGroups = $this->searchSubGroups( $mainLocation );
+            $subGroupCount = $subGroups->count;
+        }
+
+        return new UserGroup( array(
+            'contentInfo'   => $contentInfo,
+            'contentType'   => $contentInfo->getContentType(),
+            'contentId'     => $contentInfo->contentId,
+            'versionInfo'   => $content->getVersionInfo(),
+            'fields'        => $content->getFields(),
+            'relations'     => $content->getRelations(),
+            'id'            => $contentInfo->contentId,
+            'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
+            'subGroupCount' => $subGroupCount
+        ) );
+    }
+
+    /**
      * Builds the domain user object from provided persistence user object
      *
      * @param \eZ\Publish\SPI\Persistence\User $spiUser
+     * @param \eZ\Publish\API\Repository\Values\Content\Content|null $content
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function buildDomainUserObject( SPIUser $spiUser )
+    protected function buildDomainUserObject( SPIUser $spiUser, Content $content = null )
     {
-        $content = $this->repository->getContentService()->loadContent( $spiUser->id );
+        if ( $content === null )
+            $content = $this->repository->getContentService()->loadContent( $spiUser->id );
+
         $contentInfo = $content->getVersionInfo()->getContentInfo();
 
         return new User( array(
@@ -720,25 +706,6 @@ class UserService implements UserServiceInterface
             'hashAlgorithm' => $spiUser->hashAlgorithm,
             'isEnabled'     => $spiUser->isEnabled,
             'maxLogin'      => $spiUser->maxLogin,
-        ) );
-    }
-
-    /**
-     * Builds the persistence user object from provided user create struct
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\User
-     */
-    protected function buildPersistenceUserObject( APIUserCreateStruct $userCreateStruct )
-    {
-        return new SPIUser( array(
-            'login'         => $userCreateStruct->login,
-            'email'         => $userCreateStruct->email,
-            // @todo: read password hash algorithm and site from INI settings
-            'passwordHash'  => $this->createPasswordHash( $userCreateStruct->login, $userCreateStruct->password, 'eZ Publish', User::PASSWORD_HASH_MD5_USER ),
-            'hashAlgorithm' => null,
-            'isEnabled'     => $userCreateStruct->enabled
         ) );
     }
 
