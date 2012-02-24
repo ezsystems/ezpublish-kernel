@@ -80,7 +80,76 @@ class LocationServiceTest extends BaseTest
      */
     public function testCreateLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo( 108 );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 2 );
+        $locationCreate->priority = 23;
+        $locationCreate->hidden = true;
+        $locationCreate->remoteId = 'sindelfingen';
+        $locationCreate->isMainLocation = true;
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $location
+        );
+
+        return array(
+            'locationCreate'  => $locationCreate,
+            'createdLocation' => $location,
+            'contentInfo'     => $contentInfo,
+        );
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     */
+    public function testCreateLocationStructValues( array $data )
+    {
+        $locationCreate  = $data['locationCreate'];
+        $createdLocation = $data['createdLocation'];
+        $contentInfo     = $data['contentInfo'];
+
+        $this->assertPropertiesCorrect(
+            array(
+                'priority'                => $locationCreate->priority,
+                'hidden'                  => $locationCreate->hidden,
+                'invisible'               => null,
+                'remoteId'                => $locationCreate->remoteId,
+                'contentInfo'             => $contentInfo,
+                'parentLocationId'        => $locationCreate->parentLocationId,
+                'pathString'              => null, // TODO: '/1/2/' . $createdLocation->id . '/',
+                'modifiedSubLocationDate' => null, // TODO: Should be DateTime
+                'mainLocationId'          => 0, // TODO: Root node ID
+                'depth'                   => 0, // TODO: Needs to be calculated
+                'childrenCount'           => 0, // TODO: Needs to be calculated
+                'sortField'               => $locationCreate->sortField,
+                'sortOrder'               => $locationCreate->sortOrder,
+            ),
+            $createdLocation
+        );
+        // 'isMainLocation' => $locationCreate->isMainLocation,
+        $this->assertNotNull(
+            $createdLocation->id
+        );
     }
 
     /**

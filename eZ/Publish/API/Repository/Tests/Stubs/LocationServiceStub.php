@@ -84,7 +84,20 @@ class LocationServiceStub implements LocationService
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $data = array();
+        foreach ( $locationCreateStruct as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+        unset( $data['isMainLocation'] );
+
+        $data['contentInfo'] = $contentInfo;
+
+        $data['id'] = $this->nextLocationId++;
+
+        $location = new LocationStub( $data );
+        $this->locations[$location->id] = $location;
+        return $location;
     }
 
     /**
