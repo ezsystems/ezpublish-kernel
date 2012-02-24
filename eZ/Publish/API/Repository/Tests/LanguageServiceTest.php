@@ -132,19 +132,6 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
-     */
-    public function testCreateLanguageThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LanguageService::createLanguage() is not implemented." );
-    }
-
-    /**
-     * Test for the createLanguage() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
@@ -250,20 +237,6 @@ class LanguageServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updateLanguageName() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
-     */
-    public function testUpdateLanguageNameThrowsUnauthorizedException()
-    {
-
-        $this->markTestIncomplete( "Test for LanguageService::updateLanguageName() is not implemented." );
-    }
-
-    /**
      * Test for the enableLanguage() method.
      *
      * @return void
@@ -294,19 +267,6 @@ class LanguageServiceTest extends BaseTest
     }
 
     /**
-     * Test for the enableLanguage() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LanguageService::enableLanguage()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testEnableLanguage
-     */
-    public function testEnableLanguageThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LanguageService::enableLanguage() is not implemented." );
-    }
-
-    /**
      * Test for the disableLanguage() method.
      *
      * @return void
@@ -334,19 +294,6 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertFalse( $enabledLanguage->enabled );
-    }
-
-    /**
-     * Test for the disableLanguage() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LanguageService::disableLanguage()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testDisableLanguage
-     */
-    public function testDisableLanguageThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for LanguageService::disableLanguage() is not implemented." );
     }
 
     /**
@@ -487,19 +434,6 @@ class LanguageServiceTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
     public function testDeleteLanguageThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for LanguageService::deleteLanguage() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteLanguage() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LanguageService::deleteLanguage()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testDeleteLanguage
-     */
-    public function testDeleteLanguageThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for LanguageService::deleteLanguage() is not implemented." );
     }

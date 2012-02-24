@@ -21,6 +21,9 @@
             <file>IOServiceTest.php</file>
             <file>LocationServiceTest.php</file>
             <file>TrashServiceTest.php</file>
+            <file>SectionServiceAuthorizationTest.php</file>
+            <file>LanguageServiceAuthorizationTest.php</file>
+            <file>ContentServiceAuthorizationTest.php</file>
             <directory>./Exceptions</directory>
         </testsuite>
     </testsuites>

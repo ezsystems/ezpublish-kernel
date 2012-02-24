@@ -70,19 +70,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @expectedException eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
-     */
-    public function testCreateSectionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::createSection() is not implemented." );
-    }
-
-    /**
-     * Test for the createSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
@@ -152,18 +139,6 @@ class SectionServiceTest extends BaseTest
         // This call should fail with a NotFoundException
         $sectionService->loadSection( PHP_INT_MAX );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the loadSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::loadSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadSectionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::loadSection() is not implemented." );
     }
 
     /**
@@ -273,19 +248,6 @@ class SectionServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals( 'Test section one', $updatedSection->name );
-    }
-
-    /**
-     * Test for the updateSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
-     */
-    public function testUpdateSectionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
     }
 
     /**
@@ -422,18 +384,6 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadSections() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::loadSections()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadSectionsThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::loadSections() is not implemented." );
-    }
-
-    /**
      * Test for the loadSectionByIdentifier() method.
      *
      * @return void
@@ -480,18 +430,6 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadSectionByIdentifier() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadSectionByIdentifierThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::loadSectionByIdentifier() is not implemented." );
-    }
-
-    /**
      * Test for the assignSection() method.
      *
      * @return void
@@ -518,18 +456,6 @@ class SectionServiceTest extends BaseTest
 
         // TODO: What to assert here? countAssignedContents() is not good, because that test depends on this test
         $this->assertEquals( 1, $sectionService->countAssignedContents( $section ) );
-    }
-
-    /**
-     * Test for the assignSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::assignSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAssignSectionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::assignSection() is not implemented." );
     }
 
     /**
@@ -655,18 +581,6 @@ class SectionServiceTest extends BaseTest
         // This call should fail with a NotFoundException
         $sectionService->deleteSection( $section );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the deleteSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteSectionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
     }
 
     /**
