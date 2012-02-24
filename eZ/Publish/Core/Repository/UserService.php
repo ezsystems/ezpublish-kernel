@@ -667,10 +667,13 @@ class UserService implements UserServiceInterface
      */
     public function newUserUpdateStruct()
     {
-        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+        $contentService = $this->repository->getContentService();
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentMetaDataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
 
         return new UserUpdateStruct( array(
-            'contentUpdateStruct' => $contentUpdateStruct
+            'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
+            'contentUpdateStruct'         => $contentUpdateStruct
         ) );
     }
 
@@ -681,10 +684,13 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupUpdateStruct()
     {
-        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+        $contentService = $this->repository->getContentService();
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentMetaDataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
 
         return new UserGroupUpdateStruct( array(
-            'contentUpdateStruct' => $contentUpdateStruct
+            'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
+            'contentUpdateStruct'         => $contentUpdateStruct
         ) );
     }
 
