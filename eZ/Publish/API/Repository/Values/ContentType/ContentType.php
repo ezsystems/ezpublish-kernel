@@ -10,8 +10,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 /**
  * this class represents a content type value
  *
- * @property-read array $contentTypeGroups calls getContentTypeGroups
- * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
  * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
@@ -22,26 +20,32 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer Determines if the type is allowd to have children
+ * @property-read boolean $isContainer Determines if the type is allowed to have children
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
- * @property-read boolean $defaultAlwaysAvailable if an instance of acontent type is created the always available flag is set by default this this value.
+ * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
 abstract class ContentType extends ValueObject
 {
     /**
-     * @var int Status constant for defined (aka "published") Type
+     * Status constant for defined (aka "published") Type
+     *
+     * @var int
      */
     const STATUS_DEFINED = 0;
 
     /**
-     * @var int Status constant for draft (aka "temporary") Type
+     * Status constant for draft (aka "temporary") Type
+     *
+     * @var int
      */
     const STATUS_DRAFT = 1;
 
     /**
-     * @var int Status constant for modified (aka "deferred for publishing") Type
+     * Status constant for modified (aka "deferred for publishing") Type
+     *
+     * @var int
      */
     const STATUS_MODIFIED = 2;
 
@@ -54,6 +58,7 @@ abstract class ContentType extends ValueObject
 
     /**
      * The status of the content type.
+     *
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
     protected $status;
@@ -72,15 +77,16 @@ abstract class ContentType extends ValueObject
     abstract public function getNames();
 
     /**
-     *
      * this method returns the name of the content type in the given language
+     *
      * @param string $languageCode
-     * @return string the name for the given language or null if none existis.
+     *
+     * @return string the name for the given language or null if none exists.
      */
     abstract public function getName( $languageCode );
 
     /**
-     *  This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -93,8 +99,10 @@ abstract class ContentType extends ValueObject
 
     /**
      * this method returns the name of the content type in the given language
+     *
      * @param string $languageCode
-     * @return string the description for the given language or null if none existis.
+     *
+     * @return string the description for the given language or null if none exists.
      */
     abstract public function getDescription( $languageCode );
 
@@ -108,14 +116,14 @@ abstract class ContentType extends ValueObject
     /**
      * Creation date of the content type
      *
-     * @var DateTime
+     * @var \DateTime
      */
     protected $creationDate;
 
     /**
      * Modification date of the content type
      *
-     * @var DateTime
+     * @var \DateTime
      */
     protected $modificationDate;
 
@@ -178,7 +186,7 @@ abstract class ContentType extends ValueObject
     protected $mainLanguageCode;
 
     /**
-     * if an instance of acontent type is created the always available flag is set
+     * if an instance of a content type is created the always available flag is set
      * by default this this value.
      *
      * @var boolean
@@ -205,21 +213,23 @@ abstract class ContentType extends ValueObject
 
     /**
      * This method returns the content type groups this content type is assigned to
-     * @return array an array of {@link ContentTypeGroup}
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     abstract public function getContentTypeGroups();
 
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] An array of {@link FieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     abstract public function getFieldDefinitions();
 
     /**
-     *
      * this method returns the field definition for the given identifier
+     *
      * @param $fieldDefinitionIdentifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     abstract public function getFieldDefinition( $fieldDefinitionIdentifier );

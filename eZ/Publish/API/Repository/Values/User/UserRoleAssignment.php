@@ -4,10 +4,7 @@ namespace eZ\Publish\API\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- *
  * This class represents a user to role assignment
- *
- * @property-read \eZ\Publish\API\Repository\Values\User\User $user calls getUser()
  */
 abstract class UserRoleAssignment extends RoleAssignment
 {

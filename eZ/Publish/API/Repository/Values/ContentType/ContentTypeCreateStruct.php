@@ -6,9 +6,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
- * this clss is used for creating content types
- *
- * @property $fieldDefinitions the collection of field definitions
+ * this class is used for creating content types
  */
 abstract class ContentTypeCreateStruct extends ValueObject
 {
@@ -27,7 +25,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $mainLanguageCode;
 
     /**
-     * The renote id
+     * The remote id
      *
      * @var string
      */
@@ -73,7 +71,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $defaultSortOrder = Location::SORT_ORDER_DESC;
 
     /**
-     * if an instance of acontent type is created the always available flag is set
+     * if an instance of a content type is created the always available flag is set
      * by default this this value.
      *
      * @var boolean
@@ -82,34 +80,42 @@ abstract class ContentTypeCreateStruct extends ValueObject
 
     /**
      * AN array of names with languageCode keys
-     * 
-     * @var array an array of string
+     *
+     * @var string[]
      */
     public $names;
 
     /**
      * An array of descriptions with languageCode keys
-     * 
-     * @var array an array of string
+     *
+     * @var string[]
      */
     public $descriptions;
-    
+
+    /**
+     * returns the list of field definitions
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[]
+     */
+    abstract public function getFieldDefinitions();
 
     /**
      * adds a new field definition
      *
-     * @param FieldDefinitionCreateStruct $fieldDef
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDef
      */
     abstract public function addFieldDefinition( FieldDefinitionCreateStruct $fieldDef );
 
     /**
      * if set this value overrides the current user as creator
+     *
      * @var int
      */
     public $creatorId = null;
 
     /**
      * If set this value overrides the current time for creation
+     *
      * @var \DateTime
      */
     public $creationDate = null;

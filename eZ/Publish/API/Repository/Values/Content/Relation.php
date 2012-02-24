@@ -5,11 +5,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
  * Class representing a relation between content.
- * 
+ *
  * @property-read int $id the internal id of the relation
  * @property-read string $sourceFieldDefinitionIdentifier the field definition identifier of the field where this relation is anchored if the relation is of type EMBED, LINK, or ATTRIBUTE
- * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $sourceContentInfo - calls {@link getSourceContentInfo()}
- * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContentInfo - calls {@link getDestinationContentInfo()}
  * @property-read int $type The relation type bitmask containing one or more of Relation::COMMON, Relation::EMBED, Relation::LINK, Relation::FIELD
  */
 abstract class Relation extends ValueObject
@@ -52,7 +50,7 @@ abstract class Relation extends ValueObject
     /**
      * Source Content Type Field Definition Id.
      * For relation not of type RelationType::COMMON this field denotes the field definition id
-     * of the attribute where the realtion is anchored.
+     * of the attribute where the relation is anchored.
      *
      * @var string
      */
@@ -71,7 +69,7 @@ abstract class Relation extends ValueObject
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     abstract public function getDestinationContentInfo();
-    
+
     /**
      * The relation type bitmask
      *

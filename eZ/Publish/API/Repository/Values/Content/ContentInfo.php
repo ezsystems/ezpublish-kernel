@@ -8,8 +8,7 @@ use DateTime;
 
 /**
  * This class provides all version independent information of the content object.
- * 
- * @property-read eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType calls {@link getContentType()}
+ *
  * @property-read int $contentId The unique id of the content object
  * @property-read string $name the computed name (via name schema) in the main language of the content object
  * @property-read int $sectionId the section to which the content is assigned
@@ -21,29 +20,34 @@ use DateTime;
  * @property-read boolean $alwaysAvailable Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $mainLanguageCode The main language code of the content. If the available flag is set to true the content is shown in this language if the requested language does not exist.
+ * @property-read mixed $mainLocationId Identifier of the main location.
  */
 abstract class ContentInfo extends ValueObject
 {
     /**
      * The unique id of the content object
+     *
      * @var mixed
      */
     protected $contentId;
 
     /**
      * the computed name (via name schema) in the main language of the content object
+     *
      * @var string
      */
     protected $name;
 
     /**
      * The content type of this content object
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     abstract public function getContentType();
 
     /**
      * the section to which the content is assigned
+     *
      * @var int
      */
     protected $sectionId;
@@ -55,7 +59,6 @@ abstract class ContentInfo extends ValueObject
      * @var int
      */
     protected $currentVersionNo;
-    
 
     /**
      * true if there exists a published version 0 otherwise
@@ -63,7 +66,7 @@ abstract class ContentInfo extends ValueObject
      * @var boolean Constant.
      */
     protected $published;
-    
+
     /**
      * the owner of this content object
      *
@@ -73,30 +76,35 @@ abstract class ContentInfo extends ValueObject
 
     /**
      * Content modification date
-     * @var DateTime
+     *
+     * @var \DateTime
      */
     protected $modificationDate;
 
     /**
-     * Content protectedation date
-     * @var DateTime
+     * Content publication date
+     *
+     * @var \DateTime
      */
     protected $publishedDate;
 
     /**
-     * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
+     * Indicates if the content object is shown in the main language if it's not present in an other requested language
+     *
      * @var boolean
      */
     protected $alwaysAvailable;
 
     /**
      * Remote identifier used as a custom identifier for the object
+     *
      * @var string
      */
     protected $remoteId;
 
     /**
      * The main language code of the content.
+     *
      * @var string
      */
     protected $mainLanguageCode;
