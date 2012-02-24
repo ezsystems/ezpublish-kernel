@@ -111,16 +111,6 @@ abstract class Location extends ValueObject
     protected $modifiedSubLocationDate;
 
     /**
-     * Identifier of the main location.
-     *
-     * If the content object in this location has multiple locations,
-     * $mainLocationId will point to the main one.
-     *
-     * @var mixed
-     */
-    protected $mainLocationId;
-
-    /**
      * Depth location has in the location tree.
      *
      * @var int

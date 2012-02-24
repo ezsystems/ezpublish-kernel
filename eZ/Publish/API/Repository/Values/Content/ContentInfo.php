@@ -100,4 +100,15 @@ abstract class ContentInfo extends ValueObject
      * @var string
      */
     protected $mainLanguageCode;
+    
+     /**
+     * Identifier of the main location.
+     *
+     * If the content object has multiple locations,
+     * $mainLocationId will point to the main one.
+     *
+     * @var mixed
+     */
+    protected $mainLocationId;
+    
 }
