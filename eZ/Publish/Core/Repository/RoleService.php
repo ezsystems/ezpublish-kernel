@@ -179,16 +179,15 @@ class RoleService implements RoleServiceInterface
         if ( $policyCreateStruct->module === '*' && $policyCreateStruct->function !== '*' )
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
-        // load role to check existence
-        $this->loadRole( $role->id );
+        $loadedRole = $this->loadRole( $role->id );
 
         $spiPolicy = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
                                                           $policyCreateStruct->function,
                                                           $policyCreateStruct->getLimitations() );
 
-        $this->persistenceHandler->userHandler()->addPolicy( $role->id, $spiPolicy );
+        $this->persistenceHandler->userHandler()->addPolicy( $loadedRole->id, $spiPolicy );
 
-        return $this->loadRole( $role->id );
+        return $this->loadRole( $loadedRole->id );
     }
 
     /**
@@ -209,12 +208,11 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $policy->id ) )
             throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
 
-        // load role to check existence
-        $this->loadRole( $role->id );
+        $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->removePolicy( $role->id, $policy->id );
+        $this->persistenceHandler->userHandler()->removePolicy( $loadedRole->id, $policy->id );
 
-        return $this->loadRole( $role->id );
+        return $this->loadRole( $loadedRole->id );
     }
 
     /**
@@ -340,10 +338,9 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        // load role to check existence
-        $this->loadRole( $role->id );
+        $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->deleteRole( $role->id );
+        $this->persistenceHandler->userHandler()->deleteRole( $loadedRole->id );
     }
 
     /**

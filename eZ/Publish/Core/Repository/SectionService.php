@@ -63,10 +63,10 @@ class SectionService implements SectionServiceInterface
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
-        if ( empty( $sectionCreateStruct->name ) )
+        if ( !is_string( $sectionCreateStruct->name ) )
             throw new InvalidArgumentValue( "name", $sectionCreateStruct->name, "SectionCreateStruct" );
 
-        if ( empty( $sectionCreateStruct->identifier ) )
+        if ( !is_string( $sectionCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $sectionCreateStruct->identifier, "SectionCreateStruct" );
 
         try
@@ -102,10 +102,16 @@ class SectionService implements SectionServiceInterface
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
-        if ( empty( $section->id ) )
+        if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        if ( !empty( $sectionUpdateStruct->identifier ) )
+        if ( $sectionUpdateStruct->name !== null && !is_string( $sectionUpdateStruct->name ) )
+            throw new InvalidArgumentValue( "name", $section->name, "Section" );
+
+        if ( $sectionUpdateStruct->identifier !== null && !is_string( $sectionUpdateStruct->identifier ) )
+            throw new InvalidArgumentValue( "identifier", $section->identifier, "Section" );
+
+        if ( $sectionUpdateStruct->identifier !== null )
         {
             try
             {
@@ -116,21 +122,18 @@ class SectionService implements SectionServiceInterface
             catch ( NotFoundException $e ) {}
         }
 
-        // try to see if section really exists before updating
-        // will throw exception if no section available
-        // @todo is this required
-        $section = $this->loadSection( $section->id );
+        $loadedSection = $this->loadSection( $section->id );
 
-        $updatedSection = $this->persistenceHandler->sectionHandler()->update(
-            $section->id,
-            $sectionUpdateStruct->name !== null ? $sectionUpdateStruct->name : $section->name,
-            $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $section->identifier
+        $spiSection = $this->persistenceHandler->sectionHandler()->update(
+            $loadedSection->id,
+            $sectionUpdateStruct->name !== null ? $sectionUpdateStruct->name : $loadedSection->name,
+            $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $loadedSection->identifier
         );
 
         return new Section( array(
-            'id'         => $updatedSection->id,
-            'identifier' => $updatedSection->identifier,
-            'name'       => $updatedSection->name
+            'id'         => $spiSection->id,
+            'identifier' => $spiSection->identifier,
+            'name'       => $spiSection->name
         ) );
     }
 
@@ -146,7 +149,7 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSection( $sectionId )
     {
-        if ( empty( $sectionId ) )
+        if ( !is_numeric( $sectionId ) )
             throw new InvalidArgumentValue( "sectionId", $sectionId );
 
         try
@@ -207,7 +210,7 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        if ( empty( $sectionIdentifier ) )
+        if ( !is_string( $sectionIdentifier ) )
             throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
 
         try
@@ -235,7 +238,7 @@ class SectionService implements SectionServiceInterface
      */
     public function countAssignedContents( Section $section )
     {
-        if ( empty( $section->id ) )
+        if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
         return $this->persistenceHandler->sectionHandler()->assignmentsCount( $section->id );
@@ -252,13 +255,16 @@ class SectionService implements SectionServiceInterface
      */
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
-        if ( empty( $contentInfo->contentId ) )
+        if ( !is_numeric( $contentInfo->contentId ) )
             throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
 
-        if ( empty( $section->id ) )
+        if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        $this->persistenceHandler->sectionHandler()->assign( $section->id, $contentInfo->contentId );
+        $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->contentId );
+        $loadedSection = $this->loadSection( $section->id );
+
+        $this->persistenceHandler->sectionHandler()->assign( $loadedSection->id, $loadedContentInfo->contentId );
     }
 
     /**
@@ -273,18 +279,15 @@ class SectionService implements SectionServiceInterface
      */
     public function deleteSection( Section $section )
     {
-        if ( empty( $section->id ) )
+        if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        // try to load the section and see if it exists before deleting
-        // will throw the exception if it doesn't exist
-        // @todo is this required
-        $this->loadSection( $section->id );
+        $loadedSection = $this->loadSection( $section->id );
 
-        if ( $this->countAssignedContents( $section ) > 0 )
+        if ( $this->countAssignedContents( $loadedSection ) > 0 )
             throw new BadStateException( "section" );
 
-        $this->persistenceHandler->sectionHandler()->delete( $section->id );
+        $this->persistenceHandler->sectionHandler()->delete( $loadedSection->id );
     }
 
     /**
