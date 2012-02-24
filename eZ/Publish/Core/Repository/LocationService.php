@@ -6,7 +6,6 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct as APILocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\Location as APILocation,
@@ -330,7 +329,7 @@ class LocationService implements LocationServiceInterface
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
-    public function createLocation( ContentInfo $contentInfo, APILocationCreateStruct $locationCreateStruct )
+    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
         if ( !is_numeric( $contentInfo->contentId ) )
             throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
