@@ -21,6 +21,7 @@ use DateTime;
  * @property-read boolean $alwaysAvailable Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $mainLanguageCode The main language code of the content. If the available flag is set to true the content is shown in this language if the requested language does not exist.
+ * @property-read mixed $mainLocationId Identifier of the main location.
  */
 abstract class ContentInfo extends ValueObject
 {
