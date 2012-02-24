@@ -9,17 +9,17 @@
         <env name="repositoryInit" value="common.php" />
     </php>
     <testsuites>
-        <testsuite name="PublicAPI TestSuite">
+        <testsuite name="eZ\Publish\API\Repository">
             <file>RepositoryTest.php</file>
-            <file>UserServiceTest.php</file>
-            <file>RoleServiceTest.php</file>
             <file>SectionServiceTest.php</file>
             <file>LanguageServiceTest.php</file>
             <file>ContentTypeServiceTest.php</file>
             <file>ContentServiceTest.php</file>
-            <file>IOServiceTest.php</file>
             <file>LocationServiceTest.php</file>
+            <file>UserServiceTest.php</file>
+            <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>
+            <file>IOServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
             <file>ContentServiceAuthorizationTest.php</file>
