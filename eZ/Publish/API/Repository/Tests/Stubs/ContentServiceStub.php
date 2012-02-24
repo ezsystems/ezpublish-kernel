@@ -6,9 +6,11 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
+
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\ContentService;
+use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
@@ -21,11 +23,64 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
+
 /**
  * @example Examples/contenttype.php
  */
 class ContentServiceStub implements ContentService
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
+    /**
+     * @var integer
+     */
+    private $contentNextId = 0;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    private $contents = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[]
+     */
+    private $contentInfo = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
+     */
+    private $versionInfo = array();
+
+    /**
+     * @var integer
+     */
+    private $versionNextId = 0;
+
+    /**
+     * @var integer
+     */
+    private $fieldNextId = 0;
+
+    /**
+     * Instantiates a new content service stub.
+     *
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     */
+    public function __construct( RepositoryStub $repository )
+    {
+        $this->repository = $repository;
+        $this->initFromFixture();
+    }
+
     /**
      * Loads a content info object.
      *
@@ -40,7 +95,11 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfo( $contentId )
     {
-        // TODO: Implement loadContentInfo() method.
+        if ( isset( $this->contentInfo[$contentId] ) )
+        {
+            return $this->contentInfo[$contentId];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -57,7 +116,14 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
-        // TODO: Implement loadContentInfoByRemoteId() method.
+        foreach ( $this->contentInfo as $contentInfo )
+        {
+            if ( $remoteId === $contentInfo->remoteId )
+            {
+                return $contentInfo;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -75,6 +141,13 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
+        foreach ( $this->versionInfo as $versionInfo )
+        {
+            if ( $versionInfo->contentId === $contentInfo->contentId )
+            {
+                return $versionInfo;
+            }
+        }
         // TODO: Implement loadVersionInfo() method.
     }
 
@@ -191,7 +264,113 @@ class ContentServiceStub implements ContentService
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
-        // TODO: Implement createContent() method.
+        $fields = array();
+        foreach ( $contentCreateStruct->fields as $field )
+        {
+            if ( false === isset( $fields[$field->fieldDefIdentifier] ) )
+            {
+                $fields[$field->fieldDefIdentifier] = array();
+            }
+            $fields[$field->fieldDefIdentifier][] = $field;
+        }
+
+        // Now validate that all required fields
+        $allFields = array();
+        foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( isset( $fields[$fieldDefinition->identifier] ) )
+            {
+                foreach ( $fields[$fieldDefinition->identifier] as $field )
+                {
+                    $fieldId = ++$this->fieldNextId;
+
+                    $allFields[$fieldId] = new Field(
+                        array(
+                            'id'                  =>  $fieldId,
+                            'value'               =>  $field->value,
+                            'languageCode'        =>  $field->languageCode,
+                            'fieldDefIdentifier'  =>  $fieldDefinition->identifier
+                        )
+                    );
+                }
+            }
+            else if ( $fieldDefinition->isRequired )
+            {
+                throw new ContentValidationExceptionStub( '@TODO: What error code should be used?' );
+            }
+            else
+            {
+                $fieldId = ++$this->fieldNextId;
+
+                $allFields[$fieldId] = new Field(
+                    array(
+                        'id'                  =>  $fieldId,
+                        'value'               =>  $fieldDefinition->defaultValue,
+                        'languageCode'        =>  $contentCreateStruct->contentType->mainLanguageCode,
+                        'fieldDefIdentifier'  =>  $fieldDefinition->identifier
+                    )
+                );
+            }
+        }
+
+        $languageCodes = array( $contentCreateStruct->mainLanguageCode );
+        foreach ( $allFields as $field )
+        {
+            $languageCodes[] = $field->languageCode;
+        }
+        $languageCodes = array_unique( $languageCodes );
+
+        $content = new ContentStub(
+            array(
+                'contentId'      =>  ++$this->contentNextId,
+                'contentTypeId'  =>  $contentCreateStruct->contentType->id,
+                'fields'         =>  $allFields,
+                'relations'      =>  array(),
+
+                'repository'     =>  $this->repository
+            )
+        );
+
+        $contentInfo = new ContentInfoStub(
+            array(
+                'contentId'         =>  $this->contentNextId,
+                'contentTypeId'     =>  $contentCreateStruct->contentType->id,
+                'remoteId'          =>  $contentCreateStruct->remoteId,
+                'sectionId'         =>  $contentCreateStruct->sectionId,
+                'alwaysAvailable'   =>  $contentCreateStruct->alwaysAvailable,
+                'currentVersionNo'  =>  1,
+                'mainLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,
+                'modificationDate'  =>  $contentCreateStruct->modificationDate,
+                'ownerId'           =>  $this->repository->getCurrentUser()->id,
+                'published'         =>  false,
+                'publishedDate'     =>  null,
+
+                'repository'      =>  $this->repository
+            )
+        );
+
+        $versionInfo = new VersionInfoStub(
+            array(
+                'id'                   =>  ++$this->versionNextId,
+                'contentId'            =>  $this->contentNextId,
+                'status'               =>  VersionInfo::STATUS_DRAFT,
+                'versionNo'            =>  1,
+                'creatorId'            =>  $this->repository->getCurrentUser()->id,
+                'creationDate'         =>  new \DateTime(),
+                'modificationDate'     =>  $contentCreateStruct->modificationDate,
+                'languageCodes'        =>  $languageCodes,
+                'initialLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,
+
+                'repository'           =>  $this->repository
+            )
+        );
+
+
+        $this->contents[$content->contentId]    = $content;
+        $this->contentInfo[$content->contentId] = $contentInfo;
+        $this->versionInfo[$versionInfo->id]    = $versionInfo;
+
+        return $content;
     }
 
     /**
@@ -510,7 +689,14 @@ class ContentServiceStub implements ContentService
      */
     public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode )
     {
-        // TODO: Implement newContentCreateStruct() method.
+        return new ContentCreateStructStub(
+            array(
+                'contentType'       =>  $contentType,
+                'mainLanguageCode'  =>  $mainLanguageCode,
+                'modificationDate'  =>  new \DateTime(),
+                'ownerId'           =>  $this->repository->getCurrentUser()->id
+            )
+        );
     }
 
     /**
@@ -548,5 +734,21 @@ class ContentServiceStub implements ContentService
     public function newTranslationValues()
     {
         // TODO: Implement newTranslationValues() method.
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $this->contentInfo,
+            $this->contentNextId,
+            $this->versionInfo,
+            $this->versionNextId,
+        ) = $this->repository->loadFixture( 'ContentInfo' );
     }
 }

@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\SectionService;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\Content\Section;
@@ -30,7 +29,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 class SectionServiceStub implements SectionService
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
 
@@ -55,19 +54,13 @@ class SectionServiceStub implements SectionService
     private $assignedContents = array();
 
     /**
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
 
-        $this->sections[] = new Section(
-            array(
-                'id'          =>  ++$this->nextId,
-                'name'        =>  'Standard',
-                'identifier'  =>  'standard',
-            )
-        );
+        $this->initFromFixture();
     }
 
     /**
@@ -293,4 +286,18 @@ class SectionServiceStub implements SectionService
         return new SectionUpdateStruct();
     }
 
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $this->sections,
+            $this->identifiers,
+            $this->nextId
+        ) = $this->repository->loadFixture( 'Section' );
+    }
 }

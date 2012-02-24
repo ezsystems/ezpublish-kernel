@@ -27,6 +27,11 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 class LanguageServiceStub implements LanguageService
 {
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
+    /**
      * @var integer
      */
     private $nextId = 0;
@@ -42,18 +47,15 @@ class LanguageServiceStub implements LanguageService
     private $codes = array();
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
-
-    /**
      * Instantiates the language service.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
+
+        $this->initFromFixture();
     }
 
     /**
@@ -247,5 +249,20 @@ class LanguageServiceStub implements LanguageService
     public function newLanguageCreateStruct()
     {
         return new LanguageCreateStruct();
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $this->languages,
+            $this->codes,
+            $this->nextId
+        ) = $this->repository->loadFixture( 'Language' );
     }
 }

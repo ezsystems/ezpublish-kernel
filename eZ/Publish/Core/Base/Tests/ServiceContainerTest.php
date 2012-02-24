@@ -24,13 +24,30 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'BService' => array(
-                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B'
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
+                    'public' => true,
                 )
             )
         );
         $b = $sc->get('BService');
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $b );
         self::assertFalse( $b->factoryExecuted );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testSimplePrivateService()
+    {
+        $sc = new ServiceContainer(
+            array(
+                'BService' => array(
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
+                )
+            )
+        );
+        $sc->get('BService');
     }
 
     /**
@@ -45,6 +62,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                  ),
                 'CService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\C',
+                    'public' => true,
                     'arguments' => array( '@BService' ),
                 )
             )
@@ -63,6 +81,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'AService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
+                    'public' => true,
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'BService' => array(
@@ -90,6 +109,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'AService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
+                    'public' => true,
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'CService' => array(
@@ -105,6 +125,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         self::assertEquals( '__', $a->string );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $a->b );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\C', $a->c );
+        self::assertEquals( '', $a->c->string );// This will change if factory support is re added
     }
 
     /**
@@ -116,6 +137,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'DService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\D',
+                    'public' => true,
                     'arguments' => array( '$serviceContainer', '$_SERVER', '$B' ),
                 ),
             ),
@@ -134,6 +156,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'EService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\E',
+                    'public' => true,
                     'arguments' => array(
                         array(
                             'bool' => true,
@@ -158,6 +181,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'F' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\F',
+                    'public' => true,
                     'arguments' => array(
                         array(
                             'sc' => '$serviceContainer',

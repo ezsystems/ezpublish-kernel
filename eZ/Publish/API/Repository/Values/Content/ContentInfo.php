@@ -38,7 +38,7 @@ abstract class ContentInfo extends ValueObject
 
     /**
      * The content type of this content object
-     * @return ContentType
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     abstract public function getContentType();
 

@@ -2,20 +2,18 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
+    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
 
 /**
  * this class represents a content type value
  *
- * @property-read array $names calls getNames() or on access getName($language)
- * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read array $contentTypeGroups calls getContentTypeGroups
  * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
- * @property-read int $id the id of the content type
+ * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
- * @property-read \DateTime $createdDate the date of the creation of this content type
+ * @property-read \DateTime $creationDate the date of the creation of this content type
  * @property-read \DateTime $modificationDate the date of the last modification of this content type
  * @property-read int $creatorId the user id of the creator of this content type
  * @property-read int $modifierId the user id of the user which has last modified this content type
@@ -134,7 +132,7 @@ class ContentType extends APIContentType
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return array an array of {@link FieldDefinition}
+     * @return array an array of {@link APIFieldDefinition}
      */
     public function getFieldDefinitions()
     {
@@ -145,7 +143,7 @@ class ContentType extends APIContentType
      * this method returns the field definition for the given identifier
      *
      * @param $fieldDefinitionIdentifier
-     * @return FieldDefinition
+     * @return APIFieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {

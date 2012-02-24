@@ -168,9 +168,13 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationByRemoteId()
     {
-        self::markTestIncomplete( "@todo: enable when LocationService::loadLocationByRemoteId is implemented" );
-    }
+        self::markTestSkipped( "@todo: enable when LocationService::loadLocationByRemoteId is implemented" );
+        $location = $this->repository->getLocationService()->loadLocationByRemoteId( "f3e90596361e31d496d4026eb624c983" );
 
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        self::assertGreaterThan( 0, $location->id );
+        self::assertEquals( "f3e90596361e31d496d4026eb624c983", $location->remoteId );
+    }
 
     /**
      * Test loading main location
@@ -178,7 +182,23 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadMainLocation()
     {
-        self::markTestIncomplete( "@todo: enable when LocationService::loadMainLocation is implemented" );
+        self::markTestSkipped( "@todo: enable when content service is implemented" );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 65 );
+        $location = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        self::assertGreaterThan( 0, $location->id );
+        self::assertEquals( true, $location->id == $location->mainLocationId );
+    }
+
+    /**
+     * Test loading main location throwing BadStateException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @covers \eZ\Publish\API\Repository\LocationService::loadMainLocation
+     */
+    public function testLoadMainLocationThrowsBadStateException()
+    {
+        self::markTestIncomplete( "@todo: implement when content service is implemented" );
     }
 
     /**
@@ -187,7 +207,81 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocations()
     {
-        self::markTestIncomplete( "@todo: enable when LocationService::loadLocations is implemented" );
+        self::markTestSkipped( "@todo: enable when content service is implemented" );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 4 );
+
+        $locationService = $this->repository->getLocationService();
+        $locations = $locationService->loadLocations( $contentInfo );
+
+        self::assertInternalType( "array", $locations );
+        self::assertNotEmpty( $locations );
+
+        foreach ( $locations as $location )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        }
+
+        $locationsCount = count( $locations );
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 43 );
+        $locationService->createLocation( $contentInfo, $locationCreateStruct );
+
+        $locations = $locationService->loadLocations( $contentInfo );
+
+        self::assertInternalType( "array", $locations );
+        self::assertNotEmpty( $locations );
+
+        foreach ( $locations as $location )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        }
+
+        $newLocationsCount = count( $locations );
+
+        self::assertEquals( $locationsCount + 1, $newLocationsCount );
+    }
+
+    /**
+     * Test loading locations for content with root location specified
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocations
+     */
+    public function testLoadLocationsWithRootLocation()
+    {
+        self::markTestSkipped( "@todo: enable when content service is implemented" );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 4 );
+
+        $locationService = $this->repository->getLocationService();
+        $parentLocation = $locationService->loadLocation( 43 );
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( $parentLocation->id );
+        $locationService->createLocation( $contentInfo, $locationCreateStruct );
+
+        $locations = $locationService->loadLocations( $contentInfo, $parentLocation );
+
+        self::assertInternalType( "array", $locations );
+        self::assertNotEmpty( $locations );
+
+        foreach ( $locations as $location )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        }
+
+        foreach ( $locations as $location )
+        {
+            /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
+            if ( stripos( $location->pathString, $parentLocation->pathString ) === false )
+                self::fail( "fetched locations outside root node" );
+        }
+    }
+
+    /**
+     * Test loading locations for content throwing BadStateException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocations
+     */
+    public function testLoadLocationsThrowsBadStateException()
+    {
+        self::markTestIncomplete( "@todo: implement when content service is implemented" );
     }
 
     /**
@@ -196,7 +290,20 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationChildren()
     {
-        self::markTestIncomplete( "@todo: enable when LocationService::loadLocationChildren is implemented" );
+        self::markTestSkipped( "@todo: enable when content service is implemented" );
+
+        $locationService = $this->repository->getLocationService();
+
+        $rootLocation = $locationService->loadLocation( 2 );
+        $childrenLocations = $locationService->loadLocationChildren( $rootLocation );
+
+        self::assertInternalType( "array", $childrenLocations );
+        self::assertNotEmpty( $childrenLocations );
+
+        foreach ( $childrenLocations as $childLocation )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $childLocation );
+        }
     }
 
     /**

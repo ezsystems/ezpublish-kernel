@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\UserService;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -31,37 +30,40 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub
 class UserServiceStub implements UserService
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     * @var \eZ\Publish\API\Repository\Values\User\User[]
      */
-    private $userGroups = array();
+    private $users;
 
     /**
      * @var integer
      */
-    private $userGroupNextId = 211;
+    private $userNextId;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    private $userGroups;
+
+    /**
+     * @var integer
+     */
+    private $userGroupNextId;
 
     /**
      * Instantiates a new user service instance.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
 
-        $this->userGroups = array(
-            4    =>  new UserGroupStub( array( 'id' => 4,   'parentId' => 0 ) ),
-            11   =>  new UserGroupStub( array( 'id' => 11,  'parentId' => 4 ) ),
-            12   =>  new UserGroupStub( array( 'id' => 12,  'parentId' => 4 ) ),
-            13   =>  new UserGroupStub( array( 'id' => 12,  'parentId' => 4 ) ),
-            211  =>  new UserGroupStub( array( 'id' => 211, 'parentId' => 4 ) ),
-            42   =>  new UserGroupStub( array( 'id' => 42,  'parentId' => 4 ) )
-        );
+        $this->initFromFixture();
     }
 
     /**
@@ -128,7 +130,7 @@ class UserServiceStub implements UserService
         $subUserGroups = array();
         foreach ( $this->userGroups as $group )
         {
-            if ( $group->parentId === $userGroup->id )
+            if ( (string) $group->parentId === (string) $userGroup->id )
             {
                 $subUserGroups[] = $group;
             }
@@ -338,5 +340,45 @@ class UserServiceStub implements UserService
     public function newUserGroupUpdateStruct()
     {
         // TODO: Implement newUserGroupUpdateStruct() method.
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $this->userGroups,
+            $this->userGroupNextId
+        ) = $this->repository->loadFixture( 'UserGroup' );
+
+        list(
+            $this->users,
+            $this->userNextId
+        ) = $this->repository->loadFixture( 'User' );
+    }
+
+    private function createHash( $login, $password, $type )
+    {
+        switch ( $type )
+        {
+            case 2:
+                /* PASSWORD_HASH_MD5_USER */
+                return md5( "{$login}\n{$password}" );
+
+            case 3:
+                /* PASSWORD_HASH_MD5_SITE */
+                $site = null;
+                return md5( "{$login}\n{$password}\n{$site}" );
+
+            case 5:
+                /* PASSWORD_HASH_PLAINTEXT */
+                return $password;
+        }
+        /* PASSWORD_HASH_MD5_PASSWORD (1) */
+        return md5( $password );
     }
 }

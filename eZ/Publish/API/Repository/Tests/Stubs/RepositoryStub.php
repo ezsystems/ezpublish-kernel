@@ -22,6 +22,11 @@ use \eZ\Publish\API\Repository\Values\ValueObject;
 class RepositoryStub implements Repository
 {
     /**
+     * @var string
+     */
+    private $fixtureDir;
+
+    /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
     private $currentUser;
@@ -55,6 +60,21 @@ class RepositoryStub implements Repository
      * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentTypeServiceStub
      */
     private $contentTypeService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\LocationServiceStub
+     */
+    private $locationService;
+
+    /**
+     * Instantiates the stubbed repository.
+     *
+     * @param string $fixtureDir
+     */
+    public function __construct( $fixtureDir )
+    {
+        $this->fixtureDir = $fixtureDir;
+    }
 
     /**
      * Get current user
@@ -184,7 +204,7 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->contentTypeService )
         {
-            $this->contentTypeService = new ContentTypeServiceStub();
+            $this->contentTypeService = new ContentTypeServiceStub( $this );
         }
         return $this->contentTypeService;
     }
@@ -198,7 +218,11 @@ class RepositoryStub implements Repository
      */
     public function getLocationService()
     {
-        // TODO: Implement getLocationService() method.
+        if ( null === $this->locationService )
+        {
+            $this->locationService = new LocationServiceStub( $this );
+        }
+        return $this->locationService;
     }
 
     /**
@@ -293,5 +317,18 @@ class RepositoryStub implements Repository
     public function rollback()
     {
         // TODO: Implement rollback() method.
+    }
+
+    /**
+     * Internally helper method that returns pre defined test data.
+     *
+     * @param string $fixtureName
+     * @param mixed[] $scopeValues
+     *
+     * @return array
+     */
+    public function loadFixture( $fixtureName, array $scopeValues = array() )
+    {
+        return include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
     }
 }

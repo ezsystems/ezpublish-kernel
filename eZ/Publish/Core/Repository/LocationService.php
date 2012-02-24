@@ -21,12 +21,15 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
 
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId as CriterionContentId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Status as CriterionStatus,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
 
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException;
+    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
+    eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  * Location service, used for complex subtree operations
@@ -132,7 +135,29 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocationByRemoteId( $remoteId )
     {
-        //@todo: implement
+        if ( !is_string( $remoteId ) )
+            throw new InvalidArgumentValue( "remoteId", $remoteId );
+
+        $searchCriterion = new CriterionLogicalAnd( array(
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+            new CriterionLocationRemoteId( $remoteId )
+        ) );
+
+        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
+
+        if ( !$searchResult || $searchResult->count != 1 )
+            throw new NotFoundException( "location", $remoteId );
+
+        if ( is_array( $searchResult->content[0]->locations ) )
+        {
+            foreach ( $searchResult->content[0]->locations as $spiLocation )
+            {
+                if ( $spiLocation->remoteId == $remoteId )
+                    return $this->buildDomainLocationObject( $spiLocation );
+            }
+        }
+
+        throw new NotFoundException( "location", $remoteId );
     }
 
     /**
@@ -147,7 +172,30 @@ class LocationService implements LocationServiceInterface
      */
     public function loadMainLocation( ContentInfo $contentInfo )
     {
-        //@todo: implement
+        if ( !is_numeric( $contentInfo->contentId ) )
+            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+
+        $searchCriterion = new CriterionLogicalAnd( array(
+            new CriterionContentId( $contentInfo->contentId ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+        ) );
+
+        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
+
+        if ( !$searchResult || $searchResult->count == 0 )
+            throw new BadStateException( "contentInfo" );
+
+        $spiLocations = $searchResult->content[0]->locations;
+        if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
+            return null;
+
+        foreach ( $spiLocations as $spiLocation )
+        {
+            if ( $spiLocation->id == $spiLocation->mainLocationId )
+                return $this->buildDomainLocationObject( $spiLocation );
+        }
+
+        return null;
     }
 
     /**
@@ -165,7 +213,34 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null )
     {
-        //@todo: implement
+        if ( !is_numeric( $contentInfo->contentId ) )
+            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+
+        if ( $rootLocation !== null && !is_string( $rootLocation->pathString ) )
+            throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
+
+        $searchCriterion = new CriterionLogicalAnd( array(
+            new CriterionContentId( $contentInfo->contentId ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+        ) );
+
+        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
+
+        if ( !$searchResult || $searchResult->count == 0 )
+            throw new BadStateException( "contentInfo" );
+
+        $spiLocations = $searchResult->content[0]->locations;
+        if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
+            return array();
+
+        $contentLocations = array();
+        foreach ( $spiLocations as $location )
+        {
+            if ( $rootLocation === null || stripos( $location->pathString, $rootLocation->pathString ) !== false )
+                $contentLocations[] = $this->buildDomainLocationObject( $location );
+        }
+
+        return $contentLocations;
     }
 
     /**
@@ -180,7 +255,67 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
     {
-        //@todo: implement
+        if ( !is_numeric( $location->id ) )
+            throw new InvalidArgumentValue( "id", $location->id, "Location" );
+
+        if ( !is_numeric( $location->sortField ) )
+            throw new InvalidArgumentValue( "sortField", $location->sortField, "Location" );
+
+        if ( !is_numeric( $location->sortOrder ) )
+            throw new InvalidArgumentValue( "sortOrder", $location->sortOrder, "Location" );
+
+        if ( !is_numeric( $offset ) )
+            throw new InvalidArgumentValue( "offset", $offset );
+
+        if ( !is_numeric( $limit ) )
+            throw new InvalidArgumentValue( "limit", $limit );
+
+        $searchResult = $this->searchChildrenLocations( $location->id, $location->sortField, $location->sortOrder, $offset, $limit );
+        if ( !$searchResult || $searchResult->count == 0 )
+            return array();
+
+        $childLocations = array();
+        foreach ( $searchResult->content as $spiContent )
+        {
+            if ( is_array( $spiContent->locations ) )
+            {
+                foreach ( $spiContent->locations as $spiLocation )
+                {
+                    if ( $spiLocation->parentId == $location->id )
+                        $childLocations[] = $this->buildDomainLocationObject( $spiLocation );
+                }
+            }
+        }
+
+        return $childLocations;
+    }
+
+
+
+    /**
+     * Searches children locations of the provided parent location id
+     *
+     * @param int $parentLocationId
+     * @param int $sortField
+     * @param int $sortOrder
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
+     */
+    protected function searchChildrenLocations( $parentLocationId, $sortField, $sortOrder, $offset = 0, $limit = -1 )
+    {
+        $searchCriterion = new CriterionLogicalAnd( array(
+            new CriterionParentLocationId( $parentLocationId ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+        ) );
+
+        return $this->persistenceHandler->searchHandler()->find(
+            $searchCriterion,
+            $offset,
+            $limit > 0 ? $limit : null,
+            array( $this->getSortClauseBySortField( $sortField, $sortOrder ) )
+        );
     }
 
     /**
@@ -507,9 +642,17 @@ class LocationService implements LocationServiceInterface
         return new LocationUpdateStruct();
     }
 
+    /**
+     * Builds domain location object from provided persistence location
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
+        $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, $spiLocation->sortField, $spiLocation->sortOrder );
 
         return new Location( array(
             'contentInfo'              => $contentInfo,
@@ -526,8 +669,62 @@ class LocationService implements LocationServiceInterface
             'depth'                    => $spiLocation->depth,
             'sortField'                => $spiLocation->sortField,
             'sortOrder'                => $spiLocation->sortOrder,
-            //@todo: calculate childrenCount
-            'childrenCount'            => 0
+            'childrenCount'            => $childrenLocations ? $childrenLocations->count : 0
         ) );
+    }
+
+    /**
+     * Instantiates a correct sort clause object based on provided location sort field and sort order
+     *
+     * @param int $sortField
+     * @param int $sortOrder
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\SortClause
+     */
+    protected function getSortClauseBySortField( $sortField, $sortOrder = APILocation::SORT_ORDER_ASC )
+    {
+        //@todo: use consts for sort order instead of hardcoded values
+        $sortOrder = $sortOrder == APILocation::SORT_ORDER_DESC ? 'descending' : 'ascending';
+        switch ( $sortField )
+        {
+            case APILocation::SORT_FIELD_PATH:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPath( $sortOrder );
+
+            case APILocation::SORT_FIELD_PUBLISHED:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\DateCreated( $sortOrder );
+
+            case APILocation::SORT_FIELD_MODIFIED:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\DateModified( $sortOrder );
+
+            case APILocation::SORT_FIELD_SECTION:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\SectionIdentifier( $sortOrder );
+
+            case APILocation::SORT_FIELD_DEPTH:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationDepth( $sortOrder );
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_CLASS_NAME:
+
+            case APILocation::SORT_FIELD_PRIORITY:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPriority( $sortOrder );
+
+            case APILocation::SORT_FIELD_NAME:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\ContentName( $sortOrder );
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_NODE_ID:
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
+
+            default:
+                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPath( $sortOrder );
+        }
     }
 }

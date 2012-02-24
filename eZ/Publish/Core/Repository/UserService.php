@@ -14,22 +14,25 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
+    eZ\Publish\API\Repository\Values\Content\Location,
 
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\API\Repository\UserService as UserServiceInterface,
 
     eZ\Publish\SPI\Persistence\User as SPIUser,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Status as CriterionStatus,
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException;
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * This service provides methods for managing users and user groups
@@ -134,6 +137,13 @@ class UserService implements UserServiceInterface
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         $mainLocation = $locationService->loadMainLocation( $contentInfo );
 
+        $subGroupCount = 0;
+        if ( $mainLocation !== null )
+        {
+            $subGroups = $this->searchSubGroups( $mainLocation );
+            $subGroupCount = $subGroups->count;
+        }
+
         return new UserGroup( array(
             'contentInfo'   => $contentInfo,
             'contentType'   => $contentInfo->getContentType(),
@@ -143,8 +153,7 @@ class UserService implements UserServiceInterface
             'relations'     => $content->getRelations(),
             'id'            => $contentInfo->contentId,
             'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
-            //@todo: calculate sub group count
-            'subGroupCount' => 0
+            'subGroupCount' => $subGroupCount
         ) );
     }
 
@@ -163,24 +172,60 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
+        $locationService = $this->repository->getLocationService();
+
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
-        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+        $mainGroupLocation = $locationService->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
 
         if ( $mainGroupLocation === null )
             return array();
 
-        $searchResult = $this->persistenceHandler->searchHandler()->find(
-            new CriterionLogicalAnd( array(
-                //@todo: read user group type ID from INI settings
-                new CriterionContentTypeId( 3 ),
-                new CriterionParentLocationId( $mainGroupLocation->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
-            ) )
-        );
+        $searchResult = $this->searchSubGroups( $mainGroupLocation );
+        if ( !is_array( $searchResult->items ) || empty( $searchResult->items ) )
+            return array();
 
-        // @todo: hm... we need to convert SPI\Content to API\Content
-        // such method already exists in content service but is private
-        // return $searchResult->content;
+        $subUserGroups = array();
+        foreach ( $searchResult->items as $resultItem )
+        {
+            $resultItemContentInfo = $resultItem->getVersionInfo()->getContentInfo();
+            $subSubGroupMainLocation = $locationService->loadMainLocation( $resultItemContentInfo );
+            $subSubGroups = $this->searchSubGroups( $subSubGroupMainLocation );
+
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $resultItem */
+            $subUserGroups[] = new UserGroup( array(
+                'contentInfo'   => $resultItemContentInfo,
+                'contentType'   => $resultItemContentInfo->getContentType(),
+                'contentId'     => $resultItemContentInfo->contentId,
+                'versionInfo'   => $resultItem->getVersionInfo(),
+                'fields'        => $resultItem->getFields(),
+                'relations'     => $resultItem->getRelations(),
+                'id'            => $resultItemContentInfo->contentId,
+                'parentId'      => $mainGroupLocation->id,
+                'subGroupCount' => $subSubGroups->count
+            ) );
+        }
+
+        return $subUserGroups;
+    }
+
+    /**
+     * Returns (searches) subgroups of a user group described by its main location
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     */
+    protected function searchSubGroups( Location $location )
+    {
+        $searchQuery = new Query();
+        $searchQuery->criterion = new CriterionLogicalAnd( array(
+            //@todo: read user group type ID from INI settings
+            new CriterionContentTypeId( 3 ),
+            new CriterionParentLocationId( $location->id ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+        ) );
+
+        return $this->repository->getContentService()->findContent( $searchQuery, array() );
     }
 
     /**
@@ -270,7 +315,17 @@ class UserService implements UserServiceInterface
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
         $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
 
+        $publishedContent = $contentService->updateContentMetadata( $publishedContentInfo, $userGroupUpdateStruct->contentMetaDataUpdateStruct );
+        $publishedContentInfo = $publishedContent->getVersionInfo()->getContentInfo();
+
         $mainLocation = $locationService->loadMainLocation( $publishedContentInfo );
+
+        $subGroupCount = 0;
+        if ( $mainLocation !== null )
+        {
+            $subGroups = $this->searchSubGroups( $mainLocation );
+            $subGroupCount = $subGroups->count;
+        }
 
         return new UserGroup( array(
             'contentInfo'   => $publishedContentInfo,
@@ -281,8 +336,7 @@ class UserService implements UserServiceInterface
             'relations'     => $publishedContent->getRelations(),
             'id'            => $publishedContentInfo->contentId,
             'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
-            //@todo: calculate sub group count
-            'subGroupCount' => 0
+            'subGroupCount' => $subGroupCount
         ) );
     }
 
@@ -400,8 +454,7 @@ class UserService implements UserServiceInterface
         {
             // something went wrong, we should not have more than one
             // user with the same login
-            // @todo: maybe throw BadStateException?
-            return null;
+            throw new InvalidArgumentException( "login", "there are multiple users with the same login" );
         }
 
         // @todo: read site name from settings
@@ -465,7 +518,9 @@ class UserService implements UserServiceInterface
 
         $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
         $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userUpdateStruct->contentUpdateStruct );
-        $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+        $contentService->updateContentMetadata( $publishedContent->getVersionInfo()->getContentInfo(), $userUpdateStruct->contentMetaDataUpdateStruct );
 
         $this->persistenceHandler->userHandler()->update( new SPIUser( array(
             'id'            => $loadedUser->id,
@@ -632,6 +687,13 @@ class UserService implements UserServiceInterface
         ) );
     }
 
+    /**
+     * Builds the domain user object from provided persistence user object
+     *
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
     protected function buildDomainUserObject( SPIUser $spiUser )
     {
         $content = $this->repository->getContentService()->loadContent( $spiUser->id );
@@ -654,6 +716,13 @@ class UserService implements UserServiceInterface
         ) );
     }
 
+    /**
+     * Builds the persistence user object from provided user create struct
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
     protected function buildPersistenceUserObject( APIUserCreateStruct $userCreateStruct )
     {
         return new SPIUser( array(

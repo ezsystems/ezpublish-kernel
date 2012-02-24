@@ -22,12 +22,13 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * @example Examples/contenttype.php
@@ -67,6 +68,11 @@ class ContentTypeServiceStub implements ContentTypeService
     private $nextTypeId = 0;
 
     /**
+     * @var int
+     */
+    private $nextFieldDefinitionId = 0;
+
+    /**
      * Properties of a ContentTypeGroup
      *
      * @var string[]
@@ -74,11 +80,22 @@ class ContentTypeServiceStub implements ContentTypeService
     private $groupProperties;
 
     /**
-     *
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
-    public function __construct()
+    private $repository;
+
+    /**
+     * Instantiates a new content type service stub.
+     *
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     */
+    public function __construct( RepositoryStub $repository )
     {
         $this->initGroupProperties();
+
+        $this->repository = $repository;
+
+        $this->initFromFixture();
     }
 
     /**
@@ -239,8 +256,36 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup )
     {
+        if ( $this->groupHasTypes( $contentTypeGroup ) )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+
         unset( $this->groups[$contentTypeGroup->identifier] );
         unset( $this->groupsById[$contentTypeGroup->id] );
+    }
+
+    /**
+     * Checks of $contentTypeGroup has types assigned
+     *
+     * @param ContentTypeGroup $contentTypeGroup
+     * @return bool
+     */
+    protected function groupHasTypes( ContentTypeGroup $contentTypeGroup )
+    {
+        $types = array_merge( $this->types, $this->typeDrafts );
+
+        foreach ( $types as $type )
+        {
+            foreach ( $type->contentTypeGroups as $assignedGroup )
+            {
+                if ( $assignedGroup->id == $contentTypeGroup->id )
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -282,11 +327,7 @@ class ContentTypeServiceStub implements ContentTypeService
         // FIXME: Set status to draft
         $data['id'] = $this->nextTypeId++;
 
-        $type = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
-
-        $this->typeDrafts[$type->id] = $type;
-
-        return $type;
+        return $this->setContentTypeDraft( $data );
     }
 
     /**
@@ -337,13 +378,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             $data[$propertyName] = $propertyValue;
         }
-
-        // FIXME: Work around inconsistency
-        if ( isset( $data['fieldTypeIdentifier'] ) )
-        {
-            $data['fieldType'] = $data['fieldTypeIdentifier'];
-            unset( $data['fieldTypeIdentifier'] );
-        }
+        $data['id'] = $this->nextFieldDefinitionId++;
 
         return new FieldDefinitionStub( $data );
     }
@@ -363,6 +398,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             return $this->typeDrafts[$contentTypeId];
         }
+        throw new Exceptions\NotFoundExceptionStub;
     }
 
     /**
@@ -380,27 +416,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         $this->checkContentTypeUpdate( $contentTypeDraft, $contentTypeUpdateStruct );
 
-        $data = array(
-            'id'                     => $contentTypeDraft->id,
-            'status'                 => $contentTypeDraft->status,
-            'names'                  => $contentTypeDraft->names,
-            'descriptions'           => $contentTypeDraft->descriptions,
-            'identifier'             => $contentTypeDraft->identifier,
-            'creationDate'           => $contentTypeDraft->creationDate,
-            'modificationDate'       => $contentTypeDraft->modificationDate,
-            'creatorId'              => $contentTypeDraft->creatorId,
-            'modifierId'             => $contentTypeDraft->modifierId,
-            'remoteId'               => $contentTypeDraft->remoteId,
-            'urlAliasSchema'         => $contentTypeDraft->urlAliasSchema,
-            'nameSchema'             => $contentTypeDraft->nameSchema,
-            'isContainer'            => $contentTypeDraft->isContainer,
-            'mainLanguageCode'       => $contentTypeDraft->mainLanguageCode,
-            'defaultAlwaysAvailable' => $contentTypeDraft->defaultAlwaysAvailable,
-            'defaultSortField'       => $contentTypeDraft->defaultSortField,
-            'defaultSortOrder'       => $contentTypeDraft->defaultSortOrder,
-            'contentTypeGroups'      => $contentTypeDraft->contentTypeGroups,
-            'fieldDefinitions'       => $contentTypeDraft->fieldDefinitions,
-        );
+        $data = $this->getTypeAsArray( $contentTypeDraft );
 
         foreach ( array_keys( $data ) as $propertyName )
         {
@@ -410,8 +426,37 @@ class ContentTypeServiceStub implements ContentTypeService
             }
         }
 
-        $this->typeDrafts[$contentTypeDraft->id] = new ContentTypeDraftStub(
-            new ContentTypeStub( $data )
+        $this->setContentTypeDraft( $data );
+    }
+
+    /**
+     * Returns the properties of $contentType in form of an array
+     *
+     * @param ContentType $contentType
+     * @return array
+     */
+    protected function getTypeAsArray( ContentType $contentType )
+    {
+        return array(
+            'id'                     => $contentType->id,
+            'status'                 => $contentType->status,
+            'names'                  => $contentType->names,
+            'descriptions'           => $contentType->descriptions,
+            'identifier'             => $contentType->identifier,
+            'creationDate'           => $contentType->creationDate,
+            'modificationDate'       => $contentType->modificationDate,
+            'creatorId'              => $contentType->creatorId,
+            'modifierId'             => $contentType->modifierId,
+            'remoteId'               => $contentType->remoteId,
+            'urlAliasSchema'         => $contentType->urlAliasSchema,
+            'nameSchema'             => $contentType->nameSchema,
+            'isContainer'            => $contentType->isContainer,
+            'mainLanguageCode'       => $contentType->mainLanguageCode,
+            'defaultAlwaysAvailable' => $contentType->defaultAlwaysAvailable,
+            'defaultSortField'       => $contentType->defaultSortField,
+            'defaultSortOrder'       => $contentType->defaultSortOrder,
+            'contentTypeGroups'      => $contentType->contentTypeGroups,
+            'fieldDefinitions'       => $contentType->fieldDefinitions,
         );
     }
 
@@ -445,6 +490,195 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
+     * Adds a new field definition to an existing content type. 
+     * 
+     * The content type must be in state DRAFT.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the identifier in already exists in the content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     */
+    public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    {
+        foreach ( $contentTypeDraft->fieldDefinitions as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier == $fieldDefinitionCreateStruct->identifier )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
+
+        $data = $this->getTypeAsArray( $contentTypeDraft );
+
+        $data['fieldDefinitions'][] = $this->createFieldDefinition( $fieldDefinitionCreateStruct );
+
+        $this->setContentTypeDraft( $data );
+    }
+
+    /**
+     * Remove a field definition from an existing Type.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given field definition does not belong to the given type
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     */
+    public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition )
+    {
+        $data = $this->getTypeAsArray( $contentTypeDraft );
+
+        $removed = false;
+        foreach ( $data['fieldDefinitions'] as $index => $existingDefinition )
+        {
+            if ( $existingDefinition->id == $fieldDefinition->id )
+            {
+                unset( $data['fieldDefinitions'][$index] );
+                $removed = true;
+            }
+        }
+
+        if ( !$removed )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+
+        $this->setContentTypeDraft( $data );
+    }
+
+    /**
+     * Creates and sets a new ContentTypeDraft from $data
+     *
+     * @param array $data
+     * @return \eZ\Publish\API\Repository\Values\ContentTypeDraft
+     */
+    protected function setContentTypeDraft( array $data )
+    {
+        $data['status'] = ContentType::STATUS_DRAFT;
+
+        $newType = new ContentTypeDraftStub( new ContentTypeStub( $data ) );
+
+        $this->typeDrafts[$newType->id] = $newType;
+
+        return $newType;
+    }
+
+    /**
+     * Update a field definition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  If the given identifier is used in an existing field of the given content type
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft the content type draft
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+     */
+    public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
+    {
+        $this->checkFieldDefinitionUpdate( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct );
+
+        $fieldData = $this->getFieldDefinitionAsArray( $fieldDefinition );
+        foreach ( $fieldData as $propertyName => $propertyValue )
+        {
+            if ( isset( $fieldDefinitionUpdateStruct->$propertyName ) )
+            {
+                $fieldData[$propertyName] = $fieldDefinitionUpdateStruct->$propertyName;
+            }
+        }
+        $newFieldDefinition = new FieldDefinitionStub( $fieldData );
+
+        $typeData  = $this->getTypeAsArray( $contentTypeDraft );
+        foreach ( $typeData['fieldDefinitions'] as $index => $existingFieldDefinition )
+        {
+            if ( $existingFieldDefinition->id == $newFieldDefinition->id )
+            {
+                $typeData['fieldDefinitions'][$index] = $newFieldDefinition;
+            }
+        }
+
+        $this->setContentTypeDraft( $typeData );
+    }
+
+    /**
+     * Checks the given update combination for validity
+     *
+     * @param ContentTypeDraft $contentTypeDraft
+     * @param FieldDefinition $fieldDefinition
+     * @param FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+     * @return void
+     */
+    protected function checkFieldDefinitionUpdate( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
+    {
+        $foundFieldId = false;
+        foreach ( $contentTypeDraft->fieldDefinitions as $existingFieldDefinition )
+        {
+            if ( $existingFieldDefinition->id == $fieldDefinition->id )
+            {
+                $foundFieldId = true;
+            }
+            else if ( $existingFieldDefinition->identifier == $fieldDefinitionUpdateStruct->identifier )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub;
+            }
+        }
+        if ( !$foundFieldId )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+    }
+
+    /**
+     * Returns the data of $fieldDefinition as an array
+     *
+     * @param FieldDefinition $fieldDefinition
+     * @return array
+     */
+    protected function getFieldDefinitionAsArray( FieldDefinition $fieldDefinition )
+    {
+        return array(
+            'id'                  => $fieldDefinition->id,
+            'identifier'          => $fieldDefinition->identifier,
+            'names'               => $fieldDefinition->names,
+            'descriptions'        => $fieldDefinition->descriptions,
+            'fieldGroup'          => $fieldDefinition->fieldGroup,
+            'position'            => $fieldDefinition->position,
+            'fieldTypeIdentifier' => $fieldDefinition->fieldTypeIdentifier,
+            'isTranslatable'      => $fieldDefinition->isTranslatable,
+            'isRequired'          => $fieldDefinition->isRequired,
+            'isInfoCollector'     => $fieldDefinition->isInfoCollector,
+            'validators'          => $fieldDefinition->validators,
+            'defaultValue'        => $fieldDefinition->defaultValue,
+            'isSearchable'        => $fieldDefinition->isSearchable,
+        );
+    }
+
+    /**
+     * Publish the content type and update content objects.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
+     *
+     * This method updates content objects, depending on the changed field definitions.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     */
+    public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
+    {
+        if ( !isset( $this->typeDrafts[$contentTypeDraft->id] ) )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
+
+        $this->types[$contentTypeDraft->id] = $this->typeDrafts[$contentTypeDraft->id]
+            ->getInnerContentType();
+        unset( $this->typeDrafts[$contentTypeDraft->id] );
+
+    }
+
+    /**
      * Get a Content Type object by id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
@@ -455,7 +689,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentType( $contentTypeId )
     {
-        // TODO: Implement.
+        if ( isset( $this->types[$contentTypeId] ) )
+        {
+            return $this->types[$contentTypeId];
+        }
+        throw new Exceptions\NotFoundExceptionStub;
     }
 
     /**
@@ -469,7 +707,14 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeByIdentifier( $identifier )
     {
-        // TODO: Implement.
+        foreach ( $this->types as $contentType )
+        {
+            if ( $identifier === $contentType->identifier )
+            {
+                return $contentType;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -483,7 +728,14 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
-        // TODO: Implement.
+        foreach ( $this->types as $contentType )
+        {
+            if ( $remoteId === $contentType->remoteId )
+            {
+                return $contentType;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -495,7 +747,20 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup )
     {
-        // TODO: Implement.
+        $typesInGroup = array();
+
+        foreach ( $this->types as $type )
+        {
+            foreach ( $type->contentTypeGroups as $group )
+            {
+                if ( $group->id == $contentTypeGroup->id )
+                {
+                    $typesInGroup[] = $type;
+                }
+            }
+        }
+
+        return $typesInGroup;
     }
 
     /**
@@ -513,7 +778,12 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeDraft( ContentType $contentType )
     {
-        // TODO: Implement.
+        if ( isset( $this->typeDrafts[$contentType->id] ) )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
+        $data = $this->getTypeAsArray( $this->types[$contentType->id] );
+        return $this->setContentTypeDraft( $data );
     }
 
     /**
@@ -528,7 +798,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function deleteContentType( ContentType $contentType )
     {
-        // TODO: Implement.
+        unset( $this->types[$contentType->id] );
     }
 
     /**
@@ -546,7 +816,26 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function copyContentType( ContentType $contentType, User $user = null )
     {
-        // TODO: Implement.
+        $contentTypeData = $this->getTypeAsArray( $contentType );
+
+        $contentTypeData['id'] = $this->nextTypeId++;
+        $contentTypeData['identifier'] = $contentTypeData['identifier'] . '_' . uniqid();
+        $contentTypeData['remoteId'] = $contentTypeData['remoteId'] . '_' . uniqid();
+        $contentTypeData['creationDate'] = new \DateTime();
+        $contentTypeData['modificationDate'] = new \DateTime();
+
+        $newFieldDefinitions = array();
+        foreach ( $contentTypeData['fieldDefinitions'] as $fieldDefinition )
+        {
+            $definitionData = $this->getFieldDefinitionAsArray( $fieldDefinition );
+            $definitionData['id'] = $this->nextFieldDefinitionId++;
+            $newFieldDefinitions[] = new FieldDefinitionStub( $definitionData );
+        }
+        $contentTypeData['fieldDefinitions'] = $newFieldDefinitions;
+
+        $newType = new ContentTypeStub( $contentTypeData );
+        $this->types[$contentTypeData['id']] = $newType;
+        return $newType;
     }
 
     /**
@@ -560,7 +849,18 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
-        // TODO: Implement.
+        $assignedGroups = $this->types[$contentType->id]->contentTypeGroups;
+        foreach ( $assignedGroups as $assignedGroup )
+        {
+            if ( $assignedGroup->id == $contentTypeGroup->id )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
+
+        $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
+        $typeData['contentTypeGroups'][] = $contentTypeGroup;
+        $this->types[$contentType->id] = new ContentTypeStub( $typeData );
     }
 
     /**
@@ -575,68 +875,28 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
-        // TODO: Implement.
-    }
+        $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
 
-    /**
-     * Adds a new field definition to an existing content type. 
-     * 
-     * The content type must be in state DRAFT.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the identifier in already exists in the content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
-     */
-    public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
-    {
-        // TODO: Implement.
-    }
+        $unassigned = false;
+        foreach ( $typeData['contentTypeGroups'] as $index => $assignedGroup )
+        {
+            if ( $assignedGroup->id == $contentTypeGroup->id )
+            {
+                unset( $typeData['contentTypeGroups'][$index] );
+                $unassigned = true;
+            }
+        }
 
-    /**
-     * Remove a field definition from an existing Type.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given field definition does not belong to the given type
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     */
-    public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition )
-    {
-        // TODO: Implement.
-    }
+        if ( !$unassigned )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+        if ( count( $typeData['contentTypeGroups'] ) == 0 )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
 
-    /**
-     * Update a field definition
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  If the given identifier is used in an existing field of the given content type
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft the content type draft
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
-     */
-    public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
-    {
-        // TODO: Implement.
-    }
-
-    /**
-     * Publish the content type and update content objects.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
-     *
-     * This method updates content objects, depending on the changed field definitions.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     */
-    public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
-    {
-        // TODO: Implement.
+        $this->types[$contentType->id] = new ContentTypeStub( $typeData );
     }
 
     /**
@@ -712,7 +972,35 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newFieldDefinitionUpdateStruct()
     {
-        // TODO: Implement.
+        return new FieldDefinitionUpdateStruct();
     }
 
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        list(
+            $contentTypeGroups,
+            $this->nextGroupId
+        ) = $this->repository->loadFixture( 'ContentTypeGroup' );
+
+        ++$this->nextGroupId;
+        foreach ( $contentTypeGroups as $group )
+        {
+            $this->setGroup( $group );
+        }
+
+        list(
+            $this->types,
+            $this->nextTypeId,
+            $this->nextFieldDefinitionId
+        ) = $this->repository->loadFixture( 'ContentType', array( 'groups' => $contentTypeGroups ) );
+
+        ++$this->nextTypeId;
+        ++$this->nextFieldDefinitionId;
+    }
 }
