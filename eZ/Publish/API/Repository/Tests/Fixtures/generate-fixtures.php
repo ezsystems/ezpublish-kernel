@@ -236,11 +236,11 @@ function generateLocationFixture( array $fixture )
             'invisible'   => (bool) $data['is_invisible'],
             'remoteId'    => $data['remote_id'],
             'contentInfo' => createRepoCall(
-                'Content',
+                'ContentService',
                 'loadContentInfo',
                 array( $data['contentobject_id'] )
             ),
-            'parentId'                => $data['parent_node_id'],
+            'parentLocationId'        => $data['parent_node_id'],
             'pathString'              => $data['path_string'],
             'modifiedSubLocationDate' => $data['modified_subnode'],
             'mainLocationId'          => $data['main_node_id'],
