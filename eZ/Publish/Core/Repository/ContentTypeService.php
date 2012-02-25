@@ -1082,7 +1082,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a new content type group create class
+     * instantiates a new content type group create class
      *
      * @param string $identifier
      *
@@ -1103,7 +1103,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a new content type create class
+     * instantiates a new content type create class
      *
      * @param string $identifier
      *
@@ -1124,7 +1124,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanctiates a new content type update struct
+     * instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
@@ -1134,7 +1134,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a new content type update struct
+     * instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
@@ -1144,7 +1144,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a field definition create struct
+     * instantiates a field definition create struct
      *
      * @param string $fieldTypeIdentifier the required  field type identifier
      * @param string $identifier the required identifier for the field definition
@@ -1172,7 +1172,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a field definition update class
+     * instantiates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */

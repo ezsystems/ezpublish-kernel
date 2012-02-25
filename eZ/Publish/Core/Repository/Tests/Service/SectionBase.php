@@ -115,7 +115,7 @@ abstract class SectionBase extends BaseServiceTest
         $struct->identifier = 'test';
         $struct->name = 'Test';
 
-        $newSection = $service->createSection( $struct );
+        $service->createSection( $struct );
     }
 
     /**

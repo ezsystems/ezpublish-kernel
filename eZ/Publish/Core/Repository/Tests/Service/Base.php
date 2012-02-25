@@ -47,7 +47,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @param mixed[] $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $skipProperties
-     * @param bool $dump
+     *
      * @return void
      */
     protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject, array $skipProperties = array() )

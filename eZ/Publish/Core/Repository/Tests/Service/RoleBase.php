@@ -41,8 +41,8 @@ abstract class RoleBase extends BaseServiceTest
         self::assertEquals( null, $policy->roleId );
         self::assertEquals( null, $policy->module );
         self::assertEquals( null, $policy->function );
-        self::assertInternalType( "array", $policy->limitations );
-        self::assertEmpty( $policy->limitations );
+        self::assertInternalType( "array", $policy->getLimitations() );
+        self::assertEmpty( $policy->getLimitations() );
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class RoleBase extends BaseServiceTest
         try
         {
             $role = new Role();
-            $role->policies = array();
+            $role->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
         catch( PropertyPermission $e ) {}
@@ -87,7 +87,7 @@ abstract class RoleBase extends BaseServiceTest
         try
         {
             $policy = new Policy();
-            $policy->limitations = array();
+            $policy->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
         catch( PropertyPermission $e ) {}
