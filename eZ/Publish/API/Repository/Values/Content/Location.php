@@ -140,5 +140,5 @@ abstract class Location extends ValueObject
      *
      * @var integer
      */
-    protected $childrenCount;
+    protected $childCount;
 }

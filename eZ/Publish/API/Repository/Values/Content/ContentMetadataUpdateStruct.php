@@ -51,4 +51,14 @@ class ContentMetaDataUpdateStruct extends ValueObject
      * @var string
      */
     public $remoteId;
+    
+     /**
+     * if set  main location.is changed to this value
+     *
+     * If the content object has multiple locations,
+     * $mainLocationId will point to the main one.
+     *
+     * @var mixed
+     */
+    protected $mainLocationId;
 }
