@@ -186,7 +186,13 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocationByRemoteId( $remoteId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->remoteId == $remoteId )
+            {
+                return $location;
+            }
+        }
     }
 
     /**

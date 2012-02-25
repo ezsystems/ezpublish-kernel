@@ -325,11 +325,24 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
-     * 
+     * @depth eZ\Publish\API\Repository\Tests\LocationServiceTest::loadLocation
      */
     public function testLoadLocationByRemoteId()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocationByRemoteId(
+            '3f6d92f8044aed134f32153517850f5a'
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $locationService->loadLocation( 5 ),
+            $location
+        );
     }
 
     /**
