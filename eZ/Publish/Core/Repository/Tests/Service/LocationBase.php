@@ -41,7 +41,7 @@ abstract class LocationBase extends BaseServiceTest
         self::assertNull( $location->depth );
         self::assertNull( $location->sortField );
         self::assertNull( $location->sortOrder );
-        self::assertNull( $location->childrenCount );
+        self::assertNull( $location->childCount );
     }
 
     /**

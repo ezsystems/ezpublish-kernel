@@ -41,7 +41,7 @@ abstract class TrashBase extends BaseServiceTest
         self::assertNull( $trashItem->depth );
         self::assertNull( $trashItem->sortField );
         self::assertNull( $trashItem->sortOrder );
-        self::assertNull( $trashItem->childrenCount );
+        self::assertNull( $trashItem->childCount );
     }
 
     /**

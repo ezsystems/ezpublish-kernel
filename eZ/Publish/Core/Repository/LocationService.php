@@ -666,7 +666,7 @@ class LocationService implements LocationServiceInterface
             'depth'                    => $spiLocation->depth,
             'sortField'                => $spiLocation->sortField,
             'sortOrder'                => $spiLocation->sortOrder,
-            'childrenCount'            => $childrenLocations ? $childrenLocations->count : 0
+            'childCount'               => $childrenLocations ? $childrenLocations->count : 0
         ) );
     }
 
