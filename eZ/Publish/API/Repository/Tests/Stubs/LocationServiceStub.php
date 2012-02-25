@@ -193,6 +193,7 @@ class LocationServiceStub implements LocationService
                 return $location;
             }
         }
+        throw new Exceptions\NotFoundExceptionStub;
     }
 
     /**

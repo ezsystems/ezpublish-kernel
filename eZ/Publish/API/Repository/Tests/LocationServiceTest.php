@@ -354,7 +354,16 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        // Throws exception, since Location with remote ID does not exist
+        $location = $locationService->loadLocationByRemoteId(
+            'not-exists'
+        );
+        /* END: Use Case */
     }
 
     /**
