@@ -371,11 +371,27 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadMainLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadMainLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        $location = $locationService->loadMainLocation(
+            $contentInfo
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $locationService->loadLocation( 5 ),
+            $location
+        );
     }
 
     /**

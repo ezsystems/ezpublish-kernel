@@ -234,7 +234,7 @@ class LocationServiceStub implements LocationService
      */
     public function loadMainLocation( ContentInfo $contentInfo )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return $this->loadLocation( $contentInfo->mainLocationId );
     }
 
     /**
