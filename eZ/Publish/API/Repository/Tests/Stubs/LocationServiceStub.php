@@ -139,7 +139,7 @@ class LocationServiceStub implements LocationService
      * @param Location $location
      * @return void
      */
-    public function checkContentNotInTree( ContentInfo $contentInfo, Location $location )
+    protected function checkContentNotInTree( ContentInfo $contentInfo, Location $location )
     {
         if ( $location->contentInfo == $contentInfo )
         {
