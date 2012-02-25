@@ -171,6 +171,7 @@ class LocationServiceStub implements LocationService
         {
             return $this->locations[$locationId];
         }
+        throw new Exceptions\NotFoundExceptionStub;
     }
 
     /**

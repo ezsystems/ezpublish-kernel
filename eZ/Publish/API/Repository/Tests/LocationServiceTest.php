@@ -310,7 +310,14 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        // Throws exception, if Location with ID 2342 does not exist
+        $location = $locationService->loadLocation( 2342 );
+        /* END: Use Case */
     }
 
     /**
