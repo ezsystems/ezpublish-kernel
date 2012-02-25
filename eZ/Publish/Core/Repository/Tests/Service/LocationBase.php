@@ -515,7 +515,6 @@ abstract class LocationBase extends BaseServiceTest
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct', $locationUpdateStruct );
         self::assertNull( $locationUpdateStruct->priority );
         self::assertNull( $locationUpdateStruct->remoteId );
-        self::assertNull( $locationUpdateStruct->isMainLocation );
         self::assertNull( $locationUpdateStruct->sortField );
         self::assertNull( $locationUpdateStruct->sortOrder );
     }
