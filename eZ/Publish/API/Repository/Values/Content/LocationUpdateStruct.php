@@ -23,14 +23,6 @@ class LocationUpdateStruct extends ValueObject
     public $remoteId;
 
     /**
-     * if set to true this location will set as new main location for the content.
-     * If set to false this parameter is ignored.
-     *
-     * @var mixed|true
-     */
-    public $isMainLocation;
-
-    /**
      * If set the sortField is changed.
      * The sort field specifies which property the child locations should be sorted on.
      * Valid values are found at {@link Location::SORT_FIELD_*}
