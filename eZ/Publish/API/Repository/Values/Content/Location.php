@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @property-read int $depth Depth location has in the location tree
  * @property-read int $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $sortOrder Specifies whether the sort order should be ascending or descending. Valid values are {@link Location::SORT_ORDER_*}
- * @property-read int $childrenCount the number of children visible to the authenticated user which has loaded this instance.
+ * @property-read int $childCount the number of children visible to the authenticated user which has loaded this instance.
  */
 abstract class Location extends ValueObject
 {
