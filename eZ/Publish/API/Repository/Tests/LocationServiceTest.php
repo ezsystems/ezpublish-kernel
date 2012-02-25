@@ -205,7 +205,24 @@ class LocationServiceTest extends BaseTest
      */
     public function testCreateLocationThrowsIllegalArgumentExceptionRemoteIdExists()
     {
-        $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo( 108 );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 5 );
+        $locationCreate->remoteId = 'f3e90596361e31d496d4026eb624c983';
+
+        // Throws exception, since remote ID is already in use
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
     }
 
     /**

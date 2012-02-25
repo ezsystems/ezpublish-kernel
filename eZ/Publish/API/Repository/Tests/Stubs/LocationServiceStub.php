@@ -88,6 +88,7 @@ class LocationServiceStub implements LocationService
         $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
         $this->checkContentNotInTree( $contentInfo, $parentLocation );
+        $this->checkRemoteIdNotTaken( $locationCreateStruct->remoteId );
 
         $data = array();
         foreach ( $locationCreateStruct as $propertyName => $propertyValue )
@@ -107,6 +108,25 @@ class LocationServiceStub implements LocationService
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
         return $location;
+    }
+
+    /**
+     * Checks if the given $remoteId is already taken by another Location.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     *         if the remoteId exists already.
+     * @param string $remoteId
+     * @return void
+     */
+    protected function checkRemoteIdNotTaken( $remoteId )
+    {
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->remoteId == $remoteId )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
     }
 
     /**
