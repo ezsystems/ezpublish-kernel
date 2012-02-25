@@ -89,7 +89,7 @@ class LocationServiceTest extends BaseTest
         // ContentInfo for "How to use eZ Publish"
         $contentInfo = $contentService->loadContentInfo( 108 );
 
-        $locationCreate = $locationService->newLocationCreateStruct( 2 );
+        $locationCreate = $locationService->newLocationCreateStruct( 5 );
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';
@@ -136,7 +136,7 @@ class LocationServiceTest extends BaseTest
                 'remoteId'                => $locationCreate->remoteId,
                 'contentInfo'             => $contentInfo,
                 'parentLocationId'        => $locationCreate->parentLocationId,
-                'pathString'              => '/1/2/' . $createdLocation->id . '/',
+                'pathString'              => '/1/5/' . $createdLocation->id . '/',
                 'modifiedSubLocationDate' => null, // TODO: Should be DateTime
                 'depth'                   => 2,
                 'childrenCount'           => 0,
@@ -150,6 +150,8 @@ class LocationServiceTest extends BaseTest
             $createdLocation->id
         );
 
+        // TODO: Update $mainLocationId in ContentInfo, if set in
+        // LocationCreateStruct
         $this->markTestIncomplete( 'Outstanding TODOs.' );
     }
 
@@ -160,7 +162,48 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
-    public function testCreateLocationThrowsIllegalArgumentException()
+    public function testCreateLocationThrowsIllegalArgumentExceptionContentAlreadyBelowParent()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo( 108 );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 2 );
+
+        // Throws exception, since content is already located at "/1/2/107/110/"
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @todo This test case is not well-defined, yet. Re-check.
+     */
+    public function testCreateLocationThrowsIllegalArgumentExceptionParentIsSublocationOfContent()
+    {
+        $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testCreateLocationThrowsIllegalArgumentExceptionRemoteIdExists()
     {
         $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
     }

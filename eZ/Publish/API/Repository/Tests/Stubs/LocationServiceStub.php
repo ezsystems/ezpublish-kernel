@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
 /**
  * Location service, used for complex subtree operations
@@ -86,6 +87,8 @@ class LocationServiceStub implements LocationService
     {
         $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
+        $this->checkContentNotInTree( $contentInfo, $parentLocation );
+
         $data = array();
         foreach ( $locationCreateStruct as $propertyName => $propertyValue )
         {
@@ -104,6 +107,28 @@ class LocationServiceStub implements LocationService
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
         return $location;
+    }
+
+    /**
+     * Checks that the given $contentInfo does not occur in the tree starting
+     * at $location.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     *         if the content is in the tree of $location.
+     * @param ContentInfo $contentInfo
+     * @param Location $location
+     * @return void
+     */
+    public function checkContentNotInTree( ContentInfo $contentInfo, Location $location )
+    {
+        if ( $location->contentInfo == $contentInfo )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        {
+            $this->checkContentNotInTree( $contentInfo, $childLocation );
+        }
     }
 
     /**
@@ -210,7 +235,15 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $children = array();
+        foreach ( $this->locations as $potentialChild )
+        {
+            if ( $potentialChild->parentLocationId == $location->id )
+            {
+                $children[] = $potentialChild;
+            }
+        }
+        return $children;
     }
 
     /**
