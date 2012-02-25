@@ -112,6 +112,7 @@ class LocationServiceTest extends BaseTest
             'locationCreate'  => $locationCreate,
             'createdLocation' => $location,
             'contentInfo'     => $contentInfo,
+            'parentLocation'  => $locationService->loadLocation( 5 ),
         );
     }
 
@@ -154,6 +155,20 @@ class LocationServiceTest extends BaseTest
         // LocationCreateStruct
         // TODO: Check parent location childrenCount raised
         $this->markTestIncomplete( 'Outstanding TODOs.' );
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     */
+    public function testCreateLocationParentChildrenCountRaised( array $data )
+    {
+        $parentLocation = $data['parentLocation'];
+
+        $this->assertEquals( 6, $parentLocation->childrenCount );
     }
 
     /**

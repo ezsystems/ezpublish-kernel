@@ -107,6 +107,10 @@ class LocationServiceStub implements LocationService
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
+
+        $parentLocation = $this->loadLocation( $location->parentLocationId );
+        $parentLocation->__setChildrenCount( $parentLocation->childrenCount + 1 );
+
         return $location;
     }
 
