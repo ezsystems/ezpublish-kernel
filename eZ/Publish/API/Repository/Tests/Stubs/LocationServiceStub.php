@@ -84,36 +84,26 @@ class LocationServiceStub implements LocationService
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
+        $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
+
         $data = array();
         foreach ( $locationCreateStruct as $propertyName => $propertyValue )
         {
             $data[$propertyName] = $propertyValue;
         }
+        // TODO: Handle, when finally defined
         unset( $data['isMainLocation'] );
 
         $data['contentInfo'] = $contentInfo;
 
-        $data['id'] = $this->nextLocationId++;
-
-        $data['pathString'] = $this->materializePath(
-            $data['parentLocationId']
-        ) . $data['id'] . '/';
+        $data['id']             = $this->nextLocationId++;
+        $data['pathString']     = $parentLocation->pathString . $data['id'] . '/';
+        $data['depth']          = substr_count( $data['pathString'], '/' ) - 2;
+        $data['childrenCount']  = 0;
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
         return $location;
-    }
-
-    protected function materializePath( $locationId )
-    {
-        $location = $this->loadLocation( $locationId );
-
-        if ( null === $location->contentInfo )
-        {
-            return '/' . $locationId . '/';
-        }
-
-        return $this->materializePath( $location->parentLocationId ) . $locationId . '/';
     }
 
     /**
