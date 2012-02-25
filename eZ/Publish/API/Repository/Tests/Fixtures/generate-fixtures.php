@@ -195,6 +195,12 @@ function generateContentInfoFixture( array $fixture )
         $languageCodes[$data['id']] = $data['locale'];
     }
 
+    $mainLocationIds = array();
+    foreach ( getFixtureTable( 'ezcontentobject_tree', $fixture ) as $data )
+    {
+        $mainLocationIds[$data['contentobject_id']] = $data['main_node_id'];
+    }
+
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
         $contentInfos[$data['id']] = array(
@@ -210,7 +216,8 @@ function generateContentInfoFixture( array $fixture )
             'alwaysAvailable'   =>  (boolean) ( $data['language_mask'] & 1 ),
             'remoteId'          =>  $data['remote_id'],
             'mainLanguageCode'  =>  $languageCodes[$data['initial_language_id']],
-            'repository'        =>  '$this'
+            'repository'        =>  '$this',
+            'mainLocationId'    =>  $mainLocationIds[$data['id']],
         );
         $nextId = max( $nextId, $data['id'] );
     }
@@ -272,7 +279,6 @@ function generateLocationFixture( array $fixture )
             'parentLocationId'        => $data['parent_node_id'],
             'pathString'              => $data['path_string'],
             'modifiedSubLocationDate' => $data['modified_subnode'],
-            'mainLocationId'          => $data['main_node_id'],
             'depth'                   => $data['depth'],
             'sortField'               => $data['sort_field'],
             'sortOrder'               => $data['sort_order'],
