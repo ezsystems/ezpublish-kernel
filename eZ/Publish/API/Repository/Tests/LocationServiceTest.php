@@ -152,6 +152,7 @@ class LocationServiceTest extends BaseTest
 
         // TODO: Update $mainLocationId in ContentInfo, if set in
         // LocationCreateStruct
+        // TODO: Check parent location childrenCount raised
         $this->markTestIncomplete( 'Outstanding TODOs.' );
     }
 
@@ -234,7 +235,55 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 5 );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $location
+        );
+        return $location;
+    }
+
+    /**
+     * Test for the loadLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testLoadLocationStructValues( Location $location )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                      =>  5,
+                'priority'                =>  0,
+                'hidden'                  =>  false,
+                'invisible'               =>  false,
+                'remoteId'                =>  '3f6d92f8044aed134f32153517850f5a',
+                'parentLocationId'        =>  1,
+                'pathString'              =>  '/1/5/',
+                'modifiedSubLocationDate' =>  1311154216,
+                'depth'                   =>  1,
+                'sortField'               =>  1,
+                'sortOrder'               =>  1,
+                'childrenCount'           =>  5,
+            ),
+            $location
+        );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
+            $location->contentInfo
+        );
+        $this->assertEquals(
+            4, $location->contentInfo->contentId
+        );
     }
 
     /**
