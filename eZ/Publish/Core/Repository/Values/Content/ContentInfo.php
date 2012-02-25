@@ -7,7 +7,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
 
 /**
  * This class provides all version independent information of the content object.
- * 
+ *
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType calls {@link getContentType()}
  * @property-read int $contentId The unique id of the content object
  * @property-read string $name the computed name (via name schema) in the main language of the content object
