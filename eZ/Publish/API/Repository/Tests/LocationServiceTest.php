@@ -367,42 +367,6 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Test for the newLocationUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
-     * 
-     */
-    public function testNewLocationUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for LocationService::newLocationUpdateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the updateLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * 
-     */
-    public function testUpdateLocation()
-    {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
-    }
-
-    /**
-     * Test for the updateLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testUpdateLocationThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
-    }
-
-    /**
      * Test for the loadMainLocation() method.
      *
      * @return void
@@ -508,6 +472,42 @@ class LocationServiceTest extends BaseTest
     public function testLoadLocationChildrenWithThirdParameter()
     {
         $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+    }
+
+    /**
+     * Test for the newLocationUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
+     * 
+     */
+    public function testNewLocationUpdateStruct()
+    {
+        $this->markTestIncomplete( "Test for LocationService::newLocationUpdateStruct() is not implemented." );
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * 
+     */
+    public function testUpdateLocation()
+    {
+        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testUpdateLocationThrowsIllegalArgumentException()
+    {
+        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
     }
 
     /**
