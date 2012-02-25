@@ -138,7 +138,6 @@ class LocationServiceTest extends BaseTest
                 'parentLocationId'        => $locationCreate->parentLocationId,
                 'pathString'              => '/1/2/' . $createdLocation->id . '/',
                 'modifiedSubLocationDate' => null, // TODO: Should be DateTime
-                'mainLocationId'          => null, // TODO: Handle when finally defined
                 'depth'                   => 2,
                 'childrenCount'           => 0,
                 'sortField'               => $locationCreate->sortField,
