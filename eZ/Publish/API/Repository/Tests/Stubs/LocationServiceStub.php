@@ -340,6 +340,29 @@ class LocationServiceStub implements LocationService
     }
 
     /**
+     * Calculates the $childrenCount property for all stored locations.
+     *
+     * @return void
+     */
+    protected function calculateChildCounts()
+    {
+        $childCount = array();
+        foreach ( $this->locations as $location )
+        {
+            if ( !isset( $childCount[$location->parentLocationId] ) )
+            {
+                $childCount[$location->parentLocationId] = 0;
+            }
+            $childCount[$location->parentLocationId]++;
+        }
+
+        foreach ( $childCount as $id => $count )
+        {
+            $this->locations[$id]->__setChildrenCount( $count );
+        }
+    }
+
+    /**
      * Helper method that initializes some default data from an existing legacy
      * test fixture.
      *
@@ -357,6 +380,7 @@ class LocationServiceStub implements LocationService
         {
             $this->locations[$location->id] = $location;
         }
+        $this->calculateChildCounts();
     }
 }
 
