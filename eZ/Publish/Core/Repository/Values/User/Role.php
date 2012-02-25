@@ -13,21 +13,21 @@ class Role extends APIRole
     /**
      * Policies assigned to this role
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     protected $policies = array();
 
     /**
      * Human readable name in all provided languages
      *
-     * @var array
+     * @var string[]
      */
     protected $names = array();
 
     /**
      * Human readable descriptions in all provided languages
      *
-     * @var array
+     * @var string[]
      */
     protected $descriptions = array();
 
@@ -103,7 +103,7 @@ class Role extends APIRole
 
     /**
      * returns the list of policies of this role
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Policy}
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function getPolicies()
     {

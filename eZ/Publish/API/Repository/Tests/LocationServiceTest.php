@@ -89,7 +89,7 @@ class LocationServiceTest extends BaseTest
         // ContentInfo for "How to use eZ Publish"
         $contentInfo = $contentService->loadContentInfo( 108 );
 
-        $locationCreate = $locationService->newLocationCreateStruct( 2 );
+        $locationCreate = $locationService->newLocationCreateStruct( 5 );
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';
@@ -112,6 +112,7 @@ class LocationServiceTest extends BaseTest
             'locationCreate'  => $locationCreate,
             'createdLocation' => $location,
             'contentInfo'     => $contentInfo,
+            'parentLocation'  => $locationService->loadLocation( 5 ),
         );
     }
 
@@ -136,11 +137,10 @@ class LocationServiceTest extends BaseTest
                 'remoteId'                => $locationCreate->remoteId,
                 'contentInfo'             => $contentInfo,
                 'parentLocationId'        => $locationCreate->parentLocationId,
-                'pathString'              => null, // TODO: '/1/2/' . $createdLocation->id . '/',
+                'pathString'              => '/1/5/' . $createdLocation->id . '/',
                 'modifiedSubLocationDate' => null, // TODO: Should be DateTime
-                'mainLocationId'          => 0, // TODO: Root node ID
-                'depth'                   => 0, // TODO: Needs to be calculated
-                'childrenCount'           => 0, // TODO: Needs to be calculated
+                'depth'                   => 2,
+                'childrenCount'           => 0,
                 'sortField'               => $locationCreate->sortField,
                 'sortOrder'               => $locationCreate->sortOrder,
             ),
@@ -151,7 +151,24 @@ class LocationServiceTest extends BaseTest
             $createdLocation->id
         );
 
+        // TODO: Update $mainLocationId in ContentInfo, if set in
+        // LocationCreateStruct
+        // TODO: Check parent location childrenCount raised
         $this->markTestIncomplete( 'Outstanding TODOs.' );
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     */
+    public function testCreateLocationParentChildrenCountRaised( array $data )
+    {
+        $parentLocation = $data['parentLocation'];
+
+        $this->assertEquals( 6, $parentLocation->childrenCount );
     }
 
     /**
@@ -161,9 +178,67 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
-    public function testCreateLocationThrowsIllegalArgumentException()
+    public function testCreateLocationThrowsIllegalArgumentExceptionContentAlreadyBelowParent()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo( 108 );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 2 );
+
+        // Throws exception, since content is already located at "/1/2/107/110/"
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @todo This test case is not well-defined, yet. Re-check.
+     */
+    public function testCreateLocationThrowsIllegalArgumentExceptionParentIsSublocationOfContent()
     {
         $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testCreateLocationThrowsIllegalArgumentExceptionRemoteIdExists()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo( 108 );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 5 );
+        $locationCreate->remoteId = 'f3e90596361e31d496d4026eb624c983';
+
+        // Throws exception, since remote ID is already in use
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -175,7 +250,55 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 5 );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $location
+        );
+        return $location;
+    }
+
+    /**
+     * Test for the loadLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testLoadLocationStructValues( Location $location )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                      =>  5,
+                'priority'                =>  0,
+                'hidden'                  =>  false,
+                'invisible'               =>  false,
+                'remoteId'                =>  '3f6d92f8044aed134f32153517850f5a',
+                'parentLocationId'        =>  1,
+                'pathString'              =>  '/1/5/',
+                'modifiedSubLocationDate' =>  1311154216,
+                'depth'                   =>  1,
+                'sortField'               =>  1,
+                'sortOrder'               =>  1,
+                'childrenCount'           =>  5,
+            ),
+            $location
+        );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
+            $location->contentInfo
+        );
+        $this->assertEquals(
+            4, $location->contentInfo->contentId
+        );
     }
 
     /**
@@ -187,7 +310,14 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        // Throws exception, if Location with ID 2342 does not exist
+        $location = $locationService->loadLocation( 2342 );
+        /* END: Use Case */
     }
 
     /**
@@ -195,11 +325,24 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
-     * 
+     * @depth eZ\Publish\API\Repository\Tests\LocationServiceTest::loadLocation
      */
     public function testLoadLocationByRemoteId()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocationByRemoteId(
+            '3f6d92f8044aed134f32153517850f5a'
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $locationService->loadLocation( 5 ),
+            $location
+        );
     }
 
     /**
@@ -211,43 +354,16 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationByRemoteId() is not implemented." );
-    }
+        $repository = $this->getRepository();
 
-    /**
-     * Test for the newLocationUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
-     * 
-     */
-    public function testNewLocationUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for LocationService::newLocationUpdateStruct() is not implemented." );
-    }
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
 
-    /**
-     * Test for the updateLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * 
-     */
-    public function testUpdateLocation()
-    {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
-    }
-
-    /**
-     * Test for the updateLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testUpdateLocationThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+        // Throws exception, since Location with remote ID does not exist
+        $location = $locationService->loadLocationByRemoteId(
+            'not-exists'
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -255,11 +371,27 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadMainLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadMainLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        $location = $locationService->loadMainLocation(
+            $contentInfo
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $locationService->loadLocation( 5 ),
+            $location
+        );
     }
 
     /**
@@ -356,6 +488,42 @@ class LocationServiceTest extends BaseTest
     public function testLoadLocationChildrenWithThirdParameter()
     {
         $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+    }
+
+    /**
+     * Test for the newLocationUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
+     * 
+     */
+    public function testNewLocationUpdateStruct()
+    {
+        $this->markTestIncomplete( "Test for LocationService::newLocationUpdateStruct() is not implemented." );
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * 
+     */
+    public function testUpdateLocation()
+    {
+        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testUpdateLocationThrowsIllegalArgumentException()
+    {
+        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
     }
 
     /**

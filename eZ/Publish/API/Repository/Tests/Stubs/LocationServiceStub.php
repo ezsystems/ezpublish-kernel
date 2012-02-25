@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
 /**
  * Location service, used for complex subtree operations
@@ -84,20 +85,74 @@ class LocationServiceStub implements LocationService
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
+        $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
+
+        $this->checkContentNotInTree( $contentInfo, $parentLocation );
+        $this->checkRemoteIdNotTaken( $locationCreateStruct->remoteId );
+
         $data = array();
         foreach ( $locationCreateStruct as $propertyName => $propertyValue )
         {
             $data[$propertyName] = $propertyValue;
         }
+        // TODO: Handle, when finally defined
         unset( $data['isMainLocation'] );
 
         $data['contentInfo'] = $contentInfo;
 
-        $data['id'] = $this->nextLocationId++;
+        $data['id']             = $this->nextLocationId++;
+        $data['pathString']     = $parentLocation->pathString . $data['id'] . '/';
+        $data['depth']          = substr_count( $data['pathString'], '/' ) - 2;
+        $data['childrenCount']  = 0;
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
+
+        $parentLocation = $this->loadLocation( $location->parentLocationId );
+        $parentLocation->__setChildrenCount( $parentLocation->childrenCount + 1 );
+
         return $location;
+    }
+
+    /**
+     * Checks if the given $remoteId is already taken by another Location.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     *         if the remoteId exists already.
+     * @param string $remoteId
+     * @return void
+     */
+    protected function checkRemoteIdNotTaken( $remoteId )
+    {
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->remoteId == $remoteId )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
+    }
+
+    /**
+     * Checks that the given $contentInfo does not occur in the tree starting
+     * at $location.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     *         if the content is in the tree of $location.
+     * @param ContentInfo $contentInfo
+     * @param Location $location
+     * @return void
+     */
+    protected function checkContentNotInTree( ContentInfo $contentInfo, Location $location )
+    {
+        if ( $location->contentInfo == $contentInfo )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        {
+            $this->checkContentNotInTree( $contentInfo, $childLocation );
+        }
     }
 
     /**
@@ -112,7 +167,11 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocation( $locationId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( isset( $this->locations[$locationId] ) )
+        {
+            return $this->locations[$locationId];
+        }
+        throw new Exceptions\NotFoundExceptionStub;
     }
 
     /**
@@ -127,7 +186,14 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocationByRemoteId( $remoteId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->remoteId == $remoteId )
+            {
+                return $location;
+            }
+        }
+        throw new Exceptions\NotFoundExceptionStub;
     }
 
     /**
@@ -168,7 +234,7 @@ class LocationServiceStub implements LocationService
      */
     public function loadMainLocation( ContentInfo $contentInfo )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return $this->loadLocation( $contentInfo->mainLocationId );
     }
 
     /**
@@ -201,7 +267,15 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $children = array();
+        foreach ( $this->locations as $potentialChild )
+        {
+            if ( $potentialChild->parentLocationId == $location->id )
+            {
+                $children[] = $potentialChild;
+            }
+        }
+        return $children;
     }
 
     /**
@@ -298,6 +372,29 @@ class LocationServiceStub implements LocationService
     }
 
     /**
+     * Calculates the $childrenCount property for all stored locations.
+     *
+     * @return void
+     */
+    protected function calculateChildCounts()
+    {
+        $childCount = array();
+        foreach ( $this->locations as $location )
+        {
+            if ( !isset( $childCount[$location->parentLocationId] ) )
+            {
+                $childCount[$location->parentLocationId] = 0;
+            }
+            $childCount[$location->parentLocationId]++;
+        }
+
+        foreach ( $childCount as $id => $count )
+        {
+            $this->locations[$id]->__setChildrenCount( $count );
+        }
+    }
+
+    /**
      * Helper method that initializes some default data from an existing legacy
      * test fixture.
      *
@@ -315,6 +412,7 @@ class LocationServiceStub implements LocationService
         {
             $this->locations[$location->id] = $location;
         }
+        $this->calculateChildCounts();
     }
 }
 

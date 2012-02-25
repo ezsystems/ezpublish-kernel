@@ -35,10 +35,9 @@ abstract class LocationBase extends BaseServiceTest
         self::assertNull( $location->hidden );
         self::assertNull( $location->invisible );
         self::assertNull( $location->remoteId );
-        self::assertNull( $location->parentId );
+        self::assertNull( $location->parentLocationId );
         self::assertNull( $location->pathString );
         self::assertNull( $location->modifiedSubLocationDate );
-        self::assertNull( $location->mainLocationId );
         self::assertNull( $location->depth );
         self::assertNull( $location->sortField );
         self::assertNull( $location->sortOrder );
@@ -119,7 +118,7 @@ abstract class LocationBase extends BaseServiceTest
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $copiedSubtree );
         self::assertGreaterThan( 0, $copiedSubtree->id );
-        self::assertEquals( $targetLocation->id, $copiedSubtree->parentId );
+        self::assertEquals( $targetLocation->id, $copiedSubtree->parentLocationId );
     }
 
     /**
@@ -188,7 +187,7 @@ abstract class LocationBase extends BaseServiceTest
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
         self::assertGreaterThan( 0, $location->id );
-        self::assertEquals( true, $location->id == $location->mainLocationId );
+        self::assertEquals( true, $location->id == $location->getContentInfo()->mainLocationId );
     }
 
     /**
@@ -324,7 +323,7 @@ abstract class LocationBase extends BaseServiceTest
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $createdLocation );
         self::assertGreaterThan( 0, $createdLocation->id );
         self::assertEquals( $content->getVersionInfo()->getContentInfo()->contentId, $createdLocation->getContentInfo()->contentId );
-        self::assertEquals( $locationCreateStruct->parentLocationId, $createdLocation->parentId );
+        self::assertEquals( $locationCreateStruct->parentLocationId, $createdLocation->parentLocationId );
     }
 
     /**
@@ -462,7 +461,7 @@ abstract class LocationBase extends BaseServiceTest
         $locationService->moveSubtree( $locationToMove, $newParent );
 
         $loadedLocation = $locationService->loadLocation( $locationToMove->id );
-        self::assertEquals( $newParent->id, $loadedLocation->parentId );
+        self::assertEquals( $newParent->id, $loadedLocation->parentLocationId );
     }
 
     /**

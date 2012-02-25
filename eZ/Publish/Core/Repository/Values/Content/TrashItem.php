@@ -1,29 +1,29 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 
 /**
- * This class represents a location in the repository
+ * this class represents a trash item, which is actually a trashed location
  */
-class Location extends APILocation
+class TrashItem extends APITrashItem
 {
     /**
-     * content info of the content object of this location
+     * content info of the content object of this trash item
      *
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     protected $contentInfo;
 
     /**
-     * content ID of the content object of this location
+     * content ID of the content object of this trash item
      *
      * @var int
      */
     protected $contentId;
 
     /**
-     * returns the content info of the content object of this location
+     * returns the content info of the content object of this trash item
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -31,5 +31,4 @@ class Location extends APILocation
     {
         return $this->contentInfo;
     }
-
 }

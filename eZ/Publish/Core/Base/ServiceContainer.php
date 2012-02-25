@@ -38,12 +38,11 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  * Settings are defined in service.ini like the following example:
  *
  *     [repository]
- *     shared=true
+ *     public=true
  *     class=eZ\Publish\Core\Base\Repository
  *     arguments[persistence_handler]=@inmemory_persistence_handler
  *
  *     [inmemory_persistence_handler]
- *     shared=true
  *     class=eZ\Publish\Core\Persistence\InMemory\Handler
  *
  *     @todo Update service.ini reference bellow
@@ -158,7 +157,7 @@ class ServiceContainer
             throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
 
-        $settings = $this->settings[$serviceName] + array( 'shared' => false, 'public' => false );
+        $settings = $this->settings[$serviceName] + array( 'shared' => true, 'public' => false );
         if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "service\\[{$serviceName}]\\class", 'class setting is not defined' );

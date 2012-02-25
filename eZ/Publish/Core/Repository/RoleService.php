@@ -77,8 +77,17 @@ class RoleService implements RoleServiceInterface
      */
     public function createRole( APIRoleCreateStruct $roleCreateStruct )
     {
-        if ( empty( $roleCreateStruct->identifier ) )
+        if ( !is_string( $roleCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleCreateStruct->identifier, "RoleCreateStruct" );
+
+        if ( !is_string( $roleCreateStruct->mainLanguageCode ) )
+            throw new InvalidArgumentValue( "mainLanguageCode", $roleCreateStruct->mainLanguageCode, "RoleCreateStruct" );
+
+        if ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) )
+            throw new InvalidArgumentValue( "names", $roleCreateStruct->names, "RoleCreateStruct" );
+
+        if ( !is_array( $roleCreateStruct->descriptions ) || empty( $roleCreateStruct->descriptions ) )
+            throw new InvalidArgumentValue( "descriptions", $roleCreateStruct->descriptions, "RoleCreateStruct" );
 
         try
         {
@@ -107,8 +116,20 @@ class RoleService implements RoleServiceInterface
      */
     public function updateRole( APIRole $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
+
+        if ( $roleUpdateStruct->identifier !== null && !is_string( $roleUpdateStruct->identifier ) )
+            throw new InvalidArgumentValue( "identifier", $roleUpdateStruct->identifier, "RoleUpdateStruct" );
+
+        if ( $roleUpdateStruct->mainLanguageCode !== null && !is_string( $roleUpdateStruct->mainLanguageCode ) )
+            throw new InvalidArgumentValue( "mainLanguageCode", $roleUpdateStruct->mainLanguageCode, "RoleUpdateStruct" );
+
+        if ( $roleUpdateStruct->names !== null && !is_array( $roleUpdateStruct->names ) )
+            throw new InvalidArgumentValue( "names", $roleUpdateStruct->names, "RoleUpdateStruct" );
+
+        if ( $roleUpdateStruct->descriptions !== null && !is_array( $roleUpdateStruct->descriptions ) )
+            throw new InvalidArgumentValue( "descriptions", $roleUpdateStruct->descriptions, "RoleUpdateStruct" );
 
         if ( !empty( $roleUpdateStruct->identifier ) )
         {
@@ -126,8 +147,8 @@ class RoleService implements RoleServiceInterface
         $spiRoleUpdateStruct = new SPIRoleUpdateStruct();
         $spiRoleUpdateStruct->id = $loadedRole->id;
         $spiRoleUpdateStruct->identifier = $roleUpdateStruct->identifier !== null ? $roleUpdateStruct->identifier : $role->identifier;
-        $spiRoleUpdateStruct->name = $roleUpdateStruct->names !== null ? $roleUpdateStruct->names : $role->getNames();
-        $spiRoleUpdateStruct->description = $roleUpdateStruct->descriptions !== null ? $roleUpdateStruct->descriptions : $role->getDescriptions();
+        $spiRoleUpdateStruct->name = !empty( $roleUpdateStruct->names ) ? $roleUpdateStruct->names : $role->getNames();
+        $spiRoleUpdateStruct->description = !empty( $roleUpdateStruct->descriptions ) ? $roleUpdateStruct->descriptions : $role->getDescriptions();
 
         $this->persistenceHandler->userHandler()->updateRole( $spiRoleUpdateStruct );
 
@@ -146,28 +167,27 @@ class RoleService implements RoleServiceInterface
      */
     public function addPolicy( APIRole $role, APIPolicyCreateStruct $policyCreateStruct )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( empty( $policyCreateStruct->module ) )
+        if ( !is_string( $policyCreateStruct->module ) )
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
-        if ( empty( $policyCreateStruct->function ) )
+        if ( !is_string( $policyCreateStruct->function ) )
             throw new InvalidArgumentValue( "function", $policyCreateStruct->function, "PolicyCreateStruct" );
 
         if ( $policyCreateStruct->module === '*' && $policyCreateStruct->function !== '*' )
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
-        // load role to check existence
-        $this->loadRole( $role->id );
+        $loadedRole = $this->loadRole( $role->id );
 
         $spiPolicy = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
                                                           $policyCreateStruct->function,
                                                           $policyCreateStruct->getLimitations() );
 
-        $this->persistenceHandler->userHandler()->addPolicy( $role->id, $spiPolicy );
+        $this->persistenceHandler->userHandler()->addPolicy( $loadedRole->id, $spiPolicy );
 
-        return $this->loadRole( $role->id );
+        return $this->loadRole( $loadedRole->id );
     }
 
     /**
@@ -182,18 +202,17 @@ class RoleService implements RoleServiceInterface
      */
     public function removePolicy( APIRole $role, APIPolicy $policy )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( empty( $policy->id ) )
+        if ( !is_numeric( $policy->id ) )
             throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
 
-        // load role to check existence
-        $this->loadRole( $role->id );
+        $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->removePolicy( $role->id, $policy->id );
+        $this->persistenceHandler->userHandler()->removePolicy( $loadedRole->id, $policy->id );
 
-        return $this->loadRole( $role->id );
+        return $this->loadRole( $loadedRole->id );
     }
 
     /**
@@ -209,16 +228,16 @@ class RoleService implements RoleServiceInterface
      */
     public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
     {
-        if ( empty( $policy->id ) )
+        if ( !is_numeric( $policy->id ) )
             throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
 
-        if ( empty( $policy->roleId ) )
+        if ( !is_numeric( $policy->roleId ) )
             throw new InvalidArgumentValue( "roleId", $policy->roleId, "Policy" );
 
-        if ( empty( $policy->module ) )
+        if ( !is_string( $policy->module ) )
             throw new InvalidArgumentValue( "module", $policy->module, "Policy" );
 
-        if ( empty( $policy->function ) )
+        if ( !is_string( $policy->function ) )
             throw new InvalidArgumentValue( "function", $policy->function, "Policy" );
 
         $spiPolicy = $this->buildPersistencePolicyObject( $policy->module, $policy->function, $policyUpdateStruct->getLimitations() );
@@ -242,7 +261,7 @@ class RoleService implements RoleServiceInterface
     */
     public function loadRole( $id )
     {
-        if ( empty( $id ) )
+        if ( !is_numeric( $id ) )
             throw new InvalidArgumentValue( "id", $id );
 
         try
@@ -269,7 +288,7 @@ class RoleService implements RoleServiceInterface
      */
     public function loadRoleByIdentifier( $identifier )
     {
-        if ( empty( $identifier ) )
+        if ( !is_string( $identifier ) )
             throw new InvalidArgumentValue( "identifier", $identifier );
 
         try
@@ -316,13 +335,12 @@ class RoleService implements RoleServiceInterface
      */
     public function deleteRole( APIRole $role )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        // load role to check existence
-        $this->loadRole( $role->id );
+        $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->deleteRole( $role->id );
+        $this->persistenceHandler->userHandler()->deleteRole( $loadedRole->id );
     }
 
     /**
@@ -336,7 +354,7 @@ class RoleService implements RoleServiceInterface
      */
     public function loadPoliciesByUserId( $userId )
     {
-        if ( empty( $userId ) )
+        if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
         // load user to verify existence, throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -366,10 +384,10 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         $spiRoleLimitation = null;
@@ -396,10 +414,10 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         try
@@ -430,10 +448,10 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( empty( $user->id ) )
+        if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
         $spiRoleLimitation = null;
@@ -460,10 +478,10 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUser( APIRole $role, User $user )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( empty( $user->id ) )
+        if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
         try
@@ -492,7 +510,7 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignments( APIRole $role )
     {
-        if ( empty( $role->id ) )
+        if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
         try
@@ -552,7 +570,7 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignmentsForUser( User $user )
     {
-        if ( empty( $user->id ) )
+        if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
         $roleAssignments = array();
@@ -585,7 +603,7 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         $roleAssignments = array();
@@ -828,7 +846,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
-    protected function buildPersistencePolicyObject( $module, $function, array $limitations )
+    protected function buildPersistencePolicyObject( $module, $function, $limitations )
     {
         $limitationsToCreate = '*';
         if ( $module !== '*' && $function !== '*' && is_array( $limitations ) && !empty( $limitations ) )

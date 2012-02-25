@@ -141,4 +141,15 @@ class LocationStub extends Location
     {
         return $this->contentInfo;
     }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param int $childrenCount
+     * @return void
+     */
+    public function __setChildrenCount( $childrenCount )
+    {
+        $this->childrenCount = $childrenCount;
+    }
 }

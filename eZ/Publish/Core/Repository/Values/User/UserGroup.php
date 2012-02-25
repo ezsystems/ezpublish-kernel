@@ -6,7 +6,6 @@ use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
 
 /**
  * This class represents a user group
- *
  */
 class UserGroup extends APIUserGroup
 {
@@ -106,7 +105,7 @@ class UserGroup extends APIUserGroup
      *
      * @param string $languageCode
      *
-     * @return array an array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] with field identifier as keys
      */
     public function getFieldsByLanguage( $languageCode = null )
     {

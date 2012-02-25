@@ -5,8 +5,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
-    eZ\Publish\Core\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct as APILocationCreateStruct,
+    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\Location as APILocation,
@@ -290,8 +289,6 @@ class LocationService implements LocationServiceInterface
         return $childLocations;
     }
 
-
-
     /**
      * Searches children locations of the provided parent location id
      *
@@ -332,7 +329,7 @@ class LocationService implements LocationServiceInterface
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
-    public function createLocation( ContentInfo $contentInfo, APILocationCreateStruct $locationCreateStruct )
+    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
         if ( !is_numeric( $contentInfo->contentId ) )
             throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
@@ -366,8 +363,9 @@ class LocationService implements LocationServiceInterface
         {
             try
             {
-                $this->loadLocationByRemoteId( $locationCreateStruct->remoteId );
-                throw new IllegalArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
+                $existingLocation = $this->loadLocationByRemoteId( $locationCreateStruct->remoteId );
+                if ( $existingLocation !== null )
+                    throw new IllegalArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -415,7 +413,7 @@ class LocationService implements LocationServiceInterface
         {
             try
             {
-                $parentParentLocation = $this->loadLocation( $loadedParentLocation->parentId );
+                $parentParentLocation = $this->loadLocation( $loadedParentLocation->parentLocationId );
                 if ( $parentParentLocation->hidden || $parentParentLocation->invisible )
                     $createStruct->invisible = true;
             }
@@ -474,8 +472,9 @@ class LocationService implements LocationServiceInterface
         {
             try
             {
-                $this->loadLocationByRemoteId( $locationUpdateStruct->remoteId );
-                throw new IllegalArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
+                $existingLocation = $this->loadLocationByRemoteId( $locationUpdateStruct->remoteId );
+                if ( $existingLocation !== null )
+                    throw new IllegalArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -487,6 +486,8 @@ class LocationService implements LocationServiceInterface
         $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? (int) $locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
 
         $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
+
+        return $this->loadLocation( $loadedLocation->id );
     }
 
     /**
@@ -662,10 +663,9 @@ class LocationService implements LocationServiceInterface
             'hidden'                   => $spiLocation->hidden,
             'invisible'                => $spiLocation->invisible,
             'remoteId'                 => $spiLocation->remoteId,
-            'parentId'                 => $spiLocation->parentId,
+            'parentLocationId'         => $spiLocation->parentId,
             'pathString'               => $spiLocation->pathString,
             'modifiedSubLocationDate'  => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
-            'mainLocationId'           => $spiLocation->mainLocationId,
             'depth'                    => $spiLocation->depth,
             'sortField'                => $spiLocation->sortField,
             'sortOrder'                => $spiLocation->sortOrder,

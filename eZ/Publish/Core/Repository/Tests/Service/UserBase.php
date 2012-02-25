@@ -608,7 +608,7 @@ abstract class UserBase extends BaseServiceTest
         /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
         foreach ( $userLocations as $location )
         {
-            if ( $location->parentId == $userGroupMainLocation->id )
+            if ( $location->parentLocationId == $userGroupMainLocation->id )
             {
                 $hasAddedLocation = true;
                 break;
@@ -643,7 +643,7 @@ abstract class UserBase extends BaseServiceTest
             /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
             foreach ( $userLocations as $location )
             {
-                if ( $location->parentId == $userGroupMainLocation->id )
+                if ( $location->parentLocationId == $userGroupMainLocation->id )
                 {
                     $hasRemovedLocation = true;
                     break;
