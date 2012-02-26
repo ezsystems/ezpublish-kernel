@@ -28,28 +28,28 @@ class FieldDefinition extends APIFieldDefinition
      *
      * @var array
      */
-    protected $names = array();
+    protected $names;
 
     /**
      * Holds the collection of descriptions with languageCode keys
      *
      * @var array
      */
-    protected $descriptions = array();
+    protected $descriptions;
 
     /**
      * Holds collection of field settings for the contenttype
      *
      * @var array
      */
-    protected $fieldSettings = array();
+    protected $fieldSettings;
 
     /**
      * Holds collection of validators for the contenttype
      *
      * @var array
      */
-    protected $validators = array();
+    protected $validators;
 
     /**
      * This method returns the human readable name of this field in all provided languages
