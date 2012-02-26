@@ -211,17 +211,20 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\G',
                     'public' => true,
                     'arguments' => array(
-                            'lazyHServiceCall' => '%H::timesTwo',
+                            'lazyHServiceCall' => '%H-parent::timesTwo',
                             'hIntValue' => 42,
-                            'lazyHService' => '%H',
+                            'lazyHService' => '%H-parent',
                     ),
                 ),
-                'H' => array(
+                'H-parent' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\H',
-                    'public' => true,
                     'shared' => false,
                     'arguments' => array(),
-                )
+                ),
+                '-parent' => array(
+                    'public' => true,
+                    'arguments' => array( 'test' => 33 ),
+                ),
             )
         );
         $obj = $sc->get('G');
@@ -309,6 +312,12 @@ class G
 
 class H
 {
+    public function __construct( $notUsedArgument = null )
+    {
+        if ( $notUsedArgument !== null )
+            throw new \Exception( "\$notUsedArgument should be a vaue of null, got: " . $notUsedArgument );
+    }
+
     public function timesTwo( $hIntValue )
     {
         return $hIntValue * 2;

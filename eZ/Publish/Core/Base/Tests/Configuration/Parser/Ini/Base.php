@@ -169,8 +169,13 @@ conditions[events][pre_request][]=outputFn
 conditions[routes][__ROOT__][item][uri]=
 conditions[routes][content][item][uri]=content/some/
 conditions[routes][content][item][params][id]=\d+
-conditions[routes][content][item][controller]=%contentItem:controller::doList
+conditions[routes][content][item][controller]=%contentItem-controller::doList
 
+[contentItem-controller]
+class=eZ\Publish\Core\ContentItemController
+
+[-controller]
+public=true
 ';
         $expects = array(
             'test' => array(
@@ -188,10 +193,12 @@ conditions[routes][content][item][controller]=%contentItem:controller::doList
                     'routes' => array( '__ROOT__' => array( 'item' => array( 'uri' => '' ) ),
                                        'content' => array( 'item' => array( 'uri' => 'content/some/',
                                                                              'params' => array( 'id' => '\d+' ),
-                                                                             'controller' => '%contentItem:controller::doList',
+                                                                             'controller' => '%contentItem-controller::doList',
                     ) ) ),
                 )
-            )
+            ),
+            'contentItem-controller' => array( 'class' => 'eZ\Publish\Core\ContentItemController' ),
+            '-controller' => array( 'public' => true ),
         );
 
         $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );

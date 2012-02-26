@@ -151,13 +151,35 @@ class ServiceContainer
             return $this->dependencies[$serviceKey];
         }
 
-        // Validate settings
-        if ( empty( $this->settings[$serviceName] ) )
+        if ( strpos( $serviceName, '-' ) )// If - is at a positive position, then service extends another one
+        {
+            $serviceParent = explode( '-', $serviceName );
+            $serviceParent = '-' . $serviceParent[1];
+            if ( empty( $this->settings[$serviceName] ) && empty( $this->settings[$serviceParent] ) )// Validate settings
+            {
+                throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
+            }
+            else if ( empty( $this->settings[$serviceName] ) )
+            {
+                $settings = $this->settings[$serviceParent] + array( 'shared' => true, 'public' => false );
+            }
+            else
+            {
+                $settings = array_merge(
+                    $this->settings[$serviceParent] + array( 'shared' => true, 'public' => false ),
+                    $this->settings[$serviceName]
+                );// uses array_merge on puposes to make sure arguments are reset
+            }
+        }
+        else if ( empty( $this->settings[$serviceName] ) )// Validate settings
         {
             throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
+        else
+        {
+            $settings = $this->settings[$serviceName] + array( 'shared' => true, 'public' => false );
+        }
 
-        $settings = $this->settings[$serviceName] + array( 'shared' => true, 'public' => false );
         if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "service\\[{$serviceName}]\\class", 'class setting is not defined' );
