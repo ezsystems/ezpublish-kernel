@@ -33,28 +33,47 @@ class ContentType extends APIContentType
      *
      * @var array
      */
-    protected $names = array();
+    protected $names;
 
     /**
      * Holds the collection of descriptions with languageCode keys
      *
      * @var array
      */
-    protected $descriptions = array();
+    protected $descriptions;
 
     /**
      * Holds the collection of contenttypegroups the contenttype is assigned to
      *
      * @var array
      */
-    protected $contentTypeGroups = array();
+    protected $contentTypeGroups;
 
     /**
-     * Holds the collection of field definitions for the contenttype
+     * Contains the content type field definitions from this type
      *
-     * @var array
+     * @var array an array of {@link FieldDefinition}
      */
-    protected $fieldDefinitions = array();
+    protected $fieldDefinitions;
+
+    /**
+     * Field definitions indexed by identifier
+     *
+     * @var array an array of {@link FieldDefinition}
+     */
+    private $fieldDefinitionsByIdentifier;
+
+    function __construct( array $data = array() )
+    {
+        foreach ( $data as $propertyName => $propertyValue )
+        {
+            $this->$propertyName = $propertyValue;
+        }
+        foreach ( $this->fieldDefinitions as $fieldDefinition )
+        {
+            $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
+        }
+    }
 
     /**
      * This method returns the human readable name in all provided languages
@@ -147,9 +166,9 @@ class ContentType extends APIContentType
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
-        if ( array_key_exists( $fieldDefinitionIdentifier, $this->fieldDefinitions ) )
+        if ( array_key_exists( $fieldDefinitionIdentifier, $this->fieldDefinitionsByIdentifier ) )
         {
-            return $this->fieldDefinitions[$fieldDefinitionIdentifier];
+            return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
         }
 
         return null;
