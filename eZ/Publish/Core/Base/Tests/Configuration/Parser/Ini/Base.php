@@ -166,6 +166,10 @@ conditions[three][three][three]=subEight
 conditions[three][three][three3]=subNine
 conditions[three][three][three]=subTen
 conditions[events][pre_request][]=outputFn
+conditions[routes][__ROOT__][item][uri]=
+conditions[routes][content][item][uri]=content/some/
+conditions[routes][content][item][params][id]=\d+
+conditions[routes][content][item][controller]=%contentItem:controller::doList
 
 ';
         $expects = array(
@@ -180,7 +184,12 @@ conditions[events][pre_request][]=outputFn
                     array( array( 'subSix' ) ),
                     array( array( 'subSeven' ) ),
                     'three' => array( 'three' => array( 'three' => 'subTen', 'three3' => 'subNine' ) ),
-                    'events' => array( 'pre_request' => array( 'outputFn' ) )
+                    'events' => array( 'pre_request' => array( 'outputFn' ) ),
+                    'routes' => array( '__ROOT__' => array( 'item' => array( 'uri' => '' ) ),
+                                       'content' => array( 'item' => array( 'uri' => 'content/some/',
+                                                                             'params' => array( 'id' => '\d+' ),
+                                                                             'controller' => '%contentItem:controller::doList',
+                    ) ) ),
                 )
             )
         );

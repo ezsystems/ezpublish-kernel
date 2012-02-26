@@ -236,7 +236,7 @@ class Ini implements Parser
      */
     protected function parserPhpDimensionArraySupport( $fileContent )
     {
-        if ( preg_match_all( "/^([\w_-]+)\[([\w_-]+)?\]\[([\w_-]+)?\](\[([\w_-]+)?\])?/m", $fileContent, $valueArray, PREG_OFFSET_CAPTURE ) )
+        if ( preg_match_all( "/^([\w_-]+)\[([\w_-]+)?\]\[([\w_-]+)?\](\[([\w_-]+)?\])?(\[([\w_-]+)?\])?(\[([\w_-]+)?\])?/m", $fileContent, $valueArray, PREG_OFFSET_CAPTURE ) )
         {
             $offsetDiff = 0;// Since we use offset captured before replace operations, we need to maintain an offset diff
             foreach ( $valueArray[0] as $key => $match )
@@ -266,6 +266,24 @@ class Ini implements Parser
                         $replaceString .= $key;
                     else
                         $replaceString .= $valueArray[5][$key][0];
+                }
+
+                if ( !empty( $valueArray[6][$key][0] ) )
+                {
+                    $replaceString .= self::TEMP_INI_KEY_VAR;
+                    if ( empty( $valueArray[7][$key][0] ) )
+                        $replaceString .= $key;
+                    else
+                        $replaceString .= $valueArray[7][$key][0];
+                }
+
+                if ( !empty( $valueArray[8][$key][0] ) )
+                {
+                    $replaceString .= self::TEMP_INI_KEY_VAR;
+                    if ( empty( $valueArray[9][$key][0] ) )
+                        $replaceString .= $key;
+                    else
+                        $replaceString .= $valueArray[9][$key][0];
                 }
 
                 $replaceString .= ']';
@@ -322,49 +340,17 @@ class Ini implements Parser
         {
             if ( strpos( $key, self::TEMP_INI_KEY_VAR ) !== false )
             {
-                $keys = explode( self::TEMP_INI_KEY_VAR, $key );
-                if ( is_numeric( $keys[0] ) )
+                $subKeys = explode( self::TEMP_INI_KEY_VAR, $key );
+                $value = self::parsePhpPostFilter( $value );
+                foreach ( array_reverse( $subKeys ) as $subKey )
                 {
-                    if ( is_numeric( $keys[1] ) )
-                    {
-                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
-                            $newArray[][][] = self::parsePhpPostFilter( $value );
-                        elseif ( isset( $keys[2] ) )
-                            $newArray[][][$keys[2]] = self::parsePhpPostFilter( $value );
-                        else
-                            $newArray[][] = self::parsePhpPostFilter( $value );
-                    }
+                    if ( is_numeric( $subKey[0] ) )
+                        $value = array( $value );
                     else
-                    {
-                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
-                            $newArray[][$keys[1]][] = self::parsePhpPostFilter( $value );
-                        elseif ( isset( $keys[2] ) )
-                            $newArray[][$keys[1]][$keys[2]] = self::parsePhpPostFilter( $value );
-                        else
-                            $newArray[][$keys[1]] = self::parsePhpPostFilter( $value );
-                    }
+                        $value = array( $subKey => $value );
                 }
-                else
-                {
-                    if ( is_numeric( $keys[1] ) )
-                    {
-                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
-                            $newArray[$keys[0]][][] = self::parsePhpPostFilter( $value );
-                        elseif ( isset( $keys[2] ) )
-                            $newArray[$keys[0]][][$keys[2]] = self::parsePhpPostFilter( $value );
-                        else
-                            $newArray[$keys[0]][] = self::parsePhpPostFilter( $value );
-                    }
-                    else
-                    {
-                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
-                            $newArray[$keys[0]][$keys[1]][] = self::parsePhpPostFilter( $value );
-                        elseif ( isset( $keys[2] ) )
-                            $newArray[$keys[0]][$keys[1]][$keys[2]] = self::parsePhpPostFilter( $value );
-                        else
-                            $newArray[$keys[0]][$keys[1]] = self::parsePhpPostFilter( $value );
-                    }
-                }
+
+                $newArray = array_merge_recursive( $newArray, $value );
             }
             else
             {
