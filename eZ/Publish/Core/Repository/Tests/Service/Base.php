@@ -62,6 +62,18 @@ abstract class Base extends PHPUnit_Framework_TestCase
         }
     }
 
+    protected function assertSameClassPropertiesCorrect( array $propertiesNames, ValueObject $expectedValues, ValueObject $actualObject, array $skipProperties = array() )
+    {
+        foreach ( $propertiesNames as $propertyName )
+        {
+            if ( in_array( $propertyName, $skipProperties ) ) continue;
+
+            $this->assertPropertiesEqual(
+                $propertyName, $expectedValues->$propertyName, $actualObject->$propertyName
+            );
+        }
+    }
+
     /**
      * Asserts all properties from $expectedValues are correctly set in
      * $actualObject.
@@ -85,6 +97,15 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
     private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
     {
+        if( $expectedValue instanceof \ArrayObject )
+        {
+            $expectedValue = $expectedValue->getArrayCopy();
+        }
+        if( $actualValue instanceof \ArrayObject )
+        {
+            $actualValue = $actualValue->getArrayCopy();
+        }
+
         $this->assertEquals(
             $expectedValue,
             $actualValue,
