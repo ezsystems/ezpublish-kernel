@@ -219,15 +219,30 @@ class ServiceContainer
      */
     protected function lookupArguments( array $arguments, array &$keys = array() )
     {
+        $serviceContainer = $this;
         $builtArguments = array();
         foreach ( $arguments as $key => $argument )
         {
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )
+            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@'  || $argument[0] === '%' ) )
             {
-                if ( $argument === '$serviceContainer' )
+                $function = false;
+                if ( stripos( $argument, '::' ) !== false )
                 {
-                    // Self
-                    $builtArguments[$key] = $this;
+                    // Check if argument is a callback
+                    list( $argument, $function  ) = explode( '::', $argument );
+                }
+
+                if ( $argument[0] === '%' )// lazy loaded services
+                {
+                    if ( $function !== false )
+                        $builtArguments[$key] = function() use ( $serviceContainer, $argument, $function ){
+                            $service = $serviceContainer->get( ltrim( $argument, '%' ), true );
+                            return call_user_func_array( array( $service, $function ), func_get_args() );
+                        };
+                    else
+                        $builtArguments[$key] = function() use ( $serviceContainer, $argument ){
+                            return $serviceContainer->get( ltrim( $argument, '%' ), true );
+                        };
                 }
                 else if ( isset( $this->dependencies[ $argument ] ) )
                 {
@@ -243,6 +258,11 @@ class ServiceContainer
                 {
                     // Try to load a @service dependency
                     $builtArguments[$key] = $this->internalGet( ltrim( $argument, '@' ), true );
+                }
+
+                if ( $function !== false && $argument[0] !== '%' )
+                {
+                    $builtArguments[$key] = array( $builtArguments[$key], $function );
                 }
             }
             else if ( is_array( $argument ) )
