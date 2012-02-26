@@ -97,10 +97,10 @@ class ServiceContainer
      */
     public function getConfigurationManager()
     {
-        if ( isset( $this->dependencies['@configurationManager'] ) )
-            return $this->dependencies['@configurationManager'];
+        if ( isset( $this->dependencies['$configurationManager'] ) )
+            return $this->dependencies['$configurationManager'];
         // will not work as ConfigurationManager has dependencies on config.php settings at least
-        throw new \Exception( '@configurationManager missing, usually setup in bootstrap.php!' );
+        throw new \Exception( '$configurationManager missing, usually setup in bootstrap.php!' );
     }
 
     /**
