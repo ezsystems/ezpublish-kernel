@@ -62,7 +62,6 @@ class LocationServiceTest extends BaseTest
                 'priority'         => 0,
                 'hidden'           => false,
                 'remoteId'         => null,
-                'isMainLocation'   => false,
                 'sortField'        => Location::SORT_FIELD_NAME,
                 'sortOrder'        => Location::SORT_ORDER_ASC,
                 'parentLocationId' => 1,
@@ -93,7 +92,6 @@ class LocationServiceTest extends BaseTest
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';
-        $locationCreate->isMainLocation = true;
         $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -146,7 +144,7 @@ class LocationServiceTest extends BaseTest
             ),
             $createdLocation
         );
-        // 'isMainLocation' => $locationCreate->isMainLocation,
+
         $this->assertNotNull(
             $createdLocation->id
         );

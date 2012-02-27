@@ -95,8 +95,6 @@ class LocationServiceStub implements LocationService
         {
             $data[$propertyName] = $propertyValue;
         }
-        // TODO: Handle, when finally defined
-        unset( $data['isMainLocation'] );
 
         $data['contentInfo'] = $contentInfo;
 
