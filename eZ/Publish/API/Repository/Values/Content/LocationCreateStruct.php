@@ -34,14 +34,6 @@ class LocationCreateStruct extends ValueObject
     public $remoteId;
 
     /**
-     * Indicates if the newly created location should be set as main location.
-     * On creating a new content object with only one location this parameter is ignored.
-     *
-     * @var boolean
-     */
-    public $isMainLocation = false;
-
-    /**
      * Specifies which property the child locations should be sorted on.
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
