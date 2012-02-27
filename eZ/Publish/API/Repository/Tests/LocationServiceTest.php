@@ -140,7 +140,7 @@ class LocationServiceTest extends BaseTest
                 'pathString'              => '/1/5/' . $createdLocation->id . '/',
                 'modifiedSubLocationDate' => null, // TODO: Should be DateTime
                 'depth'                   => 2,
-                'childrenCount'           => 0,
+                'childCount'              => 0,
                 'sortField'               => $locationCreate->sortField,
                 'sortOrder'               => $locationCreate->sortOrder,
             ),
@@ -153,7 +153,7 @@ class LocationServiceTest extends BaseTest
 
         // TODO: Update $mainLocationId in ContentInfo, if set in
         // LocationCreateStruct
-        // TODO: Check parent location childrenCount raised
+        // TODO: Check parent location childCount raised
         $this->markTestIncomplete( 'Outstanding TODOs.' );
     }
 
@@ -164,11 +164,11 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
-    public function testCreateLocationParentChildrenCountRaised( array $data )
+    public function testCreateLocationParentChildCountRaised( array $data )
     {
         $parentLocation = $data['parentLocation'];
 
-        $this->assertEquals( 6, $parentLocation->childrenCount );
+        $this->assertEquals( 6, $parentLocation->childCount );
     }
 
     /**
@@ -287,7 +287,7 @@ class LocationServiceTest extends BaseTest
                 'depth'                   =>  1,
                 'sortField'               =>  1,
                 'sortOrder'               =>  1,
-                'childrenCount'           =>  5,
+                'childCount'              =>  5,
             ),
             $location
         );

@@ -123,7 +123,7 @@ class LocationStub extends Location
      *
      * @var integer
      */
-    // protected $childrenCount;
+    // protected $childCount;
 
     /**
      * ContentInfo
@@ -145,11 +145,11 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
-     * @param int $childrenCount
+     * @param int $childCount
      * @return void
      */
-    public function __setChildrenCount( $childrenCount )
+    public function __setChildCount( $childCount )
     {
-        $this->childrenCount = $childrenCount;
+        $this->childCount = $childCount;
     }
 }

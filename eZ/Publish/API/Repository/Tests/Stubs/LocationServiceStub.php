@@ -100,16 +100,16 @@ class LocationServiceStub implements LocationService
 
         $data['contentInfo'] = $contentInfo;
 
-        $data['id']             = $this->nextLocationId++;
-        $data['pathString']     = $parentLocation->pathString . $data['id'] . '/';
-        $data['depth']          = substr_count( $data['pathString'], '/' ) - 2;
-        $data['childrenCount']  = 0;
+        $data['id']          = $this->nextLocationId++;
+        $data['pathString']  = $parentLocation->pathString . $data['id'] . '/';
+        $data['depth']       = substr_count( $data['pathString'], '/' ) - 2;
+        $data['childCount']  = 0;
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
 
         $parentLocation = $this->loadLocation( $location->parentLocationId );
-        $parentLocation->__setChildrenCount( $parentLocation->childrenCount + 1 );
+        $parentLocation->__setChildCount( $parentLocation->childCount + 1 );
 
         return $location;
     }
@@ -372,7 +372,7 @@ class LocationServiceStub implements LocationService
     }
 
     /**
-     * Calculates the $childrenCount property for all stored locations.
+     * Calculates the $childCount property for all stored locations.
      *
      * @return void
      */
@@ -390,7 +390,7 @@ class LocationServiceStub implements LocationService
 
         foreach ( $childCount as $id => $count )
         {
-            $this->locations[$id]->__setChildrenCount( $count );
+            $this->locations[$id]->__setChildCount( $count );
         }
     }
 
