@@ -481,10 +481,14 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertEquals(
-            array(
-                $locationService->loadLocation( 5 ),
-            ),
-            $locations
+            array( 5 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
         );
     }
 
