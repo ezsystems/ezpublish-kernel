@@ -817,7 +817,67 @@ class LocationServiceTest extends BaseTest
      */
     public function testUpdateLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation( 5 );
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+        $updateStruct->priority  = 3;
+        $updateStruct->remoteId  = 'c7adcbf1e96bc29bca28c2d809d0c7ef69272651';
+        $updateStruct->sortField = Location::SORT_FIELD_PRIORITY;
+        $updateStruct->sortOrder = Location::SORT_ORDER_DESC;
+
+        $updatedLocation = $locationService->updateLocation(
+            $originalLocation, $updateStruct
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $updatedLocation
+        );
+
+        return array(
+            'originalLocation' => $originalLocation,
+            'updateStruct'     => $updateStruct,
+            'updatedLocation'  => $updatedLocation,
+        );
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUpdateLocation
+     */
+    public function testUpdateLocationStructValues( array $data )
+    {
+        $originalLocation = $data['originalLocation'];
+        $updateStruct     = $data['updateStruct'];
+        $updatedLocation  = $data['updatedLocation'];
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                      => $originalLocation->id,
+                'priority'                => $updateStruct->priority,
+                'hidden'                  => $originalLocation->hidden,
+                'invisible'               => $originalLocation->invisible,
+                'remoteId'                => $updateStruct->remoteId,
+                'contentInfo'             => $originalLocation->contentInfo,
+                'parentLocationId'        => $originalLocation->parentLocationId,
+                'pathString'              => $originalLocation->pathString,
+                'modifiedSubLocationDate' => $originalLocation->modifiedSubLocationDate,
+                'depth'                   => $originalLocation->depth,
+                'sortField'               => $updateStruct->sortField,
+                'sortOrder'               => $updateStruct->sortOrder,
+                'childCount'              => $originalLocation->childCount,
+            ),
+            $updatedLocation
+        );
     }
 
     /**

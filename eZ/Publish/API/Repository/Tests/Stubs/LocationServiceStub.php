@@ -217,7 +217,42 @@ class LocationServiceStub implements LocationService
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $data = $this->locationToArray( $location );
+
+        foreach ( $locationUpdateStruct as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+
+        $updatedLocation = new LocationStub( $data );
+        $this->locations[$updatedLocation->id] = $updatedLocation;
+
+        return $updatedLocation;
+    }
+
+    /**
+     * Returns the data of the given $location as an array
+     *
+     * @param Location $location
+     * @return array
+     */
+    protected function locationToArray( Location $location )
+    {
+        return array(
+            'id'                      => $location->id,
+            'priority'                => $location->priority,
+            'hidden'                  => $location->hidden,
+            'invisible'               => $location->invisible,
+            'remoteId'                => $location->remoteId,
+            'contentInfo'             => $location->contentInfo,
+            'parentLocationId'        => $location->parentLocationId,
+            'pathString'              => $location->pathString,
+            'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+            'depth'                   => $location->depth,
+            'sortField'               => $location->sortField,
+            'sortOrder'               => $location->sortOrder,
+            'childCount'              => $location->childCount,
+        );
     }
 
     /**
