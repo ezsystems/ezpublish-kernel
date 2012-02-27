@@ -64,4 +64,14 @@ class VersionInfoStub extends VersionInfo
         // TODO: Implement getName() method.
     }
 
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentInfo':
+                return $this->getContentInfo();
+        }
+
+        return parent::__get( $property );
+    }
 }
