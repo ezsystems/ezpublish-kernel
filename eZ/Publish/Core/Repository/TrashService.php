@@ -217,7 +217,12 @@ class TrashService implements TrashServiceInterface
         $offset = $query->offset >= 0 ? (int) $query->offset : 0;
         $limit = $query->limit > 0 ? (int) $query->limit : null;
 
-        $spiTrashItems = $this->persistenceHandler->trashHandler()->listTrashed( $criterion, $offset, $limit, $sortClauses );
+        $spiTrashItems = $this->persistenceHandler->trashHandler()->listTrashed(
+            $criterion,
+            $offset,
+            $limit,
+            $sortClauses
+        );
 
         $trashItems = array();
         foreach ( $spiTrashItems as $spiTrashItem )
@@ -244,21 +249,23 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
-        return new TrashItem( array(
-            'contentInfo'              => $contentInfo,
-            'id'                       => $spiTrashItem->id,
-            'priority'                 => $spiTrashItem->priority,
-            'hidden'                   => $spiTrashItem->hidden,
-            'invisible'                => $spiTrashItem->invisible,
-            'remoteId'                 => $spiTrashItem->remoteId,
-            'parentLocationId'         => $spiTrashItem->parentId,
-            'pathString'               => $spiTrashItem->pathString,
-            'modifiedSubLocationDate'  => new \DateTime("{@$spiTrashItem->modifiedSubLocation}"),
-            'depth'                    => $spiTrashItem->depth,
-            'sortField'                => $spiTrashItem->sortField,
-            'sortOrder'                => $spiTrashItem->sortOrder,
-            'childCount'               => 0
-        ) );
+        return new TrashItem(
+            array(
+                'contentInfo'             => $contentInfo,
+                'id'                      => $spiTrashItem->id,
+                'priority'                => $spiTrashItem->priority,
+                'hidden'                  => $spiTrashItem->hidden,
+                'invisible'               => $spiTrashItem->invisible,
+                'remoteId'                => $spiTrashItem->remoteId,
+                'parentLocationId'        => $spiTrashItem->parentId,
+                'pathString'              => $spiTrashItem->pathString,
+                'modifiedSubLocationDate' => new \DateTime("{@$spiTrashItem->modifiedSubLocation}"),
+                'depth'                   => $spiTrashItem->depth,
+                'sortField'               => $spiTrashItem->sortField,
+                'sortOrder'               => $spiTrashItem->sortOrder,
+                'childCount'              => 0
+            )
+        );
     }
 
     /**
@@ -301,7 +308,11 @@ class TrashService implements TrashServiceInterface
             return new $persistenceCriterionClass( $criteria );
         }
 
-        return $persistenceCriterionClass::createFromQueryBuilder( $criterion->target, $criterion->operator, $criterion->value );
+        return $persistenceCriterionClass::createFromQueryBuilder(
+            $criterion->target,
+            $criterion->operator,
+            $criterion->value
+        );
     }
 
     /**
@@ -322,7 +333,12 @@ class TrashService implements TrashServiceInterface
         if ( $sortClause instanceof FieldSortClause )
         {
             $targetData = $sortClause->targetData;
-            return new $persistenceSortClauseClass( $targetData->typeIdentifier, $targetData->fieldIdentifier, $sortClause->direction );
+
+            return new $persistenceSortClauseClass(
+                $targetData->typeIdentifier,
+                $targetData->fieldIdentifier,
+                $sortClause->direction
+            );
         }
 
         return new $persistenceSortClauseClass( $sortClause->direction );

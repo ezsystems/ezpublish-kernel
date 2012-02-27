@@ -181,9 +181,11 @@ class RoleService implements RoleServiceInterface
 
         $loadedRole = $this->loadRole( $role->id );
 
-        $spiPolicy = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
-                                                          $policyCreateStruct->function,
-                                                          $policyCreateStruct->getLimitations() );
+        $spiPolicy = $this->buildPersistencePolicyObject(
+            $policyCreateStruct->module,
+            $policyCreateStruct->function,
+            $policyCreateStruct->getLimitations()
+        );
 
         $this->persistenceHandler->userHandler()->addPolicy( $loadedRole->id, $spiPolicy );
 
@@ -240,7 +242,12 @@ class RoleService implements RoleServiceInterface
         if ( !is_string( $policy->function ) )
             throw new InvalidArgumentValue( "function", $policy->function, "Policy" );
 
-        $spiPolicy = $this->buildPersistencePolicyObject( $policy->module, $policy->function, $policyUpdateStruct->getLimitations() );
+        $spiPolicy = $this->buildPersistencePolicyObject(
+            $policy->module,
+            $policy->function,
+            $policyUpdateStruct->getLimitations()
+        );
+
         $spiPolicy->id = $policy->id;
         $spiPolicy->roleId = $policy->roleId;
 
@@ -400,7 +407,11 @@ class RoleService implements RoleServiceInterface
             $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
         }
 
-        $this->persistenceHandler->userHandler()->assignRole( $userGroup->id, $role->id, $spiRoleLimitation );
+        $this->persistenceHandler->userHandler()->assignRole(
+            $userGroup->id,
+            $role->id,
+            $spiRoleLimitation
+        );
     }
 
     /**
@@ -464,7 +475,11 @@ class RoleService implements RoleServiceInterface
             $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
         }
 
-        $this->persistenceHandler->userHandler()->assignRole( $user->id, $role->id, $spiRoleLimitation );
+        $this->persistenceHandler->userHandler()->assignRole(
+            $user->id,
+            $role->id,
+            $spiRoleLimitation
+        );
     }
 
     /**
@@ -533,24 +548,28 @@ class RoleService implements RoleServiceInterface
                 $userGroup = $this->repository->getUserService()->loadUserGroup( $groupId );
                 if ( $userGroup !== null )
                 {
-                    $roleAssignments[] = new UserGroupRoleAssignment( array(
-                        // @todo: add limitation
-                        'limitation' => null,
-                        'role'       => $this->buildDomainRoleObject( $spiRole ),
-                        'userGroup'  => $userGroup
-                    ) );
+                    $roleAssignments[] = new UserGroupRoleAssignment(
+                        array(
+                            // @todo: add limitation
+                            'limitation' => null,
+                            'role'       => $this->buildDomainRoleObject( $spiRole ),
+                            'userGroup'  => $userGroup
+                        )
+                    );
                 }
                 else
                 {
                     $user = $this->repository->getUserService()->loadUser( $groupId );
                     if ( $user !== null )
                     {
-                        $roleAssignments[] = new UserRoleAssignment( array(
-                            // @todo: add limitation
-                            'limitation' => null,
-                            'role'       => $this->buildDomainRoleObject( $spiRole ),
-                            'user'       => $user
-                        ) );
+                        $roleAssignments[] = new UserRoleAssignment(
+                            array(
+                                // @todo: add limitation
+                                'limitation' => null,
+                                'role'       => $this->buildDomainRoleObject( $spiRole ),
+                                'user'       => $user
+                            )
+                        );
                     }
                 }
             }
@@ -580,12 +599,14 @@ class RoleService implements RoleServiceInterface
         {
             foreach ( $spiRoles as $spiRole )
             {
-                $roleAssignments[] = new UserRoleAssignment( array(
-                    // @todo: add limitation
-                    'limitation' => null,
-                    'role'       => $this->buildDomainRoleObject( $spiRole ),
-                    'user'       => $user
-                ) );
+                $roleAssignments[] = new UserRoleAssignment(
+                    array(
+                        // @todo: add limitation
+                        'limitation' => null,
+                        'role'       => $this->buildDomainRoleObject( $spiRole ),
+                        'user'       => $user
+                    )
+                );
             }
         }
 
@@ -613,12 +634,14 @@ class RoleService implements RoleServiceInterface
         {
             foreach ( $spiRoles as $spiRole )
             {
-                $roleAssignments[] = new UserGroupRoleAssignment( array(
-                    // @todo: add limitation
-                    'limitation' => null,
-                    'role'       => $this->buildDomainRoleObject( $spiRole ),
-                    'userGroup'  => $userGroup
-                ) );
+                $roleAssignments[] = new UserGroupRoleAssignment(
+                    array(
+                        // @todo: add limitation
+                        'limitation' => null,
+                        'role'       => $this->buildDomainRoleObject( $spiRole ),
+                        'userGroup'  => $userGroup
+                    )
+                );
             }
         }
 
@@ -634,12 +657,14 @@ class RoleService implements RoleServiceInterface
      */
     public function newRoleCreateStruct( $name )
     {
-        return new RoleCreateStruct( array(
-            'identifier'   => $name,
-            'names'        => array(),
-            'descriptions' => array(),
-            'policies'     => array()
-        ) );
+        return new RoleCreateStruct(
+            array(
+                'identifier'   => $name,
+                'names'        => array(),
+                'descriptions' => array(),
+                'policies'     => array()
+            )
+        );
     }
 
     /**
@@ -652,11 +677,13 @@ class RoleService implements RoleServiceInterface
      */
     public function newPolicyCreateStruct( $module, $function )
     {
-        return new PolicyCreateStruct( array(
-            'module'      => $module,
-            'function'    => $function,
-            'limitations' => array()
-        ) );
+        return new PolicyCreateStruct(
+            array(
+                'module'      => $module,
+                'function'    => $function,
+                'limitations' => array()
+            )
+        );
     }
 
     /**
@@ -666,9 +693,11 @@ class RoleService implements RoleServiceInterface
      */
     public function newPolicyUpdateStruct()
     {
-        return new PolicyUpdateStruct( array(
-            'limitations' => array()
-        ) );
+        return new PolicyUpdateStruct(
+            array(
+                'limitations' => array()
+            )
+        );
     }
 
     /**
@@ -696,15 +725,17 @@ class RoleService implements RoleServiceInterface
             $rolePolicies[] = $this->buildDomainPolicyObject( $spiPolicy );
         }
 
-        return new Role( array(
-            'id'               => $role->id,
-            'identifier'       => $role->identifier,
-            //@todo: add main language code
-            'mainLanguageCode' => null,
-            'names'            => $role->name,
-            'descriptions'     => $role->description,
-            'policies'         => $rolePolicies
-        ) );
+        return new Role(
+            array(
+                'id'               => $role->id,
+                'identifier'       => $role->identifier,
+                //@todo: add main language code
+                'mainLanguageCode' => null,
+                'names'            => $role->name,
+                'descriptions'     => $role->description,
+                'policies'         => $rolePolicies
+            )
+        );
     }
 
     /**
@@ -729,13 +760,15 @@ class RoleService implements RoleServiceInterface
             }
         }
 
-        return new Policy( array(
-            'id'          => $policy->id,
-            'roleId'      => $policy->roleId,
-            'module'      => $policy->module,
-            'function'    => $policy->function,
-            'limitations' => $policyLimitations
-        ) );
+        return new Policy(
+            array(
+                'id'          => $policy->id,
+                'roleId'      => $policy->roleId,
+                'module'      => $policy->module,
+                'function'    => $policy->function,
+                'limitations' => $policyLimitations
+            )
+        );
     }
 
     /**
@@ -748,7 +781,7 @@ class RoleService implements RoleServiceInterface
      */
     protected function getLimitationFromIdentifier( $identifier )
     {
-        switch( $identifier )
+        switch ( $identifier )
         {
             case Limitation::CONTENTTYPE :
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
@@ -822,19 +855,23 @@ class RoleService implements RoleServiceInterface
         {
             foreach ( $policyCreateStructs as $policyCreateStruct )
             {
-                $policiesToCreate[] = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
-                                                                           $policyCreateStruct->function,
-                                                                           $policyCreateStruct->getLimitations() );
+                $policiesToCreate[] = $this->buildPersistencePolicyObject(
+                    $policyCreateStruct->module,
+                    $policyCreateStruct->function,
+                    $policyCreateStruct->getLimitations()
+                );
             }
         }
 
-        return new SPIRole( array(
-            'identifier'  => $roleCreateStruct->identifier,
-            //@todo: main language code ?
-            'name'        => $roleCreateStruct->names,
-            'description' => $roleCreateStruct->descriptions,
-            'policies'    => $policiesToCreate
-        ) );
+        return new SPIRole(
+            array(
+                'identifier'  => $roleCreateStruct->identifier,
+                //@todo: main language code ?
+                'name'        => $roleCreateStruct->names,
+                'description' => $roleCreateStruct->descriptions,
+                'policies'    => $policiesToCreate
+            )
+        );
     }
 
     /**
@@ -858,10 +895,12 @@ class RoleService implements RoleServiceInterface
             }
         }
 
-        return new SPIPolicy( array(
-            'module'      => $module,
-            'function'    => $function,
-            'limitations' => $limitationsToCreate
-        ) );
+        return new SPIPolicy(
+            array(
+                'module'      => $module,
+                'function'    => $function,
+                'limitations' => $limitationsToCreate
+            )
+        );
     }
 }

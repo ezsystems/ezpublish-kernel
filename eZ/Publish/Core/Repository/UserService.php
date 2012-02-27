@@ -170,12 +170,15 @@ class UserService implements UserServiceInterface
     protected function searchSubGroups( Location $location )
     {
         $searchQuery = new Query();
-        $searchQuery->criterion = new CriterionLogicalAnd( array(
-            //@todo: read user group type ID from INI settings
-            new CriterionContentTypeId( 3 ),
-            new CriterionParentLocationId( $location->id ),
-            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
-        ) );
+
+        $searchQuery->criterion = new CriterionLogicalAnd(
+            array(
+                //@todo: read user group type ID from INI settings
+                new CriterionContentTypeId( 3 ),
+                new CriterionParentLocationId( $location->id ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+            )
+        );
 
         return $this->repository->getContentService()->findContent( $searchQuery, array() );
     }
@@ -261,7 +264,12 @@ class UserService implements UserServiceInterface
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
         $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
-        $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userGroupUpdateStruct->contentUpdateStruct );
+
+        $contentDraft = $contentService->updateContent(
+            $contentDraft->getVersionInfo(),
+            $userGroupUpdateStruct->contentUpdateStruct
+        );
+
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         $publishedContent = $contentService->updateContentMetadata(
@@ -318,19 +326,24 @@ class UserService implements UserServiceInterface
         $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
-        $spiUser = $this->persistenceHandler->userHandler()->create( new SPIUser( array(
-            'login'         => $userCreateStruct->login,
-            'email'         => $userCreateStruct->email,
-            // @todo: read password hash algorithm and site from INI settings
-            'passwordHash'  => $this->createPasswordHash(
-                $userCreateStruct->login,
-                $userCreateStruct->password,
-                'ez.no',
-                User::PASSWORD_HASH_MD5_USER ),
-            'hashAlgorithm' => null,
-            'isEnabled'     => $userCreateStruct->enabled,
-            'maxLogin'      => 0
-        ) ) );
+        $spiUser = $this->persistenceHandler->userHandler()->create(
+            new SPIUser(
+                array(
+                    'login'         => $userCreateStruct->login,
+                    'email'         => $userCreateStruct->email,
+                    // @todo: read password hash algorithm and site from INI settings
+                    'passwordHash'  => $this->createPasswordHash(
+                        $userCreateStruct->login,
+                        $userCreateStruct->password,
+                        'ez.no',
+                        User::PASSWORD_HASH_MD5_USER
+                    ),
+                    'hashAlgorithm' => null,
+                    'isEnabled'     => $userCreateStruct->enabled,
+                    'maxLogin'      => 0
+                )
+            )
+        );
 
         return $this->buildDomainUserObject( $spiUser, $publishedContent );
     }
@@ -456,7 +469,12 @@ class UserService implements UserServiceInterface
         $loadedUser = $this->loadUser( $user->id );
 
         $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
-        $contentDraft = $contentService->updateContent( $contentDraft->getVersionInfo(), $userUpdateStruct->contentUpdateStruct );
+
+        $contentDraft = $contentService->updateContent(
+            $contentDraft->getVersionInfo(),
+            $userUpdateStruct->contentUpdateStruct
+        );
+
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         $contentService->updateContentMetadata(
@@ -464,18 +482,22 @@ class UserService implements UserServiceInterface
             $userUpdateStruct->contentMetaDataUpdateStruct
         );
 
-        $this->persistenceHandler->userHandler()->update( new SPIUser( array(
-            'id'            => $loadedUser->id,
-            'login'         => $loadedUser->login,
-            'email'         => $userUpdateStruct->email !== null ? $userUpdateStruct->email : $loadedUser->email,
-            // @todo: read password hash algorithm and site from INI settings
-            'passwordHash'  => $userUpdateStruct->password !== null ?
-                $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, 'ez.no', User::PASSWORD_HASH_MD5_USER ) :
-                $loadedUser->passwordHash,
-            'hashAlgorithm' => null,
-            'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
-            'maxLogin'      => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
-        ) ) );
+        $this->persistenceHandler->userHandler()->update(
+            new SPIUser(
+                array(
+                    'id'            => $loadedUser->id,
+                    'login'         => $loadedUser->login,
+                    'email'         => $userUpdateStruct->email !== null ? $userUpdateStruct->email : $loadedUser->email,
+                    // @todo: read password hash algorithm and site from INI settings
+                    'passwordHash'  => $userUpdateStruct->password !== null ?
+                        $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, 'ez.no', User::PASSWORD_HASH_MD5_USER ) :
+                        $loadedUser->passwordHash,
+                    'hashAlgorithm' => null,
+                    'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
+                    'maxLogin'      => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+                )
+            )
+        );
     }
 
     /**
@@ -516,7 +538,11 @@ class UserService implements UserServiceInterface
             return;
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
-        $locationService->createLocation( $loadedUser->getVersionInfo()->getContentInfo(), $locationCreateStruct );
+
+        $locationService->createLocation(
+            $loadedUser->getVersionInfo()->getContentInfo(),
+            $locationCreateStruct
+        );
     }
 
     /**
@@ -573,15 +599,17 @@ class UserService implements UserServiceInterface
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
-        return new UserCreateStruct( array(
-            'contentType'      => $contentType,
-            'mainLanguageCode' => $mainLanguageCode,
-            'login'            => $login,
-            'email'            => $email,
-            'password'         => $password,
-            'enabled'          => true,
-            'fields'           => array(),
-        ) );
+        return new UserCreateStruct(
+            array(
+                'contentType'      => $contentType,
+                'mainLanguageCode' => $mainLanguageCode,
+                'login'            => $login,
+                'email'            => $email,
+                'password'         => $password,
+                'enabled'          => true,
+                'fields'           => array(),
+            )
+        );
     }
 
     /**
@@ -594,11 +622,13 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
-        return new UserGroupCreateStruct( array(
-            'contentType'      => $contentType,
-            'mainLanguageCode' => $mainLanguageCode,
-            'fields'           => array(),
-        ) );
+        return new UserGroupCreateStruct(
+            array(
+                'contentType'      => $contentType,
+                'mainLanguageCode' => $mainLanguageCode,
+                'fields'           => array(),
+            )
+        );
     }
 
     /**
@@ -612,10 +642,12 @@ class UserService implements UserServiceInterface
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentMetaDataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
 
-        return new UserUpdateStruct( array(
-            'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
-            'contentUpdateStruct'         => $contentUpdateStruct
-        ) );
+        return new UserUpdateStruct(
+            array(
+                'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
+                'contentUpdateStruct'         => $contentUpdateStruct
+            )
+        );
     }
 
     /**
@@ -629,10 +661,12 @@ class UserService implements UserServiceInterface
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentMetaDataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
 
-        return new UserGroupUpdateStruct( array(
-            'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
-            'contentUpdateStruct'         => $contentUpdateStruct
-        ) );
+        return new UserGroupUpdateStruct(
+            array(
+                'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
+                'contentUpdateStruct'         => $contentUpdateStruct
+            )
+        );
     }
 
     /**
@@ -654,14 +688,16 @@ class UserService implements UserServiceInterface
             $subGroupCount = $subGroups->count;
         }
 
-        return new UserGroup( array(
-            'versionInfo'   => $content->getVersionInfo(),
-            'fields'        => $content->getFields(),
-            'relations'     => $content->getRelations(),
-            'id'            => $contentInfo->contentId,
-            'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
-            'subGroupCount' => $subGroupCount
-        ) );
+        return new UserGroup(
+            array(
+                'versionInfo'   => $content->getVersionInfo(),
+                'fields'        => $content->getFields(),
+                'relations'     => $content->getRelations(),
+                'id'            => $contentInfo->contentId,
+                'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
+                'subGroupCount' => $subGroupCount
+            )
+        );
     }
 
     /**
@@ -677,18 +713,20 @@ class UserService implements UserServiceInterface
         if ( $content === null )
             $content = $this->repository->getContentService()->loadContent( $spiUser->id );
 
-        return new User( array(
-            'versionInfo'   => $content->getVersionInfo(),
-            'fields'        => $content->getFields(),
-            'relations'     => $content->getRelations(),
-            'id'            => $spiUser->id,
-            'login'         => $spiUser->login,
-            'email'         => $spiUser->email,
-            'passwordHash'  => $spiUser->passwordHash,
-            'hashAlgorithm' => $spiUser->hashAlgorithm,
-            'isEnabled'     => $spiUser->isEnabled,
-            'maxLogin'      => $spiUser->maxLogin,
-        ) );
+        return new User(
+            array(
+                'versionInfo'   => $content->getVersionInfo(),
+                'fields'        => $content->getFields(),
+                'relations'     => $content->getRelations(),
+                'id'            => $spiUser->id,
+                'login'         => $spiUser->login,
+                'email'         => $spiUser->email,
+                'passwordHash'  => $spiUser->passwordHash,
+                'hashAlgorithm' => $spiUser->hashAlgorithm,
+                'isEnabled'     => $spiUser->isEnabled,
+                'maxLogin'      => $spiUser->maxLogin,
+            )
+        );
     }
 
     /**

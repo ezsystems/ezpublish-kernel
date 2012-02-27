@@ -82,11 +82,13 @@ class SectionService implements SectionServiceInterface
             $sectionCreateStruct->identifier
         );
 
-        return new Section( array(
-            'id'         => $createdSection->id,
-            'identifier' => $createdSection->identifier,
-            'name'       => $createdSection->name
-        ) );
+        return new Section(
+            array(
+                'id'         => $createdSection->id,
+                'identifier' => $createdSection->identifier,
+                'name'       => $createdSection->name
+            )
+        );
     }
 
     /**
@@ -130,11 +132,13 @@ class SectionService implements SectionServiceInterface
             $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $loadedSection->identifier
         );
 
-        return new Section( array(
-            'id'         => $spiSection->id,
-            'identifier' => $spiSection->identifier,
-            'name'       => $spiSection->name
-        ) );
+        return new Section(
+            array(
+                'id'         => $spiSection->id,
+                'identifier' => $spiSection->identifier,
+                'name'       => $spiSection->name
+            )
+        );
     }
 
     /**
@@ -161,11 +165,13 @@ class SectionService implements SectionServiceInterface
             throw new NotFoundException( "section", $sectionId, $e );
         }
 
-        return new Section( array(
-            'id'         => $section->id,
-            'identifier' => $section->identifier,
-            'name'       => $section->name
-        ) );
+        return new Section(
+            array(
+                'id'         => $section->id,
+                'identifier' => $section->identifier,
+                'name'       => $section->name
+            )
+        );
     }
 
     /**
@@ -188,11 +194,13 @@ class SectionService implements SectionServiceInterface
 
         foreach ( $allSections as $section )
         {
-            $returnArray[] = new Section( array(
-                'id'         => $section->id,
-                'identifier' => $section->identifier,
-                'name'       => $section->name
-            ) );
+            $returnArray[] = new Section(
+                array(
+                    'id'         => $section->id,
+                    'identifier' => $section->identifier,
+                    'name'       => $section->name
+                )
+            );
         }
 
         return $returnArray;
@@ -222,11 +230,13 @@ class SectionService implements SectionServiceInterface
             throw new NotFoundException( "section", $sectionIdentifier, $e );
         }
 
-        return new Section( array(
-            'id'         => $section->id,
-            'identifier' => $section->identifier,
-            'name'       => $section->name
-        ) );
+        return new Section(
+            array(
+                'id'         => $section->id,
+                'identifier' => $section->identifier,
+                'name'       => $section->name
+            )
+        );
     }
 
     /**
@@ -264,7 +274,10 @@ class SectionService implements SectionServiceInterface
         $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->contentId );
         $loadedSection = $this->loadSection( $section->id );
 
-        $this->persistenceHandler->sectionHandler()->assign( $loadedSection->id, $loadedContentInfo->contentId );
+        $this->persistenceHandler->sectionHandler()->assign(
+            $loadedSection->id,
+            $loadedContentInfo->contentId
+        );
     }
 
     /**

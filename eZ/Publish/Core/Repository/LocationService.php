@@ -91,7 +91,11 @@ class LocationService implements LocationServiceInterface
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
             throw new IllegalArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
-        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $loadedSubtree->id, $loadedTargetLocation->id );
+        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
+            $loadedSubtree->id,
+            $loadedTargetLocation->id
+        );
+
         return $this->buildDomainLocationObject( $newLocation );
     }
 
@@ -137,10 +141,12 @@ class LocationService implements LocationServiceInterface
         if ( !is_string( $remoteId ) )
             throw new InvalidArgumentValue( "remoteId", $remoteId );
 
-        $searchCriterion = new CriterionLogicalAnd( array(
-            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-            new CriterionLocationRemoteId( $remoteId )
-        ) );
+        $searchCriterion = new CriterionLogicalAnd(
+            array(
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                new CriterionLocationRemoteId( $remoteId )
+            )
+        );
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
 
@@ -174,10 +180,12 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $contentInfo->contentId ) )
             throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
 
-        $searchCriterion = new CriterionLogicalAnd( array(
-            new CriterionContentId( $contentInfo->contentId ),
-            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-        ) );
+        $searchCriterion = new CriterionLogicalAnd(
+            array(
+                new CriterionContentId( $contentInfo->contentId ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+            )
+        );
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
 
@@ -218,10 +226,12 @@ class LocationService implements LocationServiceInterface
         if ( $rootLocation !== null && !is_string( $rootLocation->pathString ) )
             throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
 
-        $searchCriterion = new CriterionLogicalAnd( array(
-            new CriterionContentId( $contentInfo->contentId ),
-            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-        ) );
+        $searchCriterion = new CriterionLogicalAnd(
+            array(
+                new CriterionContentId( $contentInfo->contentId ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+            )
+        );
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
 
@@ -269,7 +279,14 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $limit ) )
             throw new InvalidArgumentValue( "limit", $limit );
 
-        $searchResult = $this->searchChildrenLocations( $location->id, $location->sortField, $location->sortOrder, $offset, $limit );
+        $searchResult = $this->searchChildrenLocations(
+            $location->id,
+            $location->sortField,
+            $location->sortOrder,
+            $offset,
+            $limit
+        );
+
         if ( !$searchResult || $searchResult->count == 0 )
             return array();
 
@@ -302,16 +319,23 @@ class LocationService implements LocationServiceInterface
      */
     protected function searchChildrenLocations( $parentLocationId, $sortField, $sortOrder, $offset = 0, $limit = -1 )
     {
-        $searchCriterion = new CriterionLogicalAnd( array(
-            new CriterionParentLocationId( $parentLocationId ),
-            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-        ) );
+        $searchCriterion = new CriterionLogicalAnd(
+            array(
+                new CriterionParentLocationId( $parentLocationId ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+            )
+        );
 
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
             $offset,
             $limit > 0 ? $limit : null,
-            array( $this->getSortClauseBySortField( $sortField, $sortOrder ) )
+            array(
+                $this->getSortClauseBySortField(
+                    $sortField,
+                    $sortOrder
+                )
+            )
         );
     }
 
@@ -374,10 +398,14 @@ class LocationService implements LocationServiceInterface
         $loadedParentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
         // check if the content already has location below specified parent ID
-        $searchResult = $this->persistenceHandler->searchHandler()->find( new CriterionLogicalAnd( array(
-            new CriterionContentId( $contentInfo->contentId ),
-            new CriterionParentLocationId( $loadedParentLocation->id ),
-        ) ) );
+        $searchResult = $this->persistenceHandler->searchHandler()->find(
+            new CriterionLogicalAnd(
+                array(
+                    new CriterionContentId( $contentInfo->contentId ),
+                    new CriterionParentLocationId( $loadedParentLocation->id ),
+                )
+            )
+        );
 
         if ( $searchResult->count > 0 )
             throw new IllegalArgumentException( "contentInfo", "content is already below the specified parent" );
@@ -619,9 +647,11 @@ class LocationService implements LocationServiceInterface
      */
     public function newLocationCreateStruct( $parentLocationId )
     {
-        return new LocationCreateStruct( array(
-            'parentLocationId' => (int) $parentLocationId
-        ) );
+        return new LocationCreateStruct(
+            array(
+                'parentLocationId' => (int) $parentLocationId
+            )
+        );
     }
 
     /**
@@ -644,23 +674,30 @@ class LocationService implements LocationServiceInterface
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
-        $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, $spiLocation->sortField, $spiLocation->sortOrder );
 
-        return new Location( array(
-            'contentInfo'              => $contentInfo,
-            'id'                       => $spiLocation->id,
-            'priority'                 => $spiLocation->priority,
-            'hidden'                   => $spiLocation->hidden,
-            'invisible'                => $spiLocation->invisible,
-            'remoteId'                 => $spiLocation->remoteId,
-            'parentLocationId'         => $spiLocation->parentId,
-            'pathString'               => $spiLocation->pathString,
-            'modifiedSubLocationDate'  => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
-            'depth'                    => $spiLocation->depth,
-            'sortField'                => $spiLocation->sortField,
-            'sortOrder'                => $spiLocation->sortOrder,
-            'childCount'               => $childrenLocations ? $childrenLocations->count : 0
-        ) );
+        $childrenLocations = $this->searchChildrenLocations(
+            $spiLocation->id,
+            $spiLocation->sortField,
+            $spiLocation->sortOrder
+        );
+
+        return new Location(
+            array(
+                'contentInfo'             => $contentInfo,
+                'id'                      => $spiLocation->id,
+                'priority'                => $spiLocation->priority,
+                'hidden'                  => $spiLocation->hidden,
+                'invisible'               => $spiLocation->invisible,
+                'remoteId'                => $spiLocation->remoteId,
+                'parentLocationId'        => $spiLocation->parentId,
+                'pathString'              => $spiLocation->pathString,
+                'modifiedSubLocationDate' => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
+                'depth'                   => $spiLocation->depth,
+                'sortField'               => $spiLocation->sortField,
+                'sortOrder'               => $spiLocation->sortOrder,
+                'childCount'              => $childrenLocations ? $childrenLocations->count : 0
+            )
+        );
     }
 
     /**
