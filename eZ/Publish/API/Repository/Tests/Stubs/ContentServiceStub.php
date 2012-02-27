@@ -141,14 +141,7 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
-        foreach ( $this->versionInfo as $versionInfo )
-        {
-            if ( $versionInfo->contentId === $contentInfo->contentId )
-            {
-                return $versionInfo;
-            }
-        }
-        // TODO: Implement loadVersionInfo() method.
+        return $this->loadVersionInfoById( $contentInfo->contentId, $versionNo );
     }
 
     /**
@@ -166,7 +159,18 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
-        // TODO: Implement loadVersionInfoById() method.
+        foreach ( $this->versionInfo as $versionInfo )
+        {
+            if ( $versionNo > 0 && $versionInfo->versionNo != $versionNo )
+            {
+                continue;
+            }
+            if ( $versionInfo->contentId === $contentId )
+            {
+                return $versionInfo;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
