@@ -193,10 +193,10 @@ interface ContentService
     public function deleteContent( ContentInfo $contentInfo );
 
     /**
-     * creates a draft from a publshed or archived version. 
+     * creates a draft from a published or archived version.
      * 
      * If no version is given, the current published version is used.
-     * 4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.
+     * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
