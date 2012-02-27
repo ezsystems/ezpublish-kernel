@@ -13,7 +13,7 @@ class ContentMetaDataUpdateStruct extends ValueObject
     /**
      * If set this value changes the owner id of the content object
      *
-     * @var integer
+     * @var mixed
      */
     public $ownerId = null;
 

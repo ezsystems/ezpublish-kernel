@@ -19,7 +19,7 @@ class ContentTypeGroupUpdateStruct extends ValueObject
     /**
      * if set this value overrides the current user as modifier
      *
-     * @var int
+     * @var mixed
      */
     public $modifierId = null;
 

@@ -17,8 +17,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
  * @property-read string $identifier the identifier of the content type
  * @property-read \DateTime $creationDate the date of the creation of this content type
  * @property-read \DateTime $modificationDate the date of the last modification of this content type
- * @property-read int $creatorId the user id of the creator of this content type
- * @property-read int $modifierId the user id of the user which has last modified this content type
+ * @property-read mixed $creatorId the user id of the creator of this content type
+ * @property-read mixed $modifierId the user id of the user which has last modified this content type
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
@@ -173,7 +173,7 @@ abstract class ContentType extends ValueObject
     /**
      * Main language
      *
-     * @var mixed
+     * @var string
      */
     protected $mainLanguageCode;
 

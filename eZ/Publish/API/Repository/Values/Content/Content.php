@@ -11,7 +11,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
  *
  * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
  * @property-read ContentType $contentType convenience getter for $contentInfo->contentType
- * @property-read int $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
+ * @property-read mixed $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
  * @property-read VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields
  * @property-read array $relations calls getRelations()

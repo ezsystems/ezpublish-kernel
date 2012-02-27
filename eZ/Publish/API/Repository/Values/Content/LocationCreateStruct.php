@@ -61,7 +61,7 @@ class LocationCreateStruct extends ValueObject
 
     /**
      * The id of the parent location under which the new location should be created.
-     * @var int
+     * @var mixed
      */
     public $parentLocationId;
 }

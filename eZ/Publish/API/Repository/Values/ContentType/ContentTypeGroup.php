@@ -17,8 +17,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $identifier the identifier of the content type group
  * @property-read \DateTime $creationDate the date of the creation of this content type group
  * @property-read \DateTime $modificationDate the date of the last modification of this content type group
- * @property-read int $creatorId the user id of the creator of this content type group
- * @property-read int $modifierId the user id of the user which has last modified this content type group
+ * @property-read mixed $creatorId the user id of the creator of this content type group
+ * @property-read mixed $modifierId the user id of the user which has last modified this content type group
  * @property-read string $mainLanguageCode 5.0, the main language of the content type group names and description used for fallback.
  *
  */

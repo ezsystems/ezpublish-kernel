@@ -74,7 +74,7 @@ class ContentTypeUpdateStruct extends ValueObject
     /**
      * If set this value overrides the current user as creator
      *
-     * @var int
+     * @var mixed
      */
     public $modifierId = null;
 

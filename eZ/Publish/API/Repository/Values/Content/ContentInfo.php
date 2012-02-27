@@ -10,12 +10,12 @@ use DateTime;
  * This class provides all version independent information of the content object.
  * 
  * @property-read eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType calls {@link getContentType()}
- * @property-read int $contentId The unique id of the content object
+ * @property-read mixed $contentId The unique id of the content object
  * @property-read string $name the computed name (via name schema) in the main language of the content object
- * @property-read int $sectionId the section to which the content is assigned
+ * @property-read mixed $sectionId the section to which the content is assigned
  * @property-read int $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).
  * @property-read boolean $published true if there exists a published version false otherwise
- * @property-read int $ownerId the user id of the owner of the content
+ * @property-read mixed $ownerId the user id of the owner of the content
  * @property-read DateTime $modificationDate Content modification date
  * @property-read DateTime $publishedDate date of the last publish operation
  * @property-read boolean $alwaysAvailable Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
@@ -45,7 +45,7 @@ abstract class ContentInfo extends ValueObject
 
     /**
      * the section to which the content is assigned
-     * @var int
+     * @var mixed
      */
     protected $sectionId;
 
@@ -68,7 +68,7 @@ abstract class ContentInfo extends ValueObject
     /**
      * the owner of this content object
      *
-     * @var int
+     * @var mixed
      */
     protected $ownerId;
 

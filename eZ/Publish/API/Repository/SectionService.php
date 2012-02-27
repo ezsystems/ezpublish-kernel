@@ -49,7 +49,7 @@ interface SectionService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @param int $sectionId
+     * @param mixed $sectionId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */

@@ -8,19 +8,19 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * This class represents a location in the repository
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
- * @property-read int $contentId calls getContent()->contentId
- * @property-read int $id the id of the location
+ * @property-read mixed $contentId calls getContent()->contentId
+ * @property-read mixed $id the id of the location
  * @property-read int $priority Position of the Location among its siblings when sorted using priority
  * @property-read boolean $hidden Indicates that the Location is implicitly marked as hidden by a parent location.
  * @property-read boolean $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
  * @property-read string $remoteId a global unique id of the content object
- * @property-read int $parentLocationId the id of the parent location
+ * @property-read mixed $parentLocationId the id of the parent location
  * @property-read string $pathString the path to this location e.g. /1/2/4/23
  * @property-read \DateTime $modifiedSubLocationDate Date of the latest update of a content object in a sub location.
  * @property-read int $depth Depth location has in the location tree
  * @property-read int $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $sortOrder Specifies whether the sort order should be ascending or descending. Valid values are {@link Location::SORT_ORDER_*}
- * @property-read int $childrenCount the number of children visible to the authenticated user which has loaded this instance.
+ * @property-read int $childCount the number of children visible to the authenticated user which has loaded this instance.
  */
 abstract class Location extends ValueObject
 {

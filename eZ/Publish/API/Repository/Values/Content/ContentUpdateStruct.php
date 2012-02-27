@@ -9,7 +9,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class ContentUpdateStruct extends ValueObject
 {
     /**
-     * @var integer modifier of the new version. If not set the current authenticated user is used.
+     * @var mixed modifier of the new version. If not set the current authenticated user is used.
      */
     public $userId;
 

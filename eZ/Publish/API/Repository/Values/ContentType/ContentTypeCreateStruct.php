@@ -104,7 +104,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
 
     /**
      * if set this value overrides the current user as creator
-     * @var int
+     * @var mixed
      */
     public $creatorId = null;
 

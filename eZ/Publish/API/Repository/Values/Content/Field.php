@@ -6,7 +6,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class represents a field of a content object
  * 
- * @property-read int $id an internal id of the field
+ * @property-read mixed $id an internal id of the field
  * @property-read string $fieldDefIdentifier the field definition identifier
  * @property-read $value the value of the field
  * @property-read string $languageCode the language code of the field
@@ -18,7 +18,7 @@ class Field extends ValueObject
      *
      * @todo may be not needed
      *
-     * @var int
+     * @var mixed
      */
     protected $id;
 

@@ -6,7 +6,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 /**
  * Class representing a relation between content.
  * 
- * @property-read int $id the internal id of the relation
+ * @property-read mixed $id the internal id of the relation
  * @property-read string $sourceFieldDefinitionIdentifier the field definition identifier of the field where this relation is anchored if the relation is of type EMBED, LINK, or ATTRIBUTE
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $sourceContentInfo - calls {@link getSourceContentInfo()}
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContentInfo - calls {@link getDestinationContentInfo()}

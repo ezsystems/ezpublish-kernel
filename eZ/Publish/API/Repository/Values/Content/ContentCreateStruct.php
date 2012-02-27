@@ -21,14 +21,14 @@ abstract class ContentCreateStruct extends ValueObject
      * The section the content is assigned to.
      * If not set the section of the parent is used or a default section.
      *
-     * @var int
+     * @var mixed
      */
     public $sectionId = null;
 
     /**
      * The owner of the content. If not given the current authenticated user is set as owner.
      *
-     * @var int
+     * @var mixed
      */
     public $ownerId = null;
 
