@@ -551,7 +551,7 @@ class SectionServiceTest extends BaseTest
      */
     public function testDeleteSectionAfterAssignedContentsWereDeleted()
     {
-        $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for SectionService::deleteSection() is not implemented." );
     }
 
     /**

@@ -25,6 +25,7 @@ use \eZ\Publish\API\Repository\Values\User\User;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
@@ -364,6 +365,11 @@ class ContentServiceStub implements ContentService
                     )
                 );
             }
+        }
+
+        if ( $this->remoteIdExists( $contentCreateStruct->remoteId ) )
+        {
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $languageCodes = array( $contentCreateStruct->mainLanguageCode );
@@ -872,6 +878,25 @@ class ContentServiceStub implements ContentService
     public function newTranslationValues()
     {
         // TODO: Implement newTranslationValues() method.
+    }
+
+    /**
+     * Tests if the given <b>$remoteId</b> already exists.
+     *
+     * @param string $remoteId
+     *
+     * @return boolean
+     */
+    private function remoteIdExists( $remoteId )
+    {
+        foreach ( $this->contentInfo as $contentInfo )
+        {
+            if ( $remoteId === $contentInfo->remoteId )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

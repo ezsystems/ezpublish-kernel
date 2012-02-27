@@ -2182,7 +2182,7 @@ class ContentTypeServiceTest extends BaseTest
     public function testDeleteContentTypeThrowsBadStateException()
     {
         // TODO: Needs existsing content objects
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::deleteContentType() is not implemented." );
     }
 
     /**
@@ -2306,7 +2306,7 @@ class ContentTypeServiceTest extends BaseTest
     public function testCopyContentTypeWithSecondParameter()
     {
         // TODO: Needs UserService
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::copyContentType() is not implemented." );
     }
 
     /**

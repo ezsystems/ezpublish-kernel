@@ -211,7 +211,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -219,11 +219,38 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentThrowsInvalidArgumentException()
+    public function testCreateContentThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateOne = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateOne->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateOne->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateOne->alwaysAvailable = true;
+
+        $contentService->createContent( $contentCreateOne );
+
+        $contentCreateTwo = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreateTwo->setField( 'title', 'Another awesome story about eZ Publish' );
+
+        $contentCreateTwo->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateTwo->alwaysAvailable = false;
+
+        // This call will fail with an "IllegalArgumentException", because the
+        // remoteId is already in use.
+        $contentService->createContent( $contentCreateTwo );
+        /* END: Use Case */
     }
 
     /**
@@ -231,11 +258,11 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
-    public function testCreateContentThrowsInvalidArgumentExceptionWithSecondParameter()
+    public function testCreateContentThrowsIllegalArgumentExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -247,7 +274,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -259,7 +286,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentFieldValidationExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -271,7 +298,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -283,7 +310,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentValidationExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -407,7 +434,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadVersionInfoWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfo() is not implemented." );
     }
 
     /**
@@ -420,7 +447,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadVersionInfoThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfo() is not implemented." );
     }
 
     /**
@@ -432,7 +459,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadVersionInfoThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfo() is not implemented." );
     }
 
     /**
@@ -468,7 +495,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadVersionInfoByIdWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfoById() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfoById() is not implemented." );
     }
 
     /**
@@ -500,7 +527,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadVersionInfoByIdThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfoById() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfoById() is not implemented." );
     }
 
     /**
@@ -539,7 +566,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByContentInfoWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
     }
 
     /**
@@ -551,7 +578,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByContentInfoWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
     }
 
     /**
@@ -564,7 +591,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByContentInfoThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
     }
 
     /**
@@ -576,7 +603,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByContentInfoThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
     }
 
     /**
@@ -588,7 +615,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByContentInfoThrowsNotFoundExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
     }
 
     /**
@@ -630,7 +657,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByVersionInfoWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByVersionInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByVersionInfo() is not implemented." );
     }
 
     /**
@@ -666,7 +693,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -678,7 +705,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -710,7 +737,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -722,7 +749,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -758,7 +785,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByRemoteIdWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
@@ -770,7 +797,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByRemoteIdWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
@@ -782,7 +809,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
@@ -794,7 +821,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
@@ -806,7 +833,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
@@ -818,7 +845,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentMetadata()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContentMetadata() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
     }
 
     /**
@@ -830,7 +857,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentMetadataThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContentMetadata() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
     }
 
     /**
@@ -842,7 +869,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteContent() is not implemented." );
     }
 
     /**
@@ -854,7 +881,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersion()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -866,7 +893,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -878,7 +905,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -890,7 +917,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsBadStateExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -902,7 +929,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -914,7 +941,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentValidationExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -926,7 +953,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -938,7 +965,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentFieldValidationExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -950,7 +977,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
     }
 
     /**
@@ -962,7 +989,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
     }
 
     /**
@@ -974,7 +1001,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
     }
 
     /**
@@ -986,7 +1013,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
     }
 
     /**
@@ -1445,7 +1472,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentDraftWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContentDraft() is not implemented." );
     }
 
     /**
@@ -1492,7 +1519,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentDraftThrowsBadStateExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContentDraft() is not implemented." );
     }
 
     /**
@@ -1504,7 +1531,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentDrafts()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
     }
 
     /**
@@ -1516,7 +1543,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentDraftsWithFirstParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
     }
 
     /**
@@ -1528,7 +1555,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteVersion()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteVersion() is not implemented." );
     }
 
     /**
@@ -1540,7 +1567,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteVersionThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteVersion() is not implemented." );
     }
 
     /**
@@ -1552,7 +1579,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadVersions()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersions() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersions() is not implemented." );
     }
 
     /**
@@ -1564,7 +1591,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCopyContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::copyContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
     }
 
     /**
@@ -1576,7 +1603,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCopyContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::copyContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
     }
 
     /**
@@ -1588,7 +1615,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::findContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
     }
 
     /**
@@ -1600,7 +1627,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::findContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
     }
 
     /**
@@ -1612,7 +1639,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindSingle()
     {
-        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
     }
 
     /**
@@ -1624,7 +1651,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindSingleWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
     }
 
     /**
@@ -1636,7 +1663,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadRelations()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadRelations() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadRelations() is not implemented." );
     }
 
     /**
@@ -1648,7 +1675,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadReverseRelations()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadReverseRelations() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadReverseRelations() is not implemented." );
     }
 
     /**
@@ -1660,7 +1687,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testAddRelation()
     {
-        $this->markTestIncomplete( "Test for ContentService::addRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
     }
 
     /**
@@ -1672,7 +1699,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testAddRelationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::addRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
     }
 
     /**
@@ -1684,7 +1711,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteRelation()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
     }
 
     /**
@@ -1696,7 +1723,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteRelationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
     }
 
     /**
@@ -1708,7 +1735,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteRelationThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
     }
 
     /**
@@ -1720,7 +1747,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testAddTranslationInfo()
     {
-        $this->markTestIncomplete( "Test for ContentService::addTranslationInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::addTranslationInfo() is not implemented." );
     }
 
     /**
@@ -1732,7 +1759,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadTranslationInfos()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadTranslationInfos() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
     }
 
     /**
@@ -1744,7 +1771,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadTranslationInfosWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadTranslationInfos() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
     }
 
     /**
@@ -1756,7 +1783,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testNewContentMetadataUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
     }
 
     /**
@@ -1791,7 +1818,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testNewTranslationInfo()
     {
-        $this->markTestIncomplete( "Test for ContentService::newTranslationInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::newTranslationInfo() is not implemented." );
     }
 
     /**
@@ -1803,7 +1830,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testNewTranslationValues()
     {
-        $this->markTestIncomplete( "Test for ContentService::newTranslationValues() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::newTranslationValues() is not implemented." );
     }
 
 }

@@ -209,7 +209,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCreateLocationThrowsIllegalArgumentExceptionParentIsSublocationOfContent()
     {
-        $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::createLocation() is not implemented." );
     }
 
     /**
@@ -918,7 +918,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testSwapLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::swapLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::swapLocation() is not implemented." );
     }
 
     /**
@@ -1154,7 +1154,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCopySubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::copySubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::copySubtree() is not implemented." );
     }
 
     /**
@@ -1166,7 +1166,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCopySubtreeThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for LocationService::copySubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::copySubtree() is not implemented." );
     }
 
     /**
@@ -1178,6 +1178,6 @@ class LocationServiceTest extends BaseTest
      */
     public function testMoveSubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::moveSubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::moveSubtree() is not implemented." );
     }
 }
