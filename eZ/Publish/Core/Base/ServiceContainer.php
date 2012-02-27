@@ -97,10 +97,10 @@ class ServiceContainer
      */
     public function getConfigurationManager()
     {
-        if ( isset( $this->dependencies['@configurationManager'] ) )
-            return $this->dependencies['@configurationManager'];
+        if ( isset( $this->dependencies['$configurationManager'] ) )
+            return $this->dependencies['$configurationManager'];
         // will not work as ConfigurationManager has dependencies on config.php settings at least
-        throw new \Exception( '@configurationManager missing, usually setup in bootstrap.php!' );
+        throw new \Exception( '$configurationManager missing, usually setup in bootstrap.php!' );
     }
 
     /**
@@ -151,13 +151,35 @@ class ServiceContainer
             return $this->dependencies[$serviceKey];
         }
 
-        // Validate settings
-        if ( empty( $this->settings[$serviceName] ) )
+        if ( strpos( $serviceName, '-' ) )// If - is at a positive position, then service extends another one
+        {
+            $serviceParent = explode( '-', $serviceName );
+            $serviceParent = '-' . $serviceParent[1];
+            if ( empty( $this->settings[$serviceName] ) && empty( $this->settings[$serviceParent] ) )// Validate settings
+            {
+                throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
+            }
+            else if ( empty( $this->settings[$serviceName] ) )
+            {
+                $settings = $this->settings[$serviceParent] + array( 'shared' => true, 'public' => false );
+            }
+            else
+            {
+                $settings = array_merge(
+                    $this->settings[$serviceParent] + array( 'shared' => true, 'public' => false ),
+                    $this->settings[$serviceName]
+                );// uses array_merge on puposes to make sure arguments are reset
+            }
+        }
+        else if ( empty( $this->settings[$serviceName] ) )// Validate settings
         {
             throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
+        else
+        {
+            $settings = $this->settings[$serviceName] + array( 'shared' => true, 'public' => false );
+        }
 
-        $settings = $this->settings[$serviceName] + array( 'shared' => true, 'public' => false );
         if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "service\\[{$serviceName}]\\class", 'class setting is not defined' );
@@ -219,15 +241,30 @@ class ServiceContainer
      */
     protected function lookupArguments( array $arguments, array &$keys = array() )
     {
+        $serviceContainer = $this;
         $builtArguments = array();
         foreach ( $arguments as $key => $argument )
         {
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )
+            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@'  || $argument[0] === '%' ) )
             {
-                if ( $argument === '$serviceContainer' )
+                $function = false;
+                if ( stripos( $argument, '::' ) !== false )
                 {
-                    // Self
-                    $builtArguments[$key] = $this;
+                    // Check if argument is a callback
+                    list( $argument, $function  ) = explode( '::', $argument );
+                }
+
+                if ( $argument[0] === '%' )// lazy loaded services
+                {
+                    if ( $function !== false )
+                        $builtArguments[$key] = function() use ( $serviceContainer, $argument, $function ){
+                            $service = $serviceContainer->get( ltrim( $argument, '%' ), true );
+                            return call_user_func_array( array( $service, $function ), func_get_args() );
+                        };
+                    else
+                        $builtArguments[$key] = function() use ( $serviceContainer, $argument ){
+                            return $serviceContainer->get( ltrim( $argument, '%' ), true );
+                        };
                 }
                 else if ( isset( $this->dependencies[ $argument ] ) )
                 {
@@ -243,6 +280,11 @@ class ServiceContainer
                 {
                     // Try to load a @service dependency
                     $builtArguments[$key] = $this->internalGet( ltrim( $argument, '@' ), true );
+                }
+
+                if ( $function !== false && $argument[0] !== '%' )
+                {
+                    $builtArguments[$key] = array( $builtArguments[$key], $function );
                 }
             }
             else if ( is_array( $argument ) )

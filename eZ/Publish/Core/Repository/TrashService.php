@@ -258,7 +258,7 @@ class TrashService implements TrashServiceInterface
             'depth'                    => $spiTrashItem->depth,
             'sortField'                => $spiTrashItem->sortField,
             'sortOrder'                => $spiTrashItem->sortOrder,
-            'childrenCount'            => 0
+            'childCount'               => 0
         ) );
     }
 

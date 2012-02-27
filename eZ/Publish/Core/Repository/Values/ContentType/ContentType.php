@@ -20,9 +20,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer Determines if the type is allowd to have children
+ * @property-read boolean $isContainer Determines if the type is allowed to have children
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
- * @property-read boolean $defaultAlwaysAvailable if an instance of acontent type is created the always available flag is set by default this this value.
+ * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
@@ -33,28 +33,47 @@ class ContentType extends APIContentType
      *
      * @var array
      */
-    protected $names = array();
+    protected $names;
 
     /**
      * Holds the collection of descriptions with languageCode keys
      *
      * @var array
      */
-    protected $descriptions = array();
+    protected $descriptions;
 
     /**
      * Holds the collection of contenttypegroups the contenttype is assigned to
      *
      * @var array
      */
-    protected $contentTypeGroups = array();
+    protected $contentTypeGroups;
 
     /**
-     * Holds the collection of field definitions for the contenttype
+     * Contains the content type field definitions from this type
      *
-     * @var array
+     * @var array an array of {@link FieldDefinition}
      */
-    protected $fieldDefinitions = array();
+    protected $fieldDefinitions;
+
+    /**
+     * Field definitions indexed by identifier
+     *
+     * @var array an array of {@link FieldDefinition}
+     */
+    private $fieldDefinitionsByIdentifier;
+
+    function __construct( array $data = array() )
+    {
+        foreach ( $data as $propertyName => $propertyValue )
+        {
+            $this->$propertyName = $propertyValue;
+        }
+        foreach ( $this->fieldDefinitions as $fieldDefinition )
+        {
+            $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
+        }
+    }
 
     /**
      * This method returns the human readable name in all provided languages
@@ -76,7 +95,7 @@ class ContentType extends APIContentType
      * this method returns the name of the content type in the given language
      *
      * @param string $languageCode
-     * @return string the name for the given language or null if none existis.
+     * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
     {
@@ -107,7 +126,7 @@ class ContentType extends APIContentType
      * this method returns the name of the content type in the given language
      *
      * @param string $languageCode
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
     {
@@ -147,9 +166,9 @@ class ContentType extends APIContentType
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
-        if ( array_key_exists( $fieldDefinitionIdentifier, $this->fieldDefinitions ) )
+        if ( array_key_exists( $fieldDefinitionIdentifier, $this->fieldDefinitionsByIdentifier ) )
         {
-            return $this->fieldDefinitions[$fieldDefinitionIdentifier];
+            return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
         }
 
         return null;

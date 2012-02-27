@@ -41,7 +41,7 @@ abstract class LocationBase extends BaseServiceTest
         self::assertNull( $location->depth );
         self::assertNull( $location->sortField );
         self::assertNull( $location->sortOrder );
-        self::assertNull( $location->childrenCount );
+        self::assertNull( $location->childCount );
     }
 
     /**
@@ -515,7 +515,6 @@ abstract class LocationBase extends BaseServiceTest
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct', $locationUpdateStruct );
         self::assertNull( $locationUpdateStruct->priority );
         self::assertNull( $locationUpdateStruct->remoteId );
-        self::assertNull( $locationUpdateStruct->isMainLocation );
         self::assertNull( $locationUpdateStruct->sortField );
         self::assertNull( $locationUpdateStruct->sortOrder );
     }

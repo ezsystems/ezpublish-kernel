@@ -52,8 +52,8 @@ $configManager->setGlobalDirs( $paths, 'modules' );*/
 $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
     array(
-        '@classLoader' => $loader,
-        '@configurationManager' => $configManager,
+        '$classLoader' => $loader,
+        '$configurationManager' => $configManager,
     )
 );
 

@@ -457,9 +457,6 @@ class LocationService implements LocationServiceInterface
         if ( $locationUpdateStruct->remoteId !== null && ( !is_string( $locationUpdateStruct->remoteId ) || empty( $locationUpdateStruct->remoteId ) ) )
             throw new InvalidArgumentValue( "remoteId", $locationUpdateStruct->remoteId, "LocationUpdateStruct" );
 
-        if ( $locationUpdateStruct->isMainLocation !== null && !is_bool( $locationUpdateStruct->isMainLocation ) )
-            throw new InvalidArgumentValue( "isMainLocation", $locationUpdateStruct->isMainLocation, "LocationUpdateStruct" );
-
         if ( $locationUpdateStruct->sortField !== null && !is_numeric( $locationUpdateStruct->sortField ) )
             throw new InvalidArgumentValue( "sortField", $locationUpdateStruct->sortField, "LocationUpdateStruct" );
 
@@ -669,7 +666,7 @@ class LocationService implements LocationServiceInterface
             'depth'                    => $spiLocation->depth,
             'sortField'                => $spiLocation->sortField,
             'sortOrder'                => $spiLocation->sortOrder,
-            'childrenCount'            => $childrenLocations ? $childrenLocations->count : 0
+            'childCount'               => $childrenLocations ? $childrenLocations->count : 0
         ) );
     }
 

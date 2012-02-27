@@ -55,7 +55,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      *
      * this method returns the name of the content type in the given language
      * @param string $languageCode
-     * @return string the name for the given language or null if none existis.
+     * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
     {
@@ -80,7 +80,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     /**
      * this method returns the name of the content type in the given language
      * @param string $languageCode
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
     {

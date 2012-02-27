@@ -13,9 +13,9 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
  * @property-read int $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
- * @property-read int $position the position of the field definition in the content typr
+ * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldType String identifier of the field type
- * @property-read boolean $isTranslatable indicatats if fields of this definition are translatable
+ * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
  * @property-read boolean $isRequired indicates if this field is required in the content object
  * @property-read boolean $isSearchable indicates if the field is searchable
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
@@ -28,28 +28,28 @@ class FieldDefinition extends APIFieldDefinition
      *
      * @var array
      */
-    protected $names = array();
+    protected $names;
 
     /**
      * Holds the collection of descriptions with languageCode keys
      *
      * @var array
      */
-    protected $descriptions = array();
+    protected $descriptions;
 
     /**
      * Holds collection of field settings for the contenttype
      *
      * @var array
      */
-    protected $fieldSettings = array();
+    protected $fieldSettings;
 
     /**
      * Holds collection of validators for the contenttype
      *
      * @var array
      */
-    protected $validators = array();
+    protected $validators;
 
     /**
      * This method returns the human readable name of this field in all provided languages
@@ -71,7 +71,7 @@ class FieldDefinition extends APIFieldDefinition
      *
      * this method returns the name of the field in the given language
      * @param string $languageCode
-     * @return string the name for the given language or null if none existis.
+     * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
     {
@@ -101,7 +101,7 @@ class FieldDefinition extends APIFieldDefinition
     /**
      * this method returns the name of the field in the given language
      * @param string $languageCode
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
     {

@@ -271,7 +271,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * instanciates an object to be used for creating languages
+     * instantiates an object to be used for creating languages
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */

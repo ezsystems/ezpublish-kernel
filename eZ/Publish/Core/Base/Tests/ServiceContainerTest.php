@@ -138,7 +138,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 'DService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\D',
                     'public' => true,
-                    'arguments' => array( '$serviceContainer', '$_SERVER', '$B' ),
+                    'arguments' => array( '$_SERVER', '$B' ),
                 ),
             ),
             array( '$B' => new B )
@@ -184,7 +184,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                     'public' => true,
                     'arguments' => array(
                         array(
-                            'sc' => '$serviceContainer',
                             'b' => '@B',
                             'sub' => array( 'c' => '@C' ),
                         )
@@ -199,6 +198,37 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         );
         $obj = $sc->get('F');
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\F', $obj );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
+     */
+    public function testComplexLazyLoadedServiceUsingHash()
+    {
+        $sc = new ServiceContainer(
+            array(
+                'G' => array(
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\G',
+                    'public' => true,
+                    'arguments' => array(
+                            'lazyHServiceCall' => '%H-parent::timesTwo',
+                            'hIntValue' => 42,
+                            'lazyHService' => '%H-parent',
+                    ),
+                ),
+                'H-parent' => array(
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\H',
+                    'shared' => false,
+                    'arguments' => array(),
+                ),
+                '-parent' => array(
+                    'public' => true,
+                    'arguments' => array( 'test' => 33 ),
+                ),
+            )
+        );
+        $obj = $sc->get('G');
+        self::assertEquals( 42 * 2, $obj->hIntValue );
     }
 }
 
@@ -238,7 +268,7 @@ class C
 
 class D
 {
-    public function __construct( ServiceContainer $sc, array $server, B $b ){}
+    public function __construct( array $server, B $b ){}
 }
 
 class E
@@ -260,11 +290,36 @@ class F
 {
     public function __construct( array $config )
     {
-        if ( !$config['sc'] instanceof ServiceContainer )
-            throw new \Exception( "sc was not instance of 'ServiceContainer'" );
         if ( !$config['b'] instanceof B )
             throw new \Exception( "b was not instance of 'B'" );
         if ( !$config['sub']['c'] instanceof C )
             throw new \Exception( "sub.c was not instance of 'C'" );
+    }
+}
+
+
+class G
+{
+    public $hIntValue = null;
+    public function __construct( \Closure $lazyHServiceCall, $hIntValue, \Closure $lazyHService )
+    {
+        $this->hIntValue = $lazyHServiceCall( $hIntValue );
+        $service = $lazyHService();
+        if ( !$service instanceof H )
+            throw new \Exception( "\$lazyHService() did not return instance of 'H'" );
+    }
+}
+
+class H
+{
+    public function __construct( $notUsedArgument = null )
+    {
+        if ( $notUsedArgument !== null )
+            throw new \Exception( "\$notUsedArgument should be a vaue of null, got: " . $notUsedArgument );
+    }
+
+    public function timesTwo( $hIntValue )
+    {
+        return $hIntValue * 2;
     }
 }
