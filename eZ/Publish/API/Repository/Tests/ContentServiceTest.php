@@ -1174,7 +1174,6 @@ class ContentServiceTest extends BaseTest
 
         // Now we create a new draft from the published content
         $contentDraft = $contentService->createContentDraft( $contentPublished->contentInfo );
-
         /* END: Use Case */
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Content', $contentDraft );
@@ -1279,38 +1278,162 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      */
-    public function testCreateContentDraftLoadVersionInfoReturnsPublishedVersion( $content )
+    public function testCreateContentDraftLoadVersionInfoStillLoadsPublishedVersion( $draft )
     {
-        $this->fail( 'Implement me' );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published version
+        $versionInfoPublished = $contentService->loadVersionInfo( $content->contentInfo );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $versionInfoPublished->versionNo );
     }
 
     /**
      * Test for the createContentDraft() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
-     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
-    public function testCreateContentDraftLoadContentInfoReturnsPublishedVersion( $content )
+    public function testCreateContentDraftLoadContentStillLoadsPublishedVersion()
     {
-        $this->fail( 'Implement me' );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published content version
+        $contentPublished = $contentService->loadContent( $content->contentId );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $contentPublished->getVersionInfo()->versionNo );
     }
 
     /**
      * Test for the createContentDraft() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftLoadContentByRemoteIdStillLoadsPublishedVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published content version
+        $contentPublished = $contentService->loadContentByRemoteId( 'abcdef0123456789abcdef0123456789' );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $contentPublished->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
-    public function testCreateContentDraftLoadContentReturnsPublishedVersion( $content )
+    public function testCreateContentDraftLoadContentByContentInfoStillLoadsPublishedVersion()
     {
-        $this->fail( 'Implement me' );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published content version
+        $contentPublished = $contentService->loadContentByContentInfo( $content->contentInfo );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $contentPublished->getVersionInfo()->versionNo );
     }
 
     /**
