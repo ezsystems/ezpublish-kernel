@@ -434,7 +434,58 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocations()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        $locations = $locationService->loadLocations( $contentInfo );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $locations
+        );
+        return $locations;
+    }
+
+    /**
+     * Test for the loadLocations() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
+     */
+    public function testLoadLocationsContent( array $locations )
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $this->assertEquals( 1, count( $locations ) );
+        foreach ( $locations as $loadedLocation )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $loadedLocation
+            );
+        }
+
+        usort(
+            $locations,
+            function ( $a, $b )
+            {
+                strcmp( $a->id, $b->id );
+            }
+        );
+
+        $this->assertEquals(
+            array(
+                $locationService->loadLocation( 5 ),
+            ),
+            $locations
+        );
     }
 
     /**
@@ -444,9 +495,56 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * 
      */
-    public function testLoadLocationsWithSecondParameter()
+    public function testLoadLocationsLimitedSubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        // Location at "/1/48/54"
+        $originalLocation = $locationService->loadLocation( 54 );
+
+        // Create location under "/1/43/"
+        $locationCreate = $locationService->newLocationCreateStruct( 43 );
+        $locationService->createLocation(
+            $originalLocation->contentInfo,
+            $locationCreate
+        );
+
+        $findRootLocation = $locationService->loadLocation( 48 );
+
+        // Returns an array with only $originalLocation
+        $locations = $locationService->loadLocations(
+            $originalLocation->contentInfo,
+            $findRootLocation
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $locations
+        );
+        return $locations;
+    }
+
+    /**
+     * Test for the loadLocations() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationsLimitedSubtree
+     */
+    public function testLoadLocationsLimitedSubtreeContent( array $locations )
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $this->assertEquals( 1, count( $locations ) );
+
+        $this->assertEquals(
+            54,
+            reset( $locations )->id
+        );
     }
 
     /**

@@ -256,7 +256,24 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $subPath = ( $rootLocation === null ? '/' : $rootLocation->pathString );
+
+        $locations = array();
+        foreach ( $this->locations as $candidateLocation )
+        {
+            if ( $candidateLocation->contentInfo === null )
+            {
+                // Skip root location
+                continue;
+            }
+            if ( $contentInfo->contentId == $candidateLocation->contentInfo->contentId
+                 && strpos( $candidateLocation->pathString, $subPath ) === 0
+                )
+            {
+                $locations[] = $candidateLocation;
+            }
+        }
+        return $locations;
     }
 
     /**
