@@ -218,7 +218,7 @@ interface ContentService
      * 
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
     public function loadContentDrafts( User $user = null );
 
