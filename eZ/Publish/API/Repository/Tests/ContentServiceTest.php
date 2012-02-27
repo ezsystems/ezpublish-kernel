@@ -1091,7 +1091,6 @@ class ContentServiceTest extends BaseTest
 
         // Now publish the content draft
         $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1182,10 +1181,36 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testPublishVersionThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::publishVersion() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId         = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->modificationDate = new \DateTime( '1984/01/01' );
+        $contentCreate->alwaysAvailable  = true;
+
+        // Create a content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now publish the content draft
+        $contentService->publishVersion( $content->getVersionInfo() );
+
+        // This call will fail with a "BadStateException", because the version
+        // is already published.
+        $contentService->publishVersion( $content->getVersionInfo() );
+        /* END: Use Case */
     }
 
     /**
