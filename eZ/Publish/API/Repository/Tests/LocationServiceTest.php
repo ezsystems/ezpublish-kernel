@@ -403,7 +403,26 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadMainLocationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadMainLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+        $locationService    = $repository->getLocationService();
+
+        // Create new content, which is not published
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentCreate = $contentService->newContentCreateStruct(
+            $folderType, 'eng-US'
+        );
+        $contentCreate->setField( 'name', 'New Folder' );
+        $content = $contentService->createContent( $contentCreate );
+
+        // Throws Exception, since $content has no published version, yet
+        $location = $locationService->loadMainLocation(
+            $content->contentInfo
+        );
+        /* END: Use Case */
     }
 
     /**

@@ -234,6 +234,10 @@ class LocationServiceStub implements LocationService
      */
     public function loadMainLocation( ContentInfo $contentInfo )
     {
+        if ( $contentInfo->published === false )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
         return $this->loadLocation( $contentInfo->mainLocationId );
     }
 
