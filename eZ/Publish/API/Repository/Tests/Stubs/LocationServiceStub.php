@@ -201,7 +201,7 @@ class LocationServiceStub implements LocationService
      */
     public function newLocationUpdateStruct()
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return new LocationUpdateStruct();
     }
 
     /**

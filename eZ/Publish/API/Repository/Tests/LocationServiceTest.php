@@ -794,7 +794,18 @@ class LocationServiceTest extends BaseTest
      */
     public function testNewLocationUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for LocationService::newLocationUpdateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+        /* BEGIN: Use Case */;
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
+            $updateStruct
+        );
     }
 
     /**
