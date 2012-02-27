@@ -966,10 +966,15 @@ class LocationServiceTest extends BaseTest
      * @param Location $location
      * @return void
      */
-    protected function assertSubtreeProperties( array $expectedValues, Location $location )
+    protected function assertSubtreeProperties( array $expectedValues, Location $location, $stopId = null )
     {
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
+
+        if ( $location->id === $stopId )
+        {
+            return;
+        }
 
         foreach ( $expectedValues as $propertyName => $propertyValue )
         {
@@ -1011,16 +1016,77 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertFalse(
-            $hiddenLocation->hidden,
+            $unHiddenLocation->hidden,
             sprintf(
                 'Location with ID "%s" not unhidden.',
-                $hiddenLocation->id
+                $unHiddenLocation->id
             )
         );
         foreach ( $locationService->loadLocationChildren( $unHiddenLocation ) as $child )
         {
             $this->assertSubtreeProperties(
                 array( 'invisible' => false ),
+                $child
+            );
+        }
+    }
+
+    /**
+     * Test for the unhideLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
+     * 
+     */
+    public function testUnhideLocationNotUnhidesHiddenSubtree()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $higherLocation = $locationService->loadLocation( 5 );
+        $hiddenHigherLocation = $locationService->hideLocation( $higherLocation );
+
+        $lowerLocation = $locationService->loadLocation( 13 );
+        $hiddenLowerLocation = $locationService->hideLocation( $lowerLocation );
+
+        $unHiddenHigherLocation = $locationService->unhideLocation( $hiddenHigherLocation );
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $unHiddenHigherLocation
+        );
+
+        $this->assertFalse(
+            $unHiddenHigherLocation->hidden,
+            sprintf(
+                'Location with ID "%s" not unhidden.',
+                $unHiddenHigherLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $unHiddenHigherLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => false ),
+                $child,
+                13
+            );
+        }
+
+        $stillHiddenLocation = $locationService->loadLocation( 13 );
+        $this->assertTrue(
+            $stillHiddenLocation->hidden,
+            sprintf(
+                'Hidden sub-location with ID %s accedentally unhidden.',
+                $stillHiddenLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $stillHiddenLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => true ),
                 $child
             );
         }
