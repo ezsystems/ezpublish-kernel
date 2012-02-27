@@ -300,12 +300,12 @@ class ContentServiceTest extends BaseTest
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $content = $contentService->loadContentInfo( 10 );
+        $contentInfo = $contentService->loadContentInfo( 10 );
         /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\ContentInfo',
-            $content
+            $contentInfo
         );
     }
 
@@ -344,10 +344,10 @@ class ContentServiceTest extends BaseTest
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $content = $contentService->loadContentInfoByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
+        $contentInfo = $contentService->loadContentInfoByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $content );
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $contentInfo );
     }
 
     /**
