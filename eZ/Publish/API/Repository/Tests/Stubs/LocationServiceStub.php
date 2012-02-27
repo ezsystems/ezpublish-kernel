@@ -217,6 +217,8 @@ class LocationServiceStub implements LocationService
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
+        $this->checkRemoteIdNotExist( $locationUpdateStruct );
+
         $data = $this->locationToArray( $location );
 
         foreach ( $locationUpdateStruct as $propertyName => $propertyValue )
@@ -228,6 +230,23 @@ class LocationServiceStub implements LocationService
         $this->locations[$updatedLocation->id] = $updatedLocation;
 
         return $updatedLocation;
+    }
+
+    /**
+     * Checks that the remote ID used in $locationUpdateStruct does not exist
+     *
+     * @param LocationUpdateStruct $locationUpdateStruct
+     * @return void
+     */
+    protected function checkRemoteIdNotExist( LocationUpdateStruct $locationUpdateStruct )
+    {
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->remoteId == $locationUpdateStruct->remoteId )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
     }
 
     /**

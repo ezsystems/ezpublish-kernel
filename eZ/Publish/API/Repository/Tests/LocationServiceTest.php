@@ -889,7 +889,22 @@ class LocationServiceTest extends BaseTest
      */
     public function testUpdateLocationThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation( 5 );
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+        // Remote ID of the root location
+        $updateStruct->remoteId  = '629709ba256fe317c3ddcee35453a96a';
+
+        // Throws exception, since remote ID is already taken
+        $updatedLocation = $locationService->updateLocation(
+            $originalLocation, $updateStruct
+        );
+        /* BEGIN: Use Case */;
     }
 
     /**
