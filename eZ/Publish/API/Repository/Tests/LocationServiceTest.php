@@ -556,7 +556,26 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationsThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+        $locationService    = $repository->getLocationService();
+
+        // Create new content, which is not published
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentCreate = $contentService->newContentCreateStruct(
+            $folderType, 'eng-US'
+        );
+        $contentCreate->setField( 'name', 'New Folder' );
+        $content = $contentService->createContent( $contentCreate );
+
+        // Throws Exception, since $content has no published version, yet
+        $location = $locationService->loadLocations(
+            $content->contentInfo
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -566,9 +585,30 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
-    public function testLoadLocationsThrowsBadStateExceptionWithSecondParameter()
+    public function testLoadLocationsThrowsBadStateExceptionLimitedSubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+        $locationService    = $repository->getLocationService();
+
+        // Create new content, which is not published
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentCreate = $contentService->newContentCreateStruct(
+            $folderType, 'eng-US'
+        );
+        $contentCreate->setField( 'name', 'New Folder' );
+        $content = $contentService->createContent( $contentCreate );
+
+        $findRootLocation = $locationService->loadLocation( 1 );
+
+        // Throws Exception, since $content has no published version, yet
+        $location = $locationService->loadLocations(
+            $content->contentInfo, $findRootLocation
+        );
+        /* END: Use Case */
     }
 
     /**

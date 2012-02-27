@@ -256,6 +256,11 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null )
     {
+        if ( $contentInfo->published === false )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
+
         $subPath = ( $rootLocation === null ? '/' : $rootLocation->pathString );
 
         $locations = array();
