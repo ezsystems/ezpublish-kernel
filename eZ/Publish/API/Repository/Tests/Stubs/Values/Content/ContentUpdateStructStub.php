@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
+use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 
 /**
@@ -19,6 +20,11 @@ use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
  */
 class ContentUpdateStructStub extends ContentUpdateStruct
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    protected $fields = array();
+
     /**
      * Adds a field to the field collection.
      * This method could also be implemented by ArrayAccess so that
@@ -31,6 +37,12 @@ class ContentUpdateStructStub extends ContentUpdateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $languageCode = false )
     {
-
+        $this->fields[] = new Field(
+            array(
+                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
+                'value'               =>  $value,
+                'languageCode'        =>  $languageCode ?: $this->initialLanguageCode
+            )
+        );
     }
 }
