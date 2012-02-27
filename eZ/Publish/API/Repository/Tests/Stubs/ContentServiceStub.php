@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\ContentService;
 use \eZ\Publish\API\Repository\Values\Content\Field;
+use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
@@ -255,21 +256,66 @@ class ContentServiceStub implements ContentService
             }
             else if ( $versionNo === $content->getVersionInfo()->versionNo )
             {
-                return $content;
+                return $this->filterFieldsByLanguages( $content, $languages );
             }
             $contents[$content->getVersionInfo()->status] = $content;
         }
 
         if ( null === $versionNo && isset( $contents[VersionInfo::STATUS_PUBLISHED] ) )
         {
-            return $contents[VersionInfo::STATUS_PUBLISHED];
+            return $this->filterFieldsByLanguages( $contents[VersionInfo::STATUS_PUBLISHED], $languages );
         }
         else if ( null === $versionNo && isset( $contents[VersionInfo::STATUS_DRAFT] ) )
         {
-            return $contents[VersionInfo::STATUS_DRAFT];
+            return $this->filterFieldsByLanguages( $contents[VersionInfo::STATUS_DRAFT], $languages );
         }
 
         throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+    }
+
+    /**
+     * Creates a filtered version of <b>$content</b> when the given <b>$languages</b>
+     * is not <b>NULL</b> and not empty. The returned Content instance will only
+     * contain fields for the given language codes.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string[] $languageCodes
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function filterFieldsByLanguages( Content $content, array $languageCodes = null )
+    {
+        if ( null === $languageCodes || 0 === count( $languageCodes ) )
+        {
+            return $content;
+        }
+
+        $contentType = $content->contentType;
+
+        $fields = array();
+        foreach ( $content->getFields() as $field )
+        {
+            if ( false === $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
+            {
+                $fields[] = $field;
+            }
+            else if ( in_array( $field->languageCode, $languageCodes ) )
+            {
+                $fields[] = $field;
+            }
+        }
+
+        return new ContentStub(
+            array(
+                'contentId'      =>  $content->contentId,
+                'contentTypeId'  =>  $contentType->id,
+                'fields'         =>  $fields,
+                'relations'      =>  $content->getRelations(),
+
+                'versionNo'      =>  $content->getVersionInfo()->versionNo,
+                'repository'     =>  $this->repository
+            )
+        );
     }
 
     /**
@@ -485,6 +531,16 @@ class ContentServiceStub implements ContentService
 
         $versionInfo = $content->getVersionInfo();
 
+        // Select the greatest version number
+        foreach ( $this->versionInfo as $versionInfo )
+        {
+            if ( $versionInfo->contentId !== $contentInfo->contentId )
+            {
+                continue;
+            }
+            $versionNo = max( $versionNo, $versionInfo->versionNo );
+        }
+
         if ( false === in_array( $versionInfo->status, array( VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED ) ) )
         {
             throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
@@ -497,7 +553,7 @@ class ContentServiceStub implements ContentService
                 'relations'      =>  $content->getRelations(),
 
                 'contentTypeId'  =>  $contentInfo->getContentType()->id,
-                'versionNo'      =>  $versionInfo->versionNo + 1,
+                'versionNo'      =>  $versionNo + 1,
                 'repository'     =>  $this->repository
             )
         );
@@ -505,15 +561,15 @@ class ContentServiceStub implements ContentService
         $versionDraft = new VersionInfoStub(
             array(
                 'id'                   =>  ++$this->versionNextId,
-                'contentId'            =>  $content->contentId,
                 'status'               =>  VersionInfo::STATUS_DRAFT,
-                'versionNo'            =>  $versionInfo->versionNo + 1,
+                'versionNo'            =>  $versionNo + 1,
                 'creatorId'            =>  $this->repository->getCurrentUser()->id,
                 'creationDate'         =>  new \DateTime(),
                 'modificationDate'     =>  new \DateTime(),
                 'languageCodes'        =>  $versionInfo->languageCodes,
                 'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
 
+                'contentId'            =>  $content->contentId,
                 'repository'           =>  $this->repository
             )
         );
@@ -726,6 +782,7 @@ class ContentServiceStub implements ContentService
             )
         );
 
+        // Set all published versions of this content object to ARCHIVED
         foreach ( $this->versionInfo as $i => $versionInfo )
         {
             if ( $versionInfo->contentId !== $contentInfo->contentId )
