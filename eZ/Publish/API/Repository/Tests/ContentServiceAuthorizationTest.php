@@ -211,39 +211,39 @@ class ContentServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId()
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testLoadVersionByRemoteIdThrowsUnauthorizedException()
+    public function testLoadContentByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testLoadVersionByRemoteIdThrowsUnauthorizedExceptionWithSecondParameter()
+    public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages, $versionNo)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testLoadVersionByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
+    public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**

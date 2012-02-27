@@ -726,13 +726,13 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId()
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
-    public function testLoadVersionByRemoteId()
+    public function testLoadContentByRemoteId()
     {
         $repository = $this->getRepository();
 
@@ -740,7 +740,7 @@ class ContentServiceTest extends BaseTest
         $contentService = $repository->getContentService();
 
         // Load the Content for "Anonymous User"
-        $content = $contentService->loadVersionByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
+        $content = $contentService->loadContentByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -750,63 +750,63 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
      * 
      */
-    public function testLoadVersionByRemoteIdWithSecondParameter()
+    public function testLoadContentByRemoteIdWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages, $versionNo)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
      * 
      */
-    public function testLoadVersionByRemoteIdWithThirdParameter()
+    public function testLoadContentByRemoteIdWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId()
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundException()
+    public function testLoadContentByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundExceptionWithSecondParameter()
+    public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages, $versionNo)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
+    public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**

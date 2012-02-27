@@ -257,7 +257,7 @@ class ContentServiceStub implements ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadVersionByRemoteId( $remoteId, array $languages = null, $versionNo = null )
+    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
         $contentInfo = $this->loadContentInfoByRemoteId( $remoteId );
         return $this->loadContent( $contentInfo->contentId, $languages, $versionNo );
