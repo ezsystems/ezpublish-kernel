@@ -57,7 +57,10 @@ class ContentStub extends Content
      */
     public function getVersionInfo()
     {
-        return $this->repository->getContentService()->loadVersionInfo( $this->getContentInfo() );
+        return $this->repository->getContentService()->loadVersionInfo(
+            $this->getContentInfo(),
+            $this->versionNo
+        );
     }
 
     /**
@@ -147,6 +150,4 @@ class ContentStub extends Content
 
         return parent::__get( $property );
     }
-
-
 }

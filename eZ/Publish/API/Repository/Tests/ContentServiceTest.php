@@ -846,78 +846,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * 
-     */
-    public function testCreateContentDraft()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
-     * 
-     */
-    public function testCreateContentDraftWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testCreateContentDraftThrowsBadStateException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testCreateContentDraftThrowsBadStateExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentDrafts() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
-     * 
-     */
-    public function testLoadContentDrafts()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentDrafts() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts($user)
-     * 
-     */
-    public function testLoadContentDraftsWithFirstParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
-    }
-
-    /**
      * Test for the translateVersion() method.
      *
      * @return void
@@ -1211,6 +1139,239 @@ class ContentServiceTest extends BaseTest
         // is already published.
         $contentService->publishVersion( $content->getVersionInfo() );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testCreateContentDraft()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now publish this draft
+        $contentPublished = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $contentDraft = $contentService->createContentDraft( $contentPublished->contentInfo );
+
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Content', $contentDraft );
+
+        return $contentDraft;
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftSetsExpectedProperties( $draft )
+    {
+        $this->assertEquals(
+            array(
+                'fieldCount'     =>  4,
+                'relationCount'  =>  0
+            ),
+            array(
+                'fieldCount'     =>  count( $draft->getFields() ),
+                'relationCount'  =>  count( $draft->getRelations() )
+            )
+        );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftSetsContentInfo( $draft )
+    {
+        $contentInfo = $draft->contentInfo;
+
+        $this->assertEquals(
+            array(
+                $draft->contentId,
+                true,
+                1,
+                'eng-GB',
+                $this->getRepository()->getCurrentUser()->id,
+                'abcdef0123456789abcdef0123456789',
+                1
+            ),
+            array(
+                $contentInfo->contentId,
+                $contentInfo->alwaysAvailable,
+                $contentInfo->currentVersionNo,
+                $contentInfo->mainLanguageCode,
+                $contentInfo->ownerId,
+                $contentInfo->remoteId,
+                $contentInfo->sectionId
+            )
+        );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftSetsVersionInfo( $draft )
+    {
+        $versionInfo = $draft->getVersionInfo();
+
+        $this->assertEquals(
+            array(
+                'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
+                'initialLanguageCode'  =>  'eng-GB',
+                'languageCodes'        =>  array( 'eng-GB' ),
+                'status'               =>  VersionInfo::STATUS_DRAFT,
+                'versionNo'            =>  2
+            ),
+            array(
+                'creatorId'            =>  $versionInfo->creatorId,
+                'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
+                'languageCodes'        =>  $versionInfo->languageCodes,
+                'status'               =>  $versionInfo->status,
+                'versionNo'            =>  $versionInfo->versionNo
+            )
+        );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftLoadVersionInfoReturnsPublishedVersion( $content )
+    {
+        $this->fail( 'Implement me' );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftLoadContentInfoReturnsPublishedVersion( $content )
+    {
+        $this->fail( 'Implement me' );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftLoadContentReturnsPublishedVersion( $content )
+    {
+        $this->fail( 'Implement me' );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
+     *
+     */
+    public function testCreateContentDraftWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *
+     */
+    public function testCreateContentDraftThrowsBadStateException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testCreateContentDraftThrowsBadStateExceptionWithSecondParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
+     *
+     */
+    public function testLoadContentDrafts()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts($user)
+     *
+     */
+    public function testLoadContentDraftsWithFirstParameter()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
     }
 
     /**

@@ -97,9 +97,12 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfo( $contentId )
     {
-        if ( isset( $this->contentInfo[$contentId] ) )
+        foreach ( $this->contentInfo as $contentInfo )
         {
-            return $this->contentInfo[$contentId];
+            if ( $contentId === $contentInfo->contentId )
+            {
+                return $contentInfo;
+            }
         }
         throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
@@ -393,10 +396,9 @@ class ContentServiceStub implements ContentService
             )
         );
 
-
-        $this->content[]                        = $content;
-        $this->contentInfo[$content->contentId] = $contentInfo;
-        $this->versionInfo[$versionInfo->id]    = $versionInfo;
+        $this->content[]     = $content;
+        $this->contentInfo[] = $contentInfo;
+        $this->versionInfo[] = $versionInfo;
 
         return $content;
     }
@@ -448,7 +450,44 @@ class ContentServiceStub implements ContentService
      */
     public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null )
     {
-        // TODO: Implement createContentDraft() method.
+        $versionNo = $versionInfo ? $versionInfo->versionNo : null;
+
+        $content = $this->loadContentByContentInfo( $contentInfo, null, $versionNo );
+
+        $versionInfo = $content->getVersionInfo();
+
+        $contentDraft = new ContentStub(
+            array(
+                'contentId'      =>  $content->contentId,
+                'fields'         =>  $content->getFields(),
+                'relations'      =>  $content->getRelations(),
+
+                'contentTypeId'  =>  $contentInfo->getContentType()->id,
+                'versionNo'      =>  $versionInfo->versionNo + 1,
+                'repository'     =>  $this->repository
+            )
+        );
+
+        $versionDraft = new VersionInfoStub(
+            array(
+                'id'                   =>  ++$this->versionNextId,
+                'contentId'            =>  $content->contentId,
+                'status'               =>  VersionInfo::STATUS_DRAFT,
+                'versionNo'            =>  $versionInfo->versionNo + 1,
+                'creatorId'            =>  $this->repository->getCurrentUser()->id,
+                'creationDate'         =>  new \DateTime(),
+                'modificationDate'     =>  new \DateTime(),
+                'languageCodes'        =>  $versionInfo->languageCodes,
+                'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
+
+                'repository'           =>  $this->repository
+            )
+        );
+
+        array_unshift( $this->content, $contentDraft );
+        array_unshift( $this->versionInfo, $versionDraft );
+
+        return $contentDraft;
     }
 
     /**

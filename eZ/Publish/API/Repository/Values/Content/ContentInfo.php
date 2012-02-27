@@ -56,7 +56,6 @@ abstract class ContentInfo extends ValueObject
      * @var int
      */
     protected $currentVersionNo;
-    
 
     /**
      * true if there exists a published version 0 otherwise
