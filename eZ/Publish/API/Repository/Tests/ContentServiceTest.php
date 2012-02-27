@@ -1454,11 +1454,33 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentDraftThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now try to create a draft from a draft
+        // This call will fail with a "BadStateException"
+        $contentService->createContentDraft( $content->contentInfo );
+        /* END: Use Case */
     }
 
     /**

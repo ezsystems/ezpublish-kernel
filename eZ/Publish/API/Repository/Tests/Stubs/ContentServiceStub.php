@@ -479,6 +479,11 @@ class ContentServiceStub implements ContentService
 
         $versionInfo = $content->getVersionInfo();
 
+        if ( false === in_array( $versionInfo->status, array( VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED ) ) )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $contentDraft = new ContentStub(
             array(
                 'contentId'      =>  $content->contentId,
