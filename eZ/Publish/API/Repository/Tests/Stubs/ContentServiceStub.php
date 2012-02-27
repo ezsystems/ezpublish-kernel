@@ -537,7 +537,23 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentDrafts( User $user = null )
     {
-        // TODO: Implement loadContentDrafts() method.
+        $user = $user ?: $this->repository->getCurrentUser();
+
+        $contentDrafts = array();
+        foreach ( $this->versionInfo as $versionInfo )
+        {
+            if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
+            {
+                continue;
+            }
+            if ( $versionInfo->creatorId !== $user->id )
+            {
+                continue;
+            }
+            $contentDrafts[] = $versionInfo;
+        }
+
+        return $contentDrafts;
     }
 
     /**
@@ -580,7 +596,79 @@ class ContentServiceStub implements ContentService
      */
     public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct )
     {
-        // TODO: Implement updateContent() method.
+        if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $content     = $this->loadContentByVersionInfo( $versionInfo );
+        $contentInfo = $content->contentInfo;
+        $contentType = $content->contentType;
+
+        $fieldIds = array();
+        $fields   = array();
+        foreach ( $contentUpdateStruct->fields as $field )
+        {
+            $fieldIds[$field->fieldDefIdentifier] = true;
+
+            $languageCode = $field->languageCode;
+            if ( !$languageCode && $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
+            {
+                $languageCode = $contentInfo->mainLanguageCode;
+            }
+
+            $fields[] = new Field(
+                array(
+                    'id'                  =>  ++$this->fieldNextId,
+                    'value'               =>  $field->value,
+                    'languageCode'        =>  $languageCode,
+                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                )
+            );
+        }
+
+        foreach ( $content->getFields() as $field )
+        {
+            if ( isset( $fieldIds[$field->fieldDefIdentifier] ) )
+            {
+                continue;
+            }
+            $fields[] = $field;
+        }
+
+
+        $draftedContent = new ContentStub(
+            array(
+                'contentId'      =>  $content->contentId,
+                'fields'         =>  $fields,
+                'relations'      =>  $content->getRelations(),
+
+                'contentTypeId'  =>  $content->contentTypeId,
+                'versionNo'      =>  $versionInfo->versionNo,
+                'repository'     =>  $this->repository
+            )
+        );
+
+        $draftedVersionInfo = new VersionInfoStub(
+            array(
+                'id'                   =>  $versionInfo->id,
+                'contentId'            =>  $content->contentId,
+                'status'               =>  $versionInfo->status,
+                'versionNo'            =>  $versionInfo->versionNo,
+                'creatorId'            =>  $versionInfo->creatorId,
+                'creationDate'         =>  $versionInfo->creationDate,
+                'modificationDate'     =>  new \DateTime(),
+                'languageCodes'        =>  $versionInfo->languageCodes,
+                'initialLanguageCode'  =>  $contentUpdateStruct->initialLanguageCode ?: $versionInfo->initialLanguageCode,
+
+                'repository'           =>  $this->repository
+            )
+        );
+
+        $this->versionInfo[array_search( $versionInfo, $this->versionInfo )] = $draftedVersionInfo;
+        $this->content[array_search( $versionInfo, $this->content )]         = $draftedContent;
+
+        return $draftedContent;
     }
 
     /**

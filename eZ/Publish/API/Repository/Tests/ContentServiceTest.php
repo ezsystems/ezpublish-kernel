@@ -11,7 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use \eZ\Publish\API\Repository\Values\Content\Field;
+use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -969,54 +970,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updateContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * 
-     */
-    public function testUpdateContent()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testUpdateContentThrowsBadStateException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testUpdateContentThrowsContentFieldValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testUpdateContentThrowsContentValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
-    }
-
-    /**
      * Test for the publishVersion() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
@@ -1200,12 +1153,15 @@ class ContentServiceTest extends BaseTest
         $contentPublished = $contentService->publishVersion( $content->getVersionInfo() );
 
         // Now we create a new draft from the published content
-        $contentDraft = $contentService->createContentDraft( $contentPublished->contentInfo );
+        $draftedContent = $contentService->createContentDraft( $contentPublished->contentInfo );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Content', $contentDraft );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $draftedContent
+        );
 
-        return $contentDraft;
+        return $draftedContent;
     }
 
     /**
@@ -1523,15 +1479,295 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
+     * Test for the newContentUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     */
+    public function testNewContentUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
+            $updateStruct
+        );
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testUpdateContent()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedContent = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $updatedContent
+        );
+
+        return $updatedContent;
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentSetsExpectedFields( $content )
+    {
+        $actual = array();
+        foreach ( $content->getFields() as $field )
+        {
+            $actual[] = new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  $field->value,
+                    'languageCode'        =>  $field->languageCode,
+                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                )
+            );
+        }
+        usort( $actual, function ( $field1, $field2 ) {
+            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+            {
+                return strcasecmp( $field1->languageCode, $field2->languageCode );
+            }
+            return $return;
+        } );
+
+        $expected = array(
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'body'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'index_title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'tags'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome² story about ezp.',
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome²³ story about ezp.',
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'title'
+                )
+            ),
+        );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // This call will fail with a "BadStateException", because $publishedContent
+        // is not a draft.
+        $updatedContent = $contentService->updateContent(
+            $publishedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     */
+    public function testUpdateContentThrowsContentFieldValidationException()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     */
+    public function testUpdateContentThrowsContentValidationException()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
+    }
+
+    /**
      * Test for the loadContentDrafts() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     */
+    public function testLoadContentDraftsReturnsEmptyArrayByDefault()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        $contentDrafts = $contentService->loadContentDrafts();
+        /* BEGIN: Use Case */
+
+        $this->assertSame( array(), $contentDrafts );
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
      *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testLoadContentDrafts()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // "Support" article content object
+        $supportContentInfo = $contentService->loadContentInfoByRemoteId( 'affc99e41128c1475fa4f23dafb7159b' );
+
+        // "Community" article content object
+        $communityContentInfo = $contentService->loadContentInfoByRemoteId( '378acc2bc7a52400701956047a2f7d45' );
+
+        // Create some drafts
+        $contentService->createContentDraft( $supportContentInfo );
+        $contentService->createContentDraft( $communityContentInfo );
+
+        // Now $contentDrafts should contain two drafted versions
+        $contentDrafts = $contentService->loadContentDrafts();
+        /* BEGIN: Use Case */
+
+        $actual = array(
+            $contentDrafts[0]->status,
+            $contentDrafts[0]->getContentInfo()->remoteId,
+            $contentDrafts[1]->status,
+            $contentDrafts[1]->getContentInfo()->remoteId,
+        );
+        sort( $actual );
+
+        $this->assertEquals(
+            array(
+                VersionInfo::STATUS_DRAFT,
+                VersionInfo::STATUS_DRAFT,
+                '378acc2bc7a52400701956047a2f7d45',
+                'affc99e41128c1475fa4f23dafb7159b',
+            ),
+            $actual
+        );
     }
 
     /**
@@ -1784,29 +2020,6 @@ class ContentServiceTest extends BaseTest
     public function testNewContentMetadataUpdateStruct()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newContentUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     */
-    public function testNewContentUpdateStruct()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $contentService = $repository->getContentService();
-
-        $updateStruct = $contentService->newContentUpdateStruct();
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
-            $updateStruct
-        );
     }
 
     /**
