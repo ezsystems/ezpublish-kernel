@@ -152,4 +152,44 @@ class LocationStub extends Location
     {
         $this->childCount = $childCount;
     }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @return void
+     */
+    public function __hide()
+    {
+        $this->hidden = true;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @return void
+     */
+    public function __unhide()
+    {
+        $this->hidden = false;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @return void
+     */
+    public function __makeVisible()
+    {
+        $this->invisible = false;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @return void
+     */
+    public function __makeInvisible()
+    {
+        $this->invisible = true;
+    }
 }

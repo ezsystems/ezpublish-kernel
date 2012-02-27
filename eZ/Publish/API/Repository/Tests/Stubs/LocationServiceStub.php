@@ -393,7 +393,30 @@ class LocationServiceStub implements LocationService
      */
     public function hideLocation( Location $location )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $location->__hide();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child)
+        {
+            $this->markInvisible( $child );
+        }
+
+        return $location;
+    }
+
+    /**
+     * Marks the sub-tree starting at $location invisible
+     *
+     * @param Location $location
+     * @return void
+     */
+    protected function markInvisible( Location $location )
+    {
+        $location->__makeInvisible();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->markInvisible( $child );
+        }
     }
 
     /**

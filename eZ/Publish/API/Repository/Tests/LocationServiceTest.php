@@ -928,7 +928,61 @@ class LocationServiceTest extends BaseTest
      */
     public function testHideLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::hideLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $visibleLocation = $locationService->loadLocation( 5 );
+
+        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $hiddenLocation
+        );
+
+        $this->assertTrue(
+            $hiddenLocation->hidden,
+            sprintf(
+                'Location with ID "%s" not hidden.',
+                $hiddenLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $hiddenLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => true ),
+                $child
+            );
+        }
+    }
+
+    /**
+     * Assert that $expectedValues are set in the subtree starting at $location
+     *
+     * @param array $expectedValues
+     * @param Location $location
+     * @return void
+     */
+    protected function assertSubtreeProperties( array $expectedValues, Location $location )
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        foreach ( $expectedValues as $propertyName => $propertyValue )
+        {
+            $this->assertEquals(
+                $propertyValue,
+                $location->$propertyName
+            );
+
+            foreach ( $locationService->loadLocationChildren( $location ) as $child )
+            {
+                $this->assertSubtreeProperties( $expectedValues, $child );
+            }
+        }
     }
 
     /**
