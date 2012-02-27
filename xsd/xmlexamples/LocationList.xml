@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LocationList href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml">
+  <Location href="/content/locations/1/2/56" media-type="application/vnd.ez.api.Location+xml"/>
+  <Location href="/content/locations/1/4/73/133" media-type="application/vnd.ez.api.Location+xml"/>
+</LocationList>

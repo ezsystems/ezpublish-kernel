@@ -9,8 +9,8 @@
   <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml"/>
   <Name>Name</Name>
   <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml"/>
-  <CurrentVersion href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
-    <Version>
+  <CurrentVersion href="/content/objects/23/currentversion" media-type="application/vnd.ez.api.Version+xml">
+    <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
       <VersionInfo>
         <id>123</id>
         <versionNo>2</versionNo>

@@ -93,40 +93,36 @@ Overview
 
 In the content module there are the root collections objects, locations, trash and sections 
 
-===================================================== =================== ======================= ============================ ================
-        :Resource:                                          POST                GET                  PUT                         DELETE
------------------------------------------------------ ------------------- ----------------------- ---------------------------- ----------------
-/                                                     -                   list root resources     -                            -            
-/content/objects                                      create new content  list/find content       -                            -            
-/content/objects/<ID>                                 -                   load content            update content meta data     delete content
-/content/objects/<ID>/translations                    create translation  list translations       -                            -            
-/content/objects/<ID>/languages                       -                   list languages of cont. -                            -              
-/content/objects/<ID>/languages/<lang_code>           -                   load content in the     -                            delete language
-                                                                          given language                                       from content   
-/content/objects/<ID>/versions                        create a new draft  load all versions       -                            -            
+===================================================== =================== ======================= ============================ ================ ==============
+        :Resource:                                          POST                GET                  PATCH                       DELETE            COPY
+----------------------------------------------------- ------------------- ----------------------- ---------------------------- ---------------- --------------
+/                                                     .                   list root resources     .                            .                             
+/content/objects                                      create new content  list/find content       .                            .            
+/content/objects/<ID>                                 -                   load content            update content meta data     delete content   copy content
+/content/objects/<ID>/translations                    create translation  list translations       .                            .                               
+/content/objects/<ID>/<lang_code>                     .                   .                       .                            delete language
+                                                                                                                               from content   
+/content/objects/<ID>/versions                        create a new draft  load all versions       .                            .            
                                                       from an existing    (version infos)
                                                       version 
-/content/objects/<ID>/currentversion                  -                   redirect to current v.  -                            -             
-/content/objects/<ID>/versions/<no>                   -                   get a specific version  update a version/draft       delete version
-/content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. -                            -              
-/content/objects/<ID>/versions/<no>/relations/<ID>    -                   load relation details   -                            delete relation
-/content/objects/<ID>/locations                       -                   load locations of cont- create a new location for    delete all locations
-                                                                          ent                     content
-/content/views                                        create view         list views              -                            -            
-/content/views/<ID>                                   -                   get view                replace view                 delete view
-/content/views/<ID>/results                           -                   get view results        -                            -          
-/content/locations                                    -                   list/find locations     create a new location refer- -            
-                                                                                                  ing to an existing content 
-                                                                                                  and a parent
-/content/locations/<ID>                               -                   load a location         update location              delete a location (subtree)
-/content/locations/<ID>/children                      -                   load children           create a new location refer- delete all children
-                                                                                                  ing to a existing content 
-                                                                                                  object
-/content/sections                                     -                   list all sections       create a new                 section -            
-/content/sections/<ID>                                -                   load section            update setion                delete section
-/content/trash/items                                  -                   list trash items        -                            empty trash
-/content/trash/items/<ID>                             -                   load trash item         untrash item                 delete from trash
-===================================================== =================== ======================= ============================ ================
+/content/objects/<ID>/currentversion                  .                   redirect to current v.  .                            .             
+/content/objects/<ID>/versions/<no>                   .                   get a specific version  update a version/draft       delete version    create draft
+                                                                                                                                                 from version
+/content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. .                            .              
+/content/objects/<ID>/versions/<no>/relations/<ID>    .                   load relation details   .                            delete relation
+/content/objects/<ID>/locations                       create location     load locations of cont- .                            .
+                                                                          ent                            
+/content/locations                                    .                   list/find locations     .                            .                              
+/content/locations/<path>                             .                   load a location         update location              delete location  copy subtree
+/content/locations/<path>/children                    .                   load children           .                            .                  
+/content/views                                        create view         list views              .                            .            
+/content/views/<ID>                                   .                   get view                replace view                 delete view
+/content/views/<ID>/results                           .                   get view results        .                            .          
+/content/sections                                     create section      list all sections       .                            .                    
+/content/sections/<ID>                                .                   load section            update setion                delete section
+/content/trash                                        .                   list trash items        .                            empty trash
+/content/trash/<ID>                                   .                   load trash item         untrash item                 delete from trsh
+===================================================== =================== ======================= ============================ ================ ==============
 
 
 Specification
@@ -170,7 +166,7 @@ Creating Content
 
           HTTP/1.1 201 Created  
           Location: /content/objects/<newID>
-          Etag: "<new etag>"
+          ETag: "<new etag>"
           Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
@@ -195,7 +191,13 @@ XML Example
     <ContentCreate>
       <ContentType href="/content/types/10"/>
       <mainLanguageCode>eng-US</mainLanguageCode>
-      <ParentLocation href="/content/locations/17"/>
+      <LocationCreate>
+        <ParentLocation href="/content/locations/1/4/89" />
+        <priority>0</priority>
+        <hidden>false</hidden>
+        <sortField>PATH</sortField>
+        <sortOrder>ASC</sortOrder>
+      </LocationCreate>
       <Section href="/content/sections/4"/>
       <alwaysAvailable>true</alwaysAvailable>
       <remoteId>remoteId12345678</remoteId>
@@ -225,7 +227,7 @@ XML Example
     
     HTTP/1.1 201 Created
     Location: /content/objects/23
-    Etag: "12345678"
+    ETag: "12345678"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+xml;charset=utf8
     Content-Type: application/vnd.ez.api.Content+xml
     Content-Length: xxx
@@ -277,7 +279,7 @@ XML Example
         </Version>
       </CurrentVersion>
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
-      <MainLocation href="/content/locations/65" media-type="application/vnd.ez.api.Location+xml" />
+      <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
       <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
@@ -302,9 +304,15 @@ JSON Example
           "_href": "/content/types/10",
         },
         "mainLanguageCode": "eng-US",
-        "ParentLocation": {
-          "_href": "/content/locations/17",
-        },
+        "LocationCreate": {
+          "ParentLocation": { 
+            "_href": "/content/locations/1/4/89" 
+          },
+          "priority": "0",
+          "hidden": "false",
+          "sortField": "PATH",
+          "sortOrder": "ASC"
+        }
         "Section": {
           "_href": "/content/sections/4",
         },
@@ -347,7 +355,7 @@ JSON Example
 
     HTTP/1.1 201 Created
     Location: /content/objects/23
-    Etag: "12345678"
+    ETag: "12345678"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+json;charset=utf8
     Content-Type: application/vnd.ez.api.Content+json
     Content-Length: xxx
@@ -430,7 +438,7 @@ JSON Example
           "_media-type": "application/vnd.ez.api.Section+json"
         },
         "MainLocation": {
-          "_href": "/content/locations/65",
+          "_href": "/content/locations/1/4/65",
           "_media-type": "application/vnd.ez.api.Location+json"
         },
         "Locations": {
@@ -486,7 +494,7 @@ Load Content
 .. parsed-literal::
 
       HTTP/1.1 200 OK
-      Etag: "<new etag>"
+      ETag: "<new etag>"
       Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
       Content-Type: <depending on accept header>
       Content-Length: <length>
@@ -506,7 +514,7 @@ XML Example
     Content-length: 0
 
     HTTP/1.1 200 OK
-    Etag: "12345678"
+    ETag: "12345678"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+xml;charset=utf8
     Content-Type: application/vnd.ez.api.ContentInfo+xml
     Content-Length: xxx
@@ -520,7 +528,7 @@ XML Example
       <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml"/>
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
-      <MainLocation href="/content/locations/65" media-type="application/vnd.ez.api.Location+xml" />
+      <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
       <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
@@ -549,7 +557,7 @@ Update Content
 .. parsed-literal::
 
       HTTP/1.1 200 OK
-      Etag: "<new etag>"
+      ETag: "<new etag>"
       Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
       Content-Type: <depending on accept header>
       Content-Length: <length>
@@ -560,7 +568,7 @@ Update Content
     :400: If the Input does not match the input schema definition.
     :401: If the user is not authorized to update this object
     :404: If the content id does not exist
-    :412: If the current Etag does not match with the provided one in the If-Match header
+    :412: If the current ETag does not match with the provided one in the If-Match header
     :415: If the media-type is not one of those specified in Headers
 
 XML Example
@@ -586,14 +594,14 @@ In this example
     <ContentUpdate>
       <mainLanguageCode>ger-DE</mainLanguageCode>
       <Section href="/content/sections/3"/>
-      <MainLocation href="/content/locations/55"/>
+      <MainLocation href="/content/locations/1/13/55"/>
       <Owner href="/user/users/13"/>
       <alwaysAvailable>false</alwaysAvailable>
       <remoteId>qwert4321</remoteId>
     </ContentUpdate>
     
     HTTP/1.1 200 OK
-    Etag: "12345699"
+    ETag: "12345699"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+xml;charset=utf8
     Content-Type: application/vnd.ez.api.ContentInfo+xml
     Content-Length: xxx
@@ -607,7 +615,7 @@ In this example
       <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml"/>
       <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml" />
-      <MainLocation href="/content/locations/55" media-type="application/vnd.ez.api.Location+xml" />
+      <MainLocation href="/content/locations/1/13/55" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
       <Owner href="/users/user/13" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
@@ -620,7 +628,8 @@ Delete Content
 ``````````````
 :Resource: /content/objects/<ID> 
 :Method: DELETE
-:Description: The content is deleted. On delete all locations assigned the content object are deleted via delete subtree. 
+:Description: The content is deleted. If the content has locations (which is required in 4.x) 
+              on delete all locations assigned the content object are deleted via delete subtree.
 :Response: 204
 :Error Codes:
     :404: content object was not found
@@ -629,7 +638,7 @@ Delete Content
 Copy content
 ````````````
 :Resource:    /content/objects/<ID>
-:Method:      COPY or POST with header: X-eZ-method: COPY
+:Method:      COPY or POST with header: X-HTTP-Method-Override COPY
 :Description: Creates a new content object as copy under the given parent location given in the destination header. 
 :Headers:
     :Destination: A location resource to which the content object should be copied.
@@ -651,7 +660,7 @@ Example
 
     COPY /content/objects/23 HTTP/1.1
     Host: api.example.com
-    Destination: /content/locations/78
+    Destination: /content/locations/1/4/78
 
     HTTP/1.1 201 Created
     Location: /content/objects/<newId>
@@ -680,7 +689,7 @@ List Versions
 `````````````
 :Resource: /content/objects/<ID>/versions
 :Method: GET
-:Description: Returns a list of all versions of the content. This method does not include fields and relations int the Version elements of the response.
+:Description: Returns a list of all versions of the content. This method does not include fields and relations in the Version elements of the response.
 :Headers:
     :Accept:
          :application/vnd.ez.api.VersionList+xml:  if set the version list is returned in xml format (see VersionList_)
@@ -875,7 +884,7 @@ Update Version
 .. parsed-literal::
 
       HTTP/1.1 200 OK
-      Etag: "<new etag>"
+      ETag: "<new etag>"
       Accept-Patch: application/vnd.ez.api.VersionUpdate+(json|xml)
       Content-Type: <depending on accept header>
       Content-Length: <length>
@@ -886,7 +895,7 @@ Update Version
     :401: If the user is not authorized to update this version  
     :403: If the version is not allowed to change - i.e is not a DRAFT
     :404: If the content id or version id does not exist
-    :412: If the current Etag does not match with the provided one in the If-Match header
+    :412: If the current ETag does not match with the provided one in the If-Match header
     :415: If the media-type is not one of those specified in Headers
 	
 
@@ -1157,7 +1166,7 @@ XML Example
 
 ::
 
-    POST /content/objects/23/versions/4/relations
+    POST /content/objects/23/versions/4/relations HTTP/1.1
     Accept: application/vnd.ez.api.Relation+xml
     Content-Type: application/vnd.ez.api.RelationCreate+xml
     Content-Length: xxx
@@ -1172,6 +1181,7 @@ XML Example
     Content-Type: application/vnd.ez.api.RelationCreate+xml
     Content-Length: xxx
     
+    <?xml version="1.0" encoding="UTF-8"?>
     <Relation href="/content/object/32/versions/2/relations/66" media-type="application/vnd.ez.api.Relation+xml">
       <SourceContent href="/content/objects/23"
         media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -1199,7 +1209,394 @@ Delete a relation
 	
 
 
-END OF CURRENT WORK
+Managing Locations
+~~~~~~~~~~~~~~~~~~
+
+Create a new location for a content object
+``````````````````````````````````````````
+:Resource: /content/objects/<ID>/locations
+:Method: POST
+:Description: Creates a new location for the given content object
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
+         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+    :Content-Type:
+         :application/vnd.ez.api.LocationCreate+json: the LocationCreate_ schema encoded in json
+         :application/vnd.ez.api.LocationCreate+xml: the LocationCreate_ schema encoded in xml
+:Response: 
+
+.. parsed-literal::
+
+          HTTP/1.1 201 Created  
+          Location: /content/locations/<newPath>
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location_      
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to create this location  
+    :403: If a location under the given parent id already exists
+
+XML Example
+'''''''''''
+
+::
+
+    POST /content/objects/23/locations HTTP/1.1
+    Accept: application/vnd.ez.api.Location+xml
+    Content-Type: application/vnd.ez.api.LocationCreate+xml
+    Contnt-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <LocationCreate>
+      <ParentLocation href="/content/locations/1/5/73" />
+      <priority>0</priority>
+      <hidden>false</hidden>
+      <sortField>PATH</sortField>
+      <sortOrder>ASC</sortOrder>
+    </LocationCreate>
+
+
+    HTTP/1.1 201 Created
+    Location: /content/locations/1/5/73/133
+    ETag: "2345563422"
+    Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
+    Content-Type: application/vnd.ez.api.Location+xml
+    Contnt-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Location href="/content/locations/1/5/73/133" media-type="application/vnd.ez.api.Location+xml">
+      <id>133</id>
+      <priority>0</priority>
+      <hidden>false</hidden>
+      <invisible>false</invisible>
+      <ParentLocation href="/content/locations/1/5/73" media-type="application/vnd.ez.api.Location+xml"/>
+      <pathString>/1/5/73/133</pathString>
+      <subLocationModificationDate>2001-01-01T12:45:00</subLocationModificationDate>
+      <depth>4</depth>
+      <childCount>0</childCount>
+      <remoteId>remoteId-qwert567</remoteId>
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
+      <sortField>PATH</sortField>
+      <sortOrder>ASC</sortOrder>
+    </Location>
+        
+ 
+	
+Get locations for a content object
+``````````````````````````````````
+:Resource: /content/objects/<ID>/locations
+:Method: GET
+:Description: loads all locations for the given content object
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.LocationList+xml:  if set the new location is returned in xml format (see Location_)
+         :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
+:Response: 
+
+.. parsed-literal::
+
+          HTTP/1.1 200
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location_  (locationListType)     
+
+:Error Codes:
+    :404: If the  object with the given id does not exist
+    :401: If the user is not authorized to read this object  
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/objects/23/locations HTTP/1.1
+    Accept: application/vnd.ez.api.LocationList+xml
+
+    HTTP/1.1 200 OK
+    ETag: "<etag>"
+    Content-Type:  application/vnd.ez.api.LocationList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <LocationList href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml">
+      <Location href="/content/locations/1/2/56" media-type="application/vnd.ez.api.Location+xml"/>
+      <Location href="/content/locations/1/4/73/133" media-type="application/vnd.ez.api.Location+xml"/>
+    </LocationList>
+        
+
+Load location 
+`````````````
+:Resource: /content/locations/<path>
+:Method: GET
+:Description: loads the location for the given path
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
+         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+:Response: 
+
+.. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Location: /content/locations/<path>
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location_      
+
+:Error Codes:
+    :404: If the  location with the given id does not exist
+    :401: If the user is not authorized to read this location  
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/locations/1/4/73/133 HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.Location+xml
+    
+    HTTP/1.1 200 OK
+    ETag: "2345563422"
+    Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
+    Content-Type: application/vnd.ez.api.Location+xml
+    Contnt-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Location href="/content/locations/1/5/73/133" media-type="application/vnd.ez.api.Location+xml">
+      <id>133</id>
+      <priority>0</priority>
+      <hidden>false</hidden>
+      <invisible>false</invisible>
+      <ParentLocation href="/content/locations/1/5/73" media-type="application/vnd.ez.api.Location+xml"/>
+      <pathString>/1/5/73/133</pathString>
+      <subLocationModificationDate>2001-01-01T12:45:00</subLocationModificationDate>
+      <depth>4</depth>
+      <childCount>0</childCount>
+      <remoteId>remoteId-qwert567</remoteId>
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
+      <sortField>PATH</sortField>
+      <sortOrder>ASC</sortOrder>
+    </Location>
+     
+
+Update location
+```````````````
+:Resource: /content/locations/<ID>
+:Method: PATCH or POST with header: X-HTTP-Method-Override: PATCH
+:Description: updates the location,  this method can also be used to hide/unhide a location via the hidden field in the LocationUpdate_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
+         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+    :Content-Type:
+         :application/vnd.ez.api.LocationUpdate+json: the LocationUpdate_ schema encoded in json
+         :application/vnd.ez.api.LocationUpdate+xml: the LocationUpdate_ schema encoded in xml
+:Response: 
+
+.. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Location: /content/locations/<path>
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location_      
+
+:Error Codes:
+    :404: If the  location with the given id does not exist
+    :401: If the user is not authorized to update this location  
+
+
+XML Example
+'''''''''''
+
+::
+
+    PATCH /content/locations/1/5/73/133 HTTP/1.1
+    Host: www.example.net
+    If-Match: "12345678"
+    Accept: application/vnd.ez.api.Location+xml
+    Content-Type: :application/vnd.ez.api.LocationUpdate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <LocationUpdate>
+      <priority>3</priority>
+      <hidden>true</hidden>
+      <remoteId>remoteId-qwert999</remoteId>
+      <sortField>CLASS</sortField>
+      <sortOrder>DESC</sortOrder>
+    </LocationUpdate>
+
+
+    HTTP/1.1 200 OK
+    ETag: "2345563444"
+    Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
+    Content-Type: application/vnd.ez.api.Location+xml
+    Content-Length: xxx
+    
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Location href="/content/locations/1/5/73/133" media-type="application/vnd.ez.api.Location+xml">
+      <id>133</id>
+      <priority>3</priority>
+      <hidden>true</hidden>
+      <invisible>true</invisible>
+      <ParentLocation href="/content/locations/1/5/73" media-type="application/vnd.ez.api.Location+xml"/>
+      <pathString>/1/5/73/133</pathString>
+      <subLocationModificationDate>2001-01-01T12:45:00</subLocationModificationDate>
+      <depth>4</depth>
+      <childCount>0</childCount>
+      <remoteId>remoteId-qwert999</remoteId>
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
+      <sortField>CLASS</sortField>
+      <sortOrder>ASC</sortOrder>
+    </Location>
+     
+
+Get child locations 
+```````````````````
+:Resource: /content/locations/<path>/children
+:Method: GET
+:Description: loads all child locations for the given parent location
+:Parameters:
+    :offset: the offset of the result set
+    :limit: the number of locations returned
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.LocationList+xml:  if set the new location list is returned in xml format (see Location_)
+         :application/vnd.ez.api.LocationList+json:  if set the new location list is returned in json format (see Location_)
+:Response: 
+
+.. parsed-literal::
+
+          HTTP/1.1 200 OK
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location_      
+
+:Error Codes:
+    :404: If the  object with the given id does not exist
+    :401: If the user is not authorized to read this object  
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/locations/1/2/54/children HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.LocationList+xml
+
+    HTTP/1.1 200 OK
+    ETag: "<etag>"
+    Content-Type:  application/vnd.ez.api.LocationList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <LocationList href="/content/locations/1/2/54" media-type="application/vnd.ez.api.LocationList+xml">
+      <Location href="/content/locations/1/2/54/134" media-type="application/vnd.ez.api.Location+xml"/>
+      <Location href="/content/locations/1/4/54/143" media-type="application/vnd.ez.api.Location+xml"/>
+    </LocationList>
+
+Get Parent Location
+```````````````````
+:Resource: /content/locations/<path>/parent
+:Method: GET
+:Description: redirects to the parent location. 
+:Parameters:
+:Response: 
+
+::
+
+      HTTP/1.1 307 Moved Temporarily
+      Location: /content/locations/<path>
+
+
+:Error Codes:
+    :404: If the  object with the given id does not exist
+    :401: If the user is not authorized to read this object  
+
+Move Subtree
+````````````
+:Resource: /content/locations/<path>
+:Method: MOVE or POST with header X-HTTP-Method-Override: MOVE
+:Description: moves the location to another parent. The destination can also be /content/trash where the location is put into the trash.
+:Headers:
+    :Destination: A parent location resource to which the location is moved
+:Response: 
+
+::
+    
+     HTTP/1.1 201 Created
+     Location: /content/locations/<newPath>
+     or Location: /content/trash/<ID>
+
+:Error Codes:
+    :404: If the  location with the given id does not exist
+    :401: If the user is not authorized to move this location  
+	
+Copy Subtree
+````````````
+:Resource: /content/locations/<path>
+:Method: COPY or POST with header X-HTTP-Method-Override: COPY
+:Description: copies the subtree to another parent
+:Headers:
+    :Destination: A parent location resource to which the location is moved
+:Response: 
+
+::
+    
+     HTTP/1.1 201 Created
+     Location: /content/locations/<newPath>
+
+:Error Codes:
+    :404: If the location with the given id does not exist
+    :401: If the user is not authorized to move this location  
+
+Swap Location
+`````````````
+:Resource: /content/locations/<ID>
+:Method: SWAP or POST with header X-HTTP-Method-Override: SWAP
+:Description: Swaps the content of the location with the content of the given location
+:Headers:
+    :Destination: A location resource with which the content is swapped
+:Response: 
+
+::
+    
+     HTTP/1.1 204 No Content
+
+:Error Codes:
+    :404: If the location with the given id does not exist
+    :401: If the user is not authorized to swap this location  
+
+Delete Subtree
+``````````````
+:Resource: /content/locations/<path>
+:Method: DELETE
+:Description: Deletes the complete subtree for the given path. Every content object is deleted which does not have any other location. Otherwise the deleted location is removed from the content object. The children a recursively deleted.
+:Response: 204
+:Response: 
+
+::
+    
+     HTTP/1.1 204 No Content
+
+:Error Codes:
+    :404: If the  location with the given id does not exist
+    :401: If the user is not authorized to delete this subtree  
 
 Views
 ~~~~~
@@ -1261,32 +1658,9 @@ Create Translation
     :401: If the user is not authorized to create the translation
     :404: If the content object does not exist
 
-List Languages
-``````````````
-:Resource: /content/objects/<ID>/languages
-:Method: GET
-:Description: Lists all available languages of a content object
-:Parameters: 
-:Response: 200 array of string
-:Error Codes:
-    :404: If the content object or the tranlation info was not found 
-    :401: If the user is not authorized to delete this object
-
-Load Content in one Language
-````````````````````````````
-:Resource: /content/objects/<ID>/languages/<language_code>
-:Method: GET
-:Description: Loads the current version of a content object only containing the fields in the given language and the non translatable fields.
-:Parameters: 
-:Response: 200 Version_
-:Error Codes:
-    :404: If the content object or the tranlation info was not found 
-    :401: If the user is not authorized to delete this object
-
-
 Remove a language
 `````````````````
-:Resource: /content/objects<ID>/languages/<language_code>
+:Resource: /content/objects/<ID>/<language_code>
 :Method: DELETE
 :Description: A language is completely removed from the content object in all versions and the translation metadata is deleted.
 :Parameters:
@@ -1295,209 +1669,6 @@ Remove a language
     :401: If the user is not authorized to remove the translation
     :404: If the object or the translation does not exist
 	
-
-Managing Locations
-~~~~~~~~~~~~~~~~~~
-
-Create a new location for a content object
-``````````````````````````````````````````
-:Resource: /content/objects/<ID>/locations
-:Method: PUT
-:Description: Creates a new location for the given content object
-:Request Format: application/json
-:Parameters:
-     :parentId: (required): the parentId for new created location
-:Inputschema: LocationInput_
-:Response: 200 Location_
-:Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this location  
-    :403: If a location under the given parent id already exists
-	
-Alternatively:
-
-:Resource: /content/locations
-:Method: PUT
-:Description: Creates a new location for the given content object and parent Id
-:Request Format: application/json
-:Parameters:
-    :contentId: (required) the id of the content object for which this location should be created
-    :parentId: (required) the parent location for the new created location
-:Inputschema: LocationInput_
-:Response: 200 Location_
-:Error Codes:
-
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this location  
-    :403: If a location for the given content object already exists under the given parent location
-	
-Alternatively:
-
-:Resource: /content/locations/<ID>/children
-:Method: PUT
-:Description: Creates a new location for the given content object
-:Request Format: application/json
-:Parameters:
-    :contentId: (required): the contentId for which the new location is created
-:Inputschema: LocationInput_
-:Response: 200 Location_
-:Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this location  
-    :403: If a location for the given content object already exists under the given location
-	
-Get locations for a content object
-``````````````````````````````````
-:Resource: /content/objects/<ID>/locations
-:Method: GET
-:Description: loads all locations for the given content object
-:Parameters:
-:Response: 200 array of Location_
-:Error Codes:
-    :404: If the  object with the given id does not exist
-    :401: If the user is not authorized to read this object  
-
-Load main location
-``````````````````
-:Resource: /content/objects/<ID>/mainlocation
-:Method: GET
-:Description: loads the main location for the given content
-:Parameters:
-:Response: 200 Location_
-:Error Codes:
-    :404: If the content object with the given id does not exist
-    :401: If the user is not authorized to read this location  
-
-Change main location of a content object
-````````````````````````````````````````
-:Resource: /content/objects/<ID>/mainlocation
-:Method: PUT
-:Description: changes the main location of the given content object
-:Request Format: 
-:Parameters:
-     :locationId: (required): the id of the new main location
-:Inputschema: 
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to update the content object  
-    :403: If the location belongs not to the locations of content
-	
-
-
-Load location by id
-```````````````````
-:Resource: /content/locations/<ID>
-:Method: GET
-:Description: loads the location for the given id
-:Parameters:
-:Response: 200 Location_
-:Error Codes:
-    :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to read this location  
-	
-
-Update location
-```````````````
-:Resource: /content/locations/<ID>
-:Method: PUT
-:Description: updates the location,  this method can also be used to hide/unhide a location via the hidden field in the LocationInput_
-:Request Format: application/json
-:Parameters:
-:Inputschema: LocationInput_
-:Response: 200 Location_
-:Error Codes:
-    :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to update this location  
-
-Delete Subtree
-``````````````
-:Resource: /content/locations/<ID>
-:Method: DELETE
-:Description: Deletes the complete subtree for the given root id or moves it to the trash. If the parameter trash = false every content object is deleted (see "delete content object") which does not have any other location. Otherwise the deleted location is removed from the content object. The children a recursively deleted also. If trahs = true the locations are moved to trash and the content object is left untouched.
-:Parameters:
-    :trash: boolean (default true). If true the locations and content objects are moved to trash
-:Response: 204
-:Error Codes:
-    :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to delete this subtree  
-
-Get child locations 
-```````````````````
-:Resource: /content/locations/<ID>/children
-:Method: GET
-:Description: loads all child locations for the given parent location
-:Parameters:
-    :offset: the offset of the result set
-    :limit: the number of locations returned
-:Response: 200 array of Location_
-:Error Codes:
-    :404: If the  object with the given id does not exist
-    :401: If the user is not authorized to read this object  
-
-Delete all children (Subtree)
-`````````````````````````````
-:Resource: /content/locations/<ID>/children
-:Method: DELETE
-:Description: Deletes the complete subtree for the given children or moves it to the trash. If the parameter trash = false every content object is deleted (see "delete content object") which does not have any other location. Otherwise the deleted location is removed from the content object. The children a recursively deleted also. If trahs = true the locations are moved to trash and the content object is left untouched.
-:Parameters:
-	:trash: boolean (default true). If true the locations and content objects are moved to trash
-:Response: 204
-:Error Codes:
-    :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to delete this location  
-
-Get Parent Location
-```````````````````
-:Resource: /content/locations/<ID>/parent
-:Method: GET
-:Description: loads the parent location
-:Parameters:
-:Response: 200 Location_
-:Error Codes:
-    :404: If the  object with the given id does not exist
-    :401: If the user is not authorized to read this object  
-
-Move Subtree
-````````````
-:Resource: /content/locations/<ID>/parent
-:Method: PUT
-:Description: moves the location to another parent
-:Request Format: 
-:Parameters:
-    :destParentId: (required) - the new parent id
-:Inputschema:
-:Response: 200
-:Error Codes:
-    :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to move this location  
-	
-Copy Subtree
-````````````
-:Resource: /content/locations/<parentId>/children
-:Method: POST
-:Description: moves the location to another parent
-:Request Format: 
-:Parameters:
-    :srcId: (required) - the id of the tree to be copied
-:Inputschema:
-:Response: 200 Location_
-:Error Codes:
-    :404: If the location with the given id does not exist
-    :401: If the user is not authorized to move this location  
-
-Swap Location
-`````````````
-:Resource: /content/locations/<ID>
-:Method: POST
-:Description: Swaps the content of the location with the content of the given location
-:Request Format: 
-:Parameters:
-    :srcNodeId: (required) - the id of the location to be swapped
-:Inputschema:
-:Response: 204
-:Error Codes:
-    :404: If the location with the given id does not exist
-    :401: If the user is not authorized to swap this location  
 
 Managing Sections
 ~~~~~~~~~~~~~~~~~
@@ -2668,7 +2839,7 @@ ContentCreate XML Schema
         <xsd:all>
           <xsd:element name="ContentType" type="ref" />
           <xsd:element name="mainLanguageCode" type="xsd:string" />
-          <xsd:element name="ParentLocation" type="ref"/>
+          <xsd:element name="LocationCreate" type="locationCreateType"/>
           <xsd:element name="Section" type="ref" minOccurs="0" />
           <xsd:element name="User" type="ref" minOccurs="0" />
           <xsd:element name="alwaysAvailable" type="xsd:boolean"
@@ -2726,69 +2897,12 @@ Specific Field type formats
 Author
 ~~~~~~
 
-::
-
-    {
-        "name": "Authors",
-        "properties":
-            "authors": 
-            {
-                "type": array,
-                "items":
-                {
-                    type: {
-                        "name": "Author",
-                        "properties":
-                        {
-                           "name": {
-                               "type: "string"
-                            }
-                            "email": {
-                                "type":"string"
-                            }
-                        }
-                    }
-                }
-            }
-    }
 
 Selection
 ~~~~~~~~~
 
-::
-
-    {
-        "name": "Selection",
-        "properties":
-            "values": 
-            {
-                "type": array,
-                "items": {
-                    "type":"string"
-                }
-            }
-        }
-    }
-
-
-
 Keyword
 ~~~~~~~
-
-::
-
-    {
-        "name": "Keywords",
-        "properties":
-            "keywords": 
-            {
-                "type": array,
-                "items": {
-                    "type":"string"
-                }
-            }
-        }
-    }
 
 
 Country
@@ -2798,880 +2912,69 @@ Country
 RelationListInput
 ~~~~~~~~~~~~~~~~~
 
-::
-
-    {
-        "name":"RelationListInput",
-        "description":"this schema is used if a field of type ezobjectrelations is created 
-                       or updated",
-        "properties": {
-            "targetObjects": {
-                "type":"array",
-                "items": {
-                    "type":"integer"
-                }
-            }
-        }
-    }
-
-
 
 .. _Query:
 
-Query JSON Schema
------------------
-
-::
-
-    {
-        "name":"Query",
-        "properties": 
-        {
-            "identifier": {
-                "type":"string"
-            }
-            "criterion": 
-            {
-                "type": 
-                {
-                    "name": "Criterion",
-                    "properties": 
-                     {
-                         "name": 
-                         {
-                             "type": "string",
-                             "enum": ["ContentId","ContentTypeGroupId","ContentTypeId",
-                                      "DateMetaData", "Field","FullText","LocationId",
-                                      "ParentLocationId","RemoteId",
-                                      "SectionId","Status","SubtreeId","UrlAlias",
-                                      "UserMetaData", "AND","OR","NOT"]
-                         },
-                         "data": {
-                            "type":[
-                                      {
-                                          "name":"AND",
-                                          "properties": {
-                                              "terms": {
-                                                  "type": "array",
-                                                  "items: {
-                                                      "type": { "$ref", "#Criterion" }
-                                                  }
-                                              }
-                                          }
-                                      }, 
-                                      {
-                                          "name":"OR",
-                                          "properties": {
-                                              "terms": {
-                                                  "type": "array",
-                                                  "items: {
-                                                      "type": { "$ref", "#Criterion" }
-                                                  }
-                                              }
-                                          }
-                                      }, 
-                                      {
-                                          "name":"NOT",
-                                          "properties": {
-                                              "term": {
-                                                  "type": { "$ref", "#Criterion" }
-                                               }
-                                          }
-                                      }, 
-                                      {
-                                          "name": "ContentIdCriterion",
-                                          "properties": {
-                                              "contentIds": {
-                                                  "type": "array",
-                                                  "items":  {
-                                                      "type" : "integer"
-                                                  }
-                                              }
-                                          }
-                                      },
-                                      {
-                                          "name": "ContentTypeGroupIdCriterion",
-                                          "properties": {
-                                              "groupId": {
-                                                  "type":"integer"
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "ContentTypeIdCriterion",
-                                          "properties": {
-                                              "typeId": {
-                                                  "type": ["integer","string"]
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "FieldCriterion",
-                                          "properties": {
-                                              "target": {
-                                                  "description":"the identifier of the field",
-                                                   "type": "string"
-                                              },
-                                              "operator": {
-                                                  "type":"string",
-                                                  "enum": ["IN","LIKE","EQ","LT","LTE","GT","GTE","BETWEEN"]
-                                              },
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":"any"
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "DateMetaDataCriterion",
-                                          "properties": {
-                                              "target": {
-                                                  "type":"string",
-                                                  "enum": ["CREATED","MODIFIED"]
-                                              },
-                                              "operator": {
-                                                  "type":"string",
-                                                  "enum": ["EQ","LT","LTE","GT","GTE","BETWEEN"]
-                                              },
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":"integer"
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "FullTextCriterion",
-                                          "properties": {
-                                              "value": {
-                                                  "type":"string"
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "LocationIdCriterion",
-                                          "properties": {
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":["integer","string"]
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "ParentLocationIdCriterion",
-                                          "properties": {
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":["integer","string"]
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "SectionIdCriterion",
-                                          "properties": {
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":["integer","string"]
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "RemoteIdCriterion",
-                                          "properties": {
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":["integer","string"]
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "StatusCriterion",
-                                          "properties": {
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type": "string"
-                                                      "enum": ["DRAFT","PUBLISHED","ARCHIVED"]
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "SubtreeCriterion",
-                                          "properties": {
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "description":"the full path of the subtree"
-                                                      "type": "string"
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "URLAliasCriterion",
-                                          "properties": {
-                                              "operator": {
-                                                  "type":"string",
-                                                  "enum": ["EQ","IN","LIKE"]
-                                              },
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":"string"
-                                                  }
-                                              }
-                                          }    
-                                      },
-                                      {
-                                          "name": "UserMetaDataCriterion",
-                                          "properties": {
-                                              "target": {
-                                                  "type":"string",
-                                                  "enum": ["CREATOR","MODIFIER","OWNER","GROUP"]
-                                              },
-                                              "value": {
-                                                  "type": "array",
-                                                  "items": {
-                                                      "type":"integer"
-                                                  }
-                                              }
-                                          }    
-                                      }
-                                  ]
-                         }
-                    }
-                }
-            },
-            "limit": {
-                "type":"integer"
-            },
-            "offset": {
-                "type":"integer"
-            },
-            "sortClauses": 
-            {
-                "type":"array",
-                "items": 
-                {
-                    "type"; 
-                    {
-                        "name":"SortClause",
-                        "properties": 
-                        {
-                            "sortField": 
-                            {
-                                "type":"string",
-                                "enum":  ["PATH","PATHSTRING","MODIFIED","CREATED",
-                                          "SECTIONIDENTIFIER","SECTIONID","FIELD",
-                                          "PRIORITY","NAME"]
-                            },
-                            "data": {
-                                "type": "any"
-                            }
-                        }
-                    }
-                },
-                "sortOrder": {
-                    "type":"string",
-                    "enum": ["ASC","DESC"]
-                },
-            }
-        }
-    }
+Query XML Schema
+----------------
 
 
 .. _TranslationInfo:
 
-TranslationInfo JSON Schema
----------------------------
+TranslationInfo XML Schema
+--------------------------
 
-::
+.. _LocationCreate:
 
-    {
-        "name":"TranslationInfo",
-        "properties": 
-        {
-            "sourceLanguage": {
-                "type":"string"
-            },
-            "destinationLanguage": {
-                "type":"string"
-            },
-            "sourceVersion": {
-                "type":"integer"
-            },
-            "destinationVersion": {
-                "type":"integer"
-            },
-            "translator": {
-                "type":"string"
-            },
-        }
-    }
-
-
-.. _LocationInput:
-
-LocationInput JSON Schema
+LocationCreate XML Schema
 -------------------------
 
-::
+.. _LocationUpdate:
 
-    {
-      "name":"LocationInput",
-      "properties": {
-              "priority": {
-                      "type":"integer"
-               },
-              "remoteId": {
-                      "type":"string"
-               },
-               "hidden": {
-                      "description":"if set to false and the location was visible it will be hidden, 
-                                     if set to true and the location is hidden it is set to visible",
-                      "type":"boolean"
-               },
-               "sortField": {
-                       "type":"string",
-               "enum": ["PATH","PUBLISHED","MODIFIED","SECTION","DEPTH","CLASS_IDENTIFIER",
-                        "CLASS_NAME","PRIORITY","NAME","MODIFIED_SUBNODE","NODE_ID",
-                        "CONTENTOBJECT_ID"]
-               },
-               "sortOrder": {
-               "type":"string",
-               "enum": ["ASC","DESC"]
-               },
-      }
-    }
-
-
+LocationUpdate XML Schema
+-------------------------
 
 .. _Location:
 
-Location JSON Schema
---------------------
-
-::
-
-    {
-      "name":"Location",
-      "properties": {
-              "pathString": {
-                      "type":"string"
-               },
-              "pathIdentificationString": {
-                      "type":"string"
-               },
-              "id": {
-                      "type":"integer"
-               },
-              "content": {
-                      "type": {"$ref":"#ContentInfo"}
-               },
-              "parentId": {
-                      "type":"integer"
-               },
-              "mainLocationId": {
-                      "type":"integer"
-               },
-              "priority": {
-                      "type":"integer"
-               },
-              "hidden": {
-                      "type":"boolean"
-               },
-              "depth": {
-                      "type":"integer"
-               },
-              "invisible": {
-                      "type":"boolean"
-               },
-              "modifiedSubLocation": {
-                       "type":"string",
-                       "format":"date-time"
-               },
-               "remoteId"; {
-                   "type":"string"
-               },
-               "children": {
-                   "type":"array",
-                   "items": {
-                        "type":"integer"
-                   }
-               },
-              "sortField": {
-                      "type":"string",    
-                      "enum":["PATH","PUBLISHED","MODIFIED","SECTION",
-                              "DEPTH","CLASS_IDENTIFIER","CLASS_NAME",
-                              "PRIORITY","NAME","MODIFIED_SUBNODE",
-                              "NODE_ID","CONTENTOBJECT_ID"]
-               },
-              "sortOrder": {
-                      "type":"string"
-                  "enum": ["ASC","DESC"]
-               },
-      }
-    }
+Location XML Schema
+-------------------
 
 .. _SectionInput:
 
-SectionInput JSON Schema
-------------------------
+SectionInput XML Schema
+-----------------------
 
-::
-
-    {
-      "name":"SectionInput",
-      "properties": {
-              "name": {
-                  "type":"string"
-               },
-              "identifier": {
-                  "type":"string"
-               }
-      }
-    }
-    
 .. _Section:
     
-Section JSON Schema
--------------------
-
-::
-
-    {
-      "name":"Section",
-      "properties": {
-              "id": {
-                  "type":"integer"
-               },
-              "name": {
-                  "type":"string"
-               },
-              "identifier": {
-                  "type":"string"
-               }
-      }
-    }
+Section XML Schema
+------------------
 
 .. _ContentTypeGroup:
 
-ContentTypeGroup JSON Schema
-----------------------------
+ContentTypeGroup XML Schema
+---------------------------
 
-::
-
-    {
-        "name":"ContentTypeGroup",
-        "properties": {
-            "id": {
-                "type":"integer"
-            },
-            "identifier": {
-                "type":"string"
-                "required":"true"
-            },
-            "name" : {
-                "description":"the name of the content type",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "description" : {
-                "description":"the description of the content type",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "contentTypes": {
-                "description":"the collection of content types",
-                "type":"array",
-                "items": {
-                    "type": [{ "$ref": "#ContentType" }, "integer" ]
-                }
-            },
-            "creatorId": {
-                "type":"integer"
-            },
-            "created": {
-                "type":"string",
-                "format":"date-time"
-            },
-            "modifierId": {
-                "type":"integer"
-            },
-            "modified": {
-                "type":"string",
-                "format":"date-time"
-            }
-        }
-    }
 
 .. _ContentTypeGroupInput:
 
-ContentTypeGroupInput JSON Schema
----------------------------------
-
-::
-
-    {
-        "name":"ContentTypeGroupInput",
-        "properties": {
-            "identifier": {
-                "type":"string"
-                "required":"true"
-            },
-            "name" : {
-                "description":"the name of the content type",
-                "type":"array",
-                "items": {
-                    "type": {
-                        "name":"MLValue",
-                        "properties": {
-                            "language": {
-                                "type":"string",
-                            }
-                            "value":{
-                                "type":"string"
-                            }
-                        }
-                    }
-                }
-            },
-            "description" : {
-                "description":"the description of the content type",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            }
-        }
-    }
-
-
-
+ContentTypeGroupInput XML Schema
+--------------------------------
 
 
 .. _ContentType:
 
-ContentType JSON Schema
------------------------
-
-::
-
-    {
-        "name":"ContentType",
-        "properties": {
-            "id": {
-                "type":"integer"
-            },
-            "identifier": {
-                "type":"string"
-                "required":"true"
-            },
-            "name" : {
-                "description":"the name of the content type",
-                "type":"array",
-                "items": {
-                    "type": {
-                        "name":"MLValue",
-                        "properties": {
-                            "language": {
-                                "type":"string",
-                            }
-                            "value":{
-                                "type":"string"
-                            }
-                        }
-                    }
-                }
-            },
-            "description" : {
-                "description":"the description of the content type",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "state": {
-                "type":"string",
-                "enum": ["DRAFT","PULISHED","PENDING"]
-            },
-            "creatorId": {
-                "type":"integer"
-            },
-            "created": {
-                "type":"string",
-                "format":"date-time"
-            },
-            "modifierId": {
-                "type":"integer"
-            },
-            "modified": {
-                "type":"string",
-                "format":"date-time"
-            },   
-            "defaultAlwaysAvailable": {
-                "description":"defines if object instances are always availble 
-                               in the main language per default ",
-                "type":"boolean"
-            },
-            "remoteId": {
-                "type":"string"
-            },
-            "urlAliasSchema": {
-                "type":"string"
-            },
-            "objectNameSchema": {
-                "type":"string"
-            },
-            "isContainer": {
-                "type":"boolean"
-            },
-            "groupIds": {
-                "description":"the group ids of groups to which this type belongs to",
-                "type":"array",
-                "items": {
-                    "type": "integer"
-                }
-            },  
-            "fieldDefinitions": {
-                "description":"the collection of field definitions",
-                "type":"array",
-                "items": {
-                    "type":{
-                        "name":"FieldDefinition",
-                        "properties": {
-                            "indentifer": {
-                                "type":"string",
-                                "required":"true"
-                            },
-                            "id": {
-                                "type":"integer"
-                            },
-                            "name" : {
-                                "description":"the names of the field definition 
-                                               in multiple languages",
-                                "type":"array",
-                                "items": {
-                                    "type": { "$ref":"#MLValue" }
-                                }
-                            },
-                            "description" : {
-                                "description":"the descriptions of the field definition 
-                                               in multiple languages",
-                                "type":"array",
-                                "items": {
-                                    "type": { "$ref":"#MLValue" }
-                                }
-                            },
-                            "fieldType": {
-                                "type":"string"
-                            },
-                            "fieldGroup": {
-                                "type":"string"
-                            },
-                            "position": {
-                                "type":"integer"
-                            },
-                            "isSearchablle": {
-                                "type":"boolean"
-                            },
-                            "isTrabslatable": {
-                                "type":"boolean"
-                            },
-                            "isInfoCollector": {
-                                "type":"boolean"
-                            },
-                            "isRequired": {
-                                "type":"boolean"
-                            },
-                        }
-                    }
-                }
-            }
-        }
-    }
+ContentType XML Schema
+----------------------
 
 .. _ContentTypeInput:
 
 ContentTypeInput JSON Schema
 ----------------------------
 
-::
-
-    {
-        "name":"ContentType",
-        "properties": {
-            "identifier": {
-                "type":"string"
-                "required":"true"
-            },
-            "name" : {
-                "description":"the name of the content type",
-                "type":"array",
-                "items": {
-                    "type": {
-                        "name":"MLValue",
-                        "properties": {
-                            "language": {
-                                "type":"string",
-                            }
-                            "value":{
-                                "type":"string"
-                            }
-                        }
-                    }
-                }
-            },
-            "description" : {
-                "description":"the description of the content type",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "defaultAlwaysAvailable": {
-                "description":"defines if object instances are always availble in the 
-                               main language per default ",
-                "type":"boolean"
-            },
-            "remoteId": {
-                "type":"string"
-            },
-            "urlAliasSchema": {
-                "type":"string"
-            },
-            "objectNameSchema": {
-                "type":"string"
-            },
-            "isContainer": {
-                "type":"boolean"
-            },
-            "fieldDefinitions": {
-                "description":"the collection of field definitions",
-                "type":"array",
-                "items": {
-                    "type":{
-                        "name":"FieldDefinition",
-                        "properties": {
-                            "indentifer": {
-                                "type":"string",
-                                "required":"true"
-                            },
-                            "name" : {
-                                "description":"the names of the field definition in 
-                                               multiple languages",
-                                "type":"array",
-                                "items": {
-                                    "type": { "$ref":"#MLValue" }
-                                }
-                            },
-                            "description" : {
-                                "description":"the descriptions of the field definition 
-                                               in multiple languages",
-                                "type":"array",
-                                "items": {
-                                    "type": { "$ref":"#MLValue" }
-                                }
-                            },
-                            "fieldType": {
-                                "type":"string"
-                            },
-                            "fieldGroup": {
-                                "type":"string"
-                            },
-                            "position": {
-                                "type":"integer"
-                            },
-                            "isSearchablle": {
-                                "type":"boolean"
-                            },
-                            "isTrabslatable": {
-                                "type":"boolean"
-                            },
-                            "isInfoCollector": {
-                                "type":"boolean"
-                            },
-                            "isRequired": {
-                                "type":"boolean"
-                            },
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 .. _FieldDefinition:
 
 FieldDefinition JSON Schema
 ---------------------------
-
-::
-
-    {
-        "name":"FieldDefinition",
-        "properties": {
-            "id": {
-                "type":"integer"
-            },
-            "indentifer": {
-                "type":"string",
-                "required":"true"
-            },
-            "name" : {
-                "description":"the names of the field definition in multiple languages",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "description" : {
-                "description":"the descriptions of the field definition in multiple languages",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "fieldType": {
-                "type":"string"
-            },
-            "fieldGroup": {
-                "type":"string"
-            },
-            "position": {
-                "type":"integer"
-            },
-            "isSearchablle": {
-                "type":"boolean"
-            },
-            "isTrabslatable": {
-                "type":"boolean"
-            },
-            "isInfoCollector": {
-                "type":"boolean"
-            },
-            "isRequired": {
-                "type":"boolean"
-            },
-        }
-    }
-
 
 
 .. _FieldDefinitionInput:
@@ -3679,445 +2982,30 @@ FieldDefinition JSON Schema
 FieldDefinitionInput JSON Schema
 --------------------------------
 
-::
-
-    {
-        "name":"FieldDefinitionInput",
-        "properties": {
-            "indentifer": {
-                "type":"string",
-                "required":"true"
-            },
-            "name" : {
-                "description":"the names of the field definition in multiple languages",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "description" : {
-                "description":"the descriptions of the field definition in multiple languages",
-                "type":"array",
-                "items": {
-                    "type": { "$ref":"#MLValue" }
-                }
-            },
-            "fieldGroup": {
-                "type":"string"
-            },
-            "position": {
-                "type":"integer"
-            },
-            "isSearchablle": {
-                "type":"boolean"
-            },
-            "isTrabslatable": {
-                "type":"boolean"
-            },
-            "isInfoCollector": {
-                "type":"boolean"
-            },
-            "isRequired": {
-                "type":"boolean"
-            },
-        }
-    }
 
 .. _UserGroup:
 
 UserGroup JSON Schema
 ---------------------
 
-::
-
-    {
-        name:"UserGroup",
-        properties: {
-            "parentId": {
-                "type": "integer"
-            },
-            "path": {
-                "type": "string"
-            },
-            "profile": {
-                "type":
-                 {
-                    "name":"UserGroupProfile",
-                    "properties": 
-                    {
-                        "contentType" : 
-                        {
-                            "description":"the string identifier of the content type",
-                            "type":"string",
-                            "required":"true"
-                        },
-                        "name" : 
-                        {
-                            "description":"the default name of the content",
-                            "type":"string",
-                        },
-                        "id": {
-                            "type":"integer"
-                        },
-                        "ownerId": 
-                        {
-                            "description":"the user id of the user which owns this 
-                                           content object".
-                            "type":"integer"
-                        },
-                        "sectionId": {
-                            "type":"integer"
-                        },
-                        "state": 
-                        {
-                            "type":"string",
-                            "enum": ["DRAFT","PUBLISHED","ARCHIVED"]
-                        },
-                        "versionNo": {
-                            "type":"integer"
-                        },
-                        "creatorId": {
-                            "type":"integer"
-                        },
-                        "created": {
-                            "type":"string",
-                            "format":"date-time"
-                        },
-                        "modified": {
-                            "type":"string",
-                            "format":"date-time"
-                        },   
-                        "alwaysAvailable": {
-                            "description":"defines if the content object is always shown 
-                                           even it is not translated in the requested language"
-                            "type":"boolean",
-                            "default": "false"
-                        },
-                        "remoteId": {
-                            "type":"string"
-                        },
-                        "fields": {
-                            "description":"the collection of fields",
-                            "type":"array",
-                            "items": {
-                                "type":{
-                                    "name":"Field",
-                                    "properties": {
-                                        "fieldDef": {
-                                            "type":"string",
-                                            "required":"true"
-                                        }
-                                        "id": {
-                                            "type":"integer"
-                                        }
-                                        "value": {
-                                            "type":"any"
-                                        }
-                                        "language": {
-                                            "type":"string"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 .. _UserGroupInput:
 
 UserGroupInput JSON Schema
 --------------------------
 
-::
-
-    {
-        name:"UserGroupInput",
-        properties: {
-            "profile": {
-                "type":
-                 {
-                    "name":"UserGroupProfile",
-                    "properties": {
-                        "initialLanguage" : 
-                        {
-                            "description":"if fields are provided in multiple languages 
-                                           this attribute indicates the initial language",
-                            "type":"string",
-                        },
-                        "alwaysAvailable": 
-                        {
-                            "description":"defines if the content object is always shown 
-                                        even it is not translated in the requested language"
-                            "type":"boolean",
-                            "default": "false"
-                        },
-                        "remoteId": 
-                        {
-                            "description":"remoteId - if missing the system creates a new one"
-                            "type":"string"
-                        },
-                        "fields": 
-                        {
-                            "description":"the collection of fields",
-                            "type":"array",
-                            "items": 
-                            {
-                                "type":
-                                 {
-                                    "name":"FieldValue",
-                                     "properties": 
-                                     {
-                                         "fieldDef": 
-                                         {
-                                             "type":"string",
-                                             "required":true
-                                         }
-                                         "value": {
-                                             "description":"The value in a format according
-                                                     to the field type of the field definition"
-                                             "type":"any"
-                                         }
-                                         "language": {
-                                             "type":"string"
-                                         }
-                                     }
-                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 .. _UserInfo:
 
-::
-
-    {
-        name:"UserInfo",
-        properties: {
-            "login": {
-                "type": "string"
-            },
-            "email": {
-                "type": "string"
-            },
-            "id": {
-                "type": "integer"
-            },
-            "firstName": {
-                "description":"Optional if available from UserProfile",
-                "type": "string"
-            },
-            "lastName": {
-                "description":"Optional if available from UserProfile",
-                "type": "string"
-            },
-       }
-    } 
 
 .. _User:
 
 User JSON Schema
 -------------------
 
-::
-
-    {
-        name:"User",
-        properties: {
-            "login": {
-                "type": "string"
-            },
-            "email": {
-                "type": "string"
-            },
-            "password": {
-                "type": "string"
-            },
-            "hashAlg": {
-                "type": "string"
-            },
-            "enabled": {
-                "type": "boolean"
-            },
-            "groupIds": {
-                "type": "array",
-                "items": {
-                   "type":"integer"
-                }
-            }
-            "profile": {
-                "type":
-                 {
-                    "name":"UserProfile",
-                    "properties": 
-                    {
-                        "contentType" : 
-                        {
-                            "description":"the string identifier of the content type",
-                            "type":"string",
-                            "required":"true"
-                        },
-                        "name" : 
-                        {
-                            "description":"the default name of the content",
-                            "type":"string",
-                        },
-                        "id": {
-                            "type":"integer"
-                        },
-                        "ownerId": 
-                        {
-                            "description":"the user id of the user which owns this content object".
-                            "type":"integer"
-                        },
-                        "sectionId": {
-                            "type":"integer"
-                        },
-                        "state": 
-                        {
-                            "type":"string",
-                            "enum": ["DRAFT","PUBLISHED","ARCHIVED"]
-                        },
-                        "versionNo": {
-                            "type":"integer"
-                        },
-                        "creatorId": {
-                            "type":"integer"
-                        },
-                        "created": {
-                            "type":"string",
-                            "format":"date-time"
-                        },
-                        "modified": {
-                            "type":"string",
-                            "format":"date-time"
-                        },   
-                        "alwaysAvailable": {
-                            "description":"defines if the content object is always shown
-                                           even it is not translated in the requested language"
-                            "type":"boolean",
-                            "default": "false"
-                        },
-                        "remoteId": {
-                            "type":"string"
-                        },
-                        "fields": {
-                            "description":"the collection of fields",
-                            "type":"array",
-                            "items": {
-                                "type":{
-                                    "name":"Field",
-                                    "properties": {
-                                        "fieldDef": {
-                                            "type":"string",
-                                            "required":"true"
-                                        }
-                                        "id": {
-                                            "type":"integer"
-                                        }
-                                        "value": {
-                                            "type":"any"
-                                        }
-                                        "language": {
-                                            "type":"string"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 .. _UserInput:
 
 UserInput JSON Schema
 ---------------------
-
-::
-
-    {
-        name:"UserInput",
-        properties: {
-            "login": {
-                "type": "string"
-            },
-            "email": {
-                "type": "string"
-            },
-            "password": {
-                "type": "string"
-            },
-            "hashAlg": {
-                "type": "string"
-            },
-            "enabled": {
-                "type": "boolean"
-            },
-            "profile": {
-                "type":
-                 {
-                    "name":"UserProfile",
-                    "properties": {
-                        "initialLanguage" : 
-                        {
-                            "description":"if fields are provided in multiple 
-                                    languages this attribute indicates the initial language",
-                            "type":"string",
-                        },
-                        "alwaysAvailable": 
-                        {
-                            "description":"defines if the content object is always shown even
-                                          it is not translated in the requested language"
-                            "type":"boolean",
-                            "default": "false"
-                        },
-                        "remoteId": 
-                        {
-                            "description":"remoteId - if missing the system creates a new one"
-                            "type":"string"
-                        },
-                        "fields": 
-                        {
-                            "description":"the collection of fields",
-                            "type":"array",
-                            "items": 
-                            {
-                                "type":
-                                 {
-                                    "name":"FieldValue",
-                                     "properties": 
-                                     {
-                                         "fieldDef": 
-                                         {
-                                             "type":"string",
-                                             "required":true
-                                         }
-                                         "value": {
-                                             "description":"The value in a format according
-                                                to the field type of the field definition"
-                                             "type":"any"
-                                         }
-                                         "language": {
-                                             "type":"string"
-                                         }
-                                     }
-                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 
 .. _Limitation:
@@ -4125,91 +3013,21 @@ UserInput JSON Schema
 Limitation JSON Schema
 ----------------------
 
-::
-
-    {
-        "name":"Limitation",
-        "properties: {
-            "identifier": {
-                "type":"string"
-            },
-            "values": {
-                "type": "array",
-                "items": {
-                    "type": "integer"
-                }
-            }
-        }
-    }
 
 .. _Policy:
 
 Policy JSON Schema
 ------------------
 
-::
-
-    {
-        "name":"Policy",
-        "properties: {
-            "module": {
-                "type":"string"
-            },
-            "function": {
-                "type":"string"
-            }
-            "limitytions": {
-                "type": "array",
-                "items": {
-                    "type": { "$ref"; "#Limitation" }
-                }
-            } 
-        }
-    }
-
 .. _PolicyInput:
 
 PolicyInput JSON Schema
 -----------------------
 
-::
-
-    {
-        "name":"PolicyInput",
-        "properties: {
-            "limitytions": {
-                "type": "array",
-                "items": {
-                    "type": { "$ref"; "#Limitation" }
-                }
-            } 
-        }
-    }
-
 .. _Role:
 
 Role JSON Schema
 ----------------
-
-::
-
-    {
-        "name":"Role",
-        "properties: {
-            "id": {
-                "type":"integer"
-            }
-            "name": {
-                "type":"string"
-            }
-            "groupIds": {
-                "type":"array",
-                "items: {
-                    "type": "integer"
-                }
-            }
-        }
-    }
 
 
 .. _ErrorMessage:

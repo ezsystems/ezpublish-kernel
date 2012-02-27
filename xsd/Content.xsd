@@ -27,10 +27,10 @@
             <xsd:element name="Versions" type="ref" />
             <xsd:element name="CurrentVersion" type="embeddedVersionType" />
             <xsd:element name="Section" type="ref" />
-            <xsd:element name="MainLocation" type="ref" />
-            <xsd:element name="Locations" type="ref" />
+            <xsd:element name="MainLocation" type="ref" minOccurs="0" />
+            <xsd:element name="Locations" type="ref" minOccurs="0"/>
             <xsd:element name="Owner" type="ref" />
-            <xsd:element name="publishDate" type="xsd:dateTime" />
+            <xsd:element name="publishDate" type="xsd:dateTime" minOccurs="0"/>
             <xsd:element name="lastModificationDate" type="xsd:dateTime" />
             <xsd:element name="mainLanguageCode" type="xsd:string" />
             <xsd:element name="alwaysAvailable" type="xsd:boolean" />

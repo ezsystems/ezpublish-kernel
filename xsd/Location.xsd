@@ -2,28 +2,6 @@
 <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
-  <xsd:simpleType name="sortFieldType">
-    <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="PATH" />
-      <xsd:enumeration value="PUBLISHED" />
-      <xsd:enumeration value="MODIFIED" />
-      <xsd:enumeration value="SECTION" />
-      <xsd:enumeration value="DEPTH" />
-      <xsd:enumeration value="CLASS_IDENTIFIER" />
-      <xsd:enumeration value="CLASS_NAME" />
-      <xsd:enumeration value="PRIORITY" />
-      <xsd:enumeration value="NAME" />
-      <xsd:enumeration value="MODIFIED_SUBNODE" />
-      <xsd:enumeration value="NODE_ID" />
-      <xsd:enumeration value="CONTENTOBJECT_ID" />
-    </xsd:restriction>
-  </xsd:simpleType>
-  <xsd:simpleType name="sortOrderType">
-    <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="ASC" />
-      <xsd:enumeration value="DESC" />
-    </xsd:restriction>
-  </xsd:simpleType>
 
   <xsd:complexType name="locationType">
     <xsd:complexContent>
@@ -79,21 +57,11 @@
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="subLocationModificationDate"
-            type="xsd:date">
+            type="xsd:dateTime">
             <xsd:annotation>
               <xsd:documentation>
                 Timestamp of the latest update of a
                 content object in a sub location.
-              </xsd:documentation>
-            </xsd:annotation>
-          </xsd:element>
-          <xsd:element name="MainLocation" type="ref">
-            <xsd:annotation>
-              <xsd:documentation>
-                Identifier of the main location.
-                If the
-                content object in this location has multiple locations,
-                MainLocation will point to the main one.
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
@@ -114,6 +82,8 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
           <xsd:element name="Content" type="ref" />
           <xsd:element name="sortField" type="sortFieldType" />
           <xsd:element name="sortOrder" type="sortOrderType" />
@@ -131,4 +101,6 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
+  <xsd:element name="Location" type="locationType" />
+  <xsd:element name="LocationList" type="locationListType" />
 </xsd:schema>

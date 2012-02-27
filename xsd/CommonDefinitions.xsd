@@ -3,18 +3,19 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:complexType name="ref">
     <xsd:annotation>
-    <xsd:documentation>
-    A base schema for referencing resources.
+      <xsd:documentation>
+        A base schema for referencing resources.
     </xsd:documentation>
     </xsd:annotation>
     <xsd:attribute name="href" type="xsd:string" />
     <xsd:attribute name="media-type" type="xsd:string" />
   </xsd:complexType>
+
   <xsd:complexType name="fieldInputValueType">
     <xsd:annotation>
-    <xsd:documentation>
-    Schema for field inputs in content create and update structures
-    </xsd:documentation>
+      <xsd:documentation>
+        Schema for field inputs in content create and update structures
+      </xsd:documentation>
     </xsd:annotation>
     <xsd:all>
       <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
@@ -22,4 +23,27 @@
       <xsd:element name="value" type="xsd:anyType" />
     </xsd:all>
   </xsd:complexType>
+
+  <xsd:simpleType name="sortFieldType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="PATH" />
+      <xsd:enumeration value="PUBLISHED" />
+      <xsd:enumeration value="MODIFIED" />
+      <xsd:enumeration value="SECTION" />
+      <xsd:enumeration value="DEPTH" />
+      <xsd:enumeration value="CLASS_IDENTIFIER" />
+      <xsd:enumeration value="CLASS_NAME" />
+      <xsd:enumeration value="PRIORITY" />
+      <xsd:enumeration value="NAME" />
+      <xsd:enumeration value="MODIFIED_SUBNODE" />
+      <xsd:enumeration value="NODE_ID" />
+      <xsd:enumeration value="CONTENTOBJECT_ID" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="sortOrderType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ASC" />
+      <xsd:enumeration value="DESC" />
+    </xsd:restriction>
+  </xsd:simpleType>
 </xsd:schema>

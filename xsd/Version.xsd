@@ -8,29 +8,33 @@
       <xsd:element name="id" type="xsd:integer" />
       <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
       <xsd:element name="languageCode" type="xsd:string" />
-      <xsd:element name="value" type="xsd:anyType"/>
+      <xsd:element name="value" type="xsd:anyType" />
     </xsd:all>
   </xsd:complexType>
   <xsd:complexType name="versionType">
-    <xsd:all>
-      <xsd:element name="VersionInfo" type="versionInfoType" />
-      <xsd:element name="Fields">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="field" type="fieldValueType"
-              minOccurs="1" maxOccurs="unbounded" />
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element name="Relations">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="Relation" type="relationValueType"
-              minOccurs="0" maxOccurs="unbounded" />
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-    </xsd:all>
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="VersionInfo" type="versionInfoType" />
+          <xsd:element name="Fields" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="field" type="fieldValueType"
+                  minOccurs="1" maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="Relations" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Relation" type="relationValueType"
+                  minOccurs="0" maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
   </xsd:complexType>
   <xsd:element name="Version" type="versionType"></xsd:element>
 </xsd:schema>

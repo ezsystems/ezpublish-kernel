@@ -16,4 +16,5 @@
       </xsd:element>
     </xsd:all>
   </xsd:complexType>
+  <xsd:element name="VersionUpdate" type="versionUpdateType"></xsd:element>
 </xsd:schema>
