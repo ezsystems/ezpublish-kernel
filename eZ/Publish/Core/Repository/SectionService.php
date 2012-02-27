@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
 
+    eZ\Publish\SPI\Persistence\Content\Section as SPISection,
+
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
@@ -77,18 +79,12 @@ class SectionService implements SectionServiceInterface
         }
         catch ( NotFoundException $e ) {}
 
-        $createdSection = $this->persistenceHandler->sectionHandler()->create(
+        $spiSection = $this->persistenceHandler->sectionHandler()->create(
             $sectionCreateStruct->name,
             $sectionCreateStruct->identifier
         );
 
-        return new Section(
-            array(
-                'id'         => $createdSection->id,
-                'identifier' => $createdSection->identifier,
-                'name'       => $createdSection->name
-            )
-        );
+        return $this->buildDomainSectionObject( $spiSection );
     }
 
     /**
@@ -132,13 +128,7 @@ class SectionService implements SectionServiceInterface
             $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $loadedSection->identifier
         );
 
-        return new Section(
-            array(
-                'id'         => $spiSection->id,
-                'identifier' => $spiSection->identifier,
-                'name'       => $spiSection->name
-            )
-        );
+        return $this->buildDomainSectionObject( $spiSection );
     }
 
     /**
@@ -158,20 +148,14 @@ class SectionService implements SectionServiceInterface
 
         try
         {
-            $section = $this->persistenceHandler->sectionHandler()->load( $sectionId );
+            $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
         }
         catch ( NotFound $e )
         {
             throw new NotFoundException( "section", $sectionId, $e );
         }
 
-        return new Section(
-            array(
-                'id'         => $section->id,
-                'identifier' => $section->identifier,
-                'name'       => $section->name
-            )
-        );
+        return $this->buildDomainSectionObject( $spiSection );
     }
 
     /**
@@ -183,24 +167,15 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSections()
     {
-        $allSections = $this->persistenceHandler->sectionHandler()->loadAll();
-        if ( $allSections === null )
-            return array();
+        $spiSections = $this->persistenceHandler->sectionHandler()->loadAll();
+
+        if ( !is_array( $spiSections ) )
+            $spiSections = array( $spiSections );
 
         $returnArray = array();
-
-        if ( !is_array( $allSections ) )
-            $allSections = array( $allSections );
-
-        foreach ( $allSections as $section )
+        foreach ( $spiSections as $spiSection )
         {
-            $returnArray[] = new Section(
-                array(
-                    'id'         => $section->id,
-                    'identifier' => $section->identifier,
-                    'name'       => $section->name
-                )
-            );
+            $returnArray[] = $this->buildDomainSectionObject( $spiSection );
         }
 
         return $returnArray;
@@ -223,20 +198,14 @@ class SectionService implements SectionServiceInterface
 
         try
         {
-            $section = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
+            $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
         }
         catch ( NotFound $e )
         {
             throw new NotFoundException( "section", $sectionIdentifier, $e );
         }
 
-        return new Section(
-            array(
-                'id'         => $section->id,
-                'identifier' => $section->identifier,
-                'name'       => $section->name
-            )
-        );
+        return $this->buildDomainSectionObject( $spiSection );
     }
 
     /**
@@ -321,5 +290,23 @@ class SectionService implements SectionServiceInterface
     public function newSectionUpdateStruct()
     {
         return new SectionUpdateStruct();
+    }
+
+    /**
+     * Builds API Section object from provided SPI Section object
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Section $spiSection
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
+     */
+    protected function buildDomainSectionObject( SPISection $spiSection )
+    {
+        return new Section(
+            array(
+                'id'         => $spiSection->id,
+                'identifier' => $spiSection->identifier,
+                'name'       => $spiSection->name
+            )
+        );
     }
 }
