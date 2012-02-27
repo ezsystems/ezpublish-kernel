@@ -299,6 +299,19 @@ class LocationServiceStub implements LocationService
                 $children[] = $potentialChild;
             }
         }
+
+        usort(
+            $children,
+            function ( $a, $b )
+            {
+                if ( $a->priority == $b->priority )
+                {
+                    return 0;
+                }
+                return ( $a->priority < $b->priority ) ? -1 : 1;
+            }
+        );
+
         return $children;
     }
 

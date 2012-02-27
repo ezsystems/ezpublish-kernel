@@ -622,7 +622,51 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationChildren()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 2 );
+
+        $childLocations = $locationService->loadLocationChildren( $location );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $childLocations
+        );
+        return $childLocations;
+    }
+
+    /**
+     * Test for the loadLocationChildren() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
+     */
+    public function testLoadLocationChildrenData( array $locations )
+    {
+        $this->assertEquals( 9, count( $locations ) );
+
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $location
+            );
+        }
+
+        $this->assertEquals(
+            array( 69, 153, 96, 107, 77, 86, 156, 167, 190 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
+        );
     }
 
     /**
