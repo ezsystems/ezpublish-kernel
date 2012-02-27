@@ -1704,6 +1704,133 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testPublishVersionFromContentDraft()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* END: Use Case */
+
+        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo );
+
+        $this->assertEquals(
+            array(
+                'status'     =>  VersionInfo::STATUS_PUBLISHED,
+                'versionNo'  =>  2
+            ),
+            array(
+                'status'     =>  $versionInfo->status,
+                'versionNo'  =>  $versionInfo->versionNo
+            )
+        );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testPublishVersionFromContentDraftArchivesOldVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* END: Use Case */
+
+        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo, 1 );
+
+        $this->assertEquals(
+            array(
+                'status'     =>  VersionInfo::STATUS_ARCHIVED,
+                'versionNo'  =>  1
+            ),
+            array(
+                'status'     =>  $versionInfo->status,
+                'versionNo'  =>  $versionInfo->versionNo
+            )
+        );
+    }
+
+    /**
      * Test for the loadContentDrafts() method.
      *
      * @return void

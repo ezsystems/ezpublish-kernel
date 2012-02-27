@@ -726,6 +726,33 @@ class ContentServiceStub implements ContentService
             )
         );
 
+        foreach ( $this->versionInfo as $i => $versionInfo )
+        {
+            if ( $versionInfo->contentId !== $contentInfo->contentId )
+            {
+                continue;
+            }
+            if ( $versionInfo->status !== VersionInfo::STATUS_PUBLISHED )
+            {
+                continue;
+            }
+
+            $this->versionInfo[$i] = new VersionInfoStub(
+                array(
+                    'id'                   =>  $versionInfo->id,
+                    'status'               =>  VersionInfo::STATUS_ARCHIVED,
+                    'versionNo'            =>  $versionInfo->versionNo,
+                    'creatorId'            =>  $versionInfo->creatorId,
+                    'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
+                    'languageCodes'        =>  $versionInfo->languageCodes,
+                    'modificationDate'     =>  new \DateTime(),
+
+                    'contentId'            =>  $contentInfo->contentId,
+                    'repository'           =>  $this->repository
+                )
+            );
+        }
+
         $this->contentInfo[$contentInfo->contentId] = $publishedContentInfo;
         $this->versionInfo[$versionInfo->id]        = $publishedVersionInfo;
 
