@@ -994,7 +994,36 @@ class LocationServiceTest extends BaseTest
      */
     public function testUnhideLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::unhideLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $visibleLocation = $locationService->loadLocation( 5 );
+        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+
+        $unHiddenLocation = $locationService->unhideLocation( $hiddenLocation );
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $unHiddenLocation
+        );
+
+        $this->assertFalse(
+            $hiddenLocation->hidden,
+            sprintf(
+                'Location with ID "%s" not unhidden.',
+                $hiddenLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $unHiddenLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => false ),
+                $child
+            );
+        }
     }
 
     /**

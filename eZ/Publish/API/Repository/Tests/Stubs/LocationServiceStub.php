@@ -433,7 +433,37 @@ class LocationServiceStub implements LocationService
      */
     public function unhideLocation( Location $location )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $location->__unhide();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->markVisible( $child );
+        }
+
+        return $location;
+    }
+
+    /**
+     * Marks the subtree indicated by $location as visible.
+     *
+     * The process stops, when a hidden location is found in the subtree.
+     *
+     * @param mixed $location
+     * @return void
+     */
+    protected function markVisible( $location )
+    {
+        if ( $location->hidden == true )
+        {
+            // Stop as soon as a hidden location is found
+            return;
+        }
+        $location->__makeVisible();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->markVisible( $child );
+        }
     }
 
     /**
