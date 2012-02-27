@@ -27,7 +27,7 @@ writeFixtureFile( generateLanguageFixture( $fixture ), 'Language', $argv[2] );
 writeFixtureFile( generateUserFixture( $fixture ), 'User', $argv[2] );
 writeFixtureFile( generateUserGroupFixture( $fixture ), 'UserGroup', $argv[2] );
 writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
-writeFixtureFile( generateContentInfoFixture( $fixture ), 'ContentInfo', $argv[2] );
+writeFixtureFile( generateContentInfoFixture( $fixture ), 'Content', $argv[2] );
 writeFixtureFile( generateLocationFixture( $fixture ), 'Location', $argv[2] );
 
 function generateContentTypeGroupFixture( array $fixture )
@@ -81,41 +81,7 @@ function generateContentTypeFixture( array $fixture )
         $typeGroups[$data['contentclass_id']][] = '$scopeValues["groups"][' . valueToString( $data['group_id'] ) . ']';
     }
 
-    $nextFieldId = 0;
-    $fieldDef    = array();
-    foreach ( getFixtureTable( 'ezcontentclass_attribute', $fixture ) as $data )
-    {
-        if ( false === isset( $fieldDef[$data['contentclass_id']] ) )
-        {
-            $fieldDef[$data['contentclass_id']] = array();
-        }
-
-        $names = unserialize( $data['serialized_name_list'] );
-        unset( $names['always-available'] );
-
-        $description = unserialize( $data['serialized_description_list'] );
-        unset( $description['always-available'] );
-
-        $fieldDef[$data['contentclass_id']][$data['id']] = array(
-            'id'                   =>  (int) $data['id'],
-            'identifier'           =>  $data['identifier'],
-            'fieldGroup'           =>  $data['category'],
-            'position'             =>  (int) $data['placement'],
-            'fieldTypeIdentifier'  =>  $data['data_type_string'],
-            'isTranslatable'       =>  (boolean) $data['can_translate'],
-            'isRequired'           =>  (boolean) $data['is_required'],
-            'isInfoCollector'      =>  (boolean) $data['is_information_collector'],
-            'isSearchable'         =>  (boolean) $data['is_searchable'],
-            'defaultValue'         =>  null,
-
-            'names'                =>  $names,
-            'descriptions'         =>  $description,
-            'fieldSettings'        =>  array(),
-            'validators'           =>  array(),
-        );
-
-        $nextFieldId = max( $nextFieldId, $data['id'] );
-    }
+    list( $fieldDef, $nextFieldId ) = getContentTypeFieldDefinition( $fixture );
 
     $nextTypeId = 0;
     $types      = array();
@@ -153,6 +119,47 @@ function generateContentTypeFixture( array $fixture )
         $nextTypeId,
         $nextFieldId
     );
+}
+
+function getContentTypeFieldDefinition( array $fixture )
+{
+    $nextFieldId = 0;
+    $fieldDef    = array();
+    foreach ( getFixtureTable( 'ezcontentclass_attribute', $fixture ) as $data )
+    {
+        if ( false === isset( $fieldDef[$data['contentclass_id']] ) )
+        {
+            $fieldDef[$data['contentclass_id']] = array();
+        }
+
+        $names = unserialize( $data['serialized_name_list'] );
+        unset( $names['always-available'] );
+
+        $description = unserialize( $data['serialized_description_list'] );
+        unset( $description['always-available'] );
+
+        $fieldDef[$data['contentclass_id']][$data['id']] = array(
+            'id'                   =>  (int) $data['id'],
+            'identifier'           =>  $data['identifier'],
+            'fieldGroup'           =>  $data['category'],
+            'position'             =>  (int) $data['placement'],
+            'fieldTypeIdentifier'  =>  $data['data_type_string'],
+            'isTranslatable'       =>  (boolean) $data['can_translate'],
+            'isRequired'           =>  (boolean) $data['is_required'],
+            'isInfoCollector'      =>  (boolean) $data['is_information_collector'],
+            'isSearchable'         =>  (boolean) $data['is_searchable'],
+            'defaultValue'         =>  null,
+
+            'names'                =>  $names,
+            'descriptions'         =>  $description,
+            'fieldSettings'        =>  array(),
+            'validators'           =>  array(),
+        );
+
+        $nextFieldId = max( $nextFieldId, $data['id'] );
+    }
+
+    return array( $fieldDef, $nextFieldId );
 }
 
 function generateSectionFixture( array $fixture )
@@ -222,6 +229,50 @@ function generateContentInfoFixture( array $fixture )
         $nextId = max( $nextId, $data['id'] );
     }
 
+    list( $fieldDef ) = getContentTypeFieldDefinition( $fixture );
+
+    $fields      = array();
+    $fieldNextId = 0;
+
+    foreach ( getFixtureTable( 'ezcontentobject_attribute', $fixture ) as $data )
+    {
+        if ( trim( $data['data_text'] ) )
+        {
+            $value = $data['data_text'];
+        }
+        else if ( is_numeric( $data['data_float'] ) && $data['data_float'] > 0 )
+        {
+            $value = $data['data_float'];
+        }
+        else
+        {
+            $value = $data['data_int'];
+        }
+
+        $identifier = null;
+        foreach ( $fieldDef as $def )
+        {
+            if ( isset( $def[$data['contentclassattribute_id']] ) )
+            {
+                $identifier = $def[$data['contentclassattribute_id']]['identifier'];
+                break;
+            }
+        }
+
+        $fields[$data['id']] = array(
+            'id'                  =>  $data['id'],
+            'value'               =>  $value,
+            'languageCode'        =>  $data['language_code'],
+            'fieldDefIdentifier'  =>  $identifier,
+
+            'contentId'           =>  $data['contentobject_id'],
+            'version'             =>  $data['version']
+        );
+
+        $fieldNextId = max( $fieldNextId, $data['id'] );
+    }
+
+    $content       = array();
     $versionInfo   = array();
     $versionNextId = 0;
     foreach ( getFixtureTable( 'ezcontentobject_version', $fixture ) as $data )
@@ -240,6 +291,35 @@ function generateContentInfoFixture( array $fixture )
         );
 
         $versionNextId = max( $versionNextId, $data['id'] );
+
+        $contentFields = array();
+        foreach ( $fields as $field )
+        {
+            if ( $field['contentId'] != $data['contentobject_id'] )
+            {
+                continue;
+            }
+            if ( $field['version'] != $data['version'] )
+            {
+                continue;
+            }
+
+            unset( $field['contentId'], $field['version'] );
+
+            $contentFields[] = $field;
+        }
+
+        $contentFields = trim( generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Field', $contentFields ) );
+
+        $content[] = array(
+            'contentId'      =>  $data['contentobject_id'],
+            'contentTypeId'  =>  $contentInfos[$data['contentobject_id']]['contentTypeId'],
+            'fields'         =>  $contentFields,
+            'relations'      =>  array(),
+
+            'versionNo'      =>  $data['version'],
+            'repository'     =>  '$this'
+        );
     }
 
     uasort( $versionInfo, function( $versionInfo1, $versionInfo2 ) {
@@ -250,11 +330,22 @@ function generateContentInfoFixture( array $fixture )
         return $versionInfo1['contentId'] - $versionInfo2['contentId'];
     } );
 
+    uasort( $content, function( $content1, $content2 ) {
+        if ( $content1['contentId'] === $content2['contentId'] )
+        {
+            return $content2['versionNo'] - $content1['versionNo'];
+        }
+        return $content1['contentId'] - $content2['contentId'];
+    } );
+
+
+
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub', $contentInfos ),
         $nextId,
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub', $versionInfo ),
-        $versionNextId
+        $versionNextId,
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub', $content )
     );
 }
 

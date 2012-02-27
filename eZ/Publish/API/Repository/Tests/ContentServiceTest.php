@@ -603,11 +603,23 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Load the Content for "Anonymous User", any language and current version
+        $content = $contentService->loadContent( 10 );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $content
+        );
     }
 
     /**
@@ -615,7 +627,7 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testLoadContentWithSecondParameter()
     {
@@ -627,7 +639,7 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testLoadContentWithThirdParameter()
     {
@@ -640,10 +652,18 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testLoadContentThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // This call will fail with a "NotFoundException"
+        $contentService->loadContent( PHP_INT_MAX );
+        /* END: Use Case */
     }
 
     /**
