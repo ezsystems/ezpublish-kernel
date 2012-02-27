@@ -507,11 +507,26 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testLoadContentByContentInfo()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( 10 );
+
+        // Now load the current content version for the info instance
+        $content = $contentService->loadContentByContentInfo( $contentInfo );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $content
+        );
     }
 
     /**
@@ -544,6 +559,7 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
      */
     public function testLoadContentByContentInfoThrowsNotFoundException()
     {
@@ -579,11 +595,29 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByVersionInfo()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      */
     public function testLoadContentByVersionInfo()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByVersionInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( 10 );
+
+        // Load the current VersionInfo
+        $versionInfo = $contentService->loadVersionInfo( $contentInfo );
+
+        // Now load the current content version for the info instance
+        $content = $contentService->loadContentByVersionInfo( $versionInfo );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $content
+        );
     }
 
     /**
@@ -695,11 +729,23 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadVersionByRemoteId()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Load the Content for "Anonymous User"
+        $content = $contentService->loadVersionByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $content
+        );
     }
 
     /**

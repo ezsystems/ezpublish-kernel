@@ -189,7 +189,16 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
-        // TODO: Implement loadContentByContentInfo() method.
+        $contentId = $contentInfo->contentId;
+        foreach ( $this->content as $content )
+        {
+            if ( $contentId !== $content->contentId )
+            {
+                continue;
+            }
+            return $content;
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -204,7 +213,7 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
     {
-        // TODO: Implement loadContentByVersionInfo() method.
+        return $this->loadContent( $versionInfo->getContentInfo()->contentId, $languages );
     }
 
     /**
@@ -250,7 +259,8 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        // TODO: Implement loadVersionByRemoteId() method.
+        $contentInfo = $this->loadContentInfoByRemoteId( $remoteId );
+        return $this->loadContent( $contentInfo->contentId, $languages, $versionNo );
     }
 
     /**
