@@ -179,11 +179,11 @@ class ContentServiceStub implements ContentService
             $versions[$versionInfo->status] = $versionInfo;
         }
 
-        if ( isset( $versions[VersionInfo::STATUS_PUBLISHED] ) )
+        if ( null === $versionNo && isset( $versions[VersionInfo::STATUS_PUBLISHED] ) )
         {
             return $versions[VersionInfo::STATUS_PUBLISHED];
         }
-        else if ( isset( $versions[VersionInfo::STATUS_DRAFT] ) )
+        else if ( null === $versionNo && isset( $versions[VersionInfo::STATUS_DRAFT] ) )
         {
             return $versions[VersionInfo::STATUS_DRAFT];
         }
@@ -260,11 +260,11 @@ class ContentServiceStub implements ContentService
             $contents[$content->getVersionInfo()->status] = $content;
         }
 
-        if ( isset( $contents[VersionInfo::STATUS_PUBLISHED] ) )
+        if ( null === $versionNo && isset( $contents[VersionInfo::STATUS_PUBLISHED] ) )
         {
             return $contents[VersionInfo::STATUS_PUBLISHED];
         }
-        else if ( isset( $contents[VersionInfo::STATUS_DRAFT] ) )
+        else if ( null === $versionNo && isset( $contents[VersionInfo::STATUS_DRAFT] ) )
         {
             return $contents[VersionInfo::STATUS_DRAFT];
         }

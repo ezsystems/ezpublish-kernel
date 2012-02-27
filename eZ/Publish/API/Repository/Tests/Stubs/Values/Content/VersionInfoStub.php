@@ -16,7 +16,7 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\Content\VersionInfo
- * @property-read mixed $contentId
+ * @property-read mixed $contentId The id of the corresponding content object.
  */
 class VersionInfoStub extends VersionInfo
 {
