@@ -1433,11 +1433,22 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testNewContentUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for ContentService::newContentUpdateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
+            $updateStruct
+        );
     }
 
     /**

@@ -28,6 +28,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
 
 /**
@@ -779,7 +780,7 @@ class ContentServiceStub implements ContentService
      */
     public function newContentUpdateStruct()
     {
-        // TODO: Implement newContentUpdateStruct() method.
+        return new ContentUpdateStructStub();
     }
 
     /**
