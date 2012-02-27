@@ -475,7 +475,42 @@ class LocationServiceStub implements LocationService
      */
     public function deleteLocation( Location $location )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $contentService = $this->repository->getContentService();
+
+        unset( $this->locations[$location->id] );
+
+        if ( !$this->hasLocation( $location->contentInfo ) )
+        {
+            $contentService->deleteContent( $location->contentInfo );
+        }
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->deleteLocation( $child );
+        }
+    }
+
+    /**
+     * Returns if a location for the given $contentInfo exists.
+     *
+     * @param ContentInfo $contentInfo
+     * @return bool
+     */
+    protected function hasLocation( ContentInfo $contentInfo )
+    {
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->contentInfo == null )
+            {
+                // Skip root location
+                continue;
+            }
+            if ( $location->contentInfo->contentId == $contentInfo->contentId )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

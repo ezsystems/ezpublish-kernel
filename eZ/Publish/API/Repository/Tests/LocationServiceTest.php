@@ -14,6 +14,8 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
+use \eZ\Publish\API\Repository\Exceptions;
+
 /**
  * Test case for operations in the LocationService using in memory storage.
  *
@@ -1101,7 +1103,46 @@ class LocationServiceTest extends BaseTest
      */
     public function testDeleteLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::deleteLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 13 );
+
+        $locationService->deleteLocation( $location );
+        /* BEGIN: Use Case */
+
+        try
+        {
+            $locationService->loadLocation( 13 );
+            $this->fail( "Location 13 not deleted." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
+        try
+        {
+            $locationService->loadLocation( 15 );
+            $this->fail( "Location 15 not deleted." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
+
+        $this->markTestIncomplete( 'Needs implementation of ContentService::deleteContent().' );
+
+        // TODO: These assertions fail until ContentService::deleteContent() is
+        // implemented.
+        $contentService = $repository->getContentService();
+        try
+        {
+            $contentService->loadContentInfo( 12 );
+            $this->fail( "Content 12 at location 13 not delete." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
+        try
+        {
+            $contentService->loadContentInfo( 14 );
+            $this->fail( "Content 14 at location 15 not delete." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
     }
 
     /**
