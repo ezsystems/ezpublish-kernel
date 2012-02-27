@@ -9,10 +9,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
  *
  * this class represents a content object in a specific version
  *
- * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
- * @property-read ContentType $contentType convenience getter for $contentInfo->contentType
+ * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $contentInfo->contentType
  * @property-read mixed $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
- * @property-read VersionInfo $versionInfo calls getVersionInfo()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields
  * @property-read array $relations calls getRelations()
  *

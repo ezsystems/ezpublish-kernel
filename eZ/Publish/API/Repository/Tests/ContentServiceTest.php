@@ -58,7 +58,6 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        // Create a content type
         $contentTypeService = $repository->getContentTypeService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
@@ -144,7 +143,8 @@ class ContentServiceTest extends BaseTest
                 'abcdef0123456789abcdef0123456789',
                 'eng-GB',
                 $this->getRepository()->getCurrentUser()->id,
-                false
+                false,
+                null
             ),
             array(
                 $content->contentInfo->contentId,
@@ -153,7 +153,8 @@ class ContentServiceTest extends BaseTest
                 $content->contentInfo->remoteId,
                 $content->contentInfo->mainLanguageCode,
                 $content->contentInfo->ownerId,
-                $content->contentInfo->published
+                $content->contentInfo->published,
+                $content->contentInfo->publishedDate,
             )
         );
     }
@@ -1063,13 +1064,116 @@ class ContentServiceTest extends BaseTest
     /**
      * Test for the publishVersion() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testPublishVersion()
     {
-        $this->markTestIncomplete( "Test for ContentService::publishVersion() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId         = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->modificationDate = new \DateTime( '1984/01/01' );
+        $contentCreate->alwaysAvailable  = true;
+
+        // Create a content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now publish the content draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $publishedContent
+        );
+
+        return $publishedContent;
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testPublishVersionSetsExpectedContentInfo( $content )
+    {
+        $this->assertEquals(
+            array(
+                $content->contentId,
+                true,
+                1,
+                'abcdef0123456789abcdef0123456789',
+                'eng-GB',
+                $this->getRepository()->getCurrentUser()->id,
+                true,
+            ),
+            array(
+                $content->contentInfo->contentId,
+                $content->contentInfo->alwaysAvailable,
+                $content->contentInfo->currentVersionNo,
+                $content->contentInfo->remoteId,
+                $content->contentInfo->mainLanguageCode,
+                $content->contentInfo->ownerId,
+                $content->contentInfo->published
+            )
+        );
+
+        $date = new \DateTime( '1984/01/01' );
+        $this->assertGreaterThan(
+            $date->getTimestamp(),
+            $content->contentInfo->publishedDate->getTimestamp()
+        );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testPublishVersionSetsExpectedVersionInfo( $content )
+    {
+        $this->assertEquals(
+            array(
+                $this->getRepository()->getCurrentUser()->id,
+                'eng-GB',
+                VersionInfo::STATUS_PUBLISHED,
+                1
+            ),
+            array(
+                $content->getVersionInfo()->creatorId,
+                $content->getVersionInfo()->initialLanguageCode,
+                $content->getVersionInfo()->status,
+                $content->getVersionInfo()->versionNo
+            )
+        );
+
+        $date = new \DateTime( '1984/01/01' );
+        $this->assertGreaterThan(
+            $date->getTimestamp(),
+            $content->getVersionInfo()->modificationDate->getTimestamp()
+        );
+
+        $this->assertNotNull( $content->getVersionInfo()->modificationDate );
     }
 
     /**

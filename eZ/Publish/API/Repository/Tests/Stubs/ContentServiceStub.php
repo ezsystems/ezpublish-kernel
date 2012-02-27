@@ -520,7 +520,45 @@ class ContentServiceStub implements ContentService
      */
     public function publishVersion( VersionInfo $versionInfo )
     {
-        // TODO: Implement publishVersion() method.
+        $contentInfo = $versionInfo->getContentInfo();
+
+        $publishedContentInfo = new ContentInfoStub(
+            array(
+                'contentId'         =>  $contentInfo->contentId,
+                'remoteId'          =>  $contentInfo->remoteId,
+                'sectionId'         =>  $contentInfo->sectionId,
+                'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
+                'currentVersionNo'  =>  $versionInfo->versionNo,
+                'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
+                'modificationDate'  =>  $contentInfo->modificationDate,
+                'ownerId'           =>  $contentInfo->ownerId,
+                'published'         =>  true,
+                'publishedDate'     =>  new \DateTime(),
+
+                'contentTypeId'     =>  $contentInfo->getContentType()->id,
+                'repository'        =>  $this->repository
+            )
+        );
+
+        $publishedVersionInfo = new VersionInfoStub(
+            array(
+                'id'                   =>  $versionInfo->id,
+                'status'               =>  VersionInfo::STATUS_PUBLISHED,
+                'versionNo'            =>  $versionInfo->versionNo,
+                'creatorId'            =>  $versionInfo->creatorId,
+                'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
+                'languageCodes'        =>  $versionInfo->languageCodes,
+                'modificationDate'     =>  new \DateTime(),
+
+                'contentId'            =>  $contentInfo->contentId,
+                'repository'           =>  $this->repository
+            )
+        );
+
+        $this->contentInfo[$contentInfo->contentId] = $publishedContentInfo;
+        $this->versionInfo[$versionInfo->id]        = $publishedVersionInfo;
+
+        return $this->loadContentByVersionInfo( $versionInfo );
     }
 
     /**
