@@ -140,7 +140,7 @@ class LocationServiceTest extends BaseTest
                 'pathString'              => '/1/5/' . $createdLocation->id . '/',
                 'modifiedSubLocationDate' => null, // TODO: Should be DateTime
                 'depth'                   => 2,
-                'childrenCount'           => 0,
+                'childCount'              => 0,
                 'sortField'               => $locationCreate->sortField,
                 'sortOrder'               => $locationCreate->sortOrder,
             ),
@@ -153,7 +153,7 @@ class LocationServiceTest extends BaseTest
 
         // TODO: Update $mainLocationId in ContentInfo, if set in
         // LocationCreateStruct
-        // TODO: Check parent location childrenCount raised
+        // TODO: Check parent location childCount raised
         $this->markTestIncomplete( 'Outstanding TODOs.' );
     }
 
@@ -164,11 +164,11 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
-    public function testCreateLocationParentChildrenCountRaised( array $data )
+    public function testCreateLocationParentChildCountRaised( array $data )
     {
         $parentLocation = $data['parentLocation'];
 
-        $this->assertEquals( 6, $parentLocation->childrenCount );
+        $this->assertEquals( 6, $parentLocation->childCount );
     }
 
     /**
@@ -287,7 +287,7 @@ class LocationServiceTest extends BaseTest
                 'depth'                   =>  1,
                 'sortField'               =>  1,
                 'sortOrder'               =>  1,
-                'childrenCount'           =>  5,
+                'childCount'              =>  5,
             ),
             $location
         );
@@ -403,7 +403,26 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadMainLocationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadMainLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+        $locationService    = $repository->getLocationService();
+
+        // Create new content, which is not published
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentCreate = $contentService->newContentCreateStruct(
+            $folderType, 'eng-US'
+        );
+        $contentCreate->setField( 'name', 'New Folder' );
+        $content = $contentService->createContent( $contentCreate );
+
+        // Throws Exception, since $content has no published version, yet
+        $location = $locationService->loadMainLocation(
+            $content->contentInfo
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -415,7 +434,62 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocations()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        $locations = $locationService->loadLocations( $contentInfo );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $locations
+        );
+        return $locations;
+    }
+
+    /**
+     * Test for the loadLocations() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
+     */
+    public function testLoadLocationsContent( array $locations )
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $this->assertEquals( 1, count( $locations ) );
+        foreach ( $locations as $loadedLocation )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $loadedLocation
+            );
+        }
+
+        usort(
+            $locations,
+            function ( $a, $b )
+            {
+                strcmp( $a->id, $b->id );
+            }
+        );
+
+        $this->assertEquals(
+            array( 5 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
+        );
     }
 
     /**
@@ -425,9 +499,56 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * 
      */
-    public function testLoadLocationsWithSecondParameter()
+    public function testLoadLocationsLimitedSubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        // Location at "/1/48/54"
+        $originalLocation = $locationService->loadLocation( 54 );
+
+        // Create location under "/1/43/"
+        $locationCreate = $locationService->newLocationCreateStruct( 43 );
+        $locationService->createLocation(
+            $originalLocation->contentInfo,
+            $locationCreate
+        );
+
+        $findRootLocation = $locationService->loadLocation( 48 );
+
+        // Returns an array with only $originalLocation
+        $locations = $locationService->loadLocations(
+            $originalLocation->contentInfo,
+            $findRootLocation
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $locations
+        );
+        return $locations;
+    }
+
+    /**
+     * Test for the loadLocations() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationsLimitedSubtree
+     */
+    public function testLoadLocationsLimitedSubtreeContent( array $locations )
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $this->assertEquals( 1, count( $locations ) );
+
+        $this->assertEquals(
+            54,
+            reset( $locations )->id
+        );
     }
 
     /**
@@ -439,7 +560,26 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationsThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+        $locationService    = $repository->getLocationService();
+
+        // Create new content, which is not published
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentCreate = $contentService->newContentCreateStruct(
+            $folderType, 'eng-US'
+        );
+        $contentCreate->setField( 'name', 'New Folder' );
+        $content = $contentService->createContent( $contentCreate );
+
+        // Throws Exception, since $content has no published version, yet
+        $location = $locationService->loadLocations(
+            $content->contentInfo
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -449,9 +589,30 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
-    public function testLoadLocationsThrowsBadStateExceptionWithSecondParameter()
+    public function testLoadLocationsThrowsBadStateExceptionLimitedSubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocations() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+        $locationService    = $repository->getLocationService();
+
+        // Create new content, which is not published
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentCreate = $contentService->newContentCreateStruct(
+            $folderType, 'eng-US'
+        );
+        $contentCreate->setField( 'name', 'New Folder' );
+        $content = $contentService->createContent( $contentCreate );
+
+        $findRootLocation = $locationService->loadLocation( 1 );
+
+        // Throws Exception, since $content has no published version, yet
+        $location = $locationService->loadLocations(
+            $content->contentInfo, $findRootLocation
+        );
+        /* END: Use Case */
     }
 
     /**

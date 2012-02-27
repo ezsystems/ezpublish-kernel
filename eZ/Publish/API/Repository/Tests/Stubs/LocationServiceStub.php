@@ -100,16 +100,16 @@ class LocationServiceStub implements LocationService
 
         $data['contentInfo'] = $contentInfo;
 
-        $data['id']             = $this->nextLocationId++;
-        $data['pathString']     = $parentLocation->pathString . $data['id'] . '/';
-        $data['depth']          = substr_count( $data['pathString'], '/' ) - 2;
-        $data['childrenCount']  = 0;
+        $data['id']          = $this->nextLocationId++;
+        $data['pathString']  = $parentLocation->pathString . $data['id'] . '/';
+        $data['depth']       = substr_count( $data['pathString'], '/' ) - 2;
+        $data['childCount']  = 0;
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
 
         $parentLocation = $this->loadLocation( $location->parentLocationId );
-        $parentLocation->__setChildrenCount( $parentLocation->childrenCount + 1 );
+        $parentLocation->__setChildCount( $parentLocation->childCount + 1 );
 
         return $location;
     }
@@ -234,6 +234,10 @@ class LocationServiceStub implements LocationService
      */
     public function loadMainLocation( ContentInfo $contentInfo )
     {
+        if ( $contentInfo->published === false )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
         return $this->loadLocation( $contentInfo->mainLocationId );
     }
 
@@ -252,7 +256,29 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( $contentInfo->published === false )
+        {
+            throw new Exceptions\BadStateExceptionStub;
+        }
+
+        $subPath = ( $rootLocation === null ? '/' : $rootLocation->pathString );
+
+        $locations = array();
+        foreach ( $this->locations as $candidateLocation )
+        {
+            if ( $candidateLocation->contentInfo === null )
+            {
+                // Skip root location
+                continue;
+            }
+            if ( $contentInfo->contentId == $candidateLocation->contentInfo->contentId
+                 && strpos( $candidateLocation->pathString, $subPath ) === 0
+                )
+            {
+                $locations[] = $candidateLocation;
+            }
+        }
+        return $locations;
     }
 
     /**
@@ -372,7 +398,7 @@ class LocationServiceStub implements LocationService
     }
 
     /**
-     * Calculates the $childrenCount property for all stored locations.
+     * Calculates the $childCount property for all stored locations.
      *
      * @return void
      */
@@ -390,7 +416,7 @@ class LocationServiceStub implements LocationService
 
         foreach ( $childCount as $id => $count )
         {
-            $this->locations[$id]->__setChildrenCount( $count );
+            $this->locations[$id]->__setChildCount( $count );
         }
     }
 

@@ -46,17 +46,17 @@ class ContentServiceStub implements ContentService
     private $contentNextId = 0;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content[]
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub[]
      */
-    private $contents = array();
+    private $content = array();
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[]
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
      */
     private $contentInfo = array();
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub[]
      */
     private $versionInfo = array();
 
@@ -141,14 +141,7 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
-        foreach ( $this->versionInfo as $versionInfo )
-        {
-            if ( $versionInfo->contentId === $contentInfo->contentId )
-            {
-                return $versionInfo;
-            }
-        }
-        // TODO: Implement loadVersionInfo() method.
+        return $this->loadVersionInfoById( $contentInfo->contentId, $versionNo );
     }
 
     /**
@@ -166,7 +159,18 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
-        // TODO: Implement loadVersionInfoById() method.
+        foreach ( $this->versionInfo as $versionInfo )
+        {
+            if ( $versionNo > 0 && $versionInfo->versionNo != $versionNo )
+            {
+                continue;
+            }
+            if ( $versionInfo->contentId === $contentId )
+            {
+                return $versionInfo;
+            }
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -185,7 +189,16 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
-        // TODO: Implement loadContentByContentInfo() method.
+        $contentId = $contentInfo->contentId;
+        foreach ( $this->content as $content )
+        {
+            if ( $contentId !== $content->contentId )
+            {
+                continue;
+            }
+            return $content;
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -200,7 +213,7 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
     {
-        // TODO: Implement loadContentByVersionInfo() method.
+        return $this->loadContent( $versionInfo->getContentInfo()->contentId, $languages );
     }
 
     /**
@@ -219,7 +232,15 @@ class ContentServiceStub implements ContentService
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
     {
-        // TODO: Implement loadContent() method.
+        foreach ( $this->content as $content )
+        {
+            if ( $content->contentId !== $contentId )
+            {
+                continue;
+            }
+            return $content;
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -238,7 +259,8 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        // TODO: Implement loadVersionByRemoteId() method.
+        $contentInfo = $this->loadContentInfoByRemoteId( $remoteId );
+        return $this->loadContent( $contentInfo->contentId, $languages, $versionNo );
     }
 
     /**
@@ -327,6 +349,7 @@ class ContentServiceStub implements ContentService
                 'fields'         =>  $allFields,
                 'relations'      =>  array(),
 
+                'versionNo'      =>  1,
                 'repository'     =>  $this->repository
             )
         );
@@ -366,7 +389,7 @@ class ContentServiceStub implements ContentService
         );
 
 
-        $this->contents[$content->contentId]    = $content;
+        $this->content[]                        = $content;
         $this->contentInfo[$content->contentId] = $contentInfo;
         $this->versionInfo[$versionInfo->id]    = $versionInfo;
 
@@ -749,6 +772,7 @@ class ContentServiceStub implements ContentService
             $this->contentNextId,
             $this->versionInfo,
             $this->versionNextId,
-        ) = $this->repository->loadFixture( 'ContentInfo' );
+            $this->content
+        ) = $this->repository->loadFixture( 'Content' );
     }
 }

@@ -119,6 +119,27 @@ class ServiceContainer
     }
 
     /**
+     * Get a variable dependency
+     *
+     * @param $variable
+     * @return object
+     * @throws InvalidArgumentException
+     */
+    public function getVariable( $variable )
+    {
+        $variableKey = "\${$variable}";
+        if ( isset( $this->dependencies[$variableKey] ) )
+        {
+            return $this->dependencies[$variableKey];
+        }
+
+        throw new InvalidArgumentException(
+            "{$variableKey}",
+            'Could not find this variable among existing dependencies'
+        );
+    }
+
+    /**
      * Get service by name
      *
      * @uses internalGet()

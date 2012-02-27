@@ -36,6 +36,11 @@ class ContentStub extends Content
     protected $contentTypeId;
 
     /**
+     * @var integer
+     */
+    protected $versionNo;
+
+    /**
      * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[]
      */
     protected $fields;
