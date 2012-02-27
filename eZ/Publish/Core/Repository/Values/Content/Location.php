@@ -16,13 +16,6 @@ class Location extends APILocation
     protected $contentInfo;
 
     /**
-     * content ID of the content object of this location
-     *
-     * @var int
-     */
-    protected $contentId;
-
-    /**
      * returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -32,4 +25,21 @@ class Location extends APILocation
         return $this->contentInfo;
     }
 
+    /**
+     * Magic getter for retrieving convenience properties
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentId':
+                return $this->contentInfo->contentId;
+        }
+
+        return parent::__get( $property );
+    }
 }

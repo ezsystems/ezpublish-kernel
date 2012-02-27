@@ -501,7 +501,7 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
 
         $existingGroupIds = array();
-        $userLocations = $locationService->loadLocations( $loadedUser->contentInfo );
+        $userLocations = $locationService->loadLocations( $loadedUser->getVersionInfo()->getContentInfo() );
         foreach ( $userLocations as $userLocation )
         {
             $existingGroupIds[] = $userLocation->parentLocationId;
@@ -540,7 +540,7 @@ class UserService implements UserServiceInterface
         $loadedGroup = $this->loadUserGroup( $userGroup->id );
         $locationService = $this->repository->getLocationService();
 
-        $userLocations = $locationService->loadLocations( $loadedUser->contentInfo );
+        $userLocations = $locationService->loadLocations( $loadedUser->getVersionInfo()->getContentInfo() );
         if ( empty( $userLocations ) )
             throw new IllegalArgumentException( "user", "user has no locations, cannot unassign from group" );
 
@@ -655,9 +655,6 @@ class UserService implements UserServiceInterface
         }
 
         return new UserGroup( array(
-            'contentInfo'   => $contentInfo,
-            'contentType'   => $contentInfo->getContentType(),
-            'contentId'     => $contentInfo->contentId,
             'versionInfo'   => $content->getVersionInfo(),
             'fields'        => $content->getFields(),
             'relations'     => $content->getRelations(),
@@ -680,12 +677,7 @@ class UserService implements UserServiceInterface
         if ( $content === null )
             $content = $this->repository->getContentService()->loadContent( $spiUser->id );
 
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-
         return new User( array(
-            'contentInfo'   => $contentInfo,
-            'contentType'   => $contentInfo->getContentType(),
-            'contentId'     => $contentInfo->contentId,
             'versionInfo'   => $content->getVersionInfo(),
             'fields'        => $content->getFields(),
             'relations'     => $content->getRelations(),

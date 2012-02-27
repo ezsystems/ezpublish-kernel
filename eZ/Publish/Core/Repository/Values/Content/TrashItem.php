@@ -16,13 +16,6 @@ class TrashItem extends APITrashItem
     protected $contentInfo;
 
     /**
-     * content ID of the content object of this trash item
-     *
-     * @var int
-     */
-    protected $contentId;
-
-    /**
      * returns the content info of the content object of this trash item
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -30,5 +23,23 @@ class TrashItem extends APITrashItem
     public function getContentInfo()
     {
         return $this->contentInfo;
+    }
+
+    /**
+     * Magic getter for retrieving convenience properties
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentId':
+                return $this->contentInfo->contentId;
+        }
+
+        return parent::__get( $property );
     }
 }

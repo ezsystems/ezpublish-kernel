@@ -648,7 +648,6 @@ class LocationService implements LocationServiceInterface
 
         return new Location( array(
             'contentInfo'              => $contentInfo,
-            'contentId'                => $contentInfo->contentId,
             'id'                       => $spiLocation->id,
             'priority'                 => $spiLocation->priority,
             'hidden'                   => $spiLocation->hidden,

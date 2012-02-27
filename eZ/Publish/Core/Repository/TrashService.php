@@ -246,7 +246,6 @@ class TrashService implements TrashServiceInterface
 
         return new TrashItem( array(
             'contentInfo'              => $contentInfo,
-            'contentId'                => $contentInfo->contentId,
             'id'                       => $spiTrashItem->id,
             'priority'                 => $spiTrashItem->priority,
             'hidden'                   => $spiTrashItem->hidden,

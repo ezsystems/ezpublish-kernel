@@ -29,27 +29,6 @@ class User extends APIUser
     const PASSWORD_HASH_PLAINTEXT = 5;
 
     /**
-     * Content info for the user
-     *
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
-    protected $contentInfo;
-
-    /**
-     * Content type for the user
-     *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
-    protected $contentType;
-
-    /**
-     * Content id for the user
-     *
-     * @var int
-     */
-    protected $contentId;
-
-    /**
      * Version info for the user
      *
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
@@ -129,5 +108,29 @@ class User extends APIUser
     public function getFieldsByLanguage( $languageCode = null )
     {
         //@todo: implement
+    }
+
+    /**
+     * Magic getter for retrieving convenience properties
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentInfo':
+                return $this->versionInfo->getContentInfo();
+
+            case 'contentType':
+                return $this->versionInfo->getContentInfo()->getContentType();
+
+            case 'contentId':
+                return $this->versionInfo->getContentInfo()->contentId;
+        }
+
+        return parent::__get( $property );
     }
 }
