@@ -312,7 +312,7 @@ class LocationServiceStub implements LocationService
             }
         );
 
-        return $children;
+        return array_slice( $children, $offset, ( $limit == -1 ? null : $limit ) );
     }
 
     /**

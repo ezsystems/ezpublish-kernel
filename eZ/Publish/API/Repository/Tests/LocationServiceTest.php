@@ -676,9 +676,55 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * 
      */
-    public function testLoadLocationChildrenWithSecondParameter()
+    public function testLoadLocationChildrenWithOffset()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 2 );
+
+        $childLocations = $locationService->loadLocationChildren(
+            $location, 2
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $childLocations
+        );
+        return $childLocations;
+    }
+
+    /**
+     * Test for the loadLocationChildren() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffset
+     */
+    public function testLoadLocationChildrenDataWithOffset( array $locations )
+    {
+        $this->assertEquals( 7, count( $locations ) );
+
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $location
+            );
+        }
+
+        $this->assertEquals(
+            array( 96, 107, 77, 86, 156, 167, 190 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
+        );
     }
 
     /**
@@ -688,9 +734,55 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
      * 
      */
-    public function testLoadLocationChildrenWithThirdParameter()
+    public function testLoadLocationChildrenWithOffsetAndLimit()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 2 );
+
+        $childLocations = $locationService->loadLocationChildren(
+            $location, 2, 3
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $childLocations
+        );
+        return $childLocations;
+    }
+
+    /**
+     * Test for the loadLocationChildren() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffsetAndLimit
+     */
+    public function testLoadLocationChildrenDataWithOffsetAndLimit( array $locations )
+    {
+        $this->assertEquals( 3, count( $locations ) );
+
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $location
+            );
+        }
+
+        $this->assertEquals(
+            array( 96, 107, 77 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
+        );
     }
 
     /**
