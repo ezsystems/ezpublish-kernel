@@ -5,7 +5,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  *
- * This class is returnd by find methods providing a result of a search.
+ * This class is returned by find methods providing a result of a search.
  */
 class SearchResult extends ValueObject
 {
