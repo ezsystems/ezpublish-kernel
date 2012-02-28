@@ -471,9 +471,9 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $this->content[]     = $content;
-        $this->contentInfo[] = $contentInfo;
-        $this->versionInfo[] = $versionInfo;
+        $this->content[]                     = $content;
+        $this->contentInfo[]                 = $contentInfo;
+        $this->versionInfo[$versionInfo->id] = $versionInfo;
 
         return $content;
     }
@@ -532,6 +532,11 @@ class ContentServiceStub implements ContentService
 
         $versionInfo = $content->getVersionInfo();
 
+        if ( $versionInfo->status === VersionInfo::STATUS_DRAFT )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         // Select the greatest version number
         foreach ( $this->versionInfo as $versionInfo )
         {
@@ -540,11 +545,6 @@ class ContentServiceStub implements ContentService
                 continue;
             }
             $versionNo = max( $versionNo, $versionInfo->versionNo );
-        }
-
-        if ( false === in_array( $versionInfo->status, array( VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED ) ) )
-        {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $contentDraft = new ContentStub(
@@ -575,8 +575,8 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        array_unshift( $this->content, $contentDraft );
-        array_unshift( $this->versionInfo, $versionDraft );
+        $this->content[]                      = $contentDraft;
+        $this->versionInfo[$versionDraft->id] = $versionDraft;
 
         return $contentDraft;
     }
@@ -722,8 +722,8 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $this->versionInfo[array_search( $versionInfo, $this->versionInfo )] = $draftedVersionInfo;
-        $this->content[array_search( $versionInfo, $this->content )]         = $draftedContent;
+        $this->versionInfo[$versionInfo->id]                         = $draftedVersionInfo;
+        $this->content[array_search( $versionInfo, $this->content )] = $draftedContent;
 
         return $draftedContent;
     }
@@ -786,7 +786,7 @@ class ContentServiceStub implements ContentService
         );
 
         // Set all published versions of this content object to ARCHIVED
-        foreach ( $this->versionInfo as $i => $versionInfo )
+        foreach ( $this->versionInfo as $versionId => $versionInfo )
         {
             if ( $versionInfo->contentId !== $contentInfo->contentId )
             {
@@ -797,7 +797,7 @@ class ContentServiceStub implements ContentService
                 continue;
             }
 
-            $this->versionInfo[$i] = new VersionInfoStub(
+            $this->versionInfo[$versionId] = new VersionInfoStub(
                 array(
                     'id'                   =>  $versionInfo->id,
                     'status'               =>  VersionInfo::STATUS_ARCHIVED,
@@ -865,7 +865,15 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersions( ContentInfo $contentInfo )
     {
-        // TODO: Implement loadVersions() method.
+        $versions = array();
+        foreach ( $this->versionInfo as $versionInfo )
+        {
+            if ( $contentInfo->contentId === $versionInfo->contentId )
+            {
+                $versions[] = $versionInfo;
+            }
+        }
+        return $versions;
     }
 
     /**
