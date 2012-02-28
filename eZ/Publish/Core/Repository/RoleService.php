@@ -851,17 +851,13 @@ class RoleService implements RoleServiceInterface
     protected function buildPersistenceRoleObject( APIRoleCreateStruct $roleCreateStruct )
     {
         $policiesToCreate = array();
-        $policyCreateStructs = $roleCreateStruct->getPolicies();
-        if ( !empty( $policyCreateStructs ) )
+        foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
         {
-            foreach ( $policyCreateStructs as $policyCreateStruct )
-            {
-                $policiesToCreate[] = $this->buildPersistencePolicyObject(
-                    $policyCreateStruct->module,
-                    $policyCreateStruct->function,
-                    $policyCreateStruct->getLimitations()
-                );
-            }
+            $policiesToCreate[] = $this->buildPersistencePolicyObject(
+                $policyCreateStruct->module,
+                $policyCreateStruct->function,
+                $policyCreateStruct->getLimitations()
+            );
         }
 
         return new SPIRole(
@@ -884,10 +880,10 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
-    protected function buildPersistencePolicyObject( $module, $function, $limitations )
+    protected function buildPersistencePolicyObject( $module, $function, array $limitations )
     {
         $limitationsToCreate = '*';
-        if ( $module !== '*' && $function !== '*' && is_array( $limitations ) && !empty( $limitations ) )
+        if ( $module !== '*' && $function !== '*' && !empty( $limitations ) )
         {
             $limitationsToCreate = array();
             foreach ( $limitations as $limitation )
