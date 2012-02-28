@@ -147,10 +147,10 @@ class RoleService implements RoleServiceInterface
         $this->persistenceHandler->userHandler()->updateRole(
             new SPIRoleUpdateStruct(
                 array(
-                    'id'           => $loadedRole->id,
-                    'identifier'   => $roleUpdateStruct->identifier ?: $role->identifier,
-                    'name'         => $roleUpdateStruct->names ?: $role->getNames(),
-                    'descriptions' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
+                    'id'          => $loadedRole->id,
+                    'identifier'  => $roleUpdateStruct->identifier ?: $role->identifier,
+                    'name'        => $roleUpdateStruct->names ?: $role->getNames(),
+                    'description' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
                 )
             )
         );
