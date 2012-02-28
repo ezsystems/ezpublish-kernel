@@ -471,9 +471,9 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $this->content[]     = $content;
-        $this->contentInfo[] = $contentInfo;
-        $this->versionInfo[] = $versionInfo;
+        $this->content[]                     = $content;
+        $this->contentInfo[]                 = $contentInfo;
+        $this->versionInfo[$versionInfo->id] = $versionInfo;
 
         return $content;
     }
@@ -520,16 +520,22 @@ class ContentServiceStub implements ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\User\User $user if set given user is used to create the draft - otherwise the current user is used
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null )
+    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null )
     {
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
 
         $content = $this->loadContentByContentInfo( $contentInfo, null, $versionNo );
 
         $versionInfo = $content->getVersionInfo();
+
+        if ( $versionInfo->status === VersionInfo::STATUS_DRAFT )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
 
         // Select the greatest version number
         foreach ( $this->versionInfo as $versionInfo )
@@ -539,11 +545,6 @@ class ContentServiceStub implements ContentService
                 continue;
             }
             $versionNo = max( $versionNo, $versionInfo->versionNo );
-        }
-
-        if ( false === in_array( $versionInfo->status, array( VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED ) ) )
-        {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $contentDraft = new ContentStub(
@@ -574,8 +575,8 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        array_unshift( $this->content, $contentDraft );
-        array_unshift( $this->versionInfo, $versionDraft );
+        $this->content[]                      = $contentDraft;
+        $this->versionInfo[$versionDraft->id] = $versionDraft;
 
         return $contentDraft;
     }
@@ -658,7 +659,6 @@ class ContentServiceStub implements ContentService
         }
 
         $content     = $this->loadContentByVersionInfo( $versionInfo );
-        $contentInfo = $content->contentInfo;
         $contentType = $content->contentType;
 
         $fieldIds = array();
@@ -667,17 +667,18 @@ class ContentServiceStub implements ContentService
         {
             $fieldIds[$field->fieldDefIdentifier] = true;
 
-            $languageCode = $field->languageCode;
-            if ( !$languageCode && $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
+            if ( null === $field->languageCode &&
+                 null === $contentUpdateStruct->initialLanguageCode &&
+                $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
             {
-                $languageCode = $contentInfo->mainLanguageCode;
+                throw new ContentValidationExceptionStub( '@TODO: What error code should be used?' );
             }
 
             $fields[] = new Field(
                 array(
                     'id'                  =>  ++$this->fieldNextId,
                     'value'               =>  $field->value,
-                    'languageCode'        =>  $languageCode,
+                    'languageCode'        =>  $field->languageCode ?: $contentUpdateStruct->initialLanguageCode,
                     'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
                 )
             );
@@ -721,8 +722,8 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $this->versionInfo[array_search( $versionInfo, $this->versionInfo )] = $draftedVersionInfo;
-        $this->content[array_search( $versionInfo, $this->content )]         = $draftedContent;
+        $this->versionInfo[$versionInfo->id]                         = $draftedVersionInfo;
+        $this->content[array_search( $versionInfo, $this->content )] = $draftedContent;
 
         return $draftedContent;
     }
@@ -749,13 +750,15 @@ class ContentServiceStub implements ContentService
 
         $contentInfo = $versionInfo->getContentInfo();
 
+        $versionNo = max( $versionInfo->versionNo, $contentInfo->currentVersionNo );
+
         $publishedContentInfo = new ContentInfoStub(
             array(
                 'contentId'         =>  $contentInfo->contentId,
                 'remoteId'          =>  $contentInfo->remoteId,
                 'sectionId'         =>  $contentInfo->sectionId,
                 'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
-                'currentVersionNo'  =>  $versionInfo->versionNo,
+                'currentVersionNo'  =>  $versionNo,
                 'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
                 'modificationDate'  =>  $contentInfo->modificationDate,
                 'ownerId'           =>  $contentInfo->ownerId,
@@ -771,7 +774,7 @@ class ContentServiceStub implements ContentService
             array(
                 'id'                   =>  $versionInfo->id,
                 'status'               =>  VersionInfo::STATUS_PUBLISHED,
-                'versionNo'            =>  $versionInfo->versionNo,
+                'versionNo'            =>  $versionNo,
                 'creatorId'            =>  $versionInfo->creatorId,
                 'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
                 'languageCodes'        =>  $versionInfo->languageCodes,
@@ -783,7 +786,7 @@ class ContentServiceStub implements ContentService
         );
 
         // Set all published versions of this content object to ARCHIVED
-        foreach ( $this->versionInfo as $i => $versionInfo )
+        foreach ( $this->versionInfo as $versionId => $versionInfo )
         {
             if ( $versionInfo->contentId !== $contentInfo->contentId )
             {
@@ -794,7 +797,7 @@ class ContentServiceStub implements ContentService
                 continue;
             }
 
-            $this->versionInfo[$i] = new VersionInfoStub(
+            $this->versionInfo[$versionId] = new VersionInfoStub(
                 array(
                     'id'                   =>  $versionInfo->id,
                     'status'               =>  VersionInfo::STATUS_ARCHIVED,
@@ -826,7 +829,29 @@ class ContentServiceStub implements ContentService
      */
     public function deleteVersion( VersionInfo $versionInfo )
     {
-        // TODO: Implement deleteVersion() method.
+        if ( VersionInfo::STATUS_PUBLISHED === $versionInfo->status )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        foreach ( $this->content as $i => $content )
+        {
+            if ( $content->versionNo !== $versionInfo->versionNo )
+            {
+                continue;
+            }
+            else if ( $content->contentId !== $versionInfo->contentInfo->contentId )
+            {
+                continue;
+            }
+
+            unset( $this->content[$i] );
+            unset( $this->versionInfo[$versionInfo->id] );
+
+            // TODO: Delete ContentInfo if this was the last reference.
+
+            return;
+        }
     }
 
     /**
@@ -840,7 +865,15 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersions( ContentInfo $contentInfo )
     {
-        // TODO: Implement loadVersions() method.
+        $versions = array();
+        foreach ( $this->versionInfo as $versionInfo )
+        {
+            if ( $contentInfo->contentId === $versionInfo->contentId )
+            {
+                $versions[] = $versionInfo;
+            }
+        }
+        return $versions;
     }
 
     /**
