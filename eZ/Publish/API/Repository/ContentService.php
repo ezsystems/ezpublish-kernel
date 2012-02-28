@@ -200,7 +200,6 @@ interface ContentService
      * It can be changed on updating the version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version or the version info points to a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
