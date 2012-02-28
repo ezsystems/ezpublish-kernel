@@ -46,6 +46,16 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests if the currently tested api is based on a V4 implementation.
+     *
+     * @return boolean
+     */
+    protected function isVersion4()
+    {
+        return ( isset( $_ENV['backendVersion'] ) && '4' === $_ENV['backendVersion'] );
+    }
+
+    /**
      * @return \eZ\Publish\API\Repository\Repository
      */
     protected function getRepository()

@@ -7,6 +7,7 @@
          convertWarningsToExceptions="true">
     <php>
         <env name="repositoryInit" value="common.php" />
+        <env name="backendVersion" value="5" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
@@ -16,6 +17,7 @@
             <file>ContentTypeServiceTest.php</file>
             <file>ContentServiceTest.php</file>
             <file>LocationServiceTest.php</file>
+            <file>ContentAndLocationServiceInteractionTest.php</file>
             <file>UserServiceTest.php</file>
             <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>
