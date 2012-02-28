@@ -1286,41 +1286,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     */
-    public function testCreateContentDraftThrowsBadStateException()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentService = $repository->getContentService();
-
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreate );
-
-        // Now try to create a draft from a draft
-        // This call will fail with a "BadStateException"
-        $contentService->createContentDraft( $content->contentInfo );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the newContentUpdateStruct() method.
      *
      * @return void
@@ -1607,44 +1572,6 @@ class ContentServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals( 3, $draftedContentReloaded->getVersionInfo()->versionNo );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraftWithSecondParameter
-     */
-    public function testCreateContentDraftThrowsBadStateExceptionWithSecondParameter()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentService = $repository->getContentService();
-
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // This call will fail with a "BadStateException", because no published
-        // version of the content object exists.
-        $contentService->createContentDraft(
-            $content->contentInfo,
-            $content->getVersionInfo()
-        );
-        /* END: Use Case */
     }
 
     /**

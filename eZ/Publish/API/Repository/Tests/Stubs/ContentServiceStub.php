@@ -516,7 +516,6 @@ class ContentServiceStub implements ContentService
      * It can be changed on updating the version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version or the version info points to a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -529,13 +528,6 @@ class ContentServiceStub implements ContentService
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
 
         $content = $this->loadContentByContentInfo( $contentInfo, null, $versionNo );
-
-        $versionInfo = $content->getVersionInfo();
-
-        if ( $versionInfo->status === VersionInfo::STATUS_DRAFT )
-        {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
-        }
 
         // Select the greatest version number
         foreach ( $this->versionInfo as $versionInfo )
