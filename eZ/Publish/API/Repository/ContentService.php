@@ -204,10 +204,11 @@ interface ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\User\User $user if set given user is used to create the draft - otherwise the current user isused
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null );
+    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null );
 
     /**
      * Load drafts for a user. 
