@@ -32,18 +32,33 @@ abstract class UserBase extends BaseServiceTest
     public function testNewClass()
     {
         $user = new User();
-        self::assertEquals( null, $user->id );
-        self::assertEquals( null, $user->login );
-        self::assertEquals( null, $user->email );
-        self::assertEquals( null, $user->passwordHash );
-        self::assertEquals( null, $user->hashAlgorithm );
-        self::assertEquals( null, $user->maxLogin );
-        self::assertEquals( null, $user->isEnabled );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'            => null,
+                'login'         => null,
+                'email'         => null,
+                'passwordHash'  => null,
+                'hashAlgorithm' => null,
+                'maxLogin'      => null,
+                'isEnabled'     => null
+            ),
+            $user
+        );
 
         $group = new UserGroup();
         self::assertEquals( null, $group->id );
         self::assertEquals( null, $group->parentId );
         self::assertEquals( null, $group->subGroupCount );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'            => null,
+                'parentId'      => null,
+                'subGroupCount' => null
+            ),
+            $group
+        );
     }
 
     /**
@@ -256,7 +271,7 @@ abstract class UserBase extends BaseServiceTest
         self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
-        $userGroup = new UserGroup( array( "id" => 13 ) );
+        $userGroup = $userService->loadUserGroup( 13 );
         $userService->deleteUserGroup( $userGroup );
 
         try
@@ -290,8 +305,8 @@ abstract class UserBase extends BaseServiceTest
         self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
-        $userGroupToMove = new UserGroup( array( "id" => 13 ) );
-        $parentUserGroup = new UserGroup( array( "id" => 12 ) );
+        $userGroupToMove = $userService->loadUserGroup( 13 );
+        $parentUserGroup = $userService->loadUserGroup( 12 );
         $userService->moveUserGroup( $userGroupToMove, $parentUserGroup );
 
         $movedUserGroup = $userService->loadUserGroup( $userGroupToMove->id );
@@ -327,7 +342,7 @@ abstract class UserBase extends BaseServiceTest
         $userGroupUpdateStruct->contentUpdateStruct->initialLanguageCode = $initialLanguageCode;
         $userGroupUpdateStruct->contentUpdateStruct->setField( "name", "New editors" );
 
-        $userGroup = new UserGroup( array( "id" => 13 ) );
+        $userGroup = $userService->loadUserGroup( 13 );
 
         $updatedUserGroup = $userService->updateUserGroup( $userGroup, $userGroupUpdateStruct );
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $updatedUserGroup );
@@ -537,7 +552,7 @@ abstract class UserBase extends BaseServiceTest
         $userUpdateStruct->contentUpdateStruct->setField( "first_name", "New first name" );
         $userUpdateStruct->contentUpdateStruct->setField( "last_name", "New last name" );
 
-        $user = new User( array( "id" => 14 ) );
+        $user = $userService->loadUser( 14 );
 
         $userService->updateUser( $user, $userUpdateStruct );
         $updatedUser = $userService->loadUser( $user->id );
@@ -680,10 +695,18 @@ abstract class UserBase extends BaseServiceTest
 
         $userCreateStruct = $userService->newUserCreateStruct( "admin", "admin@ez.no", "password", "eng-GB" );
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserCreateStruct', $userCreateStruct );
-        self::assertEquals( "admin", $userCreateStruct->login );
-        self::assertEquals( "admin@ez.no", $userCreateStruct->email );
-        self::assertEquals( "password", $userCreateStruct->password );
-        self::assertEquals( "eng-GB", $userCreateStruct->mainLanguageCode );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'mainLanguageCode' => 'eng-GB',
+                'login'            => 'admin',
+                'email'            => 'admin@ez.no',
+                'password'         => 'password',
+                'enabled'          => true,
+                'fields'           => array()
+            ),
+            $userCreateStruct
+        );
     }
 
     /**
@@ -710,11 +733,18 @@ abstract class UserBase extends BaseServiceTest
 
         $userUpdateStruct = $userService->newUserUpdateStruct();
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserUpdateStruct', $userUpdateStruct );
-        self::assertNull( $userUpdateStruct->email );
-        self::assertNull( $userUpdateStruct->isEnabled );
-        self::assertNull( $userUpdateStruct->maxLogin );
-        self::assertNull( $userUpdateStruct->password );
-        self::assertNull( $userUpdateStruct->contentUpdateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'email'                       => null,
+                'password'                    => null,
+                'isEnabled'                   => null,
+                'maxLogin'                    => null,
+                'contentUpdateStruct'         => null,
+                'contentMetaDataUpdateStruct' => null
+            ),
+            $userUpdateStruct
+        );
     }
 
     /**
@@ -728,6 +758,13 @@ abstract class UserBase extends BaseServiceTest
 
         $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct', $userGroupUpdateStruct );
-        self::assertNull( $userGroupUpdateStruct->contentUpdateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'contentUpdateStruct'         => null,
+                'contentMetaDataUpdateStruct' => null
+            ),
+            $userGroupUpdateStruct
+        );
     }
 }
