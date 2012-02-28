@@ -826,7 +826,29 @@ class ContentServiceStub implements ContentService
      */
     public function deleteVersion( VersionInfo $versionInfo )
     {
-        // TODO: Implement deleteVersion() method.
+        if ( VersionInfo::STATUS_PUBLISHED === $versionInfo->status )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        foreach ( $this->content as $i => $content )
+        {
+            if ( $content->versionNo !== $versionInfo->versionNo )
+            {
+                continue;
+            }
+            else if ( $content->contentId !== $versionInfo->contentInfo->contentId )
+            {
+                continue;
+            }
+
+            unset( $this->content[$i] );
+            unset( $this->versionInfo[$versionInfo->id] );
+
+            // TODO: Delete ContentInfo if this was the last reference.
+
+            return;
+        }
     }
 
     /**

@@ -2267,11 +2267,36 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * 
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testDeleteVersion()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteVersion() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Delete the previously created draft
+        $contentService->deleteVersion( $content->getVersionInfo() );
+        /* END: Use Case */
+
+        $contentService->loadContent( $content->contentId );
     }
 
     /**
@@ -2280,10 +2305,37 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testDeleteVersionThrowsBadStateException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteVersion() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish the newly created content object
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // This call will fail with a "BadStateException", because the content
+        // version is currently published.
+        $contentService->deleteVersion( $publishedContent->getVersionInfo() );
+        /* END: Use Case */
     }
 
     /**
