@@ -157,8 +157,8 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
         $roleCreateStruct = $roleService->newRoleCreateStruct( 'ultimate_permissions' );
         $roleCreateStruct->mainLanguageCode = 'eng-GB';
-        $roleCreateStruct->names['eng-GB'] = 'Ultimate permissions';
-        $roleCreateStruct->descriptions['eng-GB'] = 'This is a role with ultimate permissions';
+        $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
+        $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
 
         $createdRole = $roleService->createRole( $roleCreateStruct );
 
@@ -200,8 +200,8 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
         $roleCreateStruct = $roleService->newRoleCreateStruct( 'Anonymous' );
         $roleCreateStruct->mainLanguageCode = 'eng-GB';
-        $roleCreateStruct->names['eng-GB'] = 'Anonymous';
-        $roleCreateStruct->descriptions['eng-GB'] = 'Anonymous role';
+        $roleCreateStruct->names = array( 'eng-GB' => 'Anonymous' );
+        $roleCreateStruct->descriptions = array( 'eng-GB' => 'Anonymous role' );
 
         $roleService->createRole( $roleCreateStruct );
     }
@@ -236,8 +236,8 @@ abstract class RoleBase extends BaseServiceTest
 
         $roleCreateStruct = $roleService->newRoleCreateStruct( 'ultimate_permissions' );
         $roleCreateStruct->mainLanguageCode = 'eng-GB';
-        $roleCreateStruct->names['eng-GB'] = 'Ultimate permissions';
-        $roleCreateStruct->descriptions['eng-GB'] = 'This is a role with ultimate permissions';
+        $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
+        $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
 
         $roleCreateStruct->addPolicy( $policyCreateStruct1 );
         $roleCreateStruct->addPolicy( $policyCreateStruct2 );

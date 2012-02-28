@@ -657,8 +657,6 @@ class RoleService implements RoleServiceInterface
         return new RoleCreateStruct(
             array(
                 'identifier'   => $name,
-                'names'        => array(),
-                'descriptions' => array(),
                 'policies'     => array()
             )
         );
