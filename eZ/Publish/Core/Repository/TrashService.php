@@ -139,8 +139,10 @@ class TrashService implements TrashServiceInterface
 
         try
         {
-            $locationParentId = $newParentLocation !== null ? $newParentLocation->parentLocationId : $trashItem->parentLocationId;
-            $newLocationId = $this->persistenceHandler->trashHandler()->untrashLocation( $trashItem->id, $locationParentId );
+            $newLocationId = $this->persistenceHandler->trashHandler()->untrashLocation(
+                $trashItem->id,
+                $newParentLocation ? $newParentLocation->parentLocationId : $trashItem->parentLocationId
+            );
         }
         catch ( NotFound $e )
         {
@@ -263,6 +265,7 @@ class TrashService implements TrashServiceInterface
                 'depth'                   => $spiTrashItem->depth,
                 'sortField'               => $spiTrashItem->sortField,
                 'sortOrder'               => $spiTrashItem->sortOrder,
+                //@todo: this has to be 0?
                 'childCount'              => 0
             )
         );
