@@ -750,13 +750,15 @@ class ContentServiceStub implements ContentService
 
         $contentInfo = $versionInfo->getContentInfo();
 
+        $versionNo = max( $versionInfo->versionNo, $contentInfo->currentVersionNo );
+
         $publishedContentInfo = new ContentInfoStub(
             array(
                 'contentId'         =>  $contentInfo->contentId,
                 'remoteId'          =>  $contentInfo->remoteId,
                 'sectionId'         =>  $contentInfo->sectionId,
                 'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
-                'currentVersionNo'  =>  $versionInfo->versionNo,
+                'currentVersionNo'  =>  $versionNo,
                 'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
                 'modificationDate'  =>  $contentInfo->modificationDate,
                 'ownerId'           =>  $contentInfo->ownerId,
@@ -772,7 +774,7 @@ class ContentServiceStub implements ContentService
             array(
                 'id'                   =>  $versionInfo->id,
                 'status'               =>  VersionInfo::STATUS_PUBLISHED,
-                'versionNo'            =>  $versionInfo->versionNo,
+                'versionNo'            =>  $versionNo,
                 'creatorId'            =>  $versionInfo->creatorId,
                 'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
                 'languageCodes'        =>  $versionInfo->languageCodes,

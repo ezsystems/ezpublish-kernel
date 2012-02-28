@@ -1778,6 +1778,7 @@ class ContentServiceTest extends BaseTest
         );
     }
 
+
     /**
      * Test for the publishVersion() method.
      *
@@ -1830,6 +1831,53 @@ class ContentServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals( 2, $publishedDraft->contentInfo->currentVersionNo );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testPublishVersionFromOldContentDraftKeepsCurrentVersionNo()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Create a new draft with versionNo = 2
+        $draftedContentVersion2 = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Create another new draft with versionNo = 3
+        $draftedContentVersion3 = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Publish draft with versionNo = 3
+        $publishedDraft = $contentService->publishVersion( $draftedContentVersion3->getVersionInfo() );
+
+        // Publish the first draft with versionNo = 2, currentVersionNo is still 3
+        $publishedDraft = $contentService->publishVersion( $draftedContentVersion2->getVersionInfo() );
+        /* END: Use Case */
+
+        $this->assertEquals( 3, $publishedDraft->contentInfo->currentVersionNo );
     }
 
     /**
