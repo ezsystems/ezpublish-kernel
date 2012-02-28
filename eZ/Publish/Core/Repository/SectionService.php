@@ -124,8 +124,8 @@ class SectionService implements SectionServiceInterface
 
         $spiSection = $this->persistenceHandler->sectionHandler()->update(
             $loadedSection->id,
-            $sectionUpdateStruct->name !== null ? $sectionUpdateStruct->name : $loadedSection->name,
-            $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $loadedSection->identifier
+            $sectionUpdateStruct->name ?: $loadedSection->name,
+            $sectionUpdateStruct->identifier ?: $loadedSection->identifier
         );
 
         return $this->buildDomainSectionObject( $spiSection );
@@ -169,16 +169,13 @@ class SectionService implements SectionServiceInterface
     {
         $spiSections = $this->persistenceHandler->sectionHandler()->loadAll();
 
-        if ( !is_array( $spiSections ) )
-            $spiSections = array( $spiSections );
-
-        $returnArray = array();
+        $sections = array();
         foreach ( $spiSections as $spiSection )
         {
-            $returnArray[] = $this->buildDomainSectionObject( $spiSection );
+            $sections[] = $this->buildDomainSectionObject( $spiSection );
         }
 
-        return $returnArray;
+        return $sections;
     }
 
     /**
