@@ -207,18 +207,6 @@ class ContentServiceTest extends BaseTest
      * Test for the createContent() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     *
-     */
-    public function testCreateContentWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
@@ -229,10 +217,9 @@ class ContentServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentService = $repository->getContentService();
 
         $contentCreateOne = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreateOne->setField( 'title', 'An awesome story about eZ Publish' );
@@ -258,18 +245,6 @@ class ContentServiceTest extends BaseTest
      * Test for the createContent() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testCreateContentThrowsIllegalArgumentExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      */
@@ -282,34 +257,10 @@ class ContentServiceTest extends BaseTest
      * Test for the createContent() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testCreateContentThrowsContentFieldValidationExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      */
     public function testCreateContentThrowsContentValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testCreateContentThrowsContentValidationExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
@@ -2515,30 +2466,6 @@ class ContentServiceTest extends BaseTest
             ),
             $versions
         );
-    }
-
-    /**
-     * Test for the copyContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::copyContent()
-     * 
-     */
-    public function testCopyContent()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
-    }
-
-    /**
-     * Test for the copyContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
-     * 
-     */
-    public function testCopyContentWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
     }
 
     /**

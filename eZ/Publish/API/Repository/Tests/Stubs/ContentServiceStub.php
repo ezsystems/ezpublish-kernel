@@ -358,7 +358,7 @@ class ContentServiceStub implements ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
-     * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
@@ -474,6 +474,12 @@ class ContentServiceStub implements ContentService
         $this->content[]                     = $content;
         $this->contentInfo[]                 = $contentInfo;
         $this->versionInfo[$versionInfo->id] = $versionInfo;
+
+        $locationService = $this->repository->getLocationService();
+        foreach ( $locationCreateStructs as $locationCreateStruct )
+        {
+            $locationService->createLocation( $contentInfo, $locationCreateStruct );
+        }
 
         return $content;
     }
