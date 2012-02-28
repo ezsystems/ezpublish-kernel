@@ -88,22 +88,6 @@ class ServiceContainer
     }
 
     /**
-     * Service function to get ConfigurationManager object
-     *
-     * Alias with type hints for $repo->get( 'configurationManager' );
-     *
-     * @uses get()
-     * @return \eZ\Publish\Core\Base\ConfigurationManager
-     */
-    public function getConfigurationManager()
-    {
-        if ( isset( $this->dependencies['$configurationManager'] ) )
-            return $this->dependencies['$configurationManager'];
-        // will not work as ConfigurationManager has dependencies on config.php settings at least
-        throw new \Exception( '$configurationManager missing, usually setup in bootstrap.php!' );
-    }
-
-    /**
      * Service function to get Repository object
      *
      * Alias with type hints for $repo->get( 'repository' );
