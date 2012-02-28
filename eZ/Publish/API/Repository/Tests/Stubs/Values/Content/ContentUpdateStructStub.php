@@ -41,7 +41,7 @@ class ContentUpdateStructStub extends ContentUpdateStruct
             array(
                 'fieldDefIdentifier'  =>  $fieldDefIdentifier,
                 'value'               =>  $value,
-                'languageCode'        =>  $languageCode ?: $this->initialLanguageCode
+                'languageCode'        =>  $languageCode
             )
         );
     }

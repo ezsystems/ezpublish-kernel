@@ -16,6 +16,7 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentInfo}
  * class.
  *
+ * @property-read integer $contentTypeId
  * @see \eZ\Publish\API\Repository\Values\Content\ContentInfo
  */
 class ContentInfoStub extends ContentInfo

@@ -57,6 +57,11 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContent()
     {
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( "This test requires eZ Publish 5" );
+        }
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -214,6 +219,11 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsIllegalArgumentException()
     {
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( "This test requires eZ Publish 5" );
+        }
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -222,48 +232,24 @@ class ContentServiceTest extends BaseTest
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
-        $contentCreateOne = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateOne->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate1->setField( 'title', 'An awesome story about eZ Publish' );
 
-        $contentCreateOne->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateOne->alwaysAvailable = true;
+        $contentCreate1->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate1->alwaysAvailable = true;
 
-        $contentService->createContent( $contentCreateOne );
+        $contentService->createContent( $contentCreate1 );
 
-        $contentCreateTwo = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreateTwo->setField( 'title', 'Another awesome story about eZ Publish' );
+        $contentCreate2 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreate2->setField( 'title', 'Another awesome story about eZ Publish' );
 
-        $contentCreateTwo->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateTwo->alwaysAvailable = false;
+        $contentCreate2->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate2->alwaysAvailable = false;
 
         // This call will fail with an "IllegalArgumentException", because the
         // remoteId is already in use.
-        $contentService->createContent( $contentCreateTwo );
+        $contentService->createContent( $contentCreate2 );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testCreateContentThrowsContentFieldValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testCreateContentThrowsContentValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -283,38 +269,10 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $locationService = $repository->getLocationService();
+
         /* BEGIN: Use Case */
-        // Location id of the "Home" node
-        $homeLocationId = 2;
-
-        $contentService     = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $locationService    = $repository->getLocationService();
-
-        // Configure new location
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
-
-        $locationCreate->priority  = 23;
-        $locationCreate->hidden    = true;
-        $locationCreate->remoteId  = '0123456789abcdef0123456789abcdef';
-        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
-        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
-
-        // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        // Configure new content object
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->alwaysAvailable = true;
-
-        // Create new content object under the specified location
-        $content = $contentService->createContent(
-            $contentCreate,
-            array( $locationCreate )
-        );
+        $draft = $this->createContentDraftVersion1();
 
         // This location will contain the above content object
         $location = $locationService->loadLocationByRemoteId(
@@ -322,7 +280,7 @@ class ContentServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertEquals( $content->contentInfo, $location->getContentInfo() );
+        $this->assertEquals( $draft->contentInfo, $location->getContentInfo() );
     }
 
     /**
@@ -349,21 +307,21 @@ class ContentServiceTest extends BaseTest
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
         // Configure new locations
-        $locationCreateOne = $locationService->newLocationCreateStruct( $homeLocationId );
+        $locationCreate1 = $locationService->newLocationCreateStruct( $homeLocationId );
 
-        $locationCreateOne->priority  = 23;
-        $locationCreateOne->hidden    = true;
-        $locationCreateOne->remoteId  = '0123456789abcdef0123456789aaaaaa';
-        $locationCreateOne->sortField = Location::SORT_FIELD_NODE_ID;
-        $locationCreateOne->sortOrder = Location::SORT_ORDER_DESC;
+        $locationCreate1->priority  = 23;
+        $locationCreate1->hidden    = true;
+        $locationCreate1->remoteId  = '0123456789abcdef0123456789aaaaaa';
+        $locationCreate1->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate1->sortOrder = Location::SORT_ORDER_DESC;
 
-        $locationCreateTwo = $locationService->newLocationCreateStruct( $homeLocationId );
+        $locationCreate2 = $locationService->newLocationCreateStruct( $homeLocationId );
 
-        $locationCreateTwo->priority  = 42;
-        $locationCreateTwo->hidden    = true;
-        $locationCreateTwo->remoteId  = '0123456789abcdef0123456789bbbbbb';
-        $locationCreateTwo->sortField = Location::SORT_FIELD_NODE_ID;
-        $locationCreateTwo->sortOrder = Location::SORT_ORDER_DESC;
+        $locationCreate2->priority  = 42;
+        $locationCreate2->hidden    = true;
+        $locationCreate2->remoteId  = '0123456789abcdef0123456789bbbbbb';
+        $locationCreate2->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate2->sortOrder = Location::SORT_ORDER_DESC;
 
         // Configure new content object
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
@@ -375,14 +333,14 @@ class ContentServiceTest extends BaseTest
         // Create new content object under the specified location
         $contentService->createContent(
             $contentCreate,
-            array( $locationCreateOne )
+            array( $locationCreate1 )
         );
 
         // This call will fail with an "IllegalArgumentException", because the
         // Content remoteId already exists,
         $contentService->createContent(
             $contentCreate,
-            array( $locationCreateTwo )
+            array( $locationCreate2 )
         );
         /* END: Use Case */
     }
@@ -484,10 +442,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        $anonUserId = 10;
+
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( 10 );
+        $contentInfo = $contentService->loadContentInfo( $anonUserId );
 
         // Now load the current version info of the "Anonymous User"
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -511,10 +471,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        $anonUserId = 10;
+
         $contentService = $repository->getContentService();
 
         // Load the VersionInfo for "Anonymous User"
-        $versionInfo = $contentService->loadVersionInfoById( 10 );
+        $versionInfo = $contentService->loadVersionInfoById( $anonUserId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -555,10 +517,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        $anonUserId = 10;
+
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( 10 );
+        $contentInfo = $contentService->loadContentInfo( $anonUserId );
 
         // Now load the current content version for the info instance
         $content = $contentService->loadContentByContentInfo( $contentInfo );
@@ -582,10 +546,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        $anonUserId = 10;
+
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( 10 );
+        $contentInfo = $contentService->loadContentInfo( $anonUserId );
 
         // Load the current VersionInfo
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -612,40 +578,18 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        $anonUserId = 10;
+
         $contentService = $repository->getContentService();
 
         // Load the Content for "Anonymous User", any language and current version
-        $content = $contentService->loadContent( 10 );
+        $content = $contentService->loadContent( $anonUserId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\Content',
             $content
         );
-    }
-
-    /**
-     * Test for the loadContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     */
-    public function testLoadContentWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     */
-    public function testLoadContentWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -666,30 +610,6 @@ class ContentServiceTest extends BaseTest
         // This call will fail with a "NotFoundException"
         $contentService->loadContent( PHP_INT_MAX );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the loadContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadContentThrowsNotFoundExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -720,84 +640,21 @@ class ContentServiceTest extends BaseTest
      * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
-     * 
-     */
-    public function testLoadContentByRemoteIdWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentByRemoteId() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
-     * 
-     */
-    public function testLoadContentByRemoteIdWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentByRemoteId() method.
-     *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
      */
     public function testLoadContentByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
-    }
+        $repository = $this->getRepository();
 
-    /**
-     * Test for the loadContentByRemoteId() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
-    }
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
 
-    /**
-     * Test for the loadContentByRemoteId() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContentMetadata() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
-     * 
-     */
-    public function testUpdateContentMetadata()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContentMetadata() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testUpdateContentMetadataThrowsInvalidArgumentException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
+        // This call will fail with a "NotFoundException", because no content
+        // object exists for the given remoteId
+        $contentService->loadContentByRemoteId( 'a1b1c1d1e1f1a2b2c2d2e2f2a3b3c3d3' );
+        /* END: Use Case */
     }
 
     /**
@@ -913,39 +770,20 @@ class ContentServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
      */
     public function testPublishVersion()
     {
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentService = $repository->getContentService();
-
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreate->remoteId         = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->modificationDate = new \DateTime( '1984/01/01' );
-        $contentCreate->alwaysAvailable  = true;
-
-        // Create a content draft
-        $content = $contentService->createContent( $contentCreate );
-
-        // Now publish the content draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+        $content = $this->createContentVersion1();
         /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\Content',
-            $publishedContent
+            $content
         );
 
-        return $publishedContent;
+        return $content;
     }
 
     /**
@@ -1034,29 +872,17 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
 
-        $contentCreate->remoteId         = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->modificationDate = new \DateTime( '1984/01/01' );
-        $contentCreate->alwaysAvailable  = true;
-
-        // Create a content draft
-        $content = $contentService->createContent( $contentCreate );
-
-        // Now publish the content draft
-        $contentService->publishVersion( $content->getVersionInfo() );
+        // Publish the content draft
+        $contentService->publishVersion( $draft->getVersionInfo() );
 
         // This call will fail with a "BadStateException", because the version
         // is already published.
-        $contentService->publishVersion( $content->getVersionInfo() );
+        $contentService->publishVersion( $draft->getVersionInfo() );
         /* END: Use Case */
     }
 
@@ -1071,28 +897,13 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreate );
-
-        // Now publish this draft
-        $contentPublished = $contentService->publishVersion( $content->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $contentPublished->contentInfo );
+        $draftedContent = $contentService->createContentDraft( $content->contentInfo );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1206,24 +1017,10 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create draft and publish this draft
-        $content = $contentService->publishVersion(
-            $contentService->createContent( $contentCreate )->getVersionInfo()
-        );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
         $contentService->createContentDraft( $content->contentInfo );
@@ -1247,24 +1044,10 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create draft and publish this draft
-        $content = $contentService->publishVersion(
-            $contentService->createContent( $contentCreate )->getVersionInfo()
-        );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
         $contentService->createContentDraft( $content->contentInfo );
@@ -1288,24 +1071,10 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create draft and publish this draft
-        $content = $contentService->publishVersion(
-            $contentService->createContent( $contentCreate )->getVersionInfo()
-        );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
         $contentService->createContentDraft( $content->contentInfo );
@@ -1329,24 +1098,10 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create draft and publish this draft
-        $content = $contentService->publishVersion(
-            $contentService->createContent( $contentCreate )->getVersionInfo()
-        );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
         $contentService->createContentDraft( $content->contentInfo );
@@ -1391,51 +1146,16 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContent()
     {
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentService = $repository->getContentService();
-
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedContent = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
+        $draftVersion2 = $this->createUpdatedDraftVersion2();
         /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\Content',
-            $updatedContent
+            $draftVersion2
         );
 
-        return $updatedContent;
+        return $draftVersion2;
     }
 
     /**
@@ -1527,25 +1247,10 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
@@ -1557,7 +1262,7 @@ class ContentServiceTest extends BaseTest
         // This call will fail with a "BadStateException", because $publishedContent
         // is not a draft.
         $updatedContent = $contentService->updateContent(
-            $publishedContent->getVersionInfo(),
+            $content->getVersionInfo(),
             $contentUpdateStruct
         );
         /* END: Use Case */
@@ -1598,49 +1303,15 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Publish the new version 2
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
 
         // Now we create a new draft from the initial version
         $draftedContentReloaded = $contentService->createContentDraft(
-            $publishedDraft->contentInfo,
-            $publishedDraft->getVersionInfo()
+            $contentVersion2->contentInfo,
+            $contentVersion2->getVersionInfo()
         );
         /* END: Use Case */
 
@@ -1659,47 +1330,13 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Now publish the updated draft
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
         /* END: Use Case */
 
-        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo );
+        $versionInfo = $contentService->loadVersionInfo( $contentVersion2->contentInfo );
 
         $this->assertEquals(
             array(
@@ -1724,47 +1361,13 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Now publish the updated draft
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
         /* END: Use Case */
 
-        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo, 1 );
+        $versionInfo = $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 );
 
         $this->assertEquals(
             array(
@@ -1788,49 +1391,11 @@ class ContentServiceTest extends BaseTest
      */
     public function testPublishVersionFromContentDraftUpdatesContentInfoCurrentVersion()
     {
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentService = $repository->getContentService();
-
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Now publish the updated draft
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        $contentVersion2 = $this->createContentVersion2();
         /* END: Use Case */
 
-        $this->assertEquals( 2, $publishedDraft->contentInfo->currentVersionNo );
+        $this->assertEquals( 2, $contentVersion2->contentInfo->currentVersionNo );
     }
 
     /**
@@ -1844,40 +1409,159 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // Create a new draft with versionNo = 2
-        $draftedContentVersion2 = $contentService->createContentDraft( $publishedContent->contentInfo );
+        $draftedContentVersion2 = $contentService->createContentDraft( $content->contentInfo );
 
         // Create another new draft with versionNo = 3
-        $draftedContentVersion3 = $contentService->createContentDraft( $publishedContent->contentInfo );
+        $draftedContentVersion3 = $contentService->createContentDraft( $content->contentInfo );
 
         // Publish draft with versionNo = 3
-        $publishedDraft = $contentService->publishVersion( $draftedContentVersion3->getVersionInfo() );
+        $contentService->publishVersion( $draftedContentVersion3->getVersionInfo() );
 
         // Publish the first draft with versionNo = 2, currentVersionNo is still 3
         $publishedDraft = $contentService->publishVersion( $draftedContentVersion2->getVersionInfo() );
         /* END: Use Case */
 
         $this->assertEquals( 3, $publishedDraft->contentInfo->currentVersionNo );
+    }
+
+    /**
+     * Test for the newContentMetadataUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     */
+    public function testNewContentMetadataUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Creates a new metadata update struct
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+
+        $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
+        $metadataUpdate->mainLanguageCode = 'eng-US';
+        $metadataUpdate->alwaysAvailable  = false;
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct',
+            $metadataUpdate
+        );
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentMetadataUpdateStruct
+     */
+    public function testUpdateContentMetadata()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
+
+        // Creates a metadata update struct
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+
+        $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
+        $metadataUpdate->mainLanguageCode = 'eng-US';
+        $metadataUpdate->alwaysAvailable  = false;
+        $metadataUpdate->publishedDate    = new \DateTime( '1984/01/01' );
+        $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
+
+        // Update the metadata of the published content object
+        $content = $contentService->updateContentMetadata(
+            $content->contentInfo,
+            $metadataUpdate
+        );
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $content
+        );
+
+        return $content;
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     */
+    public function testUpdateContentMetadataSetsExpectedProperties( $content )
+    {
+        $contentInfo = $content->contentInfo;
+
+        $this->assertEquals(
+            array(
+                'remoteId'          =>  'aaaabbbbccccddddeeeeffff11112222',
+                'sectionId'         =>  1,
+                'alwaysAvailable'   =>  false,
+                'currentVersionNo'  =>  1,
+                'mainLanguageCode'  =>  'eng-US',
+                'modificationDate'  =>  new \DateTime( '1984/01/01' ),
+                'ownerId'           =>  $this->getRepository()->getCurrentUser()->id,
+                'published'         =>  true,
+                'publishedDate'     =>  new \DateTime( '1984/01/01' ),
+            ),
+            array(
+                'remoteId'          =>  $contentInfo->remoteId,
+                'sectionId'         =>  $contentInfo->sectionId,
+                'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
+                'currentVersionNo'  =>  $contentInfo->currentVersionNo,
+                'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
+                'modificationDate'  =>  $contentInfo->modificationDate,
+                'ownerId'           =>  $contentInfo->ownerId,
+                'published'         =>  $contentInfo->published,
+                'publishedDate'     =>  $contentInfo->publishedDate,
+            )
+        );
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     */
+    public function testUpdateContentMetadataNotUpdatesContentVersion( $content )
+    {
+        $this->assertEquals( 1, $content->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateContentMetadataThrowsInvalidArgumentException()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
     }
 
     /**
@@ -1970,47 +1654,13 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Now publish the updated draft
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
 
         // Will return the $versionInfo of $content
-        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo, 1 );
+        $versionInfo = $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 );
         /* END: Use Case */
 
         $this->assertEquals( 1, $versionInfo->versionNo );
@@ -2028,26 +1678,14 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
 
         // This call will fail with a "NotFoundException", because not versionNo
         // 2 exists for this content object.
-        $contentService->loadVersionInfo( $content->contentInfo, 2 );
+        $contentService->loadVersionInfo( $draft->contentInfo, 2 );
         /* END: Use Case */
     }
 
@@ -2062,47 +1700,13 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Now we create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Now publish the updated draft
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
 
         // Will return the $versionInfo of $content
-        $versionInfo = $contentService->loadVersionInfoById( $publishedDraft->contentId, 1 );
+        $versionInfo = $contentService->loadVersionInfoById( $contentVersion2->contentId, 1 );
         /* END: Use Case */
 
         $this->assertEquals( 1, $versionInfo->versionNo );
@@ -2119,22 +1723,10 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // This call will fail with a "NotFoundException", because not versionNo
         // 2 exists for this content object.
@@ -2360,48 +1952,14 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Publish the updated draft
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
 
         // Will return a Content instance equal to $content
-        $reloadedContent = $contentService->loadContentByContentInfo(
-            $publishedDraft->contentInfo,
+        $contentReloaded = $contentService->loadContentByContentInfo(
+            $contentVersion2->contentInfo,
             null,
             1
         );
@@ -2409,7 +1967,7 @@ class ContentServiceTest extends BaseTest
 
         $this->assertEquals(
             'An awesome story about eZ Publish',
-            $reloadedContent->getFieldValue( 'title' )
+            $contentReloaded->getFieldValue( 'title' )
         );
     }
 
@@ -2425,29 +1983,163 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Publish this draft
-        $contentService->publishVersion( $content->getVersionInfo() );
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
 
         // This call will fail with a "NotFoundException", because no content
         // with versionNo = 2 exists.
         $contentService->loadContentByContentInfo( $content->contentInfo, null, 2 );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testLoadContentWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // This draft contains those fields localized with "eng-US"
+        $draftLocalized = $contentService->loadContent( $draft->contentId, array( 'eng-US' ) );
+        /* END: Use Case */
+
+        $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-US' );
+    }
+
+    /**
+     * Test for the loadContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testLoadContentWithThirdParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draftVersion2 = $this->createContentDraftVersion2();
+
+        // This content instance is identical to $contentVersion1
+        $oldContent = $contentService->loadContent( $draftVersion2->contentId, null, 1 );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $oldContent->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the loadContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithThirdParameter
+     */
+    public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
+
+        // This call will fail with a "NotFoundException", because for this
+        // content object no versionNo=2 exists.
+        $contentService->loadContent( $content->contentId, null, 2 );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadContentByRemoteId() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testLoadContentByRemoteIdWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // This draft contains those fields localized with "eng-US"
+        $draftLocalized = $contentService->loadContentByRemoteId(
+            $draft->contentInfo->remoteId,
+            array( 'eng-US' )
+        );
+        /* END: Use Case */
+
+        $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-US' );
+    }
+
+    /**
+     * Test for the loadContentByRemoteId() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testLoadContentByRemoteIdWithThirdParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draftVersion2 = $this->createContentDraftVersion2();
+
+        // This content instance is identical to $contentVersion1
+        $oldContent = $contentService->loadContentByRemoteId(
+            $draftVersion2->contentInfo->remoteId,
+            null,
+            1
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $oldContent->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the loadContentByRemoteId() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
+     */
+    public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
+
+        // This call will fail with a "NotFoundException", because for this
+        // content object no versionNo=2 exists.
+        $contentService->loadContentByRemoteId(
+            $content->contentInfo->remoteId,
+            null,
+            2
+        );
         /* END: Use Case */
     }
 
@@ -2464,28 +2156,16 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
 
         // Delete the previously created draft
-        $contentService->deleteVersion( $content->getVersionInfo() );
+        $contentService->deleteVersion( $draft->getVersionInfo() );
         /* END: Use Case */
 
-        $contentService->loadContent( $content->contentId );
+        $contentService->loadContent( $draft->contentId );
     }
 
     /**
@@ -2501,28 +2181,14 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $contentService = $repository->getContentService();
+
         /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Now publish the newly created content object
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+        $content = $this->createContentVersion1();
 
         // This call will fail with a "BadStateException", because the content
         // version is currently published.
-        $contentService->deleteVersion( $publishedContent->getVersionInfo() );
+        $contentService->deleteVersion( $content->getVersionInfo() );
         /* END: Use Case */
     }
 
@@ -2537,53 +2203,19 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $contentService = $repository->getContentService();
+
         /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
-
-        // Load used content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
-        $contentCreateStruct->alwaysAvailable = true;
-
-        // Create a new content draft
-        $content = $contentService->createContent( $contentCreateStruct );
-
-        // Publish this draft
-        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
-
-        // Create a new draft from the published content
-        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
-
-        // Create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $updatedDraft = $contentService->updateContent(
-            $draftedContent->getVersionInfo(),
-            $contentUpdateStruct
-        );
-
-        // Publish the updated draft
-        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        $contentVersion2 = $this->createContentVersion2();
 
         // Load versions of this ContentInfo instance
-        $versions = $contentService->loadVersions( $publishedDraft->contentInfo );
+        $versions = $contentService->loadVersions( $contentVersion2->contentInfo );
         /* END: Use Case */
 
         $this->assertEquals(
             array(
-                $publishedContent->getVersionInfo(),
-                $publishedDraft->getVersionInfo(),
+                $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 ),
+                $contentService->loadVersionInfo( $contentVersion2->contentInfo, 2 )
             ),
             $versions
         );
@@ -2782,18 +2414,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the newContentMetadataUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
-     * 
-     */
-    public function testNewContentMetadataUpdateStruct()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
-    }
-
-    /**
      * Test for the newTranslationInfo() method.
      *
      * @return void
@@ -2817,4 +2437,317 @@ class ContentServiceTest extends BaseTest
         $this->markTestIncomplete( "@TODO: Test for ContentService::newTranslationValues() is not implemented." );
     }
 
+    /**
+     * Creates a fresh clean content draft.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentDraftVersion1()
+    {
+        $repository = $this->getRepository();
+        /* BEGIN: Inline */
+        // Location id of the "Home" node
+        $homeLocationId = 2;
+
+        $contentService     = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService    = $repository->getLocationService();
+
+        // Configure new location
+        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $locationCreate->priority  = 23;
+        $locationCreate->hidden    = true;
+        $locationCreate->remoteId  = '0123456789abcdef0123456789abcdef';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Load content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        // Configure new content object
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a draft
+        $draft = $contentService->createContent( $contentCreate, array( $locationCreate ) );
+        /* END: Inline */
+
+        return $draft;
+    }
+
+    /**
+     * Creates a fresh clean published content instance.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentVersion1()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draft = $this->createContentDraftVersion1();
+
+        // Publish this draft
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+        /* END: Inline */
+
+        return $content;
+    }
+
+    /**
+     * Creates a new content draft named <b>$draftVersion2</b> from a currently
+     * published content object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentDraftVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $content = $this->createContentVersion1();
+
+        // Create a new draft from the published content
+        $draftVersion2 = $contentService->createContentDraft( $content->contentInfo );
+        /* END: Inline */
+
+        return $draftVersion2;
+    }
+
+    /**
+     * Creates an updated content draft named <b>$draftVersion2</b> from
+     * a currently published content object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createUpdatedDraftVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draftVersion2 = $this->createContentDraftVersion2();
+
+        // Create an update struct and modify some fields
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        $contentUpdate->initialLanguageCode = 'eng-GB';
+
+        // Update the content draft
+        $draftVersion2 = $contentService->updateContent(
+            $draftVersion2->getVersionInfo(),
+            $contentUpdate
+        );
+        /* END: Inline */
+
+        return $draftVersion2;
+    }
+
+    /**
+     * Creates an updated content object named <b>$contentVersion2</b> from
+     * a currently published content object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draftVersion2 = $this->createUpdatedDraftVersion2();
+
+        // Publish the updated draft
+        $contentVersion2 = $contentService->publishVersion( $draftVersion2->getVersionInfo() );
+        /* END: Inline */
+
+        return $contentVersion2;
+    }
+
+    /**
+     * Creates an updated content draft named <b>$draft</b>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createMultipleLanguageDraftVersion1()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draft = $this->createContentDraftVersion1();
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+
+        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdate->setField( 'index_title', 'British index title...' );
+
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+        $contentUpdate->setField( 'index_title', 'American index title...', 'eng-US' );
+
+        $contentUpdate->initialLanguageCode = 'eng-GB';
+
+        $draft = $contentService->updateContent(
+            $draft->getVersionInfo(),
+            $contentUpdate
+        );
+        /* BEGIN: Inline */
+
+        return $draft;
+    }
+
+    /**
+     * Asserts that the given fields are equal to the default fieldxs fixture.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     * @return void
+     */
+    private function assertAllFieldsEquals( array $fields )
+    {
+        $actual   = $this->normalizeFields( $fields );
+        $expected = $this->normalizeFields( $fields );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
+     * Asserts that the given fields are equal to a language filtered set of the
+     * default fields fixture.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     * @param string $languageCode
+     *
+     * @return void
+     */
+    private function assertLocaleFieldsEquals( array $fields, $languageCode )
+    {
+
+    }
+
+    /**
+     * This method normalizes a set of fields and returns a normalized set.
+     *
+     * Normalization means it resets the storage specific field id to zero and
+     * it sorts the field by their identifier and their language code.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    private function normalizeFields( array $fields )
+    {
+        $normalized = array();
+        foreach ( $fields as $field )
+        {
+            $normalized[] = new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  $field->value,
+                    'languageCode'        =>  $field->languageCode,
+                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                )
+            );
+        }
+        usort( $normalized, function ( $field1, $field2 ) {
+            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+            {
+                return strcasecmp( $field1->languageCode, $field2->languageCode );
+            }
+            return $return;
+        } );
+
+        return $normalized;
+    }
+
+    /**
+     * Returns a filtered set of the default fields fixture.
+     *
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    private function createLocaleFieldsFixture( $languageCode )
+    {
+        $fields = array();
+        foreach ( $this->createFieldsFixture() as $field )
+        {
+            if ( null === $field->languageCode || $languageCode === $field->languageCode )
+            {
+                $fields[] = $field;
+            }
+        }
+        return $fields;
+    }
+
+    /**
+     * Returns the default fixture of fields used in most tests.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    private function createFieldsFixture()
+    {
+        return array(
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'body'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'British index title...',
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'index_title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'American index title...',
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'index_title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'tags'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome² story about ezp.',
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome²³ story about ezp.',
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'title'
+                )
+            ),
+        );
+    }
 }

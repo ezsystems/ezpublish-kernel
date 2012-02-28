@@ -364,7 +364,6 @@ class ContentServiceStub implements ContentService
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
-
         $fields = array();
         foreach ( $contentCreateStruct->fields as $field )
         {
@@ -472,9 +471,9 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $this->content[]                     = $content;
-        $this->contentInfo[]                 = $contentInfo;
-        $this->versionInfo[$versionInfo->id] = $versionInfo;
+        $this->content[]                            = $content;
+        $this->contentInfo[$contentInfo->contentId] = $contentInfo;
+        $this->versionInfo[$versionInfo->id]        = $versionInfo;
 
         $locationService = $this->repository->getLocationService();
         foreach ( $locationCreateStructs as $locationCreateStruct )
@@ -500,7 +499,25 @@ class ContentServiceStub implements ContentService
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
     {
-        // TODO: Implement updateContentMetadata() method.
+        $this->contentInfo[$contentInfo->contentId] = new ContentInfoStub(
+            array(
+                'contentId'         =>  $contentInfo->contentId,
+                'contentTypeId'     =>  $this->contentInfo[$contentInfo->contentId]->contentTypeId,
+                'remoteId'          =>  $contentMetadataUpdateStruct->remoteId ?: $contentInfo->remoteId,
+                'sectionId'         =>  $contentInfo->sectionId,
+                'alwaysAvailable'   =>  is_null( $contentMetadataUpdateStruct->alwaysAvailable ) ? $contentInfo->alwaysAvailable : $contentMetadataUpdateStruct->alwaysAvailable,
+                'currentVersionNo'  =>  $contentInfo->currentVersionNo,
+                'mainLanguageCode'  =>  $contentMetadataUpdateStruct->mainLanguageCode ?: $contentInfo->mainLanguageCode,
+                'modificationDate'  =>  $contentMetadataUpdateStruct->modificationDate ?: $contentInfo->modificationDate,
+                'ownerId'           =>  $contentMetadataUpdateStruct->ownerId ?: $contentInfo->ownerId,
+                'published'         =>  $contentInfo->published,
+                'publishedDate'     =>  $contentMetadataUpdateStruct->publishedDate ?: $contentInfo->publishedDate,
+
+                'repository'      =>  $this->repository
+            )
+        );
+
+        return $this->loadContent( $contentInfo->contentId );
     }
 
     /**
@@ -1054,7 +1071,7 @@ class ContentServiceStub implements ContentService
      */
     public function newContentMetadataUpdateStruct()
     {
-        // TODO: Implement newContentMetadataUpdateStruct() method.
+        return new ContentMetaDataUpdateStruct();
     }
 
     /**
