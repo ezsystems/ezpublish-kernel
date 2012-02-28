@@ -22,6 +22,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\ContentTypeService,
     eZ\Publish\Core\Repository\RoleService,
     eZ\Publish\Core\Repository\UserService,
+    eZ\Publish\Core\Repository\IOService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
     RuntimeException;
@@ -108,6 +109,13 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\API\Repository\ContentTypeService
      */
     protected $contentTypeService;
+
+    /**
+     * Instance of IO service
+     *
+     * @var \eZ\Publish\API\Repository\IOService
+     */
+    protected $ioService;
 
     /**
      * Constructor
@@ -366,6 +374,22 @@ class Repository implements RepositoryInterface
 
         $this->roleService = new RoleService( $this, $this->persistenceHandler );
         return $this->roleService;
+    }
+
+    /**
+     * Get IO Service
+     *
+     * Get service object to perform IO operations
+     *
+     * @return \eZ\Publish\API\Repository\IOService
+     */
+    public function getIOService()
+    {
+        if ( $this->ioService !== null )
+            return $this->ioService;
+
+        $this->ioService = new IOService( $this, $this->ioHandler );
+        return $this->ioService;
     }
 
     /**
