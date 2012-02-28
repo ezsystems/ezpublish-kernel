@@ -719,7 +719,7 @@ class RoleService implements RoleServiceInterface
         $rolePolicies = array();
         foreach ( $role->policies as $spiPolicy )
         {
-            $rolePolicies[] = $this->buildDomainPolicyObject( $spiPolicy );
+            $rolePolicies[] = $this->buildDomainPolicyObject( $spiPolicy, $role );
         }
 
         return new Role(
@@ -739,10 +739,11 @@ class RoleService implements RoleServiceInterface
      * Maps provided SPI Policy value object to API Policy value object
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Role|null $role
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    protected function buildDomainPolicyObject( SPIPolicy $policy )
+    protected function buildDomainPolicyObject( SPIPolicy $policy, SPIRole $role = null )
     {
         $policyLimitations = array();
         if ( $policy->module !== '*' && $policy->function !== '*' && is_array( $policy->limitations ) )
@@ -758,7 +759,7 @@ class RoleService implements RoleServiceInterface
         return new Policy(
             array(
                 'id'          => $policy->id,
-                'roleId'      => $policy->roleId,
+                'roleId'      => $role ? $role->id : $policy->id,
                 'module'      => $policy->module,
                 'function'    => $policy->function,
                 'limitations' => $policyLimitations
