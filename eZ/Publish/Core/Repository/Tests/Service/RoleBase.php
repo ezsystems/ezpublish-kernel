@@ -13,9 +13,11 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
     eZ\Publish\Core\Repository\Values\User\Role,
     eZ\Publish\Core\Repository\Values\User\Policy,
+    eZ\Publish\API\Repository\Values\User\Limitation,
 
     ezp\Base\Exception\PropertyNotFound,
-    ezp\Base\Exception\PropertyPermission;
+    ezp\Base\Exception\PropertyPermission,
+    \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Role Service
@@ -30,19 +32,26 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testNewClass()
     {
-        $role = new Role();
-        self::assertEquals( null, $role->id );
-        self::assertEquals( null, $role->identifier );
-        self::assertInternalType( "array", $role->policies );
-        self::assertEmpty( $role->policies );
+        $this->assertPropertiesCorrect(
+            array(
+                'id'               => null,
+                'identifier'       => null,
+                'mainLanguageCode' => null,
+                'policies'         => array()
+            ),
+            new Role()
+        );
 
-        $policy = new Policy();
-        self::assertEquals( null, $policy->id );
-        self::assertEquals( null, $policy->roleId );
-        self::assertEquals( null, $policy->module );
-        self::assertEquals( null, $policy->function );
-        self::assertInternalType( "array", $policy->getLimitations() );
-        self::assertEmpty( $policy->getLimitations() );
+        $this->assertPropertiesCorrect(
+            array(
+                'id'          => null,
+                'roleId'      => null,
+                'module'      => null,
+                'function'    => null,
+                'limitations' => array()
+            ),
+            new Policy()
+        );
     }
 
     /**
@@ -140,34 +149,61 @@ abstract class RoleBase extends BaseServiceTest
     }
 
     /**
-     * Test creating a role with existing name
-     * @expectedException eZ\Publish\Core\Base\Exceptions\IllegalArgumentException
-     * @covers \eZ\Publish\API\Repository\RoleService::createRole
-     */
-    public function testCreateRoleWithExistingName()
-    {
-        self::markTestSkipped( "@todo: enable when RoleService::loadRole (loading role by name) implementation is done" );
-        $roleService = $this->repository->getRoleService();
-        $roleCreateStruct = $roleService->newRoleCreateStruct( "Anonymous" );
-
-        $roleService->createRole( $roleCreateStruct );
-    }
-
-    /**
      * Test creating a role
      * @covers \eZ\Publish\API\Repository\RoleService::createRole
      */
     public function testCreateRole()
     {
         $roleService = $this->repository->getRoleService();
-        $roleCreateStruct = $roleService->newRoleCreateStruct( "Ultimate permissions" );
+        $roleCreateStruct = $roleService->newRoleCreateStruct( 'ultimate_permissions' );
+        $roleCreateStruct->mainLanguageCode = 'eng-GB';
+        $roleCreateStruct->names['eng-GB'] = 'Ultimate permissions';
+        $roleCreateStruct->descriptions['eng-GB'] = 'This is a role with ultimate permissions';
 
         $createdRole = $roleService->createRole( $roleCreateStruct );
 
-        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $createdRole );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
-        self::assertEquals( $roleCreateStruct->identifier, $createdRole->identifier );
-        self::assertEmpty( $createdRole->getPolicies() );
+
+        self::assertEquals(
+            array(
+                'eng-GB' => $roleCreateStruct->names['eng-GB']
+            ),
+            $createdRole->getNames()
+        );
+
+        self::assertEquals(
+            array(
+                'eng-GB' => $roleCreateStruct->descriptions['eng-GB']
+            ),
+            $createdRole->getDescriptions()
+        );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier' => $roleCreateStruct->identifier,
+                'policies'   => array()
+            ),
+            $createdRole,
+            //@todo: enable mainLanguageCode test
+            array( 'mainLanguageCode' )
+        );
+    }
+
+    /**
+     * Test creating a role throwing IllegalArgumentException
+     * @expectedException eZ\Publish\Core\Base\Exceptions\IllegalArgumentException
+     * @covers \eZ\Publish\API\Repository\RoleService::createRole
+     */
+    public function testCreateRoleThrowsIllegalArgumentException()
+    {
+        $roleService = $this->repository->getRoleService();
+        $roleCreateStruct = $roleService->newRoleCreateStruct( 'Anonymous' );
+        $roleCreateStruct->mainLanguageCode = 'eng-GB';
+        $roleCreateStruct->names['eng-GB'] = 'Anonymous';
+        $roleCreateStruct->descriptions['eng-GB'] = 'Anonymous role';
+
+        $roleService->createRole( $roleCreateStruct );
     }
 
     /**
@@ -198,35 +234,96 @@ abstract class RoleBase extends BaseServiceTest
         $policyCreateStruct2->addLimitation( $limitation3 );
         $policyCreateStruct2->addLimitation( $limitation4 );
 
-        $roleCreateStruct = $roleService->newRoleCreateStruct( "Ultimate permissions" );
+        $roleCreateStruct = $roleService->newRoleCreateStruct( 'ultimate_permissions' );
+        $roleCreateStruct->mainLanguageCode = 'eng-GB';
+        $roleCreateStruct->names['eng-GB'] = 'Ultimate permissions';
+        $roleCreateStruct->descriptions['eng-GB'] = 'This is a role with ultimate permissions';
+
         $roleCreateStruct->addPolicy( $policyCreateStruct1 );
         $roleCreateStruct->addPolicy( $policyCreateStruct2 );
 
         $createdRole = $roleService->createRole( $roleCreateStruct );
 
-        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $createdRole );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
-        self::assertEquals( $roleCreateStruct->identifier, $createdRole->identifier );
+
+        self::assertEquals(
+            array(
+                'eng-GB' => $roleCreateStruct->names['eng-GB']
+            ),
+            $createdRole->getNames()
+        );
+
+        self::assertEquals(
+            array(
+                'eng-GB' => $roleCreateStruct->descriptions['eng-GB']
+            ),
+            $createdRole->getDescriptions()
+        );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier' => $roleCreateStruct->identifier
+            ),
+            $createdRole,
+            //@todo: enable mainLanguageCode test
+            array( 'mainLanguageCode' )
+        );
 
         self::assertCount( 2, $createdRole->getPolicies() );
-    }
 
-    /**
-     * Test updating role with existing name
-     * @expectedException eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     * @covers \eZ\Publish\API\Repository\RoleService::updateRole
-     */
-    public function testUpdateRoleWithExistingName()
-    {
-        self::markTestSkipped( "@todo: enable when RoleService::loadRole (loading role by name) implementation is done" );
-        $roleService = $this->repository->getRoleService();
+        foreach ( $createdRole->getPolicies() as $policy )
+        {
+            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
+            self::assertGreaterThan( 0, $policy->id );
+            self::assertEquals( $createdRole->id, $policy->roleId );
 
-        $role = new Role( array( "id" => 2 ) );
+            self::assertCount( 2, $policy->getLimitations() );
 
-        $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-        $roleUpdateStruct->identifier = "Anonymous";
+            foreach ( $policy->getLimitations() as $limitation )
+            {
+                /** @var $limitation \eZ\Publish\API\Repository\Values\User\Limitation */
+                self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Limitation', $limitation );
 
-        $roleService->updateRole( $role, $roleUpdateStruct );
+                if ( $policy->module == 'content' && $policy->function == 'read' )
+                {
+                    switch ( $limitation->getIdentifier() )
+                    {
+                        case Limitation::CONTENTTYPE:
+                            self::assertEquals( $limitation1->limitationValues, $limitation->limitationValues );
+                            break;
+
+                        case Limitation::SECTION:
+                            self::assertEquals( $limitation2->limitationValues, $limitation->limitationValues );
+                            break;
+
+                        default:
+                            self::fail( 'Created role contains limitations not defined with create struct' );
+                    }
+                }
+                else if ( $policy->module == 'content' && $policy->function == 'edit' )
+                {
+                    switch ( $limitation->getIdentifier() )
+                    {
+                        case Limitation::OWNER:
+                            self::assertEquals( $limitation3->limitationValues, $limitation->limitationValues );
+                            break;
+
+                        case Limitation::USERGROUP:
+                            self::assertEquals( $limitation4->limitationValues, $limitation->limitationValues );
+                            break;
+
+                        default:
+                            self::fail( 'Created role contains limitations not defined with create struct' );
+                    }
+                }
+                else
+                {
+                    self::fail( 'Created role contains policy not defined with create struct' );
+                }
+            }
+        }
     }
 
     /**
@@ -237,39 +334,61 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $role = new Role( array( "id" => 1 ) );
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
 
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
         $roleUpdateStruct->identifier = "Anonymous 2";
+        $roleUpdateStruct->mainLanguageCode = 'eng-US';
+        $roleUpdateStruct->names['eng-US'] = 'Anonymous 2';
+        $roleUpdateStruct->descriptions['eng-US'] = 'Anonymous 2 role';
 
         $updatedRole = $roleService->updateRole( $role, $roleUpdateStruct );
-        self::assertEquals( $role->id, $updatedRole->id );
-        self::assertEquals( $roleUpdateStruct->identifier, $updatedRole->identifier );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $updatedRole );
+
+        // @todo: enable
+/*
+        self::assertEquals(
+            array(
+                'eng-US' => $roleUpdateStruct->names['eng-US']
+            ),
+            $updatedRole->getNames()
+        );
+
+        self::assertEquals(
+            array(
+                'eng-US' => $roleUpdateStruct->descriptions['eng-US']
+            ),
+            $updatedRole->getDescriptions()
+        );
+*/
+        $this->assertPropertiesCorrect(
+            array(
+                'id'         => $role->id,
+                'identifier' => $roleUpdateStruct->identifier,
+                'policies'   => $role->getPolicies()
+            ),
+            $updatedRole,
+            //@todo: enable mainLanguageCode test
+            array( 'mainLanguageCode' )
+        );
     }
 
     /**
-     * Test adding policy to role with invalid values
-     * @expectedException eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\API\Repository\RoleService::addPolicy
+     * Test updating role throwing IllegalArgumentException
+     * @expectedException eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @covers \eZ\Publish\API\Repository\RoleService::updateRole
      */
-    public function testAddPolicyWithInvalidValues()
+    public function testUpdateRoleThrowsIllegalArgumentException()
     {
         $roleService = $this->repository->getRoleService();
 
-        $role = new Role( array( "id" => 1 ) );
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
 
-        $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $limitation1->limitationValues = array( '12', '13', '14' );
+        $roleUpdateStruct = $roleService->newRoleUpdateStruct();
+        $roleUpdateStruct->identifier = 'Administrator';
 
-        $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
-        $limitation2->limitationValues = array( '5', '6' );
-
-        // policy with "module: *, function: anything but *" is not semantically correct
-        $policyCreateStruct = $roleService->newPolicyCreateStruct( '*', 'read' );
-        $policyCreateStruct->addLimitation( $limitation1 );
-        $policyCreateStruct->addLimitation( $limitation2 );
-
-        $roleService->addPolicy( $role, $policyCreateStruct );
+        $roleService->updateRole( $role, $roleUpdateStruct );
     }
 
     /**
@@ -293,9 +412,18 @@ abstract class RoleBase extends BaseServiceTest
         $policyCreateStruct->addLimitation( $limitation1 );
         $policyCreateStruct->addLimitation( $limitation2 );
 
-        $role = $roleService->addPolicy( $role, $policyCreateStruct );
+        $updatedRole = $roleService->addPolicy( $role, $policyCreateStruct );
 
-        self::assertCount( $policyCount + 1, $role->getPolicies() );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $updatedRole );
+        self::assertCount( $policyCount + 1, $updatedRole->getPolicies() );
+
+        foreach ( $updatedRole->getPolicies() as $policy )
+        {
+            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
+            self::assertGreaterThan( 0, $policy->id );
+            self::assertEquals( $role->id, $policy->roleId );
+        }
     }
 
     /**
@@ -307,24 +435,13 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 1 );
-        $policyCount = count( $role->getPolicies() );
+        $policies = $role->getPolicies();
+        $policyCount = count( $policies );
 
-        $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $limitation1->limitationValues = array( '12', '13', '14' );
+        self::assertGreaterThan( 0, $policyCount );
 
-        $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
-        $limitation2->limitationValues = array( '5', '6' );
-
-        $policyCreateStruct = $roleService->newPolicyCreateStruct( 'content', 'read' );
-        $policyCreateStruct->addLimitation( $limitation1 );
-        $policyCreateStruct->addLimitation( $limitation2 );
-
-        $role = $roleService->addPolicy( $role, $policyCreateStruct );
-        self::assertCount( $policyCount + 1, $role->getPolicies() );
-
-        $policyToRemove = $role->policies[0];
-        $role = $roleService->removePolicy( $role, $policyToRemove );
-        self::assertCount( $policyCount, $role->getPolicies() );
+        $updatedRole = $roleService->removePolicy( $role, $policies[0] );
+        self::assertCount( $policyCount - 1, $updatedRole->getPolicies() );
     }
 
     /**
@@ -345,41 +462,101 @@ abstract class RoleBase extends BaseServiceTest
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
         $policyUpdateStruct->addLimitation( $limitation );
 
-        $policy = $roleService->updatePolicy( $policy, $policyUpdateStruct );
-        self::assertCount( 1, $policy->getLimitations() );
+        $updatedPolicy = $roleService->updatePolicy( $policy, $policyUpdateStruct );
+        /** @var $limitations \eZ\Publish\API\Repository\Values\User\Limitation[] */
+        $limitations = $updatedPolicy->getLimitations();
+
+        self::assertCount( 1, $limitations );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Limitation', $limitations[0] );
+        self::assertEquals( Limitation::CONTENTTYPE, $limitations[0]->getIdentifier() );
+        self::assertEquals( $limitation->limitationValues, $limitations[0]->limitationValues );
     }
 
     /**
-     * Test loading role by name
+     * Test loading role by id
      * @covers \eZ\Publish\API\Repository\RoleService::loadRole
      */
     public function testLoadRole()
     {
-        self::markTestSkipped( "@todo: enable when RoleService::loadRole (loading role by name) implementation is done" );
         $roleService = $this->repository->getRoleService();
 
-        $role = $roleService->loadRole( "Anonymous" );
-        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $role );
-        self::assertGreaterThan( 0, $role->id );
-        self::assertEquals( "Anonymous", $role->identifier );
+        $role = $roleService->loadRole( 1 );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'         => 1,
+                'identifier' => 'Anonymous'
+            ),
+            $role
+        );
+    }
+
+    /**
+     * Test loading role by id throwing NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\RoleService::loadRole
+     */
+    public function testLoadRoleThrowsNotFoundException()
+    {
+        $roleService = $this->repository->getRoleService();
+
+        $roleService->loadRole( PHP_INT_MAX );
+    }
+
+    /**
+     * Test loading role by identifier
+     * @covers \eZ\Publish\API\Repository\RoleService::loadRoleByIdentifier
+     */
+    public function testLoadRoleByIdentifier()
+    {
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'         => 1,
+                'identifier' => 'Anonymous'
+            ),
+            $role
+        );
+    }
+
+    /**
+     * Test loading role by identifier throwing NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\RoleService::loadRoleByIdentifier
+     */
+    public function testLoadRoleByIdentifierThrowsNotFoundException()
+    {
+        $roleService = $this->repository->getRoleService();
+
+        $roleService->loadRoleByIdentifier( 'non-existing' );
     }
 
     /**
      * Test loading all roles
      * @covers \eZ\Publish\API\Repository\RoleService::loadRoles
      */
-    public function testLoadAllRoles()
+    public function testLoadRoles()
     {
         $roleService = $this->repository->getRoleService();
 
         $roles = $roleService->loadRoles();
-        self::assertInternalType( "array", $roles );
+        self::assertInternalType( 'array', $roles );
         self::assertGreaterThan( 0, count( $roles ) );
+
+        foreach ( $roles as $role )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+            self::assertGreaterThan( 0, $role->id );
+        }
     }
 
     /**
      * Test deleting a role
-     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\RoleService::deleteRole
      */
     public function testDeleteRole()
@@ -387,11 +564,38 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 1 );
-        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $role );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
 
         $roleService->deleteRole( $role );
 
-        $roleService->loadRole( 1 );
+        try
+        {
+            $roleService->loadRole( 1 );
+            self::fail( 'Succeeded loading role after deleting it' );
+        }
+        catch ( NotFoundException $e ) {}
+    }
+
+    /**
+     * Test loading policies by user ID
+     * @covers \eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId
+     */
+    public function testLoadPoliciesByUserId()
+    {
+        self::markTestSkipped( "@todo: enable when content service is implemented" );
+        $roleService = $this->repository->getRoleService();
+
+        $policies = $roleService->loadPoliciesByUserId( 10 );
+        self::assertInternalType( 'array', $policies );
+        self::assertNotEmpty( $policies );
+
+        foreach ( $policies as $policy )
+        {
+            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
+            self::assertGreaterThan( 0, $policy->id );
+            self::assertGreaterThan( 0, $policy->roleId );
+        }
     }
 
     /**
@@ -401,23 +605,10 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testLoadPoliciesByNonExistingUserId()
     {
-        self::markTestSkipped( "@todo: enable when UserService::loadUser implementation is done" );
+        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $roleService = $this->repository->getRoleService();
 
         $roleService->loadPoliciesByUserId( PHP_INT_MAX );
-    }
-
-    /**
-     * Test loading policies by user ID
-     * @covers \eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId
-     */
-    public function testLoadPoliciesByUserId()
-    {
-        self::markTestSkipped( "@todo: enable when UserService::loadUser implementation is done" );
-        $roleService = $this->repository->getRoleService();
-
-        $policies = $roleService->loadPoliciesByUserId( 10 );
-        self::assertGreaterThan( 0, count( $policies ) );
     }
 
     /**
@@ -510,6 +701,19 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $roleCreateStruct = $roleService->newRoleCreateStruct( "Ultimate permissions" );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleCreateStruct', $roleCreateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'       => "Ultimate permissions",
+                'mainLanguageCode' => null,
+                'names'            => null,
+                'descriptions'     => null
+            ),
+            $roleCreateStruct
+        );
+
         self::assertEquals( "Ultimate permissions", $roleCreateStruct->identifier );
         self::assertInternalType( "array", $roleCreateStruct->getPolicies() );
         self::assertEmpty( $roleCreateStruct->getPolicies() );
@@ -524,8 +728,17 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $policyCreateStruct = $roleService->newPolicyCreateStruct( "content", "read" );
-        self::assertEquals( "content", $policyCreateStruct->module );
-        self::assertEquals( "read", $policyCreateStruct->function );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\PolicyCreateStruct', $policyCreateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'module'   => 'content',
+                'function' => 'read'
+            ),
+            $policyCreateStruct
+        );
+
         self::assertInternalType( "array", $policyCreateStruct->getLimitations() );
         self::assertEmpty( $policyCreateStruct->getLimitations() );
     }
@@ -539,7 +752,18 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-        self::assertNull( $roleUpdateStruct->identifier );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleUpdateStruct', $roleUpdateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'       => null,
+                'mainLanguageCode' => null,
+                'names'            => null,
+                'descriptions'     => null
+            ),
+            $roleUpdateStruct
+        );
     }
 
     /**
@@ -551,6 +775,9 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct', $policyUpdateStruct );
+
         self::assertInternalType( "array", $policyUpdateStruct->getLimitations() );
         self::assertEmpty( $policyUpdateStruct->getLimitations() );
     }
