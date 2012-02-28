@@ -83,7 +83,7 @@ interface LocationService
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
      *
-     * @return array An array of {@link Location}
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
      */
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null );
 
@@ -95,7 +95,7 @@ interface LocationService
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
-     * @return array Of {@link Location}
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] Of {@link Location}
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 );
 
