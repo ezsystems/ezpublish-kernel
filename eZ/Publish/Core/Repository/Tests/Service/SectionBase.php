@@ -28,9 +28,15 @@ abstract class SectionBase extends BaseServiceTest
     public function testNewClass()
     {
         $section = new Section();
-        self::assertEquals( null, $section->id );
-        self::assertEquals( null, $section->identifier );
-        self::assertEquals( null, $section->name );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'         => null,
+                'identifier' => null,
+                'name'       => null
+            ),
+            $section
+        );
     }
 
     /**
@@ -86,184 +92,299 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::create
+     * @covers \eZ\Publish\Core\Repository\SectionService::createSection
      */
-    public function testCreate()
+    public function testCreateSection()
     {
-        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
-        $service = $this->repository->getSectionService();
-        $struct = new SectionCreateStruct();
-        $struct->identifier = 'test';
-        $struct->name = 'Test';
+        $sectionService = $this->repository->getSectionService();
 
-        $newSection = $service->createSection( $struct );
-        //self::assertEquals( $newSection->id, 2 );
-        self::assertEquals( $struct->identifier, $newSection->identifier );
-        self::assertEquals( $struct->name, $newSection->name );
+        $sectionCreateStruct = $sectionService->newSectionCreateStruct();
+        $sectionCreateStruct->identifier = 'test';
+        $sectionCreateStruct->name = 'Test';
+
+        $createdSection = $sectionService->createSection( $sectionCreateStruct );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $createdSection );
+        self::assertGreaterThan( 0, $createdSection->id );
+
+        $this->assertStructPropertiesCorrect(
+            $sectionCreateStruct,
+            $createdSection
+        );
     }
 
     /**
-     * Test service function for creating sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::create
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
+     * Test service function for creating sections throwing IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @covers \eZ\Publish\Core\Repository\SectionService::createSection
      */
-    public function testCreateForbidden()
+    public function testCreateSectionThrowsIllegalArgumentException()
     {
-        self::markTestSkipped( "@todo: Re add when permissions are re added" );
-        $service = $this->repository->getSectionService();
-        $struct = new SectionCreateStruct();
-        $struct->identifier = 'test';
-        $struct->name = 'Test';
+        $sectionService = $this->repository->getSectionService();
 
-        $service->createSection( $struct );
+        $sectionCreateStruct = $sectionService->newSectionCreateStruct();
+        $sectionCreateStruct->identifier = 'standard';
+        $sectionCreateStruct->name = 'Standard';
+
+        $sectionService->createSection( $sectionCreateStruct );
+    }
+
+    /**
+     * Test service function for updating sections
+     * @covers \eZ\Publish\Core\Repository\SectionService::updateSection
+     */
+    public function testUpdateSection()
+    {
+        $sectionService = $this->repository->getSectionService();
+
+        $loadedSection = $sectionService->loadSection( 1 );
+
+        $sectionUpdateStruct = $sectionService->newSectionUpdateStruct();
+        $sectionUpdateStruct->identifier = 'test';
+        $sectionUpdateStruct->name = 'Test';
+
+        $updatedSection = $sectionService->updateSection( $loadedSection, $sectionUpdateStruct );
+
+        self::assertEquals( $loadedSection->id, $updatedSection->id );
+
+        $this->assertStructPropertiesCorrect(
+            $sectionUpdateStruct,
+            $updatedSection
+        );
+    }
+
+    /**
+     * Test service function for updating sections
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @covers \eZ\Publish\Core\Repository\SectionService::updateSection
+     */
+    public function testUpdateSectionThrowsIllegalArgumentException()
+    {
+        $sectionService = $this->repository->getSectionService();
+
+        $loadedSection = $sectionService->loadSectionByIdentifier( 'standard' );
+
+        $sectionUpdateStruct = $sectionService->newSectionUpdateStruct();
+        $sectionUpdateStruct->identifier = 'media';
+        $sectionUpdateStruct->name = 'Media';
+
+        $sectionService->updateSection( $loadedSection, $sectionUpdateStruct );
     }
 
     /**
      * Test service function for loading sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::load
+     * @covers \eZ\Publish\Core\Repository\SectionService::loadSection
      */
-    public function testLoad()
+    public function testLoadSection()
     {
-        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
-        $service = $this->repository->getSectionService();
-        $section = $service->loadSection( 1 );
-        self::assertEquals( 1, $section->id );
-        self::assertEquals( 'standard', $section->identifier );
-        self::assertEquals( 'Standard', $section->name );
+        $sectionService = $this->repository->getSectionService();
+
+        $section = $sectionService->loadSection( 1 );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'         => 1,
+                'name'       => 'Standard',
+                'identifier' => 'standard'
+            ),
+            $section
+        );
     }
 
     /**
-     * Test service function for loading sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
+     * Test service function for loading sections throwing NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\Core\Repository\SectionService::loadSection
      */
-    public function testLoadByIdentifier()
+    public function testLoadSectionThrowsNotFoundException()
     {
-        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
-        $service = $this->repository->getSectionService();
-        $section = $service->loadSectionByIdentifier( 'standard' );
-        self::assertEquals( 1, $section->id );
-        self::assertEquals( 'standard', $section->identifier );
-        self::assertEquals( 'Standard', $section->name );
+        $sectionService = $this->repository->getSectionService();
+
+        $sectionService->loadSection( PHP_INT_MAX );
     }
 
     /**
      * Test service function for loading all sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::loadAll
+     * @covers \eZ\Publish\Core\Repository\SectionService::loadSections
      */
-    public function testLoadAll()
+    public function testLoadSections()
     {
-        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
-        $service = $this->repository->getSectionService();
-        $sections = $service->loadSections();
+        self::markTestSkipped( "@todo: Enable when loading all sections from persistence is fixed" );
+
+        $sections = $this->repository->getSectionService()->loadSections();
 
         self::assertInternalType( 'array', $sections );
-
-        $sectionsCount = count( $sections );
-        self::assertGreaterThan( 0, $sectionsCount );
+        self::assertGreaterThan( 0, count( $sections ) );
     }
 
     /**
-     * Test service function for loading sections
-     *
-     * @covers \eZ\Publish\Core\Repository\SectionService::load
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * Test service function for loading section by identifier
+     * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
      */
-    public function testLoadNotFound()
+    public function testLoadSectionByIdentifier()
     {
-        $service = $this->repository->getSectionService();
-        $service->loadSection( 999 );
+        $sectionService = $this->repository->getSectionService();
+
+        $section = $sectionService->loadSectionByIdentifier( 'standard' );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'         => 1,
+                'name'       => 'Standard',
+                'identifier' => 'standard'
+            ),
+            $section
+        );
     }
 
     /**
-     * Test service function for update sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::update
+     * Test service function for loading section by identifier throwing NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
      */
-    public function testUpdate()
+    public function testLoadSectionByIdentifierThrowsNotFoundException()
     {
-        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
-        $service = $this->repository->getSectionService();
-        $tempSection = $service->loadSection( 1 );
-        $struct = new SectionUpdateStruct();
-        $struct->identifier = 'test';
-        $struct->name = 'Test';
+        $sectionService = $this->repository->getSectionService();
 
-        $section = $service->updateSection( $tempSection, $struct );
-
-        self::assertEquals( $struct->identifier, $section->identifier );
-        self::assertEquals( $struct->name, $section->name );
+        $sectionService->loadSectionByIdentifier( 'non-existing' );
     }
 
     /**
-     * Test service function for update sections
-     *
-     * @covers \eZ\Publish\Core\Repository\SectionService::update
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
-     */
-    public function testUpdateForbidden()
-    {
-        self::markTestSkipped( "@todo: Re add when permissions are re added" );
-        $service = $this->repository->getSectionService();
-        $section = $service->loadSection( 1 );
-        $service->updateSection( $section, new SectionUpdateStruct() );
-    }
-
-    /**
-     * Test service function for deleting sections
-     *
-     * @covers \eZ\Publish\Core\Repository\SectionService::delete
-     */
-    public function testDelete()
-    {
-        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
-        $service = $this->repository->getSectionService();
-        $struct = new SectionCreateStruct();
-        $struct->identifier = 'test';
-        $struct->name = 'Test';
-
-        $newSection = $service->createSection( $struct );
-        $service->deleteSection( $newSection );
-
-        try
-        {
-            $service->loadSection( $newSection->id );
-            self::fail( 'Section is still returned after being deleted' );
-        }
-        catch ( NotFoundException $e )
-        {
-        }
-    }
-
-    /**
-     * Test service function for counting the contents which section is assigned to
-     *
-     * @covers \eZ\Publish\Core\Repository\SectionService::delete
+     * Test service function for counting content assigned to section
+     * @covers \eZ\Publish\Core\Repository\SectionService::countAssignedContents
      */
     public function testCountAssignedContents()
     {
-        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
-        $service = $this->repository->getSectionService();
-        $section = $service->loadSection( 1 );
-        $contentCount = $service->countAssignedContents( $section );
+        $sectionService = $this->repository->getSectionService();
 
-        self::assertInternalType( 'integer', $contentCount );
+        $section = $sectionService->loadSection( 1 );
+        $contentCount = $sectionService->countAssignedContents( $section );
+
         self::assertGreaterThan( 0, $contentCount );
+
+        $sectionCreateStruct = $sectionService->newSectionCreateStruct();
+        $sectionCreateStruct->identifier = 'test';
+        $sectionCreateStruct->name = 'Test';
+
+        $newSection = $sectionService->createSection( $sectionCreateStruct );
+        $contentCount = $sectionService->countAssignedContents( $newSection );
+
+        self::assertEquals( 0, $contentCount );
+    }
+
+    /**
+     * Test service function for assigning section to content
+     * @covers \eZ\Publish\Core\Repository\SectionService::assignSection
+     */
+    public function testAssignSection()
+    {
+        self::markTestSkipped( '@todo: Enable when content service is implemented' );
+
+        $sectionService = $this->repository->getSectionService();
+        $contentService = $this->repository->getContentService();
+
+        $section = $sectionService->loadSection( 2 );
+        $contentInfo = $contentService->loadContentInfo( 57 );
+
+        self::assertEquals( 1, $contentInfo->sectionId );
+
+        $sectionService->assignSection( $contentInfo, $section );
+
+        $contentInfo = $contentService->loadContentInfo( 57 );
+
+        self::assertEquals( 2, $contentInfo->sectionId );
     }
 
     /**
      * Test service function for deleting sections
-     *
-     * @covers \eZ\Publish\Core\Repository\SectionService::delete
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
+     * @covers \eZ\Publish\Core\Repository\SectionService::deleteSection
      */
-    public function testDeleteForbidden()
+    public function testDeleteSection()
     {
-        self::markTestSkipped( "@todo: Re add when permissions are re added" );
-        $service = $this->repository->getSectionService();
-        $struct = new SectionCreateStruct();
-        $struct->identifier = 'test';
-        $struct->name = 'Test';
+        $sectionService = $this->repository->getSectionService();
 
-        $newSection = $service->createSection( $struct );
-        $service->deleteSection( $newSection );
+        $sectionCreateStruct = $sectionService->newSectionCreateStruct();
+        $sectionCreateStruct->identifier = 'test';
+        $sectionCreateStruct->name = 'Test';
+
+        $newSection = $sectionService->createSection( $sectionCreateStruct );
+        $sectionService->deleteSection( $newSection );
+
+        try
+        {
+            $sectionService->loadSection( $newSection->id );
+            self::fail( 'Section is still returned after being deleted' );
+        }
+        catch ( NotFoundException $e ) {}
+    }
+
+    /**
+     * Test service function for deleting sections throwing NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\Core\Repository\SectionService::deleteSection
+     */
+    public function testDeleteSectionThrowsNotFoundException()
+    {
+        $sectionService = $this->repository->getSectionService();
+
+        $section = new Section( array( 'id' => PHP_INT_MAX ) );
+
+        $sectionService->deleteSection( $section );
+    }
+
+    /**
+     * Test service function for deleting sections throwing BadStateException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @covers \eZ\Publish\Core\Repository\SectionService::deleteSection
+     */
+    public function testDeleteSectionThrowsBadStateException()
+    {
+        $sectionService = $this->repository->getSectionService();
+
+        $section = $sectionService->loadSection( 1 );
+
+        $sectionService->deleteSection( $section );
+    }
+
+    /**
+     * Test service function for creating new SectionCreateStruct
+     * @covers \eZ\Publish\Core\Repository\SectionService::newSectionCreateStruct
+     */
+    public function testNewSectionCreateStruct()
+    {
+        $sectionService = $this->repository->getSectionService();
+
+        $sectionCreateStruct = $sectionService->newSectionCreateStruct();
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionCreateStruct', $sectionCreateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier' => null,
+                'name'       => null
+            ),
+            $sectionCreateStruct
+        );
+    }
+
+    /**
+     * Test service function for creating new SectionUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\SectionService::newSectionUpdateStruct
+     */
+    public function testNewSectionUpdateStruct()
+    {
+        $sectionService = $this->repository->getSectionService();
+
+        $sectionUpdateStruct = $sectionService->newSectionUpdateStruct();
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct', $sectionUpdateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier' => null,
+                'name'       => null
+            ),
+            $sectionUpdateStruct
+        );
     }
 }
