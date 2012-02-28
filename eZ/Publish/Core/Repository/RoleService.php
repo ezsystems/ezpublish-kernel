@@ -537,6 +537,8 @@ class RoleService implements RoleServiceInterface
             throw new NotFoundException( "role", $role->id, $e );
         }
 
+        $userService = $this->repository->getUserService();
+
         $roleAssignments = array();
         if ( is_array( $spiRole->groupIds ) && !empty( $spiRole->groupIds ) )
         {
@@ -545,9 +547,9 @@ class RoleService implements RoleServiceInterface
                 // $spiRole->groupIds can contain both group and user IDs, although assigning roles to
                 // users is deprecated. Hence, we'll first check for groups. If that fails,
                 // we'll check for users
-                $userGroup = $this->repository->getUserService()->loadUserGroup( $groupId );
-                if ( $userGroup !== null )
+                try
                 {
+                    $userGroup = $userService->loadUserGroup( $groupId );
                     $roleAssignments[] = new UserGroupRoleAssignment(
                         array(
                             // @todo: add limitation
@@ -557,11 +559,11 @@ class RoleService implements RoleServiceInterface
                         )
                     );
                 }
-                else
+                catch ( NotFoundException $e )
                 {
-                    $user = $this->repository->getUserService()->loadUser( $groupId );
-                    if ( $user !== null )
+                    try
                     {
+                        $user = $userService->loadUser( $groupId );
                         $roleAssignments[] = new UserRoleAssignment(
                             array(
                                 // @todo: add limitation
@@ -571,6 +573,7 @@ class RoleService implements RoleServiceInterface
                             )
                         );
                     }
+                    catch ( NotFoundException $e ) {}
                 }
             }
         }
