@@ -149,15 +149,14 @@ class LocationService implements LocationServiceInterface
         );
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-
-        if ( !$searchResult || $searchResult->count != 1 )
+        if ( $searchResult->count != 1 )
             throw new NotFoundException( "location", $remoteId );
 
         if ( is_array( $searchResult->content[0]->locations ) )
         {
             foreach ( $searchResult->content[0]->locations as $spiLocation )
             {
-                if ( $spiLocation->remoteId == $remoteId )
+                if ( $spiLocation->remoteId === $remoteId )
                     return $this->buildDomainLocationObject( $spiLocation );
             }
         }
@@ -188,8 +187,7 @@ class LocationService implements LocationServiceInterface
         );
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-
-        if ( !$searchResult || $searchResult->count == 0 )
+        if ( $searchResult->count == 0 )
             throw new BadStateException( "contentInfo" );
 
         $spiLocations = $searchResult->content[0]->locations;
@@ -234,8 +232,7 @@ class LocationService implements LocationServiceInterface
         );
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-
-        if ( !$searchResult || $searchResult->count == 0 )
+        if ( $searchResult->count == 0 )
             throw new BadStateException( "contentInfo" );
 
         $spiLocations = $searchResult->content[0]->locations;
@@ -287,7 +284,7 @@ class LocationService implements LocationServiceInterface
             $limit
         );
 
-        if ( !$searchResult || $searchResult->count == 0 )
+        if ( $searchResult->count == 0 )
             return array();
 
         $childLocations = array();
@@ -695,7 +692,7 @@ class LocationService implements LocationServiceInterface
                 'depth'                   => $spiLocation->depth,
                 'sortField'               => $spiLocation->sortField,
                 'sortOrder'               => $spiLocation->sortOrder,
-                'childCount'              => $childrenLocations ? $childrenLocations->count : 0
+                'childCount'              => $childrenLocations->count
             )
         );
     }
