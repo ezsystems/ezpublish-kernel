@@ -27,7 +27,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testCreateContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::createContentTypeGroup() is not implemented." );
     }
 
     /**
@@ -39,7 +39,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
     }
 
     /**
@@ -51,7 +51,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
     }
 
     /**
@@ -63,7 +63,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateContentTypeDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
     }
 
     /**
@@ -76,7 +76,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testAddFieldDefinitionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::addFieldDefinition() is not implemented." );
     }
 
     /**
@@ -88,7 +88,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testRemoveFieldDefinitionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::removeFieldDefinition() is not implemented." );
     }
 
     /**
@@ -100,7 +100,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateFieldDefinitionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::updateFieldDefinition() is not implemented." );
     }
 
     /**
@@ -112,7 +112,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
     }
 
     /**
@@ -124,7 +124,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testCreateContentTypeDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeDraft() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::createContentTypeDraft() is not implemented." );
     }
 
     /**
@@ -136,7 +136,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteContentTypeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::deleteContentType() is not implemented." );
     }
 
     /**
@@ -148,7 +148,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testCopyContentTypeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::copyContentType() is not implemented." );
     }
 
     /**
@@ -160,7 +160,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testCopyContentTypeThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::copyContentType() is not implemented." );
     }
 
     /**
@@ -172,7 +172,7 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testAssignContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::assignContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::assignContentTypeGroup() is not implemented." );
     }
 
     /**
@@ -184,6 +184,6 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testUnassignContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
     }
 }

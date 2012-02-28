@@ -30,7 +30,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testCreateLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::createLocation() is not implemented." );
     }
 
     /**
@@ -42,7 +42,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testLoadLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::loadLocation() is not implemented." );
     }
 
     /**
@@ -54,7 +54,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testLoadLocationByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::loadLocationByRemoteId() is not implemented." );
     }
 
     /**
@@ -66,7 +66,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::updateLocation() is not implemented." );
     }
 
     /**
@@ -78,7 +78,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testLoadMainLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadMainLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::loadMainLocation() is not implemented." );
     }
 
     /**
@@ -90,7 +90,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testSwapLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::swapLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::swapLocation() is not implemented." );
     }
 
     /**
@@ -102,7 +102,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testHideLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::hideLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::hideLocation() is not implemented." );
     }
 
     /**
@@ -114,7 +114,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testUnhideLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::unhideLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::unhideLocation() is not implemented." );
     }
 
     /**
@@ -126,7 +126,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::deleteLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::deleteLocation() is not implemented." );
     }
 
     /**
@@ -138,7 +138,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testCopySubtreeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::copySubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::copySubtree() is not implemented." );
     }
 
     /**
@@ -150,6 +150,6 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testMoveSubtreeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for LocationService::moveSubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::moveSubtree() is not implemented." );
     }
 }

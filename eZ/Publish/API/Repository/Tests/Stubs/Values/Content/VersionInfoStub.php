@@ -16,6 +16,7 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\Content\VersionInfo
+ * @property-read mixed $contentId The id of the corresponding content object.
  */
 class VersionInfoStub extends VersionInfo
 {
@@ -64,4 +65,14 @@ class VersionInfoStub extends VersionInfo
         // TODO: Implement getName() method.
     }
 
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentInfo':
+                return $this->getContentInfo();
+        }
+
+        return parent::__get( $property );
+    }
 }

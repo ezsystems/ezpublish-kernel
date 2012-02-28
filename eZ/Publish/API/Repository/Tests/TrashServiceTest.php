@@ -27,7 +27,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testLoadTrashItem()
     {
-        $this->markTestIncomplete( "Test for TrashService::loadTrashItem() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::loadTrashItem() is not implemented." );
     }
 
     /**
@@ -39,7 +39,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testLoadTrashItemThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for TrashService::loadTrashItem() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::loadTrashItem() is not implemented." );
     }
 
     /**
@@ -51,7 +51,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testLoadTrashItemThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for TrashService::loadTrashItem() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::loadTrashItem() is not implemented." );
     }
 
     /**
@@ -63,7 +63,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testTrash()
     {
-        $this->markTestIncomplete( "Test for TrashService::trash() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::trash() is not implemented." );
     }
 
     /**
@@ -75,7 +75,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testTrashThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for TrashService::trash() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::trash() is not implemented." );
     }
 
     /**
@@ -87,7 +87,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testRecover()
     {
-        $this->markTestIncomplete( "Test for TrashService::recover() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::recover() is not implemented." );
     }
 
     /**
@@ -99,7 +99,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testRecoverWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for TrashService::recover() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::recover() is not implemented." );
     }
 
     /**
@@ -111,7 +111,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testRecoverThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for TrashService::recover() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::recover() is not implemented." );
     }
 
     /**
@@ -123,7 +123,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testRecoverThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for TrashService::recover() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::recover() is not implemented." );
     }
 
     /**
@@ -135,7 +135,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testEmptyTrash()
     {
-        $this->markTestIncomplete( "Test for TrashService::emptyTrash() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::emptyTrash() is not implemented." );
     }
 
     /**
@@ -147,7 +147,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testEmptyTrashThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for TrashService::emptyTrash() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::emptyTrash() is not implemented." );
     }
 
     /**
@@ -159,7 +159,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testDeleteTrashItem()
     {
-        $this->markTestIncomplete( "Test for TrashService::deleteTrashItem() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::deleteTrashItem() is not implemented." );
     }
 
     /**
@@ -171,7 +171,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testDeleteTrashItemThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for TrashService::deleteTrashItem() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::deleteTrashItem() is not implemented." );
     }
 
     /**
@@ -183,7 +183,7 @@ class TrashServiceTest extends BaseTest
      */
     public function testFindTrashItems()
     {
-        $this->markTestIncomplete( "Test for TrashService::findTrashItems() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for TrashService::findTrashItems() is not implemented." );
     }
 
 }

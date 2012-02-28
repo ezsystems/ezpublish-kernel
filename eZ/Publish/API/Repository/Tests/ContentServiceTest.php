@@ -11,7 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use \eZ\Publish\API\Repository\Values\Content\Field;
+use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -58,7 +59,6 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        // Create a content type
         $contentTypeService = $repository->getContentTypeService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
@@ -144,7 +144,8 @@ class ContentServiceTest extends BaseTest
                 'abcdef0123456789abcdef0123456789',
                 'eng-GB',
                 $this->getRepository()->getCurrentUser()->id,
-                false
+                false,
+                null
             ),
             array(
                 $content->contentInfo->contentId,
@@ -153,7 +154,8 @@ class ContentServiceTest extends BaseTest
                 $content->contentInfo->remoteId,
                 $content->contentInfo->mainLanguageCode,
                 $content->contentInfo->ownerId,
-                $content->contentInfo->published
+                $content->contentInfo->published,
+                $content->contentInfo->publishedDate,
             )
         );
     }
@@ -210,7 +212,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -218,11 +220,38 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentThrowsInvalidArgumentException()
+    public function testCreateContentThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateOne = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateOne->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateOne->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateOne->alwaysAvailable = true;
+
+        $contentService->createContent( $contentCreateOne );
+
+        $contentCreateTwo = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreateTwo->setField( 'title', 'Another awesome story about eZ Publish' );
+
+        $contentCreateTwo->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateTwo->alwaysAvailable = false;
+
+        // This call will fail with an "IllegalArgumentException", because the
+        // remoteId is already in use.
+        $contentService->createContent( $contentCreateTwo );
+        /* END: Use Case */
     }
 
     /**
@@ -230,11 +259,11 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      */
-    public function testCreateContentThrowsInvalidArgumentExceptionWithSecondParameter()
+    public function testCreateContentThrowsIllegalArgumentExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -246,7 +275,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -258,7 +287,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentFieldValidationExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -270,7 +299,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -282,7 +311,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCreateContentThrowsContentValidationExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -398,43 +427,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadVersionInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
-     * 
-     */
-    public function testLoadVersionInfoWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the loadVersionInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
-     */
-    public function testLoadVersionInfoThrowsNotFoundException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the loadVersionInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadVersionInfoThrowsNotFoundExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
-    }
-
-    /**
      * Test for the loadVersionInfoById() method.
      *
      * @return void
@@ -462,18 +454,6 @@ class ContentServiceTest extends BaseTest
      * Test for the loadVersionInfoById() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
-     * 
-     */
-    public function testLoadVersionInfoByIdWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfoById() is not implemented." );
-    }
-
-    /**
-     * Test for the loadVersionInfoById() method.
-     *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
@@ -488,18 +468,6 @@ class ContentServiceTest extends BaseTest
         // This call will fail with a "NotFoundException"
         $contentService->loadVersionInfoById( PHP_INT_MAX );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the loadVersionInfoById() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadVersionInfoByIdThrowsNotFoundExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfoById() is not implemented." );
     }
 
     /**
@@ -530,67 +498,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadContentByContentInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages)
-     * 
-     */
-    public function testLoadContentByContentInfoWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentByContentInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
-     * 
-     */
-    public function testLoadContentByContentInfoWithThirdParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentByContentInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
-     */
-    public function testLoadContentByContentInfoThrowsNotFoundException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentByContentInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadContentByContentInfoThrowsNotFoundExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentByContentInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadContentByContentInfoThrowsNotFoundExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByContentInfo() is not implemented." );
-    }
-
-    /**
      * Test for the loadContentByVersionInfo() method.
      *
      * @return void
@@ -618,18 +525,6 @@ class ContentServiceTest extends BaseTest
             '\eZ\Publish\API\Repository\Values\Content\Content',
             $content
         );
-    }
-
-    /**
-     * Test for the loadContentByVersionInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByVersionInfo($versionInfo, $languages)
-     * 
-     */
-    public function testLoadContentByVersionInfoWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByVersionInfo() is not implemented." );
     }
 
     /**
@@ -665,7 +560,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -677,7 +572,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -709,7 +604,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -721,17 +616,17 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId()
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
-    public function testLoadVersionByRemoteId()
+    public function testLoadContentByRemoteId()
     {
         $repository = $this->getRepository();
 
@@ -739,7 +634,7 @@ class ContentServiceTest extends BaseTest
         $contentService = $repository->getContentService();
 
         // Load the Content for "Anonymous User"
-        $content = $contentService->loadVersionByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
+        $content = $contentService->loadContentByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -749,63 +644,63 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
      * 
      */
-    public function testLoadVersionByRemoteIdWithSecondParameter()
+    public function testLoadContentByRemoteIdWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages, $versionNo)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
      * 
      */
-    public function testLoadVersionByRemoteIdWithThirdParameter()
+    public function testLoadContentByRemoteIdWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId()
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundException()
+    public function testLoadContentByRemoteIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundExceptionWithSecondParameter()
+    public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionByRemoteId() method.
+     * Test for the loadContentByRemoteId() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadVersionByRemoteId($remoteId, $languages, $versionNo)
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadVersionByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
+    public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
@@ -817,7 +712,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentMetadata()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContentMetadata() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
     }
 
     /**
@@ -829,7 +724,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentMetadataThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContentMetadata() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
     }
 
     /**
@@ -841,79 +736,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteContent() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * 
-     */
-    public function testCreateContentDraft()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
-     * 
-     */
-    public function testCreateContentDraftWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testCreateContentDraftThrowsBadStateException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the createContentDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testCreateContentDraftThrowsBadStateExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentDrafts() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
-     * 
-     */
-    public function testLoadContentDrafts()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
-    }
-
-    /**
-     * Test for the loadContentDrafts() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts($user)
-     * 
-     */
-    public function testLoadContentDraftsWithFirstParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteContent() is not implemented." );
     }
 
     /**
@@ -925,7 +748,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersion()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -937,7 +760,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -949,7 +772,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -961,7 +784,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsBadStateExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -973,7 +796,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -985,7 +808,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentValidationExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -997,7 +820,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
 
     /**
@@ -1009,19 +832,647 @@ class ContentServiceTest extends BaseTest
      */
     public function testTranslateVersionThrowsContentFieldValidationExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::translateVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testPublishVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId         = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->modificationDate = new \DateTime( '1984/01/01' );
+        $contentCreate->alwaysAvailable  = true;
+
+        // Create a content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now publish the content draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $publishedContent
+        );
+
+        return $publishedContent;
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testPublishVersionSetsExpectedContentInfo( $content )
+    {
+        $this->assertEquals(
+            array(
+                $content->contentId,
+                true,
+                1,
+                'abcdef0123456789abcdef0123456789',
+                'eng-GB',
+                $this->getRepository()->getCurrentUser()->id,
+                true,
+            ),
+            array(
+                $content->contentInfo->contentId,
+                $content->contentInfo->alwaysAvailable,
+                $content->contentInfo->currentVersionNo,
+                $content->contentInfo->remoteId,
+                $content->contentInfo->mainLanguageCode,
+                $content->contentInfo->ownerId,
+                $content->contentInfo->published
+            )
+        );
+
+        $date = new \DateTime( '1984/01/01' );
+        $this->assertGreaterThan(
+            $date->getTimestamp(),
+            $content->contentInfo->publishedDate->getTimestamp()
+        );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testPublishVersionSetsExpectedVersionInfo( $content )
+    {
+        $this->assertEquals(
+            array(
+                $this->getRepository()->getCurrentUser()->id,
+                'eng-GB',
+                VersionInfo::STATUS_PUBLISHED,
+                1
+            ),
+            array(
+                $content->getVersionInfo()->creatorId,
+                $content->getVersionInfo()->initialLanguageCode,
+                $content->getVersionInfo()->status,
+                $content->getVersionInfo()->versionNo
+            )
+        );
+
+        $date = new \DateTime( '1984/01/01' );
+        $this->assertGreaterThan(
+            $date->getTimestamp(),
+            $content->getVersionInfo()->modificationDate->getTimestamp()
+        );
+
+        $this->assertNotNull( $content->getVersionInfo()->modificationDate );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testPublishVersionThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId         = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->modificationDate = new \DateTime( '1984/01/01' );
+        $contentCreate->alwaysAvailable  = true;
+
+        // Create a content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now publish the content draft
+        $contentService->publishVersion( $content->getVersionInfo() );
+
+        // This call will fail with a "BadStateException", because the version
+        // is already published.
+        $contentService->publishVersion( $content->getVersionInfo() );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testCreateContentDraft()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now publish this draft
+        $contentPublished = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $contentPublished->contentInfo );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $draftedContent
+        );
+
+        return $draftedContent;
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftSetsExpectedProperties( $draft )
+    {
+        $this->assertEquals(
+            array(
+                'fieldCount'     =>  4,
+                'relationCount'  =>  0
+            ),
+            array(
+                'fieldCount'     =>  count( $draft->getFields() ),
+                'relationCount'  =>  count( $draft->getRelations() )
+            )
+        );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftSetsContentInfo( $draft )
+    {
+        $contentInfo = $draft->contentInfo;
+
+        $this->assertEquals(
+            array(
+                $draft->contentId,
+                true,
+                1,
+                'eng-GB',
+                $this->getRepository()->getCurrentUser()->id,
+                'abcdef0123456789abcdef0123456789',
+                1
+            ),
+            array(
+                $contentInfo->contentId,
+                $contentInfo->alwaysAvailable,
+                $contentInfo->currentVersionNo,
+                $contentInfo->mainLanguageCode,
+                $contentInfo->ownerId,
+                $contentInfo->remoteId,
+                $contentInfo->sectionId
+            )
+        );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftSetsVersionInfo( $draft )
+    {
+        $versionInfo = $draft->getVersionInfo();
+
+        $this->assertEquals(
+            array(
+                'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
+                'initialLanguageCode'  =>  'eng-GB',
+                'languageCodes'        =>  array( 'eng-GB' ),
+                'status'               =>  VersionInfo::STATUS_DRAFT,
+                'versionNo'            =>  2
+            ),
+            array(
+                'creatorId'            =>  $versionInfo->creatorId,
+                'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
+                'languageCodes'        =>  $versionInfo->languageCodes,
+                'status'               =>  $versionInfo->status,
+                'versionNo'            =>  $versionInfo->versionNo
+            )
+        );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
+     */
+    public function testCreateContentDraftLoadVersionInfoStillLoadsPublishedVersion( $draft )
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published version
+        $versionInfoPublished = $contentService->loadVersionInfo( $content->contentInfo );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $versionInfoPublished->versionNo );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftLoadContentStillLoadsPublishedVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published content version
+        $contentPublished = $contentService->loadContent( $content->contentId );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $contentPublished->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftLoadContentByRemoteIdStillLoadsPublishedVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published content version
+        $contentPublished = $contentService->loadContentByRemoteId( 'abcdef0123456789abcdef0123456789' );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $contentPublished->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testCreateContentDraftLoadContentByContentInfoStillLoadsPublishedVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create draft and publish this draft
+        $content = $contentService->publishVersion(
+            $contentService->createContent( $contentCreate )->getVersionInfo()
+        );
+
+        // Now we create a new draft from the published content
+        $contentService->createContentDraft( $content->contentInfo );
+
+        // This call will still load the published content version
+        $contentPublished = $contentService->loadContentByContentInfo( $content->contentInfo );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $contentPublished->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentDraftThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreate );
+
+        // Now try to create a draft from a draft
+        // This call will fail with a "BadStateException"
+        $contentService->createContentDraft( $content->contentInfo );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the newContentUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     */
+    public function testNewContentUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
+            $updateStruct
+        );
     }
 
     /**
      * Test for the updateContent() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testUpdateContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedContent = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $updatedContent
+        );
+
+        return $updatedContent;
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentSetsExpectedFields( $content )
+    {
+        $actual = array();
+        foreach ( $content->getFields() as $field )
+        {
+            $actual[] = new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  $field->value,
+                    'languageCode'        =>  $field->languageCode,
+                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                )
+            );
+        }
+        usort( $actual, function ( $field1, $field2 ) {
+            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+            {
+                return strcasecmp( $field1->languageCode, $field2->languageCode );
+            }
+            return $return;
+        } );
+
+        $expected = array(
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'body'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'index_title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'tags'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome² story about ezp.',
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome²³ story about ezp.',
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'title'
+                )
+            ),
+        );
+
+        $this->assertEquals( $expected, $actual );
     }
 
     /**
@@ -1030,10 +1481,44 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // This call will fail with a "BadStateException", because $publishedContent
+        // is not a draft.
+        $updatedContent = $contentService->updateContent(
+            $publishedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -1045,7 +1530,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
     }
 
     /**
@@ -1057,31 +1542,724 @@ class ContentServiceTest extends BaseTest
      */
     public function testUpdateContentThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
     }
 
     /**
-     * Test for the publishVersion() method.
+     * Test for the createContentDraft() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * 
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
-    public function testPublishVersion()
+    public function testCreateContentDraftWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::publishVersion() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Publish the new version 2
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+
+        // Now we create a new draft from the initial version
+        $draftedContentReloaded = $contentService->createContentDraft(
+            $publishedDraft->contentInfo,
+            $publishedDraft->getVersionInfo()
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( 3, $draftedContentReloaded->getVersionInfo()->versionNo );
     }
 
     /**
-     * Test for the publishVersion() method.
+     * Test for the createContentDraft() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraftWithSecondParameter
      */
-    public function testPublishVersionThrowsBadStateException()
+    public function testCreateContentDraftThrowsBadStateExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::publishVersion() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // This call will fail with a "BadStateException", because no published
+        // version of the content object exists.
+        $contentService->createContentDraft(
+            $content->contentInfo,
+            $content->getVersionInfo()
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testPublishVersionFromContentDraft()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* END: Use Case */
+
+        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo );
+
+        $this->assertEquals(
+            array(
+                'status'     =>  VersionInfo::STATUS_PUBLISHED,
+                'versionNo'  =>  2
+            ),
+            array(
+                'status'     =>  $versionInfo->status,
+                'versionNo'  =>  $versionInfo->versionNo
+            )
+        );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testPublishVersionFromContentDraftArchivesOldVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* END: Use Case */
+
+        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo, 1 );
+
+        $this->assertEquals(
+            array(
+                'status'     =>  VersionInfo::STATUS_ARCHIVED,
+                'versionNo'  =>  1
+            ),
+            array(
+                'status'     =>  $versionInfo->status,
+                'versionNo'  =>  $versionInfo->versionNo
+            )
+        );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testPublishVersionFromContentDraftUpdatesContentInfoCurrentVersion()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+        /* END: Use Case */
+
+        $this->assertEquals( 2, $publishedDraft->contentInfo->currentVersionNo );
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     */
+    public function testLoadContentDraftsReturnsEmptyArrayByDefault()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        $contentDrafts = $contentService->loadContentDrafts();
+        /* BEGIN: Use Case */
+
+        $this->assertSame( array(), $contentDrafts );
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     */
+    public function testLoadContentDrafts()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // "Support" article content object
+        $supportContentInfo = $contentService->loadContentInfoByRemoteId( 'affc99e41128c1475fa4f23dafb7159b' );
+
+        // "Community" article content object
+        $communityContentInfo = $contentService->loadContentInfoByRemoteId( '378acc2bc7a52400701956047a2f7d45' );
+
+        // Create some drafts
+        $contentService->createContentDraft( $supportContentInfo );
+        $contentService->createContentDraft( $communityContentInfo );
+
+        // Now $contentDrafts should contain two drafted versions
+        $contentDrafts = $contentService->loadContentDrafts();
+        /* BEGIN: Use Case */
+
+        $actual = array(
+            $contentDrafts[0]->status,
+            $contentDrafts[0]->getContentInfo()->remoteId,
+            $contentDrafts[1]->status,
+            $contentDrafts[1]->getContentInfo()->remoteId,
+        );
+        sort( $actual );
+
+        $this->assertEquals(
+            array(
+                VersionInfo::STATUS_DRAFT,
+                VersionInfo::STATUS_DRAFT,
+                '378acc2bc7a52400701956047a2f7d45',
+                'affc99e41128c1475fa4f23dafb7159b',
+            ),
+            $actual
+        );
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts($user)
+     *
+     */
+    public function testLoadContentDraftsWithFirstParameter()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
+    }
+
+    /**
+     * Test for the loadVersionInfo() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testLoadVersionInfoWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+
+        // Will return the $versionInfo of $content
+        $versionInfo = $contentService->loadVersionInfo( $publishedDraft->contentInfo, 1 );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $versionInfo->versionNo );
+    }
+
+    /**
+     * Test for the loadVersionInfo() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
+     */
+    public function testLoadVersionInfoThrowsNotFoundExceptionWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // This call will fail with a "NotFoundException", because not versionNo
+        // 2 exists for this content object.
+        $contentService->loadVersionInfo( $content->contentInfo, 2 );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadVersionInfoById() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
+     *
+     */
+    public function testLoadVersionInfoByIdWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+
+        // Will return the $versionInfo of $content
+        $versionInfo = $contentService->loadVersionInfoById( $publishedDraft->contentId, 1 );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $versionInfo->versionNo );
+    }
+
+    /**
+     * Test for the loadVersionInfoById() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadVersionInfoByIdThrowsNotFoundExceptionWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // This call will fail with a "NotFoundException", because not versionNo
+        // 2 exists for this content object.
+        $contentService->loadVersionInfoById( $content->contentId, 2 );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadContentByVersionInfo() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByVersionInfo($versionInfo, $languages)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByVersionInfo
+     */
+    public function testLoadContentByVersionInfoWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+
+        $contentCreateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentCreateStruct->setField( 'index_title', 'British index title...' );
+
+        $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+        $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-US' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Will return a content instance with fields in "eng-GB"
+        $reloadedContent = $contentService->loadContentByVersionInfo(
+            $publishedContent->getVersionInfo(),
+            array(
+                'eng-GB'
+            )
+        );
+        /* END: Use Case */
+
+        $actual = array();
+        foreach ( $reloadedContent->getFields() as $field )
+        {
+            $actual[] = new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  $field->value,
+                    'languageCode'        =>  $field->languageCode,
+                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                )
+            );
+        }
+        usort( $actual, function ( $field1, $field2 ) {
+            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+            {
+                return strcasecmp( $field1->languageCode, $field2->languageCode );
+            }
+            return $return;
+        } );
+
+        $expected = array(
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'body'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'British index title...',
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'index_title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'tags'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome² story about ezp.',
+                    'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'title'
+                )
+            ),
+        );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
+     * Test for the loadContentByContentInfo() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     */
+    public function testLoadContentByContentInfoWithSecondParameter()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
+    }
+
+    /**
+     * Test for the loadContentByContentInfo() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     */
+    public function testLoadContentByContentInfoWithThirdParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->sectionId       = 1;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        // Now publish this draft
+        $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
+
+        // Now we create a new draft from the published content
+        $draftedContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        // Update the content draft
+        $updatedDraft = $contentService->updateContent(
+            $draftedContent->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        // Now publish the updated draft
+        $publishedDraft = $contentService->publishVersion( $updatedDraft->getVersionInfo() );
+
+        // Will return a Content instance equal to $content
+        $reloadedContent = $contentService->loadContentByContentInfo( $publishedDraft->contentInfo, null, 1 );
+        /* END: Use Case */
+
+        $this->assertEquals( 'An awesome story about eZ Publish', $reloadedContent->getFieldValue( 'title' ) );
+    }
+
+    /**
+     * Test for the loadContentByContentInfo() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     */
+    public function testLoadContentByContentInfoThrowsNotFoundExceptionWithThirdParameter()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
     }
 
     /**
@@ -1093,7 +2271,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteVersion()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteVersion() is not implemented." );
     }
 
     /**
@@ -1105,7 +2283,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteVersionThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteVersion() is not implemented." );
     }
 
     /**
@@ -1117,7 +2295,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadVersions()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersions() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersions() is not implemented." );
     }
 
     /**
@@ -1129,7 +2307,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCopyContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::copyContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
     }
 
     /**
@@ -1141,7 +2319,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCopyContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::copyContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
     }
 
     /**
@@ -1153,7 +2331,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindContent()
     {
-        $this->markTestIncomplete( "Test for ContentService::findContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
     }
 
     /**
@@ -1165,7 +2343,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::findContent() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
     }
 
     /**
@@ -1177,7 +2355,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindSingle()
     {
-        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
     }
 
     /**
@@ -1189,7 +2367,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testFindSingleWithThirdParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
     }
 
     /**
@@ -1201,7 +2379,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadRelations()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadRelations() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadRelations() is not implemented." );
     }
 
     /**
@@ -1213,7 +2391,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadReverseRelations()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadReverseRelations() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadReverseRelations() is not implemented." );
     }
 
     /**
@@ -1225,7 +2403,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testAddRelation()
     {
-        $this->markTestIncomplete( "Test for ContentService::addRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
     }
 
     /**
@@ -1237,7 +2415,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testAddRelationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::addRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
     }
 
     /**
@@ -1249,7 +2427,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteRelation()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
     }
 
     /**
@@ -1261,7 +2439,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteRelationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
     }
 
     /**
@@ -1273,7 +2451,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testDeleteRelationThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteRelation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
     }
 
     /**
@@ -1285,7 +2463,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testAddTranslationInfo()
     {
-        $this->markTestIncomplete( "Test for ContentService::addTranslationInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::addTranslationInfo() is not implemented." );
     }
 
     /**
@@ -1297,7 +2475,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadTranslationInfos()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadTranslationInfos() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
     }
 
     /**
@@ -1309,7 +2487,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadTranslationInfosWithSecondParameter()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadTranslationInfos() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
     }
 
     /**
@@ -1321,19 +2499,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testNewContentMetadataUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newContentUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
-     * 
-     */
-    public function testNewContentUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentService::newContentUpdateStruct() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
     }
 
     /**
@@ -1345,7 +2511,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testNewTranslationInfo()
     {
-        $this->markTestIncomplete( "Test for ContentService::newTranslationInfo() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::newTranslationInfo() is not implemented." );
     }
 
     /**
@@ -1357,7 +2523,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testNewTranslationValues()
     {
-        $this->markTestIncomplete( "Test for ContentService::newTranslationValues() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::newTranslationValues() is not implemented." );
     }
 
 }

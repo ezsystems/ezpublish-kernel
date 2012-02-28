@@ -497,7 +497,6 @@ abstract class LocationBase extends BaseServiceTest
         self::assertEquals( 0, $locationCreateStruct->priority );
         self::assertEquals( false, $locationCreateStruct->hidden );
         self::assertNull( $locationCreateStruct->remoteId );
-        self::assertEquals( false, $locationCreateStruct->isMainLocation );
         self::assertEquals( Location::SORT_FIELD_NAME, $locationCreateStruct->sortField );
         self::assertEquals( Location::SORT_ORDER_ASC, $locationCreateStruct->sortOrder );
         self::assertEquals( 2, $locationCreateStruct->parentLocationId );

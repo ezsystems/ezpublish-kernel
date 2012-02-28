@@ -27,7 +27,7 @@ class ForbiddenExceptionTest extends BaseTest
      */
     public function testGetErrorCode()
     {
-        $this->markTestIncomplete( "Test for ForbiddenException::getErrorCode() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ForbiddenException::getErrorCode() is not implemented." );
     }
 
 }

@@ -14,6 +14,8 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
+use \eZ\Publish\API\Repository\Exceptions;
+
 /**
  * Test case for operations in the LocationService using in memory storage.
  *
@@ -62,7 +64,6 @@ class LocationServiceTest extends BaseTest
                 'priority'         => 0,
                 'hidden'           => false,
                 'remoteId'         => null,
-                'isMainLocation'   => false,
                 'sortField'        => Location::SORT_FIELD_NAME,
                 'sortOrder'        => Location::SORT_ORDER_ASC,
                 'parentLocationId' => 1,
@@ -93,7 +94,6 @@ class LocationServiceTest extends BaseTest
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';
-        $locationCreate->isMainLocation = true;
         $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -146,7 +146,7 @@ class LocationServiceTest extends BaseTest
             ),
             $createdLocation
         );
-        // 'isMainLocation' => $locationCreate->isMainLocation,
+
         $this->assertNotNull(
             $createdLocation->id
         );
@@ -209,7 +209,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCreateLocationThrowsIllegalArgumentExceptionParentIsSublocationOfContent()
     {
-        $this->markTestIncomplete( "Test for LocationService::createLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::createLocation() is not implemented." );
     }
 
     /**
@@ -624,7 +624,51 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationChildren()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 2 );
+
+        $childLocations = $locationService->loadLocationChildren( $location );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $childLocations
+        );
+        return $childLocations;
+    }
+
+    /**
+     * Test for the loadLocationChildren() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
+     */
+    public function testLoadLocationChildrenData( array $locations )
+    {
+        $this->assertEquals( 9, count( $locations ) );
+
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $location
+            );
+        }
+
+        $this->assertEquals(
+            array( 69, 153, 96, 107, 77, 86, 156, 167, 190 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
+        );
     }
 
     /**
@@ -634,9 +678,55 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * 
      */
-    public function testLoadLocationChildrenWithSecondParameter()
+    public function testLoadLocationChildrenWithOffset()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 2 );
+
+        $childLocations = $locationService->loadLocationChildren(
+            $location, 2
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $childLocations
+        );
+        return $childLocations;
+    }
+
+    /**
+     * Test for the loadLocationChildren() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffset
+     */
+    public function testLoadLocationChildrenDataWithOffset( array $locations )
+    {
+        $this->assertEquals( 7, count( $locations ) );
+
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $location
+            );
+        }
+
+        $this->assertEquals(
+            array( 96, 107, 77, 86, 156, 167, 190 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
+        );
     }
 
     /**
@@ -646,9 +736,55 @@ class LocationServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
      * 
      */
-    public function testLoadLocationChildrenWithThirdParameter()
+    public function testLoadLocationChildrenWithOffsetAndLimit()
     {
-        $this->markTestIncomplete( "Test for LocationService::loadLocationChildren() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 2 );
+
+        $childLocations = $locationService->loadLocationChildren(
+            $location, 2, 3
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInternalType(
+            'array', $childLocations
+        );
+        return $childLocations;
+    }
+
+    /**
+     * Test for the loadLocationChildren() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffsetAndLimit
+     */
+    public function testLoadLocationChildrenDataWithOffsetAndLimit( array $locations )
+    {
+        $this->assertEquals( 3, count( $locations ) );
+
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $location
+            );
+        }
+
+        $this->assertEquals(
+            array( 96, 107, 77 ),
+            array_map(
+                function ( Location $location )
+                {
+                    return $location->id;
+                },
+                $locations
+            )
+        );
     }
 
     /**
@@ -660,7 +796,18 @@ class LocationServiceTest extends BaseTest
      */
     public function testNewLocationUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for LocationService::newLocationUpdateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+        /* BEGIN: Use Case */;
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
+            $updateStruct
+        );
     }
 
     /**
@@ -672,7 +819,67 @@ class LocationServiceTest extends BaseTest
      */
     public function testUpdateLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation( 5 );
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+        $updateStruct->priority  = 3;
+        $updateStruct->remoteId  = 'c7adcbf1e96bc29bca28c2d809d0c7ef69272651';
+        $updateStruct->sortField = Location::SORT_FIELD_PRIORITY;
+        $updateStruct->sortOrder = Location::SORT_ORDER_DESC;
+
+        $updatedLocation = $locationService->updateLocation(
+            $originalLocation, $updateStruct
+        );
+        /* BEGIN: Use Case */;
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $updatedLocation
+        );
+
+        return array(
+            'originalLocation' => $originalLocation,
+            'updateStruct'     => $updateStruct,
+            'updatedLocation'  => $updatedLocation,
+        );
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUpdateLocation
+     */
+    public function testUpdateLocationStructValues( array $data )
+    {
+        $originalLocation = $data['originalLocation'];
+        $updateStruct     = $data['updateStruct'];
+        $updatedLocation  = $data['updatedLocation'];
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                      => $originalLocation->id,
+                'priority'                => $updateStruct->priority,
+                'hidden'                  => $originalLocation->hidden,
+                'invisible'               => $originalLocation->invisible,
+                'remoteId'                => $updateStruct->remoteId,
+                'contentInfo'             => $originalLocation->contentInfo,
+                'parentLocationId'        => $originalLocation->parentLocationId,
+                'pathString'              => $originalLocation->pathString,
+                'modifiedSubLocationDate' => $originalLocation->modifiedSubLocationDate,
+                'depth'                   => $originalLocation->depth,
+                'sortField'               => $updateStruct->sortField,
+                'sortOrder'               => $updateStruct->sortOrder,
+                'childCount'              => $originalLocation->childCount,
+            ),
+            $updatedLocation
+        );
     }
 
     /**
@@ -684,7 +891,22 @@ class LocationServiceTest extends BaseTest
      */
     public function testUpdateLocationThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for LocationService::updateLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation( 5 );
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+        // Remote ID of the root location
+        $updateStruct->remoteId  = '629709ba256fe317c3ddcee35453a96a';
+
+        // Throws exception, since remote ID is already taken
+        $updatedLocation = $locationService->updateLocation(
+            $originalLocation, $updateStruct
+        );
+        /* BEGIN: Use Case */;
     }
 
     /**
@@ -696,7 +918,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testSwapLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::swapLocation() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::swapLocation() is not implemented." );
     }
 
     /**
@@ -708,7 +930,66 @@ class LocationServiceTest extends BaseTest
      */
     public function testHideLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::hideLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $visibleLocation = $locationService->loadLocation( 5 );
+
+        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $hiddenLocation
+        );
+
+        $this->assertTrue(
+            $hiddenLocation->hidden,
+            sprintf(
+                'Location with ID "%s" not hidden.',
+                $hiddenLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $hiddenLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => true ),
+                $child
+            );
+        }
+    }
+
+    /**
+     * Assert that $expectedValues are set in the subtree starting at $location
+     *
+     * @param array $expectedValues
+     * @param Location $location
+     * @return void
+     */
+    protected function assertSubtreeProperties( array $expectedValues, Location $location, $stopId = null )
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        if ( $location->id === $stopId )
+        {
+            return;
+        }
+
+        foreach ( $expectedValues as $propertyName => $propertyValue )
+        {
+            $this->assertEquals(
+                $propertyValue,
+                $location->$propertyName
+            );
+
+            foreach ( $locationService->loadLocationChildren( $location ) as $child )
+            {
+                $this->assertSubtreeProperties( $expectedValues, $child );
+            }
+        }
     }
 
     /**
@@ -720,7 +1001,97 @@ class LocationServiceTest extends BaseTest
      */
     public function testUnhideLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::unhideLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $visibleLocation = $locationService->loadLocation( 5 );
+        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+
+        $unHiddenLocation = $locationService->unhideLocation( $hiddenLocation );
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $unHiddenLocation
+        );
+
+        $this->assertFalse(
+            $unHiddenLocation->hidden,
+            sprintf(
+                'Location with ID "%s" not unhidden.',
+                $unHiddenLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $unHiddenLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => false ),
+                $child
+            );
+        }
+    }
+
+    /**
+     * Test for the unhideLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
+     * 
+     */
+    public function testUnhideLocationNotUnhidesHiddenSubtree()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $higherLocation = $locationService->loadLocation( 5 );
+        $hiddenHigherLocation = $locationService->hideLocation( $higherLocation );
+
+        $lowerLocation = $locationService->loadLocation( 13 );
+        $hiddenLowerLocation = $locationService->hideLocation( $lowerLocation );
+
+        $unHiddenHigherLocation = $locationService->unhideLocation( $hiddenHigherLocation );
+        /* BEGIN: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $unHiddenHigherLocation
+        );
+
+        $this->assertFalse(
+            $unHiddenHigherLocation->hidden,
+            sprintf(
+                'Location with ID "%s" not unhidden.',
+                $unHiddenHigherLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $unHiddenHigherLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => false ),
+                $child,
+                13
+            );
+        }
+
+        $stillHiddenLocation = $locationService->loadLocation( 13 );
+        $this->assertTrue(
+            $stillHiddenLocation->hidden,
+            sprintf(
+                'Hidden sub-location with ID %s accedentally unhidden.',
+                $stillHiddenLocation->id
+            )
+        );
+        foreach ( $locationService->loadLocationChildren( $stillHiddenLocation ) as $child )
+        {
+            $this->assertSubtreeProperties(
+                array( 'invisible' => true ),
+                $child
+            );
+        }
     }
 
     /**
@@ -732,7 +1103,46 @@ class LocationServiceTest extends BaseTest
      */
     public function testDeleteLocation()
     {
-        $this->markTestIncomplete( "Test for LocationService::deleteLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( 13 );
+
+        $locationService->deleteLocation( $location );
+        /* BEGIN: Use Case */
+
+        try
+        {
+            $locationService->loadLocation( 13 );
+            $this->fail( "Location 13 not deleted." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
+        try
+        {
+            $locationService->loadLocation( 15 );
+            $this->fail( "Location 15 not deleted." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
+
+        $this->markTestIncomplete( 'Needs implementation of ContentService::deleteContent().' );
+
+        // TODO: These assertions fail until ContentService::deleteContent() is
+        // implemented.
+        $contentService = $repository->getContentService();
+        try
+        {
+            $contentService->loadContentInfo( 12 );
+            $this->fail( "Content 12 at location 13 not delete." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
+        try
+        {
+            $contentService->loadContentInfo( 14 );
+            $this->fail( "Content 14 at location 15 not delete." );
+        }
+        catch ( Exceptions\NotFoundException $e ) {}
     }
 
     /**
@@ -744,7 +1154,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCopySubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::copySubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::copySubtree() is not implemented." );
     }
 
     /**
@@ -756,7 +1166,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCopySubtreeThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for LocationService::copySubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::copySubtree() is not implemented." );
     }
 
     /**
@@ -768,6 +1178,6 @@ class LocationServiceTest extends BaseTest
      */
     public function testMoveSubtree()
     {
-        $this->markTestIncomplete( "Test for LocationService::moveSubtree() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for LocationService::moveSubtree() is not implemented." );
     }
 }

@@ -349,9 +349,6 @@ class LocationService implements LocationServiceInterface
         if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
             throw new InvalidArgumentValue( "remoteId", $locationCreateStruct->remoteId, "LocationCreateStruct" );
 
-        if ( $locationCreateStruct->isMainLocation !== null && !is_bool( $locationCreateStruct->isMainLocation ) )
-            throw new InvalidArgumentValue( "isMainLocation", $locationCreateStruct->isMainLocation, "LocationCreateStruct" );
-
         if ( $locationCreateStruct->sortField !== null && !is_numeric( $locationCreateStruct->sortField ) )
             throw new InvalidArgumentValue( "sortField", $locationCreateStruct->sortField, "LocationCreateStruct" );
 
@@ -423,9 +420,6 @@ class LocationService implements LocationServiceInterface
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
         $createStruct->contentId = (int) $contentInfo->contentId;
         $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
-
-        // @todo: set main location
-        // $createStruct->mainLocationId = $locationCreateStruct->isMainLocation;
 
         $createStruct->sortField = $locationCreateStruct->sortField === null ? APILocation::SORT_FIELD_NAME : (int) $locationCreateStruct->sortField;
         $createStruct->sortOrder = $locationCreateStruct->sortOrder === null ? APILocation::SORT_ORDER_ASC : (int) $locationCreateStruct->sortOrder;

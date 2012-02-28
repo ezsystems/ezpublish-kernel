@@ -98,8 +98,6 @@ class UserService implements UserServiceInterface
             throw new IllegalArgumentException( "parentGroup", "parent user group has no main location" );
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
-        $locationCreateStruct->isMainLocation = true;
-
         $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
@@ -309,18 +307,12 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
 
         $locationCreateStructs = array();
-        $isMainLocationSet = false;
         foreach ( $parentGroups as $parentGroup )
         {
             $parentGroup = $this->loadUserGroup( $parentGroup->id );
             $mainLocation = $locationService->loadMainLocation( $parentGroup->getVersionInfo()->getContentInfo() );
             if ( $mainLocation !== null )
-            {
-                $locationCreateStruct = $locationService->newLocationCreateStruct( $mainLocation->id );
-                $locationCreateStruct->isMainLocation = !$isMainLocationSet;
-                $locationCreateStructs[] = $locationCreateStruct;
-                $isMainLocationSet = true;
-            }
+                $locationCreateStructs[] = $locationService->newLocationCreateStruct( $mainLocation->id );
         }
 
         $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
@@ -524,8 +516,6 @@ class UserService implements UserServiceInterface
             return;
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
-        $locationCreateStruct->isMainLocation = empty( $existingGroupIds );
-
         $locationService->createLocation( $loadedUser->getVersionInfo()->getContentInfo(), $locationCreateStruct );
     }
 

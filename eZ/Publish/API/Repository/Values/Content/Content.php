@@ -9,10 +9,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
  *
  * this class represents a content object in a specific version
  *
- * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
- * @property-read ContentType $contentType convenience getter for $contentInfo->contentType
+ * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $contentInfo->contentType
  * @property-read mixed $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
- * @property-read VersionInfo $versionInfo calls getVersionInfo()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields
  * @property-read array $relations calls getRelations()
  *
@@ -50,7 +50,7 @@ abstract class Content extends ValueObject
     /**
      * This method returns the complete fields collection
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
      */
     abstract public function getFields();
 
@@ -61,7 +61,7 @@ abstract class Content extends ValueObject
      *
      * @param string $languageCode
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} with field identifier as keys
      */
     abstract public function getFieldsByLanguage( $languageCode = null );
 }

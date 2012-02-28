@@ -57,7 +57,10 @@ class ContentStub extends Content
      */
     public function getVersionInfo()
     {
-        return $this->repository->getContentService()->loadVersionInfo( $this->getContentInfo() );
+        return $this->repository->getContentService()->loadVersionInfo(
+            $this->getContentInfo(),
+            $this->versionNo
+        );
     }
 
     /**
@@ -74,7 +77,27 @@ class ContentStub extends Content
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        // TODO: Implement getFieldValue() method.
+        $contentType  = $this->getContentType();
+        $translatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
+
+        if ( null === $languageCode )
+        {
+            $languageCode = $this->getContentType()->mainLanguageCode;
+        }
+
+        foreach ( $this->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier !== $fieldDefIdentifier )
+            {
+                continue;
+            }
+            if ( $translatable && $field->languageCode !== $languageCode )
+            {
+                continue;
+            }
+            return $field->value;
+        }
+        return null;
     }
 
     /**
@@ -90,7 +113,7 @@ class ContentStub extends Content
     /**
      * This method returns the complete fields collection
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
      */
     public function getFields()
     {
@@ -147,6 +170,4 @@ class ContentStub extends Content
 
         return parent::__get( $property );
     }
-
-
 }

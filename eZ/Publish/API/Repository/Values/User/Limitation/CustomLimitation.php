@@ -28,6 +28,6 @@ class CustomLimitation extends Limitation
      */
     public function getIdentifier()
     {
-        return $name;
+        return $this->name;
     }
 }

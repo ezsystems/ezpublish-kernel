@@ -95,8 +95,6 @@ class LocationServiceStub implements LocationService
         {
             $data[$propertyName] = $propertyValue;
         }
-        // TODO: Handle, when finally defined
-        unset( $data['isMainLocation'] );
 
         $data['contentInfo'] = $contentInfo;
 
@@ -203,7 +201,7 @@ class LocationServiceStub implements LocationService
      */
     public function newLocationUpdateStruct()
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return new LocationUpdateStruct();
     }
 
     /**
@@ -219,7 +217,61 @@ class LocationServiceStub implements LocationService
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->checkRemoteIdNotExist( $locationUpdateStruct );
+
+        $data = $this->locationToArray( $location );
+
+        foreach ( $locationUpdateStruct as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+
+        $updatedLocation = new LocationStub( $data );
+        $this->locations[$updatedLocation->id] = $updatedLocation;
+
+        return $updatedLocation;
+    }
+
+    /**
+     * Checks that the remote ID used in $locationUpdateStruct does not exist
+     *
+     * @param LocationUpdateStruct $locationUpdateStruct
+     * @return void
+     */
+    protected function checkRemoteIdNotExist( LocationUpdateStruct $locationUpdateStruct )
+    {
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->remoteId == $locationUpdateStruct->remoteId )
+            {
+                throw new Exceptions\IllegalArgumentExceptionStub;
+            }
+        }
+    }
+
+    /**
+     * Returns the data of the given $location as an array
+     *
+     * @param Location $location
+     * @return array
+     */
+    protected function locationToArray( Location $location )
+    {
+        return array(
+            'id'                      => $location->id,
+            'priority'                => $location->priority,
+            'hidden'                  => $location->hidden,
+            'invisible'               => $location->invisible,
+            'remoteId'                => $location->remoteId,
+            'contentInfo'             => $location->contentInfo,
+            'parentLocationId'        => $location->parentLocationId,
+            'pathString'              => $location->pathString,
+            'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+            'depth'                   => $location->depth,
+            'sortField'               => $location->sortField,
+            'sortOrder'               => $location->sortOrder,
+            'childCount'              => $location->childCount,
+        );
     }
 
     /**
@@ -301,7 +353,20 @@ class LocationServiceStub implements LocationService
                 $children[] = $potentialChild;
             }
         }
-        return $children;
+
+        usort(
+            $children,
+            function ( $a, $b )
+            {
+                if ( $a->priority == $b->priority )
+                {
+                    return 0;
+                }
+                return ( $a->priority < $b->priority ) ? -1 : 1;
+            }
+        );
+
+        return array_slice( $children, $offset, ( $limit == -1 ? null : $limit ) );
     }
 
     /**
@@ -328,7 +393,30 @@ class LocationServiceStub implements LocationService
      */
     public function hideLocation( Location $location )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $location->__hide();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child)
+        {
+            $this->markInvisible( $child );
+        }
+
+        return $location;
+    }
+
+    /**
+     * Marks the sub-tree starting at $location invisible
+     *
+     * @param Location $location
+     * @return void
+     */
+    protected function markInvisible( Location $location )
+    {
+        $location->__makeInvisible();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->markInvisible( $child );
+        }
     }
 
     /**
@@ -345,7 +433,37 @@ class LocationServiceStub implements LocationService
      */
     public function unhideLocation( Location $location )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $location->__unhide();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->markVisible( $child );
+        }
+
+        return $location;
+    }
+
+    /**
+     * Marks the subtree indicated by $location as visible.
+     *
+     * The process stops, when a hidden location is found in the subtree.
+     *
+     * @param mixed $location
+     * @return void
+     */
+    protected function markVisible( $location )
+    {
+        if ( $location->hidden == true )
+        {
+            // Stop as soon as a hidden location is found
+            return;
+        }
+        $location->__makeVisible();
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->markVisible( $child );
+        }
     }
 
     /**
@@ -357,7 +475,42 @@ class LocationServiceStub implements LocationService
      */
     public function deleteLocation( Location $location )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $contentService = $this->repository->getContentService();
+
+        unset( $this->locations[$location->id] );
+
+        if ( !$this->hasLocation( $location->contentInfo ) )
+        {
+            $contentService->deleteContent( $location->contentInfo );
+        }
+
+        foreach ( $this->loadLocationChildren( $location ) as $child )
+        {
+            $this->deleteLocation( $child );
+        }
+    }
+
+    /**
+     * Returns if a location for the given $contentInfo exists.
+     *
+     * @param ContentInfo $contentInfo
+     * @return bool
+     */
+    protected function hasLocation( ContentInfo $contentInfo )
+    {
+        foreach ( $this->locations as $location )
+        {
+            if ( $location->contentInfo == null )
+            {
+                // Skip root location
+                continue;
+            }
+            if ( $location->contentInfo->contentId == $contentInfo->contentId )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
