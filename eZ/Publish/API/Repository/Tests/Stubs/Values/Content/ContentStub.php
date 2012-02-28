@@ -17,6 +17,8 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\Content\Content
+ * @property-read integer $contentTypeId
+ * @property-read integer $versionNo
  */
 class ContentStub extends Content
 {

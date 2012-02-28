@@ -27,6 +27,7 @@ use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
@@ -499,6 +500,11 @@ class ContentServiceStub implements ContentService
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
     {
+        if ( $this->remoteIdExists( $contentMetadataUpdateStruct->remoteId ) )
+        {
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $this->contentInfo[$contentInfo->contentId] = new ContentInfoStub(
             array(
                 'contentId'         =>  $contentInfo->contentId,
@@ -529,7 +535,38 @@ class ContentServiceStub implements ContentService
      */
     public function deleteContent( ContentInfo $contentInfo )
     {
-        // TODO: Implement deleteContent() method.
+        // Avoid cycles between ContentService and LocationService
+        if ( false === isset( $this->contentInfo[$contentInfo->contentId] ) )
+        {
+            return;
+        }
+
+        foreach ( $this->versionInfo as $key => $versionInfo )
+        {
+            if ( $versionInfo->contentInfo->contentId === $contentInfo->contentId )
+            {
+                unset( $this->versionInfo[$key] );
+            }
+        }
+
+        foreach ( $this->content as $key => $content )
+        {
+            if ( $content->contentId === $contentInfo->contentId )
+            {
+                unset( $this->content[$key] );
+            }
+        }
+
+        unset( $this->contentInfo[$contentInfo->contentId] );
+
+        // Delete all locations for the given $contentInfo
+        $locationService = $this->repository->getLocationService();
+
+        $locations = $locationService->loadLocations( $contentInfo );
+        foreach ( $locations as $location )
+        {
+            $locationService->deleteLocation( $location );
+        }
     }
 
     /**
@@ -1110,6 +1147,11 @@ class ContentServiceStub implements ContentService
      */
     private function remoteIdExists( $remoteId )
     {
+        if ( null === $remoteId )
+        {
+            return false;
+        }
+
         foreach ( $this->contentInfo as $contentInfo )
         {
             if ( $remoteId === $contentInfo->remoteId )

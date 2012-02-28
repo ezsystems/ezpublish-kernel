@@ -658,18 +658,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the deleteContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
-     * 
-     */
-    public function testDeleteContent()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteContent() is not implemented." );
-    }
-
-    /**
      * Test for the translateVersion() method.
      *
      * @return void
@@ -713,54 +701,6 @@ class ContentServiceTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testTranslateVersionThrowsBadStateExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testTranslateVersionThrowsContentValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion($translationInfo, $translationValues, $user)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testTranslateVersionThrowsContentValidationExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testTranslateVersionThrowsContentFieldValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion($translationInfo, $translationValues, $user)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testTranslateVersionThrowsContentFieldValidationExceptionWithThirdParameter()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
     }
@@ -1269,30 +1209,6 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updateContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testUpdateContentThrowsContentFieldValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testUpdateContentThrowsContentValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
-    }
-
-    /**
      * Test for the createContentDraft() method.
      *
      * @return void
@@ -1558,10 +1474,62 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateContentMetadataThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $content = $this->createContentVersion1();
+
+        // Creates a metadata update struct
+        $metadataUpdate           = $contentService->newContentMetadataUpdateStruct();
+        $metadataUpdate->remoteId = $supportRemoteId;
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // specified remoteId is already used by the "Support" page.
+        $contentService->updateContentMetadata(
+            $content->contentInfo,
+            $metadataUpdate
+        );
+        /* BEGIN: Use Case */
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteContent()
+    {
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Load the locations for this content object
+        $locations = $locationService->loadLocations( $contentVersion2->contentInfo );
+
+        // This will delete the content, all versions and the associated locations
+        $contentService->deleteContent( $contentVersion2->contentInfo );
+        /* BEGIN: Use Case */
+
+        foreach ( $locations as $location )
+        {
+            $locationService->loadLocation( $location->id );
+        }
     }
 
     /**
