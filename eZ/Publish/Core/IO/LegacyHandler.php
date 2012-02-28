@@ -274,7 +274,7 @@ class LegacyHandler implements IoHandlerInterface
      */
     protected static function getMimeTypeFromPath( $path )
     {
-        if ( !file_exists( $path ) )
+        if ( !is_file( $path ) )
         {
             throw new NotFoundException( 'BinaryFile', $path );
         }

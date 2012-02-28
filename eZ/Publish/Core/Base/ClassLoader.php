@@ -30,7 +30,7 @@ class ClassLoader
     const MODE_PSR_0_STRICT = 1;
 
     /**
-     * Skip doing a file_exists() check on matching namespaces
+     * Skip doing a is_file() check on matching namespaces
      * @var int
      */
     const MODE_SKIP_FILE_CHECK = 2;
@@ -89,7 +89,7 @@ class ClassLoader
                     '/' . str_replace( '_', '/', substr( $className, $classNamePos + 1 ) ) . '.php';
             }
 
-            if ( !($this->mode & self::MODE_SKIP_FILE_CHECK) && !file_exists( $file ) )
+            if ( !($this->mode & self::MODE_SKIP_FILE_CHECK) && !is_file( $file ) )
             {
                 return false;
             }

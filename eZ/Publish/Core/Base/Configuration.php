@@ -233,7 +233,7 @@ class Configuration
      */
     protected function hasCache( $cacheName )
     {
-        return file_exists( self::CONFIG_CACHE_DIR . $cacheName . '.php' );
+        return is_file( self::CONFIG_CACHE_DIR . $cacheName . '.php' );
     }
 
     /**
@@ -259,7 +259,7 @@ class Configuration
             $currentTime = time();
             foreach ( $cacheData['files'] as $inputFile )
             {
-                $fileTime = file_exists( $inputFile ) ? filemtime( $inputFile ) : false;
+                $fileTime = is_file( $inputFile ) ? filemtime( $inputFile ) : false;
                 // Refresh cache & input files if file is gone
                 if ( $fileTime === false )
                 {
@@ -322,7 +322,7 @@ class Configuration
                 foreach ( $parsers as $suffix => $parser )
                 {
                     $fileName = $settingsDir . $this->moduleName . $suffix;
-                    if ( !isset( $sourceFiles[$fileName] ) && file_exists( $fileName ) )
+                    if ( !isset( $sourceFiles[$fileName] ) && is_file( $fileName ) )
                     {
                         $sourceFiles[$fileName] = $suffix;
                     }
@@ -400,7 +400,7 @@ class Configuration
         try
         {
             // Create ini dir if it does not exist
-            if ( !file_exists( self::CONFIG_CACHE_DIR ) )
+            if ( !is_dir( self::CONFIG_CACHE_DIR ) )
             {
                 mkdir( self::CONFIG_CACHE_DIR, $this->dirPermission, true );
             }

@@ -170,7 +170,7 @@ class Ini implements Parser
         $fileContent = $this->parserClearArraySupport( $fileContent );
 
         // Create ini dir if it does not exist
-        if ( !file_exists( Configuration::CONFIG_CACHE_DIR ) )
+        if ( !is_dir( Configuration::CONFIG_CACHE_DIR ) )
             mkdir( Configuration::CONFIG_CACHE_DIR, $this->dirPermission, true );
 
         // Create temp file
