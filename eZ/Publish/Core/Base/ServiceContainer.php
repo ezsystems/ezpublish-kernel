@@ -266,18 +266,24 @@ class ServiceContainer
         $builtArguments = array();
         foreach ( $arguments as $key => $argument )
         {
+            $keys[] = $key;
             if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@'  || $argument[0] === '%' ) )
             {
-                $function = false;
+                $function = '';
                 if ( stripos( $argument, '::' ) !== false )
                 {
                     // Check if argument is a callback
                     list( $argument, $function  ) = explode( '::', $argument );
                 }
 
-                if ( $argument[0] === '%' )// lazy loaded services
+                if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === '-' )// expand extended services
                 {
-                    if ( $function !== false )
+                    $builtArguments[$key] = $this->lookupArguments( $this->expandExtendedServices( $argument, $function ) );
+                    continue;
+                }
+                elseif ( $argument[0] === '%' )// lazy loaded services
+                {
+                    if ( $function !== '' )
                         $builtArguments[$key] = function() use ( $serviceContainer, $argument, $function ){
                             $service = $serviceContainer->get( ltrim( $argument, '%' ), true );
                             return call_user_func_array( array( $service, $function ), func_get_args() );
@@ -287,23 +293,20 @@ class ServiceContainer
                             return $serviceContainer->get( ltrim( $argument, '%' ), true );
                         };
                 }
-                else if ( isset( $this->dependencies[ $argument ] ) )
+                else if ( isset( $this->dependencies[ $argument ] ) )// Existing dependencies (@Service / $Variable)
                 {
-                    // Existing dependencies (@Service / $Variable)
                     $builtArguments[$key] = $this->dependencies[ $argument ];
                 }
-                else if ( $argument[0] === '$' )
+                else if ( $argument[0] === '$' )// Undefined variables will trow an exception
                 {
-                    // Undefined variables will trow an exception
                     throw new InvalidArgumentValue( "arguments[{$key}]", $argument );
                 }
-                else
+                else// Try to load a @service dependency
                 {
-                    // Try to load a @service dependency
                     $builtArguments[$key] = $this->internalGet( ltrim( $argument, '@' ), true );
                 }
 
-                if ( $function !== false && $argument[0] !== '%' )
+                if ( $function !== '' && $argument[0] !== '%' )
                 {
                     $builtArguments[$key] = array( $builtArguments[$key], $function );
                 }
@@ -316,8 +319,30 @@ class ServiceContainer
             {
                 $builtArguments[$key] = $argument;
             }
-            $keys[] = $key;
         }
         return $builtArguments;
+    }
+
+    /**
+     * @param string $argument Eg: %-controller
+     * @param string $function Optional function string
+     * @return array|int|string
+     */
+    protected function expandExtendedServices( $argument, $function = '' )
+    {
+        $prefix = $argument[0];
+        $argument = ltrim( $argument, '@%' );
+        $services = array();
+        if ( $function !== '' )
+            $function = '::' . $function;
+
+        foreach ( $this->settings as $service => $settings )
+        {
+            if ( preg_match( "/^(?P<name>\w+){$argument}$/", $service, $match ) )
+            {
+                $services[$match['name']] = $prefix . $match['name'] . $argument . $function;
+            }
+        }
+        return $services;
     }
 }
