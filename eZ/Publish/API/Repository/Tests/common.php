@@ -17,7 +17,10 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
 $user   = new UserStub( array( 'id' => 1 ) );
 $policy = new PolicyStub( array( 'module' => '*', 'function' => '*' ) );
 
-$repository = new RepositoryStub( __DIR__ . '/Fixtures' );
+$repository = new RepositoryStub(
+    __DIR__ . '/Fixtures',
+    ( isset( $_ENV['backendVersion'] ) ? (int) $_ENV['backendVersion'] : 5 )
+);
 $repository->setCurrentUser( $user );
 // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
 $repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );

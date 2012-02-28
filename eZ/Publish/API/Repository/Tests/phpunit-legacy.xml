@@ -18,7 +18,6 @@
             <file>ContentTypeServiceTest.php</file>
             <file>ContentServiceTest.php</file>
             <file>LocationServiceTest.php</file>
-            <file>ContentAndLocationServiceInteractionTest.php</file>
             <file>UserServiceTest.php</file>
             <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>

@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 use \eZ\Publish\API\Repository\Values\Content\Field;
+use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
@@ -263,6 +264,127 @@ class ContentServiceTest extends BaseTest
     public function testCreateContentThrowsContentValidationException()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * NOTE: We have bidirectional dependencies between the ContentService and
+     * the LocationService, so that we cannot use PHPUnit's test dependencies
+     * here.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Location id of the "Home" node
+        $homeLocationId = 2;
+
+        $contentService     = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService    = $repository->getLocationService();
+
+        // Configure new location
+        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $locationCreate->priority  = 23;
+        $locationCreate->hidden    = true;
+        $locationCreate->remoteId  = '0123456789abcdef0123456789abcdef';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Load content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        // Configure new content object
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // Create new content object under the specified location
+        $content = $contentService->createContent(
+            $contentCreate,
+            array( $locationCreate )
+        );
+
+        // This location will contain the above content object
+        $location = $locationService->loadLocationByRemoteId(
+            '0123456789abcdef0123456789abcdef'
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( $content->contentInfo, $location->getContentInfo() );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
+     */
+    public function testCreateContentThrowsIllegalArgumentExceptionWithSecondParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Location id of the "Home" node
+        $homeLocationId = 2;
+
+        $contentService     = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService    = $repository->getLocationService();
+
+        // Load content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        // Configure new locations
+        $locationCreateOne = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $locationCreateOne->priority  = 23;
+        $locationCreateOne->hidden    = true;
+        $locationCreateOne->remoteId  = '0123456789abcdef0123456789aaaaaa';
+        $locationCreateOne->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreateOne->sortOrder = Location::SORT_ORDER_DESC;
+
+        $locationCreateTwo = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $locationCreateTwo->priority  = 42;
+        $locationCreateTwo->hidden    = true;
+        $locationCreateTwo->remoteId  = '0123456789abcdef0123456789bbbbbb';
+        $locationCreateTwo->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreateTwo->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Configure new content object
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // Create new content object under the specified location
+        $contentService->createContent(
+            $contentCreate,
+            array( $locationCreateOne )
+        );
+
+        // This call will fail with an "IllegalArgumentException", because the
+        // Content remoteId already exists,
+        $contentService->createContent(
+            $contentCreate,
+            array( $locationCreateTwo )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -2381,10 +2503,9 @@ class ContentServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        $contentService = $repository->getContentService();
 
         $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
@@ -2410,7 +2531,7 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersions()
-     * ReturnsEmptyArrayByDefault()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testLoadVersions()
     {
@@ -2418,14 +2539,14 @@ class ContentServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
 
+        // Load used content type
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
-        $contentService = $repository->getContentService();
-
         $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
 
+        $contentCreateStruct->setField( 'title', 'An awesome story about eZ Publish' );
         $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
         $contentCreateStruct->sectionId       = 1;
         $contentCreateStruct->alwaysAvailable = true;
@@ -2466,6 +2587,30 @@ class ContentServiceTest extends BaseTest
             ),
             $versions
         );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::copyContent()
+     *
+     */
+    public function testCopyContent()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
+     *
+     */
+    public function testCopyContentWithThirdParameter()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
     }
 
     /**

@@ -27,6 +27,11 @@ class RepositoryStub implements Repository
     private $fixtureDir;
 
     /**
+     * @var integer
+     */
+    private $version;
+
+    /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
     private $currentUser;
@@ -70,10 +75,12 @@ class RepositoryStub implements Repository
      * Instantiates the stubbed repository.
      *
      * @param string $fixtureDir
+     * @param integer $version
      */
-    public function __construct( $fixtureDir )
+    public function __construct( $fixtureDir, $version )
     {
         $this->fixtureDir = $fixtureDir;
+        $this->version    = $version;
     }
 
     /**
