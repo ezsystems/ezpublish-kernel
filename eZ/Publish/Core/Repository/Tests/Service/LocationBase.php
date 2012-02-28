@@ -30,18 +30,24 @@ abstract class LocationBase extends BaseServiceTest
     public function testNewClass()
     {
         $location = new Location();
-        self::assertNull( $location->id );
-        self::assertNull( $location->priority );
-        self::assertNull( $location->hidden );
-        self::assertNull( $location->invisible );
-        self::assertNull( $location->remoteId );
-        self::assertNull( $location->parentLocationId );
-        self::assertNull( $location->pathString );
-        self::assertNull( $location->modifiedSubLocationDate );
-        self::assertNull( $location->depth );
-        self::assertNull( $location->sortField );
-        self::assertNull( $location->sortOrder );
-        self::assertNull( $location->childCount );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                      => null,
+                'priority'                => null,
+                'hidden'                  => null,
+                'invisible'               => null,
+                'remoteId'                => null,
+                'parentLocationId'        => null,
+                'pathString'              => null,
+                'modifiedSubLocationDate' => null,
+                'depth'                   => null,
+                'sortField'               => null,
+                'sortOrder'               => null,
+                'childCount'              => null
+            ),
+            $location
+        );
     }
 
     /**
@@ -217,7 +223,9 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
+            /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+            self::assertEquals( $contentInfo->contentId, $location->getContentInfo()->contentId );
         }
 
         $locationsCount = count( $locations );
@@ -232,7 +240,9 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
+            /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+            self::assertEquals( $contentInfo->contentId, $location->getContentInfo()->contentId );
         }
 
         $newLocationsCount = count( $locations );
@@ -301,7 +311,9 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $childrenLocations as $childLocation )
         {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Location $childLocation */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $childLocation );
+            self::assertEquals( $rootLocation->id, $childLocation->parentLocationId );
         }
     }
 
@@ -315,15 +327,42 @@ abstract class LocationBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $contentService = $this->repository->getContentService();
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( 52 );
+        $parentLocation = $locationService->loadLocation( 52 );
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( $parentLocation->id );
+        $locationCreateStruct->priority = 42;
+        $locationCreateStruct->remoteId = 'new-remote-id';
+        $locationCreateStruct->hidden = true;
+        $locationCreateStruct->sortField = Location::SORT_FIELD_DEPTH;
+        $locationCreateStruct->sortOrder = Location::SORT_ORDER_DESC;
+
         $content = $contentService->loadContent( 49 );
 
-        $createdLocation = $locationService->createLocation( $content->getVersionInfo()->getContentInfo(), $locationCreateStruct );
+        $createdLocation = $locationService->createLocation(
+            $content->getVersionInfo()->getContentInfo(),
+            $locationCreateStruct
+        );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $createdLocation );
         self::assertGreaterThan( 0, $createdLocation->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'priority'                => $locationCreateStruct->priority,
+                'hidden'                  => $locationCreateStruct->hidden,
+                'invisible'               => $locationCreateStruct->hidden,
+                'remoteId'                => $locationCreateStruct->remoteId,
+                'parentLocationId'        => $locationCreateStruct->parentLocationId,
+                'pathString'              => $parentLocation->pathString . $createdLocation->id . '/',
+                'depth'                   => $parentLocation->depth + 1,
+                'sortField'               => $locationCreateStruct->sortField,
+                'sortOrder'               => $locationCreateStruct->sortOrder,
+                'childCount'              => 0
+            ),
+            $createdLocation
+        );
+
         self::assertEquals( $content->getVersionInfo()->getContentInfo()->contentId, $createdLocation->getContentInfo()->contentId );
-        self::assertEquals( $locationCreateStruct->parentLocationId, $createdLocation->parentLocationId );
     }
 
     /**
@@ -376,12 +415,24 @@ abstract class LocationBase extends BaseServiceTest
 
         $location = $locationService->loadLocation( 5 );
         $locationUpdateStruct = $locationService->newLocationUpdateStruct();
+        $locationUpdateStruct->priority = 42;
+        $locationUpdateStruct->sortField = Location::SORT_FIELD_DEPTH;
+        $locationUpdateStruct->sortOrder = Location::SORT_ORDER_DESC;
         $locationUpdateStruct->remoteId = "NEW_REMOTE_ID";
 
         $location = $locationService->updateLocation( $location, $locationUpdateStruct );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
-        self::assertEquals( $locationUpdateStruct->remoteId, $location->remoteId );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'priority'  => $locationUpdateStruct->priority,
+                'sortField' => $locationUpdateStruct->sortField,
+                'sortOrder' => $locationUpdateStruct->sortOrder,
+                'remoteId'  => $locationUpdateStruct->remoteId
+            ),
+            $location
+        );
     }
 
     /**
@@ -435,7 +486,7 @@ abstract class LocationBase extends BaseServiceTest
         self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
 
-        $location = new Location( array( "id" => 5 ) );
+        $location = $locationService->loadLocation( 5 );
         $location = $locationService->hideLocation( $location );
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
         self::assertEquals( true, $location->hidden );
@@ -456,8 +507,8 @@ abstract class LocationBase extends BaseServiceTest
         self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
 
-        $locationToMove = new Location( array( "id" => 5 ) );
-        $newParent = new Location( array( "id" => 2 ) );
+        $locationToMove = $locationService->loadLocation( 5 );
+        $newParent = $locationService->loadLocation( 2 );
         $locationService->moveSubtree( $locationToMove, $newParent );
 
         $loadedLocation = $locationService->loadLocation( $locationToMove->id );
@@ -473,7 +524,7 @@ abstract class LocationBase extends BaseServiceTest
         self::markTestSkipped( "@todo: enable when method removeSubtree is implemented in persistence" );
         $locationService = $this->repository->getLocationService();
 
-        $location = new Location( array( "id" => 43 ) );
+        $location = $locationService->loadLocation( 43 );
         $locationService->deleteLocation( $location );
 
         try
@@ -494,12 +545,18 @@ abstract class LocationBase extends BaseServiceTest
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LocationCreateStruct', $locationCreateStruct );
-        self::assertEquals( 0, $locationCreateStruct->priority );
-        self::assertEquals( false, $locationCreateStruct->hidden );
-        self::assertNull( $locationCreateStruct->remoteId );
-        self::assertEquals( Location::SORT_FIELD_NAME, $locationCreateStruct->sortField );
-        self::assertEquals( Location::SORT_ORDER_ASC, $locationCreateStruct->sortOrder );
-        self::assertEquals( 2, $locationCreateStruct->parentLocationId );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'priority'         => 0,
+                'hidden'           => false,
+                'remoteId'         => null,
+                'sortField'        => Location::SORT_FIELD_NAME,
+                'sortOrder'        => Location::SORT_ORDER_ASC,
+                'parentLocationId' => 2
+            ),
+            $locationCreateStruct
+        );
     }
 
     /**
@@ -512,9 +569,15 @@ abstract class LocationBase extends BaseServiceTest
 
         $locationUpdateStruct = $locationService->newLocationUpdateStruct();
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct', $locationUpdateStruct );
-        self::assertNull( $locationUpdateStruct->priority );
-        self::assertNull( $locationUpdateStruct->remoteId );
-        self::assertNull( $locationUpdateStruct->sortField );
-        self::assertNull( $locationUpdateStruct->sortOrder );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'priority'         => null,
+                'remoteId'         => null,
+                'sortField'        => null,
+                'sortOrder'        => null
+            ),
+            $locationUpdateStruct
+        );
     }
 }
