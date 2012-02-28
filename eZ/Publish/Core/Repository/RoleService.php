@@ -750,11 +750,9 @@ class RoleService implements RoleServiceInterface
      */
     protected function buildDomainPolicyObject( SPIPolicy $policy )
     {
-        $policyLimitations = '*';
-        if ( $policy->module !== '*' && $policy->function !== '*'
-             && is_array( $policy->limitations ) && !empty( $policy->limitations ) )
+        $policyLimitations = array();
+        if ( $policy->module !== '*' && $policy->function !== '*' && is_array( $policy->limitations ) )
         {
-            $policyLimitations = array();
             foreach ( $policy->limitations as $limitationIdentifier => $limitationValues )
             {
                 $limitation = $this->getLimitationFromIdentifier( $limitationIdentifier );
