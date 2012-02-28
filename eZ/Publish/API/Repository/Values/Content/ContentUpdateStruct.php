@@ -24,7 +24,7 @@ abstract class ContentUpdateStruct extends ValueObject
      * $fields[$fieldDefIdentifier][$language] = $value or without language $fields[$fieldDefIdentifier] = $value
      * is an equivalent call.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BasStateException if the field is translatable and $initialLanguageCode is not set and $languageCode is NULL
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the field is translatable and $initialLanguageCode is not set and $languageCode is NULL
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
