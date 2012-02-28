@@ -33,7 +33,9 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+
+    ezcMailTools;
 
 /**
  * This service provides methods for managing users and user groups
@@ -259,23 +261,37 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
+        if ( $userGroupUpdateStruct->contentUpdateStruct === null &&
+             $userGroupUpdateStruct->contentMetaDataUpdateStruct === null )
+        {
+            // both update structs are empty, nothing to do
+            return $userGroup;
+        }
+
         $contentService = $this->repository->getContentService();
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+        $publishedContent = $loadedUserGroup;
+        if ( $userGroupUpdateStruct->contentUpdateStruct !== null )
+        {
+            $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
 
-        $contentDraft = $contentService->updateContent(
-            $contentDraft->getVersionInfo(),
-            $userGroupUpdateStruct->contentUpdateStruct
-        );
+            $contentDraft = $contentService->updateContent(
+                $contentDraft->getVersionInfo(),
+                $userGroupUpdateStruct->contentUpdateStruct
+            );
 
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        }
 
-        $publishedContent = $contentService->updateContentMetadata(
-            $publishedContent->getVersionInfo()->getContentInfo(),
-            $userGroupUpdateStruct->contentMetaDataUpdateStruct
-        );
+        if ( $userGroupUpdateStruct->contentMetaDataUpdateStruct !== null )
+        {
+            $publishedContent = $contentService->updateContentMetadata(
+                $publishedContent->getVersionInfo()->getContentInfo(),
+                $userGroupUpdateStruct->contentMetaDataUpdateStruct
+            );
+        }
 
         return $this->buildDomainUserGroupObject( $publishedContent );
     }
@@ -301,8 +317,10 @@ class UserService implements UserServiceInterface
         if ( !is_string( $userCreateStruct->login ) || empty( $userCreateStruct->login ) )
             throw new InvalidArgumentValue( "login", $userCreateStruct->login, "UserCreateStruct" );
 
-        //@todo: verify email validity
         if ( !is_string( $userCreateStruct->email ) || empty( $userCreateStruct->email ) )
+            throw new InvalidArgumentValue( "email", $userCreateStruct->email, "UserCreateStruct" );
+
+        if ( !ezcMailTools::validateEmailAddress( $userCreateStruct->email ) )
             throw new InvalidArgumentValue( "email", $userCreateStruct->email, "UserCreateStruct" );
 
         if ( !is_string( $userCreateStruct->password ) || empty( $userCreateStruct->password ) )
@@ -451,9 +469,14 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
-        //@todo: verify email validity
-        if ( $userUpdateStruct->email !== null && ( !is_string( $userUpdateStruct->email ) || empty( $userUpdateStruct->email ) ) )
-            throw new InvalidArgumentValue( "email", $userUpdateStruct->email, "UserUpdateStruct" );
+        if ( $userUpdateStruct->email !== null )
+        {
+            if ( !is_string( $userUpdateStruct->email ) || empty( $userUpdateStruct->email ) )
+                throw new InvalidArgumentValue( "email", $userUpdateStruct->email, "UserUpdateStruct" );
+
+            if ( !ezcMailTools::validateEmailAddress( $userUpdateStruct->email ) )
+                throw new InvalidArgumentValue( "email", $userUpdateStruct->email, "UserUpdateStruct" );
+        }
 
         if ( $userUpdateStruct->password !== null && ( !is_string( $userUpdateStruct->password ) || empty( $userUpdateStruct->password ) ) )
             throw new InvalidArgumentValue( "password", $userUpdateStruct->password, "UserUpdateStruct" );
@@ -468,29 +491,41 @@ class UserService implements UserServiceInterface
 
         $loadedUser = $this->loadUser( $user->id );
 
-        $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
+        $publishedContent = $loadedUser;
+        if ( $userUpdateStruct->contentUpdateStruct !== null )
+        {
+            $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
 
-        $contentDraft = $contentService->updateContent(
-            $contentDraft->getVersionInfo(),
-            $userUpdateStruct->contentUpdateStruct
-        );
+            $contentDraft = $contentService->updateContent(
+                $contentDraft->getVersionInfo(),
+                $userUpdateStruct->contentUpdateStruct
+            );
 
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        }
 
-        $contentService->updateContentMetadata(
-            $publishedContent->getVersionInfo()->getContentInfo(),
-            $userUpdateStruct->contentMetaDataUpdateStruct
-        );
+        if ( $userUpdateStruct->contentMetaDataUpdateStruct !== null )
+        {
+            $contentService->updateContentMetadata(
+                $publishedContent->getVersionInfo()->getContentInfo(),
+                $userUpdateStruct->contentMetaDataUpdateStruct
+            );
+        }
 
         $this->persistenceHandler->userHandler()->update(
             new SPIUser(
                 array(
                     'id'            => $loadedUser->id,
                     'login'         => $loadedUser->login,
-                    'email'         => $userUpdateStruct->email !== null ? $userUpdateStruct->email : $loadedUser->email,
+                    'email'         => $userUpdateStruct->email ?: $loadedUser->email,
                     // @todo: read password hash algorithm and site from INI settings
-                    'passwordHash'  => $userUpdateStruct->password !== null ?
-                        $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, 'ez.no', User::PASSWORD_HASH_MD5_USER ) :
+                    'passwordHash'  => $userUpdateStruct->password ?
+                        $this->createPasswordHash(
+                            $loadedUser->login,
+                            $userUpdateStruct->password,
+                            'ez.no',
+                            User::PASSWORD_HASH_MD5_USER
+                        ) :
                         $loadedUser->passwordHash,
                     'hashAlgorithm' => null,
                     'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
@@ -576,7 +611,7 @@ class UserService implements UserServiceInterface
 
         foreach ( $userLocations as $userLocation )
         {
-            if ( $userLocation->parentLocationId === $groupMainLocation->id )
+            if ( $userLocation->parentLocationId == $groupMainLocation->id )
             {
                 $locationService->deleteLocation( $userLocation );
                 return;
@@ -694,7 +729,7 @@ class UserService implements UserServiceInterface
                 'fields'        => $content->getFields(),
                 'relations'     => $content->getRelations(),
                 'id'            => $contentInfo->contentId,
-                'parentId'      => $mainLocation !== null ? $mainLocation->parentLocationId : null,
+                'parentId'      => $mainLocation ? $mainLocation->parentLocationId : null,
                 'subGroupCount' => $subGroupCount
             )
         );
