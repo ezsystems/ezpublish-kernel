@@ -520,10 +520,11 @@ class ContentServiceStub implements ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\User\User $user if set given user is used to create the draft - otherwise the current user is used
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null )
+    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null )
     {
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
 
@@ -658,7 +659,6 @@ class ContentServiceStub implements ContentService
         }
 
         $content     = $this->loadContentByVersionInfo( $versionInfo );
-        $contentInfo = $content->contentInfo;
         $contentType = $content->contentType;
 
         $fieldIds = array();
@@ -667,17 +667,18 @@ class ContentServiceStub implements ContentService
         {
             $fieldIds[$field->fieldDefIdentifier] = true;
 
-            $languageCode = $field->languageCode;
-            if ( !$languageCode && $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
+            if ( null === $field->languageCode &&
+                 null === $contentUpdateStruct->initialLanguageCode &&
+                $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
             {
-                $languageCode = $contentInfo->mainLanguageCode;
+                throw new ContentValidationExceptionStub( '@TODO: What error code should be used?' );
             }
 
             $fields[] = new Field(
                 array(
                     'id'                  =>  ++$this->fieldNextId,
                     'value'               =>  $field->value,
-                    'languageCode'        =>  $languageCode,
+                    'languageCode'        =>  $field->languageCode ?: $contentUpdateStruct->initialLanguageCode,
                     'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
                 )
             );

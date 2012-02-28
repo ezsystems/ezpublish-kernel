@@ -1383,6 +1383,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
 
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+
         // Update the content draft
         $updatedContent = $contentService->updateContent(
             $draftedContent->getVersionInfo(),
@@ -1512,6 +1514,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
 
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+
         // This call will fail with a "BadStateException", because $publishedContent
         // is not a draft.
         $updatedContent = $contentService->updateContent(
@@ -1583,6 +1587,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
 
         // Update the content draft
         $updatedDraft = $contentService->updateContent(
@@ -1681,6 +1687,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
 
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+
         // Update the content draft
         $updatedDraft = $contentService->updateContent(
             $draftedContent->getVersionInfo(),
@@ -1744,6 +1752,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
 
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+
         // Update the content draft
         $updatedDraft = $contentService->updateContent(
             $draftedContent->getVersionInfo(),
@@ -1806,6 +1816,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
 
         // Update the content draft
         $updatedDraft = $contentService->updateContent(
@@ -1938,6 +1950,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
 
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+
         // Update the content draft
         $updatedDraft = $contentService->updateContent(
             $draftedContent->getVersionInfo(),
@@ -2027,6 +2041,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
 
         // Update the content draft
         $updatedDraft = $contentService->updateContent(
@@ -2232,6 +2248,8 @@ class ContentServiceTest extends BaseTest
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
 
         // Update the content draft
         $updatedDraft = $contentService->updateContent(
