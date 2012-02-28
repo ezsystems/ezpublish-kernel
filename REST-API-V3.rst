@@ -162,7 +162,7 @@ Creating Content
          :application/vnd.ez.api.ContentCreate+xml: the ContentCreate_ schema encoded in xml
 :Response: 
 
-.. parsed-literal::
+     .. parsed-literal::
 
           HTTP/1.1 201 Created  
           Location: /content/objects/<newID>
@@ -491,15 +491,15 @@ Load Content
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-      HTTP/1.1 200 OK
-      ETag: "<new etag>"
-      Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
-      Content-Type: <depending on accept header>
-      Content-Length: <length>
-      Content_      
-      
+          HTTP/1.1 200 OK
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Content_      
+          
 :Error Codes:
     :401: If the user is not authorized to read  this object. This could also happen if there is no published version yet and another user owns a draft of this content
     :404: If the ID is not found
@@ -554,15 +554,15 @@ Update Content
          :application/vnd.ez.api.ContentUpdate+xml: the ContentUpdate_ schema encoded in xml
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-      HTTP/1.1 200 OK
-      ETag: "<new etag>"
-      Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
-      Content-Type: <depending on accept header>
-      Content-Length: <length>
-      Content_      
-      
+          HTTP/1.1 200 OK
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Content_      
+          
 
 :Error Codes:
     :400: If the Input does not match the input schema definition.
@@ -696,12 +696,12 @@ List Versions
          :application/vnd.ez.api.VersionList+json:  if set the version list is returned in json format 
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-    HTTP/1.1 200 OK
-    Content-Type: <depending on accept header>
-    Content-Length: <length>
-    VersionList_
+        HTTP/1.1 200 OK
+        Content-Type: <depending on accept header>
+        Content-Length: <length>
+        VersionList_
 
 :Error Codes:
      :401: If the user has no permission to read the versions
@@ -787,12 +787,12 @@ Load Version
          :application/vnd.ez.api.Version+json:  if set the version list is returned in json format 
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-    HTTP/1.1 200 OK
-    Content-Type: <depending on accept header>
-    Content-Length: <length>
-    Version_
+        HTTP/1.1 200 OK
+        Content-Type: <depending on accept header>
+        Content-Length: <length>
+        Version_
 
 :Error Codes:
     :401: If the user is not authorized to read  this object
@@ -881,14 +881,14 @@ Update Version
          :application/vnd.ez.api.VersionUpdate+xml: the VersionUpdate_ schema encoded in xml
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-      HTTP/1.1 200 OK
-      ETag: "<new etag>"
-      Accept-Patch: application/vnd.ez.api.VersionUpdate+(json|xml)
-      Content-Type: <depending on accept header>
-      Content-Length: <length>
-      Version_      
+        HTTP/1.1 200 OK
+        ETag: "<new etag>"
+        Accept-Patch: application/vnd.ez.api.VersionUpdate+(json|xml)
+        Content-Type: <depending on accept header>
+        Content-Length: <length>
+        Version_      
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -992,11 +992,11 @@ Create a Draft from an archived or published Version
 :Description: The system creates a new draft version as a copy from the given version
 :Response:
 
-.. parsed-literal::
+    .. parsed-literal::
  
-    HTTP/1.1 201 Created
-    Location: /content/objects/<ID>/versions/<new-versionNo> 
-    Version_
+        HTTP/1.1 201 Created
+        Location: /content/objects/<ID>/versions/<new-versionNo> 
+        Version_
 
 :Error Codes:
     :401: If the user is not authorized to update this object  
@@ -1068,12 +1068,12 @@ Load relations of version
          :application/vnd.ez.api.RelationList+json:  if set the relation is returned in json format (see Relation_)
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-    HTTP/1.1 200 OK
-    Content-Type: <depending on Accept header>
-    Content-Length: xxx
-    Relation_ (relationListType)
+        HTTP/1.1 200 OK
+        Content-Type: <depending on Accept header>
+        Content-Length: xxx
+        Relation_ (relationListType)
 
 :Error Codes:
 :401: If the user is not authorized to read  this object
@@ -1123,12 +1123,12 @@ Load a relation
          :application/vnd.ez.api.Relation+json:  if set the relation is returned in json format (see Relation_)
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-    HTTP/1.1 200 OK
-    Content-Type: <depending on Accept header>
-    Content-Length: xxx
-    Relation_ (relationValueType(
+        HTTP/1.1 200 OK
+        Content-Type: <depending on Accept header>
+        Content-Length: xxx
+        Relation_ (relationValueType(
 
 :Error Codes:
     :404: If the  object with the given id or the relation does not exist
@@ -1148,13 +1148,13 @@ Create a new Relation
          :application/vnd.ez.api.RelationCreate+json: the RelationCreate (see Relation_) schema encoded in json
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
-    HTTP/1.1 201 Created
-    Location: /content/objects/<ID>/versions/<no>/relations/<newId>
-    Content-Type: <depending on Accept header>
-    Content-Length: xxx
-    Relation_ (relationValueType(
+        HTTP/1.1 201 Created
+        Location: /content/objects/<ID>/versions/<no>/relations/<newId>
+        Content-Type: <depending on Accept header>
+        Content-Length: xxx
+        Relation_ (relationValueType(
 
 :Error Codes:
     :401: If the user is not authorized to update this content object
@@ -1226,7 +1226,7 @@ Create a new location for a content object
          :application/vnd.ez.api.LocationCreate+xml: the LocationCreate_ schema encoded in xml
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
           HTTP/1.1 201 Created  
           Location: /content/locations/<newPath>
@@ -1298,7 +1298,7 @@ Get locations for a content object
          :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
           HTTP/1.1 200
           ETag: "<etag>"
@@ -1341,7 +1341,7 @@ Load location
          :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
           HTTP/1.1 200 OK
           Location: /content/locations/<path>
@@ -1402,7 +1402,7 @@ Update location
          :application/vnd.ez.api.LocationUpdate+xml: the LocationUpdate_ schema encoded in xml
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
           HTTP/1.1 200 OK
           Location: /content/locations/<path>
@@ -1477,7 +1477,7 @@ Get child locations
          :application/vnd.ez.api.LocationList+json:  if set the new location list is returned in json format (see Location_)
 :Response: 
 
-.. parsed-literal::
+    .. parsed-literal::
 
           HTTP/1.1 200 OK
           ETag: "<new etag>"
@@ -1510,24 +1510,6 @@ XML Example
       <Location href="/content/locations/1/4/54/143" media-type="application/vnd.ez.api.Location+xml"/>
     </LocationList>
 
-Get Parent Location
-```````````````````
-:Resource: /content/locations/<path>/parent
-:Method: GET
-:Description: redirects to the parent location. 
-:Parameters:
-:Response: 
-
-::
-
-      HTTP/1.1 307 Moved Temporarily
-      Location: /content/locations/<path>
-
-
-:Error Codes:
-    :404: If the  object with the given id does not exist
-    :401: If the user is not authorized to read this object  
-
 Move Subtree
 ````````````
 :Resource: /content/locations/<path>
@@ -1537,11 +1519,11 @@ Move Subtree
     :Destination: A parent location resource to which the location is moved
 :Response: 
 
-::
+    ::
     
-     HTTP/1.1 201 Created
-     Location: /content/locations/<newPath>
-     or Location: /content/trash/<ID>
+        HTTP/1.1 201 Created
+        Location: /content/locations/<newPath>
+        or Location: /content/trash/<ID>
 
 :Error Codes:
     :404: If the  location with the given id does not exist
@@ -1556,10 +1538,10 @@ Copy Subtree
     :Destination: A parent location resource to which the location is moved
 :Response: 
 
-::
+    ::
     
-     HTTP/1.1 201 Created
-     Location: /content/locations/<newPath>
+        HTTP/1.1 201 Created
+        Location: /content/locations/<newPath>
 
 :Error Codes:
     :404: If the location with the given id does not exist
@@ -1574,9 +1556,9 @@ Swap Location
     :Destination: A location resource with which the content is swapped
 :Response: 
 
-::
+    ::
     
-     HTTP/1.1 204 No Content
+        HTTP/1.1 204 No Content
 
 :Error Codes:
     :404: If the location with the given id does not exist
@@ -1590,9 +1572,9 @@ Delete Subtree
 :Response: 204
 :Response: 
 
-::
+    ::
     
-     HTTP/1.1 204 No Content
+        HTTP/1.1 204 No Content
 
 :Error Codes:
     :404: If the  location with the given id does not exist
@@ -1614,130 +1596,201 @@ Views
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
 
 
-Managing Translations
-~~~~~~~~~~~~~~~~~~~~~
-
-A translation is a result of an executed translation process. It consists of
-the meta data sourceLanguage, sourceVersion, destinationLanguage, destinationVersion 
-The repository stores translation info datasets which contain for each content object a
-set of executed translations (not available in 4.6).
-
-List available translations
-```````````````````````````
-:Resource: /content/objects/<ID>/translations
-:Method: GET
-:Description: Lists the latest translation infos for the given content object.
-:Parameters: 
-    :latest: if true (default) only the latest translation for each language is returned.
-:Response: 200 array of TranslationInfo_
-:Error Codes:
-    :404: If the content object does not exist
-
-Load Translation
-````````````````
-:Resource: /content/objects/<ID>/translations/<ID>
-:Method: GET
-:Description: loads a translation info
-:Parameters: 
-:Response: 200 TranslationInfo_
-:Error Codes:
-    :404: If the content object or the tranlation info was not found 
-    :401: If the user is not authorized to delete this object
-
-Create Translation
-``````````````````
-:Resource: /content/objects/<ID>/translations
-:Method: POST
-:Description: Inserts a new translation info for the given object 
-:Request Format: application/json
-:Parameters:
-:Inputschema: TranslationInfo_
-:Response: 201
-:Error Codes:
-    :400: If the Input does not match the input schema definition.  In this case the response contains an ErrorMessage_ containing the appropriate error description
-    :401: If the user is not authorized to create the translation
-    :404: If the content object does not exist
-
-Remove a language
-`````````````````
-:Resource: /content/objects/<ID>/<language_code>
-:Method: DELETE
-:Description: A language is completely removed from the content object in all versions and the translation metadata is deleted.
-:Parameters:
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to remove the translation
-    :404: If the object or the translation does not exist
-	
-
 Managing Sections
 ~~~~~~~~~~~~~~~~~
 
 Create a new Section
 ````````````````````
 :Resource: /content/sections
-:Method: PUT
+:Method: POST
 :Description: Creates a new section
-:Request Format: application/json
-:Parameters:
-:Inputschema: SectionInput_
-:Response: 200 Section_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Section+xml:  if set the new section is returned in xml format (see Section_)
+         :application/vnd.ez.api.Section+json:  if set the new section is returned in json format (see Section_)
+    :Content-Type:
+         :application/vnd.ez.api.SectionInput+json: the Section_ input schema encoded in json
+         :application/vnd.ez.api.SectionInput+xml: the Section_ input schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /content/section/<ID>
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.SectionInput+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Section_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this section  
     :403: If a section with same identifier already exists
+
+XML Example
+'''''''''''
+
+::
+
+    POST /content/sections HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.Section+xml
+    Content-Type: application/vnd.ez.api.SectionInput+xml
+    Content-Length: xxxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <SectionInput>
+      <identifier>restricted</identifier>
+      <name>Restricted</name>
+    </SectionInput>
+        
+    HTTP/1.1 201 Created
+    Location: /content/section/5
+    ETag: "4567867894564356"
+    Accept-Patch: application/vnd.ez.api.SectionInput+(json|xml)
+    Content-Type:  application/vnd.ez.api.Section+xml
+    Content-Length: xxxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Section href="/content/sections/5" media-type="vnd.ez.api.Section+xml">
+      <sectionId>5</sectionId>
+      <identifier>restricted</identifier>
+      <name>Restriced</name>
+    </Section>
+       
+
 
 Get Sections
 ````````````
 :Resource: /content/sections
 :Method: GET
 :Description: Returns a list of all sections
-:Response: 200 array of Section_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.SectionList+xml:  if set the new section list is returned in xml format (see Section_)
+         :application/vnd.ez.api.SectionList+json:  if set the new section list is returned in json format (see Section_)
+:Response:
+ 
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Section_  (sectionListType)    
+
 :Error Codes:
     :401: If the user has no permission to read the sections
-	
-Get Section of content
-``````````````````````
-:Resource: /content/objects/<ID>/section
-:Method: GET
-:Description: Returns the section assigned to the given content object
-:Response: 200 Section_
-:Error Codes:
-    :401: If the user has no permission to read the content object
-    :404: If the content object with the given id does not exist
-	
-Assign a Section to content
-```````````````````````````
-:Resource: /content/objects/<ID>/section
-:Method: PUT
-:Description: Assigns a new section to the given content object
-:Request Format: 
-:Parameters:
-    :sectionId: (required)
-:Inputschema:
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to assign this section  
-    :404: If the content object does not exist
 
-Get Section by id
-`````````````````
+XML Example
+'''''''''''
+
+::
+
+    GET /content/sections
+    Host: api.example.net
+    Accept: application/vnd.ez.api.SectionList+xml
+
+    HTTP/1.1 200 OK
+    ETag: "43450986743098576"
+    Content-Type: application/vnd.ez.api.SectionList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <SectionList href="/content/sections" media-type="vnd.ez.api.SectionList+xml">
+      <Section href="/content/sections/1" media-type="vnd.ez.api.Section+xml">
+        <sectionId>1</sectionId>
+        <identifier>standard</identifier>
+        <name>Standard</name>
+      </Section>
+      <Section href="/content/sections/2" media-type="vnd.ez.api.Section+xml">
+        <sectionId>2</sectionId>
+        <identifier>users</identifier>
+        <name>Users</name>
+      </Section>
+      <Section href="/content/sections/3" media-type="vnd.ez.api.Section+xml">
+        <sectionId>3</sectionId>
+        <identifier>media</identifier>
+        <name>Media</name>
+      </Section>
+      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml">
+        <sectionId>4</sectionId>
+        <identifier>setup</identifier>
+        <name>Setup</name>
+      </Section>
+    </SectionList>
+
+	
+Get Section
+```````````
 :Resource: /content/sections/<ID>
 :Method: GET
 :Description: Returns the section given by id
-:Response: 200 Section
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Section+xml:  if set the new section is returned in xml format (see Section_)
+         :application/vnd.ez.api.Section+json:  if set the new section is returned in json format (see Section_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.SectionInput+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Section_  (sectionListType)    
+:ErrorCodes:
     :401: If the user is not authorized to read this section  
     :404: If the section does not exist
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/sections/3 HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.Section+xml
+
+    HTTP/1.1 200 OK
+    ETag: "4567867894564356"
+    Accept-Patch: application/vnd.ez.api.SectionInput+(json|xml)
+    Content-Type:  application/vnd.ez.api.Section+xml
+    Content-Length: xxxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Section href="/content/sections/3" media-type="vnd.ez.api.Section+xml">
+      <sectionId>3</sectionId>
+      <identifier>media</identifier>
+      <name>Media</name>
+    </Section>
+
 
 Update a Section
 ````````````````
 :Resource: /content/sections/<ID>
-:Method: PUT
+:Method: PATCH or POST with header X-HTTP-Method-Override
 :Description: Updates a section
-:Request Format: application/json
-:Parameters:
-:Inputschema: SectionInput_
-:Response: 200 Section_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Section+xml:  if set the new section is returned in xml format (see Section_)
+         :application/vnd.ez.api.Section+json:  if set the new section is returned in json format (see Section_)
+    :Content-Type:
+         :application/vnd.ez.api.SectionInput+json: the Section_ input schema encoded in json
+         :application/vnd.ez.api.SectionInput+xml: the Section_ input schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.SectionInput+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Section_  (sectionListType)    
+
 :Error Codes:
     :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this section  
@@ -1749,56 +1802,75 @@ Delete Section
 :Method: DELETE
 :Description: the given section is deleted
 :Parameters:
-:Response: 204
+:Response: 
+
+    ::
+        
+         HTTP/1.1 204 No Content
 :Error Codes:
     :401: If the user is not authorized to delete this section
     :404: If the section does not exist
-
-Assign Section to a subtree
-```````````````````````````
-:Resource: /content/locations/<ID>
-:Method: POST
-:Description: Assigns a new section to the complete subtree given by ID
-:Request Format: 
-:Parameters:
-    :sectionId: (required)
-:Inputschema:
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to assign this section  
-    :404: If the location does not exist
 
 Managing Trash
 ~~~~~~~~~~~~~~
 
 List TrashItems
 ```````````````
-:Resource: /content/trash/items
+:Resource: /content/trash
 :Method: GET
 :Description: Returns a list of all trash items
-:Response: 200 array of Location_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.LocationList+xml:  if set the new location is returned in xml format (see Location_)
+         :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location_  (locationListType)     
+
+:ErrorCodes: 
     :401: If the user has no permission to read the trash
 
 Get TrashItem
 `````````````
-:Resource: /content/trash/items/<ID>
+:Resource: /content/trash/<ID>
 :Method: GET
 :Description: Returns the trash item given by id
-:Response: 200 Location_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
+         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Location: /content/locations/<path>
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location_      
 :Error Codes:
     :401: If the user has no permission to read the trash item
     :404: If the trash item with the given id does not exist
 
 Untrash Item
 ````````````
-:Resource: /content/trash/items/<ID>
-:Method: PUT
+:Resource: /content/trash/<ID>
+:Method: MOVE or POST with header X-HTTP-Method-Override: MOVE
 :Description: Restores a trashItem
-:Request Format:
-:Parameters:
-	:parentLocation: if given the trash item is restored under this location otherwise under its parent location
-:Inputschema:
-:Response: 200 Location_
+:Headers:
+	:Destination: if given the trash item is restored under this location otherwise under its orifinal parent location
+:Response: 
+
+    ::
+    
+        HTTP/1.1 201 Created
+        Location: /content/locations/<newPath>
+        
 :Error Codes:
     :401: If the user is not authorized to restore this trash item  
     :403: if the given parent location does not exist
@@ -1806,11 +1878,15 @@ Untrash Item
 
 Empty Trash
 ```````````
-:Resource: /content/trash/items
+:Resource: /content/trash
 :Method: DELETE
 :Description: Empties the trash
-:Parameters: 
-:Response: 204
+:Response: 
+
+    ::
+  
+        HTTP/1.1 204 No Content
+    
 :Error Codes:
     :401: If the user is not authorized to empty all trash items
 
@@ -1819,25 +1895,16 @@ Delete TrashItem
 :Resource: /content/trash/items/<ID>
 :Method: DELETE
 :Description: Deletes the given trash item
-:Parameters: 
-:Response: 204
+:Response: 
+
+    ::
+  
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to empty the given trash item
     :404: if the given trash item does not exist
 
-Additional Usecases
-~~~~~~~~~~~~~~~~~~~
-
-Get item counts of collections
-``````````````````````````````
-GET /.../<collection>?count
-
-
-Upload Images/Media Files
-`````````````````````````
-TBD
-
- 
 Content Types
 =============
 
@@ -2919,35 +2986,263 @@ Query XML Schema
 ----------------
 
 
-.. _TranslationInfo:
-
-TranslationInfo XML Schema
---------------------------
-
 .. _LocationCreate:
 
 LocationCreate XML Schema
 -------------------------
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="locationCreateType">
+        <xsd:all>
+          <xsd:element name="ParentLocation" type="ref">
+            <xsd:annotation>
+              <xsd:documentation>
+                The parent location where the new location
+                is created
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="priority" type="xsd:int" minOccurs="0" default="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Location priority
+                Position of the
+                Location
+                among its siblings when sorted using priority
+                sort order.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="hidden" type="xsd:boolean"
+            minOccurs="0" default="false">
+            <xsd:annotation>
+              <xsd:documentation>
+                Indicates that the Location entity has
+                been
+                explicitly marked as hidden.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="sortField" type="sortFieldType" />
+          <xsd:element name="sortOrder" type="sortOrderType" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="LocationCreate" type="locationCreateType" />
+    </xsd:schema>
+
+
 
 .. _LocationUpdate:
 
 LocationUpdate XML Schema
 -------------------------
 
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="locationUpdateType">
+        <xsd:all>
+          <xsd:element name="priority" type="xsd:int" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                 If set the location priority is changed to the given value
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="hidden" type="xsd:boolean"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set to true the location is hidden, if set to false the location is unhidden.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="sortField" type="sortFieldType" />
+          <xsd:element name="sortOrder" type="sortOrderType" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="LocationUpdate" type="locationUpdateType" />
+    </xsd:schema>
+
+
+
+
 .. _Location:
 
 Location XML Schema
 -------------------
 
-.. _SectionInput:
 
-SectionInput XML Schema
------------------------
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="locationType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location ID.
+                              </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="priority" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location priority
+                    Position of the
+                    Location among its siblings when sorted using priority
+                    sort order.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="hidden" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location entity has
+                    been explicitly marked as hidden.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="invisible" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location is
+                    implicitly marked as hidden by a parent
+                    location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="ParentLocation" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The parent location
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="pathString" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The materialized path of the location
+                    entry, eg: /1/2/
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="subLocationModificationDate"
+                type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Timestamp of the latest update of a
+                    content object in a sub location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="depth" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Depth location has in the location
+                    tree.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="childCount" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the number of chidren visible to the
+                    authenticated user which has
+                    loaded this instance.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="remoteId" type="xsd:string"
+                minOccurs="0" />
+              <xsd:element name="Content" type="ref" />
+              <xsd:element name="sortField" type="sortFieldType" />
+              <xsd:element name="sortOrder" type="sortOrderType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="locationListType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="Location" type="ref" minOccurs="0"
+                maxOccurs="unbounded"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="Location" type="locationType" />
+      <xsd:element name="LocationList" type="locationListType" />
+    </xsd:schema>
+
 
 .. _Section:
     
 Section XML Schema
 ------------------
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      
+        <xsd:complexType name="sectionValueType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+            <xsd:element name="sectionId" type="xsd:int"/>
+            <xsd:element name="identifier" type="xsd:string"/>
+            <xsd:element name="name" type="xsd:string"/>
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="sectionListType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="Section" type="sectionValueType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="sectionInputType">
+        <xsd:all>
+            <xsd:element name="identifier" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="Section" type="sectionValueType"></xsd:element>
+      <xsd:element name="SectionList" type="sectionListType"></xsd:element>
+      <xsd:element name="SectionInput" type="sectionInputType"></xsd:element>
+      
+      
+    </xsd:schema>
+
 
 .. _ContentTypeGroup:
 
