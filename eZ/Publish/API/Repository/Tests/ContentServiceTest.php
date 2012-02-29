@@ -2194,11 +2194,59 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
-     *
+     * @depe nds eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testCopyContent()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
+        $homeLocationId = 2;
+
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $targetLocationCreate->priority  = 42;
+        $targetLocationCreate->hidden    = true;
+        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Copy content with all versions and drafts
+        $contentCopied = $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $contentCopied
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentInfo->remoteId,
+            $contentCopied->contentInfo->remoteId
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentId,
+            $contentCopied->contentId
+        );
+
+        $this->assertEquals(
+            2,
+            count( $contentService->loadVersions( $contentCopied->contentInfo ) )
+        );
+
+        $this->assertEquals( 2, $contentCopied->getVersionInfo()->versionNo );
+
+        $this->assertAllFieldsEquals( $contentCopied->getFields() );
     }
 
     /**
@@ -2206,11 +2254,58 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      */
     public function testCopyContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
+        $homeLocationId = 2;
+
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $targetLocationCreate->priority  = 42;
+        $targetLocationCreate->hidden    = true;
+        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Copy only the initial version
+        $contentCopied = $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate,
+            $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 )
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $contentCopied
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentInfo->remoteId,
+            $contentCopied->contentInfo->remoteId
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentId,
+            $contentCopied->contentId
+        );
+
+        $this->assertEquals(
+            1,
+            count( $contentService->loadVersions( $contentCopied->contentInfo ) )
+        );
+
+        $this->assertEquals( 1, $contentCopied->getVersionInfo()->versionNo );
     }
 
     /**

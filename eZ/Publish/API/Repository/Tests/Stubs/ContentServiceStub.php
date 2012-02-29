@@ -942,7 +942,89 @@ class ContentServiceStub implements ContentService
      */
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null )
     {
-        // TODO: Implement copyContent() method.
+        ++$this->contentNextId;
+
+        $versionNo = $versionInfo ? $versionInfo->versionNo : null;
+
+        $this->contentInfo[$this->contentNextId] = new ContentInfoStub(
+            array(
+                'contentId'         =>  $this->contentNextId,
+                'remoteId'          =>  md5( uniqid( $contentInfo->remoteId, true ) ),
+                'sectionId'         =>  $contentInfo->sectionId,
+                'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
+                'currentVersionNo'  =>  $versionNo ? 1 : $contentInfo->currentVersionNo,
+                'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
+                'modificationDate'  =>  new \DateTime(),
+                'ownerId'           =>  $contentInfo->ownerId,
+                'published'         =>  $contentInfo->published,
+                'publishedDate'     =>  new \DateTime(),
+
+                'contentTypeId'     =>  $contentInfo->getContentType()->id,
+                'repository'        =>  $this->repository
+            )
+        );
+
+        foreach ( $this->versionInfo as $versionInfoStub )
+        {
+            if ( $versionInfoStub->contentId !== $contentInfo->contentId )
+            {
+                continue;
+            }
+            if ( $versionNo && $versionInfoStub->versionNo !== $versionNo )
+            {
+                continue;
+            }
+
+            ++$this->versionNextId;
+
+            $this->versionInfo[$this->versionNextId] = new VersionInfoStub(
+                array(
+                    'id'                   =>  $this->versionNextId,
+                    'status'               =>  VersionInfo::STATUS_DRAFT,
+                    'versionNo'            =>  $versionNo ? 1 : $versionInfoStub->versionNo,
+                    'creatorId'            =>  $versionInfoStub->creatorId,
+                    'creationDate'         =>  new \DateTime(),
+                    'modificationDate'     =>  new \DateTime(),
+                    'languageCodes'        =>  $versionInfoStub->languageCodes,
+                    'initialLanguageCode'  =>  $versionInfoStub->initialLanguageCode,
+
+                    'contentId'            =>  $this->contentNextId,
+                    'repository'           =>  $this->repository
+                )
+            );
+        }
+
+        foreach ( $this->content as $content )
+        {
+            if ( $content->contentId !== $contentInfo->contentId )
+            {
+                continue;
+            }
+            if ( $versionNo && $content->versionNo !== $versionNo )
+            {
+                continue;
+            }
+
+            $this->content[] = new ContentStub(
+                array(
+                    'contentId'      =>  $this->contentNextId,
+                    'fields'         =>  $content->getFields(),
+                    'relations'      =>  $content->getRelations(),
+
+                    'contentTypeId'  =>  $content->contentTypeId,
+                    'versionNo'      =>  $versionNo ? 1 : $content->versionNo,
+                    'repository'     =>  $this->repository
+                )
+            );
+        }
+
+        $locationService = $this->repository->getLocationService();
+        $locationService->createLocation(
+            $this->contentInfo[$this->contentNextId],
+            $destinationLocationCreateStruct
+        );
+
+        return $this->loadContent( $this->contentNextId );
     }
 
     /**
