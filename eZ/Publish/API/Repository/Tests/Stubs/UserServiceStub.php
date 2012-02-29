@@ -87,8 +87,9 @@ class UserServiceStub implements UserService
     {
         $userGroup = new UserGroupStub(
             array(
-                'id'        =>  ++$this->userGroupNextId,
-                'parentId'  =>  $parentGroup->id,
+                'id'             =>  ++$this->userGroupNextId,
+                'parentId'       =>  $parentGroup->id,
+                'subGroupCount'  =>  0
             )
         );
         $this->userGroups[$userGroup->id] = $userGroup;
@@ -123,7 +124,6 @@ class UserServiceStub implements UserService
      * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function loadSubUserGroups( UserGroup $userGroup )
     {
@@ -305,7 +305,7 @@ class UserServiceStub implements UserService
     /**
      * Instantiate a user create class
      *
-     * @param string $login the login of the new user
+     * @paramb string $login the login of the new user
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
      * @param string $mainLanguageCode the main language for the underlying content object
@@ -322,13 +322,21 @@ class UserServiceStub implements UserService
      * Instantiate a user group create class
      *
      * @param string $mainLanguageCode The main language for the underlying content object
-     * @param null|\eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
-        return new UserGroupCreateStructStub( array( 'mainLanguageCode' => $mainLanguageCode ) );
+        $contentType = $contentType ?:
+            $this->repository->getContentTypeService()->loadContentTypeByIdentifier( 'user_group' );
+
+        return new UserGroupCreateStructStub(
+            array(
+                'mainLanguageCode'  =>  $mainLanguageCode,
+                'contentType'       =>  $contentType
+            )
+        );
     }
 
     /**

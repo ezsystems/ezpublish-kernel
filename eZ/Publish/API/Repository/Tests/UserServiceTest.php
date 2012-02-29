@@ -113,24 +113,11 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadSubUserGroups() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::loadSubUserGroups()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadSubUserGroups
-     */
-    public function testLoadSubUserGroupsThrowsNotFoundException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::loadSubUserGroups() is not implemented." );
-    }
-
-    /**
      * Test for the newUserGroupCreateStruct() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testNewUserGroupCreateStruct()
     {
@@ -142,27 +129,43 @@ class UserServiceTest extends BaseTest
         $groupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct', $groupCreate );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct',
+            $groupCreate
+        );
+
+        return $groupCreate;
     }
 
     /**
      * Test for the newUserGroupCreateStruct() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $groupCreate
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
      */
-    public function testNewUserGroupCreateStructSetsMainLanguageCode()
+    public function testNewUserGroupCreateStructSetsMainLanguageCode( $groupCreate )
     {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $userService = $repository->getUserService();
-
-        $groupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
-        /* END: Use Case */
-
         $this->assertEquals( 'eng-US', $groupCreate->mainLanguageCode );
+    }
+
+    /**
+     * Test for the newUserGroupCreateStruct() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $groupCreate
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
+     */
+    public function testNewUserGroupCreateStructSetsContentType( $groupCreate )
+    {
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentType',
+            $groupCreate->contentType
+        );
     }
 
     /**
