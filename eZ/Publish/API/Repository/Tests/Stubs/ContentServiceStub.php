@@ -17,12 +17,14 @@ use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
+use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use \eZ\Publish\API\Repository\Values\Content\Query;
+use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use \eZ\Publish\API\Repository\Values\User\User;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
@@ -1041,7 +1043,70 @@ class ContentServiceStub implements ContentService
      */
     public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
-        // TODO: Implement findContent() method.
+        $callbacks = array();
+        foreach ( $query->criterion->criteria as $criteria )
+        {
+            if ( $criteria->operator === Criterion\Operator::LIKE )
+            {
+                $regexp     = '(' . str_replace( '\*', '.*', preg_quote( $criteria->value ) ) . ')i';
+                $identifier = $criteria->target;
+
+                $callbacks[] = function( Content $content ) use ( $identifier, $regexp ) {
+                    foreach ( $content->getFields() as $field )
+                    {
+                        if ( $field->fieldDefIdentifier !== $identifier )
+                        {
+                            continue;
+                        }
+
+                        if ( preg_match( $regexp, $field->value ) )
+                        {
+
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+            }
+        }
+
+        $result = array();
+        foreach ( $this->content as $content )
+        {
+            if ( $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED )
+            {
+                continue;
+            }
+
+            foreach ( $callbacks as $callback )
+            {
+                if ( false === $callback( $content ) )
+                {
+                    continue 2;
+                }
+            }
+
+            $result[] = $content;
+        }
+
+        if ( isset( $fieldFilters['languages'] ) )
+        {
+            foreach ( $result as $i => $content )
+            {
+                $result[$i] = $this->filterFieldsByLanguages(
+                    $content,
+                    $fieldFilters['languages']
+                );
+            }
+        }
+
+        return new SearchResult(
+            array(
+                'query'  =>  $query,
+                'count'  =>  count( $result ),
+                'items'  =>  $result
+            )
+        );
     }
 
     /**
@@ -1165,7 +1230,48 @@ class ContentServiceStub implements ContentService
      */
     public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
-        // TODO: Implement deleteRelation() method.
+        if ( VersionInfo::STATUS_DRAFT !== $sourceVersion->status )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $content   = $this->loadContentByVersionInfo( $sourceVersion );
+        $relations = $content->getRelations();
+
+        $relationNotFound = true;
+        $relationNoCommon = true;
+        foreach ( $relations as $i => $relation )
+        {
+            if ( $relation->destinationContentInfo !== $destinationContent )
+            {
+                continue;
+            }
+            $relationNotFound = false;
+
+            if ( $relation->type !== Relation::COMMON )
+            {
+                continue;
+            }
+            $relationNoCommon = false;
+
+            unset( $relations[$i] );
+            break;
+        }
+
+        if ( $relationNotFound || $relationNoCommon )
+        {
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $this->replaceContentObject(
+            $content,
+            $this->copyContentObject(
+                $content,
+                array(
+                    'relations'  =>  $relations
+                )
+            )
+        );
     }
 
     /**

@@ -15,6 +15,8 @@ use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use \eZ\Publish\API\Repository\Values\Content\Query;
+use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -2212,7 +2214,7 @@ class ContentServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
-        $contentVersion2 = $this->createContentVersion2();
+        $contentVersion2 = $this->createMultipleLanguageContentVersion2();
 
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
@@ -2317,25 +2319,96 @@ class ContentServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      * @see \eZ\Publish\API\Repository\ContentService::findContent()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testFindContent()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Publish*' )
+            )
+        );
+
+        // Search for matching content
+        $searchResult = $contentService->findContent( $query, array() );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\SearchResult',
+            $searchResult
+        );
+
+        return $searchResult;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\SearchResult $searchResult
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
+     */
+    public function testFindContentSearchResultContainsExpectedProperties( $searchResult )
+    {
+        $this->assertGreaterThan( 0, $searchResult->count );
+        $this->assertEquals( $searchResult->count, count( $searchResult->items ) );
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Query',
+            $searchResult->query
+        );
     }
 
     /**
      * Test for the findContent() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
-     * 
+     * @see \eZ\Publish\API\Repository\ContentService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
      */
-    public function testFindContentWithThirdParameter()
+    public function testFindContentWithLanguageFilter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // Publish the newly created draft
+        $contentService->publishVersion( $draft->getVersionInfo() );
+
+        // Create a search query for the created content object
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*awesome² story about*' )
+            )
+        );
+
+        // Search for matching content with field language filter
+        $searchResult = $contentService->findContent(
+            $query,
+            array( 'languages' => array( 'eng-US' ) )
+        );
+        /* END: Use Case */
+        $this->assertEquals( 1, $searchResult->count );
+        $this->assertLocaleFieldsEquals(
+            $searchResult->items[0]->getFields(),
+            'eng-US'
+        );
     }
 
     /**
@@ -2346,18 +2419,6 @@ class ContentServiceTest extends BaseTest
      * 
      */
     public function testFindSingle()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
-     * 
-     */
-    public function testFindSingleWithThirdParameter()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
     }
@@ -2523,30 +2584,22 @@ class ContentServiceTest extends BaseTest
         $this->assertEquals(
             array(
                 array(
-                    'type'                             =>  Relation::COMMON,
-                    'sourceFieldDefinitionIdentifier'  =>  null,
-                    'sourceContentInfo'                =>  'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo'           =>  'affc99e41128c1475fa4f23dafb7159b',
+                    'sourceContentInfo'       =>  'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo'  =>  'affc99e41128c1475fa4f23dafb7159b',
                 ),
                 array(
-                    'type'                             =>  Relation::COMMON,
-                    'sourceFieldDefinitionIdentifier'  =>  null,
-                    'sourceContentInfo'                =>  'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo'           =>  '378acc2bc7a52400701956047a2f7d45',
+                    'sourceContentInfo'       =>  'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo'  =>  '378acc2bc7a52400701956047a2f7d45',
                 )
             ),
             array(
                 array(
-                    'type'                             =>  $relations[0]->type,
-                    'sourceFieldDefinitionIdentifier'  =>  $relations[0]->sourceFieldDefinitionIdentifier,
-                    'sourceContentInfo'                =>  $relations[0]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'           =>  $relations[0]->destinationContentInfo->remoteId,
+                    'sourceContentInfo'       =>  $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'  =>  $relations[0]->destinationContentInfo->remoteId,
                 ),
                 array(
-                    'type'                             =>  $relations[1]->type,
-                    'sourceFieldDefinitionIdentifier'  =>  $relations[1]->sourceFieldDefinitionIdentifier,
-                    'sourceContentInfo'                =>  $relations[1]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'           =>  $relations[1]->destinationContentInfo->remoteId,
+                    'sourceContentInfo'       =>  $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'  =>  $relations[1]->destinationContentInfo->remoteId,
                 )
             )
         );
@@ -2607,30 +2660,22 @@ class ContentServiceTest extends BaseTest
         $this->assertEquals(
             array(
                 array(
-                    'type'                             =>  Relation::COMMON,
-                    'sourceFieldDefinitionIdentifier'  =>  null,
-                    'sourceContentInfo'                =>  'affc99e41128c1475fa4f23dafb7159b',
-                    'destinationContentInfo'           =>  'abcdef0123456789abcdef0123456789',
+                    'sourceContentInfo'       =>  'affc99e41128c1475fa4f23dafb7159b',
+                    'destinationContentInfo'  =>  'abcdef0123456789abcdef0123456789',
                 ),
                 array(
-                    'type'                             =>  Relation::COMMON,
-                    'sourceFieldDefinitionIdentifier'  =>  null,
-                    'sourceContentInfo'                =>  '378acc2bc7a52400701956047a2f7d45',
-                    'destinationContentInfo'           =>  'abcdef0123456789abcdef0123456789',
+                    'sourceContentInfo'       =>  '378acc2bc7a52400701956047a2f7d45',
+                    'destinationContentInfo'  =>  'abcdef0123456789abcdef0123456789',
                 )
             ),
             array(
                 array(
-                    'type'                             =>  $relations[0]->type,
-                    'sourceFieldDefinitionIdentifier'  =>  $relations[0]->sourceFieldDefinitionIdentifier,
-                    'sourceContentInfo'                =>  $relations[0]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'           =>  $relations[0]->destinationContentInfo->remoteId,
+                    'sourceContentInfo'       =>  $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'  =>  $relations[0]->destinationContentInfo->remoteId,
                 ),
                 array(
-                    'type'                             =>  $relations[1]->type,
-                    'sourceFieldDefinitionIdentifier'  =>  $relations[1]->sourceFieldDefinitionIdentifier,
-                    'sourceContentInfo'                =>  $relations[1]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'           =>  $relations[1]->destinationContentInfo->remoteId,
+                    'sourceContentInfo'       =>  $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'  =>  $relations[1]->destinationContentInfo->remoteId,
                 )
             )
         );
@@ -2641,11 +2686,37 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadRelations
      */
     public function testDeleteRelation()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // Remote ids of the "Support" and the "Community" page of a eZ Publish
+        // demo installation.
+        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+
+        $draft = $this->createContentDraftVersion1();
+
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
+
+        // Establish some relations
+        $contentService->addRelation( $draft->getVersionInfo(), $support );
+        $contentService->addRelation( $draft->getVersionInfo(), $community );
+
+        // Delete one of the currently created relations
+        $contentService->deleteRelation( $draft->getVersionInfo(), $support );
+
+        // The relations array now contains only one element
+        $relations = $contentService->loadRelations( $draft->getVersionInfo() );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, count( $relations ) );
     }
 
     /**
@@ -2654,10 +2725,41 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $content = $this->createContentVersion1();
+
+        // Load the destination object
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // Create a new draft
+        $draftVersion2 = $contentService->createContentDraft( $content->contentInfo );
+
+        // Add a relation
+        $contentService->addRelation( $draftVersion2->getVersionInfo(), $support );
+
+        // Publish new version
+        $contentVersion2 = $contentService->publishVersion(
+            $draftVersion2->getVersionInfo()
+        );
+
+        // This call will fail with a "BadStateException", because content is
+        // published and not a draft.
+        $contentService->deleteRelation(
+            $contentVersion2->getVersionInfo(),
+            $support
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -2666,10 +2768,30 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $draft = $this->createContentDraftVersion1();
+
+        // Load the destination object
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // This call will fail with a "InvalidArgumentException", because no
+        // relation exists between $draft and $support.
+        $contentService->deleteRelation(
+            $draft->getVersionInfo(),
+            $support
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -2906,6 +3028,47 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
+     * Creates a published content object with versionNo=2 named
+     * <b>$contentVersion2</b>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createMultipleLanguageContentVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // Publish this version.
+        $contentVersion1 = $contentService->publishVersion(
+            $draft->getVersionInfo()
+        );
+
+        // Create a new draft and update with same values
+        $draftVersion2 = $contentService->createContentDraft(
+            $contentVersion1->contentInfo
+        );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+
+        $contentService->updateContent(
+            $draftVersion2->getVersionInfo(),
+            $contentUpdate
+        );
+
+        // Finally publish version 2
+        $contentVersion2 = $contentService->publishVersion(
+            $draftVersion2->getVersionInfo()
+        );
+        /* BEGIN: Inline */
+
+        return $contentVersion2;
+    }
+
+    /**
      * Asserts that the given fields are equal to the default fieldxs fixture.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
@@ -2914,7 +3077,7 @@ class ContentServiceTest extends BaseTest
     private function assertAllFieldsEquals( array $fields )
     {
         $actual   = $this->normalizeFields( $fields );
-        $expected = $this->normalizeFields( $fields );
+        $expected = $this->createFieldsFixture();
 
         $this->assertEquals( $expected, $actual );
     }
@@ -2930,7 +3093,19 @@ class ContentServiceTest extends BaseTest
      */
     private function assertLocaleFieldsEquals( array $fields, $languageCode )
     {
+        $actual = $this->normalizeFields( $fields );
 
+        $expected = array();
+        foreach ( $this->createFieldsFixture() as $field )
+        {
+            if ( $field->languageCode !== $languageCode )
+            {
+                continue;
+            }
+            $expected[] = $field;
+        }
+
+        $this->assertEquals( $expected, $actual );
     }
 
     /**

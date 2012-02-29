@@ -521,4 +521,29 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
     }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
+     */
+    public function testFindContentWithUserPermissionFilter()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
+     */
+    public function testFindSingleWithUserPermissionFilter()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
+    }
+
 }
