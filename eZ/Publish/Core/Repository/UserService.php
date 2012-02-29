@@ -248,10 +248,10 @@ class UserService implements UserServiceInterface
         $newParentMainLocation = $locationService->loadMainLocation( $loadedNewParent->getVersionInfo()->getContentInfo() );
 
         if ( $userGroupMainLocation === null )
-            throw new BadStateException( "userGroup" );
+            throw new BadStateException( "userGroup", 'existing user group is not stored and/or does not have any location yet' );
 
         if ( $newParentMainLocation === null )
-            throw new BadStateException( "newParent" );
+            throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
         $this->repository->getLocationService()->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
     }
@@ -440,7 +440,7 @@ class UserService implements UserServiceInterface
         {
             // something went wrong, we should not have more than one
             // user with the same login
-            throw new BadStateException( "login" );
+            throw new BadStateException( "login", 'found several users with same login' );
         }
 
         $passwordHash = $this->createPasswordHash(

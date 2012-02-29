@@ -20,15 +20,16 @@ use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateExcepti
 class BadStateException extends APIBadStateException
 {
     /**
-     * Generates: "Argument '{$argumentName}' is illegal: {$whatIsWrong}"
+     * Generates: "Argument '{$argumentName}' has a bad state: {$whatIsWrong}"
      *
      * @param string $argumentName
+     * @param string $whatIsWrong
      * @param \Exception|null $previous
      */
-    public function __construct( $argumentName, Exception $previous = null )
+    public function __construct( $argumentName, $whatIsWrong, Exception $previous = null )
     {
         parent::__construct(
-            "Argument '{$argumentName}' has a bad state.",
+            "Argument '{$argumentName}' has a bad state: {$whatIsWrong}",
             0,
             $previous
         );

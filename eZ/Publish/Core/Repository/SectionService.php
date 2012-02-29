@@ -252,7 +252,7 @@ class SectionService implements SectionServiceInterface
         $loadedSection = $this->loadSection( $section->id );
 
         if ( $this->countAssignedContents( $loadedSection ) > 0 )
-            throw new BadStateException( "section" );
+            throw new BadStateException( "section", 'section is still assigned to content' );
 
         $this->persistenceHandler->sectionHandler()->delete( $loadedSection->id );
     }

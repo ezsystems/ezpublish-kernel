@@ -62,21 +62,29 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testDeleteGroup()
     {
-        $this->persistenceHandler->ContentTypeHandler()->deleteGroup( 1 );
+        $handler = $this->persistenceHandler->ContentTypeHandler();
+        $group = $handler->createGroup( $this->getGroupCreateStruct() );
+        $handler->deleteGroup( $group->id );
 
         try
         {
-            $this->persistenceHandler->ContentTypeHandler()->loadGroup( 1 );
+            $handler->loadGroup( $group->id );
             $this->fail( "Group not deleted correctly" );
         }
         catch ( NotFound $e )
         {
         }
+    }
 
-        $this->assertEquals(
-            array(),
-            $this->persistenceHandler->ContentTypeHandler()->load( 1 )->groupIds
-        );
+    /**
+     * Test delete group function where group is assigned to type
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::deleteGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testDeleteGroupBadState()
+    {
+        $this->persistenceHandler->ContentTypeHandler()->deleteGroup( 1 );
     }
 
     /**
@@ -281,8 +289,46 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testDelete()
     {
         $handler = $this->persistenceHandler->ContentTypeHandler();
+        $obj = $handler->create( $this->getTypeCreateStruct() );
+        $handler->delete( $obj->id, 0 );
+        $this->assertNull( $handler->load( $obj->id, 0 ) );
+    }
+
+    /**
+     * Test delete function whit existing content assigned to type
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::delete
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testDeleteBadState()
+    {
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->delete( 1, 0 );
         $this->assertNull( $handler->load( 1, 0 ) );
+    }
+
+    /**
+     * Test delete function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::delete
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteNotFound()
+    {
+        $handler = $this->persistenceHandler->ContentTypeHandler();
+        $handler->delete( 9999, 0 );
+    }
+
+    /**
+     * Test delete function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::delete
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteNotFoundStatus()
+    {
+        $handler = $this->persistenceHandler->ContentTypeHandler();
+        $handler->delete( 1, 2 );
     }
 
     /**
@@ -416,7 +462,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test link function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::link
-     * @expectedException \ezp\Base\Exception\BadRequest
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     public function testLinkExistingGroupLink()
     {
@@ -443,13 +489,12 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test unlink function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::unlink
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @todo Will have to insert broken data to be able to test this (a group type is part of that does not exist)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
-    /*public function testUnLinkMissingGroup()
+    public function testUnLinkMissingGroup()
     {
         $this->persistenceHandler->contentTypeHandler()->unlink( 64, 1, 0 );
-    }*/
+    }
 
     /**
      * Test unlink function
@@ -466,7 +511,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test unlink function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::unlink
-     * @expectedException \ezp\Base\Exception\BadRequest
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     public function testUnLinkNotInGroup()
     {
@@ -477,7 +522,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test unlink function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::unlink
-     * @expectedException \ezp\Base\Exception\BadRequest
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     public function testUnLinkLastGroup()
     {

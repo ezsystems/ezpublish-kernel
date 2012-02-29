@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
+    eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
@@ -37,10 +38,6 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    // @todo Legacy knowledge should not be known by service, this needs to be defined in the interfaces!
-    eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty,
-    eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent,
-    eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType,
     DateTime;
 
 /**
@@ -268,7 +265,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentTypeGroup->id
             );
         }
-        catch ( GroupNotEmpty $e )
+        catch ( APIBadStateException $e )
         {
             throw new InvalidArgumentException(
                 "contentTypeGroup",
@@ -760,7 +757,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
             if ( $spiContentType->modifierId !== $currentUser->id )
             {
-                throw new BadStateException( "contentType" );
+                throw new BadStateException( "contentType", 'modifier of draft is not the same user as current user' );
             }
         }
         catch ( APINotFoundException $e )
@@ -885,9 +882,9 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentType->status
             );
         }
-        catch ( TypeStillHasContent $e )
+        catch ( APIBadStateException $e )
         {
-            throw new BadStateException( '$contentType', $e );
+            throw new BadStateException( '$contentType', 'existing content exists of this content type', $e );
         }
     }
 
@@ -986,9 +983,9 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentType->status
             );
         }
-        catch ( RemoveLastGroupFromType $e )
+        catch ( APIBadStateException $e )
         {
-            throw new BadStateException( '$contentType', $e );
+            throw new BadStateException( '$contentType', 'the type group is the last group assigned to this type', $e );
         }
     }
 
@@ -1117,7 +1114,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
         catch ( APINotFoundException $e )
         {
-            throw new BadStateException( '$contentTypeDraft', $e );
+            throw new BadStateException( '$contentTypeDraft', 'this content type has no drafts to publish', $e );
         }
 
         $this->persistenceHandler->contentTypeHandler()->publish(

@@ -9,11 +9,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Exception;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  * Exception thrown when a Type is to be unlinked from its last Group.
  */
-class TypeStillHasContent extends \LogicException
+class TypeStillHasContent extends BadStateException
 {
     /**
      * Creates a new exception for $typeId in $status;
@@ -24,6 +25,7 @@ class TypeStillHasContent extends \LogicException
     public function __construct( $typeId, $status )
     {
         parent::__construct(
+            '$typeId',
             sprintf(
                 'Type with ID "%s" in status "%s" still has content instances and can therefore not be deleted.',
                 $typeId,

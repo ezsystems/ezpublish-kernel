@@ -187,7 +187,7 @@ class LocationService implements LocationServiceInterface
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
         if ( $searchResult->count == 0 )
-            throw new BadStateException( "contentInfo" );
+            throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
 
         $spiLocations = $searchResult->content[0]->locations;
         if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
@@ -232,7 +232,7 @@ class LocationService implements LocationServiceInterface
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
         if ( $searchResult->count == 0 )
-            throw new BadStateException( "contentInfo" );
+            throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
 
         $spiLocations = $searchResult->content[0]->locations;
         if ( !is_array( $spiLocations ) || empty( $spiLocations ) )

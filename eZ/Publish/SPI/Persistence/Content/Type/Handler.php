@@ -33,7 +33,8 @@ interface Handler
 
     /**
      * @param mixed $groupId
-     * @todo Throw exception if group is not found, also if group contains types
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type group contains types
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
      */
     public function deleteGroup( $groupId );
 
@@ -111,6 +112,8 @@ interface Handler
     /**
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      */
     public function delete( $contentTypeId, $status );
 
@@ -147,7 +150,8 @@ interface Handler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
-     * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $groupId is last group on $contentTypeId or
+     *                                                                 not a group assigned to type
      */
     public function unlink( $groupId, $contentTypeId, $status );
 
@@ -158,7 +162,7 @@ interface Handler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
-     * @throws \ezp\Base\Exception\BadRequest If type is already part of group
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $status );
 
