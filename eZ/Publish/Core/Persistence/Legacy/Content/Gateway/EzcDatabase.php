@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\Field,
     ezp\Content as ContentDo,
@@ -248,44 +249,63 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Updates an existing content in respect to $struct
+     * Updates an existing content identified by $contentId in respect to $struct
      *
-     * @param UpdateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
      * @return void
      */
-    public function updateContent( UpdateStruct $struct )
+    public function updateContent( $contentId, MetadataUpdateStruct $struct )
     {
-        if ( isset( $struct->name['always-available'] ) )
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) );
+
+        if ( isset( $struct->name ) )
         {
-            $name = $struct->name[$struct->name['always-available']];
+            $q->set(
+                $this->dbHandler->quoteColumn( 'name' ),
+                $q->bindValue( $struct->name, null, \PDO::PARAM_INT )
+            );
         }
-        else
+        if ( isset( $struct->mainLanguageId ) )
         {
-            $name = '';
+            $q->set(
+                $this->dbHandler->quoteColumn( 'initial_language_id' ),
+                $q->bindValue( $struct->mainLanguageId, null, \PDO::PARAM_INT )
+            );
+        }
+        if ( isset( $struct->publicationDate ) )
+        {
+            $q->set(
+                $this->dbHandler->quoteColumn( 'modified' ),
+                $q->bindValue( $struct->modificationDate, null, \PDO::PARAM_INT )
+            );
+        }
+        if ( isset( $struct->ownerId ) )
+        {
+            $q->set(
+                $this->dbHandler->quoteColumn( 'owner_id' ),
+                $q->bindValue( $struct->ownerId, null, \PDO::PARAM_INT )
+            );
+        }
+        if ( isset( $struct->publicationDate ) )
+        {
+            $q->set(
+                $this->dbHandler->quoteColumn( 'published' ),
+                $q->bindValue( $struct->publicationDate, null, \PDO::PARAM_INT )
+            );
+        }
+        if ( isset( $struct->remoteId ) )
+        {
+            $q->set(
+                $this->dbHandler->quoteColumn( 'remote_id' ),
+                $q->bindValue( $struct->remoteId, null, \PDO::PARAM_INT )
+            );
         }
 
-        $q = $this->dbHandler->createUpdateQuery();
-        $q->update(
-            $this->dbHandler->quoteTable( 'ezcontentobject' )
-        )->set(
-            $this->dbHandler->quoteColumn( 'name' ),
-            $q->bindValue( $name )
-        )->set(
-            $this->dbHandler->quoteColumn( 'initial_language_id' ),
-            $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
-        )->set(
-            $this->dbHandler->quoteColumn( 'modified' ),
-            $q->bindValue( $struct->modified, null, \PDO::PARAM_INT )
-        )->set(
-            $this->dbHandler->quoteColumn( 'owner_id' ),
-            $q->bindValue( $struct->ownerId, null, \PDO::PARAM_INT )
-        )->set(
-            $this->dbHandler->quoteColumn( 'published' ),
-            $q->bindValue( $struct->published, null, \PDO::PARAM_INT )
-        )->where(
+        $q->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
-                $q->bindValue( $struct->id, null, \PDO::PARAM_INT )
+                $q->bindValue( $contentId, null, \PDO::PARAM_INT )
             )
         );
         $q->prepare()->execute();
