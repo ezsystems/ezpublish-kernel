@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
 use eZ\Publish\Core\Repository\Tests\Service\LanguageBase as BaseLanguageServiceTest;
 
 /**
- * Test case for Section Service using Legacy storage class
+ * Test case for Language Service using Legacy storage class
  *
  */
 class LanguageTest extends BaseLanguageServiceTest

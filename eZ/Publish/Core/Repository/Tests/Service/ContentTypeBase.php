@@ -9,9 +9,8 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\Core\Repository\Repository,
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentType,
+    eZ\Publish\API\Repository\Values\ContentType\ContentType,
     eZ\Publish\API\Repository\Exceptions;
 
 /**

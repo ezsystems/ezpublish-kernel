@@ -14,7 +14,7 @@ use eZ\Publish\Core\Repository\Tests\Service\LanguageBase as BaseLanguageService
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 
 /**
- * Test case for Section Service using InMemory storage class
+ * Test case for Language Service using InMemory storage class
  *
  */
 class LanguageTest extends BaseLanguageServiceTest
