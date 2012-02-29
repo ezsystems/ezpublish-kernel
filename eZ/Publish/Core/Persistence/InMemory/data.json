@@ -25,7 +25,8 @@
 
     ],
     "Content\\Language" : [
-        {"id": 2, "languageCode": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" }
+        {"id": 2, "languageCode": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" },
+        {"id": 4, "languageCode": "eng-US", "isEnabled": true, "name": "English (American)" }
     ],
     "Content\\Location" : [
         {"id": 1,  "remoteId": "remoteIDForLocation1", "contentId": 0,  "parentId": 0,  "pathIdentificationString": "", "mainLocationId": 1,  "depth": 0, "pathString": "/1/", "modifiedSubLocation": 1312473387, "priority": 0, "hidden": false, "invisible": false,  "sortField": 1, "sortOrder": 1},
@@ -54,7 +55,8 @@
     "Content\\Type": [
         {"id": 1, "status": 0, "name": {"eng-GB": "Folder"}, "description": {"eng-GB": "A simple folder"}, "identifier": "folder", "remoteId": "remoteIDForType1", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "nameSchema": "<short_name|name>", "urlAliasSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "groupIds": [1]},
         {"id": 3, "status": 0, "name": {"eng-GB": "User Group"}, "description": {"eng-GB": "A simple user group"}, "identifier": "user_group", "remoteId": "remoteIDForType2", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "nameSchema": "<short_name|name>", "urlAliasSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "groupIds": [2]},
-        {"id": 4, "status": 0, "name": {"eng-GB": "User"}, "description": {"eng-GB": "A simple user"}, "identifier": "user", "remoteId": "remoteIDForType3", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "nameSchema": "<short_name|name>", "urlAliasSchema": "<short_name|name>", "isContainer": false, "initialLanguageId": 2, "groupIds": [2]}
+        {"id": 4, "status": 0, "name": {"eng-GB": "User"}, "description": {"eng-GB": "A simple user"}, "identifier": "user", "remoteId": "remoteIDForType3", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "nameSchema": "<short_name|name>", "urlAliasSchema": "<short_name|name>", "isContainer": false, "initialLanguageId": 2, "groupIds": [2]},
+        {"id": 13, "status": 0, "name": {"eng-GB": "Comment"}, "description": {"eng-GB": "A simple comment"}, "identifier": "comment", "remoteId": "remoteIDForType13", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "nameSchema": "<short_name|name>", "urlAliasSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "groupIds": [1]}
     ],
     "Content\\Type\\FieldDefinition" : [
         {"id": 1, "name": {"eng-GB": "Name"}, "description": {"eng-GB": "Folder name"}, "identifier": "name", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "New Folder", "_typeId": 1, "_status": 0},
@@ -62,11 +64,14 @@
         {"id": 5, "name": {"eng-GB": "Description"}, "description": {"eng-GB": "Folder description"}, "identifier": "description", "fieldGroup": "", "position": 2, "fieldType": "eztext", "isTranslatable": true, "isRequired": false, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "", "_typeId": 1, "_status": 0},
         {"id": 2, "name": {"eng-GB": "Name"}, "description": {"eng-GB": "User Group name"}, "identifier": "name", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "New User Group", "_typeId": 3, "_status": 0},
         {"id": 4, "name": {"eng-GB": "Description"}, "description": {"eng-GB": "User Group description"}, "identifier": "description", "fieldGroup": "", "position": 1, "fieldType": "ezstring", "isTranslatable": true, "isRequired": false, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "", "_typeId": 3, "_status": 0},
-        {"id": 3, "name": {"eng-GB": "Name"}, "description": {"eng-GB": "User name"}, "identifier": "name", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "New User", "_typeId": 4, "_status": 0}
+        {"id": 3, "name": {"eng-GB": "Name"}, "description": {"eng-GB": "User name"}, "identifier": "name", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "New User", "_typeId": 4, "_status": 0},
+        {"id": 7, "name": {"eng-GB": "Subject"}, "description": {"eng-GB": "Comment subject"}, "identifier": "subject", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "New Comment", "_typeId": 13, "_status": 0}
     ],
     "Content\\Type\\Group" : [
-        {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}, "identifier": "content" },
-        {"id": 2, "name": {"eng-GB": "Users"}, "description": {"eng-GB": "User content type group"}, "identifier": "users" }
+        {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}, "identifier": "Content" },
+        {"id": 2, "name": {"eng-GB": "Users"}, "description": {"eng-GB": "User content type group"}, "identifier": "Users" },
+        {"id": 3, "name": {"eng-GB": "Media"}, "description": {"eng-GB": "Media content type group"}, "identifier": "Media" },
+        {"id": 4, "name": {"eng-GB": "Setup"}, "description": {"eng-GB": "Setup content type group"}, "identifier": "Setup" }
     ],
     "Content\\Relation": [],
     "User": [
