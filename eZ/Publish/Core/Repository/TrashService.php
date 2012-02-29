@@ -80,15 +80,7 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItemId ) )
             throw new InvalidArgumentValue( "trashItemId", $trashItemId );
 
-        try
-        {
-            $spiTrashItem = $this->persistenceHandler->trashHandler()->load( $trashItemId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "trashed location", $trashItemId, $e );
-        }
-
+        $spiTrashItem = $this->persistenceHandler->trashHandler()->load( $trashItemId );
         return $this->buildDomainTrashItemObject( $spiTrashItem );
     }
 
@@ -108,15 +100,7 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        try
-        {
-            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $location->id, $e );
-        }
-
+        $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
         return $this->buildDomainTrashItemObject( $spiTrashItem );
     }
 
@@ -179,15 +163,7 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
 
-        try
-        {
-            // Persistence layer takes care of deleting corresponding content object
-            $this->persistenceHandler->trashHandler()->emptyOne( $trashItem->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "trashed location", $trashItem->id, $e );
-        }
+        $this->persistenceHandler->trashHandler()->emptyOne( $trashItem->id );
     }
 
     /**

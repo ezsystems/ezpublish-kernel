@@ -28,7 +28,6 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
@@ -405,15 +404,7 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        try
-        {
-            $spiUser = $this->persistenceHandler->userHandler()->load( $userId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "user", $userId, $e );
-        }
-
+        $spiUser = $this->persistenceHandler->userHandler()->load( $userId );
         return $this->buildDomainUserObject( $spiUser );
     }
 
@@ -447,15 +438,7 @@ class UserService implements UserServiceInterface
         if ( !is_string( $password ) || empty( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
-        try
-        {
-            $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "user", $login, $e );
-        }
-
+        $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
         if ( count( $spiUsers ) > 1 )
         {
             // something went wrong, we should not have more than one

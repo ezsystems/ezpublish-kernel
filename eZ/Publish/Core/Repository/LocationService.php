@@ -24,7 +24,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
 
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
@@ -121,15 +120,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $locationId ) )
             throw new InvalidArgumentValue( "locationId", $locationId );
 
-        try
-        {
-            $spiLocation = $this->persistenceHandler->locationHandler()->load( $locationId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $locationId, $e );
-        }
-
+        $spiLocation = $this->persistenceHandler->locationHandler()->load( $locationId );
         return $this->buildDomainLocationObject( $spiLocation );
     }
 
@@ -549,15 +540,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->hide( $location->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $location->id, $e );
-        }
-
+        $this->persistenceHandler->locationHandler()->hide( $location->id );
         return $this->loadLocation( $location->id );
     }
 
@@ -578,15 +561,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->unHide( $location->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $location->id, $e );
-        }
-
+        $this->persistenceHandler->locationHandler()->unHide( $location->id );
         return $this->loadLocation( $location->id );
     }
 
@@ -609,14 +584,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $e->identifier, $e );
-        }
+        $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
     }
 
     /**
@@ -631,14 +599,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $location->id, $e );
-        }
+        $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
     }
 
 

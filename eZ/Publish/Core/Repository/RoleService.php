@@ -28,7 +28,6 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
 
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -280,15 +279,7 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $id ) )
             throw new InvalidArgumentValue( "id", $id );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $id, $e );
-        }
-
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $id );
         return $this->buildDomainRoleObject( $spiRole );
     }
 
@@ -307,15 +298,7 @@ class RoleService implements RoleServiceInterface
         if ( !is_string( $identifier ) )
             throw new InvalidArgumentValue( "identifier", $identifier );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRoleByIdentifier( $identifier );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $identifier, $e );
-        }
-
+        $spiRole = $this->persistenceHandler->userHandler()->loadRoleByIdentifier( $identifier );
         return $this->buildDomainRoleObject( $spiRole );
     }
 
@@ -437,14 +420,7 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $role->id, $e );
-        }
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
 
         if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
             throw new InvalidArgumentException( "userGroup", "role is not assigned to the user group" );
@@ -508,14 +484,7 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $role->id, $e );
-        }
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
 
         if ( !in_array( $user->id, $spiRole->groupIds ) )
             throw new InvalidArgumentException( "user", "role is not assigned to the user" );
@@ -537,14 +506,7 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $role->id, $e );
-        }
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
 
         $userService = $this->repository->getUserService();
 

@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
 
     eZ\Publish\SPI\Persistence\Content\Section as SPISection,
 
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
@@ -153,15 +152,7 @@ class SectionService implements SectionServiceInterface
         if ( !is_numeric( $sectionId ) )
             throw new InvalidArgumentValue( "sectionId", $sectionId );
 
-        try
-        {
-            $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "section", $sectionId, $e );
-        }
-
+        $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
         return $this->buildDomainSectionObject( $spiSection );
     }
 
@@ -200,15 +191,7 @@ class SectionService implements SectionServiceInterface
         if ( !is_string( $sectionIdentifier ) )
             throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
 
-        try
-        {
-            $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "section", $sectionIdentifier, $e );
-        }
-
+        $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
         return $this->buildDomainSectionObject( $spiSection );
     }
 
