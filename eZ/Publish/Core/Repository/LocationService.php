@@ -256,7 +256,7 @@ class LocationService implements LocationServiceInterface
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
-     * @return array Of {@link Location}
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
     {

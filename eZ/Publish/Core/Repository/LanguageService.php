@@ -197,7 +197,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Loads all Languages
      *
-     * @return array an array of {@link  \eZ\Publish\API\Repository\Values\Content\Language}
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
     public function loadLanguages()
     {

@@ -149,10 +149,9 @@ class UserService implements UserServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function loadSubUserGroups( APIUserGroup $userGroup )
     {

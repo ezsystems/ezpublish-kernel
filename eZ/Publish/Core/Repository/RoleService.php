@@ -306,7 +306,7 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Role}
+     * @return \eZ\Publish\API\Repository\Values\User\Role[]
      */
     public function loadRoles()
     {
@@ -345,7 +345,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param $userId
      *
-     * @return array an array of {@link Policy}
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
     {
@@ -498,7 +498,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @return array an array of {@link RoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public function getRoleAssignments( APIRole $role )
     {
@@ -555,7 +555,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return array an array of {@link UserRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */
     public function getRoleAssignmentsForUser( User $user )
     {
@@ -587,7 +587,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {

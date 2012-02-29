@@ -159,7 +159,7 @@ class SectionService implements SectionServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @return array of {@link \eZ\Publish\API\Repository\Values\Content\Section}
+     * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
     public function loadSections()
     {

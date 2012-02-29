@@ -299,7 +299,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *         or there is a duplicate field identifier
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
-     * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
@@ -657,7 +657,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return array an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
      */
     public function loadContentTypes( APIContentTypeGroup $contentTypeGroup )
     {

@@ -1,25 +1,20 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct;
-
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
-
-use eZ\Publish\API\Repository\Values\ValueObject;
-
-use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 
 /**
  * this class is used for creating content types
  *
- * @property $fieldDefinitions the collection of field definitions
+ * @property \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[] $fieldDefinitions the collection of field definitions
  */
 class ContentTypeCreateStruct extends APIContentTypeCreateStruct
 {
     /**
      * Holds the collection of field definitions
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[]
      */
     public $fieldDefinitions = array();
 

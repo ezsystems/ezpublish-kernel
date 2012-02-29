@@ -87,7 +87,7 @@ class ContentTypeDraft extends APIContentTypeDraft
 
     /**
      * This method returns the content type groups this content type is assigned to
-     * @return array an array of {@link ContentTypeGroup}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function getContentTypeGroups()
     {
@@ -97,7 +97,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return array an array of {@link FieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     public function getFieldDefinitions()
     {
@@ -107,8 +107,8 @@ class ContentTypeDraft extends APIContentTypeDraft
     /**
      *
      * this method returns the field definition for the given identifier
-     * @param $fieldDefinitionIdentifier
-     * @return FieldDefinition
+     * @param string $fieldDefinitionIdentifier
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {

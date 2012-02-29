@@ -6,7 +6,7 @@ use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 /**
  * This class represents a role
  *
- * @property-read array $policies Policies assigned to this role
+ * @property-read \eZ\Publish\API\Repository\Values\User\Policy[] $policies Policies assigned to this role
  */
 class Role extends APIRole
 {

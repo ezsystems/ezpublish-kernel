@@ -1,22 +1,20 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 
 /**
  * this class represents a content type value
  *
- * @property-read array $contentTypeGroups calls getContentTypeGroups
- * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups calls getContentTypeGroups
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
  * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
  * @property-read \DateTime $creationDate the date of the creation of this content type
  * @property-read \DateTime $modificationDate the date of the last modification of this content type
- * @property-read int $creatorId the user id of the creator of this content type
- * @property-read int $modifierId the user id of the user which has last modified this content type
+ * @property-read mixed $creatorId the user id of the creator of this content type
+ * @property-read mixed $modifierId the user id of the user which has last modified this content type
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
@@ -31,35 +29,35 @@ class ContentType extends APIContentType
     /**
      * Holds the collection of names with languageCode keys
      *
-     * @var array
+     * @var string[]
      */
     protected $names;
 
     /**
      * Holds the collection of descriptions with languageCode keys
      *
-     * @var array
+     * @var string[]
      */
     protected $descriptions;
 
     /**
      * Holds the collection of contenttypegroups the contenttype is assigned to
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     protected $contentTypeGroups;
 
     /**
      * Contains the content type field definitions from this type
      *
-     * @var array an array of {@link FieldDefinition}
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     protected $fieldDefinitions;
 
     /**
      * Field definitions indexed by identifier
      *
-     * @var array an array of {@link FieldDefinition}
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     private $fieldDefinitionsByIdentifier;
 
@@ -141,7 +139,7 @@ class ContentType extends APIContentType
     /**
      * This method returns the content type groups this content type is assigned to
      *
-     * @return array an array of {@link ContentTypeGroup}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function getContentTypeGroups()
     {
@@ -151,7 +149,7 @@ class ContentType extends APIContentType
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return array an array of {@link APIFieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     public function getFieldDefinitions()
     {
@@ -161,8 +159,8 @@ class ContentType extends APIContentType
     /**
      * this method returns the field definition for the given identifier
      *
-     * @param $fieldDefinitionIdentifier
-     * @return APIFieldDefinition
+     * @param string $fieldDefinitionIdentifier
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
