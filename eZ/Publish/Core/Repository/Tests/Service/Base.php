@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use PHPUnit_Framework_TestCase;
-use \eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * Base test case for tests on services

@@ -5,10 +5,8 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Section,
-    eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
 
     eZ\Publish\API\Repository\SectionService as SectionServiceInterface,
