@@ -76,6 +76,8 @@ class UserService implements UserServiceInterface
             'defaultUserPlacement' => 12,
             'userClassID' => 4,
             'userGroupClassID' => 3,
+            'hashType' => User::PASSWORD_HASH_MD5_USER,
+            'siteName' => 'ez.no'
         );
     }
 
@@ -103,6 +105,13 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        if ( $userGroupCreateStruct->contentType === null )
+        {
+            $userGroupContentType = $contentTypeService->loadContentType( $this->settings['userGroupClassID'] );
+            $userGroupCreateStruct->contentType = $userGroupContentType;
+        }
 
         $loadedParentGroup = $this->loadUserGroup( $parentGroup->id );
         $mainParentGroupLocation = $locationService->loadMainLocation( $loadedParentGroup->getVersionInfo()->getContentInfo() );
@@ -186,8 +195,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
-                //@todo: read user group type ID from INI settings
-                new CriterionContentTypeId( 3 ),
+                new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
                 new CriterionParentLocationId( $location->id ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
             )
@@ -342,6 +350,13 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        if ( $userCreateStruct->contentType === null )
+        {
+            $userContentType = $contentTypeService->loadContentType( $this->settings['userClassID'] );
+            $userCreateStruct->contentType = $userContentType;
+        }
 
         $locationCreateStructs = array();
         foreach ( $parentGroups as $parentGroup )
@@ -360,14 +375,13 @@ class UserService implements UserServiceInterface
                 array(
                     'login'         => $userCreateStruct->login,
                     'email'         => $userCreateStruct->email,
-                    // @todo: read password hash algorithm and site from INI settings
                     'passwordHash'  => $this->createPasswordHash(
                         $userCreateStruct->login,
                         $userCreateStruct->password,
-                        'ez.no',
-                        User::PASSWORD_HASH_MD5_USER
+                        $this->settings['siteName'],
+                        $this->settings['hashType']
                     ),
-                    'hashAlgorithm' => null,
+                    'hashAlgorithm' => $this->settings['hashType'],
                     'isEnabled'     => $userCreateStruct->enabled,
                     'maxLogin'      => 0
                 )
@@ -449,8 +463,14 @@ class UserService implements UserServiceInterface
             throw new BadStateException( "login" );
         }
 
-        // @todo: read site name from settings
-        if ( $spiUsers[0]->passwordHash !== $this->createPasswordHash( $login, $password, 'ez.no', $spiUsers[0]->hashAlgorithm ) )
+        $passwordHash = $this->createPasswordHash(
+            $login,
+            $password,
+            $this->settings['siteName'],
+            $spiUsers[0]->hashAlgorithm
+        );
+
+        if ( $spiUsers[0]->passwordHash !== $passwordHash )
             throw new InvalidArgumentValue( "password", $password );
 
         return $this->buildDomainUserObject( $spiUsers[0] );
@@ -540,16 +560,15 @@ class UserService implements UserServiceInterface
                     'id'            => $loadedUser->id,
                     'login'         => $loadedUser->login,
                     'email'         => $userUpdateStruct->email ?: $loadedUser->email,
-                    // @todo: read password hash algorithm and site from INI settings
                     'passwordHash'  => $userUpdateStruct->password ?
                         $this->createPasswordHash(
                             $loadedUser->login,
                             $userUpdateStruct->password,
-                            'ez.no',
-                            User::PASSWORD_HASH_MD5_USER
+                            $this->settings['siteName'],
+                            $this->settings['hashType']
                         ) :
                         $loadedUser->passwordHash,
-                    'hashAlgorithm' => null,
+                    'hashAlgorithm' => $this->settings['hashType'],
                     'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
                     'maxLogin'      => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
                 )
@@ -656,6 +675,13 @@ class UserService implements UserServiceInterface
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
+        if ( $contentType === null )
+        {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $this->settings['userClassID']
+            );
+        }
+
         return new UserCreateStruct(
             array(
                 'contentType'      => $contentType,
@@ -679,6 +705,13 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
+        if ( $contentType === null )
+        {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $this->settings['userGroupClassID']
+            );
+        }
+
         return new UserGroupCreateStruct(
             array(
                 'contentType'      => $contentType,
