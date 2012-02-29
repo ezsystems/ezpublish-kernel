@@ -10,6 +10,8 @@ class ContentTypeGroupCreateStruct extends ValueObject
     /**
      * Readable string identifier of a group
      *
+     * @required
+     *
      * @var string
      */
     public $identifier;

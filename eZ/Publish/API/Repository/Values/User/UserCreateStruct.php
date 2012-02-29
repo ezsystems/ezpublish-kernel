@@ -11,6 +11,8 @@ abstract class UserCreateStruct extends ContentCreateStruct
     /**
      * User login
      *
+     * @required
+     *
      * @var string
      */
     public $login;
@@ -18,12 +20,16 @@ abstract class UserCreateStruct extends ContentCreateStruct
     /**
      * User E-Mail address
      *
+     * @required
+     *
      * @var string
      */
     public $email;
 
     /**
      * the plain password
+     *
+     * @required
      *
      * @var string
      */

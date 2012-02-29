@@ -12,6 +12,8 @@ abstract class ContentCreateStruct extends ValueObject
 {
     /**
      * The content type for which the new content is created
+     * 
+     * @required
      *
      * @var ContentType
      */
@@ -23,33 +25,35 @@ abstract class ContentCreateStruct extends ValueObject
      *
      * @var mixed
      */
-    public $sectionId = null;
+    public $sectionId;
 
     /**
      * The owner of the content. If not given the current authenticated user is set as owner.
      *
      * @var mixed
      */
-    public $ownerId = null;
+    public $ownerId;
 
     /**
      * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
      *
      * @var boolean
      */
-    public $alwaysAvailable = true;
+    public $alwaysAvailable;
 
     /**
      * Remote identifier used as a custom identifier for the object
      *
      * @var string
      */
-    public $remoteId = null;
+    public $remoteId;
 
     /**
      * the main language code for the content. This language will also
      * be used for as initial language for the first created version.
      * It is also used as default language for added fields.
+     * 
+     * @required
      *
      * @var string
      */

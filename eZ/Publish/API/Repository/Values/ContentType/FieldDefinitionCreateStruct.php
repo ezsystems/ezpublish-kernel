@@ -11,12 +11,16 @@ class FieldDefinitionCreateStruct extends ValueObject
     /**
      * String identifier of the field type
      *
+     * @required
+     *
      * @var string
      */
     public $fieldTypeIdentifier;
 
     /**
      * Readable string identifier of a field definition
+     *
+     * @required
      *
      * @var string
      */

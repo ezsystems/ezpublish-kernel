@@ -15,12 +15,16 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * String identifier of a type
      *
+     * @required
+     *
      * @var string
      */
     public $identifier;
 
     /**
      * Main language Code.
+     *
+     * @required
      *
      * @var string
      */

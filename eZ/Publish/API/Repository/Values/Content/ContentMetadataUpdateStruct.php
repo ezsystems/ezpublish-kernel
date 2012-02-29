@@ -5,7 +5,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  *
  * With this class data can be provided to update version independent fields of the content.
- * It is used in content update methods.
+ * It is used in content update methods. At least one property in this clsss must be set.
  *
  */
 class ContentMetaDataUpdateStruct extends ValueObject
@@ -15,7 +15,7 @@ class ContentMetaDataUpdateStruct extends ValueObject
      *
      * @var mixed
      */
-    public $ownerId = null;
+    public $ownerId;
 
     /**
      * if set this value overrides the publication date of the content. (Used in staging scenarios)

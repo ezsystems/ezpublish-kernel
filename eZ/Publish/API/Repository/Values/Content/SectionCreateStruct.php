@@ -11,6 +11,8 @@ class SectionCreateStruct extends ValueObject
 
     /**
      * Unique identifier of the section
+     * 
+     * @required
      *
      * @var string
      */
@@ -18,6 +20,8 @@ class SectionCreateStruct extends ValueObject
 
     /**
      * Name of the section
+     *
+     * @required
      *
      * @var string
      */

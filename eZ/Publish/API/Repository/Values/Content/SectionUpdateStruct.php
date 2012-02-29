@@ -4,7 +4,7 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class represents a section
+ * This class is used to provide data for updating a section. At least one property has to set.
  */
 class SectionUpdateStruct extends ValueObject
 {
