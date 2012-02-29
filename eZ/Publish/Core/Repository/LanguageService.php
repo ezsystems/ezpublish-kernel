@@ -11,7 +11,7 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
     eZ\Publish\API\Repository\Values\Content\Language,
     eZ\Publish\Core\Base\ConfigurationManager,
-    \eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
