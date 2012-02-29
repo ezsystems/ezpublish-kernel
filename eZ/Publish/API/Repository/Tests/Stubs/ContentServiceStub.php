@@ -1110,6 +1110,11 @@ class ContentServiceStub implements ContentService
      */
     public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
+        if ( $sourceVersion->status !== VersionInfo::STATUS_DRAFT )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $relation = new RelationStub(
             array(
                 'id'                      =>  23,

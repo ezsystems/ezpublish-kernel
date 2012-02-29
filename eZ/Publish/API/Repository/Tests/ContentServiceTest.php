@@ -2374,13 +2374,13 @@ class ContentServiceTest extends BaseTest
         // RemoteId of the "Support" page of an eZ Publish demo installation
         $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
 
-        $content = $this->createContentVersion1();
+        $draft = $this->createContentDraftVersion1();
 
         $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
 
         // Create relation between new content object and "Support" page
         $relation = $contentService->addRelation(
-            $content->getVersionInfo(),
+            $draft->getVersionInfo(),
             $support
         );
         /* END: Use Case */
@@ -2390,7 +2390,7 @@ class ContentServiceTest extends BaseTest
             $relation
         );
 
-        return $contentService->loadContent( $content->contentId );
+        return $contentService->loadContent( $draft->contentId );
     }
 
     /**
@@ -2442,10 +2442,29 @@ class ContentServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testAddRelationThrowsBadStateException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $content = $this->createContentVersion1();
+
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // This call will fail with a "BadStateException", because content is
+        // published and not a draft.
+        $contentService->addRelation(
+            $content->getVersionInfo(),
+            $support
+        );
+        /* END: Use Case */
     }
 
     /**
