@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Language,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 /**
@@ -100,7 +100,7 @@ abstract class LanguageBase extends BaseServiceTest
             $service->loadLanguage( $newLanguage->id );
             self::fail( 'Language is still returned after being deleted' );
         }
-        catch ( NotFound $e )
+        catch ( NotFoundException $e )
         {
         }
     }
