@@ -56,15 +56,27 @@ class UserService implements UserServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings + array(
+            'anonymousUserID' => 10,
+            'defaultUserPlacement' => 12,
+            'userClassID' => 4,
+            'userGroupClassID' => 3,
+        );
     }
 
     /**
@@ -389,6 +401,17 @@ class UserService implements UserServiceInterface
         }
 
         return $this->buildDomainUserObject( $spiUser );
+    }
+
+    /**
+     * Loads anonymous user
+     *
+     * @uses loadUser()
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadAnonymousUser()
+    {
+        return $this->loadUser( $this->settings['anonymousUserID'] );
     }
 
     /**
