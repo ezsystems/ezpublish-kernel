@@ -16,13 +16,13 @@ class Field extends Criterion implements CriterionInterface
      *
      * Matches $field against $value using $operator
      *
-     * @param FieldIdentifierStruct $target The target type/field
+     * @param FieldIdentifierStruct $fieldIdentifier The target type/field
      * @param string $operator The match operator
      * @param mixed $value The value to match against
      */
-    public function __construct( $fieldIdentifer, $operator, $value )
+    public function __construct( $fieldIdentifier, $operator, $value )
     {
-        parent::__construct( $field, $operator, $value );
+        parent::__construct( $fieldIdentifier, $operator, $value );
     }
 
     public function getSpecifications()
