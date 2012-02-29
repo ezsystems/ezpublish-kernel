@@ -50,15 +50,22 @@ class LocationService implements LocationServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings;
     }
 
     /**
