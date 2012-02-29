@@ -312,6 +312,31 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * Updates a content object meta data, identified by $contentId
+     *
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
+     * @return \eZ\Publish\SPI\Persistence\ContentInfo
+     */
+    public function updateMetadata( $contentId, MetadataUpdateStruct $content )
+    {
+
+    }
+
+    /**
+     * Updates a content version, identified by $contentId and $versionNo
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
+     * @return \eZ\Publish\SPI\Persistence\Content
+     */
+    public function updateContent( $contentId, $versionNo, UpdateStruct $content )
+    {
+
+    }
+
+    /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
      *
      * Removes the relations, but not the related objects. Alle subtrees of the

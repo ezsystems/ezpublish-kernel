@@ -353,6 +353,31 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
+     * Updates a content object meta data, identified by $contentId
+     *
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
+     * @return \eZ\Publish\SPI\Persistence\ContentInfo
+     */
+    public function updateMetadata( $contentId, MetadataUpdateStruct $content )
+    {
+
+    }
+
+    /**
+     * Updates a content version, identified by $contentId and $versionNo
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
+     * @return \eZ\Publish\SPI\Persistence\Content
+     */
+    public function updateContent( $contentId, $versionNo, UpdateStruct $content )
+    {
+
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function delete( $contentId )
