@@ -1,9 +1,7 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft,
-    ezp\Base\Exception\PropertyNotFound,
-    ezp\Base\Exception\PropertyPermission;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
 
 /**
  *
