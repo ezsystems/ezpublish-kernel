@@ -220,9 +220,9 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testCreateUserGroupThrowsIllegalArgumentException()
+    public function testCreateUserGroupThrowsInvalidArgumentException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::createUserGroup() is not implemented." );
     }
@@ -604,9 +604,9 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::unAssignUssrFromUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testUnAssignUserFromUserGroupThrowsIllegalArgumentException()
+    public function testUnAssignUserFromUserGroupThrowsInvalidArgumentException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::unAssignUssrFromUserGroup() is not implemented." );
     }

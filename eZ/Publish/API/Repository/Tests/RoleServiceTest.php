@@ -114,10 +114,10 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
      */
-    public function testCreateRoleThrowsIllegalArgumentException()
+    public function testCreateRoleThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -126,7 +126,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate  = $roleService->newRoleCreateStruct( 'Editor' );
 
-        // This call will fail with an IllegalArgumentException, because Editor exists
+        // This call will fail with an InvalidArgumentException, because Editor exists
         $roleService->createRole( $roleCreate );
 
         /* END: Use Case */
@@ -405,10 +405,10 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
      */
-    public function testUpdateRoleThrowsIllegalArgumentException()
+    public function testUpdateRoleThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -421,7 +421,7 @@ class RoleServiceTest extends BaseTest
         $roleUpdate             = $roleService->newRoleUpdateStruct();
         $roleUpdate->identifier = 'Editor';
 
-        // This call will fail with an IllegalArgumentException, because Editor is a predefined role
+        // This call will fail with an InvalidArgumentException, because Editor is a predefined role
         $roleService->updateRole( $role, $roleUpdate );
         /* END: Use Case */
     }

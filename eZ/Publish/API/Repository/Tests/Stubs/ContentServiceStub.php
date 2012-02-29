@@ -26,7 +26,6 @@ use \eZ\Publish\API\Repository\Values\User\User;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
@@ -353,7 +352,7 @@ class ContentServiceStub implements ContentService
      * In 4.x at least one location has to be provided in the location creation array.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if there is a provided remoteId which exists in the system
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
      *                                                            or (4.x) there is no location provided
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
@@ -416,7 +415,7 @@ class ContentServiceStub implements ContentService
 
         if ( $this->remoteIdExists( $contentCreateStruct->remoteId ) )
         {
-            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $languageCodes = array( $contentCreateStruct->mainLanguageCode );
@@ -1037,7 +1036,7 @@ class ContentServiceStub implements ContentService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed edit this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if there is no relation of type COMMON for the given destination
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is no relation of type COMMON for the given destination
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent

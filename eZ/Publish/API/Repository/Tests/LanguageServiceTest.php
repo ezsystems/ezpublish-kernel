@@ -132,10 +132,10 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
-    public function testCreateLanguageThrowsIllegalArgumentException()
+    public function testCreateLanguageThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -149,7 +149,7 @@ class LanguageServiceTest extends BaseTest
 
         $languageService->createLanguage( $languageCreate );
 
-        // This call should fail with an IllegalArgumentException, because nor-NO already exists
+        // This call should fail with an InvalidArgumentException, because nor-NO already exists
         $languageService->createLanguage( $languageCreate );
         /* END: Use Case */
     }
@@ -431,9 +431,9 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::deleteLanguage()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testDeleteLanguageThrowsIllegalArgumentException()
+    public function testDeleteLanguageThrowsInvalidArgumentException()
     {
         $this->markTestIncomplete( "@TODO: Test for LanguageService::deleteLanguage() is not implemented." );
     }

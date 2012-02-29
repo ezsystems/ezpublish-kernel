@@ -214,10 +214,10 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentThrowsIllegalArgumentException()
+    public function testCreateContentThrowsInvalidArgumentException()
     {
         if ( $this->isVersion4() )
         {
@@ -246,7 +246,7 @@ class ContentServiceTest extends BaseTest
         $contentCreate2->remoteId        = 'abcdef0123456789abcdef0123456789';
         $contentCreate2->alwaysAvailable = false;
 
-        // This call will fail with an "IllegalArgumentException", because the
+        // This call will fail with an "InvalidArgumentException", because the
         // remoteId is already in use.
         $contentService->createContent( $contentCreate2 );
         /* END: Use Case */
@@ -288,10 +288,10 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
      */
-    public function testCreateContentThrowsIllegalArgumentExceptionWithSecondParameter()
+    public function testCreateContentThrowsInvalidArgumentExceptionWithSecondParameter()
     {
         $repository = $this->getRepository();
 
@@ -336,7 +336,7 @@ class ContentServiceTest extends BaseTest
             array( $locationCreate1 )
         );
 
-        // This call will fail with an "IllegalArgumentException", because the
+        // This call will fail with an "InvalidArgumentException", because the
         // Content remoteId already exists,
         $contentService->createContent(
             $contentCreate,
@@ -2338,9 +2338,9 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testDeleteRelationThrowsIllegalArgumentException()
+    public function testDeleteRelationThrowsInvalidArgumentException()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
     }

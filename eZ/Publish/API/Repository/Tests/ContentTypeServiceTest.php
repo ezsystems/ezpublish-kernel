@@ -134,10 +134,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
-    public function testCreateContentTypeGroupThrowsIllegalArgumentException()
+    public function testCreateContentTypeGroupThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -445,10 +445,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
-    public function testUpdateContentTypeGroupThrowsIllegalArgumentException()
+    public function testUpdateContentTypeGroupThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -619,9 +619,9 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testDeleteContentTypeGroupThrowsIllegalArgumentException()
+    public function testDeleteContentTypeGroupThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -873,10 +873,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
-    public function testCreateContentTypeThrowsIllegalArgumentExceptionDuplicateIdentifier()
+    public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateIdentifier()
     {
         $repository = $this->getRepository();
 
@@ -895,10 +895,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
-    public function testCreateContentTypeThrowsIllegalArgumentExceptionDuplicateRemoteId()
+    public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateRemoteId()
     {
         $repository = $this->getRepository();
 
@@ -918,10 +918,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
-    public function testCreateContentTypeThrowsIllegalArgumentExceptionDuplicateFieldIdentifier()
+    public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateFieldIdentifier()
     {
         $repository = $this->getRepository();
 
@@ -1219,10 +1219,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
-    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionDuplicateIdentifier()
+    public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionDuplicateIdentifier()
     {
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -1246,10 +1246,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
-    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionDuplicateRemoteId()
+    public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionDuplicateRemoteId()
     {
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -1273,10 +1273,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
-    public function testUpdateContentTypeDraftThrowsIllegalArgumentExceptionIncorrectUser()
+    public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionIncorrectUser()
     {
         $this->markTestIncomplete( "Is not implemented." );
     }
@@ -1372,9 +1372,9 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testAddFieldDefinitionThrowsIllegalArgumentExceptionDuplicateFieldIdentifier()
+    public function testAddFieldDefinitionThrowsInvalidArgumentExceptionDuplicateFieldIdentifier()
     {
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -1464,10 +1464,10 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
      */
-    public function testRemoveFieldDefinitionThrowsIllegalArgumentException()
+    public function testRemoveFieldDefinitionThrowsInvalidArgumentException()
     {
         $contentTypeDraft = $this->createContentTypeDraft();
         $draftId = $contentTypeDraft->id;
@@ -1646,9 +1646,9 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testUpdateFieldDefinitionThrowsIllegalArgumentException()
+    public function testUpdateFieldDefinitionThrowsInvalidArgumentExceptionForUndefinedField()
     {
         $contentTypeDraft = $this->createContentTypeDraft();
         $draftId = $contentTypeDraft->id;
@@ -2351,9 +2351,9 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testAssignContentTypeGroupThrowsIllegalArgumentException()
+    public function testAssignContentTypeGroupThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -2417,9 +2417,9 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::unassignContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testUnassignContentTypeGroupThrowsIllegalArgumentException()
+    public function testUnassignContentTypeGroupThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 

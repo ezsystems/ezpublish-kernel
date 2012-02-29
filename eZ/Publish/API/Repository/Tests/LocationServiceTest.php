@@ -176,9 +176,9 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testCreateLocationThrowsIllegalArgumentExceptionContentAlreadyBelowParent()
+    public function testCreateLocationThrowsInvalidArgumentExceptionContentAlreadyBelowParent()
     {
         $repository = $this->getRepository();
 
@@ -204,10 +204,10 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @todo This test case is not well-defined, yet. Re-check.
      */
-    public function testCreateLocationThrowsIllegalArgumentExceptionParentIsSublocationOfContent()
+    public function testCreateLocationThrowsInvalidArgumentExceptionParentIsSublocationOfContent()
     {
         $this->markTestIncomplete( "@TODO: Test for LocationService::createLocation() is not implemented." );
     }
@@ -217,9 +217,9 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testCreateLocationThrowsIllegalArgumentExceptionRemoteIdExists()
+    public function testCreateLocationThrowsInvalidArgumentExceptionRemoteIdExists()
     {
         $repository = $this->getRepository();
 
@@ -887,9 +887,9 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testUpdateLocationThrowsIllegalArgumentException()
+    public function testUpdateLocationThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -1162,9 +1162,9 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testCopySubtreeThrowsIllegalArgumentException()
+    public function testCopySubtreeThrowsInvalidArgumentException()
     {
         $this->markTestIncomplete( "@TODO: Test for LocationService::copySubtree() is not implemented." );
     }

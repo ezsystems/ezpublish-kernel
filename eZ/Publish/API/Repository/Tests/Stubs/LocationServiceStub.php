@@ -72,7 +72,7 @@ class LocationServiceStub implements LocationService
     /**
      * Creates the new $location in the content repository for the given content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the content is already below the specified parent
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  if the content is already below the specified parent
      *                                        or the parent is a sub location of the location the content
      *                                        or if set the remoteId exists already
      *
@@ -115,7 +115,7 @@ class LocationServiceStub implements LocationService
     /**
      * Checks if the given $remoteId is already taken by another Location.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if the remoteId exists already.
      * @param string $remoteId
      * @return void
@@ -126,7 +126,7 @@ class LocationServiceStub implements LocationService
         {
             if ( $location->remoteId == $remoteId )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
         }
     }
@@ -135,7 +135,7 @@ class LocationServiceStub implements LocationService
      * Checks that the given $contentInfo does not occur in the tree starting
      * at $location.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if the content is in the tree of $location.
      * @param ContentInfo $contentInfo
      * @param Location $location
@@ -145,7 +145,7 @@ class LocationServiceStub implements LocationService
     {
         if ( $location->contentInfo == $contentInfo )
         {
-            throw new Exceptions\IllegalArgumentExceptionStub;
+            throw new Exceptions\InvalidArgumentExceptionStub;
         }
         foreach ( $this->loadLocationChildren( $location ) as $childLocation )
         {
@@ -208,7 +208,7 @@ class LocationServiceStub implements LocationService
      * Updates $location in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId exists already
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException   if if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
@@ -244,7 +244,7 @@ class LocationServiceStub implements LocationService
         {
             if ( $location->remoteId == $locationUpdateStruct->remoteId )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
         }
     }
@@ -519,7 +519,7 @@ class LocationServiceStub implements LocationService
      * Only the items on which the user has read access are copied.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the target location is a sub location of the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  if the target location is a sub location of the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
      * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation

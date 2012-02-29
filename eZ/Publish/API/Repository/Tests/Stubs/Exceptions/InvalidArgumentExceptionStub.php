@@ -18,4 +18,14 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
  */
 class InvalidArgumentExceptionStub extends InvalidArgumentException
 {
+    /**
+     * Returns an additional error code which indicates why an action could not be performed
+     *
+     * @return int An error code
+     */
+    function getErrorCode()
+    {
+        // TODO: Implement getErrorCode() method.
+    }
+
 }
