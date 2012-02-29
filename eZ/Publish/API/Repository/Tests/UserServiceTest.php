@@ -276,18 +276,6 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the deleteUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::deleteUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testDeleteUserGroupThrowsNotFoundException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::deleteUserGroup() is not implemented." );
-    }
-
-    /**
      * Test for the moveUserGroup() method.
      *
      * @return void
@@ -307,18 +295,6 @@ class UserServiceTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testMoveUserGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::moveUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the moveUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testMoveUserGroupThrowsNotFoundException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::moveUserGroup() is not implemented." );
     }

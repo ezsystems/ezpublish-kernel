@@ -79,11 +79,6 @@ class ContentServiceStub implements ContentService
     private $fieldNextId = 0;
 
     /**
-     * @var array
-     */
-    private $index;
-
-    /**
      * Instantiates a new content service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
@@ -1465,8 +1460,7 @@ class ContentServiceStub implements ContentService
             $this->contentNextId,
             $this->versionInfo,
             $this->versionNextId,
-            $this->content,
-            $this->index
+            $this->content
         ) = $this->repository->loadFixture( 'Content' );
     }
 }

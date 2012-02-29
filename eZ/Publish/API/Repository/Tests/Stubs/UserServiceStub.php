@@ -146,7 +146,6 @@ class UserServiceStub implements UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function deleteUserGroup( UserGroup $userGroup )
     {
@@ -160,7 +159,6 @@ class UserServiceStub implements UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $newParent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
@@ -227,7 +225,7 @@ class UserServiceStub implements UserService
      */
     public function loadAnonymousUser()
     {
-
+        // TODO: Implement loadAnonymousUser() method.
     }
 
     /**
