@@ -1,6 +1,6 @@
 <?php
 /**
- * @package eZ\Publish\API\Repository
+ * @package eZ\Publish\Core\Repository
  */
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
