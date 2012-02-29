@@ -75,7 +75,7 @@ class SectionService implements SectionServiceInterface
         {
             $existingSection = $this->loadSectionByIdentifier( $sectionCreateStruct->identifier );
             if ( $existingSection !== null )
-                throw new InvalidArgumentException( "identifier", $sectionCreateStruct->identifier );
+                throw new InvalidArgumentException( "sectionCreateStruct", "section with specified identifier already exists" );
         }
         catch ( NotFoundException $e ) {}
 
@@ -115,7 +115,7 @@ class SectionService implements SectionServiceInterface
             {
                 $existingSection = $this->loadSectionByIdentifier( $sectionUpdateStruct->identifier );
                 if ( $existingSection !== null )
-                    throw new InvalidArgumentException( "identifier", $sectionUpdateStruct->identifier );
+                    throw new InvalidArgumentException( "sectionUpdateStruct", "section with specified identifier already exists" );
             }
             catch ( NotFoundException $e ) {}
         }

@@ -285,7 +285,7 @@ class TrashService implements TrashServiceInterface
 
         /** @var $persistenceCriterionClass \eZ\Publish\SPI\Persistence\Content\Query\Criterion */
         if ( !class_exists( $persistenceCriterionClass ) )
-            throw new InvalidArgumentException( "criterion", "Criterion $persistenceCriterionClass not found" );
+            throw new InvalidArgumentException( "criterion", "criterion $persistenceCriterionClass not found" );
 
         if ( $criterion instanceof LogicalOperator )
         {
@@ -331,7 +331,7 @@ class TrashService implements TrashServiceInterface
                                       $persistenceSortClauseClass[count( $persistenceSortClauseClass ) - 1];
 
         if ( !class_exists( $persistenceSortClauseClass ) )
-            throw new InvalidArgumentException( "sort clause", "Sort clause $persistenceSortClauseClass not found" );
+            throw new InvalidArgumentException( "sortClause", "sort clause $persistenceSortClauseClass not found" );
 
         if ( $sortClause instanceof FieldSortClause )
         {

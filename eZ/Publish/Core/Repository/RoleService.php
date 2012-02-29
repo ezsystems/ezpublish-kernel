@@ -92,7 +92,7 @@ class RoleService implements RoleServiceInterface
         {
             $existingRole = $this->loadRoleByIdentifier( $roleCreateStruct->identifier );
             if ( $existingRole !== null )
-                throw new InvalidArgumentException( "identifier", $roleCreateStruct->identifier );
+                throw new InvalidArgumentException( "roleCreateStruct", "role with specified identifier already exists" );
         }
         catch ( NotFoundException $e ) {}
 
@@ -136,7 +136,7 @@ class RoleService implements RoleServiceInterface
             {
                 $existingRole = $this->loadRoleByIdentifier( $roleUpdateStruct->identifier );
                 if ( $existingRole !== null )
-                    throw new InvalidArgumentException( "identifier", $roleUpdateStruct->identifier );
+                    throw new InvalidArgumentException( "roleUpdateStruct", "role with specified identifier already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -440,7 +440,7 @@ class RoleService implements RoleServiceInterface
         }
 
         if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "\$userGroup->id", "Role is not assigned to the user group" );
+            throw new InvalidArgumentException( "userGroup", "role is not assigned to the user group" );
 
         $this->persistenceHandler->userHandler()->unAssignRole( $userGroup->id, $role->id );
     }
@@ -511,7 +511,7 @@ class RoleService implements RoleServiceInterface
         }
 
         if ( !in_array( $user->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "\$user->id", "Role is not assigned to the user" );
+            throw new InvalidArgumentException( "user", "role is not assigned to the user" );
 
         $this->persistenceHandler->userHandler()->unAssignRole( $user->id, $role->id );
     }

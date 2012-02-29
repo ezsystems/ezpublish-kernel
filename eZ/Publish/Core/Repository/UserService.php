@@ -617,7 +617,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        throw new InvalidArgumentException( '$userGroup', 'user is not in the given user group' );
+        throw new InvalidArgumentException( "userGroup", "user is not in the given user group" );
     }
 
     /**

@@ -60,7 +60,7 @@ class LanguageService implements LanguageServiceInterface
         try
         {
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
-                throw new InvalidArgumentException( "languageCreateStruct", $languageCreateStruct->languageCode );
+                throw new InvalidArgumentException( "languageCreateStruct", "language with specified language code already exists" );
         }
         catch ( NotFound $e ) {}
 
