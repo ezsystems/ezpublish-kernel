@@ -114,11 +114,11 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
-     * Test service function for creating sections throwing IllegalArgumentException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * Test service function for creating sections throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\Core\Repository\SectionService::createSection
      */
-    public function testCreateSectionThrowsIllegalArgumentException()
+    public function testCreateSectionThrowsInvalidArgumentException()
     {
         $sectionService = $this->repository->getSectionService();
 
@@ -155,10 +155,10 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for updating sections
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\Core\Repository\SectionService::updateSection
      */
-    public function testUpdateSectionThrowsIllegalArgumentException()
+    public function testUpdateSectionThrowsInvalidArgumentException()
     {
         $sectionService = $this->repository->getSectionService();
 

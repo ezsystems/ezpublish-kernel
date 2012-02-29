@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\Core\Base\ConfigurationManager,
     eZ\Publish\Core\Base\Exceptions\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     ezp\Base\Exception\NotFound as PersistenceNotFound;
 
 /**
@@ -49,7 +49,7 @@ class LanguageService implements LanguageServiceInterface
      * Creates the a new Language in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the languageCode already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct
      *
@@ -60,7 +60,7 @@ class LanguageService implements LanguageServiceInterface
         try
         {
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
-                throw new IllegalArgumentException( "languageCreateStruct", $languageCreateStruct->languageCode );
+                throw new InvalidArgumentException( "languageCreateStruct", $languageCreateStruct->languageCode );
         }
         catch ( NotFound $e ) {}
 
@@ -240,7 +240,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Deletes  a language from content repository
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations

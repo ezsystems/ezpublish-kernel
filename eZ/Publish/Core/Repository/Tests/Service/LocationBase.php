@@ -15,7 +15,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\IllegalArgumentException;
+    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 /**
  * Test case for Location Service
@@ -128,11 +128,11 @@ abstract class LocationBase extends BaseServiceTest
     }
 
     /**
-     * Test copying a subtree throwing IllegalArgumentException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * Test copying a subtree throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LocationService::copySubtree
      */
-    public function testCopySubtreeThrowsIllegalArgumentException()
+    public function testCopySubtreeThrowsInvalidArgumentException()
     {
         self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
@@ -366,10 +366,10 @@ abstract class LocationBase extends BaseServiceTest
     }
 
     /**
-     * Test creating a location throwing IllegalArgumentException
+     * Test creating a location throwing InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LocationService::createLocation
      */
-    public function testCreateLocationThrowsIllegalArgumentException()
+    public function testCreateLocationThrowsInvalidArgumentException()
     {
         self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
@@ -382,7 +382,7 @@ abstract class LocationBase extends BaseServiceTest
             $locationService->createLocation( $content->getVersionInfo()->getContentInfo(), $locationCreateStruct );
             self::fail( "succeeded adding a location to content where content already has a location below specified parent" );
         }
-        catch ( IllegalArgumentException $e ) {}
+        catch ( InvalidArgumentException $e ) {}
 
         try
         {
@@ -392,7 +392,7 @@ abstract class LocationBase extends BaseServiceTest
             $locationService->createLocation( $content->getVersionInfo()->getContentInfo(), $locationCreateStruct );
             self::fail( "succeeded adding a location with existing remote ID" );
         }
-        catch ( IllegalArgumentException $e ) {}
+        catch ( InvalidArgumentException $e ) {}
 
         try
         {
@@ -401,7 +401,7 @@ abstract class LocationBase extends BaseServiceTest
             $locationService->createLocation( $content->getVersionInfo()->getContentInfo(), $locationCreateStruct );
             self::fail( "succeeded adding a location where parent is a sub location of the content" );
         }
-        catch ( IllegalArgumentException $e ) {}
+        catch ( InvalidArgumentException $e ) {}
     }
 
     /**
@@ -436,11 +436,11 @@ abstract class LocationBase extends BaseServiceTest
     }
 
     /**
-     * Test updating location throwing IllegalArgumentException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * Test updating location throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LocationService::updateLocation
      */
-    public function testUpdateLocationThrowsIllegalArgumentException()
+    public function testUpdateLocationThrowsInvalidArgumentException()
     {
         self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
