@@ -7,6 +7,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
@@ -36,9 +37,8 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    // @todo Legacy knowledge should not be known by service, this needs to be defined in the interfaces!
     eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty,
-    eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound,
-    eZ\Publish\Core\Persistence\Legacy\Exception\TypeGroupNotFound,
     eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent,
     eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType,
     DateTime;
@@ -100,7 +100,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "a group with the same identifier already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         if ( $contentTypeGroupCreateStruct->creationDate === null )
             $timestamp = time();
@@ -153,7 +153,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentTypeGroupId
             );
         }
-        catch ( TypeGroupNotFound $e )
+        catch ( APINotFoundException $e )
         {
             throw new NotFoundException(
                 'ContentTypeGroup',
@@ -227,7 +227,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "given identifier already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         if ( $contentTypeGroupUpdateStruct->modificationDate !== null )
             $modifiedTimestamp = $contentTypeGroupUpdateStruct->modificationDate->getTimestamp();
@@ -340,7 +340,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "identifier in the content type create struct already exists"
             );
         }
-        catch ( TypeNotFound $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         try
         {
@@ -353,7 +353,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "remoteId in the content type create struct already exists"
             );
         }
-        catch ( TypeNotFound $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         if ( $contentTypeCreateStruct->creatorId === null )
             $userId = $this->repository->getCurrentUser()->id;
@@ -585,7 +585,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 SPIContentType::STATUS_DEFINED
             );
         }
-        catch ( TypeNotFound $e )
+        catch ( APINotFoundException $e )
         {
             throw new NotFoundException(
                 "contentType",
@@ -622,7 +622,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $identifier
             );
         }
-        catch ( TypeNotFound $e )
+        catch ( APINotFoundException $e )
         {
             throw new NotFoundException(
                 "contentType",
@@ -651,7 +651,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
         }
-        catch ( TypeNotFound $e )
+        catch ( APINotFoundException $e )
         {
             throw new NotFoundException(
                 "contentType",
@@ -689,7 +689,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 SPIContentType::STATUS_DRAFT
             );
         }
-        catch ( TypeNotFound $e )
+        catch ( APINotFoundException $e )
         {
             throw new NotFoundException(
                 "contentType",
@@ -763,7 +763,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 throw new BadStateException( "contentType" );
             }
         }
-        catch ( TypeNotFound $e )
+        catch ( APINotFoundException $e )
         {
             $spiContentType = $this->persistenceHandler->contentTypeHandler()->createDraft(
                 $contentType->modifierId,
@@ -794,7 +794,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $this->loadContentTypeDraft( $contentTypeDraft->id );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             throw new InvalidArgumentException(
                 '$contentTypeUpdateStruct->identifier',
@@ -812,7 +812,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "the given identifier already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         try
         {
@@ -823,7 +823,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "the given remoteId already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         $initialLanguageId = $this->persistenceHandler
             ->contentLanguageHandler()
@@ -1115,7 +1115,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             throw new BadStateException( '$contentTypeDraft', $e );
         }
