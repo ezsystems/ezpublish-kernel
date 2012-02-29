@@ -336,12 +336,12 @@ function generateContentInfoFixture( array $fixture )
         $remoteId = $contentInfos[$data['contentobject_id']]['remoteId'];
 
         $versionId = $data['id'];
-        $contentId = count( $content ) - 1;
+        $contentId = $data['contentobject_id'];
 
-        $indexMap[$remoteId]['versionId'][$versionId]                 = $versionId;
-        $indexMap[$remoteId]['contentId'][$contentId]                 = $contentId;
-        $indexMap[$data['contentobject_id']]['versionId'][$versionId] = $versionId;
-        $indexMap[$data['contentobject_id']]['contentId'][$contentId] = $contentId;
+        $indexMap[$remoteId]['versionId'][$versionId]  = $versionId;
+        $indexMap[$remoteId]['contentId'][$contentId]  = $contentId;
+        $indexMap[$contentId]['versionId'][$versionId] = $versionId;
+        $indexMap[$contentId]['contentId'][$contentId] = $contentId;
     }
 
     uasort( $versionInfo, function( $versionInfo1, $versionInfo2 ) {
