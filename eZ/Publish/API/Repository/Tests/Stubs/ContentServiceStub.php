@@ -18,6 +18,7 @@ use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\Query;
+use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -32,6 +33,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
 
 /**
@@ -99,12 +101,9 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfo( $contentId )
     {
-        foreach ( $this->contentInfo as $contentInfo )
+        if ( isset( $this->contentInfo[$contentId] ) )
         {
-            if ( $contentId === $contentInfo->contentId )
-            {
-                return $contentInfo;
-            }
+            return  $this->contentInfo[$contentId];
         }
         throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
@@ -305,16 +304,9 @@ class ContentServiceStub implements ContentService
             }
         }
 
-        return new ContentStub(
-            array(
-                'contentId'      =>  $content->contentId,
-                'contentTypeId'  =>  $contentType->id,
-                'fields'         =>  $fields,
-                'relations'      =>  $content->getRelations(),
-
-                'versionNo'      =>  $content->getVersionInfo()->versionNo,
-                'repository'     =>  $this->repository
-            )
+        return $this->copyContentObject(
+            $content,
+            array( 'fields' => $fields )
         );
     }
 
@@ -745,7 +737,6 @@ class ContentServiceStub implements ContentService
             $fields[] = $field;
         }
 
-
         $draftedContent = new ContentStub(
             array(
                 'contentId'      =>  $content->contentId,
@@ -774,8 +765,13 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $this->versionInfo[$versionInfo->id]                         = $draftedVersionInfo;
-        $this->content[array_search( $versionInfo, $this->content )] = $draftedContent;
+        if ( false === ( $index = array_search( $content, $this->content ) ) )
+        {
+            throw new \ErrorException( "An implementation error..." );
+        }
+
+        $this->versionInfo[$versionInfo->id] = $draftedVersionInfo;
+        $this->content[$index]               = $draftedContent;
 
         return $draftedContent;
     }
@@ -1005,15 +1001,11 @@ class ContentServiceStub implements ContentService
                 continue;
             }
 
-            $this->content[] = new ContentStub(
+            $this->content[] = $this->copyContentObject(
+                $content,
                 array(
-                    'contentId'      =>  $this->contentNextId,
-                    'fields'         =>  $content->getFields(),
-                    'relations'      =>  $content->getRelations(),
-
-                    'contentTypeId'  =>  $content->contentTypeId,
-                    'versionNo'      =>  $versionNo ? 1 : $content->versionNo,
-                    'repository'     =>  $this->repository
+                    'contentId'  =>  $this->contentNextId,
+                    'versionNo'  =>  $versionNo ? 1 : $content->versionNo
                 )
             );
         }
@@ -1110,7 +1102,31 @@ class ContentServiceStub implements ContentService
      */
     public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
-        // TODO: Implement addRelation() method.
+        $relation = new RelationStub(
+            array(
+                'id'                      =>  23,
+                'sourceContentInfo'       =>  $sourceVersion->contentInfo,
+                'destinationContentInfo'  =>  $destinationContent,
+                'type'                    =>  Relation::COMMON
+            )
+        );
+
+        $content = $this->loadContentByVersionInfo( $sourceVersion );
+
+        $this->replaceContentObject(
+            $content,
+            $this->copyContentObject(
+                $content,
+                array(
+                    'relations' => array_merge(
+                        $content->getRelations(),
+                        array( $relation )
+                    )
+                )
+            )
+        );
+
+        return $relation;
     }
 
     /**
@@ -1217,6 +1233,57 @@ class ContentServiceStub implements ContentService
     public function newTranslationValues()
     {
         // TODO: Implement newTranslationValues() method.
+    }
+
+    /**
+     * Replaces an object internally.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $oldContent
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $newContent
+     * @return void
+     */
+    private function replaceContentObject( Content $oldContent, Content $newContent )
+    {
+        if ( false === ( $index = array_search( $oldContent, $this->content ) ) )
+        {
+            throw new \ErrorException( "Implementation error..." );
+        }
+
+        $this->content[$index] = $newContent;
+    }
+
+    /**
+     * Copies a content object.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string[] $overwrites
+     * @return Values\Content\ContentStub
+     */
+    private function copyContentObject( Content $content, array $overwrites = array() )
+    {
+        $names = array(
+            'contentId',
+            'fields',
+            'relations',
+            'contentTypeId',
+            'versionNo',
+            'repository'
+        );
+
+        $values = array();
+        foreach ( $names as $name )
+        {
+            if ( array_key_exists( $name, $overwrites ) )
+            {
+                $values[$name] = $overwrites[$name];
+            }
+            else
+            {
+                $values[$name] = $content->{$name};
+            }
+        }
+
+        return new ContentStub( $values );
     }
 
     /**

@@ -13,6 +13,7 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\Location;
+use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
@@ -2194,7 +2195,7 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
-     * @depe nds eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testCopyContent()
     {
@@ -2357,6 +2358,97 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
+     * Test for the addRelation() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testAddRelation()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $content = $this->createContentVersion1();
+
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // Create relation between new content object and "Support" page
+        $relation = $contentService->addRelation(
+            $content->getVersionInfo(),
+            $support
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Relation',
+            $relation
+        );
+
+        return $contentService->loadContent( $content->contentId );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     */
+    public function testAddRelationAddsRelationToContent( $content )
+    {
+        $this->assertEquals( 1, count( $content->getRelations() ) );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     */
+    public function testAddRelationSetsExpectedRelations( $content )
+    {
+        $relations = $content->getRelations();
+
+        $this->assertEquals(
+            array(
+                'type'                             =>  Relation::COMMON,
+                'sourceFieldDefinitionIdentifier'  =>  null,
+                'sourceContentInfo'                =>  'abcdef0123456789abcdef0123456789',
+                'destinationContentInfo'           =>  'affc99e41128c1475fa4f23dafb7159b',
+            ),
+            array(
+                'type'                             =>  $relations[0]->type,
+                'sourceFieldDefinitionIdentifier'  =>  $relations[0]->sourceFieldDefinitionIdentifier,
+                'sourceContentInfo'                =>  $relations[0]->sourceContentInfo->remoteId,
+                'destinationContentInfo'           =>  $relations[0]->destinationContentInfo->remoteId,
+            )
+        );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testAddRelationThrowsBadStateException()
+    {
+        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
+    }
+
+    /**
      * Test for the loadRelations() method.
      *
      * @return void
@@ -2378,30 +2470,6 @@ class ContentServiceTest extends BaseTest
     public function testLoadReverseRelations()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::loadReverseRelations() is not implemented." );
-    }
-
-    /**
-     * Test for the addRelation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * 
-     */
-    public function testAddRelation()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
-    }
-
-    /**
-     * Test for the addRelation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testAddRelationThrowsBadStateException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
     }
 
     /**
