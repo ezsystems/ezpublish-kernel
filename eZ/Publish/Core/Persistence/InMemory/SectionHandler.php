@@ -10,7 +10,7 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Base\Exception\Logic;
 
 /**
@@ -94,7 +94,7 @@ class SectionHandler implements SectionHandlerInterface
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Section
-     * @throws \ezp\Base\Exception\NotFound If section is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
      */
     public function loadByIdentifier( $identifier )
     {

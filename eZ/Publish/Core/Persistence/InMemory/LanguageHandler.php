@@ -11,7 +11,8 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
@@ -70,7 +71,7 @@ class LanguageHandler implements LanguageHandlerInterface
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $id
      */
     public function load( $id )
     {
@@ -82,13 +83,13 @@ class LanguageHandler implements LanguageHandlerInterface
      *
      * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $languageCode
      */
     public function loadByLanguageCode( $languageCode )
     {
         $languages = $this->backend->find( 'Content\\Language', array( 'languageCode' => $languageCode ) );
         if ( empty( $languages ) )
-            throw new \ezp\Base\Exception\NotFound( 'Content\\Language', $languageCode );
+            throw new NotFound( 'Content\\Language', $languageCode );
 
         return $languages[0];
     }

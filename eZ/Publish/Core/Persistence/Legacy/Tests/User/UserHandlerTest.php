@@ -105,7 +105,7 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUnknownUser()
     {
@@ -126,7 +126,7 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUserByEmailNotFound()
     {

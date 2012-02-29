@@ -73,7 +73,7 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadInvalidLocation()
     {

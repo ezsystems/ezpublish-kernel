@@ -23,7 +23,7 @@ interface Handler
      *
      * @param int $locationId
      * @return \eZ\Publish\SPI\Persistence\Content\Location
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function load( $locationId );
 
@@ -38,7 +38,7 @@ interface Handler
      * @param mixed $sourceId
      * @param mixed $destinationParentId
      * @return Location the newly created Location.
-     * @throws \ezp\Base\Exception\NotFound If $sourceId or $destinationParentId are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $sourceId or $destinationParentId are invalid
      */
     public function copySubtree( $sourceId, $destinationParentId );
 

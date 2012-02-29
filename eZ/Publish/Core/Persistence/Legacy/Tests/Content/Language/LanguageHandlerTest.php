@@ -147,7 +147,7 @@ class LanguageHandlerTest extends TestCase
     /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::load
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadFailure()
     {
@@ -200,7 +200,7 @@ class LanguageHandlerTest extends TestCase
     /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadByLanguageCode
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadByLanguageCodeFailure()
     {

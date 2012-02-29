@@ -142,7 +142,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashInvalidLocation()
     {
@@ -153,7 +153,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidParent()
     {
@@ -165,7 +165,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidOldParent()
     {

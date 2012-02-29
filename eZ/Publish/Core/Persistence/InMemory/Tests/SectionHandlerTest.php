@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 use eZ\Publish\SPI\Persistence\Content\Section,
-    ezp\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.

@@ -25,7 +25,7 @@ interface Handler
      *
      * @param int $id
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function load( $id );
 

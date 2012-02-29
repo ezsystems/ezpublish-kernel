@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterfa
     eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\Group,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Base\Exception\BadRequest,
     eZ\Publish\Core\Persistence\InMemory\Handler,
     eZ\Publish\Core\Persistence\InMemory\Backend,
@@ -108,7 +108,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @param mixed $groupId
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
-     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
      */
     public function loadGroup( $groupId )
     {
@@ -118,7 +118,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
-     * @throws \ezp\Base\Exception\NotFound If type group with id is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
      */
     public function loadGroupByIdentifier( $identifier )
     {
@@ -162,7 +162,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If type with provided status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with provided status is not found
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
@@ -188,7 +188,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
      */
     public function loadByIdentifier( $identifier )
     {
@@ -214,7 +214,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $remoteId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
      */
     public function loadByRemoteId( $remoteId )
     {
@@ -293,7 +293,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $modifierId
      * @param mixed $contentTypeId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with defined status is not found
      */
     public function createDraft( $modifierId, $contentTypeId )
     {
@@ -326,7 +326,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user or type with provided status is not found
      */
     public function copy( $userId, $contentTypeId, $status )
     {
@@ -351,7 +351,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
     public function unlink( $groupId, $contentTypeId, $status )
@@ -386,7 +386,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $status )
@@ -420,7 +420,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
-     * @throws \ezp\Base\Exception\NotFound If type is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      * @todo Add FieldDefintion\CreateStruct?
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
@@ -447,7 +447,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param mixed $fieldDefinitionId
      * @return void
-     * @throws \ezp\Base\Exception\NotFound If field is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
      * @todo Add FieldDefintion\UpdateStruct?
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
@@ -474,7 +474,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
-     * @throws \ezp\Base\Exception\NotFound If field is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
@@ -504,7 +504,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @return void
-     * @throws \ezp\Base\Exception\NotFound If type with $contentTypeId and Type::STATUS_DRAFT is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with $contentTypeId and Type::STATUS_DRAFT is not found
      */
     public function publish( $contentTypeId )
     {

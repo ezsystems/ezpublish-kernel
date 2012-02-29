@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\SPI\Persistence\Content\Location\Trashed,
 
-    ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
@@ -144,17 +143,10 @@ class TrashService implements TrashServiceInterface
         if ( $newParentLocation !== null && !is_numeric( $newParentLocation->parentLocationId ) )
             throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->parentLocationId, "LocationCreateStruct" );
 
-        try
-        {
-            $newLocationId = $this->persistenceHandler->trashHandler()->untrashLocation(
-                $trashItem->id,
-                $newParentLocation ? $newParentLocation->parentLocationId : $trashItem->parentLocationId
-            );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( $e->what, $e->identifier, $e );
-        }
+        $newLocationId = $this->persistenceHandler->trashHandler()->untrashLocation(
+            $trashItem->id,
+            $newParentLocation ? $newParentLocation->parentLocationId : $trashItem->parentLocationId
+        );
 
         return $this->repository->getLocationService()->loadLocation( $newLocationId );
     }

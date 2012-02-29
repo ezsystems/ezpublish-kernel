@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Language,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 /**
@@ -167,7 +167,7 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for loading language
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers \ezp\Content\Language\Service::loadLanguage
      */
     public function testLoadLanguageByLanguageCodeNotFound()
@@ -231,7 +231,7 @@ abstract class LanguageBase extends BaseServiceTest
     /**
      * Test service function for loading language
      *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
      */
     public function testLoadLanguageByIdNotFound()
@@ -240,6 +240,11 @@ abstract class LanguageBase extends BaseServiceTest
         $service->loadLanguageById( 999 );
     }
 
+    /**
+     * Test service function getDefaultLanguageCode
+     *
+     * @covers \eZ\Publish\API\Repository\LanguageService::getDefaultLanguageCode
+     */
     public function testGetDefaultLanguageCode()
     {
         $service = $this->repository->getContentLanguageService();

@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     ezp\Content,
     ezp\Content\Version,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     RuntimeException,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
@@ -169,7 +169,7 @@ class ContentHandler implements ContentHandlerInterface
      * @param int $contentId
      * @param int|false $versionNo Copy all versions if left false
      * @return \eZ\Publish\SPI\Persistence\Content
-     * @throws \ezp\Base\Exception\NotFound If content or version is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found
      * @todo Language support
      */
     public function copy( $contentId, $versionNo )
@@ -398,7 +398,7 @@ class ContentHandler implements ContentHandlerInterface
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Handler
-     * @throws \ezp\Base\Exception\NotFound If no version found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no version found
      */
     public function listVersions( $contentId )
     {
@@ -458,7 +458,7 @@ class ContentHandler implements ContentHandlerInterface
      * Removes a relation by relation Id.
      *
      * @param mixed $relationId
-     * @throws \ezp\Base\Exception\NotFound if relation to be removed is not found.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if relation to be removed is not found.
      */
     public function removeRelation( $relationId )
     {

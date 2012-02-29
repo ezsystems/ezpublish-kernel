@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
 
     eZ\Publish\SPI\Persistence\Content\Section as SPISection,
 
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,

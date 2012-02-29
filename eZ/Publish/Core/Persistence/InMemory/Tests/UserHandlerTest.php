@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
-    ezp\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.
@@ -39,7 +39,7 @@ class UserHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::load
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUnExistingUserId()
     {
@@ -180,7 +180,7 @@ class UserHandlerTest extends HandlerTest
      * Test delete function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::delete
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDelete()
     {
@@ -228,7 +228,7 @@ class UserHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRole
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadRoleNotFound()
     {
@@ -257,7 +257,7 @@ class UserHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleByIdentifier
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadRoleByIdentifierNotFound()
     {
@@ -326,7 +326,7 @@ class UserHandlerTest extends HandlerTest
      * Test loadRolesByGroupId function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadRolesByGroupIdNotFound()
     {
@@ -375,7 +375,7 @@ class UserHandlerTest extends HandlerTest
      * Test delete function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::deleteRole
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteRole()
     {
@@ -496,7 +496,7 @@ class UserHandlerTest extends HandlerTest
      * Test assignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testAssignRoleGroupNotFound()
     {
@@ -509,7 +509,7 @@ class UserHandlerTest extends HandlerTest
      * Test assignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testAssignRoleRoleNotFound()
     {
@@ -569,7 +569,7 @@ class UserHandlerTest extends HandlerTest
      * Test unAssignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUnAssignRoleGroupNotFound()
     {
@@ -582,7 +582,7 @@ class UserHandlerTest extends HandlerTest
      * Test unAssignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUnAssignRoleRoleNotFound()
     {
@@ -685,7 +685,7 @@ class UserHandlerTest extends HandlerTest
      * Test loadPoliciesByUserId function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadPoliciesByUserIdNotFound()
     {

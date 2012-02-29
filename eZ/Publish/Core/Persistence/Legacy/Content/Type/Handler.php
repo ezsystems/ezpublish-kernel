@@ -106,7 +106,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $groupId
      * @return Group
-     * @throws \ezp\Base\Exception\NotFound If type group with $groupId is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with $groupId is not found
      */
     public function loadGroup( $groupId )
     {
@@ -124,7 +124,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
-     * @throws \ezp\Base\Exception\NotFound If type group with $identifier is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with $identifier is not found
      */
     public function loadGroupByIdentifier( $identifier )
     {
@@ -177,7 +177,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
      */
     public function loadByIdentifier( $identifier )
     {
@@ -192,7 +192,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $remoteId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
      */
     public function loadByRemoteId( $remoteId )
     {
@@ -311,7 +311,7 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $modifierId
      * @param mixed $contentTypeId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with defined status is not found
      */
     public function createDraft( $modifierId, $contentTypeId )
     {

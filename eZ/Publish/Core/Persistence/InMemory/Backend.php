@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\ValueObject;
@@ -93,7 +93,7 @@ class Backend
      * @param int|string $id
      * @return object
      * @throws InvalidArgumentValue On invalid $type
-     * @throws \ezp\Base\Exception\NotFound If data does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
      * @throws \ezp\Base\Exception\Logic If several items exists with same id
      */
     public function load( $type, $id )
@@ -115,7 +115,7 @@ class Backend
         }
 
         if ( !$found )
-            throw new NotFound( $type, $id );
+            throw new NotFoundException( $type, $id );
 
         return $return;
     }
@@ -209,7 +209,7 @@ class Backend
      *
      * @param string $type
      * @param int|string $id
-     * @throws \ezp\Base\Exception\NotFound If data does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
      * @uses deleteByMatch()
      */
     public function delete( $type, $id )
@@ -226,7 +226,7 @@ class Backend
      * @param string $type
      * @param array $match A flat array with property => value to match against
      * @throws InvalidArgumentValue On invalid $type
-     * @throws \ezp\Base\Exception\NotFound If no data to delete have been found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no data to delete have been found
      */
     public function deleteByMatch( $type, array $match )
     {
@@ -244,7 +244,7 @@ class Backend
         }
 
         if ( !$found )
-            throw new NotFound( $type, $match );
+            throw new NotFoundException( $type, $match );
     }
 
     /**

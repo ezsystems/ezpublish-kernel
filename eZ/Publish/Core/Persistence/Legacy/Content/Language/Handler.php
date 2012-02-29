@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-    ezp\Base\Exception;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Language Handler
@@ -74,7 +74,7 @@ class Handler implements BaseLanguageHandler
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $id
      */
     public function load( $id )
     {
@@ -83,7 +83,7 @@ class Handler implements BaseLanguageHandler
 
         if ( count( $languages ) < 1 )
         {
-            throw new Exception\NotFound( 'Language', $id );
+            throw new NotFoundException( 'Language', $id );
         }
         return reset( $languages );
     }
@@ -93,7 +93,7 @@ class Handler implements BaseLanguageHandler
      *
      * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $languageCode
      */
     public function loadByLanguageCode( $languageCode )
     {
@@ -102,7 +102,7 @@ class Handler implements BaseLanguageHandler
 
         if ( count( $languages ) < 1 )
         {
-            throw new Exception\NotFound( 'Language', $languageCode );
+            throw new NotFoundException( 'Language', $languageCode );
         }
         return reset( $languages );
     }

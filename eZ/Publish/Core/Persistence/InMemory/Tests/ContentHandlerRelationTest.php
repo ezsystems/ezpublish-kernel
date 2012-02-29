@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content\Relation,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
@@ -174,7 +174,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test addRelation function with unexisting source content ID
      *
-     * @expectedException ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelationSourceDoesNotExist1()
@@ -194,7 +194,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test addRelation function with unexisting source content version
      *
-     * @expectedException ezp\Base\Exception\NotFound
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelationSourceDoesNotExist2()
@@ -450,7 +450,7 @@ class ContentHandlerRelationTest extends HandlerTest
         self::assertEmpty( $relations );
     }
     /**
-     * @expectedException ezp\Base\Exception\NotFound
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::removeRelation
      */
     public function testRemoveRelationDoesNotExist()

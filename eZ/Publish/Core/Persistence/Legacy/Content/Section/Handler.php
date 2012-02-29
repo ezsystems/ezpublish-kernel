@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as BaseSectionHandler,
     eZ\Publish\SPI\Persistence\Content\Section,
-    ezp\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Section Handler
@@ -78,7 +78,7 @@ class Handler implements BaseSectionHandler
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Section
-     * @throws \ezp\Base\Exception\NotFound If section is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
      */
     public function load( $id )
     {
@@ -107,7 +107,7 @@ class Handler implements BaseSectionHandler
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Section
-     * @throws \ezp\Base\Exception\NotFound If section is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
      */
     public function loadByIdentifier( $identifier )
     {

@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content\Location,
     ezp\Content\FieldType\TextLine\Value as TextLineValue;
 
@@ -404,7 +404,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Tests loadByParentId function on unexisting id
      *
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::loadByParentId
      * @group locationHandler
      */

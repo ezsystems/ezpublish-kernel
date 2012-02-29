@@ -9,7 +9,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Exception;
-use ezp\Base\Exception\NotFound;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Exception thrown when a Type to be loaded is not found

@@ -23,7 +23,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\Subtree,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     Exception;
 
 /**

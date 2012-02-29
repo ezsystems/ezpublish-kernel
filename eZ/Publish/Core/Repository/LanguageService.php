@@ -11,10 +11,9 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
     eZ\Publish\API\Repository\Values\Content\Language,
     eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\Exceptions\NotFound,
+    \eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    ezp\Base\Exception\NotFound as PersistenceNotFound;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Language service, used for language operations
@@ -71,7 +70,7 @@ class LanguageService implements LanguageServiceInterface
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
                 throw new InvalidArgumentException( "languageCreateStruct", "language with specified language code already exists" );
         }
-        catch ( NotFound $e ) {}
+        catch ( NotFoundException $e ) {}
 
         $createStruct = new CreateStruct(
             array(
@@ -188,14 +187,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_string( $languageCode ) )
             throw new InvalidArgumentValue( "languageCode", $languageCode );
 
-        try
-        {
-            $language = $this->handler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
-        }
-        catch ( PersistenceNotFound $e )
-        {
-            throw new NotFound( "language", $languageCode, $e );
-        }
+        $language = $this->handler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
 
         return $this->buildDomainObject( $language );
     }
@@ -234,14 +226,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_int( $languageId ) )
             throw new InvalidArgumentValue( "languageId", $languageId );
 
-        try
-        {
-            $language = $this->handler->contentLanguageHandler()->load( $languageId );
-        }
-        catch ( PersistenceNotFound $e )
-        {
-            throw new NotFound( "Language", $languageId, $e );
-        }
+        $language = $this->handler->contentLanguageHandler()->load( $languageId );
 
         return $this->buildDomainObject( $language );
     }

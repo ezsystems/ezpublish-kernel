@@ -36,7 +36,7 @@ interface Handler
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $id
      */
     public function load( $id );
 
@@ -45,7 +45,7 @@ interface Handler
      *
      * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $languageCode
      */
     public function loadByLanguageCode( $languageCode );
 
