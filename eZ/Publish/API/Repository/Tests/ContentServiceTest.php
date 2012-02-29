@@ -2404,6 +2404,7 @@ class ContentServiceTest extends BaseTest
             array( 'languages' => array( 'eng-US' ) )
         );
         /* END: Use Case */
+
         $this->assertEquals( 1, $searchResult->count );
         $this->assertLocaleFieldsEquals(
             $searchResult->items[0]->getFields(),
@@ -2416,11 +2417,95 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testFindSingle()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Systems*' )
+            )
+        );
+
+        // Search for a matching content object
+        $searchResult = $contentService->findSingle( $query, array() );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\SearchResult',
+            $searchResult
+        );
+
+        return $searchResult;
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\SearchResult $searchResult
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
+     */
+    public function testFindSingleSearchResultContainsExpectedProperties( $searchResult )
+    {
+        $this->assertEquals( 1, $searchResult->count );
+        $this->assertEquals( 1, count( $searchResult->items ) );
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Query',
+            $searchResult->query
+        );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testFindSingleWithLanguageFilter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // Publish the newly created draft
+        $contentService->publishVersion( $draft->getVersionInfo() );
+
+        // Create a search query for the created content object
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*awesome² story about*' )
+            )
+        );
+
+        // Search for matching content with field language filter
+        $searchResult = $contentService->findSingle(
+            $query,
+            array( 'languages' => array( 'eng-US' ) )
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $searchResult->count );
+        $this->assertLocaleFieldsEquals(
+            $searchResult->items[0]->getFields(),
+            'eng-US'
+        );
     }
 
     /**
@@ -2792,66 +2877,6 @@ class ContentServiceTest extends BaseTest
             $support
         );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the addTranslationInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::addTranslationInfo()
-     * 
-     */
-    public function testAddTranslationInfo()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addTranslationInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the loadTranslationInfos() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadTranslationInfos()
-     * 
-     */
-    public function testLoadTranslationInfos()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
-    }
-
-    /**
-     * Test for the loadTranslationInfos() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadTranslationInfos($contentInfo, $filter)
-     * 
-     */
-    public function testLoadTranslationInfosWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
-    }
-
-    /**
-     * Test for the newTranslationInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::newTranslationInfo()
-     * 
-     */
-    public function testNewTranslationInfo()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::newTranslationInfo() is not implemented." );
-    }
-
-    /**
-     * Test for the newTranslationValues() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::newTranslationValues()
-     * 
-     */
-    public function testNewTranslationValues()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::newTranslationValues() is not implemented." );
     }
 
     /**

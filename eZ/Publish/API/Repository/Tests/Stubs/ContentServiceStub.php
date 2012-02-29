@@ -1125,7 +1125,19 @@ class ContentServiceStub implements ContentService
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
-        // TODO: Implement findSingle() method.
+        $searchResult = $this->findContent( $query, $fieldFilters, $filterOnUserPermissions );
+
+        if ( $searchResult->count > 1 )
+        {
+            $searchResult = new SearchResult(
+                array(
+                    'query'  =>  $query,
+                    'count'  =>  1,
+                    'items'  =>  array( reset( $searchResult->items ) )
+                )
+            );
+        }
+        return $searchResult;
     }
 
     /**
