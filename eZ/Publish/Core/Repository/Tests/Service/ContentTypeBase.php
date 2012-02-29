@@ -2053,7 +2053,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             $skipFieldProperties
         );
 
-        $this->assertNotEquals(
+        $this->assertEquals(
             $publishedType->id,
             $draftType->id
         );
