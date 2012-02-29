@@ -130,6 +130,14 @@ interface UserService
     public function loadUser( $userId );
 
     /**
+     * Loads anonymous user
+     *
+     * @uses loadUser()
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadAnonymousUser();
+
+    /**
      * Loads a user for the given login and password
      *
      * @param string $login

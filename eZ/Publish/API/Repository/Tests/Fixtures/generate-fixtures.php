@@ -196,6 +196,8 @@ function generateContentInfoFixture( array $fixture )
     $nextId       = 0;
     $contentInfos = array();
 
+    $indexMap = array();
+
     $languageCodes = array();
     foreach ( getFixtureTable( 'ezcontent_language', $fixture ) as $data )
     {
@@ -210,6 +212,16 @@ function generateContentInfoFixture( array $fixture )
 
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
+        $indexMap[$data['remote_id']] = array(
+            'versionId'  =>  array(),
+            'contentId'  =>  array(),
+        );
+
+        $indexMap[$data['id']] = array(
+            'versionId'  =>  array(),
+            'contentId'  =>  array(),
+        );
+
         $contentInfos[$data['id']] = array(
             'contentId'         =>  $data['id'],
             'name'              =>  $data['name'],
@@ -320,6 +332,16 @@ function generateContentInfoFixture( array $fixture )
             'versionNo'      =>  $data['version'],
             'repository'     =>  '$this'
         );
+
+        $remoteId = $contentInfos[$data['contentobject_id']]['remoteId'];
+
+        $versionId = $data['id'];
+        $contentId = count( $content ) - 1;
+
+        $indexMap[$remoteId]['versionId'][$versionId]                 = $versionId;
+        $indexMap[$remoteId]['contentId'][$contentId]                 = $contentId;
+        $indexMap[$data['contentobject_id']]['versionId'][$versionId] = $versionId;
+        $indexMap[$data['contentobject_id']]['contentId'][$contentId] = $contentId;
     }
 
     uasort( $versionInfo, function( $versionInfo1, $versionInfo2 ) {
@@ -345,7 +367,8 @@ function generateContentInfoFixture( array $fixture )
         $nextId,
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub', $versionInfo ),
         $versionNextId,
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub', $content )
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub', $content ),
+        generateMapping( $indexMap )
     );
 }
 

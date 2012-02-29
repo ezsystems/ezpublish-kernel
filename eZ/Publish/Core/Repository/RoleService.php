@@ -31,7 +31,6 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -69,7 +68,7 @@ class RoleService implements RoleServiceInterface
      * Creates a new Role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the name of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
@@ -93,7 +92,7 @@ class RoleService implements RoleServiceInterface
         {
             $existingRole = $this->loadRoleByIdentifier( $roleCreateStruct->identifier );
             if ( $existingRole !== null )
-                throw new IllegalArgumentException( "identifier", $roleCreateStruct->identifier );
+                throw new InvalidArgumentException( "roleCreateStruct", "role with specified identifier already exists" );
         }
         catch ( NotFoundException $e ) {}
 
@@ -107,7 +106,7 @@ class RoleService implements RoleServiceInterface
      * Updates the name and (5.x) description of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the name of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
@@ -137,7 +136,7 @@ class RoleService implements RoleServiceInterface
             {
                 $existingRole = $this->loadRoleByIdentifier( $roleUpdateStruct->identifier );
                 if ( $existingRole !== null )
-                    throw new IllegalArgumentException( "identifier", $roleUpdateStruct->identifier );
+                    throw new InvalidArgumentException( "roleUpdateStruct", "role with specified identifier already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -441,7 +440,7 @@ class RoleService implements RoleServiceInterface
         }
 
         if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "\$userGroup->id", "Role is not assigned to the user group" );
+            throw new InvalidArgumentException( "userGroup", "role is not assigned to the user group" );
 
         $this->persistenceHandler->userHandler()->unAssignRole( $userGroup->id, $role->id );
     }
@@ -512,7 +511,7 @@ class RoleService implements RoleServiceInterface
         }
 
         if ( !in_array( $user->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "\$user->id", "Role is not assigned to the user" );
+            throw new InvalidArgumentException( "user", "role is not assigned to the user" );
 
         $this->persistenceHandler->userHandler()->unAssignRole( $user->id, $role->id );
     }

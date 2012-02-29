@@ -13,6 +13,7 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\Location;
+use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
@@ -2194,11 +2195,59 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testCopyContent()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
+        $homeLocationId = 2;
+
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $targetLocationCreate->priority  = 42;
+        $targetLocationCreate->hidden    = true;
+        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Copy content with all versions and drafts
+        $contentCopied = $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $contentCopied
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentInfo->remoteId,
+            $contentCopied->contentInfo->remoteId
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentId,
+            $contentCopied->contentId
+        );
+
+        $this->assertEquals(
+            2,
+            count( $contentService->loadVersions( $contentCopied->contentInfo ) )
+        );
+
+        $this->assertEquals( 2, $contentCopied->getVersionInfo()->versionNo );
+
+        $this->assertAllFieldsEquals( $contentCopied->getFields() );
     }
 
     /**
@@ -2206,11 +2255,58 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      */
     public function testCopyContentWithThirdParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
+        $homeLocationId = 2;
+
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        $targetLocationCreate->priority  = 42;
+        $targetLocationCreate->hidden    = true;
+        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Copy only the initial version
+        $contentCopied = $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate,
+            $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 )
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Content',
+            $contentCopied
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentInfo->remoteId,
+            $contentCopied->contentInfo->remoteId
+        );
+
+        $this->assertNotEquals(
+            $contentVersion2->contentId,
+            $contentCopied->contentId
+        );
+
+        $this->assertEquals(
+            1,
+            count( $contentService->loadVersions( $contentCopied->contentInfo ) )
+        );
+
+        $this->assertEquals( 1, $contentCopied->getVersionInfo()->versionNo );
     }
 
     /**
@@ -2262,6 +2358,116 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
+     * Test for the addRelation() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testAddRelation()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $draft = $this->createContentDraftVersion1();
+
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // Create relation between new content object and "Support" page
+        $relation = $contentService->addRelation(
+            $draft->getVersionInfo(),
+            $support
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Relation',
+            $relation
+        );
+
+        return $contentService->loadContent( $draft->contentId );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     */
+    public function testAddRelationAddsRelationToContent( $content )
+    {
+        $this->assertEquals( 1, count( $content->getRelations() ) );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     */
+    public function testAddRelationSetsExpectedRelations( $content )
+    {
+        $relations = $content->getRelations();
+
+        $this->assertEquals(
+            array(
+                'type'                             =>  Relation::COMMON,
+                'sourceFieldDefinitionIdentifier'  =>  null,
+                'sourceContentInfo'                =>  'abcdef0123456789abcdef0123456789',
+                'destinationContentInfo'           =>  'affc99e41128c1475fa4f23dafb7159b',
+            ),
+            array(
+                'type'                             =>  $relations[0]->type,
+                'sourceFieldDefinitionIdentifier'  =>  $relations[0]->sourceFieldDefinitionIdentifier,
+                'sourceContentInfo'                =>  $relations[0]->sourceContentInfo->remoteId,
+                'destinationContentInfo'           =>  $relations[0]->destinationContentInfo->remoteId,
+            )
+        );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     */
+    public function testAddRelationThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $content = $this->createContentVersion1();
+
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // This call will fail with a "BadStateException", because content is
+        // published and not a draft.
+        $contentService->addRelation(
+            $content->getVersionInfo(),
+            $support
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadRelations() method.
      *
      * @return void
@@ -2283,30 +2489,6 @@ class ContentServiceTest extends BaseTest
     public function testLoadReverseRelations()
     {
         $this->markTestIncomplete( "@TODO: Test for ContentService::loadReverseRelations() is not implemented." );
-    }
-
-    /**
-     * Test for the addRelation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * 
-     */
-    public function testAddRelation()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
-    }
-
-    /**
-     * Test for the addRelation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testAddRelationThrowsBadStateException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
     }
 
     /**

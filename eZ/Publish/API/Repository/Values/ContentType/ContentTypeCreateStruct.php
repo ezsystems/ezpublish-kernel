@@ -87,6 +87,8 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * AN array of names with languageCode keys
      * 
+     * @reauired - at least one name in the main language is required
+     * 
      * @var array an array of string
      */
     public $names;

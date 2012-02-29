@@ -18,6 +18,7 @@ use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\Query;
+use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -32,6 +33,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
 
 /**
@@ -75,6 +77,11 @@ class ContentServiceStub implements ContentService
     private $fieldNextId = 0;
 
     /**
+     * @var array
+     */
+    private $index;
+
+    /**
      * Instantiates a new content service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
@@ -99,12 +106,9 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentInfo( $contentId )
     {
-        foreach ( $this->contentInfo as $contentInfo )
+        if ( isset( $this->contentInfo[$contentId] ) )
         {
-            if ( $contentId === $contentInfo->contentId )
-            {
-                return $contentInfo;
-            }
+            return  $this->contentInfo[$contentId];
         }
         throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
@@ -305,16 +309,9 @@ class ContentServiceStub implements ContentService
             }
         }
 
-        return new ContentStub(
-            array(
-                'contentId'      =>  $content->contentId,
-                'contentTypeId'  =>  $contentType->id,
-                'fields'         =>  $fields,
-                'relations'      =>  $content->getRelations(),
-
-                'versionNo'      =>  $content->getVersionInfo()->versionNo,
-                'repository'     =>  $this->repository
-            )
+        return $this->copyContentObject(
+            $content,
+            array( 'fields' => $fields )
         );
     }
 
@@ -474,6 +471,9 @@ class ContentServiceStub implements ContentService
         $this->content[]                            = $content;
         $this->contentInfo[$contentInfo->contentId] = $contentInfo;
         $this->versionInfo[$versionInfo->id]        = $versionInfo;
+
+        $this->index[$contentInfo->contentId]['versionId'][$versionInfo->id] = $versionInfo->id;
+        $this->index[$contentInfo->contentId]['contentId'][count( $this->content ) - 1] = count( $this->content ) - 1;
 
         $locationService = $this->repository->getLocationService();
         foreach ( $locationCreateStructs as $locationCreateStruct )
@@ -745,7 +745,6 @@ class ContentServiceStub implements ContentService
             $fields[] = $field;
         }
 
-
         $draftedContent = new ContentStub(
             array(
                 'contentId'      =>  $content->contentId,
@@ -774,8 +773,13 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $this->versionInfo[$versionInfo->id]                         = $draftedVersionInfo;
-        $this->content[array_search( $versionInfo, $this->content )] = $draftedContent;
+        if ( false === ( $index = array_search( $content, $this->content ) ) )
+        {
+            throw new \ErrorException( "An implementation error..." );
+        }
+
+        $this->versionInfo[$versionInfo->id] = $draftedVersionInfo;
+        $this->content[$index]               = $draftedContent;
 
         return $draftedContent;
     }
@@ -942,7 +946,85 @@ class ContentServiceStub implements ContentService
      */
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null )
     {
-        // TODO: Implement copyContent() method.
+        ++$this->contentNextId;
+
+        $versionNo = $versionInfo ? $versionInfo->versionNo : null;
+
+        $this->contentInfo[$this->contentNextId] = new ContentInfoStub(
+            array(
+                'contentId'         =>  $this->contentNextId,
+                'remoteId'          =>  md5( uniqid( $contentInfo->remoteId, true ) ),
+                'sectionId'         =>  $contentInfo->sectionId,
+                'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
+                'currentVersionNo'  =>  $versionNo ? 1 : $contentInfo->currentVersionNo,
+                'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
+                'modificationDate'  =>  new \DateTime(),
+                'ownerId'           =>  $contentInfo->ownerId,
+                'published'         =>  $contentInfo->published,
+                'publishedDate'     =>  new \DateTime(),
+
+                'contentTypeId'     =>  $contentInfo->getContentType()->id,
+                'repository'        =>  $this->repository
+            )
+        );
+
+        foreach ( $this->versionInfo as $versionInfoStub )
+        {
+            if ( $versionInfoStub->contentId !== $contentInfo->contentId )
+            {
+                continue;
+            }
+            if ( $versionNo && $versionInfoStub->versionNo !== $versionNo )
+            {
+                continue;
+            }
+
+            ++$this->versionNextId;
+
+            $this->versionInfo[$this->versionNextId] = new VersionInfoStub(
+                array(
+                    'id'                   =>  $this->versionNextId,
+                    'status'               =>  VersionInfo::STATUS_DRAFT,
+                    'versionNo'            =>  $versionNo ? 1 : $versionInfoStub->versionNo,
+                    'creatorId'            =>  $versionInfoStub->creatorId,
+                    'creationDate'         =>  new \DateTime(),
+                    'modificationDate'     =>  new \DateTime(),
+                    'languageCodes'        =>  $versionInfoStub->languageCodes,
+                    'initialLanguageCode'  =>  $versionInfoStub->initialLanguageCode,
+
+                    'contentId'            =>  $this->contentNextId,
+                    'repository'           =>  $this->repository
+                )
+            );
+        }
+
+        foreach ( $this->content as $content )
+        {
+            if ( $content->contentId !== $contentInfo->contentId )
+            {
+                continue;
+            }
+            if ( $versionNo && $content->versionNo !== $versionNo )
+            {
+                continue;
+            }
+
+            $this->content[] = $this->copyContentObject(
+                $content,
+                array(
+                    'contentId'  =>  $this->contentNextId,
+                    'versionNo'  =>  $versionNo ? 1 : $content->versionNo
+                )
+            );
+        }
+
+        $locationService = $this->repository->getLocationService();
+        $locationService->createLocation(
+            $this->contentInfo[$this->contentNextId],
+            $destinationLocationCreateStruct
+        );
+
+        return $this->loadContent( $this->contentNextId );
     }
 
     /**
@@ -1028,7 +1110,36 @@ class ContentServiceStub implements ContentService
      */
     public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
-        // TODO: Implement addRelation() method.
+        if ( $sourceVersion->status !== VersionInfo::STATUS_DRAFT )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $relation = new RelationStub(
+            array(
+                'id'                      =>  23,
+                'sourceContentInfo'       =>  $sourceVersion->contentInfo,
+                'destinationContentInfo'  =>  $destinationContent,
+                'type'                    =>  Relation::COMMON
+            )
+        );
+
+        $content = $this->loadContentByVersionInfo( $sourceVersion );
+
+        $this->replaceContentObject(
+            $content,
+            $this->copyContentObject(
+                $content,
+                array(
+                    'relations' => array_merge(
+                        $content->getRelations(),
+                        array( $relation )
+                    )
+                )
+            )
+        );
+
+        return $relation;
     }
 
     /**
@@ -1138,6 +1249,57 @@ class ContentServiceStub implements ContentService
     }
 
     /**
+     * Replaces an object internally.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $oldContent
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $newContent
+     * @return void
+     */
+    private function replaceContentObject( Content $oldContent, Content $newContent )
+    {
+        if ( false === ( $index = array_search( $oldContent, $this->content ) ) )
+        {
+            throw new \ErrorException( "Implementation error..." );
+        }
+
+        $this->content[$index] = $newContent;
+    }
+
+    /**
+     * Copies a content object.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string[] $overwrites
+     * @return Values\Content\ContentStub
+     */
+    private function copyContentObject( Content $content, array $overwrites = array() )
+    {
+        $names = array(
+            'contentId',
+            'fields',
+            'relations',
+            'contentTypeId',
+            'versionNo',
+            'repository'
+        );
+
+        $values = array();
+        foreach ( $names as $name )
+        {
+            if ( array_key_exists( $name, $overwrites ) )
+            {
+                $values[$name] = $overwrites[$name];
+            }
+            else
+            {
+                $values[$name] = $content->{$name};
+            }
+        }
+
+        return new ContentStub( $values );
+    }
+
+    /**
      * Tests if the given <b>$remoteId</b> already exists.
      *
      * @param string $remoteId
@@ -1174,7 +1336,8 @@ class ContentServiceStub implements ContentService
             $this->contentNextId,
             $this->versionInfo,
             $this->versionNextId,
-            $this->content
+            $this->content,
+            $this->index
         ) = $this->repository->loadFixture( 'Content' );
     }
 }

@@ -31,7 +31,6 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 
@@ -57,15 +56,27 @@ class UserService implements UserServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings + array(
+            'anonymousUserID' => 10,
+            'defaultUserPlacement' => 12,
+            'userClassID' => 4,
+            'userGroupClassID' => 3,
+        );
     }
 
     /**
@@ -81,7 +92,7 @@ class UserService implements UserServiceInterface
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the input structure has invalid data
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the input structure has invalid data
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
      */
@@ -97,7 +108,7 @@ class UserService implements UserServiceInterface
         $mainParentGroupLocation = $locationService->loadMainLocation( $loadedParentGroup->getVersionInfo()->getContentInfo() );
 
         if ( $mainParentGroupLocation === null )
-            throw new IllegalArgumentException( "parentGroup", "parent user group has no main location" );
+            throw new InvalidArgumentException( "parentGroup", "parent user group has no main location" );
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
         $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
@@ -393,6 +404,17 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Loads anonymous user
+     *
+     * @uses loadUser()
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadAnonymousUser()
+    {
+        return $this->loadUser( $this->settings['anonymousUserID'] );
+    }
+
+    /**
      * Loads a user for the given login and password
      *
      * @param string $login
@@ -566,7 +588,7 @@ class UserService implements UserServiceInterface
 
         $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
         if ( $groupMainLocation === null )
-            throw new IllegalArgumentException( "userGroup", "user group has no main location or no locations" );
+            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations" );
 
         if ( in_array( $groupMainLocation->id, $existingGroupIds ) )
             // user is already assigned to the user group
@@ -587,7 +609,7 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the user is not in the given user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
      */
     public function unAssignUserFromUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
@@ -603,11 +625,11 @@ class UserService implements UserServiceInterface
 
         $userLocations = $locationService->loadLocations( $loadedUser->getVersionInfo()->getContentInfo() );
         if ( empty( $userLocations ) )
-            throw new IllegalArgumentException( "user", "user has no locations, cannot unassign from group" );
+            throw new InvalidArgumentException( "user", "user has no locations, cannot unassign from group" );
 
         $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
         if ( $groupMainLocation === null )
-            throw new IllegalArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
+            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
 
         foreach ( $userLocations as $userLocation )
         {
@@ -618,7 +640,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        throw new IllegalArgumentException( '$userGroup', 'user is not in the given user group' );
+        throw new InvalidArgumentException( "userGroup", "user is not in the given user group" );
     }
 
     /**

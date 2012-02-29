@@ -671,11 +671,11 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
-     * Test removing a user from user group throwing IllegalArgumentException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * Test removing a user from user group throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup
      */
-    public function testUnAssignUserFromUserGroupThrowsIllegalArgumentException()
+    public function testUnAssignUserFromUserGroupThrowsInvalidArgumentException()
     {
         self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();

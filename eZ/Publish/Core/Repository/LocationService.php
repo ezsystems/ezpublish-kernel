@@ -27,7 +27,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
@@ -67,7 +67,7 @@ class LocationService implements LocationServiceInterface
      * Only the items on which the user has read access are copied.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the target location is a sub location of the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the target location is a sub location of the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
      * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
@@ -89,7 +89,7 @@ class LocationService implements LocationServiceInterface
         $loadedTargetLocation = $this->loadLocation( $targetParentLocation->id );
 
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
-            throw new IllegalArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
+            throw new InvalidArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
         $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
             $loadedSubtree->id,
@@ -339,7 +339,7 @@ class LocationService implements LocationServiceInterface
     /**
      * Creates the new $location in the content repository for the given content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the content is already below the specified parent
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the content is already below the specified parent
      *                                        or the parent is a sub location of the location of the content
      *                                        or if set the remoteId exists already
      *
@@ -383,7 +383,7 @@ class LocationService implements LocationServiceInterface
             {
                 $existingLocation = $this->loadLocationByRemoteId( $locationCreateStruct->remoteId );
                 if ( $existingLocation !== null )
-                    throw new IllegalArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
+                    throw new InvalidArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -405,7 +405,7 @@ class LocationService implements LocationServiceInterface
         );
 
         if ( $searchResult->count > 0 )
-            throw new IllegalArgumentException( "contentInfo", "content is already below the specified parent" );
+            throw new InvalidArgumentException( "contentInfo", "content is already below the specified parent" );
 
         // check if the parent is a sub location of one of the existing content locations
         // this also solves the situation where parent location actually one of the content locations
@@ -417,7 +417,7 @@ class LocationService implements LocationServiceInterface
             foreach ( $existingContentLocations as $existingContentLocation )
             {
                 if ( stripos( $existingContentLocation->pathString, $loadedParentLocation->pathString ) !== false )
-                    throw new IllegalArgumentException( "locationCreateStruct", "specified parent is a sub location of one of the existing content locations" );
+                    throw new InvalidArgumentException( "locationCreateStruct", "specified parent is a sub location of one of the existing content locations" );
             }
         }
 
@@ -458,7 +458,7 @@ class LocationService implements LocationServiceInterface
      * Updates $location in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId exists already
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException   if if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
@@ -490,7 +490,7 @@ class LocationService implements LocationServiceInterface
             {
                 $existingLocation = $this->loadLocationByRemoteId( $locationUpdateStruct->remoteId );
                 if ( $existingLocation !== null )
-                    throw new IllegalArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
+                    throw new InvalidArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
