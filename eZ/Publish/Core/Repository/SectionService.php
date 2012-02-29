@@ -19,8 +19,8 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 /**

@@ -25,6 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException;
@@ -383,7 +384,7 @@ class LocationService implements LocationServiceInterface
                 if ( $existingLocation !== null )
                     throw new InvalidArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( APINotFoundException $e ) {}
         }
         else
         {
@@ -437,7 +438,7 @@ class LocationService implements LocationServiceInterface
                 if ( $parentParentLocation->hidden || $parentParentLocation->invisible )
                     $createStruct->invisible = true;
             }
-            catch ( NotFoundException $e ) {}
+            catch ( APINotFoundException $e ) {}
         }
 
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
@@ -490,7 +491,7 @@ class LocationService implements LocationServiceInterface
                 if ( $existingLocation !== null )
                     throw new InvalidArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( APINotFoundException $e ) {}
         }
 
         $updateStruct = new UpdateStruct();

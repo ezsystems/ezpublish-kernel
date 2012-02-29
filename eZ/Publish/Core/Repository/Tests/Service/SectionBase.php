@@ -12,7 +12,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
     eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
     ezp\Base\Exception\PropertyPermission;
 
 /**

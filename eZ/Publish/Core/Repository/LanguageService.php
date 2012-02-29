@@ -6,12 +6,14 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
+
     eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Language as PersistenceLanguage,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
+
     eZ\Publish\API\Repository\Values\Content\Language,
-    eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Language,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 /**

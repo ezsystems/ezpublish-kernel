@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\SPI\Persistence\Content\Location\Trashed,
 
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 

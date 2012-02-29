@@ -30,7 +30,7 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * This service provides methods for managing Roles and Policies
