@@ -16,29 +16,16 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class UpdateStruct extends ValueObject
 {
     /**
-     * @var int|string
-     */
-    public $id;
-
-    /**
-     * @var int
-     */
-    public $versionNo;
-
-    /**
      * @var string[] Eg. array( 'eng-GB' => "New Article" )
      */
     public $name = array();
 
     /**
-     * @var int Creator of the new version
+     * Creator's ID for the new version
+     *
+     * @var int
      */
     public $creatorId;
-
-    /**
-     * @var int Owner id of the content object
-     */
-    public $ownerId;
 
     /**
      * Contains fields to be updated.
@@ -48,19 +35,15 @@ class UpdateStruct extends ValueObject
     public $fields = array();
 
     /**
-     * Publication date, only used by publish()
-     * @var int Unix timestamp
+     * Modification date for the version.
+     * Unix timestamp.
+     *
+     * @var int
      */
-    public $published;
+    public $modificationDate;
 
     /**
-     * Modification date
-     * @var int Unix timestamp
-     */
-    public $modified;
-
-    /**
-     * @todo: Document
+     * ID for initial (main) language for this version.
      *
      * @var mixed
      */
