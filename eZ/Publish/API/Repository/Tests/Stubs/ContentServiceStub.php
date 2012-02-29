@@ -77,6 +77,11 @@ class ContentServiceStub implements ContentService
     private $fieldNextId = 0;
 
     /**
+     * @var array
+     */
+    private $index;
+
+    /**
      * Instantiates a new content service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
@@ -466,6 +471,9 @@ class ContentServiceStub implements ContentService
         $this->content[]                            = $content;
         $this->contentInfo[$contentInfo->contentId] = $contentInfo;
         $this->versionInfo[$versionInfo->id]        = $versionInfo;
+
+        $this->index[$contentInfo->contentId]['versionId'][$versionInfo->id] = $versionInfo->id;
+        $this->index[$contentInfo->contentId]['contentId'][count( $this->content ) - 1] = count( $this->content ) - 1;
 
         $locationService = $this->repository->getLocationService();
         foreach ( $locationCreateStructs as $locationCreateStruct )
@@ -1323,7 +1331,8 @@ class ContentServiceStub implements ContentService
             $this->contentNextId,
             $this->versionInfo,
             $this->versionNextId,
-            $this->content
+            $this->content,
+            $this->index
         ) = $this->repository->loadFixture( 'Content' );
     }
 }
