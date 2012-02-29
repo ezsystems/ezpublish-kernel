@@ -231,13 +231,13 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindMatchOnArray()
     {
-        $list = $this->backend->find( "Content\\Type", array( "groupIds" => 1 ) );
-        $this->assertEquals( 1, count( $list ) );
-        foreach ( $list as $key => $content )
-        {
-            $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 'folder', $content->identifier );
-        }
+        $types = $this->backend->find( "Content\\Type", array( "groupIds" => 1 ) );
+        $this->assertEquals( 2, count( $types ) );
+
+        $this->assertEquals( 1, $types[0]->id );
+        $this->assertEquals( 'folder', $types[0]->identifier );
+        $this->assertEquals( 13, $types[1]->id );
+        $this->assertEquals( 'comment', $types[1]->identifier );
     }
 
     /**
