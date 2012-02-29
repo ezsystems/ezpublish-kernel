@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Language Service
@@ -26,12 +25,11 @@ abstract class LanguageBase extends BaseServiceTest
     {
         $service = $this->repository->getContentLanguageService();
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
+
         $newLanguage = $service->createLanguage( $languageCreateStruct );
 
         self::assertEquals( $newLanguage->languageCode, 'test-TEST' );
@@ -59,12 +57,10 @@ abstract class LanguageBase extends BaseServiceTest
     {
         $service = $this->repository->getContentLanguageService();
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
 
         $language = $service->createLanguage( $languageCreateStruct );
         $sameLanguage = $service->updateLanguageName( $language, 'test name' );
@@ -123,12 +119,10 @@ abstract class LanguageBase extends BaseServiceTest
     {
         $service = $this->repository->getContentLanguageService();
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
 
         $language = $service->createLanguage( $languageCreateStruct );
         $sameLanguage = $service->loadLanguageById( $language->id );
@@ -148,12 +142,10 @@ abstract class LanguageBase extends BaseServiceTest
         $service = $this->repository->getContentLanguageService();
         //Add when permission are done
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
 
         $language = $service->createLanguage( $languageCreateStruct );
         $sameLanguage = $service->loadLanguage( 'test-TEST' );
@@ -193,22 +185,20 @@ abstract class LanguageBase extends BaseServiceTest
             $service->deleteLanguage( $language );
         }
 
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'eng-GB',
-                'name' => 'English (United Kingdom)',
-                'enabled' => true
-            )
-        );
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'eng-GB';
+        $languageCreateStruct->name = 'English (United Kingdom)';
+        $languageCreateStruct->enabled = true;
+
         $service->createLanguage( $languageCreateStruct );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'eng-US',
-                'name' => 'English (American)',
-                'enabled' => false
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'eng-US';
+        $languageCreateStruct->name = 'English (American)';
+        $languageCreateStruct->enabled = true;
+
         $service->createLanguage( $languageCreateStruct );
+
         $languages = $service->loadLanguages();
 
         self::assertInternalType( 'array', $languages );
