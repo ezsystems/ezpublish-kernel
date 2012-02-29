@@ -10,8 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
+
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    ezp\Base\Exception\PropertyPermission;
+    ezp\Base\Exception\PropertyPermission,
+    ezp\Base\Exception\PropertyNotFound;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -39,24 +41,32 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test retrieving missing property
-     * @expectedException ezp\Base\Exception\PropertyNotFound
      * @covers \eZ\Publish\API\Repository\Values\Content\Section::__get
      */
     public function testMissingProperty()
     {
-        $section = new Section();
-        $value = $section->notDefined;
+        try
+        {
+            $section = new Section();
+            $value = $section->notDefined;
+            self::fail( "Succeeded getting non existing property" );
+        }
+        catch ( PropertyNotFound $e ) {}
     }
 
     /**
      * Test setting read only property
-     * @expectedException ezp\Base\Exception\PropertyPermission
      * @covers \eZ\Publish\API\Repository\Values\Content\Section::__set
      */
     public function testReadOnlyProperty()
     {
-        $section = new Section();
-        $section->id = 22;
+        try
+        {
+            $section = new Section();
+            $section->id = 22;
+            self::fail( "Succeeded setting read only property" );
+        }
+        catch( PropertyPermission $e ) {}
     }
 
     /**
