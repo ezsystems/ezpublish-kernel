@@ -16,7 +16,7 @@ use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
@@ -67,7 +67,7 @@ class SectionServiceStub implements SectionService
      * Creates the a new Section in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier in $sectionCreateStruct already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct
      *
@@ -82,7 +82,7 @@ class SectionServiceStub implements SectionService
 
         if ( isset( $this->identifiers[$sectionCreateStruct->identifier] ) )
         {
-            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $section = new Section(
@@ -103,7 +103,7 @@ class SectionServiceStub implements SectionService
      * Updates the given in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the new identifier already exists (if set in the update struct)
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier already exists (if set in the update struct)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      * @param \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct
@@ -120,7 +120,7 @@ class SectionServiceStub implements SectionService
         if ( isset( $this->identifiers[$sectionUpdateStruct->identifier] ) &&
             ( $this->identifiers[$sectionUpdateStruct->identifier] !== $section->id ) )
         {
-            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $updatedSection = new Section(

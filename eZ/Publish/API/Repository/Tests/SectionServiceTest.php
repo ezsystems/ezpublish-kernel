@@ -70,10 +70,10 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
-    public function testCreateSectionThrowsIllegalArgumentException()
+    public function testCreateSectionThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -255,10 +255,10 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
-    public function testUpdateSectionThrowsIllegalArgumentException()
+    public function testUpdateSectionThrowsInvalidArgumentException()
     {
         $sectionId = $this->createSection()->id;
 
@@ -280,7 +280,7 @@ class SectionServiceTest extends BaseTest
         $sectionUpdate             = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'conflictKey';
 
-        // This call should fail with an IllegalArgumentException
+        // This call should fail with an InvalidArgumentException
         $sectionService->updateSection( $section, $sectionUpdate );
         /* END: Use Case */
     }

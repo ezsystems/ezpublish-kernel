@@ -21,7 +21,7 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
@@ -84,7 +84,7 @@ class RoleServiceStub implements RoleService
      * Creates a new Role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the name of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
@@ -94,7 +94,7 @@ class RoleServiceStub implements RoleService
     {
         if ( isset( $this->nameToRoleId[$roleCreateStruct->identifier] ) )
         {
-            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $role = new RoleStub(
@@ -120,7 +120,7 @@ class RoleServiceStub implements RoleService
      * Updates the name and (5.x) description of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the name of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
@@ -133,7 +133,7 @@ class RoleServiceStub implements RoleService
 
         if ( isset( $this->nameToRoleId[$roleName] ) && $this->nameToRoleId[$roleName] !== $role->id )
         {
-            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $updatedRole = new RoleStub(
