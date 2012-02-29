@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
 /**
  * Language service, used for language operations
  *
- * @package ezp\Publish\PublicAPI
+ * @package eZ\Publish\Core\Repository
  */
 class LanguageService implements LanguageServiceInterface
 {
