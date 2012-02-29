@@ -123,7 +123,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Create a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If a group with the same identifier already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If a group with the same identifier already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct
      *
@@ -159,7 +159,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( isset( $this->groups[$group->identifier] ) )
         {
-            throw new Exceptions\IllegalArgumentExceptionStub;
+            throw new Exceptions\InvalidArgumentExceptionStub;
         }
         $this->groups[$group->identifier] = $group;
         $this->groupsById[$group->id] = $group;
@@ -215,7 +215,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Update a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given identifier (if set) already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier (if set) already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
@@ -250,7 +250,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * This method only deletes an content type group which has content types without any content instances
      * 
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If  a to be deleted content type has instances
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
@@ -258,7 +258,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( $this->groupHasTypes( $contentTypeGroup ) )
         {
-            throw new Exceptions\IllegalArgumentExceptionStub;
+            throw new Exceptions\InvalidArgumentExceptionStub;
         }
 
         unset( $this->groups[$contentTypeGroup->identifier] );
@@ -293,7 +293,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * 
      * The content type is created in the state STATUS_DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
      *         or there is a dublicate field identifier
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
@@ -333,7 +333,7 @@ class ContentTypeServiceStub implements ContentTypeService
     /**
      * Checks that the given $contentTypeCreateStruct is valid
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
      *         or there is a dublicate field identifier
      *
      * @param ContentTypeCreateStruct $contentTypeCreateStruct
@@ -346,11 +346,11 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             if ( $type->identifier == $contentTypeCreateStruct->identifier )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
             if ( $type->remoteId == $contentTypeCreateStruct->remoteId )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
         }
 
@@ -359,7 +359,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             if ( isset( $fieldIdentifiers[$fieldDefinitionCreate->identifier] ) )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
             $fieldIdentifiers[$fieldDefinitionCreate->identifier] = true;
         }
@@ -407,7 +407,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
@@ -463,7 +463,7 @@ class ContentTypeServiceStub implements ContentTypeService
     /**
      * Checks that the given $contentTypeUpdateStruct is valid
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
      *         or there is a dublicate field identifier
      *
      * @param ContentTypeCreateStruct $contentTypeCreateStruct
@@ -480,11 +480,11 @@ class ContentTypeServiceStub implements ContentTypeService
             }
             if ( $type->identifier == $contentTypeUpdateStruct->identifier )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
             if ( $type->remoteId == $contentTypeUpdateStruct->remoteId )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
         }
     }
@@ -494,7 +494,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * 
      * The content type must be in state DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the identifier in already exists in the content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
@@ -506,7 +506,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             if ( $fieldDefinition->identifier == $fieldDefinitionCreateStruct->identifier )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
         }
 
@@ -520,7 +520,7 @@ class ContentTypeServiceStub implements ContentTypeService
     /**
      * Remove a field definition from an existing Type.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given field definition does not belong to the given type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given field definition does not belong to the given type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
@@ -542,7 +542,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         if ( !$removed )
         {
-            throw new Exceptions\IllegalArgumentExceptionStub;
+            throw new Exceptions\InvalidArgumentExceptionStub;
         }
 
         $this->setContentTypeDraft( $data );
@@ -570,7 +570,7 @@ class ContentTypeServiceStub implements ContentTypeService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  If the given identifier is used in an existing field of the given content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the given identifier is used in an existing field of the given content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft the content type draft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
@@ -626,7 +626,7 @@ class ContentTypeServiceStub implements ContentTypeService
         }
         if ( !$foundFieldId )
         {
-            throw new Exceptions\IllegalArgumentExceptionStub;
+            throw new Exceptions\InvalidArgumentExceptionStub;
         }
     }
 
@@ -842,7 +842,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * assign a content type to a content type group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the content type is already assigned the given group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
@@ -854,7 +854,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             if ( $assignedGroup->id == $contentTypeGroup->id )
             {
-                throw new Exceptions\IllegalArgumentExceptionStub;
+                throw new Exceptions\InvalidArgumentExceptionStub;
             }
         }
 
@@ -867,7 +867,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Unassign a content type from a group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to link a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the content type is not assigned this the given group.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is not assigned this the given group.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $contentTypeGroup is the last group assigned to the content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -889,7 +889,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         if ( !$unassigned )
         {
-            throw new Exceptions\IllegalArgumentExceptionStub;
+            throw new Exceptions\InvalidArgumentExceptionStub;
         }
         if ( count( $typeData['contentTypeGroups'] ) == 0 )
         {

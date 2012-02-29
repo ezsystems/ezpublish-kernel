@@ -87,7 +87,7 @@ catch(UnauthorizedException $e) {
     echo "permission denied\n" . $e.getMessage();
     $repository->rollback();
 }
-catch(IllegalArgumentException $e) {
+catch(InvalidArgumentException $e) {
     echo "you did something wrong in the create struct: " . $e.getMessage() ."\n";
     $repository->rollback();
 }

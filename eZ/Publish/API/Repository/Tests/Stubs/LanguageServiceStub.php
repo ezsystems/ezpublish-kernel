@@ -14,7 +14,7 @@ use \eZ\Publish\API\Repository\LanguageService;
 use \eZ\Publish\API\Repository\Values\Content\Language;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
@@ -62,7 +62,7 @@ class LanguageServiceStub implements LanguageService
      * Creates the a new Language in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the languageCode already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct
      *
@@ -72,7 +72,7 @@ class LanguageServiceStub implements LanguageService
     {
         if ( isset( $this->codes[$languageCreateStruct->languageCode] ) )
         {
-            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
         if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
         {
@@ -215,7 +215,7 @@ class LanguageServiceStub implements LanguageService
     /**
      * Deletes  a language from content repository
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
