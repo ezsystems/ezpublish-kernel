@@ -1565,13 +1565,18 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        // Remote ids of the "Support" and the "Community" page of a eZ Publish
+        // demo installation.
+        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+
         $contentService = $repository->getContentService();
 
         // "Support" article content object
-        $supportContentInfo = $contentService->loadContentInfoByRemoteId( 'affc99e41128c1475fa4f23dafb7159b' );
+        $supportContentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
 
         // "Community" article content object
-        $communityContentInfo = $contentService->loadContentInfoByRemoteId( '378acc2bc7a52400701956047a2f7d45' );
+        $communityContentInfo = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
 
         // Create some drafts
         $contentService->createContentDraft( $supportContentInfo );
@@ -1593,8 +1598,8 @@ class ContentServiceTest extends BaseTest
             array(
                 VersionInfo::STATUS_DRAFT,
                 VersionInfo::STATUS_DRAFT,
-                '378acc2bc7a52400701956047a2f7d45',
-                'affc99e41128c1475fa4f23dafb7159b',
+                $communityRemoteId,
+                $supportRemoteId,
             ),
             $actual
         );
@@ -2472,11 +2477,79 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadRelations()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testLoadRelations()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadRelations() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // Remote ids of the "Support" and the "Community" page of a eZ Publish
+        // demo installation.
+        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+
+        $draft = $this->createContentDraftVersion1();
+
+        // Load other content objects
+        $support   = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
+
+        // Create relation between new content object and "Support" page
+        $contentService->addRelation(
+            $draft->getVersionInfo(),
+            $support
+        );
+
+        // Create another relation with the "Community" page
+        $contentService->addRelation(
+            $draft->getVersionInfo(),
+            $community
+        );
+
+        // Load all relations
+        $relations = $contentService->loadRelations( $draft->getVersionInfo() );
+        /* END: Use Case */
+
+        usort( $relations, function( $rel1, $rel2 ) {
+            return strcasecmp(
+                $rel2->getDestinationContentInfo()->remoteId,
+                $rel1->getDestinationContentInfo()->remoteId
+            );
+        } );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'type'                             =>  Relation::COMMON,
+                    'sourceFieldDefinitionIdentifier'  =>  null,
+                    'sourceContentInfo'                =>  'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo'           =>  'affc99e41128c1475fa4f23dafb7159b',
+                ),
+                array(
+                    'type'                             =>  Relation::COMMON,
+                    'sourceFieldDefinitionIdentifier'  =>  null,
+                    'sourceContentInfo'                =>  'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo'           =>  '378acc2bc7a52400701956047a2f7d45',
+                )
+            ),
+            array(
+                array(
+                    'type'                             =>  $relations[0]->type,
+                    'sourceFieldDefinitionIdentifier'  =>  $relations[0]->sourceFieldDefinitionIdentifier,
+                    'sourceContentInfo'                =>  $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'           =>  $relations[0]->destinationContentInfo->remoteId,
+                ),
+                array(
+                    'type'                             =>  $relations[1]->type,
+                    'sourceFieldDefinitionIdentifier'  =>  $relations[1]->sourceFieldDefinitionIdentifier,
+                    'sourceContentInfo'                =>  $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'           =>  $relations[1]->destinationContentInfo->remoteId,
+                )
+            )
+        );
     }
 
     /**
@@ -2484,11 +2557,83 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadReverseRelations()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testLoadReverseRelations()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadReverseRelations() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // Remote ids of the "Support" and the "Community" page of a eZ Publish
+        // demo installation.
+        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+
+        $content = $this->createContentVersion1();
+
+        // Create some drafts
+        $supportDraft = $contentService->createContentDraft(
+            $contentService->loadContentInfoByRemoteId( $supportRemoteId )
+        );
+        $communityDraft = $contentService->createContentDraft(
+            $contentService->loadContentInfoByRemoteId( $communityRemoteId )
+        );
+
+        // Create relation between new content object and "Support" page
+        $contentService->addRelation(
+            $supportDraft->getVersionInfo(),
+            $content->contentInfo
+        );
+
+        // Create another relation with the "Community" page
+        $contentService->addRelation(
+            $communityDraft->getVersionInfo(),
+            $content->contentInfo
+        );
+
+        // Load all relations
+        $relations = $contentService->loadReverseRelations( $content->contentInfo );
+        /* END: Use Case */
+
+        usort( $relations, function( $rel1, $rel2 ) {
+            return strcasecmp(
+                $rel2->getSourceContentInfo()->remoteId,
+                $rel1->getSourceContentInfo()->remoteId
+            );
+        } );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'type'                             =>  Relation::COMMON,
+                    'sourceFieldDefinitionIdentifier'  =>  null,
+                    'sourceContentInfo'                =>  'affc99e41128c1475fa4f23dafb7159b',
+                    'destinationContentInfo'           =>  'abcdef0123456789abcdef0123456789',
+                ),
+                array(
+                    'type'                             =>  Relation::COMMON,
+                    'sourceFieldDefinitionIdentifier'  =>  null,
+                    'sourceContentInfo'                =>  '378acc2bc7a52400701956047a2f7d45',
+                    'destinationContentInfo'           =>  'abcdef0123456789abcdef0123456789',
+                )
+            ),
+            array(
+                array(
+                    'type'                             =>  $relations[0]->type,
+                    'sourceFieldDefinitionIdentifier'  =>  $relations[0]->sourceFieldDefinitionIdentifier,
+                    'sourceContentInfo'                =>  $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'           =>  $relations[0]->destinationContentInfo->remoteId,
+                ),
+                array(
+                    'type'                             =>  $relations[1]->type,
+                    'sourceFieldDefinitionIdentifier'  =>  $relations[1]->sourceFieldDefinitionIdentifier,
+                    'sourceContentInfo'                =>  $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo'           =>  $relations[1]->destinationContentInfo->remoteId,
+                )
+            )
+        );
     }
 
     /**

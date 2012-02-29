@@ -1074,7 +1074,7 @@ class ContentServiceStub implements ContentService
      */
     public function loadRelations( VersionInfo $versionInfo )
     {
-        // TODO: Implement loadRelations() method.
+        return $this->loadContentByVersionInfo( $versionInfo )->getRelations();
     }
 
     /**
@@ -1091,7 +1091,18 @@ class ContentServiceStub implements ContentService
      */
     public function loadReverseRelations( ContentInfo $contentInfo )
     {
-        // TODO: Implement loadReverseRelations() method.
+        $relations = array();
+        foreach ( $this->content as $content )
+        {
+            foreach ( $content->getRelations() as $relation )
+            {
+                if ( $relation->destinationContentInfo === $contentInfo )
+                {
+                    $relations[] = $relation;
+                }
+            }
+        }
+        return $relations;
     }
 
     /**
