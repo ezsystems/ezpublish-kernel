@@ -2,8 +2,7 @@
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType,
-    DateTime;
+    eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * This class provides all version independent information of the content object.
@@ -25,11 +24,31 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
 class ContentInfo extends APIContentInfo
 {
     /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
+     * @var integer
+     */
+    protected $contentTypeId;
+
+    /**
      * The content type of this content object
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function getContentType()
     {
+        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
+    }
 
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentType':
+                return $this->getContentType();
+        }
+        return parent::__get( $property );
     }
 }
