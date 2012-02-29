@@ -38,14 +38,14 @@ class FieldDefinition extends APIFieldDefinition
     protected $descriptions;
 
     /**
-     * Holds collection of field settings for the contenttype
+     * Holds collection of settings for the field definition supported by the field type
      *
      * @var array
      */
     protected $fieldSettings;
 
     /**
-     * Holds collection of validators for the contenttype
+     * Holds collection of validators of this field definition supported by the field type
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\Validator[]
      */
@@ -105,7 +105,7 @@ class FieldDefinition extends APIFieldDefinition
      */
     public function getDescription( $languageCode )
     {
-        if ( array_key_exists( $languageCode, $this->descriptions ))
+        if ( array_key_exists( $languageCode, $this->descriptions ) )
         {
             return $this->descriptions[$languageCode];
         }
