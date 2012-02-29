@@ -64,51 +64,6 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::__construct
-     */
-    public function testConstructor()
-    {
-        $refFieldSettings = $this->refStub->getProperty( 'fieldSettings' );
-        $refFieldSettings->setAccessible( true );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $refFieldSettings->getValue( $this->stub ) );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::initializeSettings
-     */
-    public function testInitializeSettings()
-    {
-        $this->stub->initializeSettings( $this->allowedSettings );
-        $refFieldSettings = $this->refStub->getProperty( 'fieldSettings' );
-        $refFieldSettings->setAccessible( true );
-        self::assertSame( $this->allowedSettings, $refFieldSettings->getValue( $this->stub )->getArrayCopy() );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::getFieldTypeSettings
-     */
-    public function testGetFieldTypeSettings()
-    {
-        $this->stub->initializeSettings( $this->allowedSettings );
-        $fieldTypeSettings = $this->stub->getFieldTypeSettings();
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldTypeSettings );
-        self::assertSame( $this->allowedSettings, $fieldTypeSettings->getArrayCopy() );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
-     */
-    public function testAllowedSettings()
-    {
-        $this->stub->initializeSettings( $this->allowedSettings );
-        self::assertSame( array_keys( $this->allowedSettings ), $this->stub->allowedSettings() );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testAllowedValidators()

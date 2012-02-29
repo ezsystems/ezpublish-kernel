@@ -105,7 +105,8 @@ class FieldDefinition extends Model
                 'fieldTypeConstraints' => new FieldTypeConstraints
             )
         );
-        $this->properties->fieldTypeConstraints->fieldSettings = $this->type->getFieldTypeSettings();
+        // FIXME: how is this supposed to be filled?
+        // $this->properties->fieldTypeConstraints->fieldSettings = $this->type->getFieldTypeSettings();
         $this->defaultValue = $this->type->getDefaultDefaultValue();
     }
 
@@ -279,7 +280,6 @@ class FieldDefinition extends Model
     public function setFieldSetting( $settingName, $value )
     {
         $this->properties->fieldTypeConstraints->fieldSettings[$settingName] = $value;
-        $this->type->setFieldSetting( $settingName, $value );
     }
 
     /**

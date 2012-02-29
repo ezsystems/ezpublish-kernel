@@ -9,15 +9,12 @@
 
 namespace eZ\Publish\Core\Repository;
 use ezp\Content\Field,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\Core\Repository\FieldType\Value,
     eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     ezp\Content\Type\FieldDefinition,
-    ezp\Base\Observable,
     ezp\Base\Repository as BaseRepository,
-    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType;
 
 /**
@@ -41,14 +38,6 @@ use ezp\Content\Field,
  */
 abstract class FieldType implements FieldTypeInterface
 {
-    /**
-     * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings Custom properties which are specific to the field
-     *                                           type. Typically these properties are used to
-     *                                           configure behaviour of field types and normally set
-     *                                           in the FieldDefinition on ContentTypes
-     */
-    protected $fieldSettings;
-
     /**
      * The setting keys which are available on this field type.
      *
@@ -78,7 +67,6 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function __construct()
     {
-        $this->fieldSettings = new FieldSettings( $this->allowedSettings );
     }
 
     /**
@@ -91,55 +79,6 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function handleEvent( $event, BaseRepository $repository, FieldDefinition $fieldDef, Field $field )
     {
-    }
-
-    /**
-     * Sets $value for $settingName on field type.
-     * Allowed options are in {@link \eZ\Publish\Core\Repository\FieldType::$allowedSettings}
-     *
-     * @see \eZ\Publish\Core\Repository\FieldType::$fieldSettings
-     * @param string $settingName
-     * @param mixed $value
-     * @return void
-     */
-    public function setFieldSetting( $settingName, $value )
-    {
-        $this->fieldSettings[$settingName] = $value;
-    }
-
-    /**
-     * Gets field setting identified by $settingName
-     *
-     * @see \eZ\Publish\Core\Repository\FieldType::$fieldSettings
-     * @param string $settingName
-     * @return mixed
-     */
-    public function getFieldSetting( $settingName )
-    {
-        return $this->fieldSettings[$settingName];
-    }
-
-    /**
-     * Set all settings on field type.
-     *
-     * Useful to initialize field type from a field definition.
-     *
-     * @param array $values
-     * @return void
-     */
-    public function initializeSettings( array $values )
-    {
-        $this->fieldSettings->exchangeArray( $values );
-    }
-
-    /**
-     * Return a copy of the array of fieldSettings.
-     *
-     * @return array
-     */
-    public function getFieldTypeSettings()
-    {
-        return $this->fieldSettings;
     }
 
     /**
@@ -227,7 +166,7 @@ abstract class FieldType implements FieldTypeInterface
         return new FieldValue(
             array(
                 "data" => $this->toHash( $value ),
-                //"externalData" => null,
+                "externalData" => null,
                 "sortKey" => $this->getSortInfo( $value ),
             )
         );

@@ -37,43 +37,6 @@ interface FieldTypeInterface
     public function handleEvent( $event, BaseRepository $repository, FieldDefinition $fieldDef, Field $field );
 
     /**
-     * Sets $value for $settingName on field type.
-     * Allowed options are in {@link \eZ\Publish\Core\Repository\FieldType::$allowedSettings}
-     *
-     * @see \eZ\Publish\Core\Repository\FieldType::$fieldSettings
-     * @param string $settingName
-     * @param mixed $value
-     * @return void
-     */
-    public function setFieldSetting( $settingName, $value );
-
-    /**
-     * Gets field setting identified by $settingName
-     *
-     * @see \eZ\Publish\Core\Repository\FieldType::$fieldSettings
-     * @param string $settingName
-     * @return mixed
-     */
-    public function getFieldSetting( $settingName );
-
-    /**
-     * Set all settings on field type.
-     *
-     * Useful to initialize field type from a field definition.
-     *
-     * @param array $values
-     * @return void
-     */
-    public function initializeSettings( array $values );
-
-    /**
-     * Return a copy of the array of fieldSettings.
-     *
-     * @return array
-     */
-    public function getFieldTypeSettings();
-
-    /**
      * Keys of settings which are available on this fieldtype.
      * @return array
      */
