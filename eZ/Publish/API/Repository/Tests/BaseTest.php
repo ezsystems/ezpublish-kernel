@@ -36,7 +36,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    public function tearDown()
     {
         $this->repository = null;
 

@@ -107,7 +107,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Removes stuff created in setUp().
      */
-    protected function tearDown()
+    public function tearDown()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
 

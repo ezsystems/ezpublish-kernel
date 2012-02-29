@@ -134,7 +134,7 @@ class TrashHandlerTest extends HandlerTest
     /**
      * Removes stuff created in setUp().
      */
-    protected function tearDown()
+    public function tearDown()
     {
         $this->trashHandler->emptyTrash();
         $this->trashHandler = null;

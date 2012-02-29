@@ -34,6 +34,15 @@ class BackendTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tear down test
+     */
+    public function tearDown()
+    {
+        unset( $this->backend );
+        parent::tearDown();
+    }
+
+    /**
      * Test creating content with a wrong type.
      *
      * @param mixed $type Wrong type to create

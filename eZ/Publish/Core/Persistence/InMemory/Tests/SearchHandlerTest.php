@@ -68,7 +68,7 @@ class SearchHandlerTest extends HandlerTest
         $this->contentId = $this->content->id;
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
 

@@ -59,7 +59,7 @@ class LanguageHandlerTest extends HandlerTest
     /**
      * Removes stuff created in setUp().
      */
-    protected function tearDown()
+    public function tearDown()
     {
         try
         {

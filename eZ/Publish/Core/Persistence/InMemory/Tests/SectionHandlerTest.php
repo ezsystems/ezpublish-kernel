@@ -35,7 +35,7 @@ class SectionHandlerTest extends HandlerTest
     /**
      * Removes stuff created in setUp().
      */
-    protected function tearDown()
+    public function tearDown()
     {
         $sectionHandler = $this->persistenceHandler->sectionHandler();
         // Removing default objects as well as those created by

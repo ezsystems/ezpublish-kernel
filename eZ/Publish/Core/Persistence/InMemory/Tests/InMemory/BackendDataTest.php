@@ -39,7 +39,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $this->insertCustomContent();
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         unset( $this->backend );
         parent::tearDown();
