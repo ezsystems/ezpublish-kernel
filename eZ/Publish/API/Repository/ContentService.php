@@ -28,8 +28,8 @@ interface ContentService
 {
 
     /**
-     * Loads a content info object. 
-     * 
+     * Loads a content info object.
+     *
      * To load fields use loadContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
@@ -42,11 +42,11 @@ interface ContentService
     public function loadContentInfo( $contentId );
 
     /**
-     * Loads a content info object for the given remoteId. 
-     * 
+     * Loads a content info object for the given remoteId.
+     *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
@@ -56,8 +56,8 @@ interface ContentService
     public function loadContentInfoByRemoteId( $remoteId );
 
     /**
-     * loads a version info of the given content object. 
-     * 
+     * loads a version info of the given content object.
+     *
      * If no version number is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
@@ -71,8 +71,8 @@ interface ContentService
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null );
 
     /**
-     * loads a version info of the given content object id. 
-     * 
+     * loads a version info of the given content object id.
+     *
      * If no version number is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
@@ -86,8 +86,8 @@ interface ContentService
     public function loadVersionInfoById( $contentId, $versionNo = null );
 
     /**
-     * loads content in a version for the given content info object. 
-     * 
+     * loads content in a version for the given content info object.
+     *
      * If no version number is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if version with the given number does not exist
@@ -114,8 +114,8 @@ interface ContentService
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null );
 
     /**
-     * loads content in a version of the given content object. 
-     * 
+     * loads content in a version of the given content object.
+     *
      * If no version number is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given id does not exist
@@ -131,7 +131,7 @@ interface ContentService
 
     /**
      * loads content in a version for the content object reference by the given remote id.
-     * 
+     *
      * If no version is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given remote id does not exist
@@ -147,7 +147,7 @@ interface ContentService
 
     /**
      * Creates a new content draft assigned to the authenticated user.
-     * 
+     *
      * If a different userId is given in $contentCreateStruct it is assigned to the given user
      * but this required special rights for the authenticated user
      * (this is useful for content staging where the transfer process does not
@@ -156,7 +156,7 @@ interface ContentService
      * In 4.x at least one location has to be provided in the location creation array.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system 
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
      *                                                            or (4.x) there is no location provided
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
@@ -169,8 +169,8 @@ interface ContentService
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() );
 
     /**
-     * Updates the metadata. 
-     * 
+     * Updates the metadata.
+     *
      * (see {@link ContentMetadataUpdateStruct}) of a content object - to update fields use updateContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to update the content meta data
@@ -194,7 +194,7 @@ interface ContentService
 
     /**
      * creates a draft from a published or archived version.
-     * 
+     *
      * If no version is given, the current published version is used.
      * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
@@ -210,12 +210,12 @@ interface ContentService
     public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null );
 
     /**
-     * Load drafts for a user. 
-     * 
+     * Load drafts for a user.
+     *
      * If no user is given the drafts for the authenticated user a returned
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
-     * 
+     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
@@ -225,7 +225,7 @@ interface ContentService
 
     /**
      * Translate a version
-     * 
+     *
      * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
      *
      * @example Examples/translation_5x.php
@@ -235,12 +235,12 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo 
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues 
-     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version 
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
+     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     * 
+     *
      * @since 5.0
      */
     public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null );
@@ -312,7 +312,7 @@ interface ContentService
 
     /**
      * finds content objects for the given query.
-     * 
+     *
      * @TODO define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
@@ -329,7 +329,7 @@ interface ContentService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the found content object
      * @TODO throw an exception if the found object count is > 1
-     * 
+     *
      * @TODO define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array  $fieldFilters - a map of filters for the returned fields.
@@ -342,7 +342,7 @@ interface ContentService
 
     /**
      * load all outgoing relations for the given version
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -366,11 +366,11 @@ interface ContentService
     public function loadReverseRelations( ContentInfo $contentInfo );
 
     /**
-     * Adds a relation of type common. 
+     * Adds a relation of type common.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     * 
+     *
      * The source of the relation is the content and version
      * referenced by $versionInfo.
      *
@@ -395,7 +395,7 @@ interface ContentService
 
     /**
      * add translation information to the content object
-     * 
+     *
      * @example Examples/translation_5x.php
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
@@ -412,11 +412,11 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter 
+     * @param array $filter
      * @todo TBD - filter by sourceversion destination version and languages
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
-     * 
+     *
      * @since 5.0
      */
     public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() );
