@@ -299,8 +299,8 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        // Location id of the "Home" node
-        $homeLocationId = 2;
+        // Location id of the "Home > Community" node
+        $parentLocationId = 167;
 
         $contentService     = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -310,7 +310,7 @@ class ContentServiceTest extends BaseTest
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
         // Configure new locations
-        $locationCreate1 = $locationService->newLocationCreateStruct( $homeLocationId );
+        $locationCreate1 = $locationService->newLocationCreateStruct( $parentLocationId );
 
         $locationCreate1->priority  = 23;
         $locationCreate1->hidden    = true;
@@ -318,7 +318,7 @@ class ContentServiceTest extends BaseTest
         $locationCreate1->sortField = Location::SORT_FIELD_NODE_ID;
         $locationCreate1->sortOrder = Location::SORT_ORDER_DESC;
 
-        $locationCreate2 = $locationService->newLocationCreateStruct( $homeLocationId );
+        $locationCreate2 = $locationService->newLocationCreateStruct( $parentLocationId );
 
         $locationCreate2->priority  = 42;
         $locationCreate2->hidden    = true;
@@ -661,58 +661,13 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
-     * 
-     */
-    public function testTranslateVersion()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion($translationInfo, $translationValues, $user)
-     * 
-     */
-    public function testTranslateVersionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testTranslateVersionThrowsBadStateException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion($translationInfo, $translationValues, $user)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testTranslateVersionThrowsBadStateExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
      * Test for the publishVersion() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
      */
     public function testPublishVersion()
@@ -1670,7 +1625,7 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
      */
     public function testLoadVersionInfoByIdWithSecondParameter()
     {
@@ -2206,7 +2161,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCopyContent()
     {
-        $homeLocationId = 2;
+        $parentLocationId = 167;
 
         $repository = $this->getRepository();
 
@@ -2217,7 +2172,7 @@ class ContentServiceTest extends BaseTest
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
 
         // Configure new target location
-        $targetLocationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
         $targetLocationCreate->priority  = 42;
         $targetLocationCreate->hidden    = true;
@@ -2266,7 +2221,7 @@ class ContentServiceTest extends BaseTest
      */
     public function testCopyContentWithThirdParameter()
     {
-        $homeLocationId = 2;
+        $parentLocationId = 167;
 
         $repository = $this->getRepository();
 
@@ -2277,7 +2232,7 @@ class ContentServiceTest extends BaseTest
         $contentVersion2 = $this->createContentVersion2();
 
         // Configure new target location
-        $targetLocationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
         $targetLocationCreate->priority  = 42;
         $targetLocationCreate->hidden    = true;
@@ -2888,15 +2843,15 @@ class ContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
         /* BEGIN: Inline */
-        // Location id of the "Home" node
-        $homeLocationId = 2;
+        // Location id of the "Home > Community" node
+        $parentLocationId = 167;
 
         $contentService     = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $locationService    = $repository->getLocationService();
 
         // Configure new location
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
         $locationCreate->priority  = 23;
         $locationCreate->hidden    = true;
