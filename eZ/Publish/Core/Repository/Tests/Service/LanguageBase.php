@@ -20,7 +20,7 @@ abstract class LanguageBase extends BaseServiceTest
 {
     /**
      * Test service function for creating language
-     * @covers \ezp\PublicAPI\Values\Content\Section::__construct
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      */
     public function testCreateLanguage()
     {
@@ -41,8 +41,8 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for creating language
-     * @covers \ezp\Content\Language\Service::create
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateForbidden()
     {
@@ -53,7 +53,7 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for updating language
-     * @covers \ezp\Content\Language\Service::update
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
      */
     public function testUpdateLanguageName()
     {
@@ -74,8 +74,8 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for updating language
-     * @covers \ezp\Content\Language\Service::update
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateForbidden()
     {
@@ -85,7 +85,7 @@ abstract class LanguageBase extends BaseServiceTest
     /**
      * Test service function for deleting language
      *
-     * @covers \ezp\Content\Language\Service::delete
+     * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
      */
     public function testDelete()
     {
@@ -107,8 +107,8 @@ abstract class LanguageBase extends BaseServiceTest
     /**
      * Test service function for deleting language
      *
-     * @covers \ezp\Content\Language\Service::delete
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteForbidden()
     {
@@ -117,7 +117,7 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for loading language
-     * @covers \ezp\Content\Language\Service::loadLanguageById
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
      */
     public function testLoadLanguageById()
     {
@@ -141,7 +141,7 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for loading language
-     * @covers \ezp\Content\Language\Service::loadLanguage
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
      */
     public function testLoadLanguageByLanguageCode()
     {
@@ -167,7 +167,7 @@ abstract class LanguageBase extends BaseServiceTest
     /**
      * Test service function for loading language
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     * @covers \ezp\Content\Language\Service::loadLanguage
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
      */
     public function testLoadLanguageByLanguageCodeNotFound()
     {
