@@ -85,14 +85,36 @@ class UserServiceStub implements UserService
      */
     public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup )
     {
+        $contentService  = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $locationCreate = $locationService->newLocationCreateStruct(
+            $parentGroup->contentInfo->mainLocationId
+        );
+
+        $draft = $contentService->createContent(
+            $userGroupCreateStruct,
+            array( $locationCreate )
+        );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+
         $userGroup = new UserGroupStub(
             array(
-                'id'             =>  ++$this->userGroupNextId,
+                'id'             =>  $content->contentId,
                 'parentId'       =>  $parentGroup->id,
-                'subGroupCount'  =>  0
+                'subGroupCount'  =>  0,
+                'content'        =>  $content
             )
         );
-        $this->userGroups[$userGroup->id] = $userGroup;
+        $this->userGroups[$userGroup->id]   = $userGroup;
+        $this->userGroups[$parentGroup->id] = new UserGroupStub(
+            array(
+                'id'             =>  $parentGroup->id,
+                'parentId'       =>  $parentGroup->parentId,
+                'subGroupCount'  =>  $parentGroup->subGroupCount + 1,
+                'content'        =>  $parentGroup->content
+            )
+        );
 
         return $userGroup;
     }

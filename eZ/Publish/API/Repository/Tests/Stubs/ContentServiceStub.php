@@ -271,7 +271,7 @@ class ContentServiceStub implements ContentService
             return $this->filterFieldsByLanguages( $contents[VersionInfo::STATUS_DRAFT], $languages );
         }
 
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used? ID(' . $contentId . ')' );
     }
 
     /**
@@ -390,7 +390,9 @@ class ContentServiceStub implements ContentService
             }
             else if ( $fieldDefinition->isRequired )
             {
-                throw new ContentValidationExceptionStub( '@TODO: What error code should be used?' );
+                throw new ContentValidationExceptionStub(
+                    '@TODO: What error code should be used? ' . $fieldDefinition->identifier
+                );
             }
             else
             {

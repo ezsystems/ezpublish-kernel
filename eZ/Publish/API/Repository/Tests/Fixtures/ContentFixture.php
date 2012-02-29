@@ -3365,7 +3365,7 @@ return array(
             array(
                 "id"  =>  439,
                 "contentId"  =>  11,
-                "status"  =>  3,
+                "status"  =>  1,
                 "versionNo"  =>  1,
                 "modificationDate"  =>  new \DateTime( "@1033920746" ),
                 "creatorId"  =>  14,
@@ -3425,7 +3425,7 @@ return array(
             array(
                 "id"  =>  499,
                 "contentId"  =>  14,
-                "status"  =>  3,
+                "status"  =>  1,
                 "versionNo"  =>  3,
                 "modificationDate"  =>  new \DateTime( "@1301062024" ),
                 "creatorId"  =>  14,

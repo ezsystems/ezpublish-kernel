@@ -20,13 +20,18 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 class UserGroupStub extends UserGroup
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected $content;
+
+    /**
      * returns the VersionInfo for this version
      *
      * @return VersionInfo
      */
     public function getVersionInfo()
     {
-        // TODO: Implement getVersionInfo() method.
+        return $this->content->getVersionInfo();
     }
 
     /**
@@ -43,7 +48,7 @@ class UserGroupStub extends UserGroup
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        // TODO: Implement getFieldValue() method.
+        return $this->content->getFieldValue( $fieldDefIdentifier, $languageCode );
     }
 
     /**
@@ -53,7 +58,7 @@ class UserGroupStub extends UserGroup
      */
     public function getRelations()
     {
-        // TODO: Implement getRelations() method.
+        return $this->content->getRelations();
     }
 
     /**
@@ -63,7 +68,7 @@ class UserGroupStub extends UserGroup
      */
     public function getFields()
     {
-        // TODO: Implement getFields() method.
+        return $this->content->getFields();
     }
 
     /**
@@ -77,7 +82,32 @@ class UserGroupStub extends UserGroup
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
-        // TODO: Implement getFieldsByLanguage() method.
+        return $this->content->getFieldsByLanguage( $languageCode );
     }
 
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentInfo':
+                return $this->content->contentInfo;
+
+            case 'contentType':
+                return $this->content->contentType;
+
+            case 'contentId':
+                return $this->content->contentId;
+
+            case 'versionInfo':
+                return $this->getVersionInfo();
+
+            case 'fields':
+                return $this->getFields();
+
+            case 'relations':
+                return $this->getRelations();
+        }
+
+        return parent::__get( $property );
+    }
 }

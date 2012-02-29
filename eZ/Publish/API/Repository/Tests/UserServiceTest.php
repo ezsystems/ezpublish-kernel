@@ -45,19 +45,6 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::loadUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
-     */
-    public function testLoadUserGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::loadUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the loadUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::loadUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      */
@@ -97,19 +84,6 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $subUserGroup );
-    }
-
-    /**
-     * Test for the loadSubUserGroups() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::loadSubUserGroups()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadSubUserGroups
-     */
-    public function testLoadSubUserGroupsThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::loadSubUserGroups() is not implemented." );
     }
 
     /**
@@ -183,9 +157,8 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the createUserGroup() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
-     *
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      */
@@ -199,23 +172,75 @@ class UserServiceTest extends BaseTest
         $parentUserGroup = $userService->loadUserGroup( $this->fixtureUserGroupUsers );
 
         $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
 
         $userGroup = $userService->createUserGroup( $userGroupCreate, $parentUserGroup );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $userGroup );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\UserGroup',
+            $userGroup
+        );
+
+        return $userGroup;
     }
+
+    /**
+     * Test for the createUserGroup() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
+     */
+    public function testCreateUserGroupSetsExpectedProperties( $userGroup )
+    {
+        $this->assertEquals(
+            array(
+                'parentId'       =>  4,
+                'subGroupCount'  =>  0
+            ),
+            array(
+                'parentId'       =>  $userGroup->parentId,
+                'subGroupCount'  =>  $userGroup->subGroupCount
+            )
+        );
+    }
+
 
     /**
      * Test for the createUserGroup() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
-    public function testCreateUserGroupThrowsUnauthorizedException()
+    public function testCreateUserGroupIncrementsParentSubGroupCount()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the main "Users" group
+        $mainGroupId = 4;
+
+        $userService = $repository->getUserService();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
+
+        // Create the new user group
+        $userService->createUserGroup( $userGroupCreate, $parentUserGroup );
+
+        // This should be one greater than before
+        $subGroupCount = $userService->loadUserGroup( $mainGroupId )->subGroupCount;
+        /* END: Use Case */
+
+        $this->assertEquals( $parentUserGroup->subGroupCount + 1, $subGroupCount );
     }
 
     /**
@@ -235,23 +260,28 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testCreateUserGroupThrowsContentFieldValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the createUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
     public function testCreateUserGroupThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the main "Users" group
+        $mainGroupId = 4;
+
+        $userService = $repository->getUserService();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+
+        // This call will fail with a "ContentValidationException", because the
+        // only mandatory field "name" is not set.
+        $userService->createUserGroup( $userGroupCreate, $parentUserGroup );
     }
 
     /**
@@ -262,18 +292,6 @@ class UserServiceTest extends BaseTest
      * 
      */
     public function testDeleteUserGroup()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::deleteUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::deleteUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::deleteUserGroup() is not implemented." );
     }
@@ -291,18 +309,6 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the moveUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testMoveUserGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::moveUserGroup() is not implemented." );
-    }
-
-    /**
      * Test for the updateUserGroup() method.
      *
      * @return void
@@ -310,18 +316,6 @@ class UserServiceTest extends BaseTest
      * 
      */
     public function testUpdateUserGroup()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the updateUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::updateUserGroup() is not implemented." );
     }
@@ -358,18 +352,6 @@ class UserServiceTest extends BaseTest
      * 
      */
     public function testCreateUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUser() is not implemented." );
-    }
-
-    /**
-     * Test for the createUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::createUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCreateUserThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::createUser() is not implemented." );
     }
@@ -471,18 +453,6 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the deleteUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::deleteUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteUserThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::deleteUser() is not implemented." );
-    }
-
-    /**
      * Test for the updateUser() method.
      *
      * @return void
@@ -490,18 +460,6 @@ class UserServiceTest extends BaseTest
      * 
      */
     public function testUpdateUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUser() is not implemented." );
-    }
-
-    /**
-     * Test for the updateUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateUserThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::updateUser() is not implemented." );
     }
@@ -543,18 +501,6 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the assignUserToUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAssignUserToUserGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::assignUserToUserGroup() is not implemented." );
-    }
-
-    /**
      * Test for the unAssignUssrFromUserGroup() method.
      *
      * @return void
@@ -562,18 +508,6 @@ class UserServiceTest extends BaseTest
      * 
      */
     public function testUnAssignUserFromUserGroup()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::unAssignUssrFromUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the unAssignUssrFromUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::unAssignUssrFromUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUnAssignUserFromUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::unAssignUssrFromUserGroup() is not implemented." );
     }

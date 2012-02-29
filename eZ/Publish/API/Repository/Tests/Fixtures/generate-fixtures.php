@@ -292,7 +292,7 @@ function generateContentInfoFixture( array $fixture )
         $versionInfo[$data['id']] = array(
             'id'                   =>  $data['id'],
             'contentId'            =>  $data['contentobject_id'],
-            'status'               =>  $data['status'],
+            'status'               =>  $data['status'] <= 2 ? $data['status'] : 1,
             'versionNo'            =>  $data['version'],
             'modificationDate'     =>  'new \DateTime( "@' . $data['modified'] . '" )',
             'creatorId'            =>  $data['creator_id'],
@@ -512,9 +512,10 @@ function generateUserGroupFixture( array $fixture )
         }
 
         $groups[$data['id']] = array(
-            'id'             =>  $data['id'],
-            'parentId'       =>  is_numeric( $parentId ) ? $parentId : 'null',
-            'subGroupCount'  =>  0
+            'id'              =>  $data['id'],
+            'parentId'        =>  is_numeric( $parentId ) ? $parentId : 'null',
+            'subGroupCount'   =>  0,
+            'content'         =>  '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
         );
 
         $nextId = max( $nextId, $data['id'] );

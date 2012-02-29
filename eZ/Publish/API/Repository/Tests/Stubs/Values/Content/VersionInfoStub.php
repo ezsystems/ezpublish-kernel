@@ -30,6 +30,18 @@ class VersionInfoStub extends VersionInfo
      */
     protected $contentId;
 
+    public function __construct( array $properties = array() )
+    {
+        parent::__construct( $properties );
+
+        if ( $properties['status'] > 2 ) {
+            echo "\nalert(", $properties['contentId'], ")\n";
+            $trace = debug_backtrace();
+            echo $trace[0]['file'], ' +', $trace[0]['line'], PHP_EOL;
+        }
+    }
+
+
     /**
      * Content of the content this version belongs to.
      *

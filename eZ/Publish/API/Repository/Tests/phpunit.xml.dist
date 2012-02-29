@@ -26,6 +26,7 @@
             <file>ContentTypeServiceAuthorizationTest.php</file>
             <file>ContentServiceAuthorizationTest.php</file>
             <file>LocationServiceAuthorizationTest.php</file>
+            <file>UserServiceAuthorizationTest.php</file>
             <directory>./Exceptions</directory>
         </testsuite>
     </testsuites>
