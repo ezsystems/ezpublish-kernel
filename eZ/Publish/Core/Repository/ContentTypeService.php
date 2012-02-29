@@ -142,20 +142,9 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeGroupId', $contentTypeGroupId );
         }
 
-        try
-        {
-            $spiGroup = $this->persistenceHandler->contentTypeHandler()->loadGroup(
-                $contentTypeGroupId
-            );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                'ContentTypeGroup',
-                $contentTypeGroupId,
-                $e
-            );
-        }
+        $spiGroup = $this->persistenceHandler->contentTypeHandler()->loadGroup(
+            $contentTypeGroupId
+        );
 
         return $this->buildContentTypeGroupDomainObject( $spiGroup );
     }
@@ -572,22 +561,11 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
         }
 
-        try
-        {
-            /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
-                $contentTypeId,
-                SPIContentType::STATUS_DEFINED
-            );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $contentTypeId,
-                $e
-            );
-        }
+        /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $contentTypeId,
+            SPIContentType::STATUS_DEFINED
+        );
 
         return $this->buildContentTypeDomainObject(
             $spiContentType
@@ -610,21 +588,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$identifier', $identifier );
         }
 
-        try
-        {
-            /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
-                $identifier
-            );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $identifier,
-                $e
-            );
-        }
+        /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
+            $identifier
+        );
 
         return $this->buildContentTypeDomainObject(
             $spiContentType
@@ -642,18 +609,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
-        try
-        {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $remoteId,
-                $e
-            );
-        }
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
 
         return $this->buildContentTypeDomainObject(
             $spiContentType
@@ -677,21 +633,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
         }
 
-        try
-        {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
-                $contentTypeId,
-                SPIContentType::STATUS_DRAFT
-            );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $contentTypeId,
-                $e
-            );
-        }
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $contentTypeId,
+            SPIContentType::STATUS_DRAFT
+        );
 
         /*
         $currentUser = $this->repository->getCurrentUser();
