@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SearchHandler using in memory storage.
@@ -68,7 +68,7 @@ class SearchHandlerTest extends HandlerTest
         $this->contentId = $this->content->id;
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
 

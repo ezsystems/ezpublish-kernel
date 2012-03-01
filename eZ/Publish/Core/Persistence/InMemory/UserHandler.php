@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\Content,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Base\Exception\NotFoundWithType,
     eZ\Publish\Core\Persistence\InMemory\Handler,
     eZ\Publish\Core\Persistence\InMemory\Backend;
@@ -155,7 +155,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $roleId
      * @return \eZ\Publish\SPI\Persistence\User\Role
-     * @throws \ezp\Base\Exception\NotFound If role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      */
     public function loadRole( $roleId )
     {
@@ -180,7 +180,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\User\Role
-     * @throws \ezp\Base\Exception\NotFound If role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      */
     public function loadRoleByIdentifier( $identifier )
     {
@@ -224,7 +224,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $groupId
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
-     * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user (it's content object atm) is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
      */
     public function loadRolesByGroupId( $groupId )
@@ -335,7 +335,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $userId
      * @return \eZ\Publish\SPI\Persistence\User\Policy[]
-     * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user (it's content object atm) is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If user is not of user Content Type
      */
     public function loadPoliciesByUserId( $userId )
@@ -443,7 +443,7 @@ class UserHandler implements UserHandlerInterface
      *                       Assigning to a user is not supported, only un-assigning is supported for bc.
      * @param mixed $roleId
      * @param array $limitation @todo Remove or implement
-     * @throws \ezp\Base\Exception\NotFound If group or role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
      * @throws \ezp\Base\Exception\InvalidArgumentValue If group is already assigned role
      */
@@ -470,7 +470,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $groupId The group / user Id to un-assign a role from
      * @param mixed $roleId
-     * @throws \ezp\Base\Exception\NotFound If group or role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user[_group] Content Type
      * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
      */

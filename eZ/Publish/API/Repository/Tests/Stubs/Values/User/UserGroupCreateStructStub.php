@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
+use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 
 /**
@@ -19,6 +20,11 @@ use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
  */
 class UserGroupCreateStructStub extends UserGroupCreateStruct
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    protected $fields = array();
+
     /**
      * Adds a field to the field collection.
      *
@@ -35,7 +41,18 @@ class UserGroupCreateStructStub extends UserGroupCreateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        // TODO: Implement setField() method.
+        if ( null === $language && $this->contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable )
+        {
+            $language = $this->mainLanguageCode;
+        }
+
+        $this->fields[] = new Field(
+            array(
+                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
+                'value'               =>  $value,
+                'languageCode'        =>  $language
+            )
+        );
     }
 
 }

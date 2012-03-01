@@ -17,7 +17,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
-    \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Role Service
@@ -191,11 +191,11 @@ abstract class RoleBase extends BaseServiceTest
     }
 
     /**
-     * Test creating a role throwing IllegalArgumentException
-     * @expectedException eZ\Publish\Core\Base\Exceptions\IllegalArgumentException
+     * Test creating a role throwing InvalidArgumentException
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\RoleService::createRole
      */
-    public function testCreateRoleThrowsIllegalArgumentException()
+    public function testCreateRoleThrowsInvalidArgumentException()
     {
         $roleService = $this->repository->getRoleService();
         $roleCreateStruct = $roleService->newRoleCreateStruct( 'Anonymous' );
@@ -375,11 +375,11 @@ abstract class RoleBase extends BaseServiceTest
     }
 
     /**
-     * Test updating role throwing IllegalArgumentException
-     * @expectedException eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * Test updating role throwing InvalidArgumentException
+     * @expectedException eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\RoleService::updateRole
      */
-    public function testUpdateRoleThrowsIllegalArgumentException()
+    public function testUpdateRoleThrowsInvalidArgumentException()
     {
         $roleService = $this->repository->getRoleService();
 

@@ -28,10 +28,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
-    ezp\Base\Exception\NotFound,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 
@@ -57,15 +54,29 @@ class UserService implements UserServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings + array(
+            'anonymousUserID' => 10,
+            'defaultUserPlacement' => 12,
+            'userClassID' => 4,
+            'userGroupClassID' => 3,
+            'hashType' => User::PASSWORD_HASH_MD5_USER,
+            'siteName' => 'ez.no'
+        );
     }
 
     /**
@@ -81,7 +92,7 @@ class UserService implements UserServiceInterface
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the input structure has invalid data
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the input structure has invalid data
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
      */
@@ -92,12 +103,19 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        if ( $userGroupCreateStruct->contentType === null )
+        {
+            $userGroupContentType = $contentTypeService->loadContentType( $this->settings['userGroupClassID'] );
+            $userGroupCreateStruct->contentType = $userGroupContentType;
+        }
 
         $loadedParentGroup = $this->loadUserGroup( $parentGroup->id );
         $mainParentGroupLocation = $locationService->loadMainLocation( $loadedParentGroup->getVersionInfo()->getContentInfo() );
 
         if ( $mainParentGroupLocation === null )
-            throw new IllegalArgumentException( "parentGroup", "parent user group has no main location" );
+            throw new InvalidArgumentException( "parentGroup", "parent user group has no main location" );
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
         $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
@@ -131,10 +149,9 @@ class UserService implements UserServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function loadSubUserGroups( APIUserGroup $userGroup )
     {
@@ -175,8 +192,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
-                //@todo: read user group type ID from INI settings
-                new CriterionContentTypeId( 3 ),
+                new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
                 new CriterionParentLocationId( $location->id ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
             )
@@ -193,7 +209,6 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function deleteUserGroup( APIUserGroup $userGroup )
     {
@@ -214,7 +229,6 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $newParent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function moveUserGroup( APIUserGroup $userGroup, APIUserGroup $newParent )
     {
@@ -233,10 +247,10 @@ class UserService implements UserServiceInterface
         $newParentMainLocation = $locationService->loadMainLocation( $loadedNewParent->getVersionInfo()->getContentInfo() );
 
         if ( $userGroupMainLocation === null )
-            throw new BadStateException( "userGroup" );
+            throw new BadStateException( "userGroup", 'existing user group is not stored and/or does not have any location yet' );
 
         if ( $newParentMainLocation === null )
-            throw new BadStateException( "newParent" );
+            throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
         $this->repository->getLocationService()->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
     }
@@ -331,6 +345,13 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        if ( $userCreateStruct->contentType === null )
+        {
+            $userContentType = $contentTypeService->loadContentType( $this->settings['userClassID'] );
+            $userCreateStruct->contentType = $userContentType;
+        }
 
         $locationCreateStructs = array();
         foreach ( $parentGroups as $parentGroup )
@@ -349,14 +370,13 @@ class UserService implements UserServiceInterface
                 array(
                     'login'         => $userCreateStruct->login,
                     'email'         => $userCreateStruct->email,
-                    // @todo: read password hash algorithm and site from INI settings
                     'passwordHash'  => $this->createPasswordHash(
                         $userCreateStruct->login,
                         $userCreateStruct->password,
-                        'ez.no',
-                        User::PASSWORD_HASH_MD5_USER
+                        $this->settings['siteName'],
+                        $this->settings['hashType']
                     ),
-                    'hashAlgorithm' => null,
+                    'hashAlgorithm' => $this->settings['hashType'],
                     'isEnabled'     => $userCreateStruct->enabled,
                     'maxLogin'      => 0
                 )
@@ -380,16 +400,19 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        try
-        {
-            $spiUser = $this->persistenceHandler->userHandler()->load( $userId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "user", $userId, $e );
-        }
-
+        $spiUser = $this->persistenceHandler->userHandler()->load( $userId );
         return $this->buildDomainUserObject( $spiUser );
+    }
+
+    /**
+     * Loads anonymous user
+     *
+     * @uses loadUser()
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadAnonymousUser()
+    {
+        return $this->loadUser( $this->settings['anonymousUserID'] );
     }
 
     /**
@@ -411,24 +434,22 @@ class UserService implements UserServiceInterface
         if ( !is_string( $password ) || empty( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
-        try
-        {
-            $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "user", $login, $e );
-        }
-
+        $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
         if ( count( $spiUsers ) > 1 )
         {
             // something went wrong, we should not have more than one
             // user with the same login
-            throw new BadStateException( "login" );
+            throw new BadStateException( "login", 'found several users with same login' );
         }
 
-        // @todo: read site name from settings
-        if ( $spiUsers[0]->passwordHash !== $this->createPasswordHash( $login, $password, 'ez.no', $spiUsers[0]->hashAlgorithm ) )
+        $passwordHash = $this->createPasswordHash(
+            $login,
+            $password,
+            $this->settings['siteName'],
+            $spiUsers[0]->hashAlgorithm
+        );
+
+        if ( $spiUsers[0]->passwordHash !== $passwordHash )
             throw new InvalidArgumentValue( "password", $password );
 
         return $this->buildDomainUserObject( $spiUsers[0] );
@@ -518,16 +539,15 @@ class UserService implements UserServiceInterface
                     'id'            => $loadedUser->id,
                     'login'         => $loadedUser->login,
                     'email'         => $userUpdateStruct->email ?: $loadedUser->email,
-                    // @todo: read password hash algorithm and site from INI settings
                     'passwordHash'  => $userUpdateStruct->password ?
                         $this->createPasswordHash(
                             $loadedUser->login,
                             $userUpdateStruct->password,
-                            'ez.no',
-                            User::PASSWORD_HASH_MD5_USER
+                            $this->settings['siteName'],
+                            $this->settings['hashType']
                         ) :
                         $loadedUser->passwordHash,
-                    'hashAlgorithm' => null,
+                    'hashAlgorithm' => $this->settings['hashType'],
                     'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
                     'maxLogin'      => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
                 )
@@ -566,7 +586,7 @@ class UserService implements UserServiceInterface
 
         $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
         if ( $groupMainLocation === null )
-            throw new IllegalArgumentException( "userGroup", "user group has no main location or no locations" );
+            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations" );
 
         if ( in_array( $groupMainLocation->id, $existingGroupIds ) )
             // user is already assigned to the user group
@@ -587,7 +607,7 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the user is not in the given user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
      */
     public function unAssignUserFromUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
@@ -603,11 +623,11 @@ class UserService implements UserServiceInterface
 
         $userLocations = $locationService->loadLocations( $loadedUser->getVersionInfo()->getContentInfo() );
         if ( empty( $userLocations ) )
-            throw new IllegalArgumentException( "user", "user has no locations, cannot unassign from group" );
+            throw new InvalidArgumentException( "user", "user has no locations, cannot unassign from group" );
 
         $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
         if ( $groupMainLocation === null )
-            throw new IllegalArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
+            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
 
         foreach ( $userLocations as $userLocation )
         {
@@ -618,7 +638,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        throw new IllegalArgumentException( '$userGroup', 'user is not in the given user group' );
+        throw new InvalidArgumentException( "userGroup", "user is not in the given user group" );
     }
 
     /**
@@ -634,6 +654,13 @@ class UserService implements UserServiceInterface
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
+        if ( $contentType === null )
+        {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $this->settings['userClassID']
+            );
+        }
+
         return new UserCreateStruct(
             array(
                 'contentType'      => $contentType,
@@ -657,6 +684,13 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
+        if ( $contentType === null )
+        {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $this->settings['userGroupClassID']
+            );
+        }
+
         return new UserGroupCreateStruct(
             array(
                 'contentType'      => $contentType,

@@ -18,7 +18,7 @@ class Query extends ValueObject
      * The Query criterion
      * Can contain multiple criterion, as items of a logical one (by default AND)
      *
-     * @var Criterion
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public $criterion;
 

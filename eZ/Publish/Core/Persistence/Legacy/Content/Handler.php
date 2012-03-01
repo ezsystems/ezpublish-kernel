@@ -17,7 +17,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * The Content Handler stores Content and ContentType objects.
@@ -229,7 +230,7 @@ class Handler implements BaseContentHandler
 
         if ( !count( $rows ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'content', $id );
+            throw new NotFound( 'content', $id );
         }
 
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
@@ -356,7 +357,7 @@ class Handler implements BaseContentHandler
      * @param int $contentId
      * @param int|false $version Copy all versions if left false
      * @return \eZ\Publish\SPI\Persistence\Content
-     * @throws \ezp\Base\Exception\NotFound If content or version is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found
      */
     public function copy( $contentId, $version )
     {
@@ -375,7 +376,7 @@ class Handler implements BaseContentHandler
 
         if ( 0 == count( $rows ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'content', $contentId );
+            throw new NotFound( 'content', $contentId );
         }
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
 

@@ -7,6 +7,8 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
+    eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
@@ -18,7 +20,6 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct,
-    eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup,
     eZ\Publish\Core\Repository\Values\ContentType\ContentType,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft,
@@ -31,18 +32,10 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup,
     eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPIContentTypeGroupCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPIContentTypeGroupUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints as SPIFieldTypeConstraints,
-    ezp\Base\Exception\NotFound as BaseNotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty,
-    eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound,
-    eZ\Publish\Core\Persistence\Legacy\Exception\TypeGroupNotFound,
-    eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent,
-    eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType,
     DateTime;
 
 /**
@@ -63,22 +56,29 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings;
     }
 
     /**
      * Create a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If a group with the same identifier already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If a group with the same identifier already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct
      *
@@ -90,12 +90,12 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $this->loadContentTypeGroupByIdentifier( $contentTypeGroupCreateStruct->identifier );
 
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeGroupCreateStruct->identifier',
                 "a group with the same identifier already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         if ( $contentTypeGroupCreateStruct->creationDate === null )
             $timestamp = time();
@@ -142,20 +142,9 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeGroupId', $contentTypeGroupId );
         }
 
-        try
-        {
-            $spiGroup = $this->persistenceHandler->contentTypeHandler()->loadGroup(
-                $contentTypeGroupId
-            );
-        }
-        catch ( TypeGroupNotFound $e )
-        {
-            throw new NotFoundException(
-                'ContentTypeGroup',
-                $contentTypeGroupId,
-                $e
-            );
-        }
+        $spiGroup = $this->persistenceHandler->contentTypeHandler()->loadGroup(
+            $contentTypeGroupId
+        );
 
         return $this->buildContentTypeGroupDomainObject( $spiGroup );
     }
@@ -206,7 +195,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Update a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given identifier (if set) already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier (if set) already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
@@ -217,12 +206,12 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $this->loadContentTypeGroupByIdentifier( $contentTypeGroupUpdateStruct->identifier );
 
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeGroupUpdateStruct->identifier',
                 "given identifier already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         if ( $contentTypeGroupUpdateStruct->modificationDate !== null )
             $modifiedTimestamp = $contentTypeGroupUpdateStruct->modificationDate->getTimestamp();
@@ -251,7 +240,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * This method only deletes an content type group which has content types without any content instances
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If  a to be deleted content type has instances
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
@@ -263,9 +252,9 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentTypeGroup->id
             );
         }
-        catch ( GroupNotEmpty $e )
+        catch ( APIBadStateException $e )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 "contentTypeGroup",
                 "content class group has content type instances",
                 $e
@@ -306,11 +295,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * The content type is created in the state STATUS_DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
      *         or there is a duplicate field identifier
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
-     * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
@@ -318,7 +307,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         if ( count( $contentTypeGroups ) === 0 )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeGroups',
                 "array must contain at least one contentTypeGroup"
             );
@@ -330,12 +319,12 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentTypeCreateStruct->identifier
             );
 
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeCreateStruct->identifier',
                 "identifier in the content type create struct already exists"
             );
         }
-        catch ( TypeNotFound $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         try
         {
@@ -343,12 +332,12 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentTypeCreateStruct->remoteId
             );
 
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeCreateStruct->remoteId',
                 "remoteId in the content type create struct already exists"
             );
         }
-        catch ( TypeNotFound $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         if ( $contentTypeCreateStruct->creatorId === null )
             $userId = $this->repository->getCurrentUser()->id;
@@ -572,22 +561,11 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
         }
 
-        try
-        {
-            /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
-                $contentTypeId,
-                SPIContentType::STATUS_DEFINED
-            );
-        }
-        catch ( TypeNotFound $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $contentTypeId,
-                $e
-            );
-        }
+        /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $contentTypeId,
+            SPIContentType::STATUS_DEFINED
+        );
 
         return $this->buildContentTypeDomainObject(
             $spiContentType
@@ -610,21 +588,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$identifier', $identifier );
         }
 
-        try
-        {
-            /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
-                $identifier
-            );
-        }
-        catch ( TypeNotFound $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $identifier,
-                $e
-            );
-        }
+        /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
+            $identifier
+        );
 
         return $this->buildContentTypeDomainObject(
             $spiContentType
@@ -642,18 +609,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
-        try
-        {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
-        }
-        catch ( TypeNotFound $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $remoteId,
-                $e
-            );
-        }
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
 
         return $this->buildContentTypeDomainObject(
             $spiContentType
@@ -677,21 +633,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
         }
 
-        try
-        {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
-                $contentTypeId,
-                SPIContentType::STATUS_DRAFT
-            );
-        }
-        catch ( TypeNotFound $e )
-        {
-            throw new NotFoundException(
-                "contentType",
-                $contentTypeId,
-                $e
-            );
-        }
+        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $contentTypeId,
+            SPIContentType::STATUS_DRAFT
+        );
 
         /*
         $currentUser = $this->repository->getCurrentUser();
@@ -712,7 +657,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return array an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
      */
     public function loadContentTypes( APIContentTypeGroup $contentTypeGroup )
     {
@@ -755,10 +700,10 @@ class ContentTypeService implements ContentTypeServiceInterface
 
             if ( $spiContentType->modifierId !== $currentUser->id )
             {
-                throw new BadStateException( "contentType" );
+                throw new BadStateException( "contentType", 'modifier of draft is not the same user as current user' );
             }
         }
-        catch ( TypeNotFound $e )
+        catch ( APINotFoundException $e )
         {
             $spiContentType = $this->persistenceHandler->contentTypeHandler()->createDraft(
                 $contentType->modifierId,
@@ -777,7 +722,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given identifier or remoteId already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier or remoteId already exists
      *         or there is no draft assigned to the authenticated user
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
@@ -789,9 +734,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $this->loadContentTypeDraft( $contentTypeDraft->id );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeUpdateStruct->identifier',
                 "there is no draft assigned to the authenticated user",
                 $e
@@ -802,23 +747,23 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $this->loadContentTypeByIdentifier( $contentTypeUpdateStruct->identifier );
 
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeUpdateStruct->identifier',
                 "the given identifier already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         try
         {
             $this->loadContentTypeByRemoteId( $contentTypeUpdateStruct->remoteId );
 
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeUpdateStruct->remoteId',
                 "the given remoteId already exists"
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( APINotFoundException $e ) {}
 
         $initialLanguageId = $this->persistenceHandler
             ->contentLanguageHandler()
@@ -880,9 +825,9 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentType->status
             );
         }
-        catch ( TypeStillHasContent $e )
+        catch ( APIBadStateException $e )
         {
-            throw new BadStateException( '$contentType', $e );
+            throw new BadStateException( '$contentType', 'existing content exists of this content type', $e );
         }
     }
 
@@ -921,7 +866,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * assign a content type to a content type group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the content type is already assigned the given group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
@@ -935,7 +880,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( in_array( $contentTypeGroup->id, $spiContentType->groupIds ) )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentType',
                 "the content type is already assigned to the given group"
             );
@@ -952,7 +897,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Unassign a content type from a group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to link a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the content type is not assigned this the given group.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is not assigned this the given group.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $contentTypeGroup is the last group assigned to the content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -967,7 +912,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( !in_array( $contentTypeGroup->id, $spiContentType->groupIds ) )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentType',
                 "the content type is not assigned the given group"
             );
@@ -981,9 +926,9 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentType->status
             );
         }
-        catch ( RemoveLastGroupFromType $e )
+        catch ( APIBadStateException $e )
         {
-            throw new BadStateException( '$contentType', $e );
+            throw new BadStateException( '$contentType', 'the type group is the last group assigned to this type', $e );
         }
     }
 
@@ -992,7 +937,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * The content type must be in state DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the identifier in already exists in the content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
@@ -1004,7 +949,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $loadedContentTypeDraft->getFieldDefinition( $fieldDefinitionCreateStruct->identifier ) !== null )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeDraft',
                 "the identifier already exists in the content type"
             );
@@ -1022,7 +967,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Remove a field definition from an existing Type.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given field definition does not belong to the given type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given field definition does not belong to the given type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
@@ -1034,7 +979,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $loadedContentTypeDraft->getFieldDefinition( $fieldDefinition->identifier ) === null )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$contentTypeDraft',
                 "the given field definition does not belong to the given type"
             );
@@ -1051,8 +996,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Update a field definition
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type
+     *                                                                        If the given identifier is used in an existing field of the given content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the given identifier is used in an existing field of the given content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft the content type draft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
@@ -1078,7 +1023,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
         if ( !$foundFieldId )
         {
-            throw new IllegalArgumentException(
+            throw new InvalidArgumentException(
                 '$fieldDefinition->id',
                 "the given field does not belong to the content type"
             );
@@ -1110,9 +1055,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
-            throw new BadStateException( '$contentTypeDraft', $e );
+            throw new BadStateException( '$contentTypeDraft', 'this content type has no drafts to publish', $e );
         }
 
         $this->persistenceHandler->contentTypeHandler()->publish(

@@ -118,26 +118,40 @@ class Repository implements RepositoryInterface
     protected $ioService;
 
     /**
+     * Service settings, first level key is service name
+     *
+     * @var array
+     */
+    protected $serviceSettings;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\IO\Handler $ioHandler
+     * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      */
-    public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, User $user = null )
+    public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, array $serviceSettings = array(), User $user = null )
     {
         $this->persistenceHandler = $persistenceHandler;
         $this->ioHandler = $ioHandler;
+        $this->serviceSettings = $serviceSettings + array(
+            'content' => array(),
+            'contentType' => array(),
+            'location' => array(),
+            'section' => array(),
+            'role' => array(),
+            'user' => array(),
+            'language' => array(),
+            'trash' => array(),
+            'io' => array(),
+        );
 
         if ( $user !== null )
             $this->setCurrentUser( $user );
-        else
-        {
-            // @todo No requirement for user for the time being
-            //throw new Logic( "@todo Need to get anon user", "repository needs to have a user object" );
-        }
     }
 
     /**
@@ -147,6 +161,9 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUser()
     {
+        if ( !$this->user instanceof User )
+            $this->user = $this->getUserService()->loadAnonymousUser();
+
         return $this->user;
     }
 
@@ -260,7 +277,7 @@ class Repository implements RepositoryInterface
         if ( $this->contentService !== null )
             return $this->contentService;
 
-        $this->contentService = new ContentService( $this, $this->persistenceHandler );
+        $this->contentService = new ContentService( $this, $this->persistenceHandler, $this->serviceSettings['content'] );
         return $this->contentService;
     }
 
@@ -276,7 +293,7 @@ class Repository implements RepositoryInterface
         if ( $this->languageService !== null )
             return $this->languageService;
 
-        $this->languageService = new LanguageService( $this, $this->persistenceHandler );
+        $this->languageService = new LanguageService( $this, $this->persistenceHandler, $this->serviceSettings['language'] );
         return $this->languageService;
     }
 
@@ -293,7 +310,7 @@ class Repository implements RepositoryInterface
         if ( $this->contentTypeService !== null )
             return $this->contentTypeService;
 
-        $this->contentTypeService = new ContentTypeService( $this, $this->persistenceHandler );
+        $this->contentTypeService = new ContentTypeService( $this, $this->persistenceHandler, $this->serviceSettings['contentType'] );
         return $this->contentTypeService;
     }
 
@@ -309,7 +326,7 @@ class Repository implements RepositoryInterface
         if ( $this->locationService !== null )
             return $this->locationService;
 
-        $this->locationService = new LocationService( $this, $this->persistenceHandler );
+        $this->locationService = new LocationService( $this, $this->persistenceHandler, $this->serviceSettings['location'] );
         return $this->locationService;
     }
 
@@ -326,7 +343,7 @@ class Repository implements RepositoryInterface
         if ( $this->trashService !== null )
             return $this->trashService;
 
-        $this->trashService = new TrashService( $this, $this->persistenceHandler );
+        $this->trashService = new TrashService( $this, $this->persistenceHandler, $this->serviceSettings['trash'] );
         return $this->trashService;
     }
 
@@ -342,7 +359,7 @@ class Repository implements RepositoryInterface
         if ( $this->sectionService !== null )
             return $this->sectionService;
 
-        $this->sectionService = new SectionService( $this, $this->persistenceHandler );
+        $this->sectionService = new SectionService( $this, $this->persistenceHandler, $this->serviceSettings['section'] );
         return $this->sectionService;
     }
 
@@ -358,7 +375,7 @@ class Repository implements RepositoryInterface
         if ( $this->userService !== null )
             return $this->userService;
 
-        $this->userService = new UserService( $this, $this->persistenceHandler );
+        $this->userService = new UserService( $this, $this->persistenceHandler, $this->serviceSettings['user'] );
         return $this->userService;
     }
 
@@ -372,7 +389,7 @@ class Repository implements RepositoryInterface
         if ( $this->roleService !== null )
             return $this->roleService;
 
-        $this->roleService = new RoleService( $this, $this->persistenceHandler );
+        $this->roleService = new RoleService( $this, $this->persistenceHandler, $this->serviceSettings['role'] );
         return $this->roleService;
     }
 
@@ -388,7 +405,7 @@ class Repository implements RepositoryInterface
         if ( $this->ioService !== null )
             return $this->ioService;
 
-        $this->ioService = new IOService( $this, $this->ioHandler );
+        $this->ioService = new IOService( $this, $this->ioHandler, $this->serviceSettings['io'] );
         return $this->ioService;
     }
 

@@ -9,11 +9,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Exception thrown if no converter for a type was found
  */
-class NotFound extends \InvalidArgumentException
+class NotFound extends NotFoundException
 {
     /**
      * Creates a new exception for $typeName
@@ -23,6 +24,7 @@ class NotFound extends \InvalidArgumentException
     public function __construct( $typeName )
     {
         parent::__construct(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue\\Converter\\*',
             sprintf( 'FieldValue Converter for type "%s" not found.', $typeName )
         );
     }

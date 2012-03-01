@@ -15,7 +15,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Trash Service

@@ -12,7 +12,6 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
     eZ\Publish\API\Repository\Values\User\Role as APIRole,
     eZ\Publish\Core\Repository\Values\User\RoleCreateStruct,
     eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct,
-    eZ\Publish\API\Repository\Values\User\RoleAssignment,
     eZ\Publish\Core\Repository\Values\User\UserRoleAssignment,
     eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment,
     eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation,
@@ -28,11 +27,9 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
 
-    ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * This service provides methods for managing Roles and Policies
@@ -54,22 +51,29 @@ class RoleService implements RoleServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings;
     }
 
     /**
      * Creates a new Role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the name of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
@@ -93,7 +97,7 @@ class RoleService implements RoleServiceInterface
         {
             $existingRole = $this->loadRoleByIdentifier( $roleCreateStruct->identifier );
             if ( $existingRole !== null )
-                throw new IllegalArgumentException( "identifier", $roleCreateStruct->identifier );
+                throw new InvalidArgumentException( "roleCreateStruct", "role with specified identifier already exists" );
         }
         catch ( NotFoundException $e ) {}
 
@@ -107,7 +111,7 @@ class RoleService implements RoleServiceInterface
      * Updates the name and (5.x) description of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the name of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
@@ -137,7 +141,7 @@ class RoleService implements RoleServiceInterface
             {
                 $existingRole = $this->loadRoleByIdentifier( $roleUpdateStruct->identifier );
                 if ( $existingRole !== null )
-                    throw new IllegalArgumentException( "identifier", $roleUpdateStruct->identifier );
+                    throw new InvalidArgumentException( "roleUpdateStruct", "role with specified identifier already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -274,15 +278,7 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $id ) )
             throw new InvalidArgumentValue( "id", $id );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $id, $e );
-        }
-
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $id );
         return $this->buildDomainRoleObject( $spiRole );
     }
 
@@ -301,15 +297,7 @@ class RoleService implements RoleServiceInterface
         if ( !is_string( $identifier ) )
             throw new InvalidArgumentValue( "identifier", $identifier );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRoleByIdentifier( $identifier );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $identifier, $e );
-        }
-
+        $spiRole = $this->persistenceHandler->userHandler()->loadRoleByIdentifier( $identifier );
         return $this->buildDomainRoleObject( $spiRole );
     }
 
@@ -318,7 +306,7 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Role}
+     * @return \eZ\Publish\API\Repository\Values\User\Role[]
      */
     public function loadRoles()
     {
@@ -357,7 +345,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param $userId
      *
-     * @return array an array of {@link Policy}
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
     {
@@ -431,17 +419,10 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $role->id, $e );
-        }
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
 
         if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "\$userGroup->id", "Role is not assigned to the user group" );
+            throw new InvalidArgumentException( "userGroup", "role is not assigned to the user group" );
 
         $this->persistenceHandler->userHandler()->unAssignRole( $userGroup->id, $role->id );
     }
@@ -502,17 +483,10 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $role->id, $e );
-        }
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
 
         if ( !in_array( $user->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "\$user->id", "Role is not assigned to the user" );
+            throw new InvalidArgumentException( "user", "role is not assigned to the user" );
 
         $this->persistenceHandler->userHandler()->unAssignRole( $user->id, $role->id );
     }
@@ -524,21 +498,14 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @return array an array of {@link RoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public function getRoleAssignments( APIRole $role )
     {
         if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        try
-        {
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
-        }
-        catch( NotFound $e )
-        {
-            throw new NotFoundException( "role", $role->id, $e );
-        }
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
 
         $userService = $this->repository->getUserService();
 
@@ -588,7 +555,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return array an array of {@link UserRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */
     public function getRoleAssignmentsForUser( User $user )
     {
@@ -620,7 +587,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {

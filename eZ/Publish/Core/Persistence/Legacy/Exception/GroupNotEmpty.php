@@ -9,12 +9,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Exception;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  * Exception thrown if a Content\Type\Group is to be deleted which is not
  * empty.
  */
-class GroupNotEmpty extends \InvalidArgumentException
+class GroupNotEmpty extends BadStateException
 {
     /**
      * Creates a new exception for $groupId
@@ -24,6 +25,7 @@ class GroupNotEmpty extends \InvalidArgumentException
     public function __construct( $groupId )
     {
         parent::__construct(
+            '$groupId',
             sprintf( 'Group with ID "%s" is not empty.', $groupId )
         );
     }

@@ -24,10 +24,10 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
 
-    ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
@@ -50,15 +50,22 @@ class LocationService implements LocationServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings;
     }
 
     /**
@@ -67,7 +74,7 @@ class LocationService implements LocationServiceInterface
      * Only the items on which the user has read access are copied.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the target location is a sub location of the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the target location is a sub location of the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
      * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
@@ -89,7 +96,7 @@ class LocationService implements LocationServiceInterface
         $loadedTargetLocation = $this->loadLocation( $targetParentLocation->id );
 
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
-            throw new IllegalArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
+            throw new InvalidArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
         $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
             $loadedSubtree->id,
@@ -114,15 +121,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $locationId ) )
             throw new InvalidArgumentValue( "locationId", $locationId );
 
-        try
-        {
-            $spiLocation = $this->persistenceHandler->locationHandler()->load( $locationId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $locationId, $e );
-        }
-
+        $spiLocation = $this->persistenceHandler->locationHandler()->load( $locationId );
         return $this->buildDomainLocationObject( $spiLocation );
     }
 
@@ -188,7 +187,7 @@ class LocationService implements LocationServiceInterface
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
         if ( $searchResult->count == 0 )
-            throw new BadStateException( "contentInfo" );
+            throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
 
         $spiLocations = $searchResult->content[0]->locations;
         if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
@@ -233,7 +232,7 @@ class LocationService implements LocationServiceInterface
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
         if ( $searchResult->count == 0 )
-            throw new BadStateException( "contentInfo" );
+            throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
 
         $spiLocations = $searchResult->content[0]->locations;
         if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
@@ -257,7 +256,7 @@ class LocationService implements LocationServiceInterface
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
-     * @return array Of {@link Location}
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
     {
@@ -339,7 +338,7 @@ class LocationService implements LocationServiceInterface
     /**
      * Creates the new $location in the content repository for the given content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the content is already below the specified parent
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the content is already below the specified parent
      *                                        or the parent is a sub location of the location of the content
      *                                        or if set the remoteId exists already
      *
@@ -383,9 +382,9 @@ class LocationService implements LocationServiceInterface
             {
                 $existingLocation = $this->loadLocationByRemoteId( $locationCreateStruct->remoteId );
                 if ( $existingLocation !== null )
-                    throw new IllegalArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
+                    throw new InvalidArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( APINotFoundException $e ) {}
         }
         else
         {
@@ -405,7 +404,7 @@ class LocationService implements LocationServiceInterface
         );
 
         if ( $searchResult->count > 0 )
-            throw new IllegalArgumentException( "contentInfo", "content is already below the specified parent" );
+            throw new InvalidArgumentException( "contentInfo", "content is already below the specified parent" );
 
         // check if the parent is a sub location of one of the existing content locations
         // this also solves the situation where parent location actually one of the content locations
@@ -417,7 +416,7 @@ class LocationService implements LocationServiceInterface
             foreach ( $existingContentLocations as $existingContentLocation )
             {
                 if ( stripos( $existingContentLocation->pathString, $loadedParentLocation->pathString ) !== false )
-                    throw new IllegalArgumentException( "locationCreateStruct", "specified parent is a sub location of one of the existing content locations" );
+                    throw new InvalidArgumentException( "locationCreateStruct", "specified parent is a sub location of one of the existing content locations" );
             }
         }
 
@@ -439,7 +438,7 @@ class LocationService implements LocationServiceInterface
                 if ( $parentParentLocation->hidden || $parentParentLocation->invisible )
                     $createStruct->invisible = true;
             }
-            catch ( NotFoundException $e ) {}
+            catch ( APINotFoundException $e ) {}
         }
 
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
@@ -458,7 +457,7 @@ class LocationService implements LocationServiceInterface
      * Updates $location in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId exists already
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException   if if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
@@ -490,9 +489,9 @@ class LocationService implements LocationServiceInterface
             {
                 $existingLocation = $this->loadLocationByRemoteId( $locationUpdateStruct->remoteId );
                 if ( $existingLocation !== null )
-                    throw new IllegalArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
+                    throw new InvalidArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( APINotFoundException $e ) {}
         }
 
         $updateStruct = new UpdateStruct();
@@ -542,15 +541,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->hide( $location->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $location->id, $e );
-        }
-
+        $this->persistenceHandler->locationHandler()->hide( $location->id );
         return $this->loadLocation( $location->id );
     }
 
@@ -571,15 +562,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->unHide( $location->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $location->id, $e );
-        }
-
+        $this->persistenceHandler->locationHandler()->unHide( $location->id );
         return $this->loadLocation( $location->id );
     }
 
@@ -602,14 +585,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $e->identifier, $e );
-        }
+        $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
     }
 
     /**
@@ -624,14 +600,7 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        try
-        {
-            $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "location", $location->id, $e );
-        }
+        $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
     }
 
 

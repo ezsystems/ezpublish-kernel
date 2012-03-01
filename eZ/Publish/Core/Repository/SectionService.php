@@ -5,10 +5,8 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Section,
-    eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
 
     eZ\Publish\API\Repository\SectionService as SectionServiceInterface,
@@ -17,11 +15,10 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
 
     eZ\Publish\SPI\Persistence\Content\Section as SPISection,
 
-    ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 /**
@@ -42,22 +39,29 @@ class SectionService implements SectionServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->settings = $settings;
     }
 
     /**
      * Creates a new Section in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier in $sectionCreateStruct already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct
      *
@@ -75,7 +79,7 @@ class SectionService implements SectionServiceInterface
         {
             $existingSection = $this->loadSectionByIdentifier( $sectionCreateStruct->identifier );
             if ( $existingSection !== null )
-                throw new IllegalArgumentException( "identifier", $sectionCreateStruct->identifier );
+                throw new InvalidArgumentException( "sectionCreateStruct", "section with specified identifier already exists" );
         }
         catch ( NotFoundException $e ) {}
 
@@ -91,7 +95,7 @@ class SectionService implements SectionServiceInterface
      * Updates the given section in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the new identifier already exists (if set in the update struct)
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier already exists (if set in the update struct)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      * @param \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct
@@ -115,7 +119,7 @@ class SectionService implements SectionServiceInterface
             {
                 $existingSection = $this->loadSectionByIdentifier( $sectionUpdateStruct->identifier );
                 if ( $existingSection !== null )
-                    throw new IllegalArgumentException( "identifier", $sectionUpdateStruct->identifier );
+                    throw new InvalidArgumentException( "sectionUpdateStruct", "section with specified identifier already exists" );
             }
             catch ( NotFoundException $e ) {}
         }
@@ -146,15 +150,7 @@ class SectionService implements SectionServiceInterface
         if ( !is_numeric( $sectionId ) )
             throw new InvalidArgumentValue( "sectionId", $sectionId );
 
-        try
-        {
-            $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "section", $sectionId, $e );
-        }
-
+        $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
         return $this->buildDomainSectionObject( $spiSection );
     }
 
@@ -163,7 +159,7 @@ class SectionService implements SectionServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @return array of {@link \eZ\Publish\API\Repository\Values\Content\Section}
+     * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
     public function loadSections()
     {
@@ -193,15 +189,7 @@ class SectionService implements SectionServiceInterface
         if ( !is_string( $sectionIdentifier ) )
             throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
 
-        try
-        {
-            $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
-        }
-        catch ( NotFound $e )
-        {
-            throw new NotFoundException( "section", $sectionIdentifier, $e );
-        }
-
+        $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
         return $this->buildDomainSectionObject( $spiSection );
     }
 
@@ -264,7 +252,7 @@ class SectionService implements SectionServiceInterface
         $loadedSection = $this->loadSection( $section->id );
 
         if ( $this->countAssignedContents( $loadedSection ) > 0 )
-            throw new BadStateException( "section" );
+            throw new BadStateException( "section", 'section is still assigned to content' );
 
         $this->persistenceHandler->sectionHandler()->delete( $loadedSection->id );
     }

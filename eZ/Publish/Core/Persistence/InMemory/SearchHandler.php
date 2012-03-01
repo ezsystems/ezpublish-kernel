@@ -23,7 +23,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\Subtree,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     Exception;
 
 /**
@@ -127,7 +127,7 @@ class SearchHandler extends SearchHandlerInterface
     {
         $list = $this->find( $criterion, 0, 1, null, $translations );
         if ( !$list->count )
-            throw new NotFound( 'Content', $criterion );
+            throw new NotFound( 'Content', var_export( $criterion, true ) );
 
         return $list->content[0];
     }

@@ -20,14 +20,14 @@ class ContentMetaDataUpdateStruct extends ValueObject
     /**
      * if set this value overrides the publication date of the content. (Used in staging scenarios)
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $publishedDate;
 
     /**
      * If set this value overrides the modification date. (Used for staging scenarios).
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $modificationDate;
 

@@ -59,7 +59,6 @@ interface UserService
      * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function loadSubUserGroups( UserGroup $userGroup );
 
@@ -71,7 +70,6 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function deleteUserGroup( UserGroup $userGroup );
 
@@ -82,7 +80,6 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $newParent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent );
 
@@ -128,6 +125,14 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      */
     public function loadUser( $userId );
+
+    /**
+     * Loads anonymous user
+     *
+     * @uses loadUser()
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadAnonymousUser();
 
     /**
      * Loads a user for the given login and password

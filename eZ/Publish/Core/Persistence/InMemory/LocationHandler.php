@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterf
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
-    ezp\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Handler

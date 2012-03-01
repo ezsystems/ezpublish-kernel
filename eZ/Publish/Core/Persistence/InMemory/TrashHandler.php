@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInt
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content\Location\Exception\ParentNotFound;
 
 /**

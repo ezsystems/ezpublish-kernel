@@ -18,6 +18,8 @@ use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
 
@@ -40,19 +42,9 @@ class UserServiceStub implements UserService
     private $users;
 
     /**
-     * @var integer
-     */
-    private $userNextId;
-
-    /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
     private $userGroups;
-
-    /**
-     * @var integer
-     */
-    private $userGroupNextId;
 
     /**
      * Instantiates a new user service instance.
@@ -85,13 +77,36 @@ class UserServiceStub implements UserService
      */
     public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup )
     {
+        $contentService  = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $locationCreate = $locationService->newLocationCreateStruct(
+            $parentGroup->contentInfo->mainLocationId
+        );
+
+        $draft = $contentService->createContent(
+            $userGroupCreateStruct,
+            array( $locationCreate )
+        );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+
         $userGroup = new UserGroupStub(
             array(
-                'id'        =>  ++$this->userGroupNextId,
-                'parentId'  =>  $parentGroup->id,
+                'id'             =>  $content->contentId,
+                'parentId'       =>  $parentGroup->id,
+                'subGroupCount'  =>  0,
+                'content'        =>  $content
             )
         );
-        $this->userGroups[$userGroup->id] = $userGroup;
+        $this->userGroups[$userGroup->id]   = $userGroup;
+        $this->userGroups[$parentGroup->id] = new UserGroupStub(
+            array(
+                'id'             =>  $parentGroup->id,
+                'parentId'       =>  $parentGroup->parentId,
+                'subGroupCount'  =>  $parentGroup->subGroupCount + 1,
+                'content'        =>  $parentGroup->content
+            )
+        );
 
         return $userGroup;
     }
@@ -123,7 +138,6 @@ class UserServiceStub implements UserService
      * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function loadSubUserGroups( UserGroup $userGroup )
     {
@@ -146,7 +160,6 @@ class UserServiceStub implements UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function deleteUserGroup( UserGroup $userGroup )
     {
@@ -160,7 +173,6 @@ class UserServiceStub implements UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $newParent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
@@ -202,7 +214,44 @@ class UserServiceStub implements UserService
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
-        // TODO: Implement createUser() method.
+        $contentService  = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $locationCreateStruts = array();
+        foreach ( $parentGroups as $parentGroup )
+        {
+            $locationCreateStruts[] = $locationService->newLocationCreateStruct(
+                $parentGroup->contentInfo->mainLocationId
+            );
+        }
+
+        // Seems the is a back reference in the content object
+        $userCreateStruct->setField( 'user_account', new UserStub() );
+
+        $draft = $contentService->createContent(
+            $userCreateStruct,
+            $locationCreateStruts
+        );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $user = new UserStub(
+            array(
+                'id'             =>  $content->contentId,
+                'login'          =>  $userCreateStruct->login,
+                'email'          =>  $userCreateStruct->email,
+                'passwordHash'   =>  $this->createHash(
+                    $userCreateStruct->login,
+                    $userCreateStruct->password,
+                    2
+                ),
+                'hashAlgorithm'  =>  2,
+                'isEnabled'      =>  true,
+                'content'        =>  $content
+            )
+        );
+        $this->users[$user->id] = $user;
+
+        return $user;
     }
 
     /**
@@ -216,7 +265,23 @@ class UserServiceStub implements UserService
      */
     public function loadUser( $userId )
     {
-        // TODO: Implement loadUser() method.
+        if ( isset( $this->users[$userId] ) )
+        {
+            return $this->users[$userId];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+    }
+
+    /**
+     * Loads anonymous user
+     *
+     * @uses loadUser()
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadAnonymousUser()
+    {
+        // 10 is the contentId of the anon user in the test dump
+        return $this->loadUser( 10 );
     }
 
     /**
@@ -231,7 +296,26 @@ class UserServiceStub implements UserService
      */
     public function loadUserByCredentials( $login, $password )
     {
-        // TODO: Implement loadUserByCredentials() method.
+        foreach ( $this->users as $user )
+        {
+            if ( $login !== $user->login )
+            {
+                continue;
+            }
+
+            $passwordHash = $this->createHash(
+                $login,
+                $password,
+                $user->hashAlgorithm
+            );
+
+            if ( $passwordHash !== $user->passwordHash )
+            {
+                continue;
+            }
+            return $user;
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -243,7 +327,7 @@ class UserServiceStub implements UserService
      */
     public function deleteUser( User $user )
     {
-        // TODO: Implement deleteUser() method.
+        unset( $this->users[$user->id] );
     }
 
     /**
@@ -261,7 +345,48 @@ class UserServiceStub implements UserService
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct )
     {
-        // TODO: Implement updateUser() method.
+        $contentService = $this->repository->getContentService();
+
+        $contentUpdate = $userUpdateStruct->contentUpdateStruct ?:
+            $contentService->newContentUpdateStruct();
+
+        $contentDraft = $contentService->createContentDraft( $user->contentInfo );
+        $contentDraft = $contentService->updateContent(
+            $contentDraft->getVersionInfo(),
+            $contentUpdate
+        );
+
+        $content = $contentService->publishVersion(
+            $contentDraft->getVersionInfo()
+        );
+
+        if ( $userUpdateStruct->contentMetaDataUpdateStruct )
+        {
+            $content = $contentService->updateContentMetadata(
+                $content->contentInfo,
+                $userUpdateStruct->contentMetaDataUpdateStruct
+            );
+        }
+
+        $this->users[$user->id] = new UserStub(
+            array(
+                'id'             =>  $user->id,
+                'login'          =>  $user->login,
+                'email'          =>  $userUpdateStruct->email ?: $user->email,
+                'isEnabled'      =>  is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,
+                'maxLogin'       =>  is_null( $userUpdateStruct->maxLogin ) ? $user->maxLogin : $userUpdateStruct->maxLogin,
+                'hashAlgorithm'  =>  $user->hashAlgorithm,
+                'passwordHash'   =>  $userUpdateStruct->password ?
+                    $this->createHash(
+                        $user->login,
+                        $userUpdateStruct->password,
+                        $user->hashAlgorithm ) : $user->passwordHash,
+
+                'content'    =>  $content,
+            )
+        );
+
+        return $this->users[$user->id];
     }
 
     /**
@@ -296,7 +421,7 @@ class UserServiceStub implements UserService
     /**
      * Instantiate a user create class
      *
-     * @param string $login the login of the new user
+     * @paramb string $login the login of the new user
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
      * @param string $mainLanguageCode the main language for the underlying content object
@@ -306,20 +431,40 @@ class UserServiceStub implements UserService
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
-        // TODO: Implement newUserCreateStruct() method.
+        $contentType = $contentType ?:
+            $this->repository->getContentTypeService()->loadContentTypeByIdentifier( 'user' );
+
+        return new UserCreateStructStub(
+            array(
+                'login'             =>  $login,
+                'email'             =>  $email,
+                'password'          =>  $password,
+                'mainLanguageCode'  =>  $mainLanguageCode,
+                'contentType'       =>  $contentType
+            )
+        );
+
     }
 
     /**
      * Instantiate a user group create class
      *
      * @param string $mainLanguageCode The main language for the underlying content object
-     * @param null|\eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
-        return new UserGroupCreateStructStub( array( 'mainLanguageCode' => $mainLanguageCode ) );
+        $contentType = $contentType ?:
+            $this->repository->getContentTypeService()->loadContentTypeByIdentifier( 'user_group' );
+
+        return new UserGroupCreateStructStub(
+            array(
+                'mainLanguageCode'  =>  $mainLanguageCode,
+                'contentType'       =>  $contentType
+            )
+        );
     }
 
     /**
@@ -329,7 +474,7 @@ class UserServiceStub implements UserService
      */
     public function newUserUpdateStruct()
     {
-        // TODO: Implement newUserUpdateStruct() method.
+        return new UserUpdateStruct();
     }
 
     /**
@@ -350,15 +495,8 @@ class UserServiceStub implements UserService
      */
     private function initFromFixture()
     {
-        list(
-            $this->userGroups,
-            $this->userGroupNextId
-        ) = $this->repository->loadFixture( 'UserGroup' );
-
-        list(
-            $this->users,
-            $this->userNextId
-        ) = $this->repository->loadFixture( 'User' );
+        list( $this->userGroups ) = $this->repository->loadFixture( 'UserGroup' );
+        list( $this->users )      = $this->repository->loadFixture( 'User' );
     }
 
     private function createHash( $login, $password, $type )

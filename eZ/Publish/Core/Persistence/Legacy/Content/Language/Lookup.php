@@ -19,7 +19,7 @@ interface Lookup
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found
      */
     public function getById( $id );
@@ -29,7 +29,7 @@ interface Lookup
      *
      * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found
      */
     public function getByLocale( $languageCode );

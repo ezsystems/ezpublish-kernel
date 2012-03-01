@@ -196,6 +196,8 @@ function generateContentInfoFixture( array $fixture )
     $nextId       = 0;
     $contentInfos = array();
 
+    $indexMap = array();
+
     $languageCodes = array();
     foreach ( getFixtureTable( 'ezcontent_language', $fixture ) as $data )
     {
@@ -210,6 +212,16 @@ function generateContentInfoFixture( array $fixture )
 
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
+        $indexMap[$data['remote_id']] = array(
+            'versionId'  =>  array(),
+            'contentId'  =>  array(),
+        );
+
+        $indexMap[$data['id']] = array(
+            'versionId'  =>  array(),
+            'contentId'  =>  array(),
+        );
+
         $contentInfos[$data['id']] = array(
             'contentId'         =>  $data['id'],
             'name'              =>  $data['name'],
@@ -280,7 +292,7 @@ function generateContentInfoFixture( array $fixture )
         $versionInfo[$data['id']] = array(
             'id'                   =>  $data['id'],
             'contentId'            =>  $data['contentobject_id'],
-            'status'               =>  $data['status'],
+            'status'               =>  $data['status'] <= 2 ? $data['status'] : 1,
             'versionNo'            =>  $data['version'],
             'modificationDate'     =>  'new \DateTime( "@' . $data['modified'] . '" )',
             'creatorId'            =>  $data['creator_id'],
@@ -320,6 +332,16 @@ function generateContentInfoFixture( array $fixture )
             'versionNo'      =>  $data['version'],
             'repository'     =>  '$this'
         );
+
+        $remoteId = $contentInfos[$data['contentobject_id']]['remoteId'];
+
+        $versionId = $data['id'];
+        $contentId = $data['contentobject_id'];
+
+        $indexMap[$remoteId]['versionId'][$versionId]  = $versionId;
+        $indexMap[$remoteId]['contentId'][$contentId]  = $contentId;
+        $indexMap[$contentId]['versionId'][$versionId] = $versionId;
+        $indexMap[$contentId]['contentId'][$contentId] = $contentId;
     }
 
     uasort( $versionInfo, function( $versionInfo1, $versionInfo2 ) {
@@ -345,7 +367,8 @@ function generateContentInfoFixture( array $fixture )
         $nextId,
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub', $versionInfo ),
         $versionNextId,
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub', $content )
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub', $content ),
+        generateMapping( $indexMap )
     );
 }
 
@@ -428,8 +451,7 @@ function generateLanguageFixture( array $fixture )
 
 function generateUserFixture( array $fixture )
 {
-    $nextId = 0;
-    $users  = array();
+    $users = array();
     foreach ( getFixtureTable( 'ezuser', $fixture ) as $data )
     {
         $users[] = array(
@@ -438,14 +460,13 @@ function generateUserFixture( array $fixture )
             'email'          =>  $data['email'],
             'passwordHash'   =>  $data['password_hash'],
             'hashAlgorithm'  =>  $data['password_hash_type'],
-            'isEnabled'      =>  true
+            'isEnabled'      =>  true,
+            'content'         =>  '$this->getContentService()->loadContent( ' . $data['contentobject_id'] . ' )'
         );
-        $nextId = max( $nextId, $data['contentobject_id'] );
     }
     
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub', $users ),
-        $nextId
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub', $users )
     );
 }
 
@@ -469,7 +490,6 @@ function generateUserGroupFixture( array $fixture )
         $node2parentId[$data['node_id']]           = $data['parent_node_id'];
     }
 
-    $nextId = 0;
     $groups = array();
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
@@ -489,12 +509,11 @@ function generateUserGroupFixture( array $fixture )
         }
 
         $groups[$data['id']] = array(
-            'id'             =>  $data['id'],
-            'parentId'       =>  is_numeric( $parentId ) ? $parentId : 'null',
-            'subGroupCount'  =>  0
+            'id'              =>  $data['id'],
+            'parentId'        =>  is_numeric( $parentId ) ? $parentId : 'null',
+            'subGroupCount'   =>  0,
+            'content'         =>  '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
         );
-
-        $nextId = max( $nextId, $data['id'] );
     }
 
     foreach ( $groups as $group )
@@ -507,8 +526,7 @@ function generateUserGroupFixture( array $fixture )
 
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub', $groups ),
-        $nextId
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub', $groups )
     );
 }
 

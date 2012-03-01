@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\FieldIdentifierStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
-    ezp\Base\Exception,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     ezcQuerySelect;
 
 /**
@@ -104,7 +104,7 @@ class Field extends CriterionHandler
         $statement->execute();
         if ( !( $row = $statement->fetch( \PDO::FETCH_ASSOC ) ) )
         {
-            throw new Exception\NotFound( 'Content type', $target->contentTypeIdentifier . '/' . $target->fieldIdentifier );
+            throw new NotFoundException( 'Content type', $target->contentTypeIdentifier . '/' . $target->fieldIdentifier );
         }
 
         $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );

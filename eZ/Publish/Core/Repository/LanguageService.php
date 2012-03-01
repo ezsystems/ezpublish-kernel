@@ -1,25 +1,26 @@
 <?php
 /**
- * @package eZ\Publish\API\Repository
+ * @package eZ\Publish\Core\Repository
  */
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
+
     eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Language as PersistenceLanguage,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
+
     eZ\Publish\API\Repository\Values\Content\Language,
-    eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\Exceptions\NotFound,
+
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
-    ezp\Base\Exception\NotFound as PersistenceNotFound;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Language service, used for language operations
  *
- * @package ezp\Publish\PublicAPI
+ * @package eZ\Publish\Core\Repository
  */
 class LanguageService implements LanguageServiceInterface
 {
@@ -34,22 +35,31 @@ class LanguageService implements LanguageServiceInterface
     protected $handler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
         $this->handler = $handler;
+        $this->settings = $settings + array(
+            'languages' => array( 'eng-GB' ),// Union will skip this if $settings contains 'languages'
+        );
     }
 
     /**
      * Creates the a new Language in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the languageCode already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct
      *
@@ -60,9 +70,9 @@ class LanguageService implements LanguageServiceInterface
         try
         {
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
-                throw new IllegalArgumentException( "languageCreateStruct", $languageCreateStruct->languageCode );
+                throw new InvalidArgumentException( "languageCreateStruct", "language with specified language code already exists" );
         }
-        catch ( NotFound $e ) {}
+        catch ( NotFoundException $e ) {}
 
         $createStruct = new CreateStruct(
             array(
@@ -179,14 +189,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_string( $languageCode ) )
             throw new InvalidArgumentValue( "languageCode", $languageCode );
 
-        try
-        {
-            $language = $this->handler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
-        }
-        catch ( PersistenceNotFound $e )
-        {
-            throw new NotFound( "language", $languageCode, $e );
-        }
+        $language = $this->handler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
 
         return $this->buildDomainObject( $language );
     }
@@ -194,7 +197,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Loads all Languages
      *
-     * @return array an array of {@link  \eZ\Publish\API\Repository\Values\Content\Language}
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
     public function loadLanguages()
     {
@@ -225,14 +228,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_int( $languageId ) )
             throw new InvalidArgumentValue( "languageId", $languageId );
 
-        try
-        {
-            $language = $this->handler->contentLanguageHandler()->load( $languageId );
-        }
-        catch ( PersistenceNotFound $e )
-        {
-            throw new NotFound( "Language", $languageId, $e );
-        }
+        $language = $this->handler->contentLanguageHandler()->load( $languageId );
 
         return $this->buildDomainObject( $language );
     }
@@ -240,7 +236,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Deletes  a language from content repository
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
@@ -259,15 +255,10 @@ class LanguageService implements LanguageServiceInterface
      * returns a configured default language code
      *
      * @return string
-     * @todo This should use dependency injection instead (service.ini settings instead of reusing legacy ezp settings)
      */
     public function getDefaultLanguageCode()
     {
-        $settings = include( __DIR__ . "/../../../../config.php" );
-        $configManager = new ConfigurationManager( $settings, $settings["base"]["Configuration"]["Paths"] );
-        $siteLanguageList = $configManager->getConfiguration("site")->get( "RegionalSettings", "SiteLanguageList" );
-
-        return reset( $siteLanguageList );
+        return $this->settings['languages'][0];
     }
 
     /**

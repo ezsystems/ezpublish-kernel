@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\Language,
-    ezp\Base\Exception,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
 
 /**
@@ -227,7 +227,7 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::load
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadFailure()
     {
@@ -240,7 +240,7 @@ class CachingLanguageHandlerTest extends TestCase
             ->method( 'getById' )
             ->with( $this->equalTo( 2 ) )
             ->will( $this->throwException(
-                new Exception\NotFound( 'Language', 2 )
+                new NotFoundException( 'Language', 2 )
             ) );
 
         $result = $handler->load( 2 );
@@ -273,7 +273,7 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadByLanguageCodeFailure()
     {
@@ -286,7 +286,7 @@ class CachingLanguageHandlerTest extends TestCase
             ->method( 'getByLocale' )
             ->with( $this->equalTo( 'eng-US' ) )
             ->will( $this->throwException(
-                new Exception\NotFound( 'Language', 'eng-US' )
+                new NotFoundException( 'Language', 'eng-US' )
             ) );
 
         $result = $handler->loadByLanguageCode( 'eng-US' );

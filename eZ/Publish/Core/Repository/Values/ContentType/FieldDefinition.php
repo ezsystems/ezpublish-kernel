@@ -6,11 +6,11 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
 /**
  *
  * This class represents a field definition
- * @property-read $names calls getNames() or on access getName($language)
- * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
- * @property-read $fieldSettings calls getFieldSettings()
- * @property-read $validators calls getValidators()
- * @property-read int $id the id of the field definition
+ * @property-read string[] $names calls getNames() or on access getName($language)
+ * @property-read string[] $descriptions calls getDescriptions() or on access getDescription($language)
+ * @property-read array $fieldSettings calls getFieldSettings()
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\Validator[] $validators calls getValidators()
+ * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
  * @property-read int $position the position of the field definition in the content type
@@ -19,35 +19,35 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
  * @property-read boolean $isRequired indicates if this field is required in the content object
  * @property-read boolean $isSearchable indicates if the field is searchable
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
- * @property-read $defaultValue the default value of the field
+ * @property-read mixed $defaultValue the default value of the field
  */
 class FieldDefinition extends APIFieldDefinition
 {
     /**
      * Holds the collection of names with languageCode keys
      *
-     * @var array
+     * @var string[]
      */
     protected $names;
 
     /**
      * Holds the collection of descriptions with languageCode keys
      *
-     * @var array
+     * @var string[]
      */
     protected $descriptions;
 
     /**
-     * Holds collection of field settings for the contenttype
+     * Holds collection of settings for the field definition supported by the field type
      *
      * @var array
      */
     protected $fieldSettings;
 
     /**
-     * Holds collection of validators for the contenttype
+     * Holds collection of validators of this field definition supported by the field type
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\ContentType\Validator[]
      */
     protected $validators;
 
@@ -105,7 +105,7 @@ class FieldDefinition extends APIFieldDefinition
      */
     public function getDescription( $languageCode )
     {
-        if ( array_key_exists( $languageCode, $this->descriptions ))
+        if ( array_key_exists( $languageCode, $this->descriptions ) )
         {
             return $this->descriptions[$languageCode];
         }
@@ -115,7 +115,7 @@ class FieldDefinition extends APIFieldDefinition
 
     /**
      * this method returns the validators of this field definition supported by the field type
-     * @return array an array of {@link Validator}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\Validator[]
      */
     public function getValidators()
     {

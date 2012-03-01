@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use PHPUnit_Framework_TestCase;
-use \eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * Base test case for tests on services
@@ -39,6 +39,15 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @return \eZ\Publish\Core\Repository\Repository
      */
     abstract protected function getRepository();
+
+    /**
+     * Tear down test
+     */
+    public function tearDown()
+    {
+        unset( $this->repository );
+        parent::tearDown();
+    }
 
     /**
      * Asserts that properties given in $expectedValues are correctly set in
@@ -95,6 +104,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param $propertyName
+     * @param $expectedValue
+     * @param $actualValue
+     */
     private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
     {
         if( $expectedValue instanceof \ArrayObject )

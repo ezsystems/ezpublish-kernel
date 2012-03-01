@@ -99,7 +99,7 @@ class CachingTest extends TestCase
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
-     * @expectedException ezp\Base\Exception\NotFound
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetByIdFailure()
     {
@@ -132,7 +132,7 @@ class CachingTest extends TestCase
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
-     * @expectedException ezp\Base\Exception\NotFound
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetByLocaleFailure()
     {

@@ -18,7 +18,9 @@ use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler,
-    eZ\Publish\Core\Persistence\Legacy\Exception;
+    eZ\Publish\Core\Persistence\Legacy\Exception,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  */
@@ -91,8 +93,8 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $groupId
-     * @throws \eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
-     *         if a non-empty group is to be deleted.
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type group contains types
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
      */
     public function deleteGroup( $groupId )
     {
@@ -106,7 +108,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $groupId
      * @return Group
-     * @throws \ezp\Base\Exception\NotFound If type group with $groupId is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with $groupId is not found
      */
     public function loadGroup( $groupId )
     {
@@ -124,7 +126,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
-     * @throws \ezp\Base\Exception\NotFound If type group with $identifier is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with $identifier is not found
      */
     public function loadGroupByIdentifier( $identifier )
     {
@@ -177,7 +179,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
      */
     public function loadByIdentifier( $identifier )
     {
@@ -192,7 +194,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $remoteId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
      */
     public function loadByRemoteId( $remoteId )
     {
@@ -278,10 +280,14 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $contentTypeId
      * @todo Maintain contentclass_name
+     * @param int $status
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
+     * @todo Add throw when type does not exist
      */
     public function delete( $contentTypeId, $status )
     {
-        $count = $this->contentTypeGateway->countInstancesOfType(
+        $count = Type::STATUS_DEFINED !== $status ? 0 : $this->contentTypeGateway->countInstancesOfType(
             $contentTypeId, $status
         );
         if ( $count > 0 )
@@ -311,7 +317,7 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $modifierId
      * @param mixed $contentTypeId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with defined status is not found
      */
     public function createDraft( $modifierId, $contentTypeId )
     {
@@ -350,6 +356,10 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $groupId is last group on $contentTypeId or
+     *                                                                 not a group assigned to type
+     * @todo Add throws for NotFound and BadState when group is not assigned to type
      */
     public function unlink( $groupId, $contentTypeId, $status )
     {
@@ -375,6 +385,9 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is already part of group
+     * @todo Above throws are not implemented
      */
     public function link( $groupId, $contentTypeId, $status )
     {

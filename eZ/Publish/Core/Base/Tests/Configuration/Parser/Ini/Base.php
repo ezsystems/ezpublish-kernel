@@ -39,6 +39,15 @@ abstract class Base extends PHPUnit_Framework_TestCase
     abstract protected function getParser();
 
     /**
+     * Tear down test
+     */
+    public function tearDown()
+    {
+        unset( $this->parser );
+        parent::tearDown();
+    }
+
+    /**
      * Test that ending hash boom is stripped out
      * @covers \eZ\Publish\Core\Base\Configuration\Parser\Ini::parseFilePhp
      * @covers \eZ\Publish\Core\Base\Configuration\Parser\Ini::parseFileEzc

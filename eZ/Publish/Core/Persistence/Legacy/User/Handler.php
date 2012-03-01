@@ -14,7 +14,8 @@ use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway as RoleGateway,
-    RuntimeException;
+    RuntimeException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Storage Engine handler for user module
@@ -84,7 +85,7 @@ class Handler implements BaseUserHandler
 
         if ( empty( $data ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'user', $userId );
+            throw new NotFound( 'user', $userId );
         }
 
         return $this->mapper->mapUser( $data );
@@ -103,7 +104,7 @@ class Handler implements BaseUserHandler
 
         if ( empty( $data ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'user', $login );
+            throw new NotFound( 'user', $login );
         }
 
         return $this->mapper->mapUser( $data );
@@ -152,7 +153,7 @@ class Handler implements BaseUserHandler
      *
      * @param mixed $roleId
      * @return \eZ\Publish\SPI\Persistence\User\Role
-     * @throws \ezp\Base\Exception\NotFound If role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      */
     public function loadRole( $roleId )
     {
@@ -160,7 +161,7 @@ class Handler implements BaseUserHandler
 
         if ( empty( $data ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'role', $roleId );
+            throw new NotFound( 'role', $roleId );
         }
 
         return $this->mapper->mapRole( $data );
@@ -171,7 +172,7 @@ class Handler implements BaseUserHandler
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\User\Role
-     * @throws \ezp\Base\Exception\NotFound If role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      */
     public function loadRoleByIdentifier( $identifier )
     {
@@ -179,7 +180,7 @@ class Handler implements BaseUserHandler
 
         if ( empty( $data ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'role', $identifier );
+            throw new NotFound( 'role', $identifier );
         }
 
         return $this->mapper->mapRole( $data );

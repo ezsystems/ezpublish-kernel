@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Publish\PublicAPI\Tests\Service\SectionTest class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\LanguageBase class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\API\Repository\Values\Content\Language,
-    ezp\Base\Exception\NotFound,
-    eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Language Service
@@ -21,18 +19,17 @@ abstract class LanguageBase extends BaseServiceTest
 {
     /**
      * Test service function for creating language
-     * @covers \ezp\PublicAPI\Values\Content\Section::__construct
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      */
     public function testCreateLanguage()
     {
         $service = $this->repository->getContentLanguageService();
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
+
         $newLanguage = $service->createLanguage( $languageCreateStruct );
 
         self::assertEquals( $newLanguage->languageCode, 'test-TEST' );
@@ -42,8 +39,8 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for creating language
-     * @covers \ezp\Content\Language\Service::create
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateForbidden()
     {
@@ -54,18 +51,16 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for updating language
-     * @covers \ezp\Content\Language\Service::update
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
      */
     public function testUpdateLanguageName()
     {
         $service = $this->repository->getContentLanguageService();
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
 
         $language = $service->createLanguage( $languageCreateStruct );
         $sameLanguage = $service->updateLanguageName( $language, 'test name' );
@@ -75,8 +70,8 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for updating language
-     * @covers \ezp\Content\Language\Service::update
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateForbidden()
     {
@@ -86,7 +81,7 @@ abstract class LanguageBase extends BaseServiceTest
     /**
      * Test service function for deleting language
      *
-     * @covers \ezp\Content\Language\Service::delete
+     * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
      */
     public function testDelete()
     {
@@ -100,7 +95,7 @@ abstract class LanguageBase extends BaseServiceTest
             $service->loadLanguage( $newLanguage->id );
             self::fail( 'Language is still returned after being deleted' );
         }
-        catch ( NotFound $e )
+        catch ( NotFoundException $e )
         {
         }
     }
@@ -108,8 +103,8 @@ abstract class LanguageBase extends BaseServiceTest
     /**
      * Test service function for deleting language
      *
-     * @covers \ezp\Content\Language\Service::delete
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteForbidden()
     {
@@ -118,18 +113,16 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for loading language
-     * @covers \ezp\Content\Language\Service::loadLanguageById
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
      */
     public function testLoadLanguageById()
     {
         $service = $this->repository->getContentLanguageService();
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
 
         $language = $service->createLanguage( $languageCreateStruct );
         $sameLanguage = $service->loadLanguageById( $language->id );
@@ -142,19 +135,17 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for loading language
-     * @covers \ezp\Content\Language\Service::loadLanguage
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
      */
     public function testLoadLanguageByLanguageCode()
     {
         $service = $this->repository->getContentLanguageService();
         //Add when permission are done
         //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'test-TEST',
-                'name' => 'test'
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'test-TEST';
+        $languageCreateStruct->name = 'test';
 
         $language = $service->createLanguage( $languageCreateStruct );
         $sameLanguage = $service->loadLanguage( 'test-TEST' );
@@ -167,8 +158,8 @@ abstract class LanguageBase extends BaseServiceTest
 
     /**
      * Test service function for loading language
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound
-     * @covers \ezp\Content\Language\Service::loadLanguage
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
      */
     public function testLoadLanguageByLanguageCodeNotFound()
     {
@@ -194,22 +185,20 @@ abstract class LanguageBase extends BaseServiceTest
             $service->deleteLanguage( $language );
         }
 
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'eng-GB',
-                'name' => 'English (United Kingdom)',
-                'enabled' => true
-            )
-        );
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'eng-GB';
+        $languageCreateStruct->name = 'English (United Kingdom)';
+        $languageCreateStruct->enabled = true;
+
         $service->createLanguage( $languageCreateStruct );
-        $languageCreateStruct = new LanguageCreateStruct(
-            array(
-                'languageCode' => 'eng-US',
-                'name' => 'English (American)',
-                'enabled' => false
-            )
-        );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'eng-US';
+        $languageCreateStruct->name = 'English (American)';
+        $languageCreateStruct->enabled = true;
+
         $service->createLanguage( $languageCreateStruct );
+
         $languages = $service->loadLanguages();
 
         self::assertInternalType( 'array', $languages );
@@ -225,13 +214,13 @@ abstract class LanguageBase extends BaseServiceTest
 
         self::assertEquals( 'eng-US', $languages['eng-US']->languageCode );
         self::assertEquals( 'English (American)', $languages['eng-US']->name );
-        self::assertFalse( $languages['eng-US']->enabled );
+        self::assertTrue( $languages['eng-US']->enabled );
     }
 
     /**
      * Test service function for loading language
      *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
      */
     public function testLoadLanguageByIdNotFound()
@@ -240,6 +229,11 @@ abstract class LanguageBase extends BaseServiceTest
         $service->loadLanguageById( 999 );
     }
 
+    /**
+     * Test service function getDefaultLanguageCode
+     *
+     * @covers \eZ\Publish\API\Repository\LanguageService::getDefaultLanguageCode
+     */
     public function testGetDefaultLanguageCode()
     {
         $service = $this->repository->getContentLanguageService();

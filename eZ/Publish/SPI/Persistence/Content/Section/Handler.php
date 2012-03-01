@@ -39,7 +39,7 @@ interface Handler
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Section
-     * @throws \ezp\Base\Exception\NotFound If section is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
      */
     public function load( $id );
 
@@ -55,7 +55,7 @@ interface Handler
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\Content\Section
-     * @throws \ezp\Base\Exception\NotFound If section is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
      */
     public function loadByIdentifier( $identifier );
 

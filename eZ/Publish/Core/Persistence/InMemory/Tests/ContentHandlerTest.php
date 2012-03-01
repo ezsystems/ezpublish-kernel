@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
     eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content as ContentDomainObject,
     ezp\Content\Version,
     ezp\Content\Relation,
@@ -76,7 +76,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Removes stuff created in setUp().
      */
-    protected function tearDown()
+    public function tearDown()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
 

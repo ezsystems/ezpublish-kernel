@@ -79,8 +79,8 @@
         {"id": 10, "login": "anonymous", "email": "nospam@ez.no", "passwordHash": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 1000}
     ],
     "User\\Role" : [
-        {"id": 1, "name": {"eng-GB": "Anonymous"}, "description": {"eng-GB": "Anonymous role"}, "identifier": "anonymous", "groupIds": [ 42 ] },
-        {"id": 2, "name": {"eng-GB": "Administrator"}, "description": {"eng-GB": "Administrator role"}, "identifier": "administrator", "groupIds": [ 12 ] }
+        {"id": 1, "name": {"eng-GB": "Anonymous"}, "description": {"eng-GB": "Anonymous role"}, "identifier": "Anonymous", "groupIds": [ 42 ] },
+        {"id": 2, "name": {"eng-GB": "Administrator"}, "description": {"eng-GB": "Administrator role"}, "identifier": "Administrator", "groupIds": [ 12 ] }
     ],
     "User\\Policy" : [
         {"id": 1, "roleId": 2, "module": "*", "function": "*", "limitations": "*" },

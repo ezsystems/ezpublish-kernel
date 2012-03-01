@@ -9,12 +9,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Exception;
-use ezp\Base\Exception\NotFound;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Exception thrown when a Type to be loaded is not found
  */
-class TypeNotFound extends NotFound
+class TypeNotFound extends NotFoundException
 {
     /**
      * Creates a new exception for $typeId in $status;

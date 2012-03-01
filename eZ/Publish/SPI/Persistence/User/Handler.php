@@ -36,7 +36,7 @@ interface Handler
      *
      * @param mixed $userId
      * @return \eZ\Publish\SPI\Persistence\User
-     * @throws \ezp\Base\Exception\NotFound If user is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
      */
     public function load( $userId );
 
@@ -79,7 +79,7 @@ interface Handler
      *
      * @param mixed $roleId
      * @return \eZ\Publish\SPI\Persistence\User\Role
-     * @throws \ezp\Base\Exception\NotFound If role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      */
     public function loadRole( $roleId );
 
@@ -88,7 +88,7 @@ interface Handler
      *
      * @param string $identifier
      * @return \eZ\Publish\SPI\Persistence\User\Role
-     * @throws \ezp\Base\Exception\NotFound If role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      */
     public function loadRoleByIdentifier( $identifier );
 

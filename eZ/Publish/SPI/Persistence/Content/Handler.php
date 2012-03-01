@@ -47,7 +47,7 @@ interface Handler
      * @param mixed $contentId
      * @param int $srcVersion
      * @return \eZ\Publish\SPI\Persistence\Content\Version
-     * @throws \ezp\Base\Exception\NotFound Thrown if $contentId and/or $srcVersion are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException Thrown if $contentId and/or $srcVersion are invalid
      */
     public function createDraftFromVersion( $contentId, $srcVersion );
 
@@ -144,7 +144,7 @@ interface Handler
      * @param mixed $contentId
      * @param int|false $version Copy all versions if left false
      * @return \eZ\Publish\SPI\Persistence\Content
-     * @throws \ezp\Base\Exception\NotFound If content or version is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found
      */
     public function copy( $contentId, $version );
 

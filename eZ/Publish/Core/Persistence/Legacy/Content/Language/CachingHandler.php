@@ -72,7 +72,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found
      */
     public function getById( $id )
@@ -86,7 +86,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      *
      * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found
      */
     public function getByLocale( $languageCode )
@@ -126,7 +126,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $id
      */
     public function load( $id )
     {
@@ -139,7 +139,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      *
      * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $languageCode
      */
     public function loadByLanguageCode( $languageCode )
     {

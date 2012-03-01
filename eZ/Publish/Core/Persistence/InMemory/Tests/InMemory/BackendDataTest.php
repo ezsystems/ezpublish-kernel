@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
 use PHPUnit_Framework_TestCase,
     ReflectionObject,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Location,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
@@ -39,7 +39,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $this->insertCustomContent();
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         unset( $this->backend );
         parent::tearDown();
@@ -231,13 +231,13 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindMatchOnArray()
     {
-        $list = $this->backend->find( "Content\\Type", array( "groupIds" => 1 ) );
-        $this->assertEquals( 1, count( $list ) );
-        foreach ( $list as $key => $content )
-        {
-            $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 'folder', $content->identifier );
-        }
+        $types = $this->backend->find( "Content\\Type", array( "groupIds" => 1 ) );
+        $this->assertEquals( 2, count( $types ) );
+
+        $this->assertEquals( 1, $types[0]->id );
+        $this->assertEquals( 'folder', $types[0]->identifier );
+        $this->assertEquals( 13, $types[1]->id );
+        $this->assertEquals( 'comment', $types[1]->identifier );
     }
 
     /**
@@ -527,7 +527,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test loading content without results
      *
      * @dataProvider providerForLoadEmpty
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::load
      * @group inMemoryBackend
      */
@@ -674,7 +674,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     /**
      * Test deleting content which does not exist
      *
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::delete
      * @group inMemoryBackend
      */

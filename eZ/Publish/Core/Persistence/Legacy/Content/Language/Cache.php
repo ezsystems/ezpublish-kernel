@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language,
-    ezp\Base\Exception;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Language Cache
@@ -65,14 +65,14 @@ class Cache
      *
      * @param mixed $id
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found
      */
     public function getById( $id )
     {
         if ( !isset( $this->mapById[$id] ) )
         {
-            throw new Exception\NotFound( 'Language', $id );
+            throw new NotFoundException( 'Language', $id );
         }
         return $this->mapById[$id];
     }
@@ -82,14 +82,14 @@ class Cache
      *
      * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \ezp\Base\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found
      */
     public function getByLocale( $languageCode )
     {
         if ( !isset( $this->mapByLocale[$languageCode] ) )
         {
-            throw new Exception\NotFound( 'Language', $languageCode );
+            throw new NotFoundException( 'Language', $languageCode );
         }
         return $this->mapByLocale[$languageCode];
     }

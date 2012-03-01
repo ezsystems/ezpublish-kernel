@@ -15,7 +15,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Query\SortClause,
-    ezp\Content\Query;
+    ezp\Content\Query,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Location gateway implementation using the zeta database component.
@@ -70,7 +71,7 @@ class EzcDatabase extends Gateway
             return $row;
         }
 
-        throw new \ezp\Base\Exception\NotFound( 'location', $nodeId );
+        throw new NotFound( 'location', $nodeId );
     }
 
     /**
@@ -827,7 +828,7 @@ class EzcDatabase extends Gateway
         $nodeIds = array();
         if ( !( $row = $statement->fetch( \PDO::FETCH_ASSOC ) ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'trashed location', $locationId );
+            throw new NotFound( 'trashed location', $locationId );
         }
 
         $newParentId = $newParentId ?: $row['parent_node_id'];
@@ -894,7 +895,7 @@ class EzcDatabase extends Gateway
             return $row;
         }
 
-        throw new \ezp\Base\Exception\NotFound( 'trash', $locationId );
+        throw new NotFound( 'trash', $locationId );
     }
 
     /**

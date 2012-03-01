@@ -9,6 +9,7 @@ return array(
                 "passwordHash"  =>  "4e6f6184135228ccd45f8233d72a0363",
                 "hashAlgorithm"  =>  2,
                 "isEnabled"  =>  true,
+                "content"  =>  $this->getContentService()->loadContent( 10 ),
             )
         ),
         14  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
@@ -19,8 +20,8 @@ return array(
                 "passwordHash"  =>  "c78e3b0f3d9244ed8c6d1c29464bdff9",
                 "hashAlgorithm"  =>  2,
                 "isEnabled"  =>  true,
+                "content"  =>  $this->getContentService()->loadContent( 14 ),
             )
         ),
-    ),
-    14
+    )
 );
