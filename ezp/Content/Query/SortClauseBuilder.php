@@ -38,7 +38,7 @@ class SortClauseBuilder
      */
     public function __call( $method, $args )
     {
-        $sortClauseClass = '\\eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause\\' . ucfirst( $method );
+        $sortClauseClass = '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\SortClause\\' . ucfirst( $method );
         if ( !class_exists( $sortClauseClass ) )
         {
             // @todo Add proper exception

@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Type;
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 
 /**
  * Test case for Content Type Updater.
@@ -148,7 +149,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'find' )
             ->with(
-                $this->equalTo( new Content\Query\Criterion\ContentTypeId( 23 ) )
+                $this->equalTo( new CriterionContentTypeId( 23 ) )
             )->will(
                 $this->returnValue( array( $content, clone $content ) )
             );

@@ -13,7 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\FieldHandler,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence;
 
 /**
@@ -853,7 +853,7 @@ class ContentSearchHandlerTest extends TestCase
 
         $result = $locator->find(
             new Criterion\Field(
-                new Criterion\FieldIdentifierStruct( 'user_group', 'name' ),
+                'name',
                 Criterion\Operator::EQ,
                 'members'
             ),
@@ -892,7 +892,7 @@ class ContentSearchHandlerTest extends TestCase
 
         $result = $locator->find(
             new Criterion\Field(
-                new Criterion\FieldIdentifierStruct( 'user_group', 'name' ),
+                'name',
                 Criterion\Operator::IN,
                 array( 'members', 'anonymous users' )
             ),
@@ -931,7 +931,7 @@ class ContentSearchHandlerTest extends TestCase
 
         $result = $locator->find(
             new Criterion\Field(
-                new Criterion\FieldIdentifierStruct( 'product', 'price' ),
+                'price',
                 Criterion\Operator::BETWEEN,
                 array( 10000, 1000000 )
             ),
@@ -984,12 +984,12 @@ class ContentSearchHandlerTest extends TestCase
             new Criterion\LogicalOr(
                 array(
                     new Criterion\Field(
-                        new Criterion\FieldIdentifierStruct( 'user_group', 'name' ),
+                        'name',
                         Criterion\Operator::EQ,
                         'members'
                     ),
                     new Criterion\Field(
-                        new Criterion\FieldIdentifierStruct( 'product', 'price' ),
+                        'price',
                         Criterion\Operator::BETWEEN,
                         array( 10000, 1000000 )
                     )

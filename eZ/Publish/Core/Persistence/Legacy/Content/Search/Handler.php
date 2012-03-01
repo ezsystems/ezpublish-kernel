@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
     eZ\Publish\SPI\Persistence\Content\Search\Result,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
@@ -82,10 +82,10 @@ class Handler extends BaseSearchHandler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param string[] $translations
      * @return eZ\Publish\SPI\Persistence\Content\Search\Result
      */

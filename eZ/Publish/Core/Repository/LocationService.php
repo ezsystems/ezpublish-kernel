@@ -18,11 +18,11 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
 
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId as CriterionContentId,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Status as CriterionStatus,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId as CriterionContentId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
@@ -672,7 +672,7 @@ class LocationService implements LocationServiceInterface
      * @param int $sortField
      * @param int $sortOrder
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Query\SortClause
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
      */
     protected function getSortClauseBySortField( $sortField, $sortOrder = APILocation::SORT_ORDER_ASC )
     {
@@ -681,19 +681,19 @@ class LocationService implements LocationServiceInterface
         switch ( $sortField )
         {
             case APILocation::SORT_FIELD_PATH:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPath( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
 
             case APILocation::SORT_FIELD_PUBLISHED:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\DateCreated( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateCreated( $sortOrder );
 
             case APILocation::SORT_FIELD_MODIFIED:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\DateModified( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified( $sortOrder );
 
             case APILocation::SORT_FIELD_SECTION:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\SectionIdentifier( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier( $sortOrder );
 
             case APILocation::SORT_FIELD_DEPTH:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationDepth( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationDepth( $sortOrder );
 
             //@todo: enable
             // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
@@ -702,10 +702,10 @@ class LocationService implements LocationServiceInterface
             // case APILocation::SORT_FIELD_CLASS_NAME:
 
             case APILocation::SORT_FIELD_PRIORITY:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPriority( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority( $sortOrder );
 
             case APILocation::SORT_FIELD_NAME:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\ContentName( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName( $sortOrder );
 
             //@todo: enable
             // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
@@ -717,7 +717,7 @@ class LocationService implements LocationServiceInterface
             // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
 
             default:
-                return new \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPath( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
         }
     }
 }

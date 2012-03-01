@@ -13,7 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     ezcQuerySelect;
 
 /**
@@ -74,7 +74,7 @@ class EzcDatabase extends Gateway
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param string[] $translations
      * @return mixed[][]
      */

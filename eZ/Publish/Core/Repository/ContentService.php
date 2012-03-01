@@ -31,8 +31,8 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
 
-use eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId as CriterionContentId;
-use eZ\Publish\SPI\Persistence\Content\Query\Criterion\RemoteId as CriterionRemoteId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId as CriterionContentId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId as CriterionRemoteId;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;

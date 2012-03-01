@@ -12,7 +12,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 

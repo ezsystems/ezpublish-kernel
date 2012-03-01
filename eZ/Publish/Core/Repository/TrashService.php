@@ -248,16 +248,16 @@ class TrashService implements TrashServiceInterface
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Query\Criterion
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     protected function convertCriterion( Criterion $criterion )
     {
         $criterionClass = get_class( $criterion );
         $persistenceCriterionClass = explode( "\\", $criterionClass );
-        $persistenceCriterionClass = "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\" .
+        $persistenceCriterionClass = "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\" .
                                      $persistenceCriterionClass[count( $persistenceCriterionClass ) - 1];
 
-        /** @var $persistenceCriterionClass \eZ\Publish\SPI\Persistence\Content\Query\Criterion */
+        /** @var $persistenceCriterionClass \eZ\Publish\API\Repository\Values\Content\Query\Criterion */
         if ( !class_exists( $persistenceCriterionClass ) )
             throw new InvalidArgumentException( "criterion", "criterion $persistenceCriterionClass not found" );
 
@@ -295,13 +295,13 @@ class TrashService implements TrashServiceInterface
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Query\SortClause
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
      */
     protected function convertSortClause( SortClause $sortClause )
     {
         $sortClauseClass = get_class( $sortClause );
         $persistenceSortClauseClass = explode( "\\", $sortClauseClass );
-        $persistenceSortClauseClass = "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause\\" .
+        $persistenceSortClauseClass = "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\SortClause\\" .
                                       $persistenceSortClauseClass[count( $persistenceSortClauseClass ) - 1];
 
         if ( !class_exists( $persistenceSortClauseClass ) )

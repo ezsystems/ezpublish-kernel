@@ -12,7 +12,7 @@ namespace eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion as AbstractCriterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion as AbstractCriterion,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 

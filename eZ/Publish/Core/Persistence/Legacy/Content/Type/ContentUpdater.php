@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Class to update content objects to a new type version

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     ezcQuerySelect;
 
 /**
