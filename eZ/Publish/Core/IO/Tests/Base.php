@@ -47,7 +47,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     /**
      * Tear down test
      */
-    public function tearDown()
+    protected function tearDown()
     {
         unset( $this->ioHandler );
     }

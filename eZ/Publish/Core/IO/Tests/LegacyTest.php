@@ -53,7 +53,7 @@ class LegacyTest extends BaseHandlerTest
         return new Legacy();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if ( file_exists( 'var/test' ) )
         {
