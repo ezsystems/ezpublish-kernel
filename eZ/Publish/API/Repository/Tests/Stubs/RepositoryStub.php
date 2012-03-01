@@ -278,6 +278,18 @@ class RepositoryStub implements Repository
     }
 
     /**
+     * Get IO Service
+     *
+     * Get service object to perform operations on binary files
+     *
+     * @return \eZ\Publish\API\Repository\IOService
+     */
+    public function getIOService()
+    {
+        // TODO: Implement getIOService() method.
+    }
+
+    /**
      * Get RoleService
      *
      * @return \eZ\Publish\API\Repository\RoleService
