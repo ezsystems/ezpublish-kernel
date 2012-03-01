@@ -162,6 +162,8 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
+     * 
+     * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct );
 
