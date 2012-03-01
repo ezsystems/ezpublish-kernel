@@ -173,6 +173,18 @@ class TrashService implements TrashServiceInterface
      */
     public function findTrashItems( Query $query )
     {
+        if ( $query->criterion !== null && !$query->criterion instanceof Criterion )
+            throw new InvalidArgumentValue( "query->criterion", $query->criterion, "Query" );
+
+        if ( $query->sortClauses !== null && !is_array( $query->sortClauses ) )
+            throw new InvalidArgumentValue( "query->sortClauses", $query->sortClauses, "Query" );
+
+        if ( $query->offset !== null && !is_numeric( $query->offset ) )
+            throw new InvalidArgumentValue( "query->offset", $query->offset, "Query" );
+
+        if ( $query->limit !== null && !is_numeric( $query->limit ) )
+            throw new InvalidArgumentValue( "query->limit", $query->limit, "Query" );
+
         if ( is_array( $query->sortClauses ) )
         {
             foreach ( $query->sortClauses as $sortClause )
@@ -183,10 +195,10 @@ class TrashService implements TrashServiceInterface
         }
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->listTrashed(
-            $query->criterion instanceof Criterion ? $query->criterion : null,
-            $query->offset >= 0 ? (int) $query->offset : 0,
-            $query->limit > 0 ? (int) $query->limit : null,
-            is_array( $query->sortClauses ) ? $query->sortClauses : null
+            $query->criterion !== null ? $query->criterion : null,
+            $query->offset !== null && $query->offset >= 0 ? (int) $query->offset : 0,
+            $query->limit !== null && $query->limit > 0 ? (int) $query->limit : null,
+            $query->sortClauses !== null ? $query->sortClauses : null
         );
 
         $trashItems = array();
