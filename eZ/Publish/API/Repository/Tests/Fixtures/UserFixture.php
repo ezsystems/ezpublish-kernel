@@ -23,6 +23,5 @@ return array(
                 "content"  =>  $this->getContentService()->loadContent( 14 ),
             )
         ),
-    ),
-    14
+    )
 );

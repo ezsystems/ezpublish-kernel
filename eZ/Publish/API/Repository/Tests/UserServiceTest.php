@@ -11,6 +11,9 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
+use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use \eZ\Publish\API\Repository\Values\User\User;
+
 /**
  * Test case for operations in the UserService using in memory storage.
  *
@@ -434,38 +437,17 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testCreateUserSetsExpectedProperties( $user )
+    public function testCreateUserSetsExpectedProperties( User $user )
     {
-        switch ( $user->hashAlgorithm )
-        {
-            case 2:
-                /* PASSWORD_HASH_MD5_USER */
-                $password = md5( "user\nsecret" );
-                break;
-
-            case 3:
-                /* PASSWORD_HASH_MD5_SITE */
-                $site = null;
-                $password = md5( "user\nsecret\n{$site}" );
-                break;
-
-            case 5:
-                /* PASSWORD_HASH_PLAINTEXT */
-                $password = 'secret';
-                break;
-
-            case 1:
-            default:
-                /* PASSWORD_HASH_MD5_PASSWORD (1) */
-                $password = md5( 'secret' );
-                break;
-        }
-
         $this->assertEquals(
             array(
                 'login'             =>  'user',
                 'email'             =>  'user@example.com',
-                'passwordHash'      =>  $password,
+                'passwordHash'      =>  $this->createHash(
+                    'user',
+                    'secret',
+                    $user->hashAlgorithm
+                ),
                 'mainLanguageCode'  =>  'eng-US'
             ),
             array(
@@ -695,15 +677,130 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updateUser() method.
+     * Test for the newUserUpdateStruct() method.
      *
      * @return void
+     * @see \eZ\Publish\API\Repository\UserService::newUserUpdateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
+     */
+    public function testNewUserUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService = $repository->getUserService();
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\UserUpdateStruct',
+            $userUpdate
+        );
+
+        // TODO: Are the properties $contentMetaDataUpdateStruct and
+        // $contentUpdateStruct pre initialized or not?
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateUser()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUser() is not implemented." );
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set new values for password and maxLogin
+        $userUpdate->password  = 'my-new-password';
+        $userUpdate->maxLogin  = 42;
+        $userUpdate->isEnabled = false;
+
+        // Updated the user record.
+        $userVersion2 = $userService->updateUser( $user, $userUpdate );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\User',
+            $user
+        );
+
+        return $userVersion2;
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
+     */
+    public function testUpdateUserUpdatesExpectedProperties( User $user )
+    {
+        $this->assertEquals(
+            array(
+                'login'         =>  'user',
+                'email'         =>  'user@example.com',
+                'passwordHash'  =>  $this->createHash(
+                    'user',
+                    'my-new-password',
+                    $user->hashAlgorithm
+                ),
+                'maxLogin'      =>  42,
+                'isEnabled'     =>  false
+            ),
+            array(
+                'login'         =>  $user->login,
+                'email'         =>  $user->email,
+                'passwordHash'  =>  $user->passwordHash,
+                'maxLogin'      =>  $user->maxLogin,
+                'isEnabled'     =>  $user->isEnabled
+            )
+        );
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
+     */
+    public function testUpdateUserIncrementsVersionNumber( $user )
+    {
+        $this->assertEquals( 2, $user->getVersionInfo()->versionNo );
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
+     */
+    public function testUpdateUserReturnsPublishedVersion( $user )
+    {
+        $this->assertEquals(
+            VersionInfo::STATUS_PUBLISHED,
+            $user->getVersionInfo()->status
+        );
     }
 
     /**
@@ -779,18 +876,6 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the newUserUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::newUserUpdateStruct()
-     * 
-     */
-    public function testNewUserUpdateStruct()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::newUserUpdateStruct() is not implemented." );
-    }
-
-    /**
      * Test for the newUserGroupUpdateStruct() method.
      *
      * @return void
@@ -837,5 +922,26 @@ class UserServiceTest extends BaseTest
         /* END: Inline */
 
         return $user;
+    }
+
+    private function createHash( $login, $password, $type )
+    {
+        switch ( $type )
+        {
+            case 2:
+                /* PASSWORD_HASH_MD5_USER */
+                return md5( "{$login}\n{$password}" );
+
+            case 3:
+                /* PASSWORD_HASH_MD5_SITE */
+                $site = null;
+                return md5( "{$login}\n{$password}\n{$site}" );
+
+            case 5:
+                /* PASSWORD_HASH_PLAINTEXT */
+                return $password;
+        }
+        /* PASSWORD_HASH_MD5_PASSWORD (1) */
+        return md5( $password );
     }
 }

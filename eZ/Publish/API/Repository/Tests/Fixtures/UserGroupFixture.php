@@ -49,6 +49,5 @@ return array(
                 "content"  =>  $this->getContentService()->loadContent( 225 ),
             )
         ),
-    ),
-    225
+    )
 );

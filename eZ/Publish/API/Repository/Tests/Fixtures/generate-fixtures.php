@@ -451,8 +451,7 @@ function generateLanguageFixture( array $fixture )
 
 function generateUserFixture( array $fixture )
 {
-    $nextId = 0;
-    $users  = array();
+    $users = array();
     foreach ( getFixtureTable( 'ezuser', $fixture ) as $data )
     {
         $users[] = array(
@@ -464,12 +463,10 @@ function generateUserFixture( array $fixture )
             'isEnabled'      =>  true,
             'content'         =>  '$this->getContentService()->loadContent( ' . $data['contentobject_id'] . ' )'
         );
-        $nextId = max( $nextId, $data['contentobject_id'] );
     }
     
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub', $users ),
-        $nextId
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub', $users )
     );
 }
 
@@ -493,7 +490,6 @@ function generateUserGroupFixture( array $fixture )
         $node2parentId[$data['node_id']]           = $data['parent_node_id'];
     }
 
-    $nextId = 0;
     $groups = array();
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
@@ -518,8 +514,6 @@ function generateUserGroupFixture( array $fixture )
             'subGroupCount'   =>  0,
             'content'         =>  '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
         );
-
-        $nextId = max( $nextId, $data['id'] );
     }
 
     foreach ( $groups as $group )
@@ -532,8 +526,7 @@ function generateUserGroupFixture( array $fixture )
 
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub', $groups ),
-        $nextId
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub', $groups )
     );
 }
 

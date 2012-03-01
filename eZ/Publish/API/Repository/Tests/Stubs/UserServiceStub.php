@@ -42,19 +42,9 @@ class UserServiceStub implements UserService
     private $users;
 
     /**
-     * @var integer
-     */
-    private $userNextId;
-
-    /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
     private $userGroups;
-
-    /**
-     * @var integer
-     */
-    private $userGroupNextId;
 
     /**
      * Instantiates a new user service instance.
@@ -355,7 +345,48 @@ class UserServiceStub implements UserService
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct )
     {
-        // TODO: Implement updateUser() method.
+        $contentService = $this->repository->getContentService();
+
+        $contentUpdate = $userUpdateStruct->contentUpdateStruct ?:
+            $contentService->newContentUpdateStruct();
+
+        $contentDraft = $contentService->createContentDraft( $user->contentInfo );
+        $contentDraft = $contentService->updateContent(
+            $contentDraft->getVersionInfo(),
+            $contentUpdate
+        );
+
+        $content = $contentService->publishVersion(
+            $contentDraft->getVersionInfo()
+        );
+
+        if ( $userUpdateStruct->contentMetaDataUpdateStruct )
+        {
+            $content = $contentService->updateContentMetadata(
+                $content->contentInfo,
+                $userUpdateStruct->contentMetaDataUpdateStruct
+            );
+        }
+
+        $this->users[$user->id] = new UserStub(
+            array(
+                'id'             =>  $user->id,
+                'login'          =>  $user->login,
+                'email'          =>  $userUpdateStruct->email ?: $user->email,
+                'isEnabled'      =>  is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,
+                'maxLogin'       =>  is_null( $userUpdateStruct->maxLogin ) ? $user->maxLogin : $userUpdateStruct->maxLogin,
+                'hashAlgorithm'  =>  $user->hashAlgorithm,
+                'passwordHash'   =>  $userUpdateStruct->password ?
+                    $this->createHash(
+                        $user->login,
+                        $userUpdateStruct->password,
+                        $user->hashAlgorithm ) : $user->passwordHash,
+
+                'content'    =>  $content,
+            )
+        );
+
+        return $this->users[$user->id];
     }
 
     /**
@@ -443,7 +474,7 @@ class UserServiceStub implements UserService
      */
     public function newUserUpdateStruct()
     {
-        // TODO: Implement newUserUpdateStruct() method.
+        return new UserUpdateStruct();
     }
 
     /**
@@ -464,15 +495,8 @@ class UserServiceStub implements UserService
      */
     private function initFromFixture()
     {
-        list(
-            $this->userGroups,
-            $this->userGroupNextId
-        ) = $this->repository->loadFixture( 'UserGroup' );
-
-        list(
-            $this->users,
-            $this->userNextId
-        ) = $this->repository->loadFixture( 'User' );
+        list( $this->userGroups ) = $this->repository->loadFixture( 'UserGroup' );
+        list( $this->users )      = $this->repository->loadFixture( 'User' );
     }
 
     private function createHash( $login, $password, $type )
