@@ -217,12 +217,15 @@ abstract class SectionBase extends BaseServiceTest
      */
     public function testLoadSections()
     {
-        self::markTestSkipped( "@todo: Enable when loading all sections from persistence is fixed" );
-
         $sections = $this->repository->getSectionService()->loadSections();
 
         self::assertInternalType( 'array', $sections );
         self::assertGreaterThan( 0, count( $sections ) );
+
+        foreach ( $sections as $section )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $section );
+        }
     }
 
     /**
