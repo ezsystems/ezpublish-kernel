@@ -561,7 +561,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
         }
 
-        /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
         $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
             $contentTypeId,
             SPIContentType::STATUS_DEFINED
@@ -588,7 +587,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$identifier', $identifier );
         }
 
-        /** @var $spiContentType \eZ\Publish\SPI\Persistence\Content\Type */
         $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
             $identifier
         );

@@ -635,7 +635,6 @@ abstract class UserBase extends BaseServiceTest
             self::fail( "Failed assigning user to user group" );
 
         $hasAddedLocation = false;
-        /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
         foreach ( $userLocations as $location )
         {
             if ( $location->parentLocationId == $userGroupMainLocation->id )
@@ -670,7 +669,6 @@ abstract class UserBase extends BaseServiceTest
         if ( is_array( $userLocations ) && !empty( $userLocations ) )
         {
             $hasRemovedLocation = false;
-            /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
             foreach ( $userLocations as $location )
             {
                 if ( $location->parentLocationId == $userGroupMainLocation->id )

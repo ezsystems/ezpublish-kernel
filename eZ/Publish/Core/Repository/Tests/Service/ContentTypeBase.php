@@ -359,7 +359,6 @@ abstract class ContentTypeBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $this->repository->getContentTypeService();
 
-        /** @var $loadedGroups \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup[] */
         $loadedGroups = $contentTypeService->loadContentTypeGroups();
         /* END: Use Case */
 
@@ -1155,7 +1154,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testCreateContentTypeStructValues( array $data )
     {
-        /** @var $groupCreateStruct \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct */
+        /** @var $typeCreate \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct */
         $typeCreate = $data['expected'];
         /** @var $contentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $contentType = $data['actual'];
@@ -2032,9 +2031,9 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testCreateContentTypeDraftValues( array $data )
     {
-        /** @var $storedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        /** @var $publishedType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $publishedType = $data['expected'];
-        /** @var $loadedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft */
+        /** @var $draftType \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft */
         $draftType = $data['actual'];
 
         $skipProperties = array(

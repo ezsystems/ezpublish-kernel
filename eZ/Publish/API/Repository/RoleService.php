@@ -132,7 +132,7 @@ interface RoleService
      *
      * @param $userId
      *
-     * @return array an array of {@link Policy}
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId );
 
