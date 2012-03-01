@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
 
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId as CriterionContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
@@ -680,8 +681,7 @@ class LocationService implements LocationServiceInterface
      */
     protected function getSortClauseBySortField( $sortField, $sortOrder = APILocation::SORT_ORDER_ASC )
     {
-        //@todo: use consts for sort order instead of hardcoded values
-        $sortOrder = $sortOrder == APILocation::SORT_ORDER_DESC ? 'descending' : 'ascending';
+        $sortOrder = $sortOrder == APILocation::SORT_ORDER_DESC ? Query::SORT_DESC : Query::SORT_ASC;
         switch ( $sortField )
         {
             case APILocation::SORT_FIELD_PATH:
