@@ -20,9 +20,15 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
  */
 class RoleStub extends Role
 {
-    protected $names;
+    /**
+     * @var string[]
+     */
+    protected $names = array();
 
-    protected $descriptions;
+    /**
+     * @var string[]
+     */
+    protected $descriptions = array();
 
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
