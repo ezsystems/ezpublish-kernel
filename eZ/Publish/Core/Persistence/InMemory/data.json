@@ -68,10 +68,10 @@
         {"id": 7, "name": {"eng-GB": "Subject"}, "description": {"eng-GB": "Comment subject"}, "identifier": "subject", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": false, "fieldTypeConstraints": {}, "defaultValue": "New Comment", "_typeId": 13, "_status": 0}
     ],
     "Content\\Type\\Group" : [
-        {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}, "identifier": "content" },
-        {"id": 2, "name": {"eng-GB": "Users"}, "description": {"eng-GB": "User content type group"}, "identifier": "users" },
-        {"id": 3, "name": {"eng-GB": "Media"}, "description": {"eng-GB": "Media content type group"}, "identifier": "media" },
-        {"id": 4, "name": {"eng-GB": "Setup"}, "description": {"eng-GB": "Setup content type group"}, "identifier": "setup" }
+        {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}, "identifier": "Content" },
+        {"id": 2, "name": {"eng-GB": "Users"}, "description": {"eng-GB": "User content type group"}, "identifier": "Users" },
+        {"id": 3, "name": {"eng-GB": "Media"}, "description": {"eng-GB": "Media content type group"}, "identifier": "Media" },
+        {"id": 4, "name": {"eng-GB": "Setup"}, "description": {"eng-GB": "Setup content type group"}, "identifier": "Setup" }
     ],
     "Content\\Relation": [],
     "User": [
@@ -79,8 +79,8 @@
         {"id": 10, "login": "anonymous", "email": "nospam@ez.no", "passwordHash": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 1000}
     ],
     "User\\Role" : [
-        {"id": 1, "name": {"eng-GB": "Anonymous"}, "description": {"eng-GB": "Anonymous role"}, "identifier": "anonymous", "groupIds": [ 42 ] },
-        {"id": 2, "name": {"eng-GB": "Administrator"}, "description": {"eng-GB": "Administrator role"}, "identifier": "administrator", "groupIds": [ 12 ] }
+        {"id": 1, "name": {"eng-GB": "Anonymous"}, "description": {"eng-GB": "Anonymous role"}, "identifier": "Anonymous", "groupIds": [ 42 ] },
+        {"id": 2, "name": {"eng-GB": "Administrator"}, "description": {"eng-GB": "Administrator role"}, "identifier": "Administrator", "groupIds": [ 12 ] }
     ],
     "User\\Policy" : [
         {"id": 1, "roleId": 2, "module": "*", "function": "*", "limitations": "*" },
