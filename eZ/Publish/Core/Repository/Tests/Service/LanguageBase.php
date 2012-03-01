@@ -214,7 +214,7 @@ abstract class LanguageBase extends BaseServiceTest
 
         self::assertEquals( 'eng-US', $languages['eng-US']->languageCode );
         self::assertEquals( 'English (American)', $languages['eng-US']->name );
-        self::assertFalse( $languages['eng-US']->enabled );
+        self::assertTrue( $languages['eng-US']->enabled );
     }
 
     /**
