@@ -18,6 +18,8 @@ use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
 
@@ -222,7 +224,44 @@ class UserServiceStub implements UserService
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
-        // TODO: Implement createUser() method.
+        $contentService  = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $locationCreateStruts = array();
+        foreach ( $parentGroups as $parentGroup )
+        {
+            $locationCreateStruts[] = $locationService->newLocationCreateStruct(
+                $parentGroup->contentInfo->mainLocationId
+            );
+        }
+
+        // Seems the is a back reference in the content object
+        $userCreateStruct->setField( 'user_account', new UserStub() );
+
+        $draft = $contentService->createContent(
+            $userCreateStruct,
+            $locationCreateStruts
+        );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $user = new UserStub(
+            array(
+                'id'             =>  $content->contentId,
+                'login'          =>  $userCreateStruct->login,
+                'email'          =>  $userCreateStruct->email,
+                'passwordHash'   =>  $this->createHash(
+                    $userCreateStruct->login,
+                    $userCreateStruct->password,
+                    2
+                ),
+                'hashAlgorithm'  =>  2,
+                'isEnabled'      =>  true,
+                'content'        =>  $content
+            )
+        );
+        $this->users[$user->id] = $user;
+
+        return $user;
     }
 
     /**
@@ -236,7 +275,11 @@ class UserServiceStub implements UserService
      */
     public function loadUser( $userId )
     {
-        // TODO: Implement loadUser() method.
+        if ( isset( $this->users[$userId] ) )
+        {
+            return $this->users[$userId];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -262,7 +305,26 @@ class UserServiceStub implements UserService
      */
     public function loadUserByCredentials( $login, $password )
     {
-        // TODO: Implement loadUserByCredentials() method.
+        foreach ( $this->users as $user )
+        {
+            if ( $login !== $user->login )
+            {
+                continue;
+            }
+
+            $passwordHash = $this->createHash(
+                $login,
+                $password,
+                $user->hashAlgorithm
+            );
+
+            if ( $passwordHash !== $user->passwordHash )
+            {
+                continue;
+            }
+            return $user;
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -337,7 +399,19 @@ class UserServiceStub implements UserService
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
-        // TODO: Implement newUserCreateStruct() method.
+        $contentType = $contentType ?:
+            $this->repository->getContentTypeService()->loadContentTypeByIdentifier( 'user' );
+
+        return new UserCreateStructStub(
+            array(
+                'login'             =>  $login,
+                'email'             =>  $email,
+                'password'          =>  $password,
+                'mainLanguageCode'  =>  $mainLanguageCode,
+                'contentType'       =>  $contentType
+            )
+        );
+
     }
 
     /**

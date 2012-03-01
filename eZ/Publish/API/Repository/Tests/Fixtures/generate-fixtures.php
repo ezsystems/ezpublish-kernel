@@ -461,7 +461,8 @@ function generateUserFixture( array $fixture )
             'email'          =>  $data['email'],
             'passwordHash'   =>  $data['password_hash'],
             'hashAlgorithm'  =>  $data['password_hash_type'],
-            'isEnabled'      =>  true
+            'isEnabled'      =>  true,
+            'content'         =>  '$this->getContentService()->loadContent( ' . $data['contentobject_id'] . ' )'
         );
         $nextId = max( $nextId, $data['contentobject_id'] );
     }

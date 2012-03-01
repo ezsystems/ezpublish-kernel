@@ -20,13 +20,18 @@ use \eZ\Publish\API\Repository\Values\User\User;
 class UserStub extends User
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected $content;
+
+    /**
      * returns the VersionInfo for this version
      *
-     * @return VersionInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getVersionInfo()
     {
-        // TODO: Implement getVersionInfo() method.
+        return $this->content->getVersionInfo();
     }
 
     /**
@@ -36,14 +41,14 @@ class UserStub extends User
      * the value of the initial language of the version if present, otherwise null.
      * On non translatable fields this method ignores the languageCode parameter.
      *
-     * @param string $fieldDefIdentifer
+     * @param string $fieldDefIdentifier
      * @param string $languageCode
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    public function getFieldValue( $fieldDefIdentifer, $languageCode = null )
+    public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        // TODO: Implement getFieldValue() method.
+        return $this->content->getFieldValue( $fieldDefIdentifier, $languageCode );
     }
 
     /**
@@ -53,7 +58,7 @@ class UserStub extends User
      */
     public function getRelations()
     {
-        // TODO: Implement getRelations() method.
+        return $this->content->getRelations();
     }
 
     /**
@@ -63,13 +68,13 @@ class UserStub extends User
      */
     public function getFields()
     {
-        // TODO: Implement getFields() method.
+        return $this->content->getFields();
     }
 
     /**
      * This method returns the fields for a given language and non translatable fields
      *
-     * If note set the initilaLanguage of the content version is used.
+     * If note set the initialLanguage of the content version is used.
      *
      * @param string $languageCode
      *
@@ -77,7 +82,32 @@ class UserStub extends User
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
-        // TODO: Implement getFieldsByLanguage() method.
+        return $this->content->getFieldsByLanguage( $languageCode );
     }
 
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case 'contentInfo':
+                return $this->content->contentInfo;
+
+            case 'contentType':
+                return $this->content->contentType;
+
+            case 'contentId':
+                return $this->content->contentId;
+
+            case 'versionInfo':
+                return $this->getVersionInfo();
+
+            case 'fields':
+                return $this->getFields();
+
+            case 'relations':
+                return $this->getRelations();
+        }
+
+        return parent::__get( $property );
+    }
 }
