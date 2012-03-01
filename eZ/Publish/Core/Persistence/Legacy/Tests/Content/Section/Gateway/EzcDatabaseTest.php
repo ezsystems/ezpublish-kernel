@@ -132,6 +132,59 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadAllSectionData
+     */
+    public function testLoadAllSectionData()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $result = $gateway->loadAllSectionData();
+
+        $expected = array(
+            array(
+                'id' => '1',
+                'identifier' => 'standard',
+                'name' => 'Standard',
+            ),
+
+            array(
+                'id' => '2',
+                'identifier' => 'users',
+                'name' => 'Users',
+            ),
+
+            array(
+                'id' => '3',
+                'identifier' => 'media',
+                'name' => 'Media',
+            ),
+
+            array(
+                'id' => '4',
+                'identifier' => 'setup',
+                'name' => 'Setup',
+            ),
+
+            array(
+                'id' => '5',
+                'identifier' => 'design',
+                'name' => 'Design',
+            ),
+
+            array(
+                'id' => '6',
+                'identifier' => '',
+                'name' => 'Restricted',
+            )
+        );
+        $this->assertEquals(
+            $expected,
+            $result
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionDataByIdentifier
      */
     public function testLoadSectionDataByIdentifier()
