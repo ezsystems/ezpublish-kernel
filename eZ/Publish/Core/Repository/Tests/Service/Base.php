@@ -32,6 +32,15 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tear down test (properties)
+     */
+    protected function tearDown()
+    {
+        unset( $this->repository );
+        parent::tearDown();
+    }
+
+    /**
      * Generate \eZ\Publish\Core\Repository\Repository
      *
      * Makes it possible to inject different Io / Persistence handlers

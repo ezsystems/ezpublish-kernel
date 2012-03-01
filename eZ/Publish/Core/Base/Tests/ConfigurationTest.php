@@ -43,6 +43,16 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tear down test (properties)
+     */
+    protected function tearDown()
+    {
+        unset( $this->parserMock );
+        unset( $this->configuration );
+        parent::tearDown();
+    }
+
+    /**
      * Test Configuration
      *
      * @covers \eZ\Publish\Core\Base\Configuration::load

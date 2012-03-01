@@ -31,6 +31,15 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tear down test (properties)
+     */
+    protected function tearDown()
+    {
+        unset( $this->parser );
+        parent::tearDown();
+    }
+
+    /**
      * Setup parser with settings
      *
      * @abstract

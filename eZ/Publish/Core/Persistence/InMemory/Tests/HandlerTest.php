@@ -32,4 +32,13 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         // Get in-memory Handler instance
         $this->persistenceHandler = new InMemoryHandler();
     }
+
+    /**
+     * Tear down test (properties)
+     */
+    protected function tearDown()
+    {
+        unset( $this->persistenceHandler );
+        parent::tearDown();
+    }
 }
