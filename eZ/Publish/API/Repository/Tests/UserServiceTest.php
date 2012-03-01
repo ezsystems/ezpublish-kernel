@@ -161,6 +161,7 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateUserGroup()
     {
@@ -408,6 +409,7 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateUser()
     {
@@ -572,6 +574,32 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadAnonymousUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadAnonymousUser()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
+     */
+    public function testLoadAnonymousUser()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService = $repository->getUserService();
+
+        // Load default anonymous user available in each eZ Publish installation
+        $anonymousUser = $userService->loadAnonymousUser();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\User',
+            $anonymousUser
+        );
+
+        $this->assertEquals( 'anonymous', $anonymousUser->login );
+    }
+
+    /**
      * Test for the loadUserByCredentials() method.
      *
      * @return void
@@ -645,11 +673,25 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::deleteUser()
-     * 
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
      */
     public function testDeleteUser()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::deleteUser() is not implemented." );
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Delete the currently created user
+        $userService->deleteUser( $user );
+        /* END: Use Case */
+
+        // We use the NotFoundException here to verify that the user not exists
+        $userService->loadUser( $user->id );
     }
 
     /**

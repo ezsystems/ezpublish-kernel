@@ -290,7 +290,8 @@ class UserServiceStub implements UserService
      */
     public function loadAnonymousUser()
     {
-        // TODO: Implement loadAnonymousUser() method.
+        // 10 is the contentId of the anon user in the test dump
+        return $this->loadUser( 10 );
     }
 
     /**
@@ -336,7 +337,7 @@ class UserServiceStub implements UserService
      */
     public function deleteUser( User $user )
     {
-        // TODO: Implement deleteUser() method.
+        unset( $this->users[$user->id] );
     }
 
     /**
