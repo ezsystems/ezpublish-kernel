@@ -128,7 +128,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Removes stuff created in setUp().
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $locationHandler = $this->persistenceHandler->locationHandler();
 

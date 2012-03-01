@@ -50,8 +50,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         unset( $this->ioHandler );
-        unset( $this->imageInputPath );
-        parent::tearDown();
     }
 
     /**

@@ -41,15 +41,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
     abstract protected function getRepository();
 
     /**
-     * Tear down test
-     */
-    public function tearDown()
-    {
-        unset( $this->repository );
-        parent::tearDown();
-    }
-
-    /**
      * Asserts that properties given in $expectedValues are correctly set in
      * $actualObject.
      *
@@ -104,11 +95,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @param $propertyName
-     * @param $expectedValue
-     * @param $actualValue
-     */
     private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
     {
         if( $expectedValue instanceof \ArrayObject )
