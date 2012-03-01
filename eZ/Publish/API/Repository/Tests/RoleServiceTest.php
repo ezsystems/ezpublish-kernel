@@ -698,7 +698,13 @@ class RoleServiceTest extends BaseTest
         }
 
         $policyUpdate = $roleService->newPolicyUpdateStruct();
-        $policyUpdate->addLimitation( new ContentTypeLimitation( array( 'limitationValues' => array( 29, 30 ) ) ) );
+        $policyUpdate->addLimitation(
+            new ContentTypeLimitation(
+                array(
+                    'limitationValues' => array( 29, 30 )
+                )
+            )
+        );
 
         $roleService->updatePolicy( $policy, $policyUpdate );
 
@@ -715,7 +721,13 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals(
-            array( new ContentTypeLimitation( array( 'limitationValues' => array( 29, 30 ) ) ) ),
+            array(
+                new ContentTypeLimitation(
+                    array(
+                        'limitationValues' => array( 29, 30 )
+                    )
+                )
+            ),
             $policy->getLimitations()
         );
     }
@@ -730,6 +742,54 @@ class RoleServiceTest extends BaseTest
     public function testRemovePolicy()
     {
         $this->markTestIncomplete( "@TODO: Test for RoleService::removePolicy() is not implemented." );
+    }
+
+    /**
+     * Test for the assignRoleToUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser()
+     *
+     */
+    public function testAssignRoleToUser()
+    {
+        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
+    }
+
+    /**
+     * Test for the assignRoleToUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
+     *
+     */
+    public function testAssignRoleToUserWithThirdParameter()
+    {
+        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
+    }
+
+    /**
+     * Test for the unassignRoleFromUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
+     *
+     */
+    public function testUnassignRoleFromUser()
+    {
+        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUser() is not implemented." );
+    }
+
+    /**
+     * Test for the unassignRoleFromUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUnassignRoleFromUserThrowsInvalidArgumentException()
+    {
+        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUser() is not implemented." );
     }
 
     /**
@@ -768,14 +828,6 @@ class RoleServiceTest extends BaseTest
         $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUserGroup() is not implemented." );
     }
 
-    public function testSindelfingen()
-    {
-        $repository = $this->getRepository();
-        $roleService = $repository->getRoleService();
-
-//        var_dump( $roleService->loadPoliciesByUserId( 14 ) );
-    }
-
     /**
      * Test for the assignRoleToUserGroup() method.
      *
@@ -810,54 +862,6 @@ class RoleServiceTest extends BaseTest
     public function testUnassignRoleFromUserGroupThrowsInvalidArgumentException()
     {
         $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the assignRoleToUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser()
-     * 
-     */
-    public function testAssignRoleToUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
-    }
-
-    /**
-     * Test for the assignRoleToUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
-     * 
-     */
-    public function testAssignRoleToUserWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
-    }
-
-    /**
-     * Test for the unassignRoleFromUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
-     * 
-     */
-    public function testUnassignRoleFromUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUser() is not implemented." );
-    }
-
-    /**
-     * Test for the unassignRoleFromUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testUnassignRoleFromUserThrowsInvalidArgumentException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUser() is not implemented." );
     }
 
     /**

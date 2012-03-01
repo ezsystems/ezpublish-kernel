@@ -56,7 +56,6 @@ class RoleServiceStub implements RoleService
      * Temporary solution to emulate user policies.
      *
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
-     * @todo REMOVE THIS WORKAROUND
      */
     private $policies = array();
 
@@ -525,20 +524,6 @@ class RoleServiceStub implements RoleService
     public function newRoleUpdateStruct()
     {
         return new RoleUpdateStruct();
-    }
-
-    /**
-     * Temporary method to simulate user policies.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\Policy[] $policies
-     *
-     * @return void
-     * @todo REMOVE THIS WORKAROUND
-     */
-    public function setPoliciesForUser( User $user, array $policies )
-    {
-        $this->policies[$user->id] = $policies;
     }
 
     /**
