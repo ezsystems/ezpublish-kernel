@@ -107,7 +107,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadGroupByIdentifier()
     {
-        $obj = $this->persistenceHandler->ContentTypeHandler()->loadGroupByIdentifier( 'content' );
+        $obj = $this->persistenceHandler->ContentTypeHandler()->loadGroupByIdentifier( 'Content' );// data is in sync with legacy
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( array( 'eng-GB' => 'Content' ), $obj->name );
