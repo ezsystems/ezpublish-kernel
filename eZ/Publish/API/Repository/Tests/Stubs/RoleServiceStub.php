@@ -58,17 +58,32 @@ class RoleServiceStub implements RoleService
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
      * @todo REMOVE THIS WORKAROUND
      */
-    private $userPolicies = array();
+    private $policies = array();
 
     /**
      * @var integer
      */
-    private $nextPolicyId = 0;
+    private $policyNextId = 0;
 
     /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
+
+    /**
+     * @var integer[]
+     */
+    private $content2role;
+
+    /**
+     * @var integer[]
+     */
+    private $role2policy;
+
+    /**
+     * @var integer[]
+     */
+    private $user2group;
 
     /**
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
@@ -168,7 +183,7 @@ class RoleServiceStub implements RoleService
         $policies   = $role->getPolicies();
         $policies[] = new PolicyStub(
             array(
-                'id'        =>  ++$this->nextPolicyId,
+                'id'        =>  ++$this->policyNextId,
                 'roleId'    =>  $role->id,
                 'module'    =>  $policyCreateStruct->module,
                 'function'  =>  $policyCreateStruct->function
@@ -318,18 +333,53 @@ class RoleServiceStub implements RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
-     * @param $userId
+     * @param mixed $userId
      *
      * @return array an array of {@link Policy}
      */
     public function loadPoliciesByUserId( $userId )
     {
-        if ( isset( $this->userPolicies[$userId] ) )
+        $contentIds = array( $userId );
+        if ( isset( $this->user2group[$userId] ) )
         {
-            return $this->userPolicies[$userId];
+            foreach ( $this->user2group[$userId] as $groupId )
+            {
+                $contentIds[] = $groupId;
+            }
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
-        // TODO: Implement loadPoliciesByUserId() method.
+
+        $roleIds = array();
+        foreach ( $contentIds as $contentId )
+        {
+            if ( false === isset( $this->content2role[$contentId] ) )
+            {
+                continue;
+            }
+            foreach ( $this->content2role[$contentId] as $roleId )
+            {
+                $roleIds[] = $roleId;
+            }
+        }
+
+        if ( 0 === count( $roleIds ) )
+        {
+            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $policies = array();
+        foreach ( $roleIds as $roleId )
+        {
+            if ( false === isset( $this->role2policy[$roleId] ) )
+            {
+                continue;
+            }
+
+            foreach ( $this->role2policy[$roleId] as $policyId )
+            {
+                $policies[] = $this->policies[$policyId];
+            }
+        }
+        return $policies;
     }
 
     /**
@@ -488,7 +538,7 @@ class RoleServiceStub implements RoleService
      */
     public function setPoliciesForUser( User $user, array $policies )
     {
-        $this->userPolicies[$user->id] = $policies;
+        $this->policies[$user->id] = $policies;
     }
 
     /**
@@ -502,7 +552,12 @@ class RoleServiceStub implements RoleService
         list(
             $this->roles,
             $this->nameToRoleId,
-            $this->nextRoleId
-            ) = $this->repository->loadFixture( 'Role' );
+            $this->nextRoleId,
+            $this->content2role,
+            $this->policies,
+            $this->policyNextId,
+            $this->role2policy,
+            $this->user2group
+        ) = $this->repository->loadFixture( 'Role' );
     }
 }

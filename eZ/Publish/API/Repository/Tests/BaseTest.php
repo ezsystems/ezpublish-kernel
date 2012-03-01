@@ -32,6 +32,29 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     private $repository;
 
     /**
+     * @return void
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        try
+        {
+            $this->getRepository();
+        }
+        catch ( \Exception $e )
+        {
+            $this->markTestSkipped(
+                'Cannot create a repository with predefined user. ' .
+                'Check the UserService or RoleService implmenentation. ' .
+                 PHP_EOL . PHP_EOL.
+                'Exception trace: ' .
+                $e->getTraceAsString()
+            );
+        }
+    }
+
+    /**
      * Resets the temporary used repository between each test run.
      *
      * @return void
@@ -71,6 +94,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             chdir( realpath( str_repeat( '../', $count ) ) );
 
             $this->repository = include $file;
+
+            $userService = $this->repository->getUserService();
+            $this->repository->setCurrentUser( $userService->loadUser( 14 ) );
         }
         return $this->repository;
     }
