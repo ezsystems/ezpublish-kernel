@@ -148,8 +148,12 @@ class LocationService implements LocationServiceInterface
         );
 
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-        if ( $searchResult->count != 1 )
+
+        if ( $searchResult->count == 0 )
             throw new NotFoundException( "location", $remoteId );
+
+        if ( $searchResult->count > 1 )
+            throw new BadStateException( "remoteId", "more than one location with specified remote ID found" );
 
         if ( is_array( $searchResult->content[0]->locations ) )
         {
