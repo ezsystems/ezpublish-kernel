@@ -39,6 +39,8 @@ class FieldValue extends ValueObject
      */
     public $fieldSettings;
 
+    public $externalData;
+
     /**
      * Mixed sort key
      *
