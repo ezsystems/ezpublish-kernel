@@ -22,6 +22,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\Base\Exceptions\NotFound,
     ezp\Content as ContentDo,
     ezp\Content\Version as VersionDo,
     ezcQueryUpdate;
@@ -309,6 +310,12 @@ class EzcDatabase extends Gateway
             )
         );
         $q->prepare()->execute();
+
+        // Handle alwaysAvailable flag update separately as it's a more complex task and has impact on several tables
+        if ( isset( $struct->alwaysAvailable ) )
+        {
+            $this->updateAlwaysAvailableFlag( $contentId, $struct->alwaysAvailable );
+        }
     }
 
     /**
@@ -341,6 +348,74 @@ class EzcDatabase extends Gateway
             )
         );
         $q->prepare()->execute();
+    }
+
+    /**
+     * Updates "always available" flag for content identified by $contentId, in respect to $isAlwaysAvailable.
+     *
+     * @param int $contentId
+     * @param bool $newAlwaysAvailable New "always available" value
+     */
+    public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable )
+    {
+        // We will need to know some info on the current language mask to update the flag everywhere needed
+        $langMaskInfo = $this->getLanguageMaskInfo( $contentId );
+        $alwaysAvailable = (bool)( $langMaskInfo['language_mask'] & 1 );
+        if ( $alwaysAvailable != $newAlwaysAvailable )
+        {
+            $newLanguageMask = $langMaskInfo['language_mask'] ^ 1;
+            $q = $this->dbHandler->createUpdateQuery();
+            $q
+                ->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'language_mask' ),
+                    $q->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
+                )
+                ->where(
+                    $q->expr->eq(
+                        $this->dbHandler->quoteColumn( 'id' ),
+                        $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    )
+                );
+            $q->prepare()->execute();
+        }
+    }
+
+    /**
+     * Returns a hash containing information on language mask for content identified by $contentId.
+     * Hash keys include:
+     *  - current_version (Current version number for content, might be needed to update language mask everywhere)
+     *  - language_mask (Current language mask)
+     *  - initial_language_id
+     *
+     * @param int $contentId
+     * @return array
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound Thrown if content cannot be found
+     */
+    private function getLanguageMaskInfo( $contentId )
+    {
+        $q = $this->dbHandler->createSelectQuery();
+        $q
+            ->select(
+                $this->dbHandler->quoteColumn( 'current_version' ),
+                $this->dbHandler->quoteColumn( 'language_mask' ),
+                $this->dbHandler->quoteColumn( 'initial_language_id' )
+            )
+            ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $q->bindValue( $contentId )
+                )
+            )
+            ->limit( 0, 1 );
+        $stmt = $q->prepare();
+        $stmt->execute();
+        $res = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        if ( empty( $res ) )
+            throw new NotFound( 'content', $contentId );
+
+        return $res[0];
     }
 
     /**
