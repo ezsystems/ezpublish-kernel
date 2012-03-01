@@ -16,23 +16,23 @@ use BadFunctionCallException,
 /**
  * This class provides the fluent factory interface for Content queries SortClause items
  *
- * @method \ezp\Persistence\Content\Query\SortClause\SectionIdentifier sectionIdentifier( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\ContentName contentName( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\DateCreated dateCreated( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\DateModified dateModified( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\Field field( string $fieldIdentifier, string $typeIdentifier, string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\LocationDepth locationDepth( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\LocationPath locationPath( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\LocationPriority locationPriority( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\SectionIdentifier sectionIdentifier( string $sortDirection )
- * @method \ezp\Persistence\Content\Query\SortClause\SectionName sectionName( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\SectionIdentifier sectionIdentifier( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\ContentName contentName( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\DateCreated dateCreated( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\DateModified dateModified( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\Field field( string $fieldIdentifier, string $typeIdentifier, string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationDepth locationDepth( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPath locationPath( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\LocationPriority locationPriority( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\SectionIdentifier sectionIdentifier( string $sortDirection )
+ * @method \eZ\Publish\SPI\Persistence\Content\Query\SortClause\SectionName sectionName( string $sortDirection )
  */
 class SortClauseBuilder
 {
     /**
      * Intercepts all SortClause calls, and returns the matching SortClause object
      *
-     * @return \ezp\Persistence\Content\Query\SortClause
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\SortClause
      *
      * @throws BadFunctionCalException If the sort clause doesn't exist
      */

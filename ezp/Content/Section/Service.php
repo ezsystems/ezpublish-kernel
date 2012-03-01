@@ -14,7 +14,7 @@ use ezp\Base\Exception\NotFound,
     ezp\Base\Service as BaseService,
     ezp\Content,
     ezp\Content\Section,
-    ezp\Persistence\ValueObject;
+    eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Section service, used for section operations
@@ -157,7 +157,7 @@ class Service extends BaseService
     /**
      * Build DO based on VO
      *
-     * @param \ezp\Persistence\ValueObject $vo
+     * @param \eZ\Publish\SPI\Persistence\ValueObject $vo
      * @return \ezp\Content\Section
      */
     protected function buildDomainObject( ValueObject $vo )

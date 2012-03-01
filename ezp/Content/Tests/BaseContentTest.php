@@ -17,7 +17,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     ezp\Base\Collection\ReadOnly,
-    ezp\Persistence\Content\Type as TypeValue,
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -47,7 +47,7 @@ abstract class BaseContentTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             Configuration::getInstance('service')->getAll(),
             array(
-                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@persistence_handler' => new \eZ\Publish\SPI\Persistence\Storage\InMemory\Handler(),
                 '@io_handler' => new \ezp\Io\Storage\InMemory(),
             )
         );

@@ -30,17 +30,17 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Field\StaticCollection as StaticFieldCollection,
     ezp\Content\Search\Result,
     ezp\Content\Utils\NamePatternResolver,
-    ezp\Persistence\Content as ContentValue,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Persistence\Content\Query\Criterion\LogicalOr,
-    ezp\Persistence\Content\Query\Criterion\LogicalAnd,
-    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    ezp\Persistence\Content\Version as VersionValue,
-    ezp\Persistence\Content\RestrictedVersion as RestrictedVersionValue,
-    ezp\Persistence\ValueObject;
+    eZ\Publish\SPI\Persistence\Content as ContentValue,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalOr,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Version as VersionValue,
+    eZ\Publish\SPI\Persistence\Content\RestrictedVersion as RestrictedVersionValue,
+    eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Content service, used for Content operations
@@ -651,7 +651,7 @@ class Service extends BaseService
 
     /**
      * Build a content Domain Object from a content Value object returned by Persistence
-     * @param \ezp\Persistence\Content $vo
+     * @param \eZ\Publish\SPI\Persistence\Content $vo
      * @param \ezp\Content\Version $version Will be set to version object during execution
      * @return \ezp\Content
      */
@@ -715,7 +715,7 @@ class Service extends BaseService
      * Builds a version Domain Object from its value object returned by persistence
      *
      * @param \ezp\Content $content
-     * @param \ezp\Persistence\Content\Version|\ezp\Persistence\Content\RestrictedVersion $versionVo
+     * @param \eZ\Publish\SPI\Persistence\Content\Version|\eZ\Publish\SPI\Persistence\Content\RestrictedVersion $versionVo
      * @return \ezp\Content\Version
      */
     protected function buildVersionDomainObject( Content $content, $versionVo )

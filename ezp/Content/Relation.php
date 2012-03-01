@@ -11,7 +11,7 @@ namespace ezp\Content;
 use ezp\Content,
     ezp\Base\Model,
     ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Persistence\Content\Relation as RelationValue;
+    eZ\Publish\SPI\Persistence\Content\Relation as RelationValue;
 
 /**
  * This class represents a Content Relation

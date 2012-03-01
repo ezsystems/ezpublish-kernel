@@ -29,7 +29,7 @@ use ezp\Base\Exception\BadConfiguration,
  *     $sc = new ezp\Base\ServiceContainer(
  *         Configuration::getInstance('service')->getAll(),
  *         array(
- *             '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler()
+ *             '@persistence_handler' => new \eZ\Publish\SPI\Persistence\Storage\InMemory\Handler()
  *         )
  *     );
  *     $sc->getRepository->getContentService()->load( 42 );
@@ -41,7 +41,7 @@ use ezp\Base\Exception\BadConfiguration,
  *     arguments[persistence_handler]=@inmemory_persistence_handler
  *
  *     [inmemory_persistence_handler]
- *     class=ezp\Persistence\Storage\InMemory\Handler
+ *     class=eZ\Publish\SPI\Persistence\Storage\InMemory\Handler
  *
  *     # @see \ezp\Base\settings\service.ini For more options and examples.
  *

@@ -17,7 +17,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 * [ezp/Base](/ezsystems/ezp-next/tree/master/ezp/Base/)  *Base functionality that other modules depend on*
 * [ezp/Content](/ezsystems/ezp-next/tree/master/ezp/Content/)  *Content related domain objects and services*
 * [ezp/Io](/ezsystems/ezp-next/tree/master/ezp/Io/)  *Binaryfiles related objects, services and handlers*
-* [ezp/Persistence](/ezsystems/ezp-next/tree/master/ezp/Persistence/)  *Persistence API (private api for now)*
+* [eZ/Publish/SPI/Persistence](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/Persistence/)  *Persistence API (private api for now)*
 * [ezp/User](/ezsystems/ezp-next/tree/master/ezp/User/)  *User related domain objects and services*
 * config.php-RECOMMENDED  *Default config file (currently DEVELOPMENT config)*
 * phpunit.xml  *PHPUnit 3.5+ xml configuration*

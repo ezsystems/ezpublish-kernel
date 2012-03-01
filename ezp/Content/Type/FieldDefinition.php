@@ -11,12 +11,12 @@ namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
     ezp\Content\FieldType\Factory as FieldTypeFactory,
     ezp\Content\FieldType\Validator,
     ezp\Content\FieldType\Value as FieldValue,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints;
+    eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 
 /**
  * Content Type Field (content class attribute) class

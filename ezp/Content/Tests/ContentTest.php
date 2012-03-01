@@ -12,7 +12,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Section\Concrete as ConcreteSection,
     ezp\Content\Type\Concrete as ConcreteType,
-    ezp\Persistence\Content\Type as TypeValue,
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
     ezp\User\Proxy as ProxyUser;
 
 /**

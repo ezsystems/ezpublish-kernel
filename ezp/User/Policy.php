@@ -11,7 +11,7 @@ namespace ezp\User;
 use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Persistence\User\Policy as PolicyValue;
+    eZ\Publish\SPI\Persistence\User\Policy as PolicyValue;
 
 /**
  * This class represents a Policy item

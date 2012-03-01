@@ -16,7 +16,7 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content\Type as TypeValue,
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
     Exception;
 
 /**

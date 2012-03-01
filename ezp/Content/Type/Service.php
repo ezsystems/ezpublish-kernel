@@ -25,13 +25,13 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Type\Group\Proxy as ProxyGroup,
     ezp\Content\Type\FieldDefinition,
     ezp\Content\FieldType\Value as FieldTypeValue,
-    ezp\Persistence\Content\Type as TypeValue,
-    ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\Group as GroupValue,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\ValueObject;
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
+    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group as GroupValue,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Content Service, extends repository with content specific operations
@@ -583,7 +583,7 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type $vo
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $vo
      * @return \ezp\Content\Type
      */
     protected function buildType( TypeValue $vo )
@@ -614,7 +614,7 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\Group $vo
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $vo
      * @return \ezp\Content\Type\Group
      */
     protected function buildGroup( GroupValue $vo )

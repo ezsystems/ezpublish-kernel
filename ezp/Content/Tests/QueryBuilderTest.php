@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Query\CriterionFactory,
+use eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Query\CriterionFactory,
     ezp\Content\Query\Builder;
 
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase

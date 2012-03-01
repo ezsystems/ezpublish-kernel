@@ -11,7 +11,7 @@ namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Base\Collection\ReadOnly as ReadOnlyCollection,
     ezp\Content\Type,
-    ezp\Persistence\Content\Type as TypeValue;
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue;
 
 /**
  * Concrete Content Type class

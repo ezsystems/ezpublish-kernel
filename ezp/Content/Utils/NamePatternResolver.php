@@ -91,7 +91,7 @@ class NamePatternResolver
      * Constructs a object to resolve $namePattern with $contentVersion fields values
      *
      * @param string $namePattern Name pattern (aka "name schema" for content name/urlAlias.
-     *                            See {@link \ezp\Persistence\Content\Type::$nameSchema} for more info.
+     *                            See {@link \eZ\Publish\SPI\Persistence\Content\Type::$nameSchema} for more info.
      * @param \ezp\Content\Version $contentVersion
      * @todo Take translation into account
      */

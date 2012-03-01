@@ -34,7 +34,7 @@ class ContentProxyTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             Configuration::getInstance('service')->getAll(),
             array(
-                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@persistence_handler' => new \eZ\Publish\SPI\Persistence\Storage\InMemory\Handler(),
                 '@io_handler' => new \ezp\Io\Storage\InMemory(),
             )
         );

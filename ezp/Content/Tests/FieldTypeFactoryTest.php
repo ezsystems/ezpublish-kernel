@@ -10,7 +10,7 @@
 namespace ezp\Content\Tests;
 use PHPUnit_Framework_TestCase,
     ezp\Content\FieldType\Factory,
-    ezp\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     ezp\Base\Configuration;
 
 class FieldTypeFactoryTest extends PHPUnit_Framework_TestCase

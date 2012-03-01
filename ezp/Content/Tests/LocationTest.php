@@ -15,7 +15,7 @@ use ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     ezp\User\Proxy as ProxyUser,
-    ezp\Persistence\Content\Type as TypeValue,
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -45,7 +45,7 @@ class LocationTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             Configuration::getInstance('service')->getAll(),
             array(
-                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@persistence_handler' => new \eZ\Publish\SPI\Persistence\Storage\InMemory\Handler(),
                 '@io_handler' => new \ezp\Io\Storage\InMemory(),
             )
         );
