@@ -101,19 +101,6 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
-     */
-    public function testCreateRoleThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::createRole() is not implemented." );
-    }
-
-    /**
-     * Test for the createRole() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::createRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
      */
@@ -163,19 +150,6 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::loadRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
-     */
-    public function testLoadRoleThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::loadRole() is not implemented." );
-    }
-
-    /**
-     * Test for the loadRole() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::loadRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
      */
@@ -217,19 +191,6 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals( 'roleName', $role->identifier );
-    }
-
-    /**
-     * Test for the loadRoleByIdentifier() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::loadRoleByIdentifier()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
-     */
-    public function testLoadRoleByIdentifierThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::loadRoleByIdentifier() is not implemented." );
     }
 
     /**
@@ -327,18 +288,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadRoles() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::loadRoles()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadRolesThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::loadRoles() is not implemented." );
-    }
-
-    /**
      * Test for the newRoleUpdateStruct() method.
      *
      * @return void
@@ -392,19 +341,6 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
-     */
-    public function testUpdateRoleThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::updateRole() is not implemented." );
-    }
-
-    /**
-     * Test for the updateRole() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::updateRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
      */
@@ -448,19 +384,6 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals( 5, count( $roleService->loadRoles() ) );
-    }
-
-    /**
-     * Test for the deleteRole() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::deleteRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testDeleteRole
-     */
-    public function testDeleteRoleThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::deleteRole() is not implemented." );
     }
 
     /**
@@ -596,18 +519,6 @@ class RoleServiceTest extends BaseTest
             array( $role->id, 'content', 'create' ),
             array( $policy->roleId, $policy->module, $policy->function )
         );
-    }
-
-    /**
-     * Test for the addPolicy() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAddPolicyThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::addPolicy() is not implemented." );
     }
 
     /**
@@ -810,18 +721,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updatePolicy() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdatePolicyThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::updatePolicy() is not implemented." );
-    }
-
-    /**
      * Test for the removePolicy() method.
      *
      * @return void
@@ -829,18 +728,6 @@ class RoleServiceTest extends BaseTest
      * 
      */
     public function testRemovePolicy()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::removePolicy() is not implemented." );
-    }
-
-    /**
-     * Test for the removePolicy() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::removePolicy()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testRemovePolicyThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for RoleService::removePolicy() is not implemented." );
     }
@@ -894,30 +781,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the assignRoleToUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAssignRoleToUserGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the assignRoleToUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAssignRoleToUserGroupThrowsUnauthorizedExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUserGroup() is not implemented." );
-    }
-
-    /**
      * Test for the unassignRoleFromUserGroup() method.
      *
      * @return void
@@ -925,18 +788,6 @@ class RoleServiceTest extends BaseTest
      * 
      */
     public function testUnassignRoleFromUserGroup()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the unassignRoleFromUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUnassignRoleFromUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUserGroup() is not implemented." );
     }
@@ -978,30 +829,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the assignRoleToUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAssignRoleToUserThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
-    }
-
-    /**
-     * Test for the assignRoleToUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAssignRoleToUserThrowsUnauthorizedExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
-    }
-
-    /**
      * Test for the unassignRoleFromUser() method.
      *
      * @return void
@@ -1009,18 +836,6 @@ class RoleServiceTest extends BaseTest
      * 
      */
     public function testUnassignRoleFromUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUser() is not implemented." );
-    }
-
-    /**
-     * Test for the unassignRoleFromUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUnassignRoleFromUserThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUser() is not implemented." );
     }
@@ -1050,18 +865,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the getRoleAssignments() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignments()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testGetRoleAssignmentsThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignments() is not implemented." );
-    }
-
-    /**
      * Test for the getRoleAssignmentsForUser() method.
      *
      * @return void
@@ -1074,18 +877,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the getRoleAssignmentsForUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testGetRoleAssignmentsForUserThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignmentsForUser() is not implemented." );
-    }
-
-    /**
      * Test for the getRoleAssignmentsForUserGroup() method.
      *
      * @return void
@@ -1093,18 +884,6 @@ class RoleServiceTest extends BaseTest
      * 
      */
     public function testGetRoleAssignmentsForUserGroup()
-    {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignmentsForUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the getRoleAssignmentsForUserGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testGetRoleAssignmentsForUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignmentsForUserGroup() is not implemented." );
     }
