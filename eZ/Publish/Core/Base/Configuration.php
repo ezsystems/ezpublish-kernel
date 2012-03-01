@@ -341,7 +341,7 @@ class Configuration
         foreach ( $sourceFiles as $fileName => $suffix )
         {
             if ( !$parsers[$suffix] instanceof Parser )
-                $parsers[$suffix] = new $parsers[$suffix]( $this->globalConfiguration );
+                $parsers[$suffix] = new $parsers[$suffix]( $this->globalConfiguration['base']['Configuration'] );
 
             $configurationFileData[$fileName] = $parsers[$suffix]->parse( $fileName, file_get_contents( $fileName ) );
         }
