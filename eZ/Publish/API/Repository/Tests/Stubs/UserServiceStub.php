@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\UserService;
+use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -245,7 +246,7 @@ class UserServiceStub implements UserService
                     2
                 ),
                 'hashAlgorithm'  =>  2,
-                'isEnabled'      =>  true,
+                'isEnabled'      =>  $userCreateStruct->enabled,
                 'content'        =>  $content
             )
         );
@@ -427,7 +428,7 @@ class UserServiceStub implements UserService
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
      * @param string $mainLanguageCode the main language for the underlying content object
-     * @param ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserCreateStruct
      */

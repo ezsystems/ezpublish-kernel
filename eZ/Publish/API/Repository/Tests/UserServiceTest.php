@@ -151,10 +151,32 @@ class UserServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct($mainLanguageCode, $contentType)
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testNewUserGroupCreateStructWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::newUserGroupCreateStruct() is not implemented." );
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( 'This test is only relevant for eZ Publish versions > 4' );
+        }
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $userService        = $repository->getUserService();
+
+        // Load the default ContentType for user groups
+        $groupType = $contentTypeService->loadContentTypeByIdentifier( 'user_group' );
+
+        // Instantiate a new group create struct
+        $groupCreate = $userService->newUserGroupCreateStruct(
+            'eng-US',
+            $groupType
+        );
+        /* END: Use Case */
+
+        $this->assertSame( $groupType, $groupCreate->contentType );
     }
 
     /**
@@ -406,6 +428,41 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the newUserCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType)
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     */
+    public function testNewUserCreateStructWithFifthParameter()
+    {
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( 'This test is only relevant for eZ Publish versions > 4' );
+        }
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $userService        = $repository->getUserService();
+
+        $userType = $contentTypeService->loadContentTypeByIdentifier( 'user' );
+
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US',
+            $userType
+        );
+        /* END: Use Case */
+
+        $this->assertSame( $userType, $userCreate->contentType );
+    }
+
+    /**
      * Test for the createUser() method.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -480,7 +537,7 @@ class UserServiceTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testCreateUserThrowsContentValidationException()
+    public function testCreateUserThrowsContentValidationExceptionForMissingField()
     {
         $repository = $this->getRepository();
 
@@ -890,18 +947,6 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     */
-    public function testUpdateUserThrowsContentFieldValidationException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUser() is not implemented." );
-    }
-
-    /**
-     * Test for the updateUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      */
     public function testUpdateUserThrowsContentValidationException()
@@ -946,18 +991,6 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the newUserCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType)
-     * 
-     */
-    public function testNewUserCreateStructWithFifthParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for UserService::newUserCreateStruct() is not implemented." );
-    }
-
-    /**
      * Test for the newUserGroupUpdateStruct() method.
      *
      * @return void
@@ -991,6 +1024,7 @@ class UserServiceTest extends BaseTest
             'secret',
             'eng-US'
         );
+        $userCreate->enabled = true;
 
         // Set some fields required by the user ContentType
         $userCreate->setField( 'first_name', 'Example' );
