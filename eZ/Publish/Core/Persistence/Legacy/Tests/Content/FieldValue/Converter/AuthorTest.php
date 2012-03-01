@@ -10,12 +10,9 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\Core\Repository\FieldType\Author\Value as AuthorValue,
     eZ\Publish\Core\Repository\FieldType\Author\Author,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author as AuthorConverter,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
