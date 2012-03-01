@@ -164,7 +164,7 @@ class UserServiceStub implements UserService
      */
     public function deleteUserGroup( UserGroup $userGroup )
     {
-        // TODO: Implement deleteUserGroup() method.
+        unset( $this->userGroups[$userGroup->id] );
     }
 
     /**
@@ -177,7 +177,42 @@ class UserServiceStub implements UserService
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
-        // TODO: Implement moveUserGroup() method.
+        $contentService = $this->repository->getContentService();
+
+        $oldParent = $this->userGroups[$userGroup->parentId];
+
+        $this->userGroups[$oldParent->id] = new UserGroupStub(
+            array(
+                'id'             =>  $oldParent->id,
+                'parentId'       =>  $oldParent->parentId,
+                'subGroupCount'  =>  $oldParent->subGroupCount - 1,
+                'content'        =>  $contentService->loadContent(
+                    $oldParent->contentId
+                )
+            )
+        );
+
+        $this->userGroups[$userGroup->id] = new UserGroupStub(
+            array(
+                'id'             =>  $userGroup->id,
+                'parentId'       =>  $newParent->id,
+                'subGroupCount'  =>  $userGroup->subGroupCount,
+                'content'        =>  $contentService->loadContent(
+                    $userGroup->contentId
+                )
+            )
+        );
+
+        $this->userGroups[$newParent->id] = new UserGroupStub(
+            array(
+                'id'             =>  $newParent->id,
+                'parentId'       =>  $newParent->parentId,
+                'subGroupCount'  =>  $newParent->subGroupCount + 1,
+                'content'        =>  $contentService->loadContent(
+                    $newParent->contentId
+                )
+            )
+        );
     }
 
     /**
@@ -197,7 +232,41 @@ class UserServiceStub implements UserService
      */
     public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
-        // TODO: Implement updateUserGroup() method.
+        $contentService = $this->repository->getContentService();
+
+        $content = null;
+        if ( $userGroupUpdateStruct->contentUpdateStruct )
+        {
+            $draft = $contentService->createContentDraft( $userGroup->contentInfo );
+            $draft = $contentService->updateContent(
+                $draft->getVersionInfo(),
+                $userGroupUpdateStruct->contentUpdateStruct
+            );
+
+            $content = $contentService->publishVersion( $draft->getVersionInfo() );
+        }
+
+        if ( $userGroupUpdateStruct->contentMetaDataUpdateStruct )
+        {
+            $content = $contentService->updateContentMetadata(
+                $userGroup->contentInfo,
+                $userGroupUpdateStruct->contentMetaDataUpdateStruct
+            );
+        }
+
+        if ( null !== $content )
+        {
+            $this->userGroups[$userGroup->id] = new UserGroupStub(
+                array(
+                    'id'             =>  $userGroup->id,
+                    'parentId'       =>  $userGroup->parentId,
+                    'subGroupCount'  =>  $userGroup->subGroupCount,
+                    'content'        =>  $content
+                )
+            );
+        }
+
+        return $this->userGroups[$userGroup->id];
     }
 
     /**
@@ -487,7 +556,7 @@ class UserServiceStub implements UserService
      */
     public function newUserGroupUpdateStruct()
     {
-        // TODO: Implement newUserGroupUpdateStruct() method.
+        return new UserGroupUpdateStruct();
     }
 
     /**
