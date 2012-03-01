@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  
+    <xsd:complexType name="sectionValueType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+        <xsd:element name="sectionId" type="xsd:int"/>
+        <xsd:element name="identifier" type="xsd:string"/>
+        <xsd:element name="name" type="xsd:string"/>
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="sectionListType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:sequence>
+          <xsd:element name="Section" type="sectionValueType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="sectionInputType">
+    <xsd:all>
+        <xsd:element name="identifier" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="Section" type="sectionValueType"></xsd:element>
+  <xsd:element name="SectionList" type="sectionListType"></xsd:element>
+  <xsd:element name="SectionInput" type="sectionInputType"></xsd:element>
+  
+  
+</xsd:schema>

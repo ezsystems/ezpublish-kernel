@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentTypeGroup href="/content/typesgroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+  <id>7</id>
+  <identifier>newContentTypeGroup</identifier>
+  <created>2012-02-31T12:45:00</created>
+  <modified>2012-02-31T12:45:00</modified>
+  <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+  <Modifier href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+  <ContentTypes href="/content/typegroups/7/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
+</ContentTypeGroup>

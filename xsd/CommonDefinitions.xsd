@@ -5,7 +5,7 @@
     <xsd:annotation>
       <xsd:documentation>
         A base schema for referencing resources.
-    </xsd:documentation>
+      </xsd:documentation>
     </xsd:annotation>
     <xsd:attribute name="href" type="xsd:string" />
     <xsd:attribute name="media-type" type="xsd:string" />
@@ -14,7 +14,8 @@
   <xsd:complexType name="fieldInputValueType">
     <xsd:annotation>
       <xsd:documentation>
-        Schema for field inputs in content create and update structures
+        Schema for field inputs in content create and
+        update structures
       </xsd:documentation>
     </xsd:annotation>
     <xsd:all>
@@ -22,6 +23,20 @@
       <xsd:element name="languageCode" type="xsd:string" />
       <xsd:element name="value" type="xsd:anyType" />
     </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="multiLanguageValuesType">
+    <xsd:sequence>
+      <xsd:element name="value" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+              <xsd:attribute name="languageCode" type="xsd:string" />
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
   </xsd:complexType>
 
   <xsd:simpleType name="sortFieldType">
@@ -40,10 +55,37 @@
       <xsd:enumeration value="CONTENTOBJECT_ID" />
     </xsd:restriction>
   </xsd:simpleType>
+
+  <xsd:simpleType name="versionStatus">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DRAFT" />
+      <xsd:enumeration value="PUBLISHED" />
+      <xsd:enumeration value="ARCHIVED" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="contentTypeStatus">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DRAFT" />
+      <xsd:enumeration value="DEFINED" />
+      <xsd:enumeration value="MODIFIED" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
   <xsd:simpleType name="sortOrderType">
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="ASC" />
       <xsd:enumeration value="DESC" />
     </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="intList">
+    <xsd:list itemType="xsd:integer" />
+  </xsd:simpleType>
+  <xsd:simpleType name="dateList">
+    <xsd:list itemType="xsd:dateTime" />
+  </xsd:simpleType>
+  <xsd:simpleType name="stringList">
+    <xsd:list itemType="xsd:string" />
   </xsd:simpleType>
 </xsd:schema>

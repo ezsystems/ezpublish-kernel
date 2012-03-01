@@ -2,13 +2,6 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
-  <xsd:simpleType name="versionStatus">
-    <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="DRAFT" />
-      <xsd:enumeration value="PUBLISHED" />
-      <xsd:enumeration value="ARCHIVED" />
-    </xsd:restriction>
-  </xsd:simpleType>
   <xsd:complexType name="versionInfoType">
     <xsd:all>
       <xsd:element name="id" type="xsd:int">

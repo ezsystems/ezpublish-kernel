@@ -637,6 +637,7 @@ Delete Content
 
 Copy content
 ````````````
+
 :Resource:    /content/objects/<ID>
 :Method:      COPY or POST with header: X-HTTP-Method-Override COPY
 :Description: Creates a new content object as copy under the given parent location given in the destination header. 
@@ -985,8 +986,9 @@ XML Example
     </Version>
 
 
-Create a Draft from an archived or published Version
-````````````````````````````````````````````````````
+Create a Draft from a Version
+`````````````````````````````
+
 :Resource: /content/objects/<ID>/versions/<no>
 :Method: COPY or POST with header X-HTTP-Method-Override: COPY
 :Description: The system creates a new draft version as a copy from the given version
@@ -1583,17 +1585,151 @@ Delete Subtree
 Views
 ~~~~~
 :Resource: /content/views
-:Method:   PUT
-:Description: executes a query and returns the results (in future - stores the query as view under the given identifier in the Query_ )
-              The Query_ input reflects the criteria model of the public API.
-:Request format: application/json
-:Parameters:
-    :fields:         comma separated list of fields which should be returned in the response (see Content)
-    :responseGroups: comma separated lists of predefined field groups (see REST API Spec v1)
-:Inputschema: Query_
-:Response: 200 array of Version_
+:Method:  POST
+:Description: executes a query and returns view including the results 
+              The View_ input reflects the criteria model of the public API.
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.View+xml: the view in xml format (see View_)
+        :application/vnd.ez.api.View+json: the view in xml format (see View_)
+    :Content-Type: 
+        :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
+        :application/vnd.ez.api.ViewInput+json: the view input in xml format (see View_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          ETag: "<new etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          View_
+
 :Error codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+
+XML Example
+'''''''''''
+
+Perform a query on articles ith a specific title.
+
+::
+
+    POST /content/views HTTP/1.1
+    Accept: application/vnd.ez.api.View+xml
+    Content-Type: application/vnd.ez.api.ViewInput+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ViewInput>
+      <Query>
+        <Criteria>
+          <AND>
+            <ContentTypeIdentifierCriterion>article</ContentTypeIdentifierCriterion>
+            <FieldCritierion>
+              <operator>EQ</operator>
+              <target>title</target>
+              <value>Title</value>
+            </FieldCritierion>
+          </AND>
+        </Criteria>
+        <limit>10</limit>
+        <offset>0</offset>
+        <SortClauses>
+          <SortClause>
+            <SortField>NAME</SortField>
+          </SortClause>
+        </SortClauses>
+      </Query>
+    </ViewInput>
+
+    
+    HTTP/1.1 201 Created
+    Location: /content/views/view1234
+    Content-Type: application/vnd.ez.api.View+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <View href="/content/views/ArticleTitleView" media-type="vnd.ez.api.View+xml">
+      <identifier>ArticleTitleView</identifier>
+      <Query>
+        <Criteria>
+          <AND>
+            <ContentTypeIdentifierCriterion>article
+            </ContentTypeIdentifierCriterion>
+            <FieldCritierion>
+              <operator>EQ</operator>
+              <target>title</target>
+              <value>Title</value>
+            </FieldCritierion>
+          </AND>
+        </Criteria>
+        <limit>10</limit>
+        <offset>0</offset>
+        <SortClauses>
+          <SortClause>
+            <SortField>NAME</SortField>
+          </SortClause>
+        </SortClauses>
+      </Query>
+      <Result href="/content/views/view1234/results"
+        media-type="vnd.ez.api.ViewResult+xml">
+        <count>1</count>
+        <Content href="/content/objects/23" id="23"
+          media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123"
+          xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://ez.no/API/Values Content.xsd ">
+          <ContentType href="/content/types/10"
+            media-type="application/vnd.ez.api.ContentType+xml" />
+          <Name>Name</Name>
+          <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
+          <CurrentVersion href="/content/objects/23/currentversion"
+            media-type="application/vnd.ez.api.Version+xml">
+            <Version href="/content/objects/23/versions/2"
+              media-type="application/vnd.ez.api.Version+xml">
+              <VersionInfo>
+                <id>123</id>
+                <versionNo>2</versionNo>
+                <status>PUBLISHED</status>
+                <modificationDate>2001-12-31T12:00:00</modificationDate>
+                <creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+                <creationDate>2001-12-31T12:00:00</creationDate>
+                <initialLanguageCode>eng-UK</initialLanguageCode>
+                <Content href="/content/objects/23"
+                  media-type="application/vnd.ez.api.ContentInfo+xml" />
+              </VersionInfo>
+              <Fields>
+                <field>
+                  <id>1234</id>
+                  <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+                  <languageCode>eng-UK</languageCode>
+                  <value>Title</value>
+                </field>
+                <field>
+                  <id>1235</id>
+                  <fieldDefinitionIdentifer>summary
+                  </fieldDefinitionIdentifer>
+                  <languageCode>eng-UK</languageCode>
+                  <value>This is a summary</value>
+                </field>
+              </Fields>
+              <Relations />
+            </Version>
+          </CurrentVersion>
+          <Section href="/content/objects/23/section" media-type="application/vnd.ez.api.Section+xml" />
+          <MainLocation href="/content/objects/23/mainlocation"
+            media-type="application/vnd.ez.api.Location+xml" />
+          <Locations href="/content/objects/23/locations"
+            media-type="application/vnd.ez.api.LocationList+xml" />
+          <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <PublishDate>2001-12-31T12:00:00</PublishDate>
+          <LastModificationDate>2001-12-31T12:00:00</LastModificationDate>
+          <MainLanguageCode>eng-UK</MainLanguageCode>
+          <AlwaysAvailable>true</AlwaysAvailable>
+        </Content>
+      </Result>
+    </View>
+
 
 
 Managing Sections
@@ -1849,7 +1985,6 @@ Get TrashItem
     .. parsed-literal::
 
           HTTP/1.1 200 OK
-          Location: /content/locations/<path>
           Content-Type: <depending on accept header>
           Content-Length: <length>
           Location_      
@@ -1911,20 +2046,18 @@ Content Types
 Overview
 --------
 
-========================================= =================== =================== ======================= =======================
-      Resource                                  POST             GET                 PUT                     DELETE
------------------------------------------ ------------------- ------------------- ----------------------- -----------------------
-/content/typegroups                       create new group    load all groups     -                       -            
-/content/typegroups/<ID>                  -                   load group          update group            delete group
-/content/typegroups/<ID>/types            create content type -                   link content type       -                  
-/content/typegroups/<ID>/types/<ID>       -                   -                   -                       unlink content type
-/content/types                            copy content type   list content types  -                       -            
-/content/types/<ID>                       -                   load content type   update content type     delete content type
-/content/types/<ID>/fieldDefinitions      create field def.   -                   -                       -            
-/content/types/<ID>/fieldDefinitions/<ID> -                   load field def.     update field definition delete field definition
-/content/types/<ID>/groups                link new group      load groups         -                       -            
-/content/types/<ID>/groups/<ID>           -                   load group          -                       remove from content type (if not last)
-========================================= =================== =================== ======================= =======================
+================================================== =================== =================== ======================= =======================
+      Resource                                           POST             GET                 PUT/PATCH               DELETE
+-------------------------------------------------- ------------------- ------------------- ----------------------- -----------------------
+/content/typegroups                                create new group    load all groups     .                       .            
+/content/typegroups/<ID>                           .                   load group          update group            delete group
+/content/typegroups/<ID>/types                     create content type list content types  .                       .                  
+/content/types                                     copy content type   list content types  .                       .            
+/content/types/<ID>                                create draft        load content type   .                       delete content type
+/content/types/<ID>/draft                          publish draft       load draft          update draft            delete draft       
+/content/types/<ID>/draft/fieldDefinitions         create field def.   .                   .                       .            
+/content/types/<ID>/draft/fieldDefinitions/<ID>    .                   load field def.     update field definition delete field definition
+================================================== =================== =================== ======================= =======================
 
 Specification
 -------------
@@ -1937,84 +2070,227 @@ Create Content Type Group
 :Resource: /content/typegroups
 :Method: POST
 :Description: Creates a new content type group 
-:Request Format: application/json
-:Parameters: 
-:Inputschema: ContentTypeGroupInput_
-:Response: 200 ContentTypeGroup_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeGroup+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
+         :application/vnd.ez.api.ContentTypeGroup+json:  if set the new section is returned in json format (see ContentTypeGroup_)
+    :Content-Type:
+         :application/vnd.ez.api.ContentTypeGroupInput+json: the ContentTypeGroup_ input schema encoded in json
+         :application/vnd.ez.api.ContentTypeGroupInput+xml: the ContentTypeGroup_ input schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Loction: /content/typegroups/<newId>
+          Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentTypeGroup_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this content type group
     :403: If a content type group with same identifier already exists
+
+
+XML Example
+'''''''''''
+
+::
+
+    POST /content/typegroups HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.ContentTypeGroup+xml
+    Content-Type: application/vnd.ez.api.ContentTypeGroupInput+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentTypeGroupInput>
+      <identifier>newContentTypeGroup</identifier>
+    </ContentTypeGroupInput>
+
+    HTTP/1.1 201 Created
+    Location: /content/typegroups/7
+    Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+xml
+    ETag: "9587649865938675"
+    Content-Type: application/vnd.ez.api.ContentTypeGroup+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentTypeGroup href="/content/typesgroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+      <id>7</id>
+      <identifier>newContentTypeGroup</identifier>
+      <created>2012-02-31T12:45:00</created>
+      <modified>2012-02-31T12:45:00</modified>
+      <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+      <Modifier href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+      <ContentTypes href="/content/typegroups/7/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
+    </ContentTypeGroup>
+     
 
 Get Content Type Groups
 ```````````````````````
 :Resource: /content/typegroups
 :Method: GET
 :Description: Returns a list of all content types groups
-:Parameters:  :includeContentTypes: default false in this case only the ids of the content types a returned
-:Response: 200 array of ContentTypeGroup_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeGroupList+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
+         :application/vnd.ez.api.ContentTypeGroupList+json:  if set the new section is returned in json format (see ContentTypeGroup_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentTypeGroup_  (contentTypeGroupListType)     
+
 :Error Codes:
     :401: If the user has no permission to read the content types
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/typegroups HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.ContentTypeGroupList+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.ContentTypeGroupList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentTypeGroupList href="/content/typegroups" media-type="application/vnd.ez.api.ContentTypeGroupList+xml">
+      <ContentTypeGroup href="/content/typegroups/1" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+        <id>1</id>
+        <identifier>Content</identifier>
+        <created>2010-06-31T12:00:00</created>
+        <modified>2010-07-31T12:00:00</modified>
+        <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+        <Modifier href="/users/user/6" media-type="application/vnd.ez.api.User+xml"/>
+        <ContentTypes href="/content/typegroups/1/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
+      </ContentTypeGroup>
+      <ContentTypeGroup href="/content/typegroups/2" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+        <id>2</id>
+        <identifier>Media</identifier>
+        <created>2010-06-31T14:00:00</created>
+        <modified>2010-09-31T12:00:00</modified>
+        <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+        <Modifier href="/users/user/9" media-type="application/vnd.ez.api.User+xml"/>
+        <ContentTypes href="/content/typegroups/2/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
+      </ContentTypeGroup>
+    </ContentTypeGroupList>
+
 	
 Get Content Type Group
 ``````````````````````
 :Resource: /content/typegroups/<ID>
 :Method: GET
 :Description: Returns the content type given by id
-:Parameters:  :includeContentTypes: default false in this case only the ids of the content types a returned
-:Response: 200 ContentTypeGroup_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeGroup+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
+         :application/vnd.ez.api.ContentTypeGroup+json:  if set the new section is returned in json format (see ContentTypeGroup_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+(json|xml)
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentTypeGroup_      
+
+:ErrorCodes:
     :401: If the user is not authorized to read this content type  
-    :404: If the content type does not exist
+    :404: If the content type group does not exist
 
 Update Content Type Group
 `````````````````````````
 :Resource: /content/typegroups/<ID>
-:Method: PUT
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
 :Description: Updates a content type group 
-:Request Format: application/json
-:Parameters: 
-:Inputschema: ContentTypeGroupInput_
-:Response: 200 ContentTypeGroup_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeGroup+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
+         :application/vnd.ez.api.ContentTypeGroup+json:  if set the new section is returned in json format (see ContentTypeGroup_)
+    :Content-Type:
+         :application/vnd.ez.api.ContentTypeGroupInput+json: the ContentTypeGroup_ input schema encoded in json
+         :application/vnd.ez.api.ContentTypeGroupInput+xml: the ContentTypeGroup_ input schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentTypeGroup_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this content type group
-    :403: If a content type group with same identifier already exists
+    :403: If a content type group with the given identifier already exists
+
+
+XML Example
+'''''''''''
+
+::
+
+    PATCH /content/typegroups/7 HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.ContentTypeGroup+xml
+    Content-Type: application/vnd.ez.api.ContentTypeGroupInput+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentTypeGroupInput>
+      <identifier>updatedIdentifer</identifier>
+    </ContentTypeGroupInput>
+
+    HTTP/1.1 200 OK
+    Location: /content/typegroups/7
+    Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+xml
+    ETag: "95876498659383245"
+    Content-Type: application/vnd.ez.api.ContentTypeGroup+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentTypeGroup href="/content/typesgroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+      <id>7</id>
+      <identifier>updatedIdentifer</identifier>
+      <created>2012-02-31T12:45:00</created>
+      <modified>2012-04-13T12:45:00</modified>
+      <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+      <Modifier href="/users/user/8" media-type="application/vnd.ez.api.User+xml"/>
+      <ContentTypes href="/content/typegroups/7/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
+    </ContentTypeGroup>
+     
 
 Delete Content Type Group
 `````````````````````````
 :Resource: /content/typegroups/<ID>
 :Method: DELETE
 :Description: the given content type group is deleted
-:Parameters: 
-:Response: 204
+:Response: 
+
+    ::
+  
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this content type
     :403: If the content type group is not empty
     :404: If the content type does not exist
 
-Link Content Type
-`````````````````
-:Resource: /content/typegroups/<ID>/types
-:Method: PUT
-:Description: Assignes the given content type to the group
-:Request Format: application/json
-:Parameters: :contentTypeId: the content type which shall be assigned to the group
-:Inputschema: 
-:Response: 200 
-:Error Codes:
-    :401: If the user is not authorized to assign this content type
-
-Unlink Content Type
-````````````````````
-:Resource: /content/typegroups/<ID>/types/<ID>
-:Method: DELETE
-:Description: removes the given content type from the given group. If the content type is in no other groups it is deleted.
-:Parameters: 
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to delete this content type
-    :403: If the content type is to be deleted but it is not empty
-    :404: If the content type does not exist
 
 Managing Content Types
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -2024,10 +2300,8 @@ Create Content Type
 :Resource: /content/typegroups/<ID>/types
 :Method: POST
 :Description: Creates a new content type draft in the given content type group
-:Request Format: application/json
 :Parameters: :publish: (default false) If true the content type is published after creating
-:Inputschema: ContentTypeInput_
-:Response: 200 ContentType_
+
 :Error Codes:
     :400: - If the Input does not match the input schema definition,
           - If publish = true and the input is not complete e.g. no field definitions are provided 
@@ -2036,13 +2310,17 @@ Create Content Type
 
 Copy Content Type
 `````````````````
-:Resource: /content/types
-:Method: POST
-:Description: Creates a new content type
-:Request Format: application/json
-:Parameters: srcId - required
-:Inputschema: 
-:Response: 200 ContentType_
+:Resource: /content/types/<ID>
+:Method:      COPY or POST with header: X-HTTP-Method-Override COPY
+:Description: copies a content type.
+:Response:
+
+::
+
+     HTTP/1.1 201 Created
+     Location: /content/types/<newId>
+
+
 :Error Codes:
     :400: if srcId is missing
     :401: If the user is not authorized to copy this content type  
@@ -2092,6 +2370,19 @@ Delete Content Type
 :Error Codes:
     :401: If the user is not authorized to delete this content type
     :403: If deleteObjects is false and there are object instances of this content type - the response should contain an ErrorMessage_
+    :404: If the content type does not exist
+
+
+Unlink Content Type
+````````````````````
+:Resource: /content/typegroups/<ID>/types/<ID>
+:Method: DELETE
+:Description: removes the given content type from the given group. If the content type is in no other groups it is deleted.
+:Parameters: 
+:Response: 204
+:Error Codes:
+    :401: If the user is not authorized to delete this content type
+    :403: If the content type is to be deleted but it is not empty
     :404: If the content type does not exist
 	
 Publish content type
@@ -2980,10 +3271,207 @@ RelationListInput
 ~~~~~~~~~~~~~~~~~
 
 
-.. _Query:
+.. _View:
 
-Query XML Schema
-----------------
+View XML Schema
+---------------
+
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="Content.xsd" />
+      <xsd:simpleType name="fieldOperatorType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="IN" />
+          <xsd:enumeration value="LIKE" />
+          <xsd:enumeration value="EQ" />
+          <xsd:enumeration value="LT" />
+          <xsd:enumeration value="LTE" />
+          <xsd:enumeration value="GT" />
+          <xsd:enumeration value="GTE" />
+          <xsd:enumeration value="BETWEEN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="dateOperatorType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="EQ" />
+          <xsd:enumeration value="LT" />
+          <xsd:enumeration value="LTE" />
+          <xsd:enumeration value="GT" />
+          <xsd:enumeration value="GTE" />
+          <xsd:enumeration value="BETWEEN" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="dateMetaDataType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="CREATED" />
+          <xsd:enumeration value="MODIFIED" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="urlAliasOperatorType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="EQ" />
+          <xsd:enumeration value="IN" />
+          <xsd:enumeration value="LIKE" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="userMetaDataType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="CREATOR" />
+          <xsd:enumeration value="MODIFIER" />
+          <xsd:enumeration value="OWNER" />
+          <xsd:enumeration value="GROUP" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="sortClauseEnumType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="PATH" />
+          <xsd:enumeration value="PATHSTRING" />
+          <xsd:enumeration value="MODIFIED" />
+          <xsd:enumeration value="CREATED" />
+          <xsd:enumeration value="SECTIONIDENTIFER" />
+          <xsd:enumeration value="SECTIONID" />
+          <xsd:enumeration value="FIELD" />
+          <xsd:enumeration value="PRIORITY" />
+          <xsd:enumeration value="NAME" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:complexType name="fieldCriterionType">
+        <xsd:all>
+          <xsd:element name="target" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                The identifier of the field i.e identifier
+                of the corresponding field
+                definition 
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="operator" type="fieldOperatorType" />
+          <xsd:element name="value" type="xsd:anyType" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="dateCriterionType">
+        <xsd:all>
+          <xsd:element name="target" type="dateMetaDataType">
+          </xsd:element>
+          <xsd:element name="operator" type="dateOperatorType" />
+          <xsd:element name="value" type="dateList" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="urlaliasCriterionType">
+        <xsd:all>
+          <xsd:element name="operator" type="urlAliasOperatorType" />
+          <xsd:element name="value" type="stringList" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="userMetaDataCriterionType">
+        <xsd:all>
+          <xsd:element name="target" type="userMetaDataType">
+          </xsd:element>
+          <xsd:element name="value" type="dateList" />
+        </xsd:all>
+      </xsd:complexType>
+
+
+      <xsd:complexType name="criterionType">
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
+          <xsd:element name="AND" type="criterionType" />
+          <xsd:element name="OR" type="criterionType" />
+          <xsd:element name="NOT" type="criterionType" />
+          <xsd:element name="ContentIdCriterion" type="intList" />
+          <xsd:element name="ContentRemoteIdCriterion" type="stringList" />
+          <xsd:element name="ContentTypeGroupIdCriterion" type="xsd:int" />
+          <xsd:element name="ContentTypeIdCriterion" type="xsd:int" />
+          <xsd:element name="ContentTypeIdentifierCriterion"
+            type="xsd:string" />
+          <xsd:element name="FieldCritierion" type="fieldCriterionType" />
+          <xsd:element name="DateMetaDataCritierion" type="dateCriterionType" />
+          <xsd:element name="FullTextCriterion" type="xsd:string" />
+          <xsd:element name="LocationIdCriterion" type="intList" />
+          <xsd:element name="LocationRemoteIdCriterion" type="stringList" />
+          <xsd:element name="ParentLocationIdCriterion" type="intList" />
+          <xsd:element name="ParentLocationRemoteIdCriterion"
+            type="stringList" />
+          <xsd:element name="SectionIdCriterion" type="xsd:int" />
+          <xsd:element name="SectionIdentifierCriterion" type="xsd:string" />
+          <xsd:element name="VersionStatusCriterion" type="versionStatus" />
+          <xsd:element name="SubtreeCriterion" type="stringList" />
+          <xsd:element name="URLAliasCriterion" type="urlaliasCriterionType" />
+          <xsd:element name="UserMetaDataCriterion" type="userMetaDataCriterionType" />
+        </xsd:choice>
+      </xsd:complexType>
+
+      <xsd:complexType name="sortClauseType">
+        <xsd:sequence>
+          <xsd:element name="SortClause">
+            <xsd:complexType>
+              <xsd:all>
+                <xsd:element name="SortField" type="sortClauseEnumType" />
+                <xsd:element name="TargetData" type="xsd:anyType"
+                  minOccurs="0" />
+              </xsd:all>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="queryType">
+        <xsd:all>
+          <xsd:element name="Criteria" type="criterionType" />
+          <xsd:element name="limit" type="xsd:int" />
+          <xsd:element name="offset" type="xsd:int" />
+          <xsd:element name="SortClauses" type="sortClauseType" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="resultType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="count" type="xsd:int"
+                minOccurs="1" maxOccurs="1" />
+              <xsd:element name="Content" type="contentValueType"
+                maxOccurs="unbounded" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="viewInputType">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string" minOccurs="0" />
+          <xsd:element name="Query" type="queryType" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="viewType">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="identifier" type="xsd:string" />
+              <xsd:element name="Query" type="queryType" />
+              <xsd:element name="Result" type="resultType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="ViewInput" type="viewInputType" />
+      <xsd:element name="View" type="viewType" />
+    </xsd:schema>
 
 
 .. _LocationCreate:

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentTypeGroupList href="/content/typegroups" media-type="application/vnd.ez.api.ContentTypeGroupList+xml">
+  <ContentTypeGroup href="/content/typegroups/1" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+    <id>1</id>
+    <identifier>Content</identifier>
+    <created>2010-06-31T12:00:00</created>
+    <modified>2010-07-31T12:00:00</modified>
+    <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+    <Modifier href="/users/user/6" media-type="application/vnd.ez.api.User+xml"/>
+    <ContentTypes href="/content/typegroups/1/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
+  </ContentTypeGroup>
+  <ContentTypeGroup href="/content/typegroups/2" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+    <id>2</id>
+    <identifier>Media</identifier>
+    <created>2010-06-31T14:00:00</created>
+    <modified>2010-09-31T12:00:00</modified>
+    <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+    <Modifier href="/users/user/9" media-type="application/vnd.ez.api.User+xml"/>
+    <ContentTypes href="/content/typegroups/2/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
+  </ContentTypeGroup>
+</ContentTypeGroupList>
