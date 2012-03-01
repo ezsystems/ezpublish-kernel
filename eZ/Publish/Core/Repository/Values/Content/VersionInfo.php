@@ -8,7 +8,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  * which the version belongs to.
  *
  * @property-read array $names returns an array with language code keys and name values
- * @property-read ContentInfo $contentInfo calls getContentInfo()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $id the internal id of the version
  * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
  * @property-read \DateTime $modifiedDate the last modified date of this version
@@ -26,14 +26,14 @@ class VersionInfo extends APIVersionInfo
     protected $repository;
 
     /**
-     * @var integer
+     * @var mixed
      */
     protected $contentId;
 
     /**
      * Content of the content this version belongs to.
      *
-     * @return ContentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     public function getContentInfo()
     {

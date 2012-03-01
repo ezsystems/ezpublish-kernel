@@ -8,7 +8,7 @@ use eZ\Publish\API\Repository\Values\ValueObject,
  * This class holds version information data. It also contains the corresponding {@link Content} to
  * which the version belongs to.
  *
- * @property-read ContentInfo $contentInfo calls getContentInfo()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
  * @property-read mixed $id the internal id of the version
  * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
  * @property-read \DateTime $modificationDate the last modified date of this version
@@ -44,7 +44,7 @@ abstract class VersionInfo extends ValueObject
     /**
      * Content of the content this version belongs to.
      *
-     * @return ContentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     abstract public function getContentInfo();
 
