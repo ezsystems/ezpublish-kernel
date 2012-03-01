@@ -808,6 +808,88 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
+     */
+    public function testUpdateUserWithContentMetadataUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Get the ContentService implementation
+        $contentService = $repository->getContentService();
+
+        // Create a metadata update struct and change the remote id.
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+        $metadataUpdate->remoteId = '85e10037d1ac0a00aa75443ced483e08';
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set the metadata update struct.
+        $userUpdate->contentMetaDataUpdateStruct = $metadataUpdate;
+
+        // Updated the user record.
+        $userVersion2 = $userService->updateUser( $user, $userUpdate );
+
+        // The contentInfo->remoteId will be changed now.
+        $remoteId = $userVersion2->contentInfo->remoteId;
+        /* END: Use Case */
+
+        $this->assertEquals( '85e10037d1ac0a00aa75443ced483e08', $remoteId );
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
+     */
+    public function testUpdateUserWithContentUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Get the ContentService implementation
+        $contentService = $repository->getContentService();
+
+        // Create a content update struct and change the remote id.
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
+        $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set the content update struct.
+        $userUpdate->contentUpdateStruct = $contentUpdate;
+
+        // Updated the user record.
+        $userVersion2 = $userService->updateUser( $user, $userUpdate );
+
+        $name = sprintf(
+            '%s %s',
+            $userVersion2->getFieldValue( 'first_name' ),
+            $userVersion2->getFieldValue( 'last_name' )
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( 'Hello World', $name );
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      */
     public function testUpdateUserThrowsContentFieldValidationException()

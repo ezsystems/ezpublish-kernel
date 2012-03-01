@@ -337,7 +337,7 @@ class UserServiceStub implements UserService
      * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
