@@ -485,6 +485,21 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
+     * Test loading anonymous user
+     * @covers \eZ\Publish\API\Repository\UserService::loadAnonymousUser
+     */
+    public function testLoadAnonymousUser()
+    {
+        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
+        $userService = $this->repository->getUserService();
+
+        $loadedUser = $userService->loadAnonymousUser();
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $loadedUser );
+        self::assertEquals( 10, $loadedUser->id );
+    }
+
+    /**
      * Test loading a user by credentials
      * @covers \eZ\Publish\API\Repository\UserService::loadUserByCredentials
      */
