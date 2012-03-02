@@ -14,7 +14,10 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValida
 /**
  * Test case for operations in the ContentTypeServiceAuthorization using in memory storage.
  *
- * @see eZ\Publish\API\Repository\ContentTypeServiceAuthorization
+ * @see eZ\Publish\API\Repository\ContentTypeService
+ * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @group integration
  */
 class ContentTypeServiceAuthorizationTest extends BaseTest
 {
@@ -24,10 +27,31 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testCreateContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::createContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $groupCreate->creatorId        = 23;
+        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->mainLanguageCode = 'de-DE';
+        $groupCreate->names            = array( 'eng-US' => 'A name.' );
+        $groupCreate->descriptions     = array( 'eng-US' => 'A description.' );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentTypeService->createContentTypeGroup( $groupCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -36,10 +60,40 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' );
+
+        $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+
+        $groupUpdate->identifier       = 'Teardown';
+        $groupUpdate->modifierId       = 42;
+        $groupUpdate->modificationDate = new \DateTime();
+        $groupUpdate->mainLanguageCode = 'eng-US';
+
+        $groupUpdate->names = array(
+            'eng-US' => 'A name',
+            'eng-GB' => 'A name',
+        );
+        $groupUpdate->descriptions = array(
+            'eng-US' => 'A description',
+            'eng-GB' => 'A description',
+        );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        /* END: Use Case */
     }
 
     /**
@@ -48,10 +102,31 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentTypeGroup
      */
     public function testDeleteContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        // ...
+
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentTypeService->deleteContentTypeGroup( $group );
+        /* END: Use Case */
     }
 
     /**
@@ -60,9 +135,16 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
     public function testUpdateContentTypeDraftThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
     }
 
@@ -73,9 +155,16 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @depens eZ\Publish\API\Repository\Tests\ContentTypeServiceAuthorizationTest::testAddFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
      */
     public function testAddFieldDefinitionThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::addFieldDefinition() is not implemented." );
     }
 
@@ -85,9 +174,16 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
      */
     public function testRemoveFieldDefinitionThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::removeFieldDefinition() is not implemented." );
     }
 
@@ -97,9 +193,16 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateFieldDefinition
      */
     public function testUpdateFieldDefinitionThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::updateFieldDefinition() is not implemented." );
     }
 
@@ -112,6 +215,12 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
     }
 
@@ -124,6 +233,12 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testCreateContentTypeDraftThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::createContentTypeDraft() is not implemented." );
     }
 
@@ -136,6 +251,12 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteContentTypeThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::deleteContentType() is not implemented." );
     }
 
@@ -148,6 +269,12 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testCopyContentTypeThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::copyContentType() is not implemented." );
     }
 
@@ -160,6 +287,12 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testCopyContentTypeThrowsUnauthorizedExceptionWithSecondParameter()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::copyContentType() is not implemented." );
     }
 
@@ -172,6 +305,12 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testAssignContentTypeGroupThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::assignContentTypeGroup() is not implemented." );
     }
 
@@ -184,6 +323,12 @@ class ContentTypeServiceAuthorizationTest extends BaseTest
      */
     public function testUnassignContentTypeGroupThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService        = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
         $this->markTestIncomplete( "@TODO: Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
     }
 }

@@ -26,9 +26,9 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupSt
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * @example Examples/contenttype.php
@@ -131,6 +131,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $data = array();
         foreach ( $this->groupProperties as $propertyName )
         {
@@ -222,6 +227,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         unset( $this->groups[$contentTypeGroup->identifier] );
         unset( $this->groupsById[$contentTypeGroup->id] );
 
@@ -256,6 +266,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( $this->groupHasTypes( $contentTypeGroup ) )
         {
             throw new Exceptions\InvalidArgumentExceptionStub;
@@ -414,6 +428,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $this->checkContentTypeUpdate( $contentTypeDraft, $contentTypeUpdateStruct );
 
         $data = $this->getTypeAsArray( $contentTypeDraft );

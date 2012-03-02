@@ -129,7 +129,7 @@ class RepositoryStub implements Repository
             {
                 continue;
             }
-            if ( $policy->function === '*' )
+            if ( $policy->function === '*' && $policy->module === $module )
             {
                 return true;
             }
@@ -146,7 +146,7 @@ class RepositoryStub implements Repository
             }
         }
 
-        if ( 0 === count( $limitations ) )
+        if ( 0 < count( $limitations ) )
         {
             return $limitations;
         }

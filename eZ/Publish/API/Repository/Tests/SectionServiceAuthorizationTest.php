@@ -12,9 +12,9 @@ namespace eZ\Publish\API\Repository\Tests;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
- * Test case for operations in the SectionServiceAuthorization using in memory storage.
+ * Test case for operations in the SectionService using in memory storage.
  *
- * @see eZ\Publish\API\Repository\SectionServiceAuthorization
+ * @see eZ\Publish\API\Repository\SectionService
  * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
