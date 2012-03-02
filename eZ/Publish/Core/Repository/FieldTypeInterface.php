@@ -12,7 +12,7 @@ use ezp\Content\Field,
     eZ\Publish\Core\Repository\FieldType\Value,
     ezp\Base\Repository as BaseRepository,
     ezp\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\FieldValue;
+    eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * Interface for field types, the most basic storage unit of data inside eZ Publish.
@@ -74,14 +74,14 @@ interface FieldTypeInterface
      *
      * @param \eZ\Publish\Core\Repository\FieldType\Value $value
      *
-     * @return \ezp\Persistence\Content\FieldValue
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public function toPersistenceValue( Value $value );
 
     /**
      * Converts a persistence $fieldValue to a Value
      *
-     * @param \ezp\Persistence\Content\FieldValue $fieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
      * @return \eZ\Publish\Core\Repository\FieldType\Value
      */

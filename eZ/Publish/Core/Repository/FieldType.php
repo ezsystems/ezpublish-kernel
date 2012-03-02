@@ -156,7 +156,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @param \eZ\Publish\Core\Repository\FieldType\Value $value
      *
-     * @return \ezp\Persistence\Content\FieldValue
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public function toPersistenceValue( Value $value )
     {
@@ -175,7 +175,7 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Converts a persistence $fieldValue to a Value
      *
-     * @param \ezp\Persistence\Content\FieldValue $fieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
      * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
