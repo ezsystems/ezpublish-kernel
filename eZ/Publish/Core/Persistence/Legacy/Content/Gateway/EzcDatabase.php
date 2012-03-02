@@ -355,14 +355,22 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @param bool $newAlwaysAvailable New "always available" value
+     * @todo This needs to be done within a transaction
      */
     public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable )
     {
         // We will need to know some info on the current language mask to update the flag everywhere needed
         $langMaskInfo = $this->getLanguageMaskInfo( $contentId );
         $alwaysAvailable = (bool)( $langMaskInfo['language_mask'] & 1 );
+
+        // Only update if old and new flags differs
         if ( $alwaysAvailable != $newAlwaysAvailable )
         {
+            /*
+             * alwaysAvailable bit field value is 1 in language mask.
+             * Thanks to the XOR (^) operator, alwaysAvailable bit field will be the exact opposite
+             * of the previous one in $newLanguageMask.
+             */
             $newLanguageMask = $langMaskInfo['language_mask'] ^ 1;
             $q = $this->dbHandler->createUpdateQuery();
             $q
@@ -378,6 +386,51 @@ class EzcDatabase extends Gateway
                     )
                 );
             $q->prepare()->execute();
+
+            // Now we need to update ezcontentobject_name
+            $versionNo = $langMaskInfo['current_version'];
+            $qName = $this->dbHandler->createUpdateQuery();
+            $qName
+                ->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'language_id' ),
+                    $qName->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
+                )
+                ->where(
+                    $qName->expr->lAnd(
+                        $qName->expr->eq(
+                            $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                            $qName->bindValue( $contentId, null, \PDO::PARAM_INT )
+                        ),
+                        $qName->expr->eq(
+                            $this->dbHandler->quoteColumn( 'version' ),
+                            $qName->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                        )
+                    )
+                );
+            $qName->prepare()->execute();
+
+            // Now update ezcontentobject_attribute for current version
+            $qAttr = $this->dbHandler->createUpdateQuery();
+            $qAttr
+                ->update( $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'language_id' ),
+                    $qAttr->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
+                )
+                ->where(
+                    $qAttr->expr->lAnd(
+                        $qAttr->expr->eq(
+                            $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                            $qAttr->bindValue( $contentId, null, \PDO::PARAM_INT )
+                        ),
+                        $qAttr->expr->eq(
+                            $this->dbHandler->quoteColumn( 'version' ),
+                            $qAttr->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                        )
+                    )
+                );
+            $qAttr->prepare()->execute();
         }
     }
 
