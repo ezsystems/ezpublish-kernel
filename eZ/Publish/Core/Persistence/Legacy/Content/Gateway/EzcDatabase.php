@@ -364,74 +364,74 @@ class EzcDatabase extends Gateway
         $alwaysAvailable = (bool)( $langMaskInfo['language_mask'] & 1 );
 
         // Only update if old and new flags differs
-        if ( $alwaysAvailable != $newAlwaysAvailable )
-        {
-            /*
-             * alwaysAvailable bit field value is 1 in language mask.
-             * Thanks to the XOR (^) operator, alwaysAvailable bit field will be the exact opposite
-             * of the previous one in $newLanguageMask.
-             */
-            $newLanguageMask = $langMaskInfo['language_mask'] ^ 1;
-            $q = $this->dbHandler->createUpdateQuery();
-            $q
-                ->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
-                ->set(
-                    $this->dbHandler->quoteColumn( 'language_mask' ),
-                    $q->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
-                )
-                ->where(
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'id' ),
-                        $q->bindValue( $contentId, null, \PDO::PARAM_INT )
-                    )
-                );
-            $q->prepare()->execute();
+        if ( $alwaysAvailable == $newAlwaysAvailable )
+            return;
 
-            // Now we need to update ezcontentobject_name
-            $versionNo = $langMaskInfo['current_version'];
-            $qName = $this->dbHandler->createUpdateQuery();
-            $qName
-                ->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
-                ->set(
-                    $this->dbHandler->quoteColumn( 'language_id' ),
-                    $qName->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
+        /*
+            * alwaysAvailable bit field value is 1 in language mask.
+            * Thanks to the XOR (^) operator, alwaysAvailable bit field will be the exact opposite
+            * of the previous one in $newLanguageMask.
+            */
+        $newLanguageMask = $langMaskInfo['language_mask'] ^ 1;
+        $q = $this->dbHandler->createUpdateQuery();
+        $q
+            ->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
+            ->set(
+                $this->dbHandler->quoteColumn( 'language_mask' ),
+                $q->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
+            )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
                 )
-                ->where(
-                    $qName->expr->lAnd(
-                        $qName->expr->eq(
-                            $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                            $qName->bindValue( $contentId, null, \PDO::PARAM_INT )
-                        ),
-                        $qName->expr->eq(
-                            $this->dbHandler->quoteColumn( 'version' ),
-                            $qName->bindValue( $versionNo, null, \PDO::PARAM_INT )
-                        )
-                    )
-                );
-            $qName->prepare()->execute();
+            );
+        $q->prepare()->execute();
 
-            // Now update ezcontentobject_attribute for current version
-            $qAttr = $this->dbHandler->createUpdateQuery();
-            $qAttr
-                ->update( $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ) )
-                ->set(
-                    $this->dbHandler->quoteColumn( 'language_id' ),
-                    $qAttr->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
-                )
-                ->where(
-                    $qAttr->expr->lAnd(
-                        $qAttr->expr->eq(
-                            $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                            $qAttr->bindValue( $contentId, null, \PDO::PARAM_INT )
-                        ),
-                        $qAttr->expr->eq(
-                            $this->dbHandler->quoteColumn( 'version' ),
-                            $qAttr->bindValue( $versionNo, null, \PDO::PARAM_INT )
-                        )
+        // Now we need to update ezcontentobject_name
+        $versionNo = $langMaskInfo['current_version'];
+        $qName = $this->dbHandler->createUpdateQuery();
+        $qName
+            ->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
+            ->set(
+                $this->dbHandler->quoteColumn( 'language_id' ),
+                $qName->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
+            )
+            ->where(
+                $qName->expr->lAnd(
+                    $qName->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                        $qName->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    ),
+                    $qName->expr->eq(
+                        $this->dbHandler->quoteColumn( 'version' ),
+                        $qName->bindValue( $versionNo, null, \PDO::PARAM_INT )
                     )
-                );
-            $qAttr->prepare()->execute();
-        }
+                )
+            );
+        $qName->prepare()->execute();
+
+        // Now update ezcontentobject_attribute for current version
+        $qAttr = $this->dbHandler->createUpdateQuery();
+        $qAttr
+            ->update( $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ) )
+            ->set(
+                $this->dbHandler->quoteColumn( 'language_id' ),
+                $qAttr->bindValue( $newLanguageMask, null, \PDO::PARAM_INT )
+            )
+            ->where(
+                $qAttr->expr->lAnd(
+                    $qAttr->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                        $qAttr->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    ),
+                    $qAttr->expr->eq(
+                        $this->dbHandler->quoteColumn( 'version' ),
+                        $qAttr->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    )
+                )
+            );
+        $qAttr->prepare()->execute();
     }
 
     /**
