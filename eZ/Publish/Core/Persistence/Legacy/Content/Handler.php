@@ -333,7 +333,8 @@ class Handler implements BaseContentHandler
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
-
+        $this->contentGateway->updateContent( $contentId, $content );
+        return $this->loadContentInfo( $contentId );
     }
 
     /**
@@ -346,7 +347,18 @@ class Handler implements BaseContentHandler
      */
     public function updateContent( $contentId, $versionNo, UpdateStruct $content )
     {
+        $this->contentGateway->updateVersion( $contentId, $versionNo, $content );
+        $this->fieldHandler->updateFields( $content );
+        foreach ( $content->name as $language => $name )
+        {
+            $this->contentGateway->setName(
+                $content->id,
+                $content->versionNo,
+                $name, $language
+            );
+        }
 
+        return $this->load( $content->id, $content->versionNo );
     }
 
     /**
