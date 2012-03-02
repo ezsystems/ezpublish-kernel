@@ -63,6 +63,14 @@ abstract class Gateway
     abstract public function updateVersion( UpdateStruct $struct );
 
     /**
+     * Updates "always available" flag for content identified by $contentId, in respect to $isAlwaysAvailable.
+     *
+     * @param int $contentId
+     * @param bool $newAlwaysAvailable New "always available" value
+     */
+    abstract public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable );
+
+    /**
      * Sets the state of object identified by $contentId and $version to $state.
      *
      * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
