@@ -361,10 +361,9 @@ class EzcDatabase extends Gateway
     {
         // We will need to know some info on the current language mask to update the flag everywhere needed
         $langMaskInfo = $this->getLanguageMaskInfo( $contentId );
-        $alwaysAvailable = (bool)( $langMaskInfo['language_mask'] & 1 );
 
         // Only update if old and new flags differs
-        if ( $alwaysAvailable == $newAlwaysAvailable )
+        if ( $langMaskInfo['always_available'] == $newAlwaysAvailable )
             return;
 
         /*
@@ -440,6 +439,7 @@ class EzcDatabase extends Gateway
      *  - current_version (Current version number for content, might be needed to update language mask everywhere)
      *  - language_mask (Current language mask)
      *  - initial_language_id
+     *  - main_language_code
      *
      * @param int $contentId
      * @return array
@@ -447,28 +447,13 @@ class EzcDatabase extends Gateway
      */
     private function getLanguageMaskInfo( $contentId )
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q
-            ->select(
-                $this->dbHandler->quoteColumn( 'current_version' ),
-                $this->dbHandler->quoteColumn( 'language_mask' ),
-                $this->dbHandler->quoteColumn( 'initial_language_id' )
-            )
-            ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
-            ->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id' ),
-                    $q->bindValue( $contentId )
-                )
-            )
-            ->limit( 0, 1 );
-        $stmt = $q->prepare();
-        $stmt->execute();
-        $res = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-        if ( empty( $res ) )
-            throw new NotFound( 'content', $contentId );
-
-        return $res[0];
+        $row = $this->loadContentInfo( $contentId );
+        return array(
+            'current_version'       => (int)$row['current_version'],
+            'language_mask'         => $row['language_mask'],
+            'initial_language_id'   => (int)$row['initial_language_id'],
+            'main_language_code'    => $row['main_language_code']
+        );
     }
 
     /**
