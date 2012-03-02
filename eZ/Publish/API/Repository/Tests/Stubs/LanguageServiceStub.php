@@ -106,6 +106,11 @@ class LanguageServiceStub implements LanguageService
      */
     public function updateLanguageName( Language $language, $newName )
     {
+        if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $this->languages[$language->id] = new Language(
             array(
                 'id'            =>  $language->id,
