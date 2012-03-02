@@ -42,24 +42,24 @@ return array(
     5,
     array(
         "12"  =>  array(
-                    0 => 2,
+                    25 => 2,
                 ),
         "11"  =>  array(
-                    0 => 1,
-                    1 => 5,
+                    28 => 1,
+                    34 => 5,
                 ),
         "42"  =>  array(
-                    0 => 1,
+                    31 => 1,
                 ),
         "13"  =>  array(
-                    0 => 3,
-                    1 => 3,
-                    2 => 5,
+                    32 => 3,
+                    33 => 3,
+                    38 => 5,
                 ),
         "225"  =>  array(
-                    0 => 4,
-                    1 => 5,
-                    2 => 1,
+                    35 => 4,
+                    36 => 5,
+                    37 => 1,
                 ),
     ),
         array(
@@ -592,6 +592,22 @@ return array(
                     5 => 371,
                     6 => 372,
                     7 => 373,
+                ),
+    ),
+    array(
+        "32"  =>  array(
+                    "id" => 32,
+                    "roleId" => 3,
+                    "contentId" => 13,
+                    "identifier" => "Subtree",
+                    "value" => "/1/2/",
+                ),
+        "33"  =>  array(
+                    "id" => 33,
+                    "roleId" => 3,
+                    "contentId" => 13,
+                    "identifier" => "Subtree",
+                    "value" => "/1/43/",
                 ),
     ),
     array(
