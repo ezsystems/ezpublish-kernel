@@ -241,6 +241,19 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * Returns the metadata object for a content identified by $contentId.
+     *
+     * @param int|string $contentId
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfo( $contentId )
+    {
+        return $this->mapper->extractContentInfoFromRow(
+            $this->contentGateway->loadContentInfo( $contentId )
+        );
+    }
+
+    /**
      * Sets the state of object identified by $contentId and $version to $state.
      *
      * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED

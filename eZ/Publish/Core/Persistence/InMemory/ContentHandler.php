@@ -288,6 +288,17 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
+     * Returns the metadata object for a content identified by $contentId.
+     *
+     * @param int|string $contentId
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfo( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented yet' );
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function setStatus( $contentId, $status, $version )

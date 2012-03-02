@@ -81,4 +81,14 @@ class MaskGenerator
         );
     }
 
+    /**
+     * Checks if $languageMask contains the alwaysAvailable bit field
+     *
+     * @param int $languageMask
+     * @return bool
+     */
+    public function isAlwaysAvailable( $languageMask )
+    {
+        return (bool)( $languageMask & 1 );
+    }
 }

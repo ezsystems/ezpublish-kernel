@@ -70,6 +70,14 @@ interface Handler
     public function load( $id, $version, $translations = null );
 
     /**
+     * Returns the metadata object for a content identified by $contentId.
+     *
+     * @param int|string $contentId
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfo( $contentId );
+
+    /**
      * Sets the state of object identified by $contentId and $version to $status.
      *
      * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED

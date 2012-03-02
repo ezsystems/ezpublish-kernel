@@ -122,6 +122,16 @@ abstract class Gateway
     abstract public function load( $contentId, $version, $translations = null );
 
     /**
+     * Loads info for content identified by $contentId.
+     * Will basically return a hash containing all field values for ezcontentobject table.
+     *
+     * @param int $contentId
+     * @return array
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound
+     */
+    abstract public function loadContentInfo( $contentId );
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId

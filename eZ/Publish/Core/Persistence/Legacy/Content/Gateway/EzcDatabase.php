@@ -771,6 +771,40 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads info for content identified by $contentId.
+     * Will basically return a hash containing all field values for ezcontentobject table plus some additional keys:
+     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
+     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
+     *
+     * @param int $contentId
+     * @return array
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound
+     */
+    public function loadContentInfo( $contentId )
+    {
+        $q = $this->dbHandler->createSelectQuery();
+        $q
+            ->select( '*' )
+            ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $q->bindValue( $contentId )
+                )
+            );
+        $stmt = $q->prepare();
+        $stmt->execute();
+        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        if ( empty( $rows ) )
+            throw new NotFound( 'content', $contentId );
+
+        $contentInfo = $rows[0];
+        $contentInfo['always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $contentInfo['language_mask'] );
+        $contentInfo['main_language_code'] = $this->languageHandler->getById( $contentId['initial_language_id'] )->languageCode;
+        return $contentInfo;
+    }
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId

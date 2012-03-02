@@ -16,7 +16,8 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry;
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo;
 
 /**
  *
@@ -232,7 +233,7 @@ class Mapper
      */
     protected function extractContentFromRow( array $row )
     {
-        $content = new Content();
+        $content = new \eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
         $content->id = (int)$row['ezcontentobject_id'];
         $content->typeId = (int)$row['ezcontentobject_contentclass_id'];
@@ -248,6 +249,30 @@ class Mapper
         $content->locations = array();
 
         return $content;
+    }
+
+    /**
+     * Extracts a ContentInfo object from $row
+     *
+     * @param array $row
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function extractContentInfoFromRow( array $row )
+    {
+        $contentInfo = new ContentInfo;
+        $contentInfo->contentId = (int)$row['id'];
+        $contentInfo->name = $row['name'];
+        $contentInfo->contentTypeId = (int)$row['contentclass_id'];
+        $contentInfo->sectionId = (int)$row['section_id'];
+        $contentInfo->currentVersionNo = (int)$row['current_version'];
+        $contentInfo->ownerId = (int)$row['owner_id'];
+        $contentInfo->publicationDate = (int)$row['published'];
+        $contentInfo->modificationDate = (int)$row['modified'];
+        $contentInfo->isAlwaysAvailable = $row['always_available'];
+        $contentInfo->mainLanguageCode = $row['main_language_code'];
+        $contentInfo->remoteId = $row['remote_id'];
+
+        return $contentInfo;
     }
 
     /**
