@@ -133,7 +133,7 @@ class CachingLanguageHandlerTest extends TestCase
             ->method( 'create' )
             ->with(
                 $this->isInstanceOf(
-                    'eZ\Publish\SPI\Persistence\Content\Language\CreateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\CreateStruct'
                 )
             )->will( $this->returnValue( $languageFixture ) );
 
@@ -365,7 +365,7 @@ class CachingLanguageHandlerTest extends TestCase
         if ( !isset( $this->innerHandlerMock ) )
         {
             $this->innerHandlerMock = $this->getMock(
-                'eZ\Publish\SPI\Persistence\Content\Language\Handler'
+                'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler'
             );
         }
         return $this->innerHandlerMock;
@@ -381,7 +381,7 @@ class CachingLanguageHandlerTest extends TestCase
         if ( !isset( $this->languageCacheMock ) )
         {
             $this->languageCacheMock = $this->getMock(
-                'eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache'
             );
         }
         return $this->languageCacheMock;

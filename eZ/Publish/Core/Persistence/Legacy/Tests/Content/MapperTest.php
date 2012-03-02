@@ -366,7 +366,7 @@ class MapperTest extends TestCase
         $struct = $mapper->createCreateStructFromContent( $content );
 
         $this->assertInstanceOf(
-            'eZ\Publish\SPI\Persistence\Content\CreateStruct',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct',
             $struct
         );
         return array(

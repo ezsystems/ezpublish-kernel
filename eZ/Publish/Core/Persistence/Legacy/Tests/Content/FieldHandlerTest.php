@@ -101,7 +101,7 @@ class FieldHandlerTest extends TestCase
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'getFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Field' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
         $fieldHandler->loadExternalFieldData( $this->getContentFixture() );
     }
