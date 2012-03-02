@@ -43,7 +43,7 @@ $contentTypeCreate->initialLanguageId = "eng-US";
 // make a new instance of a FieldDefinitionCreate class
 $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "ezstring", "name" );
 $fieldDefinitionCreate->setDefaultValue(
-    new \ezp\Content\FieldType\TextLine\Value( "New Name" )
+    new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( "New Name" )
 );
 $fieldDefinitionCreate->setName( "englishNameOfMyNewField", "eng-US" );
 $fieldDefinitionCreate->setDescription( "this is a description of my new field", "eng-US" );
@@ -71,7 +71,7 @@ $contentTypeCreate->addFieldDefinition( $fieldDefinitionCreate );
 $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "ezinteger", "number" );
 
 $fieldDefinitionCreate->setDefaultValue(
-    new \ezp\Content\FieldType\Integer\Value( 2 )
+    new \eZ\Publish\Core\Repository\FieldType\Integer\Value( 2 )
 );
 $fieldDefinitionCreate->setName( "englishNameOfMyNewField2", "eng-US" );
 $fieldDefinitionCreate->setDescription( "this is a description of my new field 2", "eng-US" );
