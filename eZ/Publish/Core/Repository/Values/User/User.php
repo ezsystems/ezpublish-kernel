@@ -73,7 +73,21 @@ class User extends APIUser
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        //@todo: implement
+        $contentInfo = $this->getVersionInfo()->getContentInfo();
+        $contentType = $contentInfo->getContentType();
+        $isTranslatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
+
+        $languageCodeToUse = $contentInfo->mainLanguageCode;
+        if ( $isTranslatable && $languageCode !== null )
+            $languageCodeToUse = $languageCode;
+
+        foreach ( $this->fields as $field )
+        {
+            if ( $field->fieldDefIdentifier === $fieldDefIdentifier && $field->languageCode === $languageCodeToUse )
+                return $field->value;
+        }
+
+        return null;
     }
 
     /**
@@ -107,7 +121,23 @@ class User extends APIUser
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
-        //@todo: implement
+        $contentInfo = $this->getVersionInfo()->getContentInfo();
+        $contentType = $contentInfo->getContentType();
+
+        $languageCodeToUse = $contentInfo->mainLanguageCode;
+        if ( $languageCode !== null )
+            $languageCodeToUse = $languageCode;
+
+        $fieldsToReturn = array();
+
+        foreach ( $this->fields as $field )
+        {
+            $isTranslatable = $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable;
+            if ( !$isTranslatable || $field->languageCode === $languageCodeToUse )
+                $fieldsToReturn[] = $field;
+        }
+
+        return $fieldsToReturn;
     }
 
     /**
