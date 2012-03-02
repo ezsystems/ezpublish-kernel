@@ -80,8 +80,8 @@ class IOService implements IOServiceInterface
         if ( isset( $uploadedFile['error'] ) && $uploadedFile['error'] !== 0 )
             throw new InvalidArgumentException( "uploadedFile", "file was not uploaded correctly" );
 
-        if ( !is_file( $uploadedFile['tmp_name'] ) || !is_readable( $uploadedFile['tmp_name'] ) )
-            throw new InvalidArgumentException( "uploadedFile", "file does not exist or is unreadable" );
+        if ( !is_uploaded_file( $uploadedFile['tmp_name'] ) || !is_readable( $uploadedFile['tmp_name'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "file was not uploaded or is unreadable" );
 
         $fileHandle = fopen( $uploadedFile['tmp_name'], 'rb' );
         if ( $fileHandle === false )
