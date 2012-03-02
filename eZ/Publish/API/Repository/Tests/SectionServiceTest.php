@@ -22,6 +22,52 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 class SectionServiceTest extends BaseTest
 {
     /**
+     * Tests that the required <b>ContentService::loadContentInfoByRemoteId()</b>
+     * at least returns an object, because this method is utilized in several
+     * tests,
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        try
+        {
+            // RemoteId of the "Support" page of an eZ Publish demo installation
+            $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+            // Load the ContentService
+            $contentService = $this->getRepository()->getContentService();
+
+            // Load a content info instance
+            $contentInfo = $contentService->loadContentInfoByRemoteId(
+                $supportRemoteId
+            );
+
+            if ( false === is_object( $contentInfo ) )
+            {
+                $this->markTestSkipped(
+                    'This test cannot be executed, because the utilized ' .
+                    'ContentService::loadContentInfoByRemoteId() does not ' .
+                    'return an object.'
+                );
+            }
+        }
+        catch ( \Exception $e )
+        {
+            $this->markTestSkipped(
+                'This test cannot be executed, because the utilized ' .
+                'ContentService::loadContentInfoByRemoteId() failed with ' .
+                PHP_EOL . PHP_EOL .
+                $e->getTraceAsString()
+            );
+        }
+
+    }
+
+
+    /**
      * Test for the newSectionCreateStruct() method.
      *
      * @return void
@@ -234,14 +280,15 @@ class SectionServiceTest extends BaseTest
      */
     public function testUpdateSectionKeepsSectionNameOnIdentifierUpdate()
     {
-        $sectionId = $this->createSection()->id;
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $sectionId );
+        $section = $sectionService->loadSection( $standardSectionId );
 
         $sectionUpdate             = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'newUniqueKey';
@@ -249,7 +296,7 @@ class SectionServiceTest extends BaseTest
         $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
         /* END: Use Case */
 
-        $this->assertEquals( 'Test section one', $updatedSection->name );
+        $this->assertEquals( 'Standard', $updatedSection->name );
     }
 
     /**
@@ -481,25 +528,44 @@ class SectionServiceTest extends BaseTest
      */
     public function testCountAssignedContents()
     {
-        $sectionId = $this->createSection()->id;
-
         $repository = $this->getRepository();
 
-        // TODO: This should be replaces with the original content service
-        $contentInfoOne = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 23 ) ) );
-        $contentInfoTwo = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 42 ) ) );
+        $sectionService   = $repository->getSectionService();
+        $assignedContents = $sectionService->countAssignedContents(
+            $sectionService->loadSection( 1 )
+        );
 
         /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
+        // Remote ids of the "Support" and the "Community" page of a eZ Publish
+        // demo installation.
+        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+
+        $contentService = $repository->getContentService();
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $sectionId );
+        // Load "Support" and "Community" ContentInfo objects
+        $contentInfoSupport = $contentService->loadContentInfoByRemoteId(
+            $supportRemoteId
+        );
+        $contentInfoCommunity = $contentService->loadContentInfoByRemoteId(
+            $communityRemoteId
+        );
 
-        $sectionService->assignSection( $contentInfoOne, $section );
-        $sectionService->assignSection( $contentInfoTwo, $section );
+        // Load standard section
+        $section = $sectionService->loadSection( $standardSectionId );
 
+        $sectionService->assignSection( $contentInfoSupport, $section );
+        $sectionService->assignSection( $contentInfoCommunity, $section );
         /* END: Use Case */
 
-        $this->assertEquals( 2, $sectionService->countAssignedContents( $section ) );
+        $this->assertEquals(
+            $assignedContents + 2,
+            $sectionService->countAssignedContents( $section )
+        );
     }
 
     /**
@@ -561,18 +627,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
-     */
-    public function testDeleteSectionAfterAssignedContentsWereDeleted()
-    {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::deleteSection() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testDeleteSection
      */
@@ -607,41 +661,29 @@ class SectionServiceTest extends BaseTest
      */
     public function testDeleteSectionThrowsBadStateException()
     {
-        $sectionId = $this->createSection()->id;
-
         $repository = $this->getRepository();
 
-        // TODO: This should be replaces with the original content service
-        $contentInfo = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 23 ) ) );
-
         /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $contentService = $repository->getContentService();
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $sectionId );
+        // Load the "Support" ContentInfo
+        $contentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
 
+        // Load the "Standard" section
+        $section = $sectionService->loadSection( $standardSectionId );
+
+        // Assign "Support" to "Standard" section
         $sectionService->assignSection( $contentInfo, $section );
 
         // This call should fail with a BadStateException, because there are assigned contents
         $sectionService->deleteSection( $section );
         /* END: Use Case */
-    }
-
-    /**
-     * Helper method that creates a new section in the API implementation under
-     * test.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Section
-     */
-    private function createSection()
-    {
-        $repository = $this->getRepository();
-
-        $sectionService = $repository->getSectionService();
-        $sectionCreate  = $sectionService->newSectionCreateStruct();
-
-        $sectionCreate->name       = 'Test section one';
-        $sectionCreate->identifier = 'uniqueKey';
-
-        return $sectionService->createSection( $sectionCreate );
     }
 }
