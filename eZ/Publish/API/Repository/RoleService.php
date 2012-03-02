@@ -189,7 +189,7 @@ interface RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @return array an array of {@link RoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link RoleAssignment}
      */
     public function getRoleAssignments( Role $role );
 
@@ -200,7 +200,7 @@ interface RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return array an array of {@link UserRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[] an array of {@link UserRoleAssignment}
      */
     public function getRoleAssignmentsForUser( User $user );
 
@@ -211,7 +211,7 @@ interface RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[] an array of {@link UserGroupRoleAssignment}
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup );
 
