@@ -172,14 +172,15 @@ class SectionServiceTest extends BaseTest
      */
     public function testUpdateSection()
     {
-        $sectionId = $this->createSection()->id;
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $sectionId );
+        $section = $sectionService->loadSection( $standardSectionId );
 
         $sectionUpdate             = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name       = 'New section name';
@@ -192,7 +193,7 @@ class SectionServiceTest extends BaseTest
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $updatedSection );
 
         // Verify that the service also persists the changes
-        $updatedSection = $sectionService->loadSection( $sectionId );
+        $updatedSection = $sectionService->loadSection( $standardSectionId );
 
         $this->assertEquals( 'New section name', $updatedSection->name );
     }
@@ -206,21 +207,22 @@ class SectionServiceTest extends BaseTest
      */
     public function testUpdateSectionKeepsSectionIdentifierOnNameUpdate()
     {
-        $sectionId = $this->createSection()->id;
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
         $sectionService = $repository->getSectionService();
 
-        $section             = $sectionService->loadSection( $sectionId );
+        $section             = $sectionService->loadSection( $standardSectionId );
         $sectionUpdate       = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'New section name';
 
         $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
         /* END: Use Case */
 
-        $this->assertEquals( 'uniqueKey', $updatedSection->identifier );
+        $this->assertEquals( 'standard', $updatedSection->identifier );
     }
 
     /**
@@ -260,11 +262,12 @@ class SectionServiceTest extends BaseTest
      */
     public function testUpdateSectionThrowsInvalidArgumentException()
     {
-        $sectionId = $this->createSection()->id;
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
         $sectionService = $repository->getSectionService();
 
         // Create section with conflict identifier
@@ -275,7 +278,7 @@ class SectionServiceTest extends BaseTest
         $sectionService->createSection( $sectionCreate );
 
         // Load an existing section and update to an existing identifier
-        $section = $sectionService->loadSection( $sectionId );
+        $section = $sectionService->loadSection( $standardSectionId );
 
         $sectionUpdate             = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'conflictKey';
@@ -438,24 +441,35 @@ class SectionServiceTest extends BaseTest
      */
     public function testAssignSection()
     {
-        $sectionId = $this->createSection()->id;
-
         $repository = $this->getRepository();
 
-        // TODO: This should be replaces with the original content service
-        $contentInfo = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 23 ) ) );
-
         /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $contentService = $repository->getContentService();
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $sectionId );
+        // Load a content info instance
+        $contentInfo = $contentService->loadContentInfoByRemoteId(
+            $supportRemoteId
+        );
 
+        // Load the "Standard" section
+        $section = $sectionService->loadSection( $standardSectionId );
+
+        // Assign Section to ContentInfo
         $sectionService->assignSection( $contentInfo, $section );
-
         /* END: Use Case */
 
         // TODO: What to assert here? countAssignedContents() is not good, because that test depends on this test
-        $this->assertEquals( 1, $sectionService->countAssignedContents( $section ) );
+        $this->assertEquals(
+            1,
+            $sectionService->countAssignedContents( $section )
+        );
     }
 
     /**

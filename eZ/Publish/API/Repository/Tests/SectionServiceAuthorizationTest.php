@@ -15,6 +15,8 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
  * Test case for operations in the SectionServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\SectionServiceAuthorization
+ * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  */
 class SectionServiceAuthorizationTest extends BaseTest
@@ -29,7 +31,22 @@ class SectionServiceAuthorizationTest extends BaseTest
      */
     public function testCreateSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::createSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService    = $repository->getUserService();
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->createSection( $sectionCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -38,10 +55,28 @@ class SectionServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSection
      */
     public function testLoadSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::loadSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService    = $repository->getUserService();
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $sectionId = $sectionService->createSection( $sectionCreate )->id;
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->loadSection( $sectionId );
+        /* END: Use Case */
     }
 
     /**
@@ -54,7 +89,27 @@ class SectionServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::updateSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
+        $userService    = $repository->getUserService();
+        $sectionService = $repository->getSectionService();#
+
+        $section = $sectionService->loadSection( $standardSectionId );
+
+        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name       = 'New section name';
+        $sectionUpdate->identifier = 'newUniqueKey';
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->updateSection( $section, $sectionUpdate );
+        /* END: Use Case */
     }
 
     /**
@@ -63,10 +118,34 @@ class SectionServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
     public function testLoadSectionsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::loadSections() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService    = $repository->getUserService();
+        $sectionService = $repository->getSectionService();
+
+        // Create some sections
+        $sectionCreateOne             = $sectionService->newSectionCreateStruct();
+        $sectionCreateOne->name       = 'Test section one';
+        $sectionCreateOne->identifier = 'uniqueKeyOne';
+
+        $sectionCreateTwo             = $sectionService->newSectionCreateStruct();
+        $sectionCreateTwo->name       = 'Test section two';
+        $sectionCreateTwo->identifier = 'uniqueKeyTwo';
+
+        $sectionService->createSection( $sectionCreateOne );
+        $sectionService->createSection( $sectionCreateTwo );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->loadSections();
+        /* BEGIN: Use Case */
     }
 
     /**
@@ -78,7 +157,24 @@ class SectionServiceAuthorizationTest extends BaseTest
      */
     public function testLoadSectionByIdentifierThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::loadSectionByIdentifier() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService    = $repository->getUserService();
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $sectionService->createSection( $sectionCreate );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->loadSectionByIdentifier( 'uniqueKey' );
+        /* END: Use Case */
     }
 
     /**
@@ -90,7 +186,33 @@ class SectionServiceAuthorizationTest extends BaseTest
      */
     public function testAssignSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::assignSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Standard" section in a eZ Publish demo installation.
+        $standardSectionId = 1;
+
+        // RemoteId of the "Support" page of an eZ Publish demo installation
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $userService    = $repository->getUserService();
+        $contentService = $repository->getContentService();
+        $sectionService = $repository->getSectionService();
+
+        // Load a content info instance
+        $contentInfo = $contentService->loadContentInfoByRemoteId(
+            $supportRemoteId
+        );
+
+        // Load the "Standard" section
+        $section = $sectionService->loadSection( $standardSectionId );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->assignSection( $contentInfo, $section );
+        /* END: Use Case */
     }
 
     /**
@@ -102,6 +224,23 @@ class SectionServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for SectionService::deleteSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService    = $repository->getUserService();
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $section = $sectionService->createSection( $sectionCreate );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->deleteSection( $section );
+        /* END: Use Case */
     }
 }

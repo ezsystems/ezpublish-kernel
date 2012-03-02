@@ -151,7 +151,7 @@ class SectionServiceStub implements SectionService
      */
     public function loadSection( $sectionId )
     {
-        if ( true !== $this->repository->hasAccess( 'section', 'read' ) )
+        if ( true !== $this->repository->hasAccess( 'section', 'view' ) )
         {
             throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
         }
@@ -171,7 +171,7 @@ class SectionServiceStub implements SectionService
      */
     public function loadSections()
     {
-        if ( true !== $this->repository->hasAccess( 'section', 'read' ) )
+        if ( true !== $this->repository->hasAccess( 'section', 'view' ) )
         {
             throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
         }
@@ -190,7 +190,7 @@ class SectionServiceStub implements SectionService
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        if ( true !== $this->repository->hasAccess( 'section', 'read' ) )
+        if ( true !== $this->repository->hasAccess( 'section', 'view' ) )
         {
             throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
         }
