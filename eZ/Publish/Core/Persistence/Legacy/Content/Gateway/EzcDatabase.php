@@ -40,7 +40,7 @@ class EzcDatabase extends Gateway
     /**
      * Query builder.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
     protected $queryBuilder;
 
@@ -960,5 +960,43 @@ class EzcDatabase extends Gateway
 
         $statement = $query->prepare();
         $statement->execute();
+    }
+
+    /**
+     * Loads relations from/to $contentId, depending on $relationOrientation. Returns every relation for every version,
+     * except if $contentVersionNo and/or $relationType are specified.
+     *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\int $contentId
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\bool $relationOrientation
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\int $contentVersionNo
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\int $relationType
+     *
+     * @return string[][] array of relation data
+     */
+    public function loadRelatedContent( $contentId, $relationOrientation = true, $contentVersionNo = null, $relationType = null )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+
+        // @todo Finish me
+        $query->select(
+            // $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
+            // ...
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_link' )
+        )->leftJoin(
+            $this->dbHandler->quoteTable( 'ezcontentobject' ),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                    $this->dbHandler->quoteColumn( '????', 'ezcontentobject_link' )
+                )
+            )
+        )->where(
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 }

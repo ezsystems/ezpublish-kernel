@@ -401,7 +401,7 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Removes a relation by relation Id.
+     * Removes a relation by $relationId.
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
@@ -422,7 +422,10 @@ class Handler implements BaseContentHandler
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $rows = $this->contentGateway->loadRelations( $sourceContentId, $orientation = true, $sourceContentVersionNo, $type );
+
+        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
+        return $relationObjects;
     }
 
     /**
@@ -436,6 +439,9 @@ class Handler implements BaseContentHandler
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $rows = $this->contentGateway->loadRelations( $sourceContentId, $orientation = false, $sourceContentVersionNo, $type );
+
+        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
+        return $relationObjects;
     }
 }

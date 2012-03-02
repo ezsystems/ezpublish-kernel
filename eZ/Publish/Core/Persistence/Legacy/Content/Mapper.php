@@ -387,4 +387,17 @@ class Mapper
 
         return $struct;
     }
+
+    /**
+     * Extracts relation objects from $rows
+     */
+    public function extractRelationsFromRows( array $row )
+    {
+        throw new Exception( "@todo Implement" );
+    }
+
+    protected function extractRelationFromRow( array $row )
+    {
+        throw new Exception( "@todo Implement" );
+    }
 }

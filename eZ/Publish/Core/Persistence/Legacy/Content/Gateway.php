@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- * Base class for contentg gateways
+ * Base class for content gateways
  */
 abstract class Gateway
 {
@@ -213,4 +213,16 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadLatestPublishedData( $contentId );
+
+    /**
+     * Loads data of related to/from $contentId
+     *
+     * @param int $contentId
+     * @param bool $relationOrientation
+     * @param int $contentVersionNo
+     * @param int $relationType
+     *
+     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
+     */
+    abstract public function loadRelatedContent( $contentId, $relationOrientation = true, $contentVersionNo = null, $relationType = null);
 }
