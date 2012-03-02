@@ -80,8 +80,8 @@ class IOService implements IOServiceInterface
         if ( isset( $uploadedFile['error'] ) && $uploadedFile['error'] !== 0 )
             throw new InvalidArgumentException( "uploadedFile", "file was not uploaded correctly" );
 
-        if ( !is_file( $uploadedFile['tmp_name'] ) )
-            throw new InvalidArgumentException( "uploadedFile", "file was not uploaded correctly" );
+        if ( !is_file( $uploadedFile['tmp_name'] ) || !is_readable( $uploadedFile['tmp_name'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "file does not exist or is unreadable" );
 
         $fileHandle = fopen( $uploadedFile['tmp_name'], 'rb' );
         if ( $fileHandle === false )
@@ -111,12 +111,12 @@ class IOService implements IOServiceInterface
         if ( empty( $localFile ) || !is_string( $localFile ) )
             throw new InvalidArgumentException( "localFile", "localFile has an invalid value" );
 
-        if ( !is_file( $localFile ) )
-            throw new InvalidArgumentException( "localFile", "file does not exist" );
+        if ( !is_file( $localFile ) || !is_readable( $localFile ) )
+            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable" );
 
         $fileHandle = fopen( $localFile, 'rb' );
         if ( $fileHandle === false )
-            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable" );
+            throw new InvalidArgumentException( "localFile", "failed to get file resource" );
 
         $binaryCreateStruct = new BinaryFileCreateStruct();
         $binaryCreateStruct->contentType = new ContentType( mime_content_type( $localFile ) );
