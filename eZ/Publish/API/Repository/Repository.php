@@ -49,7 +49,7 @@ interface Repository
      * @param \eZ\Publish\API\Repository\Values\ValueObject $value
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target );
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null );
 
     /**
      * Get Content Service
