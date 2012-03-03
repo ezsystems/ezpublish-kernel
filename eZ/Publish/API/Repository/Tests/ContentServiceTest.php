@@ -1358,7 +1358,7 @@ class ContentServiceTest extends BaseTest
         $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-US';
         $metadataUpdate->alwaysAvailable  = false;
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct',
@@ -1397,7 +1397,7 @@ class ContentServiceTest extends BaseTest
             $content->contentInfo,
             $metadataUpdate
         );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\Content',
@@ -1490,7 +1490,7 @@ class ContentServiceTest extends BaseTest
             $content->contentInfo,
             $metadataUpdate
         );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
     }
 
     /**
@@ -1516,7 +1516,7 @@ class ContentServiceTest extends BaseTest
 
         // This will delete the content, all versions and the associated locations
         $contentService->deleteContent( $contentVersion2->contentInfo );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         foreach ( $locations as $location )
         {
@@ -1539,7 +1539,7 @@ class ContentServiceTest extends BaseTest
         $contentService = $repository->getContentService();
 
         $contentDrafts = $contentService->loadContentDrafts();
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertSame( array(), $contentDrafts );
     }
@@ -1575,7 +1575,7 @@ class ContentServiceTest extends BaseTest
 
         // Now $contentDrafts should contain two drafted versions
         $draftedVersions = $contentService->loadContentDrafts();
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $actual = array(
             $draftedVersions[0]->status,
@@ -3036,7 +3036,7 @@ class ContentServiceTest extends BaseTest
             $draft->getVersionInfo(),
             $contentUpdate
         );
-        /* BEGIN: Inline */
+        /* END: Inline */
 
         return $draft;
     }
@@ -3077,7 +3077,7 @@ class ContentServiceTest extends BaseTest
         $contentVersion2 = $contentService->publishVersion(
             $draftVersion2->getVersionInfo()
         );
-        /* BEGIN: Inline */
+        /* END: Inline */
 
         return $contentVersion2;
     }
