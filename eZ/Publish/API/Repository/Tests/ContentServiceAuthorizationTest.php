@@ -11,10 +11,15 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
+use \eZ\Publish\API\Repository\Values\Content\Location;
+
 /**
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
  *
- * @see eZ\Publish\API\Repository\ContentServiceAuthorization
+ * @see eZ\Publish\API\Repository\ContentService
+ * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @group integration
  */
 class ContentServiceAuthorizationTest extends BaseTest
 {
@@ -24,10 +29,39 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( "This test requires eZ Publish 5" );
+        }
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->createContent( $contentCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -36,10 +70,21 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        $this->createContentDraftVersion1();
+        /* END: Use Case */
     }
 
     /**
@@ -48,6 +93,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
@@ -63,7 +109,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContenInfotByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentInfoByRemoteId() is not implemented." );
     }
 
     /**
@@ -252,10 +298,38 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContentMetadata() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // Creates a metadata update struct
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+
+        $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
+        $metadataUpdate->mainLanguageCode = 'eng-US';
+        $metadataUpdate->alwaysAvailable  = false;
+        $metadataUpdate->publishedDate    = new \DateTime( '1984/01/01' );
+        $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->updateContentMetadata(
+            $content->contentInfo,
+            $metadataUpdate
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -264,10 +338,25 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteContent() is not implemented." );
+        $repository     = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->deleteContent( $contentVersion2->contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -276,10 +365,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testCreateContentDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContentDraft() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->createContentDraft( $content->contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -288,10 +393,29 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraftWithSecondParameter
      */
     public function testCreateContentDraftThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::createContentDraft() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->createContentDraft(
+            $content->contentInfo,
+            $content->getVersionInfo()
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -300,6 +424,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
      */
     public function testLoadContentDraftsThrowsUnauthorizedException()
     {
@@ -319,39 +444,40 @@ class ContentServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testTranslateVersionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
-     * Test for the translateVersion() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::translateVersion($translationInfo, $translationValues, $user)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testTranslateVersionThrowsUnauthorizedExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::translateVersion() is not implemented." );
-    }
-
-    /**
      * Test for the updateContent() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::updateContent() is not implemented." );
+        $repository     = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draftVersion2 = $this->createContentDraftVersion2();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // Create an update struct and modify some fields
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        $contentUpdate->initialLanguageCode = 'eng-GB';
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->updateContent(
+            $draftVersion2->getVersionInfo(),
+            $contentUpdate
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -360,10 +486,25 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::publishVersion() is not implemented." );
+        $repository     = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->publishVersion( $draft->getVersionInfo() );
+        /* END: Use Case */
     }
 
     /**
@@ -372,10 +513,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteVersion
      */
     public function testDeleteVersionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteVersion() is not implemented." );
+        $repository     = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException", because "content"
+        // "versionremove" permission is missing.
+        $contentService->deleteVersion( $draft->getVersionInfo() );
+        /* END: Use Case */
     }
 
     /**
@@ -384,10 +541,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersions()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersions
      */
     public function testLoadVersionsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersions() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadVersions( $contentVersion2->contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -396,10 +569,41 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      */
     public function testCopyContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
+        $parentLocationId = 167;
+
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createMultipleLanguageContentVersion2();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+
+        $targetLocationCreate->priority  = 42;
+        $targetLocationCreate->hidden    = true;
+        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -408,10 +612,42 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContentWithThirdParameter
      */
     public function testCopyContentThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::copyContent() is not implemented." );
+        $parentLocationId = 167;
+
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion2 = $this->createContentVersion2();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+
+        $targetLocationCreate->priority  = 42;
+        $targetLocationCreate->hidden    = true;
+        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate,
+            $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -420,6 +656,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findSingle()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
      */
     public function testFindSingleThrowsUnauthorizedException()
     {
@@ -432,6 +669,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
      */
     public function testFindSingleThrowsUnauthorizedExceptionWithThirdParameter()
     {
@@ -444,6 +682,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadRelations()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadRelations
      */
     public function testLoadRelationsThrowsUnauthorizedException()
     {
@@ -456,6 +695,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadReverseRelations()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadReverseRelations
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
     {
@@ -468,10 +708,35 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testAddRelationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addRelation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // Remote id of the "Support" page of a eZ Publish demo installation.
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $draft = $this->createContentDraftVersion1();
+
+        // Load other content object
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->addRelation(
+            $draft->getVersionInfo(),
+            $support
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -480,46 +745,38 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::deleteRelation() is not implemented." );
-    }
+        $repository = $this->getRepository();
 
-    /**
-     * Test for the addTranslationInfo() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::addTranslationInfo()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testAddTranslationInfoThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::addTranslationInfo() is not implemented." );
-    }
+        $contentService = $repository->getContentService();
 
-    /**
-     * Test for the loadTranslationInfos() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadTranslationInfos()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadTranslationInfosThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
-    }
+        /* BEGIN: Use Case */
+        // Remote ids of the "Support" and the "Community" page of a eZ Publish
+        // demo installation.
+        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
-    /**
-     * Test for the loadTranslationInfos() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::loadTranslationInfos($contentInfo, $filter)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testLoadTranslationInfosThrowsUnauthorizedExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadTranslationInfos() is not implemented." );
+        $draft = $this->createContentDraftVersion1();
+
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
+
+        // Establish some relations
+        $contentService->addRelation( $draft->getVersionInfo(), $support );
+        $contentService->addRelation( $draft->getVersionInfo(), $community );
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->deleteRelation( $draft->getVersionInfo(), $support );
+        /* END: Use Case */
     }
 
     /**
@@ -546,4 +803,217 @@ class ContentServiceAuthorizationTest extends BaseTest
         $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
     }
 
+    /**
+     * Creates a fresh clean content draft.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentDraftVersion1()
+    {
+        $repository = $this->getRepository();
+        /* BEGIN: Inline */
+        // Location id of the "Home > Community" node
+        $parentLocationId = 167;
+
+        $contentService     = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService    = $repository->getLocationService();
+
+        // Configure new location
+        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+
+        $locationCreate->priority  = 23;
+        $locationCreate->hidden    = true;
+        $locationCreate->remoteId  = '0123456789abcdef0123456789abcdef';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Load content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        // Configure new content object
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->sectionId       = 1;
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a draft
+        $draft = $contentService->createContent( $contentCreate, array( $locationCreate ) );
+        /* END: Inline */
+
+        return $draft;
+    }
+
+    /**
+     * Creates a fresh clean published content instance.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentVersion1()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draft = $this->createContentDraftVersion1();
+
+        // Publish this draft
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+        /* END: Inline */
+
+        return $content;
+    }
+
+    /**
+     * Creates a new content draft named <b>$draftVersion2</b> from a currently
+     * published content object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentDraftVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $content = $this->createContentVersion1();
+
+        // Create a new draft from the published content
+        $draftVersion2 = $contentService->createContentDraft( $content->contentInfo );
+        /* END: Inline */
+
+        return $draftVersion2;
+    }
+
+    /**
+     * Creates an updated content draft named <b>$draftVersion2</b> from
+     * a currently published content object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createUpdatedDraftVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draftVersion2 = $this->createContentDraftVersion2();
+
+        // Create an update struct and modify some fields
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+
+        $contentUpdate->initialLanguageCode = 'eng-GB';
+
+        // Update the content draft
+        $draftVersion2 = $contentService->updateContent(
+            $draftVersion2->getVersionInfo(),
+            $contentUpdate
+        );
+        /* END: Inline */
+
+        return $draftVersion2;
+    }
+
+    /**
+     * Creates an updated content object named <b>$contentVersion2</b> from
+     * a currently published content object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createContentVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draftVersion2 = $this->createUpdatedDraftVersion2();
+
+        // Publish the updated draft
+        $contentVersion2 = $contentService->publishVersion( $draftVersion2->getVersionInfo() );
+        /* END: Inline */
+
+        return $contentVersion2;
+    }
+
+    /**
+     * Creates an updated content draft named <b>$draft</b>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createMultipleLanguageDraftVersion1()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draft = $this->createContentDraftVersion1();
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+
+        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdate->setField( 'index_title', 'British index title...' );
+
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+        $contentUpdate->setField( 'index_title', 'American index title...', 'eng-US' );
+
+        $contentUpdate->initialLanguageCode = 'eng-GB';
+
+        $draft = $contentService->updateContent(
+            $draft->getVersionInfo(),
+            $contentUpdate
+        );
+        /* END: Inline */
+
+        return $draft;
+    }
+
+    /**
+     * Creates a published content object with versionNo=2 named
+     * <b>$contentVersion2</b>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function createMultipleLanguageContentVersion2()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Inline */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // Publish this version.
+        $contentVersion1 = $contentService->publishVersion(
+            $draft->getVersionInfo()
+        );
+
+        // Create a new draft and update with same values
+        $draftVersion2 = $contentService->createContentDraft(
+            $contentVersion1->contentInfo
+        );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+
+        $contentService->updateContent(
+            $draftVersion2->getVersionInfo(),
+            $contentUpdate
+        );
+
+        // Finally publish version 2
+        $contentVersion2 = $contentService->publishVersion(
+            $draftVersion2->getVersionInfo()
+        );
+        /* END: Inline */
+
+        return $contentVersion2;
+    }
 }

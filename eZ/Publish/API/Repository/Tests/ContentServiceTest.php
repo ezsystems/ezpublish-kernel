@@ -3083,7 +3083,7 @@ class ContentServiceTest extends BaseTest
     }
 
     /**
-     * Asserts that the given fields are equal to the default fieldxs fixture.
+     * Asserts that the given fields are equal to the default fields fixture.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
      * @return void

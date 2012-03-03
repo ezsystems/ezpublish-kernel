@@ -31,6 +31,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
@@ -358,6 +359,11 @@ class ContentServiceStub implements ContentService
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'create' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $fields = array();
         foreach ( $contentCreateStruct->fields as $field )
         {
@@ -498,6 +504,10 @@ class ContentServiceStub implements ContentService
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( $this->remoteIdExists( $contentMetadataUpdateStruct->remoteId ) )
         {
             throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
@@ -533,6 +543,11 @@ class ContentServiceStub implements ContentService
      */
     public function deleteContent( ContentInfo $contentInfo )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         // Avoid cycles between ContentService and LocationService
         if ( false === isset( $this->contentInfo[$contentInfo->contentId] ) )
         {
@@ -584,6 +599,11 @@ class ContentServiceStub implements ContentService
      */
     public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
 
         $content = $this->loadContentByContentInfo( $contentInfo, null, $versionNo );
@@ -704,6 +724,10 @@ class ContentServiceStub implements ContentService
      */
     public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
         {
             throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
@@ -798,6 +822,10 @@ class ContentServiceStub implements ContentService
      */
     public function publishVersion( VersionInfo $versionInfo )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
         {
             throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
@@ -884,6 +912,11 @@ class ContentServiceStub implements ContentService
      */
     public function deleteVersion( VersionInfo $versionInfo )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'versionremove' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         if ( VersionInfo::STATUS_PUBLISHED === $versionInfo->status )
         {
             throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
@@ -920,6 +953,11 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersions( ContentInfo $contentInfo )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'versionread' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $versions = array();
         foreach ( $this->versionInfo as $versionInfo )
         {
@@ -945,6 +983,11 @@ class ContentServiceStub implements ContentService
      */
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         ++$this->contentNextId;
 
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
@@ -1195,6 +1238,10 @@ class ContentServiceStub implements ContentService
      */
     public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( $sourceVersion->status !== VersionInfo::STATUS_DRAFT )
         {
             throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
@@ -1239,6 +1286,10 @@ class ContentServiceStub implements ContentService
      */
     public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( VersionInfo::STATUS_DRAFT !== $sourceVersion->status )
         {
             throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
