@@ -521,6 +521,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         foreach ( $contentTypeDraft->fieldDefinitions as $fieldDefinition )
         {
             if ( $fieldDefinition->identifier == $fieldDefinitionCreateStruct->identifier )
@@ -547,6 +552,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $data = $this->getTypeAsArray( $contentTypeDraft );
 
         $removed = false;
@@ -597,6 +607,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $this->checkFieldDefinitionUpdate( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct );
 
         $fieldData = $this->getFieldDefinitionAsArray( $fieldDefinition );
@@ -686,6 +701,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( !isset( $this->typeDrafts[$contentTypeDraft->id] ) )
         {
             throw new Exceptions\BadStateExceptionStub;
@@ -797,6 +816,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeDraft( ContentType $contentType )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( isset( $this->typeDrafts[$contentType->id] ) )
         {
             throw new Exceptions\BadStateExceptionStub;
@@ -817,6 +840,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function deleteContentType( ContentType $contentType )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         unset( $this->types[$contentType->id] );
     }
 
@@ -835,6 +862,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function copyContentType( ContentType $contentType, User $user = null )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         $contentTypeData = $this->getTypeAsArray( $contentType );
 
         $contentTypeData['id'] = $this->nextTypeId++;
@@ -868,6 +899,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $assignedGroups = $this->types[$contentType->id]->contentTypeGroups;
         foreach ( $assignedGroups as $assignedGroup )
         {
@@ -894,6 +930,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
 
         $unassigned = false;
