@@ -179,10 +179,15 @@ class Mapper
                 $locations[$contentId][$versionId] = array();
             }
 
-            $field = (int)$row['ezcontentobject_attribute_id'];
-            if ( !isset( $versions[$contentId][$versionId]->fields[$field] ) )
+            $fieldIdx = (int)$row['ezcontentobject_attribute_id'];
+            if ( !isset( $versions[$contentId][$versionId]->fields[$fieldIdx] ) )
             {
-                $versions[$contentId][$versionId]->fields[$field] = $this->extractFieldFromRow( $row );
+                $field = $this->extractFieldFromRow( $row );
+                $versions[$contentId][$versionId]->fields[$fieldIdx] = $field;
+                if ( !in_array( $field->language, $versions[$contentId][$versionId]->languageIds ) )
+                {
+                    $versions[$contentId][$versionId]->languageIds[] = $field->language;
+                }
             }
 
             $locationId = (int)$row['ezcontentobject_tree_node_id'];
@@ -203,6 +208,10 @@ class Mapper
                 $version->fields = array_values( $version->fields );
 
                 $newContent = clone $content;
+                if ( $newContent->currentVersionNo === $version->versionNo )
+                {
+                    $newContent->status = $version->status;
+                }
                 $newContent->version = $version;
                 $newContent->locations = array_values(
                     $locations[$contentId][$versionId]
@@ -269,6 +278,7 @@ class Mapper
         $version->created = (int)$row['ezcontentobject_version_created'];
         $version->status = (int)$row['ezcontentobject_version_status'];
         $version->contentId = (int)$row['ezcontentobject_version_contentobject_id'];
+        $version->initialLanguageId = (int)$row['ezcontentobject_version_initial_language_id'];
     }
 
     /**
