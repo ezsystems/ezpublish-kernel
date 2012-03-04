@@ -1263,8 +1263,22 @@ class RoleServiceTest extends BaseTest
             $policies[] = array( $policy->roleId, $policy->module, $policy->function );
         }
         /* END: Use Case */
+        array_multisort( $policies );
 
-        $this->assertEquals( 9, count( $policies ) );
+        $this->assertEquals(
+            array(
+                array( 1, 'content', 'pdf' ),
+                array( 1, 'content', 'read' ),
+                array( 1, 'content', 'read' ),
+                array( 1, 'rss', 'feed' ),
+                array( 1, 'user', 'login' ),
+                array( 1, 'user', 'login' ),
+                array( 6, 'notification', 'use' ),
+                array( 6, 'user', 'password' ),
+                array( 6, 'user', 'selfedit' ),
+            ),
+            $policies
+        );
     }
 
     /**

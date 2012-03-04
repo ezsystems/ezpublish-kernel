@@ -97,7 +97,19 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentInfo( 10 );
+        /* END: Use Case */
     }
 
     /**
@@ -106,10 +118,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentInfoByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // RemoteId of the "Anonymous User" in an eZ Publish demo installation
+        $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentInfoByRemoteId( $anonymousRemoteId );
+        /* END: Use Case */
     }
 
     /**
@@ -118,10 +146,29 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      */
     public function testLoadVersionInfoThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Anonymous User" in an eZ Publish demo installation
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $versionInfo = $contentService->loadVersionInfo( $contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -745,7 +792,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {
@@ -1015,5 +1062,39 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* END: Inline */
 
         return $contentVersion2;
+    }
+
+    /**
+     * Creates a pseudo editor with a limitation to objects in the "Media/Images"
+     * subtree.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createAnonymousWithEditorRole()
+    {
+        $repository  = $this->getRepository();
+
+        /* BEGIN: Inline */
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        $user = $userService->loadAnonymousUser();
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        // Assign "Editor" role with limitation to "Media/Images"
+        $roleService->assignRoleToUser(
+            $role,
+            $user,
+            new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation(
+                array(
+                    'limitationValues'  =>  '/1/43/51/'
+                )
+            )
+        );
+
+        $pseudoEditor = $userService->loadUser( $user->id );
+        /* END: Inline */
+
+        return $pseudoEditor;
     }
 }

@@ -391,6 +391,7 @@ class RoleServiceStub implements RoleService
             }
         }
 
+        $limits  = array();
         $roleIds = array();
         foreach ( $contentIds as $contentId )
         {
@@ -398,9 +399,18 @@ class RoleServiceStub implements RoleService
             {
                 continue;
             }
-            foreach ( $this->content2roles[$contentId] as $roleId )
+            foreach ( $this->content2roles[$contentId] as $limitationId => $roleId)
             {
                 $roleIds[] = $roleId;
+
+                if ( $limitation = $this->getOptionalRoleLimitation( $limitationId ) )
+                {
+                    if ( false === isset( $limits[$roleId] ) )
+                    {
+                        $limits[$roleId] = array();
+                    }
+                    $limits[$roleId][] = $limitation;
+                }
             }
         }
 
@@ -419,7 +429,26 @@ class RoleServiceStub implements RoleService
 
             foreach ( $this->role2policy[$roleId] as $policyId )
             {
-                $policies[] = $this->policies[$policyId];
+                $policy = $this->policies[$policyId];
+
+                $limitations = $policy->getLimitations();
+                if ( isset( $limits[$policy->roleId] ) )
+                {
+                    foreach ( $limits[$policy->roleId] as $limit )
+                    {
+                        $limitations[] = $limit;
+                    }
+                }
+
+                $this->policies[$policyId] = $policies[] = new PolicyStub(
+                    array(
+                        'id'           =>  $policy->id,
+                        'roleId'       =>  $policy->roleId,
+                        'module'       =>  $policy->module,
+                        'function'     =>  $policy->function,
+                        'limitations'  =>  $limitations
+                    )
+                );
             }
         }
         return $policies;

@@ -106,6 +106,10 @@ class ContentServiceStub implements ContentService
     {
         if ( isset( $this->contentInfo[$contentId] ) )
         {
+            if ( false === $this->repository->canUser( 'content', 'read', $this->contentInfo[$contentId] ) )
+            {
+                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            }
             return  $this->contentInfo[$contentId];
         }
         throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
@@ -127,10 +131,15 @@ class ContentServiceStub implements ContentService
     {
         foreach ( $this->contentInfo as $contentInfo )
         {
-            if ( $remoteId === $contentInfo->remoteId )
+            if ( $remoteId !== $contentInfo->remoteId )
             {
-                return $contentInfo;
+                continue;
             }
+            if ( false === $this->repository->canUser( 'content', 'read', $contentInfo ) )
+            {
+                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            }
+            return $contentInfo;
         }
         throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
@@ -150,6 +159,10 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
+        if ( false === $this->repository->canUser( 'content', 'read', $contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         return $this->loadVersionInfoById( $contentInfo->contentId, $versionNo );
     }
 
@@ -822,7 +835,7 @@ class ContentServiceStub implements ContentService
      */
     public function publishVersion( VersionInfo $versionInfo )
     {
-        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        if ( false === $this->repository->canUser( 'content', 'edit', $versionInfo ) )
         {
             throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
         }
