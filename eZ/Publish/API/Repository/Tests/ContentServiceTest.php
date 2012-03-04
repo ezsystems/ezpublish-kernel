@@ -520,12 +520,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        $anonymousUserId = 10;
 
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonUserId );
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
 
         // Now load the current content version for the info instance
         $content = $contentService->loadContentByContentInfo( $contentInfo );
@@ -549,12 +549,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        $anonymousUserId = 10;
 
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonUserId );
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
 
         // Load the current VersionInfo
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -581,12 +581,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        $anonymousUserId = 10;
 
         $contentService = $repository->getContentService();
 
         // Load the Content for "Anonymous User", any language and current version
-        $content = $contentService->loadContent( $anonUserId );
+        $content = $contentService->loadContent( $anonymousUserId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -627,10 +627,13 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        // Remote id of the "Anonymous" user in a eZ Publish demo installation
+        $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
+
         $contentService = $repository->getContentService();
 
         // Load the Content for "Anonymous User"
-        $content = $contentService->loadContentByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
+        $content = $contentService->loadContentByRemoteId( $anonymousRemoteId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
