@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  0 => 
+  0 =>
   array (
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
@@ -22,6 +22,7 @@ return array (
     'ezcontentobject_version_status' => '3',
     'ezcontentobject_version_contentobject_id' => '11',
     'ezcontentobject_version_language_mask' => '3',
+    'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_id' => '22',
     'ezcontentobject_attribute_contentclassattribute_id' => '6',
     'ezcontentobject_attribute_data_type_string' => 'ezstring',
@@ -49,7 +50,7 @@ return array (
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
   ),
-  1 => 
+  1 =>
   array (
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
@@ -70,6 +71,7 @@ return array (
     'ezcontentobject_version_status' => '3',
     'ezcontentobject_version_contentobject_id' => '11',
     'ezcontentobject_version_language_mask' => '3',
+    'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_id' => '23',
     'ezcontentobject_attribute_contentclassattribute_id' => '7',
     'ezcontentobject_attribute_data_type_string' => 'ezstring',
@@ -97,7 +99,7 @@ return array (
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
   ),
-  2 => 
+  2 =>
   array (
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
@@ -118,6 +120,7 @@ return array (
     'ezcontentobject_version_status' => '1',
     'ezcontentobject_version_contentobject_id' => '11',
     'ezcontentobject_version_language_mask' => '3',
+    'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_id' => '22',
     'ezcontentobject_attribute_contentclassattribute_id' => '6',
     'ezcontentobject_attribute_data_type_string' => 'ezstring',
@@ -145,7 +148,7 @@ return array (
     'ezcontentobject_tree_sort_field' => '1',
     'ezcontentobject_tree_sort_order' => '1',
   ),
-  3 => 
+  3 =>
   array (
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
@@ -166,6 +169,7 @@ return array (
     'ezcontentobject_version_status' => '1',
     'ezcontentobject_version_contentobject_id' => '11',
     'ezcontentobject_version_language_mask' => '3',
+    'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_id' => '23',
     'ezcontentobject_attribute_contentclassattribute_id' => '7',
     'ezcontentobject_attribute_data_type_string' => 'ezstring',

@@ -28,6 +28,8 @@ $version->creatorId = 14;
 $version->created = 1313047865;
 $version->status = 3;
 $version->contentId = 226;
+$version->initialLanguageId = 2;
+$version->languageIds = array( "eng-US" );
 $version->fields = array();
 
 $field = new Field();
