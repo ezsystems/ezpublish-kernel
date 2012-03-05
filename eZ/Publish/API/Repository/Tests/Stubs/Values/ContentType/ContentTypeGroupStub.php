@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
-use eZ\Publish\API\Repository\Tests\Tools\ImmutableArrayObject;
 
 class ContentTypeGroupStub extends ContentTypeGroup
 {

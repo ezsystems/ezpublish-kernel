@@ -409,7 +409,7 @@ class RepositoryStub implements Repository
     {
         if ( 0 === $this->transactionDepth )
         {
-            throw new \RuntimeException( '@TODO: What error code should be used?' );
+            throw new \RuntimeException( 'What error code should be used?' );
         }
         --$this->transactionDepth;
     }
@@ -425,7 +425,7 @@ class RepositoryStub implements Repository
     {
         if ( 0 === $this->transactionDepth )
         {
-            throw new \RuntimeException( '@TODO: What error code should be used?' );
+            throw new \RuntimeException( 'What error code should be used?' );
         }
         --$this->transactionDepth;
     }

@@ -108,11 +108,11 @@ class ContentServiceStub implements ContentService
         {
             if ( false === $this->repository->canUser( 'content', 'read', $this->contentInfo[$contentId] ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
             return  $this->contentInfo[$contentId];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -137,11 +137,11 @@ class ContentServiceStub implements ContentService
             }
             if ( false === $this->repository->canUser( 'content', 'read', $contentInfo ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
             return $contentInfo;
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -187,7 +187,7 @@ class ContentServiceStub implements ContentService
 
             if ( false === $this->repository->canUser( 'content', 'read', $versionInfo ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
 
             if ( $versionInfo->versionNo === $versionNo )
@@ -206,7 +206,7 @@ class ContentServiceStub implements ContentService
             return $versions[VersionInfo::STATUS_DRAFT];
         }
 
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -274,7 +274,7 @@ class ContentServiceStub implements ContentService
 
             if ( false === $this->repository->canUser( 'content', 'read', $content ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
 
             if ( $versionNo === $content->getVersionInfo()->versionNo )
@@ -383,7 +383,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'create' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $fields = array();
@@ -439,7 +439,7 @@ class ContentServiceStub implements ContentService
 
         if ( $this->remoteIdExists( $contentCreateStruct->remoteId ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $languageCodes = array( $contentCreateStruct->mainLanguageCode );
@@ -528,11 +528,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $this->remoteIdExists( $contentMetadataUpdateStruct->remoteId ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $this->contentInfo[$contentInfo->contentId] = new ContentInfoStub(
@@ -567,7 +567,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         // Avoid cycles between ContentService and LocationService
@@ -623,7 +623,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $contentInfo ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
@@ -691,7 +691,7 @@ class ContentServiceStub implements ContentService
 
         if ( false === $this->repository->hasAccess( 'content', 'pendinglist' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $contentDrafts = array();
@@ -753,11 +753,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $content     = $this->loadContentByVersionInfo( $versionInfo );
@@ -773,7 +773,7 @@ class ContentServiceStub implements ContentService
                  null === $contentUpdateStruct->initialLanguageCode &&
                 $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
             {
-                throw new ContentValidationExceptionStub( '@TODO: What error code should be used?' );
+                throw new ContentValidationExceptionStub( 'What error code should be used?' );
             }
 
             $fields[] = new Field(
@@ -851,11 +851,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $versionInfo ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $contentInfo = $versionInfo->getContentInfo();
@@ -941,12 +941,12 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'versionremove' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         if ( VersionInfo::STATUS_PUBLISHED === $versionInfo->status )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         foreach ( $this->content as $i => $content )
@@ -982,7 +982,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'versionread' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $versions = array();
@@ -1012,7 +1012,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         ++$this->contentNextId;
@@ -1209,7 +1209,7 @@ class ContentServiceStub implements ContentService
             && false === $filterOnUserPermissions
             && false === $this->repository->canUser( 'content', 'read', $searchResult->items[0] ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         return $searchResult;
@@ -1275,11 +1275,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $sourceVersion->status !== VersionInfo::STATUS_DRAFT )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $relation = new RelationStub(
@@ -1323,11 +1323,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( VersionInfo::STATUS_DRAFT !== $sourceVersion->status )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $content   = $this->loadContentByVersionInfo( $sourceVersion );
@@ -1355,7 +1355,7 @@ class ContentServiceStub implements ContentService
 
         if ( $relationNotFound || $relationNoCommon )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $this->replaceContentObject(

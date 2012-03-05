@@ -124,11 +124,11 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( isset( $this->nameToRoleId[$roleCreateStruct->identifier] ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $role = new RoleStub(
@@ -165,14 +165,14 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $roleName = $roleUpdateStruct->identifier ?: $role->identifier;
 
         if ( isset( $this->nameToRoleId[$roleName] ) && $this->nameToRoleId[$roleName] !== $role->id )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $updatedRole = new RoleStub(
@@ -206,7 +206,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->policies[++$this->policyNextId] = new PolicyStub(
@@ -250,7 +250,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role, $policy ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $policies = array();
@@ -295,7 +295,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $policy ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $newPolicy = new PolicyStub(
@@ -349,11 +349,11 @@ class RoleServiceStub implements RoleService
     {
         if ( false === isset( $this->roles[$id] ) )
         {
-            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
         if ( false === $this->repository->canUser( 'role', '*', $this->roles[$id] ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         return $this->roles[$id];
     }
@@ -372,11 +372,11 @@ class RoleServiceStub implements RoleService
     {
         if ( false === isset( $this->nameToRoleId[$name] ) )
         {
-            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
         if ( false === $this->repository->canUser( 'role', '*', $this->roles[$this->nameToRoleId[$name]] ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         return $this->roles[$this->nameToRoleId[$name]];
     }
@@ -392,7 +392,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         return array_values( $this->roles );
     }
@@ -408,7 +408,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         unset(
@@ -460,7 +460,7 @@ class RoleServiceStub implements RoleService
 
         if ( 0 === count( $roleIds ) )
         {
-            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
 
         $policies = array();
@@ -511,7 +511,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role, $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         $this->assignRoleToContent( $role, $userGroup, $roleLimitation );
     }
@@ -529,7 +529,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role, $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         $this->unassignRoleFromContent( $role, $userGroup );
     }
@@ -549,7 +549,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role, $user ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         $this->assignRoleToContent( $role, $user, $roleLimitation );
     }
@@ -567,7 +567,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->canUser( 'role', '*', $role, $user ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         $this->unassignRoleFromContent( $role, $user );
     }
@@ -585,7 +585,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $roleAssignments = array();
@@ -622,7 +622,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         return $this->getRoleAssignmentsForContent( $user );
     }
@@ -640,7 +640,7 @@ class RoleServiceStub implements RoleService
     {
         if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         return $this->getRoleAssignmentsForContent( $userGroup );
     }
@@ -761,7 +761,7 @@ class RoleServiceStub implements RoleService
         if ( false === isset( $this->content2roles[$content->contentId] )
             || false === in_array( $role->id, $this->content2roles[$content->contentId] ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $index = array_search( $role->id, $this->content2roles[$content->contentId] );

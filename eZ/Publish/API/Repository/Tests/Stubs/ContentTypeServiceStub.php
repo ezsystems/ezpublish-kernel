@@ -133,7 +133,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $data = array();
@@ -229,7 +229,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         unset( $this->groups[$contentTypeGroup->identifier] );
@@ -268,7 +268,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $this->groupHasTypes( $contentTypeGroup ) )
         {
@@ -430,7 +430,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->checkContentTypeUpdate( $contentTypeDraft, $contentTypeUpdateStruct );
@@ -523,7 +523,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         foreach ( $contentTypeDraft->fieldDefinitions as $fieldDefinition )
@@ -554,7 +554,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $data = $this->getTypeAsArray( $contentTypeDraft );
@@ -609,7 +609,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->checkFieldDefinitionUpdate( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct );
@@ -703,7 +703,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( !isset( $this->typeDrafts[$contentTypeDraft->id] ) )
         {
@@ -752,7 +752,7 @@ class ContentTypeServiceStub implements ContentTypeService
                 return $contentType;
             }
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -773,7 +773,7 @@ class ContentTypeServiceStub implements ContentTypeService
                 return $contentType;
             }
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -818,7 +818,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( isset( $this->typeDrafts[$contentType->id] ) )
         {
@@ -842,7 +842,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         unset( $this->types[$contentType->id] );
     }
@@ -864,7 +864,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         $contentTypeData = $this->getTypeAsArray( $contentType );
 
@@ -901,7 +901,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $assignedGroups = $this->types[$contentType->id]->contentTypeGroups;
@@ -932,7 +932,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
