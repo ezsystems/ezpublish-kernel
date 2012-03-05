@@ -699,6 +699,68 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
+     * Test loading user groups the user belongs to
+     * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser
+     */
+    public function testLoadUserGroupsOfUser()
+    {
+        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
+        $userService = $this->repository->getUserService();
+        $locationService = $this->repository->getLocationService();
+
+        $user = $userService->loadUser( 14 );
+        $userLocations = $locationService->loadLocations(
+            $user->getVersionInfo()->getContentInfo()
+        );
+
+        $groupLocationIds = array();
+        foreach ( $userLocations as $userLocation )
+        {
+            if ( $userLocation->parentLocationId !== null )
+                $groupLocationIds[] = $userLocation->parentLocationId;
+        }
+
+        $userGroups = $userService->loadUserGroupsOfUser( $user );
+
+        foreach ( $userGroups as $userGroup )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $userGroup );
+
+            $userGroupLocation = $locationService->loadMainLocation( $userGroup->getVersionInfo()->getContentInfo() );
+
+            self::assertContains( $userGroupLocation->id, $groupLocationIds );
+        }
+    }
+
+    /**
+     * Test loading user groups the user belongs to
+     * @covers \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup
+     */
+    public function testLoadUsersOfUserGroup()
+    {
+        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
+        $userService = $this->repository->getUserService();
+        $locationService = $this->repository->getLocationService();
+
+        $userGroup = $userService->loadUserGroup( 12 );
+
+        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation(
+            $userGroup->getVersionInfo()->getContentInfo()
+        );
+
+        $users = $userService->loadUsersOfUserGroup( $userGroup );
+
+        foreach ( $users as $user )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $user );
+
+            $userLocation = $locationService->loadMainLocation( $user->getVersionInfo()->getContentInfo() );
+
+            self::assertEquals( $mainGroupLocation->id, $userLocation->parentLocationId );
+        }
+    }
+
+    /**
      * Test creating new UserCreateStruct
      * @covers \eZ\Publish\API\Repository\UserService::newUserCreateStruct
      */
