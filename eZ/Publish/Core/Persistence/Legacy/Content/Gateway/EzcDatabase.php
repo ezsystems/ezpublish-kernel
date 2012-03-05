@@ -785,7 +785,7 @@ class EzcDatabase extends Gateway
 
         $contentInfo = $rows[0];
         $contentInfo['always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $contentInfo['language_mask'] );
-        $contentInfo['main_language_code'] = $this->languageHandler->getById( $contentId['initial_language_id'] )->languageCode;
+        $contentInfo['main_language_code'] = $this->languageHandler->getById( $contentInfo['initial_language_id'] )->languageCode;
         return $contentInfo;
     }
 
