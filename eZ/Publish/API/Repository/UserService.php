@@ -211,6 +211,8 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      * 
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param int $offset
+     * @param int $limit
      * 
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
