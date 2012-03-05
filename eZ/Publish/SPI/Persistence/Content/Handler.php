@@ -79,6 +79,15 @@ interface Handler
     public function loadContentInfo( $contentId );
 
     /**
+     * Returns the version object for a content/version identified by $contentId and $versionNo
+     *
+     * @param int|string $contentId
+     * @param int $versionNo Version number to load
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
+     */
+    public function loadVersionInfo( $contentId, $versionNo );
+
+    /**
      * Sets the state of object identified by $contentId and $version to $status.
      *
      * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED

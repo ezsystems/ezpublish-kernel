@@ -300,6 +300,18 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
+     * Returns the version object for a content/version identified by $contentId and $versionNo
+     *
+     * @param int|string $contentId
+     * @param int $versionNo Version number to load
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
+     */
+    public function loadVersionInfo( $contentId, $versionNo )
+    {
+        throw new \RuntimeException( 'Not implemented yet' );
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function setStatus( $contentId, $status, $version )
