@@ -163,7 +163,7 @@ class RoleServiceStub implements RoleService
      */
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -204,7 +204,7 @@ class RoleServiceStub implements RoleService
      */
     public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -248,7 +248,7 @@ class RoleServiceStub implements RoleService
      */
     public function removePolicy( Role $role, Policy $policy )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role, $policy ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -293,7 +293,7 @@ class RoleServiceStub implements RoleService
      */
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $policy ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -351,7 +351,7 @@ class RoleServiceStub implements RoleService
         {
             throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
-        if ( false === $this->repository->canUser( 'role', '*', $this->roles[$id] ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -374,7 +374,7 @@ class RoleServiceStub implements RoleService
         {
             throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
-        if ( false === $this->repository->canUser( 'role', '*', $this->roles[$this->nameToRoleId[$name]] ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -406,7 +406,7 @@ class RoleServiceStub implements RoleService
      */
     public function deleteRole( Role $role )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -509,7 +509,7 @@ class RoleServiceStub implements RoleService
      */
     public function assignRoleToUserGroup( Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role, $userGroup ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -527,7 +527,7 @@ class RoleServiceStub implements RoleService
      */
     public function unassignRoleFromUserGroup( Role $role, UserGroup $userGroup )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role, $userGroup ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -547,7 +547,7 @@ class RoleServiceStub implements RoleService
      */
     public function assignRoleToUser( Role $role, User $user, RoleLimitation $roleLimitation = null )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role, $user ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -565,7 +565,7 @@ class RoleServiceStub implements RoleService
      */
     public function unassignRoleFromUser( Role $role, User $user )
     {
-        if ( false === $this->repository->canUser( 'role', '*', $role, $user ) )
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
