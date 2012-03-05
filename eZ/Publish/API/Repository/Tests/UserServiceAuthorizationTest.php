@@ -393,16 +393,16 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $group = $userService->loadUserGroup( 13 );
-
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
+
+        $userGroup = $this->createUserGroupVersion1();
 
         // Now set the currently created "Editor" as current user
         $repository->setCurrentUser( $user );
 
         // This call will fail with an "UnauthorizedException"
-        $userService->loadUsersOfUserGroup( $group );
+        $userService->loadUsersOfUserGroup( $userGroup );
         /* END: Use Case */
     }
 
