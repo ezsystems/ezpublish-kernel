@@ -81,6 +81,16 @@ class RepositoryStub implements Repository
     private $locationService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\IOServiceStub
+     */
+    private $ioService;
+
+    /**
+     * @var integer
+     */
+    private $transactionDepth = 0;
+
+    /**
      * @var integer
      */
     private $initializing = 0;
@@ -356,7 +366,11 @@ class RepositoryStub implements Repository
      */
     public function getIOService()
     {
-        // TODO: Implement getIOService() method.
+        if ( null === $this->ioService )
+        {
+            $this->ioService = new IOServiceStub( $this );
+        }
+        return $this->ioService;
     }
 
     /**
@@ -381,7 +395,7 @@ class RepositoryStub implements Repository
      */
     public function beginTransaction()
     {
-        // TODO: Implement beginTransaction() method.
+        ++$this->transactionDepth;
     }
 
     /**
@@ -389,11 +403,15 @@ class RepositoryStub implements Repository
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit()
     {
-        // TODO: Implement commit() method.
+        if ( 0 === $this->transactionDepth )
+        {
+            throw new \RuntimeException( '@TODO: What error code should be used?' );
+        }
+        --$this->transactionDepth;
     }
 
     /**
@@ -401,11 +419,15 @@ class RepositoryStub implements Repository
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback()
     {
-        // TODO: Implement rollback() method.
+        if ( 0 === $this->transactionDepth )
+        {
+            throw new \RuntimeException( '@TODO: What error code should be used?' );
+        }
+        --$this->transactionDepth;
     }
 
     /**

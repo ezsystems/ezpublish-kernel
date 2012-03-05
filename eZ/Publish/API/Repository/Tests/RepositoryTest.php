@@ -92,7 +92,10 @@ class RepositoryTest extends BaseTest
     public function testGetContentService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\ContentService', $repository->getContentService() );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\ContentService',
+            $repository->getContentService()
+        );
     }
 
     /**
@@ -104,7 +107,10 @@ class RepositoryTest extends BaseTest
     public function testGetContentLanguageService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\LanguageService', $repository->getContentLanguageService() );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\LanguageService',
+            $repository->getContentLanguageService()
+        );
     }
 
     /**
@@ -117,7 +123,10 @@ class RepositoryTest extends BaseTest
     public function testGetContentTypeService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\ContentTypeService', $repository->getContentTypeService() );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\ContentTypeService',
+            $repository->getContentTypeService()
+        );
     }
 
     /**
@@ -130,7 +139,10 @@ class RepositoryTest extends BaseTest
     public function testGetLocationService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\LocationService', $repository->getLocationService() );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\LocationService',
+            $repository->getLocationService()
+        );
     }
 
     /**
@@ -158,7 +170,10 @@ class RepositoryTest extends BaseTest
     public function testGetSectionService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\SectionService', $repository->getSectionService() );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\SectionService',
+            $repository->getSectionService()
+        );
     }
 
     /**
@@ -170,7 +185,10 @@ class RepositoryTest extends BaseTest
     public function testGetUserService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\UserService', $repository->getUserService() );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\UserService',
+            $repository->getUserService()
+        );
     }
 
     /**
@@ -182,19 +200,25 @@ class RepositoryTest extends BaseTest
     public function testGetRoleService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\RoleService', $repository->getRoleService() );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\RoleService',
+            $repository->getRoleService()
+        );
     }
 
     /**
-     * Test for the beginTransaction() method.
+     * Test for the getIOService() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\Repository::beginTransaction()
-     * 
+     * @see \eZ\Publish\API\Repository\Repository::getIOService()
      */
-    public function testBeginTransaction()
+    public function testGetIOService()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::beginTransaction() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\IOService',
+            $repository->getIOService()
+        );
     }
 
     /**
@@ -202,11 +226,12 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::commit()
-     * 
      */
     public function testCommit()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::commit() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->beginTransaction();
+        $repository->commit();
     }
 
     /**
@@ -218,7 +243,8 @@ class RepositoryTest extends BaseTest
      */
     public function testCommitThrowsRuntimeException()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::commit() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->commit();
     }
 
     /**
@@ -226,11 +252,12 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::rollback()
-     * 
      */
     public function testRollback()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::rollback() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->beginTransaction();
+        $repository->rollback();
     }
 
     /**
@@ -242,7 +269,7 @@ class RepositoryTest extends BaseTest
      */
     public function testRollbackThrowsRuntimeException()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::rollback() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->rollback();
     }
-
 }
