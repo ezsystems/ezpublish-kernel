@@ -18,6 +18,8 @@ use \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
  * Test case for operations in the RoleService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\RoleService
+ * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest
+ * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest
  */
 class RoleServiceAuthorizationTest extends BaseTest
 {
@@ -240,5 +242,43 @@ class RoleServiceAuthorizationTest extends BaseTest
     public function testGetRoleAssignmentsForUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignmentsForUserGroup() is not implemented." );
+    }
+
+    /**
+     * Create a user fixture in a variable named <b>$user</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createUserVersion1()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $editorsGroupId = 13;
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $group ) );
+        /* END: Inline */
+
+        return $user;
     }
 }

@@ -457,7 +457,7 @@ class UserServiceTest extends BaseTest
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupUpdateStruct
      */
-    public function testUpdateUserGroupWithoutSubUpdateStruct()
+    public function testUpdateUserGroup()
     {
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();
