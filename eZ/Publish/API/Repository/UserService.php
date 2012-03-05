@@ -196,6 +196,28 @@ interface UserService
     public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup );
 
     /**
+     * Loads the user groups ther user belongs to
+     * 
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * 
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    public function loadUserGroupsOfUser( User $user);
+    
+    /**
+     * loads the users of a user group
+     * 
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
+     * 
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * 
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1);
+    
+    /**
      * Instantiate a user create class
      *
      * @param string $login the login of the new user
