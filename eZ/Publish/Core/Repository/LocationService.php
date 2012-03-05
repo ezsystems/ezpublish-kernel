@@ -426,7 +426,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $createStruct = new CreateStruct();
-        $createStruct->priority = $locationCreateStruct->priority === null ?: (int) $locationCreateStruct->priority;
+        $createStruct->priority = $locationCreateStruct->priority !== null ? (int) $locationCreateStruct->priority : null;
 
         // if we declare the new location as hidden, it is automatically invisible
         // otherwise, it remains unhidden, and picks up visibility from parent
@@ -450,8 +450,15 @@ class LocationService implements LocationServiceInterface
         $createStruct->contentId = (int) $contentInfo->contentId;
         $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
 
-        $createStruct->sortField = $locationCreateStruct->sortField === null ? APILocation::SORT_FIELD_NAME : (int) $locationCreateStruct->sortField;
-        $createStruct->sortOrder = $locationCreateStruct->sortOrder === null ? APILocation::SORT_ORDER_ASC : (int) $locationCreateStruct->sortOrder;
+        // @todo: set pathIdentificationString
+        // $createStruct->pathIdentificationString = null;
+
+        $mainLocation = $this->loadMainLocation( $contentInfo );
+        if ( $mainLocation !== null )
+            $createStruct->mainLocationId = $mainLocation->id;
+
+        $createStruct->sortField = $locationCreateStruct->sortField !== null ? (int) $locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
+        $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
         $createStruct->parentId = $loadedParentLocation->id;
 
         $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );
