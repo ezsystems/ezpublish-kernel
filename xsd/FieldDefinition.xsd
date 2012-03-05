@@ -4,7 +4,7 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-  <xsd:complexType name="fieldDefinitionType">
+  <xsd:complexType name="vnd.ez.api.FieldDefinition">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
@@ -88,16 +88,16 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:complexType name="fieldDefinitionListType">
+  <xsd:complexType name="vnd.ez.api.FieldDefinitionList">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:sequence>
-          <xsd:element name="FieldDefinition" type="fieldDefinitionType"
+          <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinition"
             minOccurs="1" maxOccurs="unbounded" />
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:element name="FieldDefinitionList" type="fieldDefinitionListType" />
-  <xsd:element name="FieldDefinition" type="fieldDefinitionType" />
+  <xsd:element name="FieldDefinitionList" type="vnd.ez.api.FieldDefinitionList" />
+  <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinition" />
 </xsd:schema>

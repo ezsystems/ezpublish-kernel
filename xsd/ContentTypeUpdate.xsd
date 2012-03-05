@@ -3,7 +3,7 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-  <xsd:complexType name="contentTypeUpdateType">
+  <xsd:complexType name="vnd.ez.api.ContentTypeUpdate">
     <xsd:all>
       <xsd:element name="identifier" type="xsd:string"
         minOccurs="0">
@@ -127,5 +127,5 @@
       </xsd:element>
     </xsd:all>
   </xsd:complexType>
-  <xsd:element name="ContentTypeUpdate" type="contentTypeUpdateType"></xsd:element>
+  <xsd:element name="ContentTypeUpdate" type="vnd.ez.api.ContentTypeUpdate"></xsd:element>
 </xsd:schema>

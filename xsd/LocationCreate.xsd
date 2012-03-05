@@ -3,7 +3,7 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-  <xsd:complexType name="locationCreateType">
+  <xsd:complexType name="vnd.ez.api.LocationCreate">
     <xsd:all>
       <xsd:element name="ParentLocation" type="ref">
         <xsd:annotation>
@@ -40,5 +40,5 @@
       <xsd:element name="sortOrder" type="sortOrderType" />
     </xsd:all>
   </xsd:complexType>
-  <xsd:element name="LocationCreate" type="locationCreateType" />
+  <xsd:element name="LocationCreate" type="vnd.ez.api.LocationCreate" />
 </xsd:schema>

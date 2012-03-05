@@ -3,7 +3,7 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-  <xsd:complexType name="locationType">
+  <xsd:complexType name="vnd.ez.api.Location">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
@@ -91,7 +91,7 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:complexType name="locationListType">
+  <xsd:complexType name="vnd.ez.api.LocationList">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:sequence>
@@ -101,6 +101,6 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:element name="Location" type="locationType" />
-  <xsd:element name="LocationList" type="locationListType" />
+  <xsd:element name="Location" type="vnd.ez.api.Location" />
+  <xsd:element name="LocationList" type="vnd.ez.api.LocationList" />
 </xsd:schema>

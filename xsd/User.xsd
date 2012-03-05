@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="Version.xsd" />
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.User">
+    <xsd:complexContent>
+      <xsd:extension base="vnd.ez.api.ContentInfo">
+        <xsd:all>
+          <xsd:element name="login" type="xsd:string"/>
+          <xsd:element name="email" type="xsd:string"/>
+          <xsd:element name="enabled" type="xsd:boolean"/>
+          <xsd:element name="Content" type="vnd.ez.api.Version"/>
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="User" type="vnd.ez.api.User" />
+ </xsd:schema>
+

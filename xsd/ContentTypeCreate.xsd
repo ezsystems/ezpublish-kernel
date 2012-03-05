@@ -121,7 +121,7 @@
       <xsd:element name="FieldDefinitions">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="FieldDefinition" type="fieldDefinitionCreateType"></xsd:element>
+            <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinitionCreate"></xsd:element>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>

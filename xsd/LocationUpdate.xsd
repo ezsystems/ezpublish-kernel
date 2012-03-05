@@ -3,7 +3,7 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-  <xsd:complexType name="locationUpdateType">
+  <xsd:complexType name="vnd.ez.api.LocationUpdate">
     <xsd:all>
       <xsd:element name="priority" type="xsd:int" minOccurs="0">
         <xsd:annotation>
@@ -26,5 +26,5 @@
       <xsd:element name="sortOrder" type="sortOrderType" />
     </xsd:all>
   </xsd:complexType>
-  <xsd:element name="LocationUpdate" type="locationUpdateType" />
+  <xsd:element name="LocationUpdate" type="vnd.ez.api.LocationUpdate" />
 </xsd:schema>

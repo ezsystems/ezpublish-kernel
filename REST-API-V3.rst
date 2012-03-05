@@ -136,7 +136,7 @@ General Error Codes
 :501: The requested method was not implemented yet
 :404: Requested resource was not found
 :405: The request method is not available.  The available methods are returned for this resource
-	
+        
 
 Managing content
 ~~~~~~~~~~~~~~~~
@@ -473,7 +473,7 @@ List/Search Content
 :Response: TBD
 :Error codes:
     :400: If the query string does not match the lucene query string format, In this case the response contains an ErrorMessage_
-	
+        
 Load Content
 ````````````
 :Resource: /content/objects/<ID> 
@@ -898,7 +898,7 @@ Update Version
     :404: If the content id or version id does not exist
     :412: If the current ETag does not match with the provided one in the If-Match header
     :415: If the media-type is not one of those specified in Headers
-	
+        
 
 XML Example
 '''''''''''
@@ -1066,8 +1066,8 @@ Load relations of version
     :limit: the number of relations returned
 :Headers:
     :Accept:
-         :application/vnd.ez.api.RelationList+xml:  if set the relation is returned in xml format (see Relation_)
-         :application/vnd.ez.api.RelationList+json:  if set the relation is returned in json format (see Relation_)
+         :application/vnd.ez.api.RelationList+xml:  if set the relation is returned in xml format (see RelationList_)
+         :application/vnd.ez.api.RelationList+json:  if set the relation is returned in json format (see RelationList_)
 :Response: 
 
     .. parsed-literal::
@@ -1075,7 +1075,7 @@ Load relations of version
         HTTP/1.1 200 OK
         Content-Type: <depending on Accept header>
         Content-Length: xxx
-        Relation_ (relationListType)
+        RelationList_ 
 
 :Error Codes:
 :401: If the user is not authorized to read  this object
@@ -1135,7 +1135,7 @@ Load a relation
 :Error Codes:
     :404: If the  object with the given id or the relation does not exist
     :401: If the user is not authorized to read this object  
-	
+        
 Create a new Relation
 `````````````````````
 :Resource: /content/objects/<ID>/versions/<no>/relations
@@ -1143,11 +1143,11 @@ Create a new Relation
 :Description: Creates a new relation of type COMMON for the given draft. 
 :Headers:
     :Accept:
-         :application/vnd.ez.api.Relation+xml:  if set the updated version is returned in xml format (see Relation_)
-         :application/vnd.ez.api.Relation+json:  if set the updated version returned in json format (see Relation_)
+         :application/vnd.ez.api.Relation+xml:  if set the updated version is returned in xml format (see RelationCreate_)
+         :application/vnd.ez.api.Relation+json:  if set the updated version returned in json format (see RelationCreate_)
     :Content-Type: 
-         :application/vnd.ez.api.RelationCreate+xml: the RelationCreate (see Relation_) schema encoded in xml
-         :application/vnd.ez.api.RelationCreate+json: the RelationCreate (see Relation_) schema encoded in json
+         :application/vnd.ez.api.RelationCreate+xml: the RelationCreate (see RelationCreate_) schema encoded in xml
+         :application/vnd.ez.api.RelationCreate+json: the RelationCreate (see RelationCreate_) schema encoded in json
 :Response: 
 
     .. parsed-literal::
@@ -1208,7 +1208,7 @@ Delete a relation
     :404: content object was not found or the relation was not found in the given version
     :401: If the user is not authorized to delete this relation 
     :403: If the relation is not of type COMMON or the given version is not a draft
-	
+        
 
 
 Managing Locations
@@ -1288,7 +1288,7 @@ XML Example
     </Location>
         
  
-	
+        
 Get locations for a content object
 ``````````````````````````````````
 :Resource: /content/objects/<ID>/locations
@@ -1530,7 +1530,7 @@ Move Subtree
 :Error Codes:
     :404: If the  location with the given id does not exist
     :401: If the user is not authorized to move this location  
-	
+        
 Copy Subtree
 ````````````
 :Resource: /content/locations/<path>
@@ -1584,6 +1584,9 @@ Delete Subtree
 
 Views
 ~~~~~
+
+Create View
+```````````
 :Resource: /content/views
 :Method:  POST
 :Description: executes a query and returns view including the results 
@@ -1611,7 +1614,7 @@ Views
 XML Example
 '''''''''''
 
-Perform a query on articles ith a specific title.
+Perform a query on articles with a specific title.
 
 ::
 
@@ -1857,7 +1860,7 @@ XML Example
       </Section>
     </SectionList>
 
-	
+        
 Get Section
 ```````````
 :Resource: /content/sections/<ID>
@@ -1998,7 +2001,7 @@ Untrash Item
 :Method: MOVE or POST with header X-HTTP-Method-Override: MOVE
 :Description: Restores a trashItem
 :Headers:
-	:Destination: if given the trash item is restored under this location otherwise under its orifinal parent location
+        :Destination: if given the trash item is restored under this location otherwise under its orifinal parent location
 :Response: 
 
     ::
@@ -2186,7 +2189,7 @@ XML Example
       </ContentTypeGroup>
     </ContentTypeGroupList>
 
-	
+        
 Get Content Type Group
 ``````````````````````
 :Resource: /content/typegroups/<ID>
@@ -2301,6 +2304,36 @@ Create Content Type
 :Method: POST
 :Description: Creates a new content type draft in the given content type group
 :Parameters: :publish: (default false) If true the content type is published after creating
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentType+xml:  if set the new content type or draft is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentType+json:  if set the new content type or draft is returned in json format (see ContentType_)
+    :Content-Type:
+         :application/vnd.ez.api.ContentTypeCreate+json: the ContentTypeCreate_  schema encoded in json
+         :application/vnd.ez.api.ContentTypeCreate+xml: the ContentTypeCreate_  schema encoded in xml
+:Response: 
+    If publish = false:
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /content/types/<newId>/draft
+          Accept-Patch:  application/vnd.ez.api.ContentTypeUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentType_      
+
+    If publish = true:
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /content/types/<newId>
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentType_      
 
 :Error Codes:
     :400: - If the Input does not match the input schema definition,
@@ -2308,11 +2341,149 @@ Create Content Type
     :401: If the user is not authorized to create this content type  
     :403: If a content type with same identifier already exists
 
+XML Example
+'''''''''''
+
+::
+
+    POST /content/typegroups/<ID> HTTP/1.1
+    Accept: application/vnd.ez.api.ContentType
+    Content-Type: application/vnd.ez.api.ContentTypeCreate
+    Content-Length: xxx
+    
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentTypeCreate>
+      <identifier>newContentType</identifier>
+      <names>
+        <value languageCode="eng-US">New Content Type</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-US">This is a description</value>
+      </descriptions>
+      <remoteId>remoteId-qwert548</remoteId>
+      <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
+      <nameSchema>&lt;title&gt;</nameSchema>
+      <isContainer>true</isContainer>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
+      <defaultSortField>PATH</defaultSortField>
+      <defaultSortOrder>ASC</defaultSortOrder>
+      <FieldDefinitions>
+        <FieldDefinition>
+          <identifier>title</identifier>
+          <fieldType>ezstring</fieldType>
+          <fieldGroup>content</fieldGroup>
+          <position>1</position>
+          <isTranslatable>true</isTranslatable>
+          <isRequired>true</isRequired>
+          <isInfoCollector>false</isInfoCollector>
+          <defaultValue>New Title</defaultValue>
+          <isSearchable>true</isSearchable>
+          <names>
+            <value languageCode="eng-US">Title</value>
+          </names>
+          <descriptions>
+            <value languageCode="eng-US">This is the title</value>
+          </descriptions>
+        </FieldDefinition>
+       <FieldDefinition>
+          <identifier>summary</identifier>
+          <fieldType>ezxmltext</fieldType>
+          <fieldGroup>content</fieldGroup>
+          <position>2</position>
+          <isTranslatable>true</isTranslatable>
+          <isRequired>false</isRequired>
+          <isInfoCollector>false</isInfoCollector>
+          <defaultValue></defaultValue>
+          <isSearchable>true</isSearchable>
+          <names>
+            <value languageCode="eng-US">Summary</value>
+          </names>
+          <descriptions>
+            <value languageCode="eng-US">This is the summary</value>
+          </descriptions>
+        </FieldDefinition>
+       </FieldDefinitions>
+    </ContentTypeCreate>
+
+    HTTP/1.1 201 Created
+    Location: /content/types/32/draft
+    Accept-Patch:  application/vnd.ez.api.ContentTypeUpdate+(json|xml)
+    ETag: "45674567543546"
+    Content-Type: application/vnd.ez.api.ContentType+xml
+    Content-Length: xxx
+
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentType href="/content/types/32/draft" media-type="vnd.ez.api.ContentType+xml">
+      <id>32</id>
+      <status>DRAFT</status>
+      <identifier>newContentType</identifier>
+      <names>
+        <value languageCode="eng-US">New Content Type</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-US">This is a description</value>
+      </descriptions>
+      <creationDate>2001-01-01T16:37:00</creationDate>
+      <modificationDate>2001-01-01T16:37:00</modificationDate>
+      <Creator href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
+      <Modifier href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
+      <remoteId>remoteId-qwert548</remoteId>
+      <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
+      <nameSchema>&lt;title&gt;</nameSchema>
+      <isContainer>true</isContainer>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
+      <defaultSortField>PATH</defaultSortField>
+      <defaultSortOrder>ASC</defaultSortOrder>
+      <FieldDefinitions href="/content/types/32/draft/fielddefinitions" media-type="vnd.ez.api.FieldDefinitionList+xml">
+        <FieldDefinition href="/content/types/32/draft/fielddefinitions/34" media-type="vnd.ez.api.FieldDefinition+xml">
+          <id>34</id>
+          <identifier>title</identifier>
+          <fieldType>ezstring</fieldType>
+          <fieldGroup>content</fieldGroup>
+          <position>1</position>
+          <isTranslatable>true</isTranslatable>
+          <isRequired>true</isRequired>
+          <isInfoCollector>false</isInfoCollector>
+          <defaultValue>New Title</defaultValue>
+          <isSearchable>true</isSearchable>
+          <names>
+            <value languageCode="eng-US">Title</value>
+          </names>
+          <descriptions>
+            <value languageCode="eng-US">This is the title</value>
+          </descriptions>
+        </FieldDefinition>
+        <FieldDefinition href="/content/types/32/draft/fielddefinitions/36" media-type="vnd.ez.api.FieldDefinition+xml">
+          <id>36</id>
+          <identifier>summary</identifier>
+          <fieldType>ezxmltext</fieldType>
+          <fieldGroup>content</fieldGroup>
+          <position>2</position>
+          <isTranslatable>true</isTranslatable>
+          <isRequired>false</isRequired>
+          <isInfoCollector>false</isInfoCollector>
+          <defaultValue></defaultValue>
+          <isSearchable>true</isSearchable>
+          <names>
+            <value languageCode="eng-US">Summary</value>
+          </names>
+          <descriptions>
+            <value languageCode="eng-US">This is the summary</value>
+          </descriptions>
+        </FieldDefinition>
+      </FieldDefinitions>
+    </ContentType>
+
+
+
 Copy Content Type
 `````````````````
 :Resource: /content/types/<ID>
 :Method:      COPY or POST with header: X-HTTP-Method-Override COPY
-:Description: copies a content type.
+:Description: copies a content type. The identifier of the copy is changed to copy_of_<identifier> anda new remoteIdis generated. 
 :Response:
 
 ::
@@ -2324,131 +2495,345 @@ Copy Content Type
 :Error Codes:
     :400: if srcId is missing
     :401: If the user is not authorized to copy this content type  
-	
+        
 Get Content Types
 `````````````````
 :Resource: /content/types
 :Method: GET
-:Description: Returns a list of all content types 
-:Response: 200 array of ContentType_
+:Description: Returns a list of content types 
+:Parameters:
+    :identifier: retrieves the content type for the given identifer
+    :remoteId: retieves the content type for the given remoteId 
+    :limit:    only <limit> items will be returned started by offset
+    :offset:   offset of the result set
+    :orderby:   one of (name | lastmodified)
+    :sort:      one of (asc|desc)
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeInfoList+xml:  if set the list of content type info objects is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeInfoList+json:  if set the list of content type info objects is returned in json format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeList+xml:  if set the list of content type objects (including field definitions) is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeList+json:  if set the list content type objects (including field definitions) is returned in json format (see ContentType_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentType_      
+
 :Error Codes:
     :401: If the user has no permission to read the content types
 
-Get Content Type by id
-``````````````````````
+Get Content Type 
+````````````````
 :Resource: /content/types/<ID>
 :Method: GET
 :Description: Returns the content type given by id
-:Response: 200 ContentType_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentType+xml:  if set the list is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentType+json:  if set the list is returned in json format (see ContentType_)
+
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentType_
+      
+:ErrorCodes:
     :401: If the user is not authorized to read this content type  
     :404: If the content type does not exist
 
 Update Content Type
 ```````````````````
-:Resource: /content/types/<ID>
-:Method: PUT
-:Description: If there is no content type version with status draft a DRAFT is created as a copy. Then the 
-              given attributes of the content type are updated. The field definitions should not be present in the input - they are ignored.
-:Request Format: application/json
-:Parameters:
-:Inputschema: ContentTypeInput_ 
-:Response: 200 ContentType
+:Resource: /content/types/<ID>/draft
+:Method: PATCH or POST with header: X-HTTP-Method-Override: PATCH
+:Description: Updates meta data of a draft. This method does not handle field definitions
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeInfo+xml:  if set the new content type draft is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeInfo+json:  if set the new content type draft is returned in json format (see ContentType_)
+    :Content-Type:
+         :application/vnd.ez.api.ContentTypeUpdate+json: the ContentTypeUpdate_  schema encoded in json
+         :application/vnd.ez.api.ContentTypeUpdate+xml: the ContentTypeUpdate_  schema encoded in xml
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentType_
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to update the content type
-    :403: - If a content type with the given new identifier already exists.  
-          - If there exists a draft which is assigned to another user
+    :401: If the user is not authorized to update the draft.
+    :403: If a content type with the given new identifier already exists.  
+    :404: If there is no draft on this content type
 
-Delete Content Type
-```````````````````
-:Resource: /content/types/<ID>
-:Method: DELETE
-:Description: the given content type is deleted
-:Parameters: 
-              :deleteObjects: (default false) If true the objects belonging to this content type a deleted.
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to delete this content type
-    :403: If deleteObjects is false and there are object instances of this content type - the response should contain an ErrorMessage_
-    :404: If the content type does not exist
+XML Example
+'''''''''''
 
+::
 
-Unlink Content Type
-````````````````````
-:Resource: /content/typegroups/<ID>/types/<ID>
-:Method: DELETE
-:Description: removes the given content type from the given group. If the content type is in no other groups it is deleted.
-:Parameters: 
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to delete this content type
-    :403: If the content type is to be deleted but it is not empty
-    :404: If the content type does not exist
-	
-Publish content type
-````````````````````
-:Resource: /content/types/<ID>
-:Method: POST
-:Description: Publishes a content type draft
-:Request Format: 
-:Parameters:
-:Inputschema: 
-:Response: 200 
-:Error Codes:
-    :400: If the content type is not complete e.g. there is no field definition provided
-    :401: If the user is not authorized to publish this content type
-    :403: If there is no draft assigned to the authenticated user.
-    :404: If the content type does not exist
+    PATCH /content/types/32 HTTO/1.1
+    Accept: application/vnd.ez.api.ContentTypeInfo+xml 
+    Content-Type: application/vnd.ez.api.ContentTypeUpdate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentTypeUpdate>
+      <names>
+        <value languageCode="ger-DE">Neuer Content Typ</value>
+      </names>
+      <descriptions>
+        <value languageCode="ger-DE">Das ist ein neuer Content Typ</value>
+      </descriptions>
+    </ContentTypeUpdate>
+
+    HTTP/1.1 200 OK
+    ETag: "56435634576543"
+    Content-Type: application/vnd.ez.api.ContentTypeInfo+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ContentType href="/content/types/32/draft" media-type="vnd.ez.api.ContentType+xml">
+      <id>32</id>
+      <status>DRAFT</status>
+      <identifier>newContentType</identifier>
+      <names>
+        <value languageCode="eng-US">New Content Type</value>
+        <value languageCode="ger-DE">Neuer Content Typ</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-US">This is a description</value>
+        <value languageCode="ger-DE">Das ist ein neuer Content Typ</value>
+      </descriptions>
+      <creationDate>2001-01-01T16:37:00</creationDate>
+      <modificationDate>2001-01-01T16:37:00</modificationDate>
+      <Creator href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
+      <Modifier href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
+      <remoteId>remoteId-qwert548</remoteId>
+      <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
+      <nameSchema>&lt;title&gt;</nameSchema>
+      <isContainer>true</isContainer>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
+      <defaultSortField>PATH</defaultSortField>
+      <defaultSortOrder>ASC</defaultSortOrder>
+    </ContentType> 
 
 Add Field definition
 ````````````````````
 :Resource: /content/types/<ID>/fielddefinitions
 :Method: POST
 :Description: Creates a new field definition for the given content type
-:Request Format: application/json
-:Parameters:
-:Inputschema: FieldDefinitionInput_
-:Response: 201 FieldDefinition_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.FieldDefinition+xml:  if set the new fielddefinition is returned in xml format (see FieldDefinition_)
+         :application/vnd.ez.api.FieldDefinition+json:  if set the new fielddefinition is returned in json format (see FieldDefinition_)
+    :Content-Type:
+         :application/vnd.ez.api.FieldDefinitionCreate+json: the FieldDefinitionCreate_  schema encoded in json
+         :application/vnd.ez.api.FieldDefinitionCreate+xml: the FieldDefinitionCreate_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /content/types/<ID>/draft/fielddefinitions/<newId>
+          Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          FieldDefinition_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to add a field definition  
-    :403: - If a field definition with same identifier already exists in the given content type 
-          - If there is no draft assigned to the authenticated user.
+    :403: If a field definition with same identifier already exists in the given content type 
 
 Get Fielddefinition
 ```````````````````
-:Resource: /content/types/<ID>/fielddefinitions/<ID>
+:Resource: /content/types/<ID>/draft/fielddefinitions/<ID>
 :Method: GET
 :Description: Returns the field definition given by id
-:Response: 200 array of FieldDefinition_
-    :401: If the user is not authorized to read this content type  
-    :404: If the content type does not exist
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.FieldDefinition+xml:  if set the new fielddefinition is returned in xml format (see FieldDefinition_)
+         :application/vnd.ez.api.FieldDefinition+json:  if set the new fielddefinition is returned in json format (see FieldDefinition_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          FieldDefinition_      
+
+:ErrorCodes: 
+    :401: If the user is not authorized to read the content type draft
+    :404: If the content type or draft does not exist
 
 Update Fielddefinition
 ``````````````````````
 :Resource: /content/types/<ID>/fielddefinitions/<ID>
 :Method: PUT
 :Description: Updates the attributes of a field definitions
-:Request Format: application/json
-:Parameters:
-:Inputschema: FieldDefinitionInput_
-:Response: 200 FieldDefinition_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.FieldDefinition+xml:  if set the new fielddefinition is returned in xml format (see FieldDefinition_)
+         :application/vnd.ez.api.FieldDefinition+json:  if set the new fielddefinition is returned in json format (see FieldDefinition_)
+    :Content-Type:
+         :application/vnd.ez.api.FieldDefinitionUpdate+json: the FieldDefinitionUpdate_  schema encoded in json
+         :application/vnd.ez.api.FieldDefinitionUpdate+xml: the FieldDefinitionUpdate_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          FieldDefinition_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the field definition
-    :403: - If a field definition with the given new identifier already exists in the given content type. 
-          - If there is no draft assigned to the authenticated user.
+    :403: If a field definition with the given new identifier already exists in the given content type. 
 
 Delete Fielddefinition
 ``````````````````````
 :Resource: /content/types/<ID>/fielddefinitions/<ID>
 :Method: DELETE
 :Description: the given field definition is deleted
-:Parameters: 
-:Response: 204
+:Response: 
+
+::
+
+    HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this content type
     :403: - if there is no draft of the content type assigned to the authenticated user
+
+Publish content type
+````````````````````
+:Resource: /content/types/<ID>/draft
+:Method: PUBLISH or POST with header: X-HTTP-Method-Override: PUBLISH
+:Description: Publishes a content type draft
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          ETag: "<newEag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentType_
+
+:Error Codes:
+    :401: If the user is not authorized to publish this content type draft
+    :403: If the content type draft is not complete e.g. there is no field definition provided
+    :404: If there is no draft or content type with the given ID
+
+Delete Content Type
+```````````````````
+:Resource: /content/types/<ID>
+:Method: DELETE
+:Description: the given content type is deleted
+:Response: 
+
+    ::
+  
+        HTTP/1.1 204 No Content
+
+:Error Codes:
+    :401: If the user is not authorized to delete this content type
+    :403: If there are object instances of this content type - the response should contain an ErrorMessage_
+    :404: If the content type does not exist
+
+
+Get Groups of Content Type
+``````````````````````````
+:Resource: /content/type/<ID>/groups/<ID>
+:Method: GET
+:Description: Returns the content type groups the content type belongs to.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeGroupRefList+xml:  if set the list is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentType_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentTypeGroup_
+      
+:ErrorCodes:
+    :401: If the user is not authorized to read this content type  
+    :404: If the content type does not exist
+
+Link Group to Content Type
+``````````````````````````
+:Resource: /content/types/<ID>/groups
+:Method: POST
+:Description: links a content type group to the content type and returns the updated group list
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeGroupRefList+xml:  if set the list is returned in xml format (see ContentTypeGroup_)
+         :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentTypeGroup_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentTypeGroup_
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to add a group
+    :403: If the content type is already assigned to the group
+
+
+
+Unlink Group from Content Type
+``````````````````````````````
+:Resource: /content/type/<ID>/groups/<ID>
+:Method: DELETE
+:Description: removes the given group from the content type and returns the updated group list
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeGroupRefList+xml:  if set the list is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentType_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentTypeGroup_
+
+:Error Codes:
+    :401: If the user is not authorized to delete this content type
+    :403: If the given group is the last one
+    :404: If the resource does not exist
+        
 
 User Management
 ===============
@@ -2476,7 +2861,7 @@ Resource                                      POST                  GET         
 /user/roles/<ID>/policies                     -                     load policies         -                     delete all policies from role
 /user/roles/<ID>/policies/<module>/<function> -                     load policy           create/update policy  delete policy
 ============================================= ===================== ===================== ===================== =======================
-	
+        
 
 Managing Users and Groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2861,22 +3246,25 @@ Common definition which are used from multiple schema definitions
 
 ::
 
+    <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:complexType name="ref">
         <xsd:annotation>
-        <xsd:documentation>
-        A base schema for referencing resources.
-        </xsd:documentation>
+          <xsd:documentation>
+            A base schema for referencing resources.
+          </xsd:documentation>
         </xsd:annotation>
         <xsd:attribute name="href" type="xsd:string" />
         <xsd:attribute name="media-type" type="xsd:string" />
       </xsd:complexType>
+
       <xsd:complexType name="fieldInputValueType">
         <xsd:annotation>
-        <xsd:documentation>
-        Schema for field inputs in content create and update structures
-        </xsd:documentation>
+          <xsd:documentation>
+            Schema for field inputs in content create and
+            update structures
+          </xsd:documentation>
         </xsd:annotation>
         <xsd:all>
           <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
@@ -2884,8 +3272,71 @@ Common definition which are used from multiple schema definitions
           <xsd:element name="value" type="xsd:anyType" />
         </xsd:all>
       </xsd:complexType>
-    </xsd:schema>
 
+      <xsd:complexType name="multiLanguageValuesType">
+        <xsd:sequence>
+          <xsd:element name="value" minOccurs="1" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                  <xsd:attribute name="languageCode" type="xsd:string" />
+                </xsd:extension>
+              </xsd:simpleContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:simpleType name="sortFieldType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="PATH" />
+          <xsd:enumeration value="PUBLISHED" />
+          <xsd:enumeration value="MODIFIED" />
+          <xsd:enumeration value="SECTION" />
+          <xsd:enumeration value="DEPTH" />
+          <xsd:enumeration value="CLASS_IDENTIFIER" />
+          <xsd:enumeration value="CLASS_NAME" />
+          <xsd:enumeration value="PRIORITY" />
+          <xsd:enumeration value="NAME" />
+          <xsd:enumeration value="MODIFIED_SUBNODE" />
+          <xsd:enumeration value="NODE_ID" />
+          <xsd:enumeration value="CONTENTOBJECT_ID" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="versionStatus">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="DRAFT" />
+          <xsd:enumeration value="PUBLISHED" />
+          <xsd:enumeration value="ARCHIVED" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="contentTypeStatus">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="DRAFT" />
+          <xsd:enumeration value="DEFINED" />
+          <xsd:enumeration value="MODIFIED" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="sortOrderType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="ASC" />
+          <xsd:enumeration value="DESC" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="intList">
+        <xsd:list itemType="xsd:integer" />
+      </xsd:simpleType>
+      <xsd:simpleType name="dateList">
+        <xsd:list itemType="xsd:dateTime" />
+      </xsd:simpleType>
+      <xsd:simpleType name="stringList">
+        <xsd:list itemType="xsd:string" />
+      </xsd:simpleType>
+    </xsd:schema>
 
 
 .. _Content:
@@ -2895,48 +3346,52 @@ Content XML Schema
 
 ::
 
+    <?xml version="1.0" encoding="utf-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values"
-      targetNamespace="http://ez.no/API/Values">
-      <xsd:include
-        schemaLocation="Version.xsd" />
-      <xsd:include
-        schemaLocation="CommonDefinitions.xsd" />
-
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="Version.xsd" />
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
       <xsd:complexType name="embeddedVersionType">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
-              <xsd:element name="Version" minOccurs="0"
-                type="versionType" />
+              <xsd:element name="Version" minOccurs="0" type="versionType" />
             </xsd:all>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:element name="Content">
-        <xsd:complexType>
-          <xsd:complexContent>
-            <xsd:extension base="ref">
-              <xsd:all>
-                <xsd:element name="ContentType" type="ref" />
-                <xsd:element name="name" type="xsd:string" />
-                <xsd:element name="Versions" type="ref" />
-                <xsd:element name="CurrentVersion" type="embeddedVersionType" />
-                <xsd:element name="Section" type="ref" />
-                <xsd:element name="MainLocation" type="ref" />
-                <xsd:element name="Locations" type="ref" />
-                <xsd:element name="Owner" type="ref" />
-                <xsd:element name="publishDate" type="xsd:dateTime" />
-                <xsd:element name="lastModificationDate" type="xsd:dateTime" />
-                <xsd:element name="mainLanguageCode" type="xsd:string" />
-                <xsd:element name="alwaysAvailable" type="xsd:boolean" />
-              </xsd:all>
-              <xsd:attribute name="id" type="xsd:int" />
-              <xsd:attribute name="remoteId" type="xsd:string" />
-            </xsd:extension>
-          </xsd:complexContent>
-        </xsd:complexType>
-      </xsd:element>
+      <xsd:complexType name="vnd.ez.api.ContentInfo">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="ContentType" type="ref" />
+              <xsd:element name="name" type="xsd:string" />
+              <xsd:element name="Versions" type="ref" />
+              <xsd:element name="Section" type="ref" />
+              <xsd:element name="MainLocation" type="ref" minOccurs="0" />
+              <xsd:element name="Locations" type="ref" minOccurs="0" />
+              <xsd:element name="Owner" type="ref" />
+              <xsd:element name="publishDate" type="xsd:dateTime"
+                minOccurs="0" />
+              <xsd:element name="lastModificationDate" type="xsd:dateTime" />
+              <xsd:element name="mainLanguageCode" type="xsd:string" />
+              <xsd:element name="alwaysAvailable" type="xsd:boolean" />
+            </xsd:all>
+            <xsd:attribute name="id" type="xsd:int" />
+            <xsd:attribute name="remoteId" type="xsd:string" />
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.Content">
+        <xsd:complexContent>
+          <xsd:extension base="vnd.ez.api.ContentInfo">
+            <xsd:all>
+              <xsd:element name="CurrentVersion" type="embeddedVersionType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="ContentInfo" type="vnd.ez.api.ContentInfo" />
     </xsd:schema>
 
 
@@ -2974,6 +3429,11 @@ Relation XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
+
+.. _RelationList:
+
+::
+
       <xsd:complexType name="relationListType">
         <xsd:complexContent>
           <xsd:extension base="ref">
@@ -2983,6 +3443,11 @@ Relation XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
+
+.. _RelationCreate:
+
+::
+
       <xsd:complexType name="relationCreateType">
         <xsd:all>
           <xsd:element name="Destination" type="ref" />
@@ -3745,9 +4210,13 @@ ContentTypeGroupInput XML Schema
 
 
 .. _ContentType:
+.. _ContentTypeCreate:
+.. _ContentTypeUpdate:
 
 ContentType XML Schema
 ----------------------
+.. _include: xsd/ContentType.xsd
+   :literal:
 
 .. _ContentTypeInput:
 
@@ -3760,7 +4229,8 @@ FieldDefinition JSON Schema
 ---------------------------
 
 
-.. _FieldDefinitionInput:
+.. _FieldDefinitionCreate:
+.. _FieldDefinitionUpdate:
 
 FieldDefinitionInput JSON Schema
 --------------------------------
