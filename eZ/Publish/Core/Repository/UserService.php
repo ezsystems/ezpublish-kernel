@@ -25,6 +25,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
@@ -642,6 +643,95 @@ class UserService implements UserServiceInterface
         }
 
         throw new InvalidArgumentException( "userGroup", "user is not in the given user group" );
+    }
+
+    /**
+     * Loads the user groups the user belongs to
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    public function loadUserGroupsOfUser( APIUser $user )
+    {
+        $locationService = $this->repository->getLocationService();
+
+        $userLocations = $locationService->loadLocations(
+            $user->getVersionInfo()->getContentInfo()
+        );
+
+        $parentLocationIds = array();
+        foreach ( $userLocations as $userLocation )
+        {
+            if ( $userLocation->parentLocationId !== null )
+                $parentLocationIds[] = $userLocation->parentLocationId;
+        }
+
+        $searchQuery = new Query();
+
+        $searchQuery->criterion = new CriterionLogicalAnd(
+            array(
+                new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
+                new CriterionLocationId( array( $parentLocationIds ) ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+            )
+        );
+
+        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+
+        $userGroups = array();
+        foreach ( $searchResult->items as $resultItem )
+        {
+            $userGroups = $this->buildDomainUserGroupObject( $resultItem );
+        }
+
+        return $userGroups;
+    }
+
+    /**
+     * loads the users of a user group
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersOfUserGroup( APIUserGroup $userGroup, $offset = 0, $limit = -1 )
+    {
+        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation(
+            $userGroup->getVersionInfo()->getContentInfo()
+        );
+
+        if ( $mainGroupLocation === null )
+            return array();
+
+        $searchQuery = new Query();
+
+        $searchQuery->criterion = new CriterionLogicalAnd(
+            array(
+                new CriterionContentTypeId( $this->settings['userClassID'] ),
+                new CriterionParentLocationId( $mainGroupLocation->id ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+            )
+        );
+
+        $searchQuery->offset = $offset;
+        $searchQuery->limit = $limit;
+
+        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+
+        $users = array();
+        foreach ( $searchResult->items as $resultItem )
+        {
+            $users = $this->buildDomainUserObject( $resultItem );
+        }
+
+        return $users;
     }
 
     /**
