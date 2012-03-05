@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry;
 
@@ -391,13 +392,38 @@ class Mapper
     /**
      * Extracts relation objects from $rows
      */
-    public function extractRelationsFromRows( array $row )
+    public function extractRelationsFromRows( array $rows )
     {
-        throw new Exception( "@todo Implement" );
+        $relations = array();
+
+        foreach ( $rows as $row )
+        {
+            $id = (int)$row['id'];
+            if ( !isset( $relations[$id] ) )
+            {
+                $relations[$id] = $this->extractRelationFromRow( $row );
+            }
+        }
+
+        return $relations;
     }
 
+    /**
+     * Extracts a Relation object from a $row
+     *
+     * @param array $row Associative array representing a relation
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation
+     */
     protected function extractRelationFromRow( array $row )
     {
-        throw new Exception( "@todo Implement" );
+        $relation = new Relation();
+        $relation->id = (int)$row['id'];
+        $relation->sourceContentId = (int)$row['from_contentobject_id'];
+        $relation->sourceContentVersionNo = (int)$row['from_contentobject_version'];
+        $relation->destinationContentId = (int)$row['to_contentobject_id'];
+        $relation->type = (int)$row['relation_type'];
+
+        return $relation;
     }
 }

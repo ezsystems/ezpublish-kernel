@@ -432,6 +432,20 @@ class MapperTest extends TestCase
         }
     }
 
+    public function testExtractRelationsFromRows()
+    {
+        $mapper = $this->getMapper();
+
+        $rows = $this->getRelationExtractFixture();
+
+        $res = $mapper->extractRelationsFromRows( $rows );
+
+        $this->assertEquals(
+            $this->getRelationExtractReference(),
+            $res
+        );
+    }
+
     /**
      * Returns a fixture of database rows for content extraction
      *
@@ -512,6 +526,30 @@ class MapperTest extends TestCase
         $versions[] = $version;
 
         return $versions;
+    }
+
+    /**
+     * Returns a fixture of database rows for relations extraction
+     *
+     * Fixture is stored in _fixtures/relations.php
+     *
+     * @return array
+     */
+    protected function getRelationExtractFixture()
+    {
+        return require __DIR__ . '/_fixtures/relations_rows.php';
+    }
+
+    /**
+     * Returns a reference result for content extraction
+     *
+     * Fixture is stored in _fixtures/relations_results.php
+     *
+     * @return Content
+     */
+    protected function getRelationExtractReference()
+    {
+        return require __DIR__ . '/_fixtures/relations_results.php';
     }
 
     /**
