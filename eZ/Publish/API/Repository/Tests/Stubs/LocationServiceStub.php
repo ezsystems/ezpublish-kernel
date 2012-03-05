@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Location service, used for complex subtree operations
@@ -40,7 +41,7 @@ class LocationServiceStub implements LocationService
     protected $nextLocationId = 0;
 
     /**
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub[]
      */
     protected $locations = array();
 
@@ -88,6 +89,11 @@ class LocationServiceStub implements LocationService
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'create', $contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
         $this->checkContentNotInTree( $contentInfo, $parentLocation );
@@ -168,11 +174,16 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocation( $locationId )
     {
-        if ( isset( $this->locations[$locationId] ) )
+        if ( false === isset( $this->locations[$locationId] ) )
         {
-            return $this->locations[$locationId];
+            throw new Exceptions\NotFoundExceptionStub;
         }
-        throw new Exceptions\NotFoundExceptionStub;
+        if ( false === $this->repository->canUser( 'content', 'read', $this->locations[$locationId]->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        return $this->locations[$locationId];
     }
 
     /**
@@ -189,10 +200,15 @@ class LocationServiceStub implements LocationService
     {
         foreach ( $this->locations as $location )
         {
-            if ( $location->remoteId == $remoteId )
+            if ( $location->remoteId != $remoteId )
             {
-                return $location;
+                continue;
             }
+            if ( false === $this->repository->canUser( 'content', 'create', $location->contentInfo ) )
+            {
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+            }
+            return $location;
         }
         throw new Exceptions\NotFoundExceptionStub;
     }
@@ -220,6 +236,11 @@ class LocationServiceStub implements LocationService
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $this->checkRemoteIdNotExist( $locationUpdateStruct );
 
         $data = $this->locationToArray( $location );
@@ -396,6 +417,11 @@ class LocationServiceStub implements LocationService
      */
     public function hideLocation( Location $location )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $location->__hide();
 
         foreach ( $this->loadLocationChildren( $location ) as $child)
@@ -436,6 +462,11 @@ class LocationServiceStub implements LocationService
      */
     public function unhideLocation( Location $location )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $location->__unhide();
 
         foreach ( $this->loadLocationChildren( $location ) as $child )
@@ -478,6 +509,11 @@ class LocationServiceStub implements LocationService
      */
     public function deleteLocation( Location $location )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         unset( $this->locations[$location->id] );

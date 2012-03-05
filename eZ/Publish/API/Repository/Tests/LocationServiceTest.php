@@ -577,7 +577,7 @@ class LocationServiceTest extends BaseTest
         $content = $contentService->createContent( $contentCreate );
 
         // Throws Exception, since $content has no published version, yet
-        $location = $locationService->loadLocations(
+        $locationService->loadLocations(
             $content->contentInfo
         );
         /* END: Use Case */
@@ -607,11 +607,12 @@ class LocationServiceTest extends BaseTest
         $contentCreate->setField( 'name', 'New Folder' );
         $content = $contentService->createContent( $contentCreate );
 
-        $findRootLocation = $locationService->loadLocation( 1 );
+        $findRootLocation = $locationService->loadLocation( 2 );
 
         // Throws Exception, since $content has no published version, yet
-        $location = $locationService->loadLocations(
-            $content->contentInfo, $findRootLocation
+        $locationService->loadLocations(
+            $content->contentInfo,
+            $findRootLocation
         );
         /* END: Use Case */
     }
