@@ -1073,7 +1073,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {
