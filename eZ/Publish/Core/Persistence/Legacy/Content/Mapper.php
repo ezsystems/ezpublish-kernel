@@ -17,7 +17,8 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo;
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  *
@@ -273,6 +274,33 @@ class Mapper
         $contentInfo->remoteId = $row['remote_id'];
 
         return $contentInfo;
+    }
+
+    /**
+     * Extracts a VersionInfo object from $row
+     * 
+     * @param array $row
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
+     */
+    public function extractVersionInfoFromRow( array $row )
+    {
+        $versionInfo = new VersionInfo;
+        $versionInfo->id = (int)$row['id'];
+        $versionInfo->contentId = (int)$row['contentobject_id'];
+        $versionInfo->versionNo = (int)$row['version'];
+        $versionInfo->creatorId = (int)$row['creator_id'];
+        $versionInfo->creationDate = (int)$row['created'];
+        $versionInfo->modificationDate = (int)$row['modified'];
+        $versionInfo->initialLanguageCode = $row['initial_language_code'];
+        $versionInfo->languageIds = $row['languages'];
+        $versionInfo->status = (int)$row['status'];
+        $versionInfo->names = array();
+        foreach ( $row['names'] as $name )
+        {
+            $versionInfo->names[$name['content_translation']] = $name['name'];
+        }
+
+        return $versionInfo;
     }
 
     /**

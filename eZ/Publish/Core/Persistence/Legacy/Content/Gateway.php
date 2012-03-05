@@ -142,6 +142,18 @@ abstract class Gateway
     abstract public function loadContentInfo( $contentId );
 
     /**
+     * Loads version info for content identified by $contentId and $versionNo.
+     * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
+     *  - names => Hash of content object names. Key is the language code, value is the name.
+     *  - languages => Hash of language ids. Key is the language code (e.g. "eng-GB"), value is the language numeric id without the always available bit.
+     *  - initial_language_code => Language code for initial language in this version.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     */
+    abstract public function loadVersionInfo( $contentId, $versionNo );
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId

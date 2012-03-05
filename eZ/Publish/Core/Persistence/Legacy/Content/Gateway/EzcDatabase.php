@@ -790,6 +790,71 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads version info for content identified by $contentId and $versionNo.
+     * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
+     *  - names => Hash of content object names. Key is the language code, value is the name.
+     *  - languages => Hash of language ids. Key is the language code (e.g. "eng-GB"), value is the language numeric id without the always available bit.
+     *  - initial_language_code => Language code for initial language in this version.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     */
+    public function loadVersionInfo( $contentId, $versionNo )
+    {
+        $q = $this->dbHandler->createSelectQuery();
+        $q
+            ->select( '*' )
+            ->from( $this->dbHandler->quoteTable( 'ezcontentobject_version' ) )
+            ->where(
+                $q->expr->lAnd(
+                    $q->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                        $q->bindValue( $contentId )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteColumn( 'version' ),
+                        $q->bindValue( $versionNo )
+                    )
+                )
+            );
+        $stmt = $q->prepare();
+        $stmt->execute();
+        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        if ( empty( $rows ) )
+            throw new NotFound( 'content', $contentId );
+        $row = $rows[0];
+
+        // Now load content object names
+        $qName = $this->dbHandler->createSelectQuery();
+        $qName
+            ->select( '*' )
+            ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
+            ->where(
+                $q->expr->lAnd(
+                    $q->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                        $q->bindValue( $contentId )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteColumn( 'content_version' ),
+                        $q->bindValue( $versionNo )
+                    )
+                )
+            );
+        $stmt = $qName->prepare();
+        $stmt->execute();
+        $row['names'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+
+        // Get languages for version
+        $row['languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['language_mask'] );
+
+        // Get initial language code
+        $row['initial_language_code'] = $this->languageHandler->getById( $row['initial_language_id'] )->languageCode;
+
+        return $row;
+    }
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId

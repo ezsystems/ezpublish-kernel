@@ -91,4 +91,41 @@ class MaskGenerator
     {
         return (bool)( $languageMask & 1 );
     }
+
+    /**
+     * Removes the alwaysAvailable flag from $languageId and returns cleaned up $languageId
+     *
+     * @param int $languageId
+     * @return int
+     */
+    public function removeAlwaysAvailableFlag( $languageId )
+    {
+        return $languageId & ~1;
+    }
+
+    /**
+     * Extracts every language Ids contained in $languageMask
+     *
+     * @param int $languageMask
+     * @return array Array of language Id
+     */
+    public function extractLanguageIdsFromMask( $languageMask )
+    {
+        $languageMask = $this->removeAlwaysAvailableFlag( $languageMask );
+        $exp = 2;
+        $result = array();
+
+        // Loop until we reach initial $exp value.
+        // Each loop will shift $languageMask of 1 step (divide by 2)
+        // @see http://doc.ez.no/eZ-Publish/Technical-manual/4.x/Features/Multi-language/The-bit-field-algorithm
+        // @see http://php.net/manual/en/language.operators.bitwise.php
+        while ( $languageMask > 2 )
+        {
+            $result[] = $exp;
+            $languageMask = $languageMask >> 1;
+            $exp *= 2;
+        }
+
+        return $result;
+    }
 }
