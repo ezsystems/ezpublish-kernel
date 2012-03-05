@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
@@ -170,6 +171,10 @@ class SearchHandler extends SearchHandlerInterface
             else if ( $criterion instanceof RemoteId && !isset( $match['remoteId'] ) )
             {
                 $match['remoteId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof LocationRemoteId && !isset( $match['locations']['remoteId'] ) )
+            {
+                $match['locations']['remoteId'] = $criterion->value[0];
             }
             else if ( $criterion instanceof SectionId && !isset( $match['sectionId'] ) )
             {

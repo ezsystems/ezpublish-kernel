@@ -124,6 +124,9 @@ class ContentSearchHandlerTest extends TestCase
                         new Content\Search\Gateway\CriterionHandler\RemoteId(
                             $this->getDatabaseHandler()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\LocationRemoteId(
+                            $this->getDatabaseHandler()
+                        ),
                         new Content\Search\Gateway\CriterionHandler\SectionId(
                             $this->getDatabaseHandler()
                         ),
@@ -773,6 +776,31 @@ class ContentSearchHandlerTest extends TestCase
 
         $this->assertEquals(
             array( 4, 10 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result->content
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LocationRemoteId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testLocationRemoteIdFilter()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\LocationRemoteId(
+                array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4, 65 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content
