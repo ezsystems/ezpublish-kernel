@@ -33,14 +33,14 @@
     <filter>
         <whitelist>
             <directory suffix=".php">../</directory>
-            <!--
             <exclude>
+                <directory suffix="Test.php">../Tests</directory>
+                <directory>../Tests/Fixtures</directory>
+                <file>../Tests/common.php</file>
+
                 <directory>../Examples</directory>
-                <directory>../Tests</directory>
                 <directory>../Tutorials</directory>
             </exclude>
-            <directory>../Tests/Stubs</directory>
-            -->
         </whitelist>
     </filter>
 </phpunit>

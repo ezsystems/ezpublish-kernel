@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  *
  * @see eZ\Publish\API\Repository\ContentService
  * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
- * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  */
 class ContentServiceAuthorizationTest extends BaseTest
@@ -585,7 +585,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
@@ -595,6 +595,9 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
+
+        // Get ContentInfo instance.
+        $contentInfo = $content->contentInfo;
 
         // Load the user service
         $userService = $repository->getUserService();
@@ -613,7 +616,7 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->updateContentMetadata(
-            $content->contentInfo,
+            $contentInfo,
             $metadataUpdate
         );
         /* END: Use Case */
@@ -635,6 +638,9 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
+        // Get ContentInfo instance
+        $contentInfo = $contentVersion2->contentInfo;
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -642,7 +648,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->deleteContent( $contentVersion2->contentInfo );
+        $contentService->deleteContent( $contentInfo );
         /* END: Use Case */
     }
 
@@ -663,6 +669,9 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
+        // Get ContentInfo instance
+        $contentInfo = $content->contentInfo;
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -670,7 +679,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->createContentDraft( $content->contentInfo );
+        $contentService->createContentDraft( $contentInfo );
         /* END: Use Case */
     }
 
@@ -691,6 +700,10 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
+        // Get ContentInfo and VersionInfo instances
+        $contentInfo = $content->contentInfo;
+        $versionInfo = $content->getVersionInfo();
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -698,10 +711,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->createContentDraft(
-            $content->contentInfo,
-            $content->getVersionInfo()
-        );
+        $contentService->createContentDraft( $contentInfo, $versionInfo );
         /* END: Use Case */
     }
 
@@ -778,6 +788,9 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $draftVersion2 = $this->createContentDraftVersion2();
 
+        // Get VersionInfo instance
+        $versionInfo = $draftVersion2->getVersionInfo();
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -792,10 +805,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $contentUpdate->initialLanguageCode = 'eng-GB';
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->updateContent(
-            $draftVersion2->getVersionInfo(),
-            $contentUpdate
-        );
+        $contentService->updateContent( $versionInfo, $contentUpdate );
         /* END: Use Case */
     }
 

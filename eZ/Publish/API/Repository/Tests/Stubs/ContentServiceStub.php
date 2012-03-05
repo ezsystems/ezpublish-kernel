@@ -526,7 +526,7 @@ class ContentServiceStub implements ContentService
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
     {
-        if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }

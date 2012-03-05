@@ -361,7 +361,7 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
+     * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
      */
     public function testLoadUserGroupsOfUserThrowsUnauthorizedException()
     {
@@ -436,43 +436,5 @@ class UserServiceAuthorizationTest extends BaseTest
         /* END: Inline */
 
         return $userGroup;
-    }
-
-    /**
-     * Create a user fixture in a variable named <b>$user</b>,
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    private function createUserVersion1()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Inline */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
-
-        $userService = $repository->getUserService();
-
-        // Instantiate a create struct with mandatory properties
-        $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
-            'secret',
-            'eng-US'
-        );
-        $userCreate->enabled = true;
-
-        // Set some fields required by the user ContentType
-        $userCreate->setField( 'first_name', 'Example' );
-        $userCreate->setField( 'last_name', 'User' );
-
-        // Load parent group for the user
-        $group = $userService->loadUserGroup( $editorsGroupId );
-
-        // Create a new user instance.
-        $user = $userService->createUser( $userCreate, array( $group ) );
-        /* END: Inline */
-
-        return $user;
     }
 }

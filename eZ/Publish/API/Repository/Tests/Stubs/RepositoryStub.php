@@ -152,6 +152,7 @@ class RepositoryStub implements Repository
         {
             if ( $policy->module === '*' )
             {
+
                 return true;
             }
             if ( $policy->module !== $module )
@@ -204,6 +205,8 @@ class RepositoryStub implements Repository
             return $hasAccess;
         }
 
+        ++$this->initializing;
+
         $contentInfoValue = null;
         if ( $value instanceof ContentInfo )
         {
@@ -220,6 +223,7 @@ class RepositoryStub implements Repository
 
         if ( null === $contentInfoValue || false === $contentInfoValue->published )
         {
+            --$this->initializing;
             return true;
         }
 
@@ -236,10 +240,13 @@ class RepositoryStub implements Repository
             {
                 if ( 0 === strpos( $location->pathString, $limitation->limitationValues ) )
                 {
+                    --$this->initializing;
                     return true;
                 }
             }
         }
+
+        --$this->initializing;
         return false;
     }
 
