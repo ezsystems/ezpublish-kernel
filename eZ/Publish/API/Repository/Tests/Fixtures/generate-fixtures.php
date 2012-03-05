@@ -603,8 +603,7 @@ function generateRoleFixture( array $fixture )
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub', $policies ),
         $policyNextId,
         generateMapping( $role2policy ),
-        generateMapping( $roleLimitations ),
-        generateMapping( getUser2GroupMapping( $fixture ) )
+        generateMapping( $roleLimitations )
     );
 }
 
