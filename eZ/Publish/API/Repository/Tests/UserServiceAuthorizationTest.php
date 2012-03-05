@@ -109,7 +109,7 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::deleteUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testDeleteUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testDeleteUserGroup
      */
     public function testDeleteUserGroupThrowsUnauthorizedException()
     {
@@ -135,6 +135,7 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testMoveUserGroup
      */
     public function testMoveUserGroupThrowsUnauthorizedException()
     {
@@ -166,6 +167,7 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroup
      */
     public function testUpdateUserGroupThrowsUnauthorizedException()
     {
