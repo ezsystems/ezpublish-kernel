@@ -724,7 +724,7 @@ class RoleService implements RoleServiceInterface
         return new Policy(
             array(
                 'id'          => $policy->id,
-                'roleId'      => $role ? $role->id : $policy->id,
+                'roleId'      => $role ? $role->id : $policy->roleId,
                 'module'      => $policy->module,
                 'function'    => $policy->function,
                 'limitations' => $policyLimitations
