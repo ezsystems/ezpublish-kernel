@@ -2493,7 +2493,6 @@ Copy Content Type
 
 
 :Error Codes:
-    :400: if srcId is missing
     :401: If the user is not authorized to copy this content type  
         
 Get Content Types
@@ -2550,8 +2549,40 @@ Get Content Type
     :401: If the user is not authorized to read this content type  
     :404: If the content type does not exist
 
-Update Content Type
-```````````````````
+
+Create Draft
+````````````
+:Resource: /content/types/<ID>
+:Method: POST 
+:Description: Cretes a draft and updates it with the given data
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeInfo+xml:  if set the new content type draft is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeInfo+json:  if set the new content type draft is returned in json format (see ContentType_)
+    :Content-Type:
+         :application/vnd.ez.api.ContentTypeUpdate+json: the ContentTypeUpdate_  schema encoded in json
+         :application/vnd.ez.api.ContentTypeUpdate+xml: the ContentTypeUpdate_  schema encoded in xml
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /content/types/<ID>/draft
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          ContentType_
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to create the draft
+    :403: - If a content type with the given new identifier already exists.
+          - If there exists already a draft. 
+
+
+
+Update Draft
+````````````
 :Resource: /content/types/<ID>/draft
 :Method: PATCH or POST with header: X-HTTP-Method-Override: PATCH
 :Description: Updates meta data of a draft. This method does not handle field definitions
@@ -2632,7 +2663,7 @@ XML Example
 
 Add Field definition
 ````````````````````
-:Resource: /content/types/<ID>/fielddefinitions
+:Resource: /content/types/<ID>/draft/fielddefinitions
 :Method: POST
 :Description: Creates a new field definition for the given content type
 :Headers:
@@ -2685,7 +2716,7 @@ Get Fielddefinition
 
 Update Fielddefinition
 ``````````````````````
-:Resource: /content/types/<ID>/fielddefinitions/<ID>
+:Resource: /content/types/<ID>/draft/fielddefinitions/<ID>
 :Method: PUT
 :Description: Updates the attributes of a field definitions
 :Headers:
@@ -2713,7 +2744,7 @@ Update Fielddefinition
 
 Delete Fielddefinition
 ``````````````````````
-:Resource: /content/types/<ID>/fielddefinitions/<ID>
+:Resource: /content/types/<ID>/draft/fielddefinitions/<ID>
 :Method: DELETE
 :Description: the given field definition is deleted
 :Response: 

@@ -191,12 +191,13 @@ In the content module there are the root collections objects, locations, trash a
 ----------------------------------------------------- ------------------- ----------------------- ---------------------------- ----------------
 /                                                     -                   list root resources     -                            -            
 /content/objects                                      create new content  list/find content       -                            -            
-/content/objects/<ID>                                 -                   load content            update content meta data     delete content
+/content/objects/views                                -                   list views              create a new view and return -            
+                                                                                                  the results
+/content/objects/view/<ID>                            -                   get view results        replace view                 delete view
+/content/objects/<ID>                                 -                   load content info       update content meta data     delete content
 /content/objects/<ID>/translations                    create translation  list translations       -                            -            
 /content/objects/<ID>/languages                       -                   list languages of cont. -                            -              
 /content/objects/<ID>/languages/<lang_code>           -                   load content in the     -                            delete language
-                                                                          given language                                       from content   
-/content/objects/<ID>/versions                        create a new draft  load all versions       -                            -            
                                                       from an existing    (version infos)
                                                       version 
 /content/objects/<ID>/versions/<versionNo>            -                   get a specific version  update a version/draft       delete version
@@ -1507,10 +1508,6 @@ Update Role
 :Method: PUT
 :Description: Updates a role
 :Request Format: application/json
-:Parameters: :name: the new name of the role
-:Inputschema: 
-:Response: 200 Role_
-:Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the role
 
@@ -1767,6 +1764,24 @@ VersionInfo JSON Schema
             },
             "createdDate": {
                 "type":"string",
+                "format":"date-time"
+            },
+            "lastModifiedDate": {
+                "type":"string",
+                "format":"date-time"
+            },   
+            "names": {
+                "type":"array",
+                "items": {
+                    "type": { "$ref":"#MLValue" }
+                }
+            },
+            "languageCode": {
+                 "description","the main lanugage code for the version",
+                 "type":"string",
+            },
+            "languages": {
+                 "description":"the languages occuring in fields",
                 "format":"date-time"
             },
             "lastModifiedDate": {
@@ -3523,24 +3538,6 @@ PolicyInput JSON Schema
                 "items": {
                     "type": { "$ref"; "#Limitation" }
                 }
-            } 
-        }
-    }
-
-.. _Role:
-
-Role JSON Schema
-----------------
-
-::
-
-    {
-        "name":"Role",
-        "properties: {
-            "id": {
-                "type":"integer"
-            }
-            "name": {
                 "type":"string"
             }
             "groupIds": {
