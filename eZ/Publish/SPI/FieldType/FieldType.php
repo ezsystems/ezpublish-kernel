@@ -43,7 +43,7 @@ interface FieldType
      * Example:
      * <code>
      * array(
-     *     "ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator"
+     *     "eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator"
      * );
      * </code>
      *

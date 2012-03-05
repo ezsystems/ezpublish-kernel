@@ -80,9 +80,9 @@ class NamePatternResolver
     /**
      * Holds data fetched from content fields' Value object.
      * Key is the field identifier.
-     * Value is the string value obtained via {@link \ezp\Content\FieldType\ValueInterface::getTitle()}
+     * Value is the string value obtained via {@link \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()}
      *
-     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
      * @var string[]
      */
     private $fieldTitleArray;
@@ -132,7 +132,7 @@ class NamePatternResolver
      * Fetches the list of available Field identifiers in the token and returns
      * an array of their current title value.
      *
-     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
      * @return string[] Key is the field identifier, value is the title value
      */
     private function getFieldsTitle( $namePattern )

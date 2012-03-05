@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content\Location,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for Location Handler using in memory storage.

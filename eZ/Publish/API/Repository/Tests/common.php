@@ -16,4 +16,17 @@ $repository = new RepositoryStub(
     ( isset( $_ENV['backendVersion'] ) ? (int) $_ENV['backendVersion'] : 5 )
 );
 
+$repository->setCurrentUser(
+    new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
+        array(
+            'id' => 14,
+            'content'  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
+                array(
+                    'contentId' => 14
+                )
+            )
+        )
+    )
+);
+
 return $repository;

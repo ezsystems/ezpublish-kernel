@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
 class BinaryFile implements Converter
 {
-    const FILESIZE_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator';
+    const FILESIZE_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator';
 
     /**
      * Converts data from $value to $storageFieldValue.

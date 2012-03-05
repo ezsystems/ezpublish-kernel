@@ -403,14 +403,17 @@ class Backend
             {
                 if ( $type === "Content\\Field" && $prop === "value" && ! $data["value"] instanceof FieldValue )
                 {
-                    $fieldValueClassName = $this->getFieldTypeNamespace( $obj ) . "\\Value";
+                    $fieldTypeNS = $this->getFieldTypeNamespace( $obj );
+                    $fieldValueClassName =  "$fieldTypeNS\\Value";
                     $fieldTypeValue = new $fieldValueClassName;
                     foreach ( $data["value"] as $fieldValuePropertyName => $fieldValuePropertyValue )
                     {
                         $fieldTypeValue->$fieldValuePropertyName = $fieldValuePropertyValue;
                     }
 
-                    $value = new FieldValue( array( "data" => $fieldTypeValue ) );
+                    $fieldTypeeClassName =  "$fieldTypeNS\\Type";
+                    $fieldType = new $fieldTypeeClassName;
+                    $value = $fieldType->toPersistenceValue( $fieldTypeValue );
                 }
                 else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "fieldTypeConstraints" && !$data["fieldTypeConstraints"] instanceof FieldTypeConstraints )
                 {
@@ -479,23 +482,23 @@ class Backend
      * @var array
      */
     private $tempFieldTypeMapping = array(
-        'ezstring' => 'ezp\Content\FieldType\TextLine',
-        'ezinteger' => 'ezp\Content\FieldType\Integer',
-        'ezauthor' => 'ezp\Content\FieldType\Author',
-        'ezfloat' => 'ezp\Content\FieldType\Float',
-        'eztext' => 'ezp\Content\FieldType\TextBlock',
-        'ezboolean' => 'ezp\Content\FieldType\Checkbox',
-        'ezdatetime' => 'ezp\Content\FieldType\DateAndTime',
-        'ezkeyword' => 'ezp\Content\FieldType\Keyword',
-        'ezurl' => 'ezp\Content\FieldType\Url',
-        'ezcountry' => 'ezp\Content\FieldType\Country',
-        'ezbinaryfile' => 'ezp\Content\FieldType\BinaryFile',
-        'ezmedia' => 'ezp\Content\FieldType\Media',
-        'ezxmltext' => 'ezp\Content\FieldType\XmlText',
-        'ezobjectrelationlist' => 'ezp\Content\FieldType\RelationList',
-        'ezselection' => 'ezp\Content\FieldType\Selection',
-        'ezsrrating' => 'ezp\Content\FieldType\Rating',
-        'ezimage' => 'ezp\Content\FieldType\Image',
-        'ezobjectrelation' => 'ezp\Content\FieldType\Relation',
+        'ezstring' => 'eZ\Publish\Core\Repository\FieldType\TextLine',
+        'ezinteger' => 'eZ\Publish\Core\Repository\FieldType\Integer',
+        'ezauthor' => 'eZ\Publish\Core\Repository\FieldType\Author',
+        'ezfloat' => 'eZ\Publish\Core\Repository\FieldType\Float',
+        'eztext' => 'eZ\Publish\Core\Repository\FieldType\TextBlock',
+        'ezboolean' => 'eZ\Publish\Core\Repository\FieldType\Checkbox',
+        'ezdatetime' => 'eZ\Publish\Core\Repository\FieldType\DateAndTime',
+        'ezkeyword' => 'eZ\Publish\Core\Repository\FieldType\Keyword',
+        'ezurl' => 'eZ\Publish\Core\Repository\FieldType\Url',
+        'ezcountry' => 'eZ\Publish\Core\Repository\FieldType\Country',
+        'ezbinaryfile' => 'eZ\Publish\Core\Repository\FieldType\BinaryFile',
+        'ezmedia' => 'eZ\Publish\Core\Repository\FieldType\Media',
+        'ezxmltext' => 'eZ\Publish\Core\Repository\FieldType\XmlText',
+        'ezobjectrelationlist' => 'eZ\Publish\Core\Repository\FieldType\RelationList',
+        'ezselection' => 'eZ\Publish\Core\Repository\FieldType\Selection',
+        'ezsrrating' => 'eZ\Publish\Core\Repository\FieldType\Rating',
+        'ezimage' => 'eZ\Publish\Core\Repository\FieldType\Image',
+        'ezobjectrelation' => 'eZ\Publish\Core\Repository\FieldType\Relation',
     );
 }

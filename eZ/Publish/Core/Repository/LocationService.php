@@ -130,6 +130,7 @@ class LocationService implements LocationServiceInterface
      * Loads a location object from its $remoteId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If more than one location with same remote ID was found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param string $remoteId
@@ -426,7 +427,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $createStruct = new CreateStruct();
-        $createStruct->priority = $locationCreateStruct->priority === null ?: (int) $locationCreateStruct->priority;
+        $createStruct->priority = $locationCreateStruct->priority !== null ? (int) $locationCreateStruct->priority : null;
 
         // if we declare the new location as hidden, it is automatically invisible
         // otherwise, it remains unhidden, and picks up visibility from parent
@@ -450,8 +451,15 @@ class LocationService implements LocationServiceInterface
         $createStruct->contentId = (int) $contentInfo->contentId;
         $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
 
-        $createStruct->sortField = $locationCreateStruct->sortField === null ? APILocation::SORT_FIELD_NAME : (int) $locationCreateStruct->sortField;
-        $createStruct->sortOrder = $locationCreateStruct->sortOrder === null ? APILocation::SORT_ORDER_ASC : (int) $locationCreateStruct->sortOrder;
+        // @todo: set pathIdentificationString
+        // $createStruct->pathIdentificationString = null;
+
+        $mainLocation = $this->loadMainLocation( $contentInfo );
+        if ( $mainLocation !== null )
+            $createStruct->mainLocationId = $mainLocation->id;
+
+        $createStruct->sortField = $locationCreateStruct->sortField !== null ? (int) $locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
+        $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
         $createStruct->parentId = $loadedParentLocation->id;
 
         $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );

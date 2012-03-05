@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\XmlText\Value as XmlTextValue,
-    ezp\Content\FieldType\FieldSettings,
+use eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -32,7 +32,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     protected $converter;
 
     /**
-     * @var \ezp\Content\FieldType\Author\Author[]
+     * @var \eZ\Publish\Core\Repository\FieldType\Author\Author[]
      */
     private $authors;
 
@@ -112,10 +112,10 @@ EOT;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Author\\Value', $fieldValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value', $fieldValue->data );
 
         $authorsXml = $doc->getElementsByTagName( 'author' );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Author\\AuthorCollection', $fieldValue->data->authors );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection', $fieldValue->data->authors );
         self::assertSame( $authorsXml->length, count( $fieldValue->data->authors ) );
 
         $aAuthors = $fieldValue->data->authors->getArrayCopy();

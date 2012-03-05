@@ -32,7 +32,6 @@ class EzcDbHandler
      * Construct from zeta components database handler
      *
      * @param \ezcDbHandler $ezcDbHandler
-     * @return void
      */
     public function __construct( ezcDbHandlerWrapped $ezcDbHandler )
     {

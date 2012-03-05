@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content,
     ezp\Content as ContentDomainObject,
     ezp\Content\Version,
     ezp\Content\Relation,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for ContentHandler using in memory storage.

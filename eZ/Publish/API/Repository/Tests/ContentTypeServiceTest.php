@@ -484,7 +484,7 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+        $contentTypeService->createContentTypeGroup( $groupCreate );
 
         // ...
 
@@ -996,21 +996,20 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeDraft()
     {
-        $createdDraft = $this->createContentTypeDraft();
-        $draftId = $createdDraft->id;
-
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        // $draftId contains the ID of the draft to load
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        /* BEGIN: Use Case */
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $contentTypeDraftReloaded = $contentTypeService->loadContentTypeDraft(
+            $contentTypeDraft->id
+        );
         /* END: Use Case */
 
         $this->assertEquals(
-            $createdDraft,
-            $contentTypeDraft
+            $contentTypeDraft,
+            $contentTypeDraftReloaded
         );
     }
 
@@ -1034,95 +1033,6 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
-     * Creates a fully functional ContentTypeDraft and returns it.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
-    protected function createContentTypeDraft()
-    {
-        $repository         = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-
-        $groups = array(
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' ),
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
-        );
-
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
-        $typeCreate->mainLanguageCode = 'eng-US';
-        $typeCreate->remoteId         = '384b94a1bd6bc06826410e284dd9684887bf56fc';
-        $typeCreate->urlAliasSchema   = 'url|scheme';
-        $typeCreate->nameSchema       = 'name|scheme';
-        $typeCreate->names = array(
-            'eng-US' => 'Blog post',
-            'de-DE'  => 'Blog-Eintrag',
-        );
-        $typeCreate->descriptions = array(
-            'eng-US' => 'A blog post',
-            'de-DE'  => 'Ein Blog-Eintrag',
-        );
-        $typeCreate->creatorId    = 23;
-        $typeCreate->creationDate = new \DateTime();
-
-        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
-        );
-        $titleFieldCreate->names = array(
-            'eng-US' => 'Title',
-            'de-DE'  => 'Titel',
-        );
-        $titleFieldCreate->descriptions = array(
-            'eng-US' => 'Title of the blog post',
-            'de-DE'  => 'Titel des Blog-Eintrages',
-        );
-        $titleFieldCreate->fieldGroup      = 'blog-content';
-        $titleFieldCreate->position        = 1;
-        $titleFieldCreate->isTranslatable  = true;
-        $titleFieldCreate->isRequired      = true;
-        $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->validators      = array(
-            new StringLengthValidatorStub(),
-        );
-        $titleFieldCreate->fieldSettings = array(
-            'textblockheight' => 10
-        );
-        $titleFieldCreate->isSearchable = true;
-
-        $typeCreate->addFieldDefinition( $titleFieldCreate );
-
-        $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'body', 'text'
-        );
-        $bodyFieldCreate->names = array(
-            'eng-US' => 'Body',
-            'de-DE'  => 'Textkörper',
-        );
-        $bodyFieldCreate->descriptions = array(
-            'eng-US' => 'Body of the blog post',
-            'de-DE'  => 'Textkörper des Blog-Eintrages',
-        );
-        $bodyFieldCreate->fieldGroup      = 'blog-content';
-        $bodyFieldCreate->position        = 2;
-        $bodyFieldCreate->isTranslatable  = true;
-        $bodyFieldCreate->isRequired      = true;
-        $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->validators      = array(
-            new StringLengthValidatorStub(),
-        );
-        $bodyFieldCreate->fieldSettings = array(
-            'textblockheight' => 80
-        );
-        $bodyFieldCreate->isSearchable = true;
-
-        $typeCreate->addFieldDefinition( $bodyFieldCreate );
-
-        return $contentTypeService->createContentType(
-            $typeCreate,
-            $groups
-        );
-    }
-
-    /**
      * Test for the updateContentTypeDraft() method.
      *
      * @return void
@@ -1131,14 +1041,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateContentTypeDraft()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-
-        $repository = $this->getRepository();
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft
-
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
         $typeUpdate->identifier             = 'news-article';
@@ -1224,14 +1131,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionDuplicateIdentifier()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-
-        $repository = $this->getRepository();
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
-
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
         $typeUpdate->identifier = 'folder';
@@ -1251,14 +1155,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionDuplicateRemoteId()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-
-        $repository = $this->getRepository();
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
-
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
         $typeUpdate->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
@@ -1290,14 +1191,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testAddFieldDefinition()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-
-        $repository = $this->getRepository();
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft
-
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'tags', 'string'
@@ -1376,15 +1274,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testAddFieldDefinitionThrowsInvalidArgumentExceptionDuplicateFieldIdentifier()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-
-        $repository = $this->getRepository();
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft
-        // $contentTypeDraft has a field "title"
-
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'title', 'string'
@@ -1404,16 +1298,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testRemoveFieldDefinition()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-        $draftId = $contentTypeDraft->id;
-
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        // $draftId contains the ID of a content type draft
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        /* BEGIN: Use Case */
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
 
@@ -1469,20 +1358,16 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testRemoveFieldDefinitionThrowsInvalidArgumentException()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-        $draftId = $contentTypeDraft->id;
-
-        $repository = $this->getRepository();
-        /* BEGIN: Use Case */
-        // $draftId contains the ID of a content type draft
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        /* BEGIN: Use Case */
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
         $contentTypeService->removeFieldDefinition( $contentTypeDraft, $bodyField );
 
-        $loadedDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $loadedDraft = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
 
         // Throws exception, sine "body" has already been removed
         $contentTypeService->removeFieldDefinition( $loadedDraft, $bodyField );
@@ -1521,15 +1406,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateFieldDefinition()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-        $draftId = $contentTypeDraft->id;
-
-        $repository = $this->getRepository();
-        /* BEGIN: Use Case */
-        // $draftId contains the ID of a content type draft
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        /* BEGIN: Use Case */
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
 
@@ -1561,7 +1442,7 @@ class ContentTypeServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $loadedDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $loadedDraft = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
         $this->assertInstanceOf(
             'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
             ( $loadedField = $loadedDraft->getFieldDefinition( 'blog-body' ) )
@@ -1616,15 +1497,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateFieldDefinitionThrowsInvalidArgumentException()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-        $draftId = $contentTypeDraft->id;
-
-        $repository = $this->getRepository();
-        /* BEGIN: Use Case */
-        // $draftId contains the ID of a content type draft
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        /* BEGIN: Use Case */
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $bodyField  = $contentTypeDraft->getFieldDefinition( 'body' );
         $titleField = $contentTypeDraft->getFieldDefinition( 'title' );
@@ -1650,20 +1527,16 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateFieldDefinitionThrowsInvalidArgumentExceptionForUndefinedField()
     {
-        $contentTypeDraft = $this->createContentTypeDraft();
-        $draftId = $contentTypeDraft->id;
-
-        $repository = $this->getRepository();
-        /* BEGIN: Use Case */
-        // $draftId contains the ID of a content type draft
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        /* BEGIN: Use Case */
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
         $contentTypeService->removeFieldDefinition( $contentTypeDraft, $bodyField );
 
-        $loadedDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $loadedDraft = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
 
         $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
 
@@ -1685,20 +1558,16 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testPublishContentTypeDraft()
     {
-        $repository = $this->getRepository();
-
-        $contentTypeDraft = $this->createContentTypeDraft();
-        $draftId = $contentTypeDraft->id;
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
         /* END: Use Case */
 
-        $publishedType = $contentTypeService->loadContentType( $draftId );
+        $publishedType = $contentTypeService->loadContentType( $contentTypeDraft->id );
 
         $this->assertInstanceOf(
             'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
@@ -1719,15 +1588,11 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testPublishContentTypeDraftThrowsBadStateException()
     {
-        $repository = $this->getRepository();
-
-        $contentTypeDraft = $this->createContentTypeDraft();
-        $draftId = $contentTypeDraft->id;
+        $repository         = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $contentTypeDraft = $this->createContentTypeDraft();
 
         $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
 
@@ -2457,5 +2322,99 @@ class ContentTypeServiceTest extends BaseTest
             $contentTypeService->unassignContentTypeGroup( $folderType, $assignedGroup );
         }
         /* END: Use Case */
+    }
+
+    /**
+     * Creates a fully functional ContentTypeDraft and returns it.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     */
+    protected function createContentTypeDraft()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groups = array(
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' ),
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+        );
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->mainLanguageCode = 'eng-US';
+        $typeCreate->remoteId         = '384b94a1bd6bc06826410e284dd9684887bf56fc';
+        $typeCreate->urlAliasSchema   = 'url|scheme';
+        $typeCreate->nameSchema       = 'name|scheme';
+        $typeCreate->names = array(
+            'eng-US' => 'Blog post',
+            'de-DE'  => 'Blog-Eintrag',
+        );
+        $typeCreate->descriptions = array(
+            'eng-US' => 'A blog post',
+            'de-DE'  => 'Ein Blog-Eintrag',
+        );
+        $typeCreate->creatorId    = 23;
+        $typeCreate->creationDate = new \DateTime();
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+        $titleFieldCreate->names = array(
+            'eng-US' => 'Title',
+            'de-DE'  => 'Titel',
+        );
+        $titleFieldCreate->descriptions = array(
+            'eng-US' => 'Title of the blog post',
+            'de-DE'  => 'Titel des Blog-Eintrages',
+        );
+        $titleFieldCreate->fieldGroup      = 'blog-content';
+        $titleFieldCreate->position        = 1;
+        $titleFieldCreate->isTranslatable  = true;
+        $titleFieldCreate->isRequired      = true;
+        $titleFieldCreate->isInfoCollector = false;
+        $titleFieldCreate->validators      = array(
+            new StringLengthValidatorStub(),
+        );
+        $titleFieldCreate->fieldSettings = array(
+            'textblockheight' => 10
+        );
+        $titleFieldCreate->isSearchable = true;
+
+        $typeCreate->addFieldDefinition( $titleFieldCreate );
+
+        $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'body', 'text'
+        );
+        $bodyFieldCreate->names = array(
+            'eng-US' => 'Body',
+            'de-DE'  => 'Textkörper',
+        );
+        $bodyFieldCreate->descriptions = array(
+            'eng-US' => 'Body of the blog post',
+            'de-DE'  => 'Textkörper des Blog-Eintrages',
+        );
+        $bodyFieldCreate->fieldGroup      = 'blog-content';
+        $bodyFieldCreate->position        = 2;
+        $bodyFieldCreate->isTranslatable  = true;
+        $bodyFieldCreate->isRequired      = true;
+        $bodyFieldCreate->isInfoCollector = false;
+        $bodyFieldCreate->validators      = array(
+            new StringLengthValidatorStub(),
+        );
+        $bodyFieldCreate->fieldSettings = array(
+            'textblockheight' => 80
+        );
+        $bodyFieldCreate->isSearchable = true;
+
+        $typeCreate->addFieldDefinition( $bodyFieldCreate );
+
+        $contentTypeDraft = $contentTypeService->createContentType(
+            $typeCreate,
+            $groups
+        );
+        /* END: Inline */
+
+        return $contentTypeDraft;
     }
 }

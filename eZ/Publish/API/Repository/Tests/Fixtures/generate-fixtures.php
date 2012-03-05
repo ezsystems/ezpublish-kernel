@@ -548,14 +548,29 @@ function generateRoleFixture( array $fixture )
         $nextId = max( $nextId, $data['id'] );
     }
 
-    $content2role = array();
+    $content2role    = array();
+    $roleLimitations = array();
+
     foreach ( getFixtureTable( 'ezuser_role', $fixture ) as $data )
     {
         if ( false === isset( $content2role[$data['contentobject_id']] ) )
         {
             $content2role[$data['contentobject_id']] = array();
         }
-        $content2role[$data['contentobject_id']][] = $data['role_id'];
+        $content2role[$data['contentobject_id']][$data['id']] = $data['role_id'];
+
+        if ( '' === trim( $data['limit_identifier'] ) )
+        {
+            continue;
+        }
+
+        $roleLimitations[$data['id']] = array(
+            'id'          =>  $data['id'],
+            'roleId'      =>  $data['role_id'],
+            'contentId'   =>  $data['contentobject_id'],
+            'identifier'  =>  $data['limit_identifier'],
+            'value'       =>  $data['limit_value']
+        );
     }
 
     $role2policy  = array();
@@ -588,7 +603,7 @@ function generateRoleFixture( array $fixture )
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub', $policies ),
         $policyNextId,
         generateMapping( $role2policy ),
-        generateMapping( getUser2GroupMapping( $fixture ) )
+        generateMapping( $roleLimitations )
     );
 }
 

@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Float\Value as FloatValue,
-    ezp\Content\FieldType\Float\FloatValueValidator,
+use eZ\Publish\Core\Repository\FieldType\Float\Value as FloatValue,
+    eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator,
     PHPUnit_Framework_TestCase;
 
 class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
@@ -23,7 +23,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            "ezp\\Content\\FieldType\\Validator",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Validator",
             new FloatValueValidator
         );
     }
@@ -33,8 +33,8 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \ezp\Content\FieldType\Validator::initializeWithConstraints
-     * @covers \ezp\Content\FieldType\Validator::getValidatorConstraints
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::initializeWithConstraints
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::getValidatorConstraints
      */
     public function testInitializeConstraints()
     {
@@ -54,8 +54,8 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \ezp\Content\FieldType\Validator::initializeWithConstraints
-     * @covers \ezp\Content\FieldType\Validator::__get
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::initializeWithConstraints
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__get
      */
     public function testConstraintsInitializeGet()
     {
@@ -76,8 +76,8 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \ezp\Content\FieldType\Validator::__set
-     * @covers \ezp\Content\FieldType\Validator::__get
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__set
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__get
      */
     public function testConstraintsSetGet()
     {
@@ -97,7 +97,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \ezp\Content\FieldType\Validator::initializeWithConstraints
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::initializeWithConstraints
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testInitializeBadConstraint()
@@ -116,7 +116,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \ezp\Content\FieldType\Validator::__set
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__set
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testSetBadConstraint()
@@ -130,7 +130,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \ezp\Content\FieldType\Validator::__get
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__get
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testGetBadConstraint()
@@ -145,8 +145,8 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateOK
-     * @covers \ezp\Content\FieldType\Float\FloatValueValidator::validate
-     * @covers \ezp\Content\FieldType\Validator::getMessage
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
     {
@@ -174,7 +174,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateKO
-     * @covers \ezp\Content\FieldType\Float\FloatValueValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator::validate
      */
     public function testValidateWrongValues( $value, $message )
     {

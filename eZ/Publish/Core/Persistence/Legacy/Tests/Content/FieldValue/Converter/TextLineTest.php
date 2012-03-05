@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Content\FieldType\FieldSettings,
+use eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -66,7 +66,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine\\Value', $fieldValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value', $fieldValue->data );
         self::assertSame( $storageFieldValue->dataText, $fieldValue->data->text );
         self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey['sort_key_string'] );
     }
@@ -162,7 +162,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef->fieldTypeConstraints->validators
         );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine\\Value', $fieldDef->defaultValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value', $fieldDef->defaultValue->data );
         self::assertSame( $defaultText, $fieldDef->defaultValue->data->text );
     }
 }

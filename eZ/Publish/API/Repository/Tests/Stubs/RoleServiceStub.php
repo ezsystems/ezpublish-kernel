@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\RoleService;
+use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use \eZ\Publish\API\Repository\Values\User\Policy;
 use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
@@ -23,11 +24,14 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyUpdateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserRoleAssignmentStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupRoleAssignmentStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\RoleService}
@@ -65,14 +69,24 @@ class RoleServiceStub implements RoleService
     private $policyNextId = 0;
 
     /**
+     * @var integer
+     */
+    private $limitationId = 10000;
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
 
     /**
-     * @var integer[]
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\UserServiceStub
      */
-    private $content2role;
+    private $userService;
+
+    /**
+     * @var integer[integer[]]
+     */
+    private $content2roles;
 
     /**
      * @var integer[]
@@ -80,16 +94,18 @@ class RoleServiceStub implements RoleService
     private $role2policy;
 
     /**
-     * @var integer[]
+     * @var array[]
      */
-    private $user2group;
+    private $roleLimitations;
 
     /**
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\UserServiceStub $userService
      */
-    public function __construct( RepositoryStub $repository )
+    public function __construct( RepositoryStub $repository, UserServiceStub $userService )
     {
-        $this->repository = $repository;
+        $this->repository  = $repository;
+        $this->userService = $userService;
 
         $this->initFromFixture();
     }
@@ -106,6 +122,10 @@ class RoleServiceStub implements RoleService
      */
     public function createRole( RoleCreateStruct $roleCreateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( isset( $this->nameToRoleId[$roleCreateStruct->identifier] ) )
         {
             throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
@@ -143,6 +163,11 @@ class RoleServiceStub implements RoleService
      */
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'role', '*', $role ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $roleName = $roleUpdateStruct->identifier ?: $role->identifier;
 
         if ( isset( $this->nameToRoleId[$roleName] ) && $this->nameToRoleId[$roleName] !== $role->id )
@@ -179,15 +204,22 @@ class RoleServiceStub implements RoleService
      */
     public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct )
     {
-        $policies   = $role->getPolicies();
-        $policies[] = new PolicyStub(
+        if ( false === $this->repository->canUser( 'role', '*', $role ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $this->policies[++$this->policyNextId] = new PolicyStub(
             array(
-                'id'        =>  ++$this->policyNextId,
+                'id'        =>  $this->policyNextId,
                 'roleId'    =>  $role->id,
                 'module'    =>  $policyCreateStruct->module,
                 'function'  =>  $policyCreateStruct->function
             )
         );
+
+        $policies   = $role->getPolicies();
+        $policies[] = $this->policies[$this->policyNextId];
 
         $this->roles[$role->id] = new RoleStub(
             array(
@@ -198,6 +230,8 @@ class RoleServiceStub implements RoleService
             ),
             $policies
         );
+
+        $this->role2policy[$role->id][$this->policyNextId] = $this->policyNextId;
 
         return $this->roles[$role->id];
     }
@@ -214,7 +248,36 @@ class RoleServiceStub implements RoleService
      */
     public function removePolicy( Role $role, Policy $policy )
     {
-        // TODO: Implement removePolicy() method.
+        if ( false === $this->repository->canUser( 'role', '*', $role, $policy ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $policies = array();
+        foreach ( $role->getPolicies() as $rolePolicy )
+        {
+            if ( $rolePolicy->id !== $policy->id )
+            {
+                $policies[] = $rolePolicy;
+            }
+        }
+
+        unset(
+            $this->policies[$policy->id],
+            $this->role2policy[$role->id][$policy->id]
+        );
+
+        $this->roles[$role->id] = new RoleStub(
+            array(
+                'id'            =>  $role->id,
+                'identifier'    =>  $role->identifier,
+                'names'         =>  $role->getNames(),
+                'descriptions'  =>  $role->getDescriptions()
+            ),
+            $policies
+        );
+
+        return $this->roles[$role->id];
     }
 
     /**
@@ -230,6 +293,11 @@ class RoleServiceStub implements RoleService
      */
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'role', '*', $policy ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $newPolicy = new PolicyStub(
             array(
                 'id'           =>  $policy->id,
@@ -239,6 +307,8 @@ class RoleServiceStub implements RoleService
                 'limitations'  =>  $policyUpdateStruct->getLimitations()
             )
         );
+
+        $this->policies[$newPolicy->id] = $newPolicy;
 
         $policies = $this->roles[$policy->roleId]->getPolicies();
         foreach ( $policies as $i => $rolePolicy )
@@ -277,11 +347,15 @@ class RoleServiceStub implements RoleService
      */
     public function loadRole( $id )
     {
-        if ( isset( $this->roles[$id] ) )
+        if ( false === isset( $this->roles[$id] ) )
         {
-            return $this->roles[$id];
+            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        if ( false === $this->repository->canUser( 'role', '*', $this->roles[$id] ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        return $this->roles[$id];
     }
 
     /**
@@ -296,11 +370,15 @@ class RoleServiceStub implements RoleService
      */
     public function loadRoleByIdentifier( $name )
     {
-        if ( isset( $this->nameToRoleId[$name] ) )
+        if ( false === isset( $this->nameToRoleId[$name] ) )
         {
-            return $this->roles[$this->nameToRoleId[$name]];
+            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        if ( false === $this->repository->canUser( 'role', '*', $this->roles[$this->nameToRoleId[$name]] ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        return $this->roles[$this->nameToRoleId[$name]];
     }
 
     /**
@@ -312,6 +390,10 @@ class RoleServiceStub implements RoleService
      */
     public function loadRoles()
     {
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         return array_values( $this->roles );
     }
 
@@ -324,7 +406,16 @@ class RoleServiceStub implements RoleService
      */
     public function deleteRole( Role $role )
     {
-        unset( $this->roles[$role->id], $this->nameToRoleId[$role->identifier] );
+        if ( false === $this->repository->canUser( 'role', '*', $role ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        unset(
+            $this->roles[$role->id],
+            $this->role2policy[$role->id],
+            $this->nameToRoleId[$role->identifier]
+        );
     }
 
     /**
@@ -339,24 +430,31 @@ class RoleServiceStub implements RoleService
     public function loadPoliciesByUserId( $userId )
     {
         $contentIds = array( $userId );
-        if ( isset( $this->user2group[$userId] ) )
+        foreach ( $this->userService->__loadUserGroupsByUserId( $userId ) as $group )
         {
-            foreach ( $this->user2group[$userId] as $groupId )
-            {
-                $contentIds[] = $groupId;
-            }
+            $contentIds[] = $group->id;
         }
 
+        $limits  = array();
         $roleIds = array();
         foreach ( $contentIds as $contentId )
         {
-            if ( false === isset( $this->content2role[$contentId] ) )
+            if ( false === isset( $this->content2roles[$contentId] ) )
             {
                 continue;
             }
-            foreach ( $this->content2role[$contentId] as $roleId )
+            foreach ( $this->content2roles[$contentId] as $limitationId => $roleId)
             {
                 $roleIds[] = $roleId;
+
+                if ( $limitation = $this->getOptionalRoleLimitation( $limitationId ) )
+                {
+                    if ( false === isset( $limits[$roleId] ) )
+                    {
+                        $limits[$roleId] = array();
+                    }
+                    $limits[$roleId][] = $limitation;
+                }
             }
         }
 
@@ -375,7 +473,26 @@ class RoleServiceStub implements RoleService
 
             foreach ( $this->role2policy[$roleId] as $policyId )
             {
-                $policies[] = $this->policies[$policyId];
+                $policy = $this->policies[$policyId];
+
+                $limitations = $policy->getLimitations();
+                if ( isset( $limits[$policy->roleId] ) )
+                {
+                    foreach ( $limits[$policy->roleId] as $limit )
+                    {
+                        $limitations[] = $limit;
+                    }
+                }
+
+                $this->policies[$policyId] = $policies[] = new PolicyStub(
+                    array(
+                        'id'           =>  $policy->id,
+                        'roleId'       =>  $policy->roleId,
+                        'module'       =>  $policy->module,
+                        'function'     =>  $policy->function,
+                        'limitations'  =>  $limitations
+                    )
+                );
             }
         }
         return $policies;
@@ -392,7 +509,11 @@ class RoleServiceStub implements RoleService
      */
     public function assignRoleToUserGroup( Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
-        // TODO: Implement assignRoleToUserGroup() method.
+        if ( false === $this->repository->canUser( 'role', '*', $role, $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        $this->assignRoleToContent( $role, $userGroup, $roleLimitation );
     }
 
     /**
@@ -406,7 +527,11 @@ class RoleServiceStub implements RoleService
      */
     public function unassignRoleFromUserGroup( Role $role, UserGroup $userGroup )
     {
-        // TODO: Implement unassignRoleFromUserGroup() method.
+        if ( false === $this->repository->canUser( 'role', '*', $role, $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        $this->unassignRoleFromContent( $role, $userGroup );
     }
 
     /**
@@ -422,7 +547,11 @@ class RoleServiceStub implements RoleService
      */
     public function assignRoleToUser( Role $role, User $user, RoleLimitation $roleLimitation = null )
     {
-        // TODO: Implement assignRoleToUser() method.
+        if ( false === $this->repository->canUser( 'role', '*', $role, $user ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        $this->assignRoleToContent( $role, $user, $roleLimitation );
     }
 
     /**
@@ -436,7 +565,11 @@ class RoleServiceStub implements RoleService
      */
     public function unassignRoleFromUser( Role $role, User $user )
     {
-        // TODO: Implement unassignRoleFromUser() method.
+        if ( false === $this->repository->canUser( 'role', '*', $role, $user ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        $this->unassignRoleFromContent( $role, $user );
     }
 
     /**
@@ -446,11 +579,34 @@ class RoleServiceStub implements RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @return array an array of {@link RoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link RoleAssignment}
      */
     public function getRoleAssignments( Role $role )
     {
-        // TODO: Implement getRoleAssignments() method.
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $roleAssignments = array();
+        foreach ( $this->content2roles as $contentId => $roleIds )
+        {
+            foreach ( $roleIds as $limitationId => $roleId )
+            {
+                if ( $roleId !== $role->id )
+                {
+                    continue;
+                }
+
+                $roleAssignments[] = $this->getRoleAssignment(
+                    $role,
+                    $contentId,
+                    $limitationId
+                );
+            }
+        }
+
+        return $roleAssignments;
     }
 
     /**
@@ -460,11 +616,15 @@ class RoleServiceStub implements RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return array an array of {@link UserRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[] an array of {@link UserRoleAssignment}
      */
     public function getRoleAssignmentsForUser( User $user )
     {
-        // TODO: Implement getRoleAssignmentsForUser() method.
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        return $this->getRoleAssignmentsForContent( $user );
     }
 
     /**
@@ -474,11 +634,15 @@ class RoleServiceStub implements RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[] an array of {@link UserGroupRoleAssignment}
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
-        // TODO: Implement getRoleAssignmentsForUserGroup() method.
+        if ( false === $this->repository->hasAccess( 'role', '*' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        return $this->getRoleAssignmentsForContent( $userGroup );
     }
 
     /**
@@ -527,6 +691,164 @@ class RoleServiceStub implements RoleService
     }
 
     /**
+     * returns the roles assigned to the given user group
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link UserGroupRoleAssignment}
+     */
+    private function getRoleAssignmentsForContent( Content $content )
+    {
+        if ( false === isset( $this->content2roles[$content->contentId] ) )
+        {
+            return array();
+        }
+
+        $roleAssignments = array();
+        foreach ( $this->content2roles[$content->contentId] as $limitationId => $roleId )
+        {
+            $roleAssignments[] = $this->getRoleAssignment(
+                $this->loadRole( $roleId ),
+                $content->contentId,
+                $limitationId
+            );
+        }
+
+        return $roleAssignments;
+    }
+
+    /**
+     * Assigns a role to the given content object.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation
+     *
+     * return void
+     */
+    private function assignRoleToContent(Role $role, Content $content, RoleLimitation $roleLimitation = null )
+    {
+        if ( false === isset( $this->content2roles[$content->contentId] ) )
+        {
+            $this->content2roles[$content->contentId] = array();
+        }
+        $this->content2roles[$content->contentId][++$this->limitationId] = $role->id;
+
+        if ( $roleLimitation )
+        {
+            $this->roleLimitations[$this->limitationId] = array(
+                'identifier'  =>  $roleLimitation->getIdentifier(),
+                'value'       =>  $roleLimitation->limitationValues
+            );
+        }
+    }
+
+    /**
+     * removes a role from the given content object.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     */
+    private function unassignRoleFromContent( Role $role, Content $content )
+    {
+        if ( false === isset( $this->content2roles[$content->contentId] )
+            || false === in_array( $role->id, $this->content2roles[$content->contentId] ) )
+        {
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $index = array_search( $role->id, $this->content2roles[$content->contentId] );
+        unset(
+            $this->content2roles[$content->contentId][$index],
+            $this->roleLimitations[$index]
+        );
+    }
+
+    /**
+     * Returns a role assignment instance.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param integer $contentId
+     * @param integer $limitationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
+     */
+    private function getRoleAssignment( Role $role, $contentId, $limitationId )
+    {
+        $contentService = $this->repository->getContentService();
+        $userService    = $this->repository->getUserService();
+
+        $contentType = $contentService->loadContent( $contentId )->contentType;
+        if ( 'user_group' === $contentType->identifier )
+        {
+            return new UserGroupRoleAssignmentStub(
+                array(
+                    'role'        =>  $role,
+                    'userGroup'   =>  $userService->loadUserGroup( $contentId ),
+                    'limitation'  =>  $this->getOptionalRoleLimitation( $limitationId ),
+                )
+            );
+        }
+        else if ( 'user' === $contentType->identifier )
+        {
+            return new UserRoleAssignmentStub(
+                array(
+                    'role'        =>  $role,
+                    'user'        =>  $userService->loadUser( $contentId ),
+                    'limitation'  =>  $this->getOptionalRoleLimitation( $limitationId ),
+                )
+            );
+        }
+        throw new \ErrorException(
+            "Implementation error, unknown contentType '{$contentType->identifier}'."
+        );
+    }
+
+    /**
+     * Returns the associated limitation or <b>NULL</b>.
+     *
+     * @param string $limitationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
+     */
+    private function getOptionalRoleLimitation( $limitationId )
+    {
+        if ( false === isset( $this->roleLimitations[$limitationId] ) )
+        {
+            return null;
+        }
+
+        switch ( $this->roleLimitations[$limitationId]['identifier'] )
+        {
+            case 'Subtree':
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation(
+                    array(
+                        'limitationValues' => $this->roleLimitations[$limitationId]['value']
+                    )
+                );
+
+            case 'Section':
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation(
+                    array(
+                        'limitationValues' => $this->roleLimitations[$limitationId]['value']
+                    )
+                );
+        }
+
+        throw new \ErrorException(
+            "Implementation error, unknown limitation identifier '" .
+            $this->roleLimitations[$limitationId]['identifier'] . "'."
+        );
+    }
+
+    /**
      * Helper method that initializes some default data from an existing legacy
      * test fixture.
      *
@@ -538,11 +860,11 @@ class RoleServiceStub implements RoleService
             $this->roles,
             $this->nameToRoleId,
             $this->nextRoleId,
-            $this->content2role,
+            $this->content2roles,
             $this->policies,
             $this->policyNextId,
             $this->role2policy,
-            $this->user2group
+            $this->roleLimitations
         ) = $this->repository->loadFixture( 'Role' );
     }
 }

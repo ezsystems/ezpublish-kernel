@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Selection\Type as Selection,
-    ezp\Content\FieldType\Selection\Value as SelectionValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Selection\Type as Selection,
+    eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -22,12 +22,12 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testBuildFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Selection\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Type",
             Factory::build( "ezselection" ),
             "Selection object not returned for 'ezstring', incorrect mapping? "
         );
@@ -36,7 +36,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testSelectionSupportedValidators()
     {
@@ -50,16 +50,16 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new Selection();
         $invalidValue = new SelectionValue;
         $invalidValue->selection = "This should be an array instead!";
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, $invalidValue );
     }
@@ -67,13 +67,13 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
      */
-    public function testCanParseValueValidStringFormat()
+    public function testAcceptValueValidStringFormat()
     {
         $ft = new Selection();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new SelectionValue( "Choice1" );
@@ -83,13 +83,13 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
      */
-    public function testCanParseValueValidArrayFormat()
+    public function testAcceptValueValidArrayFormat()
     {
         $ft = new Selection();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new SelectionValue( array( "Choice1", "Choice2" ) );
@@ -99,24 +99,22 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $string = "Choice1";
         $ft = new Selection();
-        $ft->setValue( $fv = new SelectionValue( (array)$string ) );
+        $fieldValue = $ft->toPersistenceValue( new SelectionValue( (array)$string ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
+        self::assertSame( array( $string ), $fieldValue->data );
         self::assertSame( array( "sort_key_string" => $string ), $fieldValue->sortKey );
     }
 
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -128,7 +126,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -139,20 +137,20 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $string = "Choice2";
         $value = SelectionValue::fromString( $string );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Selection\\Value", $value );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $value );
         self::assertSame( (array)$string, $value->selection );
     }
 
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Content\FieldType\Selection\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::__toString
      */
     public function testFieldValueToString()
     {

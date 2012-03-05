@@ -32,16 +32,16 @@ $contentCreateStruct->fields['summary'] = "<p>this is a summary</p>";
 // set authors field of the article
 $contentCreateStruct->setField(
     'author',
-    new \ezp\Content\FieldType\Author\Value(
+    new \eZ\Publish\Core\Repository\FieldType\Author\Value(
         array(
-            new \ezp\Content\FieldType\Author\Author( 'John Doe', 'john.doe@example.net' ),
-            new \ezp\Content\FieldType\Author\Author( 'Bud Spencer', 'bud.spencer@example.net' ),
+            new \eZ\Publish\Core\Repository\FieldType\Author\Author( 'John Doe', 'john.doe@example.net' ),
+            new \eZ\Publish\Core\Repository\FieldType\Author\Author( 'Bud Spencer', 'bud.spencer@example.net' ),
         )
     )
 );
 
 // set image for the article
-$contentCreateStruct->setField( 'image', new \ezp\Content\FieldType\Image\Value( "/tmp/myimage.jpg","my alternative text" ) );
+$contentCreateStruct->setField( 'image', new \eZ\Publish\Core\Repository\FieldType\Image\Value( "/tmp/myimage.jpg","my alternative text" ) );
 
 // set a remote id for the content
 $contentCreateStruct->remoteId = "12345";

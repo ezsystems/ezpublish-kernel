@@ -315,11 +315,11 @@ class Repository
      *
      * @internal
      * @access private
-     * @return \ezp\Content\FieldType\Service
+     * @return \eZ\Publish\Core\Repository\FieldType\Service
      */
     public function getInternalFieldTypeService()
     {
-        return $this->service( 'ezp\\Content\\FieldType\\Service' );
+        return $this->service( 'eZ\\Publish\\Core\\Repository\\FieldType\\Service' );
     }
 
     /**

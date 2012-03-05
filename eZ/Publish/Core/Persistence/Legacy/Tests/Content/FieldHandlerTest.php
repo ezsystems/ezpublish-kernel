@@ -228,7 +228,7 @@ class FieldHandlerTest extends TestCase
         $firstField->type = 'some-type';
         $firstField->fieldDefinitionId = 23;
         $firstField->value = new FieldValue;
-        $firstField->value->data = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
+        $firstField->value->data = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
 
         $secondField = clone $firstField;
 

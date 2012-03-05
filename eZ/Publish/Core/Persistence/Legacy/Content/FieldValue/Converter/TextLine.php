@@ -13,12 +13,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Content\FieldType\FieldSettings;
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings;
 
 class TextLine implements Converter
 {
-    const STRING_LENGTH_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator';
+    const STRING_LENGTH_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator';
 
     /**
      * Converts data from $value to $storageFieldValue

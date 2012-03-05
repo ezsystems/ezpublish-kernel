@@ -967,7 +967,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isSearchable    = true;
         $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \ezp\Content\FieldType\TextLine\Value( 'New text line' )
+                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
             )
         );
         //$titleFieldCreate->validators
@@ -994,7 +994,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable    = true;
         $bodyFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \ezp\Content\FieldType\TextBlock\Value( '' )
+                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
             )
         );
         //$bodyFieldCreate->validators
@@ -1089,7 +1089,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isSearchable    = true;
         $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \ezp\Content\FieldType\TextLine\Value( 'New text line' )
+                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
             )
         );
         //$titleFieldCreate->validators
@@ -1116,7 +1116,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable    = true;
         $bodyFieldCreate->defaultValue   = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \ezp\Content\FieldType\TextBlock\Value( '' )
+                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
             )
         );
         //$bodyFieldCreate->validators
@@ -1927,7 +1927,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isSearchable    = true;
         $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \ezp\Content\FieldType\TextLine\Value( 'New text line' )
+                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
             )
         );
         //$titleFieldCreate->validators
@@ -2606,7 +2606,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \ezp\Content\FieldType\TextLine\Value( 'New text line' )
+                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
             )
         );
         //$fieldDefCreate->validators
@@ -2849,7 +2849,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                 "data" => new \ezp\Content\FieldType\TextBlock\Value( '' )
+                 "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
             )
         );
         //$bodyUpdateStruct->validators

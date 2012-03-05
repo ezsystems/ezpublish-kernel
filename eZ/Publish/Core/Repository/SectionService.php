@@ -69,10 +69,10 @@ class SectionService implements SectionServiceInterface
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
-        if ( !is_string( $sectionCreateStruct->name ) )
+        if ( !is_string( $sectionCreateStruct->name ) || empty( $sectionCreateStruct->name ) )
             throw new InvalidArgumentValue( "name", $sectionCreateStruct->name, "SectionCreateStruct" );
 
-        if ( !is_string( $sectionCreateStruct->identifier ) )
+        if ( !is_string( $sectionCreateStruct->identifier ) || empty( $sectionCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $sectionCreateStruct->identifier, "SectionCreateStruct" );
 
         try
@@ -186,7 +186,7 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        if ( !is_string( $sectionIdentifier ) )
+        if ( !is_string( $sectionIdentifier ) || empty( $sectionIdentifier ) )
             throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
 
         $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );

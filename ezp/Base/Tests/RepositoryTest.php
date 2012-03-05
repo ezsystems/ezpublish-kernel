@@ -557,7 +557,7 @@ class RepositoryTest extends BaseServiceTest
     public function testInternalFieldTypeService()
     {
         $this->assertInstanceOf(
-            '\\ezp\\Content\\FieldType\\Service',
+            '\\eZ\\Publish\\Core\\Repository\\FieldType\\Service',
             $this->repository->getInternalFieldTypeService()
         );
     }

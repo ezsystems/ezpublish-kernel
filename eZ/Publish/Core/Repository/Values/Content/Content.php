@@ -9,10 +9,10 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
  *
  * this class represents a content object in a specific version
  *
- * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
- * @property-read ContentType $contentType convenience getter for $contentInfo->contentType
- * @property-read int $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
- * @property-read VersionInfo $versionInfo calls getVersionInfo()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $contentInfo->contentType
+ * @property-read mixed $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
+ * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields
  * @property-read array $relations calls getRelations()
  *
@@ -35,7 +35,12 @@ class Content extends APIContent
     protected $contentTypeId;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[]
+     * @var integer
+     */
+    protected $versionNo;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
      */
     protected $fields;
 
@@ -51,7 +56,10 @@ class Content extends APIContent
      */
     public function getVersionInfo()
     {
-        return $this->repository->getContentService()->loadVersionInfo( $this->getContentInfo() );
+        return $this->repository->getContentService()->loadVersionInfoById(
+            $this->contentId,
+            $this->versionNo
+        );
     }
 
     /**
@@ -68,7 +76,30 @@ class Content extends APIContent
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        // TODO: Implement getFieldValue() method.
+        $contentType  = $this->getContentType();
+        $translatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
+
+        if ( null === $languageCode )
+        {
+            $languageCode = $this->getContentInfo()->mainLanguageCode;
+        }
+
+        foreach ( $this->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier !== $fieldDefIdentifier )
+            {
+                continue;
+            }
+
+            if ( $translatable && $field->languageCode !== $languageCode )
+            {
+                continue;
+            }
+
+            return $field->value;
+        }
+
+        return null;
     }
 
     /**
@@ -84,7 +115,7 @@ class Content extends APIContent
     /**
      * This method returns the complete fields collection
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
      */
     public function getFields()
     {
@@ -98,11 +129,30 @@ class Content extends APIContent
      *
      * @param string $languageCode
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field[] An array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} with field identifier as keys
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
-        // TODO: Implement getFieldsByLanguage() method.
+        $fields = array();
+        $contentType  = $this->getContentType();
+
+        if ( null === $languageCode )
+        {
+            $languageCode = $this->getContentInfo()->mainLanguageCode;
+        }
+
+        foreach ( $this->getFields() as $field )
+        {
+            if ( $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable
+              && $field->languageCode !== $languageCode )
+            {
+                continue;
+            }
+
+            $fields[$field->fieldDefIdentifier] = $field;
+        }
+
+        return $fields;
     }
 
     /**

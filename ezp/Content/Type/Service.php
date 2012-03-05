@@ -24,7 +24,7 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Type\Group\Concrete as ConcreteGroup,
     ezp\Content\Type\Group\Proxy as ProxyGroup,
     ezp\Content\Type\FieldDefinition,
-    ezp\Content\FieldType\Value as FieldTypeValue,
+    eZ\Publish\Core\Repository\FieldType\Value as FieldTypeValue,
     eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
     eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
@@ -162,7 +162,7 @@ class Service extends BaseService
                 throw new InvalidArgumentValue( '$field->identifier', "{$fieldDefinition->identifier} (already exists)" );
 
             $fieldDefStruct = $fieldDefinition->getState( 'properties' );
-            $fieldDefStruct->defaultValue = $fieldDefinition->type->toFieldValue();
+            $fieldDefStruct->defaultValue = $fieldDefinition->type->getDefaultDefaultValue();
             $struct->fieldDefinitions[] = $fieldDefStruct;
             $identifiers[] = $fieldDefStruct->identifier;
         }
@@ -449,7 +449,7 @@ class Service extends BaseService
         }
 
         $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->toFieldValue();
+        $fieldDefStruct->defaultValue = $field->type->getDefaultDefaultValue();
         $fieldDefStruct = $this->handler->contentTypeHandler()->addFieldDefinition(
             $type->id,
             $type->status,
@@ -522,7 +522,7 @@ class Service extends BaseService
         }
 
         $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->toFieldValue();
+        $fieldDefStruct->defaultValue = $field->type->getDefaultDefaultValue();
         $this->handler->contentTypeHandler()->updateFieldDefinition(
             $type->id,
             $type->status,

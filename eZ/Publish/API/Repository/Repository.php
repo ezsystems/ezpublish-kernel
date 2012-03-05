@@ -4,18 +4,15 @@
  */
 namespace eZ\Publish\API\Repository;
 
-
 use eZ\Publish\API\Repository\Values\ValueObject;
-
 use eZ\Publish\API\Repository\Values\User\User;
 
 /**
- * Repository class
+ * Repository interface
  * @package eZ\Publish\API\Repository
  */
 interface Repository
 {
-
     /**
      * Get current user
      *
@@ -49,7 +46,7 @@ interface Repository
      * @param \eZ\Publish\API\Repository\Values\ValueObject $value
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target );
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null );
 
     /**
      * Get Content Service

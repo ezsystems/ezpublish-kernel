@@ -520,12 +520,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        $anonymousUserId = 10;
 
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonUserId );
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
 
         // Now load the current content version for the info instance
         $content = $contentService->loadContentByContentInfo( $contentInfo );
@@ -549,12 +549,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        $anonymousUserId = 10;
 
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonUserId );
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
 
         // Load the current VersionInfo
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -581,12 +581,12 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        $anonymousUserId = 10;
 
         $contentService = $repository->getContentService();
 
         // Load the Content for "Anonymous User", any language and current version
-        $content = $contentService->loadContent( $anonUserId );
+        $content = $contentService->loadContent( $anonymousUserId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -627,10 +627,13 @@ class ContentServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
+        // Remote id of the "Anonymous" user in a eZ Publish demo installation
+        $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
+
         $contentService = $repository->getContentService();
 
         // Load the Content for "Anonymous User"
-        $content = $contentService->loadContentByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
+        $content = $contentService->loadContentByRemoteId( $anonymousRemoteId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1358,7 +1361,7 @@ class ContentServiceTest extends BaseTest
         $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-US';
         $metadataUpdate->alwaysAvailable  = false;
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct',
@@ -1397,7 +1400,7 @@ class ContentServiceTest extends BaseTest
             $content->contentInfo,
             $metadataUpdate
         );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\Content',
@@ -1490,7 +1493,7 @@ class ContentServiceTest extends BaseTest
             $content->contentInfo,
             $metadataUpdate
         );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
     }
 
     /**
@@ -1516,7 +1519,7 @@ class ContentServiceTest extends BaseTest
 
         // This will delete the content, all versions and the associated locations
         $contentService->deleteContent( $contentVersion2->contentInfo );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         foreach ( $locations as $location )
         {
@@ -1539,7 +1542,7 @@ class ContentServiceTest extends BaseTest
         $contentService = $repository->getContentService();
 
         $contentDrafts = $contentService->loadContentDrafts();
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertSame( array(), $contentDrafts );
     }
@@ -1575,7 +1578,7 @@ class ContentServiceTest extends BaseTest
 
         // Now $contentDrafts should contain two drafted versions
         $draftedVersions = $contentService->loadContentDrafts();
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $actual = array(
             $draftedVersions[0]->status,
@@ -3036,7 +3039,7 @@ class ContentServiceTest extends BaseTest
             $draft->getVersionInfo(),
             $contentUpdate
         );
-        /* BEGIN: Inline */
+        /* END: Inline */
 
         return $draft;
     }
@@ -3077,13 +3080,13 @@ class ContentServiceTest extends BaseTest
         $contentVersion2 = $contentService->publishVersion(
             $draftVersion2->getVersionInfo()
         );
-        /* BEGIN: Inline */
+        /* END: Inline */
 
         return $contentVersion2;
     }
 
     /**
-     * Asserts that the given fields are equal to the default fieldxs fixture.
+     * Asserts that the given fields are equal to the default fields fixture.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
      * @return void

@@ -1,11 +1,13 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\IO;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This struct describes a file content type, as described in RFC 2045, RFC 2046,
  * RFC 2047, RFC 4288, RFC 4289 and RFC 2049.
  */
-class ContentType
+class ContentType  extends ValueObject
 {
     /**
      * The type (audio, video, text, image)

@@ -206,7 +206,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target
      * @return array|bool
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target )
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
     {
         $className = $value;
         $limitationArray = $this->hasAccess( $module, $function );

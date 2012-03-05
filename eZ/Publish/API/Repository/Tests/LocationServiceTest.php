@@ -63,7 +63,8 @@ class LocationServiceTest extends BaseTest
             array(
                 'priority'         => 0,
                 'hidden'           => false,
-                'remoteId'         => null,
+                // remoteId should be initialized with a default value
+                //'remoteId'         => null,
                 'sortField'        => Location::SORT_FIELD_NAME,
                 'sortOrder'        => Location::SORT_ORDER_ASC,
                 'parentLocationId' => 1,
