@@ -78,6 +78,11 @@ class RoleServiceStub implements RoleService
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\UserServiceStub
+     */
+    private $userService;
+
+    /**
      * @var integer[integer[]]
      */
     private $content2roles;
@@ -93,16 +98,13 @@ class RoleServiceStub implements RoleService
     private $roleLimitations;
 
     /**
-     * @var integer[]
-     */
-    private $user2group;
-
-    /**
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\UserServiceStub $userService
      */
-    public function __construct( RepositoryStub $repository )
+    public function __construct( RepositoryStub $repository, UserServiceStub $userService )
     {
-        $this->repository = $repository;
+        $this->repository  = $repository;
+        $this->userService = $userService;
 
         $this->initFromFixture();
     }
@@ -382,13 +384,9 @@ class RoleServiceStub implements RoleService
     public function loadPoliciesByUserId( $userId )
     {
         $contentIds = array( $userId );
-        if ( isset( $this->user2group[$userId] ) )
+        foreach ( $this->userService->__loadUserGroupsByUserId( $userId ) as $group )
         {
-            // We ignore parent groups in the stub implementation.
-            foreach ( $this->user2group[$userId] as $groupId )
-            {
-                $contentIds[] = $groupId;
-            }
+            $contentIds[] = $group->id;
         }
 
         $limits  = array();
@@ -791,8 +789,7 @@ class RoleServiceStub implements RoleService
             $this->policies,
             $this->policyNextId,
             $this->role2policy,
-            $this->roleLimitations,
-            $this->user2group
+            $this->roleLimitations
         ) = $this->repository->loadFixture( 'Role' );
     }
 }

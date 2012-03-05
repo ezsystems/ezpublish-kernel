@@ -71,6 +71,11 @@ class RepositoryStub implements Repository
     private $contentTypeService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\TrashServiceStub
+     */
+    private $trashService;
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\LocationServiceStub
      */
     private $locationService;
@@ -152,7 +157,6 @@ class RepositoryStub implements Repository
                 continue;
             }
 
-            // TODO: $policy->getLimitations() === '*'
             if ( null === $limitations )
             {
                 $limitations = array();
@@ -304,7 +308,11 @@ class RepositoryStub implements Repository
      */
     public function getTrashService()
     {
-        // TODO: Implement getTrashService() method.
+        if ( null === $this->trashService )
+        {
+            $this->trashService = new TrashServiceStub( $this );
+        }
+        return $this->trashService;
     }
 
     /**
@@ -360,7 +368,7 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->roleService )
         {
-            $this->roleService = new RoleServiceStub( $this );
+            $this->roleService = new RoleServiceStub( $this, $this->getUserService() );
         }
         return $this->roleService;
     }

@@ -18,7 +18,9 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
@@ -46,6 +48,11 @@ class UserServiceStub implements UserService
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
     private $userGroups;
+
+    /**
+     * @var array
+     */
+    private $user2groups = array();
 
     /**
      * Instantiates a new user service instance.
@@ -321,6 +328,11 @@ class UserServiceStub implements UserService
         );
         $this->users[$user->id] = $user;
 
+        foreach ( $parentGroups as $parentGroup )
+        {
+            $this->assignUserToUserGroup( $user, $parentGroup );
+        }
+
         return $user;
     }
 
@@ -397,7 +409,10 @@ class UserServiceStub implements UserService
      */
     public function deleteUser( User $user )
     {
-        unset( $this->users[$user->id] );
+        unset(
+            $this->users[$user->id],
+            $this->user2groups[$user->id]
+        );
     }
 
     /**
@@ -473,7 +488,15 @@ class UserServiceStub implements UserService
      */
     public function assignUserToUserGroup( User $user, UserGroup $userGroup )
     {
-        // TODO: Implement assignUserToUserGroup() method.
+        if ( false === $this->repository->canUser( 'content', 'edit', $user, $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        if ( false === isset( $this->user2groups[$user->id] ) )
+        {
+            $this->user2groups[$user->id] = array();
+        }
+        $this->user2groups[$user->id][$userGroup->id] = true;
     }
 
     /**
@@ -487,7 +510,44 @@ class UserServiceStub implements UserService
      */
     public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup )
     {
-        // TODO: Implement unAssignUssrFromUserGroup() method.
+        if ( false === $this->repository->canUser( 'content', 'edit', $user, $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        if ( false === isset( $this->user2groups[$user->id][$userGroup->id] ) )
+        {
+            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+        unset( $this->user2groups[$user->id][$userGroup->id] );
+    }
+
+    /**
+     * Internal helper method.
+     *
+     * @param mixed $userId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    public function __loadUserGroupsByUserId( $userId )
+    {
+        if ( false === isset( $this->user2groups[$userId] ) )
+        {
+            return array();
+        }
+
+        $groupIds   = array_keys( $this->user2groups[$userId] );
+        $userGroups = array();
+        while ( count( $groupIds ) > 0 )
+        {
+            $groupId = array_pop( $groupIds );
+
+            if ( $this->userGroups[$groupId]->parentId > 0 )
+            {
+                $groupIds[] = $this->userGroups[$groupId]->parentId;
+            }
+            $userGroups[$groupId] = $this->userGroups[$groupId];
+        }
+        return $userGroups;
     }
 
     /**
@@ -569,6 +629,10 @@ class UserServiceStub implements UserService
     {
         list( $this->userGroups ) = $this->repository->loadFixture( 'UserGroup' );
         list( $this->users )      = $this->repository->loadFixture( 'User' );
+
+        // Set the default relations.
+        $this->user2groups[10] = array( 42 => true );
+        $this->user2groups[14] = array( 12 => true );
     }
 
     private function createHash( $login, $password, $type )
