@@ -444,7 +444,7 @@ class LocationServiceTest extends BaseTest
         $contentInfo = $contentService->loadContentInfo( 4 );
 
         $locations = $locationService->loadLocations( $contentInfo );
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
 
         $this->assertInternalType(
             'array', $locations
@@ -524,7 +524,7 @@ class LocationServiceTest extends BaseTest
             $originalLocation->contentInfo,
             $findRootLocation
         );
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
 
         $this->assertInternalType(
             'array', $locations
@@ -633,7 +633,7 @@ class LocationServiceTest extends BaseTest
         $location = $locationService->loadLocation( 2 );
 
         $childLocations = $locationService->loadLocationChildren( $location );
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
 
         $this->assertInternalType(
             'array', $childLocations
@@ -691,7 +691,7 @@ class LocationServiceTest extends BaseTest
         $childLocations = $locationService->loadLocationChildren(
             $location, 2
         );
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
 
         $this->assertInternalType(
             'array', $childLocations
@@ -749,7 +749,7 @@ class LocationServiceTest extends BaseTest
         $childLocations = $locationService->loadLocationChildren(
             $location, 2, 3
         );
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
 
         $this->assertInternalType(
             'array', $childLocations
@@ -803,7 +803,7 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         $updateStruct = $locationService->newLocationUpdateStruct();
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
@@ -836,7 +836,7 @@ class LocationServiceTest extends BaseTest
         $updatedLocation = $locationService->updateLocation(
             $originalLocation, $updateStruct
         );
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
@@ -907,7 +907,7 @@ class LocationServiceTest extends BaseTest
         $updatedLocation = $locationService->updateLocation(
             $originalLocation, $updateStruct
         );
-        /* BEGIN: Use Case */;
+        /* END: Use Case */;
     }
 
     /**
@@ -939,7 +939,7 @@ class LocationServiceTest extends BaseTest
         $visibleLocation = $locationService->loadLocation( 5 );
 
         $hiddenLocation = $locationService->hideLocation( $visibleLocation );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
@@ -1011,7 +1011,7 @@ class LocationServiceTest extends BaseTest
         $hiddenLocation = $locationService->hideLocation( $visibleLocation );
 
         $unHiddenLocation = $locationService->unhideLocation( $hiddenLocation );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
@@ -1055,7 +1055,7 @@ class LocationServiceTest extends BaseTest
         $hiddenLowerLocation = $locationService->hideLocation( $lowerLocation );
 
         $unHiddenHigherLocation = $locationService->unhideLocation( $hiddenHigherLocation );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
@@ -1112,7 +1112,7 @@ class LocationServiceTest extends BaseTest
         $location = $locationService->loadLocation( 13 );
 
         $locationService->deleteLocation( $location );
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         try
         {
