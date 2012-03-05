@@ -253,7 +253,7 @@ class UserService implements UserServiceInterface
         if ( $newParentMainLocation === null )
             throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
-        $this->repository->getLocationService()->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
+        $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
     }
 
     /**
@@ -368,6 +368,7 @@ class UserService implements UserServiceInterface
         $spiUser = $this->persistenceHandler->userHandler()->create(
             new SPIUser(
                 array(
+                    'id'            => $publishedContent->contentId,
                     'login'         => $userCreateStruct->login,
                     'email'         => $userCreateStruct->email,
                     'passwordHash'  => $this->createPasswordHash(
