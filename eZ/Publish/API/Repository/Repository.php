@@ -4,18 +4,15 @@
  */
 namespace eZ\Publish\API\Repository;
 
-
 use eZ\Publish\API\Repository\Values\ValueObject;
-
 use eZ\Publish\API\Repository\Values\User\User;
 
 /**
- * Repository class
+ * Repository interface
  * @package eZ\Publish\API\Repository
  */
 interface Repository
 {
-
     /**
      * Get current user
      *
