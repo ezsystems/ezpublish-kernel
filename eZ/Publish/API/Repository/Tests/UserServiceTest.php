@@ -1164,16 +1164,15 @@ class UserServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
-        // This array will contain the "Editor" user group
-        $userGroups = $userService->loadUserGroupsOfUser( $user );
+        // This array will contain the "Editors" user group name
+        $userGroupNames = array();
+        foreach ( $userService->loadUserGroupsOfUser( $user ) as $userGroup )
+        {
+            $userGroupNames[] = $userGroup->getFieldValue( 'name' );
+        }
         /* END: Use Case */
 
-        $this->assertEquals(
-            array(
-                $userService->loadUserGroup( 13 )
-            ),
-            $userGroups
-        );
+        $this->assertEquals( array( 'Editors' ), $userGroupNames );
     }
 
     /**
@@ -1181,7 +1180,7 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()
-     * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadUsersOfUserGroup()
     {
@@ -1208,11 +1207,42 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
      */
     public function testAssignUserToUserGroup()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::assignUserToUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // ID of the "Administrator" group in an eZ Publish demo installation
+        $administratorGroupId = 12;
+
+        // Assign group to newly created user
+        $userService->assignUserToUserGroup(
+            $user,
+            $userService->loadUserGroup( $administratorGroupId )
+        );
+
+        // This array will contain "Editors" and "Administrator users"
+        $userGroupNames = array();
+        foreach ( $userService->loadUserGroupsOfUser( $user ) as $userGroup )
+        {
+            $userGroupNames[] = $userGroup->getFieldValue( 'name' );
+        }
+        /* END: Use Case */
+
+        sort( $userGroupNames, SORT_STRING );
+
+        $this->assertEquals(
+            array(
+                'Administrator users',
+                'Editors'
+            ),
+            $userGroupNames
+        );
     }
 
     /**
@@ -1220,23 +1250,70 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::unAssignUssrFromUserGroup()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
      */
     public function testUnAssignUserFromUserGroup()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::unAssignUssrFromUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // ID of the "Anonymous Users" group in an eZ Publish demo installation
+        $anonymousGroupId = 42;
+
+        // Assign group to newly created user
+        $userService->assignUserToUserGroup(
+            $user,
+            $userService->loadUserGroup( $anonymousGroupId )
+        );
+
+        // Unassign user from "Editors" group
+        $userService->unAssignUserFromUserGroup(
+            $user,
+            $userService->loadUserGroup( $editorsGroupId )
+        );
+
+        // This array will contain "Anonymous Users"
+        $userGroupNames = array();
+        foreach ( $userService->loadUserGroupsOfUser( $user ) as $userGroup )
+        {
+            $userGroupNames[] = $userGroup->getFieldValue( 'name' );
+        }
+        /* END: Use Case */
+
+        $this->assertEquals( array( 'Anonymous Users' ), $userGroupNames );
     }
 
     /**
-     * Test for the unAssignUssrFromUserGroup() method.
+     * Test for the unAssignUserFromUserGroup() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\UserService::unAssignUssrFromUserGroup()
+     * @see \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUnAssignUserFromUserGroup
      */
     public function testUnAssignUserFromUserGroupThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::unAssignUssrFromUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // ID of the "Administrator" group in an eZ Publish demo installation
+        $administratorGroupId = 12;
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // user is not assigned to the "Adminstrator" group
+        $userService->unAssignUserFromUserGroup(
+            $user,
+            $userService->loadUserGroup( $administratorGroupId )
+        );
+        /* END: Use Case */
     }
 
     /**

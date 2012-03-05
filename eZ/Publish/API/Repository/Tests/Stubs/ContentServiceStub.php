@@ -1418,6 +1418,7 @@ class ContentServiceStub implements ContentService
                 'contentType'       =>  $contentType,
                 'mainLanguageCode'  =>  $mainLanguageCode,
                 'modificationDate'  =>  new \DateTime(),
+                'remoteId'          =>  md5( uniqid( __CLASS__, true ) ),
                 'ownerId'           =>  $this->repository->getCurrentUser()->id
             )
         );

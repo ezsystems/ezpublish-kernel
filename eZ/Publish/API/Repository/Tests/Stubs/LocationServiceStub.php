@@ -65,7 +65,10 @@ class LocationServiceStub implements LocationService
     public function newLocationCreateStruct( $parentLocationId )
     {
         return new LocationCreateStruct(
-            array( 'parentLocationId' => $parentLocationId )
+            array(
+                'parentLocationId'  =>  $parentLocationId,
+                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
+            )
         );
     }
 

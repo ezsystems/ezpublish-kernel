@@ -85,6 +85,11 @@ class UserServiceStub implements UserService
      */
     public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup )
     {
+        if ( false === $this->repository->canUser( 'content', 'create', $parentGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $contentService  = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
@@ -96,6 +101,7 @@ class UserServiceStub implements UserService
             $userGroupCreateStruct,
             array( $locationCreate )
         );
+
         $content = $contentService->publishVersion( $draft->getVersionInfo() );
 
         $userGroup = new UserGroupStub(
@@ -131,11 +137,15 @@ class UserServiceStub implements UserService
      */
     public function loadUserGroup( $id )
     {
-        if ( isset( $this->userGroups[$id] ) )
+        if ( false === isset( $this->userGroups[$id] ) )
         {
-            return $this->userGroups[$id];
+            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        if ( false === $this->repository->canUser( 'content', 'read', $this->userGroups[$id] ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+        return $this->userGroups[$id];
     }
 
     /**
@@ -149,6 +159,11 @@ class UserServiceStub implements UserService
      */
     public function loadSubUserGroups( UserGroup $userGroup )
     {
+        if ( false === $this->repository->canUser( 'content', 'read', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $subUserGroups = array();
         foreach ( $this->userGroups as $group )
         {
@@ -171,6 +186,15 @@ class UserServiceStub implements UserService
      */
     public function deleteUserGroup( UserGroup $userGroup )
     {
+        if ( false === $this->repository->canUser( 'content', 'remove', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        foreach ( array_keys( $this->user2groups ) as $userId )
+        {
+            unset( $this->user2groups[$userId][$userGroup->id] );
+        }
         unset( $this->userGroups[$userGroup->id] );
     }
 
@@ -184,6 +208,11 @@ class UserServiceStub implements UserService
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
+        if ( false === $this->repository->canUser( 'content', 'move', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         $oldParent = $this->userGroups[$userGroup->parentId];
@@ -239,6 +268,11 @@ class UserServiceStub implements UserService
      */
     public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         $content = null;
@@ -291,12 +325,22 @@ class UserServiceStub implements UserService
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'create' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $contentService  = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
         $locationCreateStruts = array();
         foreach ( $parentGroups as $parentGroup )
         {
+            if ( false === $this->repository->canUser( 'content', 'edit', $parentGroup ) )
+            {
+                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            }
+
             $locationCreateStruts[] = $locationService->newLocationCreateStruct(
                 $parentGroup->contentInfo->mainLocationId
             );
@@ -409,6 +453,11 @@ class UserServiceStub implements UserService
      */
     public function deleteUser( User $user )
     {
+        if ( false === $this->repository->canUser( 'content', 'remove', $user ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         unset(
             $this->users[$user->id],
             $this->user2groups[$user->id]
@@ -432,6 +481,11 @@ class UserServiceStub implements UserService
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $user ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         $contentUpdate = $userUpdateStruct->contentUpdateStruct ?:
@@ -625,7 +679,8 @@ class UserServiceStub implements UserService
                 'email'             =>  $email,
                 'password'          =>  $password,
                 'mainLanguageCode'  =>  $mainLanguageCode,
-                'contentType'       =>  $contentType
+                'contentType'       =>  $contentType,
+                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
             )
         );
 
@@ -647,7 +702,8 @@ class UserServiceStub implements UserService
         return new UserGroupCreateStructStub(
             array(
                 'mainLanguageCode'  =>  $mainLanguageCode,
-                'contentType'       =>  $contentType
+                'contentType'       =>  $contentType,
+                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
             )
         );
     }

@@ -28,7 +28,20 @@ class UserServiceAuthorizationTest extends BaseTest
      */
     public function testLoadUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::loadUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $userGroup = $this->createUserGroupVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->loadUserGroup( $userGroup->id );
+        /* END: Use Case */
     }
 
     /**
@@ -41,7 +54,20 @@ class UserServiceAuthorizationTest extends BaseTest
      */
     public function testLoadSubUserGroupsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::loadSubUserGroups() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $userGroup = $this->createUserGroupVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->loadSubUserGroups( $userGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -50,10 +76,31 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
     public function testCreateUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Load the parent group
+        $parentUserGroup = $userService->loadUserGroup( $editorsGroupId );
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // Instantiate a new group create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-GB' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->createUserGroup( $userGroupCreate, $parentUserGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -62,10 +109,24 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::deleteUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testDeleteUserGroup
      */
     public function testDeleteUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::deleteUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $userGroup = $this->createUserGroupVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->deleteUserGroup( $userGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -77,7 +138,26 @@ class UserServiceAuthorizationTest extends BaseTest
      */
     public function testMoveUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::moveUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $userGroup = $this->createUserGroupVersion1();
+
+        // ID of the "Members" group in an eZ Publish demo installation
+        $memberGroupId = 11;
+
+        // Load new parent user group
+        $newParentUserGroup = $userService->loadUserGroup( $memberGroupId );
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->moveUserGroup( $userGroup, $newParentUserGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -89,7 +169,30 @@ class UserServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $userGroup = $this->createUserGroupVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // Load content service
+        $contentService = $repository->getContentService();
+
+        // Instantiate a content update struct
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'name', 'New group name' );
+
+        $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentUpdateStruct = $contentUpdateStruct;
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->updateUserGroup( $userGroup, $userGroupUpdateStruct );
+        /* END: Use Case */
     }
 
     /**
@@ -98,10 +201,37 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testCreateUserThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUser() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // Instantiate a user create struct
+        $userCreateStruct = $userService->newUserCreateStruct(
+            'test',
+            'test@example.com',
+            'password',
+            'eng-US'
+        );
+
+        $parentUserGroup = $userService->loadUserGroup( $editorsGroupId );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->createUser(
+            $userCreateStruct,
+            array( $parentUserGroup )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -110,10 +240,22 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::deleteUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testDeleteUser
      */
     public function testDeleteUserThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::deleteUser() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->deleteUser( $user );
+        /* END: Use Case */
     }
 
     /**
@@ -125,7 +267,22 @@ class UserServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateUserThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUser() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // Instantiate a user update struct
+        $userUpdateStruct           = $userService->newUserUpdateStruct();
+        $userUpdateStruct->maxLogin = 42;
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->updateUser( $user, $userUpdateStruct );
+        /* END: Use Case */
     }
 
     /**
@@ -134,10 +291,28 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testAssignUserToUserGroup
      */
     public function testAssignUserToUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::assignUserToUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // ID of the "Administrator" group in an eZ Publish demo installation
+        $administratorGroupId = 12;
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->assignUserToUserGroup(
+            $user,
+            $userService->loadUserGroup( $administratorGroupId )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -146,10 +321,36 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::unAssignUssrFromUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUnAssignUserFromUserGroup
      */
     public function testUnAssignUserFromUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::unAssignUssrFromUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // ID of the "Members" group in an eZ Publish demo installation
+        $memberGroupId = 11;
+
+        // Assign group to newly created user
+        $userService->assignUserToUserGroup(
+            $user,
+            $userService->loadUserGroup( $memberGroupId )
+        );
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->unAssignUserFromUserGroup(
+            $user,
+            $userService->loadUserGroup( $editorsGroupId )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -185,7 +386,7 @@ class UserServiceAuthorizationTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUsersOfUserGroup
      */
-    public function testLoadUsersOfUserGroup()
+    public function testLoadUsersOfUserGroupThrowsUnauthorizedException()
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
@@ -213,7 +414,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Inline */
-        // ID of the main "Users" group
+        // ID of the main "Users" group in an eZ Publish demo installation
         $mainGroupId = 4;
 
         $userService = $repository->getUserService();
