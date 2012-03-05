@@ -2844,22 +2844,21 @@ Overview
 ============================================= ===================== ===================== ===================== =======================
 Resource                                      POST                  GET                   PUT                   DELETE
 --------------------------------------------- --------------------- --------------------- --------------------- -----------------------
-/user/groups                                  create user group     load all topl. groups -                     -            
-/user/groups/<ID>                             -                     load user group       update user group     delete user group
-/user/groups/<ID>/users                       -                     load users of group   create user           delete all users in this group
-/user/groups/<ID>/parent                      -                     load parent group     set new parent (move) -            
-/user/groups/<ID>/children                    create sub group      load sub groups       -                     remove all sub groups
-/user/groups/<ID>/roles                       assign role to group  load roles of group   -                     -            
-/user/groups/<ID>/roles/<ID>                  -                     load role             -                     unassign role from group
-/user/users                                   -                     list users            -                     -            
-/user/users/<ID>                              -                     load user             update user           delete user
-/user/users/<ID>/groups                       -                     load groups of user   add to group          -            
-/user/users/<ID>/drafts                       -                     list all drafts owned -                     -                
+/user/groups                                  create user group     load all topl. groups .                     .            
+/user/groups/<ID>                             .                     load user group       update user group     delete user group
+/user/groups/<ID>/users                       .                     load users of group   .                     delete all users in this group
+/user/groups/<ID>/children                    create sub group      load sub groups       .                     remove all sub groups
+/user/groups/<ID>/roles                       assign role to group  load roles of group   .                     .            
+/user/groups/<ID>/roles/<ID>                  .                     .                     .                     unassign role from group
+/user/users                                   create user           list users            .                     .            
+/user/users/<ID>                              .                     load user             update user           delete user
+/user/users/<ID>/groups                       .                     load groups of user   add to group          .            
+/user/users/<ID>/drafts                       .                     list all drafts owned .                     .                
                                                                     by the user                                                     
-/user/roles                                   create new role       load all roles        -                     -            
-/user/roles/<ID>                              -                     load role             update role           delete role
-/user/roles/<ID>/policies                     -                     load policies         -                     delete all policies from role
-/user/roles/<ID>/policies/<module>/<function> -                     load policy           create/update policy  delete policy
+/user/roles                                   create new role       load all roles        .                     .            
+/user/roles/<ID>                              .                     load role             update role           delete role
+/user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
+/user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy
 ============================================= ===================== ===================== ===================== =======================
         
 
