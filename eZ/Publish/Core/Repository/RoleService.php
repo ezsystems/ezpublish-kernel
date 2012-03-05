@@ -81,10 +81,10 @@ class RoleService implements RoleServiceInterface
      */
     public function createRole( APIRoleCreateStruct $roleCreateStruct )
     {
-        if ( !is_string( $roleCreateStruct->identifier ) )
+        if ( !is_string( $roleCreateStruct->identifier ) || empty( $roleCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleCreateStruct->identifier, "RoleCreateStruct" );
 
-        if ( !is_string( $roleCreateStruct->mainLanguageCode ) )
+        if ( !is_string( $roleCreateStruct->mainLanguageCode ) || empty( $roleCreateStruct->mainLanguageCode ) )
             throw new InvalidArgumentValue( "mainLanguageCode", $roleCreateStruct->mainLanguageCode, "RoleCreateStruct" );
 
         if ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) )
@@ -177,10 +177,10 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( !is_string( $policyCreateStruct->module ) )
+        if ( !is_string( $policyCreateStruct->module ) || empty( $policyCreateStruct->module ) )
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
-        if ( !is_string( $policyCreateStruct->function ) )
+        if ( !is_string( $policyCreateStruct->function ) || empty( $policyCreateStruct->function ) )
             throw new InvalidArgumentValue( "function", $policyCreateStruct->function, "PolicyCreateStruct" );
 
         if ( $policyCreateStruct->module === '*' && $policyCreateStruct->function !== '*' )
