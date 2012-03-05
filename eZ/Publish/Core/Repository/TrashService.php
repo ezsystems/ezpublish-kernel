@@ -176,23 +176,23 @@ class TrashService implements TrashServiceInterface
         if ( $query->criterion !== null && !$query->criterion instanceof Criterion )
             throw new InvalidArgumentValue( "query->criterion", $query->criterion, "Query" );
 
-        if ( $query->sortClauses !== null && !is_array( $query->sortClauses ) )
-            throw new InvalidArgumentValue( "query->sortClauses", $query->sortClauses, "Query" );
-
-        if ( $query->offset !== null && !is_numeric( $query->offset ) )
-            throw new InvalidArgumentValue( "query->offset", $query->offset, "Query" );
-
-        if ( $query->limit !== null && !is_numeric( $query->limit ) )
-            throw new InvalidArgumentValue( "query->limit", $query->limit, "Query" );
-
-        if ( is_array( $query->sortClauses ) )
+        if ( $query->sortClauses !== null )
         {
+            if ( !is_array( $query->sortClauses ) )
+                throw new InvalidArgumentValue( "query->sortClauses", $query->sortClauses, "Query" );
+
             foreach ( $query->sortClauses as $sortClause )
             {
                 if ( !$sortClause instanceof SortClause )
                     throw new InvalidArgumentValue( "query->sortClauses", "only instances of SortClause class are allowed" );
             }
         }
+
+        if ( $query->offset !== null && !is_numeric( $query->offset ) )
+            throw new InvalidArgumentValue( "query->offset", $query->offset, "Query" );
+
+        if ( $query->limit !== null && !is_numeric( $query->limit ) )
+            throw new InvalidArgumentValue( "query->limit", $query->limit, "Query" );
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->listTrashed(
             $query->criterion !== null ? $query->criterion : null,
