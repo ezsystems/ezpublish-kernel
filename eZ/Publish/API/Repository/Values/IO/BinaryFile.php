@@ -1,6 +1,8 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\IO;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This class provides an abstract access to binary files.
  *
@@ -15,7 +17,7 @@ namespace eZ\Publish\API\Repository\Values\IO;
  * @property-read string $originalFile Original file name
  */
 
-class BinaryFile
+class BinaryFile extends ValueObject
 {
     /**
      * The id of the binary file

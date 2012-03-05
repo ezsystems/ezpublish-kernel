@@ -2,10 +2,12 @@
 
 namespace eZ\Publish\API\Repository\Values\IO;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * Create struct for BinaryFile objects
  */
-class BinaryFileCreateStruct
+class BinaryFileCreateStruct extends ValueObject
 {
     /**
      * File contentType (image/jpeg, audio/mp3, etc)
