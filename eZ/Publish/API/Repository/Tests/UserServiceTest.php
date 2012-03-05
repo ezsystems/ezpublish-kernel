@@ -1149,6 +1149,61 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadUserGroupsOfUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testLoadUserGroupsOfUser()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // This array will contain the "Editor" user group
+        $userGroups = $userService->loadUserGroupsOfUser( $user );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array(
+                $userService->loadUserGroup( 13 )
+            ),
+            $userGroups
+        );
+    }
+
+    /**
+     * Test for the loadUsersOfUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()
+     * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testLoadUsersOfUserGroup()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $group = $userService->loadUserGroup( 13 );
+
+        /* BEGIN: Use Case */
+        $this->createUserVersion1();
+
+        // This array will contain the email of the newly created "Editor" user
+        $email = array();
+        foreach ( $userService->loadUsersOfUserGroup( $group ) as $user )
+        {
+            $email[] = $user->email;
+        }
+        /* END: Use Case */
+        $this->assertEquals( array( 'user@example.com' ), $email );
+    }
+
+    /**
      * Test for the assignUserToUserGroup() method.
      *
      * @return void

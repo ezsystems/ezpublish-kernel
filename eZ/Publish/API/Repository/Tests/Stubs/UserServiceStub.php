@@ -522,6 +522,59 @@ class UserServiceStub implements UserService
     }
 
     /**
+     * Loads the user groups ther user belongs to
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    public function loadUserGroupsOfUser( User $user)
+    {
+        if ( false === $this->repository->canUser( 'content', 'read', $user ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $userGroups = array();
+        foreach ( array_keys( $this->user2groups[$user->id] ) as $groupId )
+        {
+            $userGroups[] = $this->userGroups[$groupId];
+        }
+        return $userGroups;
+    }
+
+    /**
+     * loads the users of a user group
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1)
+    {
+        if ( false === $this->repository->canUser( 'content', 'read', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $users = array();
+        foreach ( $this->user2groups as $userId => $userGroupIds )
+        {
+            if ( isset( $userGroupIds[$userGroup->id] ) )
+            {
+                $users[] = $this->users[$userId];
+            }
+        }
+        return $users;
+    }
+
+    /**
      * Internal helper method.
      *
      * @param mixed $userId

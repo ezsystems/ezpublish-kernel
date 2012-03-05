@@ -151,4 +151,125 @@ class UserServiceAuthorizationTest extends BaseTest
     {
         $this->markTestIncomplete( "@TODO: Test for UserService::unAssignUssrFromUserGroup() is not implemented." );
     }
+
+    /**
+     * Test for the loadUserGroupsOfUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
+     */
+    public function testLoadUserGroupsOfUserThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->loadUserGroupsOfUser( $user );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadUsersOfUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUsersOfUserGroup
+     */
+    public function testLoadUsersOfUserGroup()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $group = $userService->loadUserGroup( 13 );
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Now set the currently created "Editor" as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $userService->loadUsersOfUserGroup( $group );
+        /* END: Use Case */
+    }
+
+    /**
+     * Create a user group fixture in a variable named <b>$userGroup</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     */
+    private function createUserGroupVersion1()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // ID of the main "Users" group
+        $mainGroupId = 4;
+
+        $userService = $repository->getUserService();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
+
+        // Create the new user group
+        $userGroup = $userService->createUserGroup(
+            $userGroupCreate,
+            $parentUserGroup
+        );
+        /* END: Inline */
+
+        return $userGroup;
+    }
+
+    /**
+     * Create a user fixture in a variable named <b>$user</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createUserVersion1()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $editorsGroupId = 13;
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $group ) );
+        /* END: Inline */
+
+        return $user;
+    }
 }
