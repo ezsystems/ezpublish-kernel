@@ -173,7 +173,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationByRemoteId()
     {
-        self::markTestSkipped( "@todo: enable when LocationService::loadLocationByRemoteId is implemented" );
         $location = $this->repository->getLocationService()->loadLocationByRemoteId( "f3e90596361e31d496d4026eb624c983" );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
@@ -517,7 +516,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testDeleteLocation()
     {
-        self::markTestSkipped( "@todo: enable when method removeSubtree is implemented in persistence" );
         $locationService = $this->repository->getLocationService();
 
         $location = $locationService->loadLocation( 43 );
