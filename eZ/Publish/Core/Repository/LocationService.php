@@ -130,6 +130,7 @@ class LocationService implements LocationServiceInterface
      * Loads a location object from its $remoteId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If more than one location with same remote ID was found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param string $remoteId
