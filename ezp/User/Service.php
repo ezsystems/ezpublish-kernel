@@ -31,10 +31,10 @@ use ezp\Base\Configuration,
     ezp\User\Group\Proxy as ProxyGroup,
     ezp\User\Role\Concrete as ConcreteRole,
     ezp\User\Role\Proxy as ProxyRole,
-    ezp\Persistence\User as UserValueObject,
-    ezp\Persistence\User\Role as RoleValueObject,
-    ezp\Persistence\User\RoleUpdateStruct,
-    ezp\Persistence\User\Policy as PolicyValueObject;
+    eZ\Publish\SPI\Persistence\User as UserValueObject,
+    eZ\Publish\SPI\Persistence\User\Role as RoleValueObject,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Policy as PolicyValueObject;
 
 /**
  * User Service, extends repository with user specific operations
@@ -507,7 +507,7 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\Persistence\User $vo
+     * @param \eZ\Publish\SPI\Persistence\User $vo
      * @param \ezp\Content $content
      * @return \ezp\User
      */
@@ -572,7 +572,7 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\Persistence\User\Role $vo
+     * @param \eZ\Publish\SPI\Persistence\User\Role $vo
      * @return \ezp\User\Role
      */
     protected function buildRole( RoleValueObject $vo )
@@ -593,7 +593,7 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\Persistence\User\Policy $vo
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $vo
      * @param \ezp\User\Role $role
      * @return \ezp\User\Policy
      */

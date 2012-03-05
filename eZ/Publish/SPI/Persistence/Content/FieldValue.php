@@ -10,7 +10,7 @@
 
 namespace eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\ValueObject,
-    ezp\Content\FieldType\Value;
+    eZ\Publish\Core\Repository\FieldType\Value;
 
 /**
  */
@@ -22,7 +22,7 @@ class FieldValue extends ValueObject
      * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
      *
-     * @var ezp\Content\FieldType\Value
+     * @var mixed
      */
     public $data;
 
@@ -35,9 +35,11 @@ class FieldValue extends ValueObject
      *
      * Settings are indexed by field setting name.
      *
-     * @var \ezp\Content\FieldType\FieldSettings
+     * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings
      */
     public $fieldSettings;
+
+    public $externalData;
 
     /**
      * Mixed sort key

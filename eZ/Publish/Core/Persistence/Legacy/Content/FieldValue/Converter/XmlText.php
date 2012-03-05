@@ -13,8 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezp\Content\FieldType\XmlText\Value as XmlTextValue,
-    ezp\Content\FieldType\FieldSettings;
+    eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings;
 
 class XmlText implements Converter
 {

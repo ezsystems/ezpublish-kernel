@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Url\Type as Url,
-    ezp\Content\FieldType\Url\Value as UrlValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Url\Type as Url,
+    eZ\Publish\Core\Repository\FieldType\Url\Value as UrlValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -21,12 +21,12 @@ class UrlTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Url\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Url\\Type",
             Factory::build( "ezurl" ),
             "Url object not returned for 'ezurl', incorrect mapping? "
         );
@@ -34,7 +34,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testUrlSupportedValidators()
     {
@@ -43,28 +43,28 @@ class UrlTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Url\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new Url();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, new UrlValue( 42 ) );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Url\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new Url();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new UrlValue( "http://ez.no/" );
@@ -73,23 +73,20 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Url\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $link = "http://ez.no/";
         $ft = new Url();
-        $ft->setValue( $fv = new UrlValue( $link ) );
+        $fieldValue = $ft->toPersistenceValue( new UrlValue( $link ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( array( "link" => $link, "text" => null ), $fieldValue->data );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Url\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -100,19 +97,19 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Url\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $link = "http://ez.no/";
         $value = UrlValue::fromString( $link );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Url\\Value", $value );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Url\\Value", $value );
         self::assertSame( $link, $value->link );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Url\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Value::__toString
      */
     public function testFieldValueToString()
     {

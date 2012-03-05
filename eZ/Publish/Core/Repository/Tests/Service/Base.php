@@ -32,6 +32,15 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tear down test (properties)
+     */
+    protected function tearDown()
+    {
+        unset( $this->repository );
+        parent::tearDown();
+    }
+
+    /**
      * Generate \eZ\Publish\Core\Repository\Repository
      *
      * Makes it possible to inject different Io / Persistence handlers
@@ -39,15 +48,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @return \eZ\Publish\Core\Repository\Repository
      */
     abstract protected function getRepository();
-
-    /**
-     * Tear down test
-     */
-    public function tearDown()
-    {
-        unset( $this->repository );
-        parent::tearDown();
-    }
 
     /**
      * Asserts that properties given in $expectedValues are correctly set in
@@ -104,11 +104,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @param $propertyName
-     * @param $expectedValue
-     * @param $actualValue
-     */
     private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
     {
         if( $expectedValue instanceof \ArrayObject )

@@ -14,10 +14,10 @@ use ezp\Content,
     ezp\Content\Type,
     ezp\Content\Type\FieldDefinition,
     ezp\User,
-    ezp\Content\FieldType\Value as FieldValue,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Content\FieldType\TextLine\StringLengthValidator,
-    ezp\Content\FieldType\Keyword\Value as KeywordValue,
+    eZ\Publish\Core\Repository\FieldType\Value as FieldValue,
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator,
+    eZ\Publish\Core\Repository\FieldType\Keyword\Value as KeywordValue,
     ReflectionObject;
 
 /**
@@ -74,7 +74,6 @@ class FieldTest extends BaseContentTest
             self::assertSame( $field->fieldDefinition->fieldType, $field->type );
             self::assertSame( $field->version->versionNo, $field->versionNo );
             self::assertSame( $field->fieldDefinition->defaultValue, $field->value );
-            self::assertSame( $field->value, $field->fieldDefinition->type->getValue() );
         }
     }
 
@@ -87,7 +86,7 @@ class FieldTest extends BaseContentTest
     {
         foreach ( $this->fields as $identifier => $field )
         {
-            self::assertInstanceOf( 'ezp\\Content\\FieldType\\Value', $field->getValue() );
+            self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value', $field->getValue() );
             self::assertSame( $field->getValue(), $field->value );
         }
     }
@@ -104,7 +103,6 @@ class FieldTest extends BaseContentTest
         $field = $this->fields['title'];
         $field->setValue( $value );
         self::assertSame( $value, $field->getValue() );
-        self::assertsame( $value, $field->fieldDefinition->type->getValue() );
     }
 
     /**
@@ -140,7 +138,7 @@ And I will strike down upon thee with great vengeance and furious anger those wh
 And you will know My name is the Lord when I lay My vengeance upon thee.
 EOT;
         $value = new TextLineValue( $longPulpFictionQuote );
-        $validator = $this->getMockForAbstractClass( 'ezp\\Content\\FieldType\\Validator' );
+        $validator = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\Repository\\FieldType\\Validator' );
         $validator
             ->expects( $this->once() )
             ->method( 'validate' )

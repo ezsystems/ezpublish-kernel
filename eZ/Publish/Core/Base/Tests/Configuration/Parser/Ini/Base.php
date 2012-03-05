@@ -31,21 +31,21 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tear down test (properties)
+     */
+    protected function tearDown()
+    {
+        unset( $this->parser );
+        parent::tearDown();
+    }
+
+    /**
      * Setup parser with settings
      *
      * @abstract
      * @return \eZ\Publish\Core\Base\Configuration\Parser\Ini
      */
     abstract protected function getParser();
-
-    /**
-     * Tear down test
-     */
-    public function tearDown()
-    {
-        unset( $this->parser );
-        parent::tearDown();
-    }
 
     /**
      * Test that ending hash boom is stripped out

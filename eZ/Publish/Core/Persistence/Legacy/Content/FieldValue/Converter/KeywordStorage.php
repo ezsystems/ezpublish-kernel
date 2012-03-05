@@ -122,8 +122,8 @@ class KeywordStorage implements Storage
     /**
      * Populates $field value property based on the external data.
      * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
-     * This value holds the data as a {@link ezp\Content\FieldType\Value} based object,
-     * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
+     * This value holds the data as a {@link eZ\Publish\Core\Repository\FieldType\Value} based object,
+     * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\Repository\FieldType\TextLine\Value} object).
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context

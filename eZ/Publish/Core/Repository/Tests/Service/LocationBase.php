@@ -223,7 +223,6 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
-            /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
             self::assertEquals( $contentInfo->contentId, $location->getContentInfo()->contentId );
         }
@@ -240,7 +239,6 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
-            /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
             self::assertEquals( $contentInfo->contentId, $location->getContentInfo()->contentId );
         }
@@ -277,7 +275,6 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
-            /** @var $location \eZ\Publish\API\Repository\Values\Content\Location */
             if ( stripos( $location->pathString, $parentLocation->pathString ) === false )
                 self::fail( "fetched locations outside root node" );
         }
@@ -311,7 +308,6 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $childrenLocations as $childLocation )
         {
-            /** @var \eZ\Publish\API\Repository\Values\Content\Location $childLocation */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $childLocation );
             self::assertEquals( $rootLocation->id, $childLocation->parentLocationId );
         }

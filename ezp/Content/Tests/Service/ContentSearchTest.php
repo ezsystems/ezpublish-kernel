@@ -15,9 +15,9 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Query\Builder as QueryBuilder,
     ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content as ContentValue,
-    ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\Content\Search\Result as ResultValue,
+    eZ\Publish\SPI\Persistence\Content as ContentValue,
+    eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
+    eZ\Publish\SPI\Persistence\Content\Search\Result as ResultValue,
     ezp\User\Proxy as ProxyUser,
     ReflectionObject;
 
@@ -32,7 +32,7 @@ class ContentSearchTest extends BaseServiceTest
     protected $service;
 
     /**
-     * @var \ezp\Persistence\Content\Search\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
     protected $searchHandler;
 
@@ -42,7 +42,7 @@ class ContentSearchTest extends BaseServiceTest
     protected $expectedContent;
 
     /**
-     * @var \ezp\Persistence\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $expectedContentVo;
 
@@ -69,7 +69,7 @@ class ContentSearchTest extends BaseServiceTest
         $refBackend = $refHandler->getProperty( 'backend' );
         $refBackend->setAccessible( true );
         $this->searchHandler = $this->getMockBuilder(
-            'ezp\\Persistence\\Storage\\InMemory\\SearchHandler'
+            'eZ\\Publish\\SPI\\Persistence\\Storage\\InMemory\\SearchHandler'
         )->setConstructorArgs(
             array(
                 $persistenceHandler,
@@ -81,7 +81,7 @@ class ContentSearchTest extends BaseServiceTest
         $refServiceHandlersProp->setValue(
             $persistenceHandler,
             array(
-                'ezp\\Persistence\\Storage\\InMemory\\SearchHandler' => $this->searchHandler
+                'eZ\\Publish\\SPI\\Persistence\\Storage\\InMemory\\SearchHandler' => $this->searchHandler
             )
         );
 

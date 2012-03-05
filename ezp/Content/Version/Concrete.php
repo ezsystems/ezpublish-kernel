@@ -12,7 +12,7 @@ use ezp\Base\Model,
     ezp\Content,
     ezp\Content\Version,
     ezp\Content\Field\StaticCollection as FieldCollection,
-    ezp\Persistence\Content\Version as VersionValue;
+    eZ\Publish\SPI\Persistence\Content\Version as VersionValue;
 
 /**
  * This class represents a Concrete Content Version

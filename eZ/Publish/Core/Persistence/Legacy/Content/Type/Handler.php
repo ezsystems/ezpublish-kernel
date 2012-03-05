@@ -478,11 +478,11 @@ class Handler implements BaseContentTypeHandler
      */
     public function publish( $contentTypeId )
     {
-        $toType = $this->load( $contentTypeId, 1 );
+        $toType = $this->load( $contentTypeId, Type::STATUS_DRAFT );
 
         try
         {
-            $fromType = $this->load( $contentTypeId, 0 );
+            $fromType = $this->load( $contentTypeId, Type::STATUS_DEFINED );
             $this->updateHandler->updateContentObjects( $fromType, $toType );
             $this->updateHandler->deleteOldType( $fromType );
         }
@@ -491,6 +491,6 @@ class Handler implements BaseContentTypeHandler
         {
         }
 
-        $this->updateHandler->publishNewType( $toType, 0 );
+        $this->updateHandler->publishNewType( $toType, Type::STATUS_DEFINED );
     }
 }

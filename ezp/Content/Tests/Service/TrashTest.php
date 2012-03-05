@@ -20,7 +20,7 @@ use ezp\Content\Location,
     ezp\Content\Proxy as ProxyContent,
     ezp\Content\Query\Builder as QueryBuilder,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content\Location\Trashed as TrashedValue,
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
     ezp\User\Proxy as ProxyUser,
     ReflectionObject;
 
@@ -65,17 +65,17 @@ class TrashTest extends Base
     protected $locationToDelete = array();
 
     /**
-     * @var \ezp\Persistence\Content\Location\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     protected $locationHandler;
 
     /**
-     * @var \ezp\Persistence\Content\Location\Trash\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     protected $trashHandler;
 
     /**
-     * @var \ezp\Persistence\Content\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
     protected $contentHandler;
 
@@ -471,7 +471,7 @@ class TrashTest extends Base
         $refHandler = new ReflectionObject( $persistenceHandler );
         $refBackend = $refHandler->getProperty( 'backend' );
         $refBackend->setAccessible( true );
-        $trashHandler = $this->getMockBuilder( 'ezp\\Persistence\\Storage\\InMemory\\TrashHandler' )
+        $trashHandler = $this->getMockBuilder( 'eZ\\Publish\\SPI\\Persistence\\Storage\\InMemory\\TrashHandler' )
             ->setConstructorArgs(
                 array(
                     $persistenceHandler,
@@ -484,7 +484,7 @@ class TrashTest extends Base
         $refServiceHandlersProp->setValue(
             $persistenceHandler,
             array(
-                'ezp\\Persistence\\Storage\\InMemory\\TrashHandler' => $trashHandler
+                'eZ\\Publish\\SPI\\Persistence\\Storage\\InMemory\\TrashHandler' => $trashHandler
             ) + $refServiceHandlersProp->getValue( $persistenceHandler )
         );
 

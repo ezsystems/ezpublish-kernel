@@ -12,7 +12,7 @@ use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\User\Role,
     ezp\User\Policy,
-    ezp\Persistence\User\Role as RoleValue;
+    eZ\Publish\SPI\Persistence\User\Role as RoleValue;
 
 /**
  * This class represents a Concrete Role item

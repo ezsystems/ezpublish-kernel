@@ -10,7 +10,7 @@
 namespace ezp\Content\Location;
 use ezp\Content,
     ezp\Content\Location\Concrete as ConcreteLocation,
-    ezp\Persistence\Content\Location\Trashed as TrashedLocationValue,
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedLocationValue,
     ezp\Base\Exception\InvalidArgumentType;
 
 class Trashed extends ConcreteLocation

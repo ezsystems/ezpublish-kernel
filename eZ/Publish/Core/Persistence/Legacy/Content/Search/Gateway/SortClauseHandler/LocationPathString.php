@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHa
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\Content\Query\SortClause,
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     ezcQuerySelect;
 
 /**

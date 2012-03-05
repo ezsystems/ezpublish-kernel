@@ -548,11 +548,98 @@ function generateRoleFixture( array $fixture )
         $nextId = max( $nextId, $data['id'] );
     }
 
+    $content2role    = array();
+    $roleLimitations = array();
+
+    foreach ( getFixtureTable( 'ezuser_role', $fixture ) as $data )
+    {
+        if ( false === isset( $content2role[$data['contentobject_id']] ) )
+        {
+            $content2role[$data['contentobject_id']] = array();
+        }
+        $content2role[$data['contentobject_id']][$data['id']] = $data['role_id'];
+
+        if ( '' === trim( $data['limit_identifier'] ) )
+        {
+            continue;
+        }
+
+        $roleLimitations[$data['id']] = array(
+            'id'          =>  $data['id'],
+            'roleId'      =>  $data['role_id'],
+            'contentId'   =>  $data['contentobject_id'],
+            'identifier'  =>  $data['limit_identifier'],
+            'value'       =>  $data['limit_value']
+        );
+    }
+
+    $role2policy  = array();
+    $policies     = array();
+    $policyNextId = 0;
+    foreach ( getFixtureTable( 'ezpolicy', $fixture ) as $data )
+    {
+        if ( false === isset( $role2policy[$data['role_id']] ) )
+        {
+            $role2policy[$data['role_id']] = array();
+        }
+        $role2policy[$data['role_id']][] = $data['id'];
+
+        $policies[$data['id']] = array(
+            'id'           =>  $data['id'],
+            'roleId'       =>  $data['role_id'],
+            'module'       =>  $data['module_name'],
+            'function'     =>  $data['function_name'],
+            'limitations'  =>  array()
+        );
+
+        $policyNextId = max( $policyNextId, $data['id'] );
+    }
+
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub', $roles ),
         generateMapping( $names ),
-        $nextId
+        $nextId,
+        generateMapping( $content2role ),
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub', $policies ),
+        $policyNextId,
+        generateMapping( $role2policy ),
+        generateMapping( $roleLimitations ),
+        generateMapping( getUser2GroupMapping( $fixture ) )
     );
+}
+
+function getUser2GroupMapping( array $fixture )
+{
+    $users = array();
+    foreach ( getFixtureTable( 'ezuser', $fixture ) as $data )
+    {
+        $users[] = (int) $data['contentobject_id'];
+    }
+
+    $nodes    = array();
+    $contents = array();
+    foreach ( getFixtureTable( 'ezcontentobject_tree', $fixture ) as $data )
+    {
+        $nodes[$data['node_id']]    = $data['parent_node_id'];
+        $contents[$data['node_id']] = $data['contentobject_id'];
+    }
+
+    $groups = array();
+    foreach ( $contents as $key => $contentId )
+    {
+        if ( false === in_array( $contentId, $users ) )
+        {
+            continue;
+        }
+
+        if ( false === isset( $groups[$contentId] ) )
+        {
+            $groups[$contentId] = array();
+        }
+        $groups[$contentId][] = $contents[$nodes[$key]];
+    }
+
+    return $groups;
 }
 
 function generateReturnArray()

@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\DateAndTime\Value as DateAndTimeValue,
-    ezp\Content\FieldType\DateAndTime\Type as DateAndTimeType,
-    ezp\Content\FieldType\FieldSettings,
+use eZ\Publish\Core\Repository\FieldType\DateAndTime\Value as DateAndTimeValue,
+    eZ\Publish\Core\Repository\FieldType\DateAndTime\Type as DateAndTimeType,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -78,7 +78,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\DateAndTime\\Value', $fieldValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldValue->data );
         self::assertSame( $storageFieldValue->dataInt, $fieldValue->data->value->getTimestamp() );
         self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey['sort_key_int'] );
     }
@@ -227,7 +227,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
         self::assertNull( $fieldDef->defaultValue->data->value );
     }
 
@@ -248,7 +248,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
         self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data->value );
         self::assertGreaterThanOrEqual( $time, $fieldDef->defaultValue->data->value->getTimestamp() );
     }
@@ -275,7 +275,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
         self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data->value );
         $generatedTimestamp = $fieldDef->defaultValue->data->value->getTimestamp();
         self::assertGreaterThanOrEqual( $timestamp, $generatedTimestamp );
@@ -307,7 +307,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
         self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data->value );
         $generatedTimestamp = $fieldDef->defaultValue->data->value->getTimestamp();
         self::assertGreaterThanOrEqual( $timestamp, $generatedTimestamp );

@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Content\Query;
-use ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Query\SortClause,
+use eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Query\SortClause,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\InvalidArgumentValue,
     InvalidArgumentException,
@@ -55,13 +55,13 @@ class Builder
 {
     /**
      * The internal criteria array
-     * @var \ezp\Persistence\Content\Query\Criterion[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Query\Criterion[]
      */
     private $criteria = array();
 
     /**
      * SortClause objects array
-     * @var \ezp\Persistence\Content\Query\SortClause[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Query\SortClause[]
      */
     private $sortClauses = array();
 
@@ -95,11 +95,11 @@ class Builder
      * Field -> Field
      * A criterion factory
      *
-     * @return \ezp\Persistence\Content\Query\CriterionFactory
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\CriterionFactory
      */
     public function __get( $property )
     {
-        $class = "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\" . ucfirst( $property );
+        $class = "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\" . ucfirst( $property );
         if ( !class_exists( $class ) )
         {
             throw new InvalidArgumentException( "Criterion $class not found" );
@@ -113,7 +113,7 @@ class Builder
      * The given criteria will be added with a logical AND, meaning that they must all match.
      * To handle OR criteria, the {@see or}/{@see lOr} methods must be used.
      *
-     * @param \ezp\Persistence\Content\Query\Criterion..$ $c
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion..$ $c
      * @return \ezp\Content\Query\Builder
      */
     public function addCriteria( Criterion $c )
@@ -122,7 +122,7 @@ class Builder
         {
             if ( !$arg instanceof Criterion )
             {
-                throw new InvalidArgumentException( "All arguments must be instances of ezp\Persistence\Content\Query\Criterion" );
+                throw new InvalidArgumentException( "All arguments must be instances of eZ\Publish\SPI\Persistence\Content\Query\Criterion" );
             }
             $this->criteria[] = $arg;
         }
@@ -134,14 +134,14 @@ class Builder
      * Logical or
      * Criterion: Criterion\LogicalAnd
      *
-     * @param \ezp\Persistence\Content\Query\Criterion $elementOne
-     * @param \ezp\Persistence\Content\Query\Criterion $elementTwo$...
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $elementOne
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $elementTwo$...
      *
-     * @return \ezp\Persistence\Content\Query\Criterion\LogicalOr
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalOr
      */
     public function lOr( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalOr' );
+        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\LogicalOr' );
         return call_user_func_array( array( $criterionFactory, 'logicalOr' ), func_get_args() );
     }
 
@@ -149,14 +149,14 @@ class Builder
      * Logical and
      * Criterion: Criterion\LogicalAnd
      *
-     * @param \ezp\Persistence\Content\Query\Criterion $elementOne
-     * @param \ezp\Persistence\Content\Query\Criterion $elementTwo$...
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $elementOne
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $elementTwo$...
      *
-     * @return \ezp\Persistence\Content\Query\Criterion\LogicalAnd
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd
      */
     public function lAnd( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalAnd' );
+        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\LogicalAnd' );
         return call_user_func_array( array( $criterionFactory, 'logicalAnd' ), func_get_args() );
     }
 
@@ -164,13 +164,13 @@ class Builder
      * Logical not
      * Criterion: Criterion\LogicalNot
      *
-     * @param \ezp\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
      *
-     * @return \ezp\Persistence\Content\Query\Criterion\LogicalNot
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalNot
      */
     public function not( Criterion $criterion )
     {
-        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalNot' );
+        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion\\LogicalNot' );
         return $criterionFactory->logicalNot( $criterion );
     }
 
@@ -180,7 +180,7 @@ class Builder
      * @param string $method
      * @param array $arguments
      *
-     * @return \ezp\Persistence\Content\Query\Criterion
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\Criterion
      */
     public function __call( $method, $arguments )
     {
@@ -200,7 +200,7 @@ class Builder
     /**
      * Adds new sorting clause objects to the query. One to many objects can be provided.
      *
-     * @param \ezp\Persistence\Content\SortClause..$ $sortClause
+     * @param \eZ\Publish\SPI\Persistence\Content\SortClause..$ $sortClause
      *
      * @return \ezp\Content\Query\Builder Self
      */
@@ -210,7 +210,7 @@ class Builder
         {
             if ( !$arg instanceof SortClause )
             {
-                throw new InvalidArgumentException( "All arguments must be instances of ezp\Persistence\Content\Query\SortClause" );
+                throw new InvalidArgumentException( "All arguments must be instances of eZ\Publish\SPI\Persistence\Content\Query\SortClause" );
             }
             $this->sortClauses[] = $arg;
         }

@@ -13,8 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezp\Content\FieldType\TextBlock\Value as TextBlockValue,
-    ezp\Content\FieldType\FieldSettings;
+    eZ\Publish\Core\Repository\FieldType\TextBlock\Value as TextBlockValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings;
 
 class TextBlock implements Converter
 {

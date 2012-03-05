@@ -11,7 +11,7 @@ namespace ezp\Content\Type\Group;
 use ezp\Base\Model,
     ezp\Base\Collection\ReadOnly as ReadOnlyCollection,
     ezp\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group as GroupValue;
+    eZ\Publish\SPI\Persistence\Content\Type\Group as GroupValue;
 
 /**
  * Concrete Group class ( Content Class Group )

@@ -11,12 +11,12 @@ namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
-    ezp\Content\FieldType\Factory as FieldTypeFactory,
-    ezp\Content\FieldType\Validator,
-    ezp\Content\FieldType\Value as FieldValue,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints;
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
+    eZ\Publish\Core\Repository\FieldType\Factory as FieldTypeFactory,
+    eZ\Publish\Core\Repository\FieldType\Validator,
+    eZ\Publish\Core\Repository\FieldType\Value as FieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 
 /**
  * Content Type Field (content class attribute) class
@@ -32,10 +32,10 @@ use ezp\Base\Model,
  * @property bool $isSearchable
  * @property bool $isRequired
  * @property bool $isInfoCollector
- * @property-read \ezp\Content\FieldTypeConstraints $fieldTypeConstraints
- * @property \ezp\Content\FieldType\Value $defaultValue
+ * @property-read \eZ\Publish\Core\Repository\FieldTypeConstraints $fieldTypeConstraints
+ * @property \eZ\Publish\Core\Repository\FieldType\Value $defaultValue
  * @property-read \ezp\Content\Type $contentType ContentType object
- * @property-read \ezp\Content\FieldType $type FieldType object
+ * @property-read \eZ\Publish\Core\Repository\FieldType $type FieldType object
  */
 class FieldDefinition extends Model
 {
@@ -72,12 +72,12 @@ class FieldDefinition extends Model
     protected $contentType;
 
     /**
-     * @var \ezp\Content\FieldType
+     * @var \eZ\Publish\Core\Repository\FieldType
      */
     protected $type;
 
     /**
-     * @var \ezp\Content\FieldType\Value
+     * @var \eZ\Publish\Core\Repository\FieldType\Value
      */
     protected $defaultValue;
 
@@ -85,7 +85,7 @@ class FieldDefinition extends Model
      * Array holding all the validator objects for this field definition.
      * The array is indexed by validator FQN (Full Qualified Name), i.e. class name with namespace without first slash.
      *
-     * @var \ezp\Content\FieldType\Validator[]
+     * @var \eZ\Publish\Core\Repository\FieldType\Validator[]
      */
     protected $validators;
 
@@ -105,9 +105,9 @@ class FieldDefinition extends Model
                 'fieldTypeConstraints' => new FieldTypeConstraints
             )
         );
-        $this->properties->fieldTypeConstraints->fieldSettings = $this->type->getFieldTypeSettings();
-        $this->defaultValue = $this->type->getValue();
-        $this->attach( $this->type, 'field/setValue' );
+        // FIXME: how is this supposed to be filled?
+        // $this->properties->fieldTypeConstraints->fieldSettings = $this->type->getFieldTypeSettings();
+        $this->defaultValue = $this->type->getDefaultDefaultValue();
     }
 
     /**
@@ -123,7 +123,7 @@ class FieldDefinition extends Model
     /**
      * Return field type object
      *
-     * @return \ezp\Content\FieldType
+     * @return \eZ\Publish\Core\Repository\FieldType
      */
     public function getType()
     {
@@ -142,7 +142,7 @@ class FieldDefinition extends Model
      * // Assume $fieldDefinition is of Integer field type
      *
      * // Adding a new validator
-     * $validator = new \ezp\Content\FieldType\Integer\IntegerValueValidator;
+     * $validator = new \eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator;
      * $validator->minIntegerValue = -6;
      * $validator->maxIntegerValue = 6;
      * $fieldDefinition->setValidator( $validator );
@@ -150,12 +150,12 @@ class FieldDefinition extends Model
      * // Updating a validator
      * // $allValidators is an array indexed by validator FQN
      * $allValidators = $fieldDefinition->getValidators();
-     * $validator = $allValidators["ezp\Content\FieldType\Integer\IntegerValueValidator"];
+     * $validator = $allValidators["eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator"];
      * $validator->minIntegerValue = -5;
      * $fieldDefinition->setValidator( $validator );
      * </code>
      *
-     * @param \ezp\Content\FieldType\Validator $validator
+     * @param \eZ\Publish\Core\Repository\FieldType\Validator $validator
      * @return void
      */
     public function setValidator( Validator $validator )
@@ -169,8 +169,8 @@ class FieldDefinition extends Model
      * Returns a validator object for this field definition, identified by $validatorName
      *
      * @param string $validatorName Validator's FQN (Full Qualified Name, class name with namespace, without first slash).
-     *                              e.g. \ezp\Content\FieldType\Integer\IntegerValueValidator
-     * @return \ezp\Content\FieldType\Validator
+     *                              e.g. \eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator
+     * @return \eZ\Publish\Core\Repository\FieldType\Validator
      * @throws \ezp\Base\Exception\InvalidArgumentValue If no validator is referenced with $validatorName
      */
     public function getValidator( $validatorName )
@@ -206,7 +206,7 @@ class FieldDefinition extends Model
      * Removes a validator, identified by $validatorName, from the field definition.
      *
      * @param string $validatorName Validator's FQN (Full Qualified Name, class name with namespace, without first slash).
-     *                              e.g. \ezp\Content\FieldType\Integer\IntegerValueValidator
+     *                              e.g. \eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator
      */
     public function removeValidator( $validatorName )
     {
@@ -223,7 +223,7 @@ class FieldDefinition extends Model
     /**
      * Returns default value for current field definition
      *
-     * @return \ezp\Content\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function getDefaultValue()
     {
@@ -233,19 +233,19 @@ class FieldDefinition extends Model
     /**
      * Sets a new default value for current field definition
      *
-     * @param \ezp\Content\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
      */
     public function setDefaultValue( FieldValue $value )
     {
         $this->defaultValue = $value;
         $this->notify( 'field/setValue', array( 'value' => $value ) );
-        $this->properties->defaultValue = $this->type->toFieldValue();
+        $this->properties->defaultValue = $this->type->toPersistenceValue( $value );
     }
 
     /**
      * Returns registered validators for current field definition
      *
-     * @return \ezp\Content\FieldType\Validator[]
+     * @return \eZ\Publish\Core\Repository\FieldType\Validator[]
      */
     public function getValidators()
     {
@@ -273,14 +273,13 @@ class FieldDefinition extends Model
     /**
      * Sets a field setting, according to field type allowed settings
      *
-     * @see \ezp\Content\FieldType::$allowedSettings
+     * @see \eZ\Publish\Core\Repository\FieldType::$allowedSettings
      * @param string $settingName
      * @param mixed $value
      */
     public function setFieldSetting( $settingName, $value )
     {
         $this->properties->fieldTypeConstraints->fieldSettings[$settingName] = $value;
-        $this->type->setFieldSetting( $settingName, $value );
     }
 
     /**

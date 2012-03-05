@@ -11,7 +11,7 @@ namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
-    ezp\Persistence\Content\Type\Group as GroupValue;
+    eZ\Publish\SPI\Persistence\Content\Type\Group as GroupValue;
 
 /**
  * Group class ( Content Class Group )

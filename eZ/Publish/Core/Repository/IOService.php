@@ -6,7 +6,15 @@ use eZ\Publish\API\Repository\IOService as IOServiceInterface,
     eZ\Publish\SPI\IO\Handler,
 
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
-    eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+    eZ\Publish\API\Repository\Values\IO\ContentType,
+    eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct,
+
+    eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile,
+    eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct,
+
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 
 /**
@@ -55,7 +63,39 @@ class IOService implements IOServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
      */
-    public function newBinaryCreateStructFromUploadedFile( array $uploadedFile ){}
+    public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
+    {
+        if ( empty( $uploadedFile['name'] ) || !is_string( $uploadedFile['name'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['name'] does not exist or has invalid value" );
+
+        if ( empty( $uploadedFile['type'] ) || !is_string( $uploadedFile['type'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['type'] does not exist or has invalid value" );
+
+        if ( empty( $uploadedFile['tmp_name'] ) || !is_string( $uploadedFile['tmp_name'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['tmp_name'] does not exist or has invalid value" );
+
+        if ( empty( $uploadedFile['size'] ) || !is_int( $uploadedFile['size'] ) || $uploadedFile['size'] < 0 )
+            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['size'] does not exist or has invalid value" );
+
+        if ( isset( $uploadedFile['error'] ) && $uploadedFile['error'] !== 0 )
+            throw new InvalidArgumentException( "uploadedFile", "file was not uploaded correctly" );
+
+        if ( !is_uploaded_file( $uploadedFile['tmp_name'] ) || !is_readable( $uploadedFile['tmp_name'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "file was not uploaded or is unreadable" );
+
+        $fileHandle = fopen( $uploadedFile['tmp_name'], 'rb' );
+        if ( $fileHandle === false )
+            throw new InvalidArgumentException( "uploadedFile", "failed to get file resource" );
+
+        $binaryCreateStruct = new BinaryFileCreateStruct();
+        $binaryCreateStruct->contentType = new ContentType( $uploadedFile['type'] );
+        $binaryCreateStruct->uri = $uploadedFile['tmp_name'];
+        $binaryCreateStruct->originalFileName = $uploadedFile['name'];
+        $binaryCreateStruct->size = $uploadedFile['size'];
+        $binaryCreateStruct->inputStream = $fileHandle;
+
+        return $binaryCreateStruct;
+    }
 
     /**
      * Creates a BinaryFileCreateStruct object from $localFile
@@ -66,23 +106,72 @@ class IOService implements IOServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
      */
-    public function newBinaryCreateStructFromLocalFile( $localFile ){}
+    public function newBinaryCreateStructFromLocalFile( $localFile )
+    {
+        if ( empty( $localFile ) || !is_string( $localFile ) )
+            throw new InvalidArgumentException( "localFile", "localFile has an invalid value" );
+
+        if ( !is_file( $localFile ) || !is_readable( $localFile ) )
+            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable" );
+
+        $fileHandle = fopen( $localFile, 'rb' );
+        if ( $fileHandle === false )
+            throw new InvalidArgumentException( "localFile", "failed to get file resource" );
+
+        $binaryCreateStruct = new BinaryFileCreateStruct();
+        $binaryCreateStruct->contentType = new ContentType( mime_content_type( $localFile ) );
+        $binaryCreateStruct->uri = $localFile;
+        $binaryCreateStruct->originalFileName = basename( $localFile );
+        $binaryCreateStruct->size = filesize( $localFile );
+        $binaryCreateStruct->inputStream = $fileHandle;
+
+        return $binaryCreateStruct;
+    }
 
     /**
-     * Creates a  binary file in the the repository
+     * Creates a binary file in the repository
      *
      * @param \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile The created BinaryFile object
      */
-    public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct ){}
+    public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
+    {
+        if ( !$binaryFileCreateStruct->contentType instanceof ContentType )
+            throw new InvalidArgumentValue( "contentType", "invalid content type", "BinaryFileCreateStruct" );
+
+        if ( empty( $binaryFileCreateStruct->uri ) || !is_string( $binaryFileCreateStruct->uri ) )
+            throw new InvalidArgumentValue( "uri", $binaryFileCreateStruct->uri, "BinaryFileCreateStruct" );
+
+        if ( empty( $binaryFileCreateStruct->originalFileName ) || !is_string( $binaryFileCreateStruct->originalFileName ) )
+            throw new InvalidArgumentValue( "originalFileName", $binaryFileCreateStruct->originalFileName, "BinaryFileCreateStruct" );
+
+        if ( !is_int( $binaryFileCreateStruct->size ) || $binaryFileCreateStruct->size < 0 )
+            throw new InvalidArgumentValue( "size", $binaryFileCreateStruct->size, "BinaryFileCreateStruct" );
+
+        if ( !is_resource( $binaryFileCreateStruct->inputStream ) )
+            throw new InvalidArgumentValue( "inputStream", "property is not a file resource", "BinaryFileCreateStruct" );
+
+        $spiBinaryCreateStruct = $this->buildSPIBinaryFileCreateStructObject( $binaryFileCreateStruct );
+
+        $spiBinaryFile = $this->ioHandler->create( $spiBinaryCreateStruct );
+
+        return $this->buildDomainBinaryFileObject( $spiBinaryFile );
+    }
 
     /**
      * Deletes the BinaryFile with $path
      *
      * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
      */
-    public function deleteBinaryFile( BinaryFile $binaryFile ){}
+    public function deleteBinaryFile( BinaryFile $binaryFile )
+    {
+        //@todo: is $binaryFile->id equal to file path?
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "id", $binaryFile->id, "BinaryFile" );
+
+        $this->ioHandler->delete( $binaryFile->id );
+    }
 
     /**
      * Loads the binary file with $id
@@ -93,7 +182,16 @@ class IOService implements IOServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
      */
-    public function loadBinaryFile( $binaryFileid ){}
+    public function loadBinaryFile( $binaryFileid )
+    {
+        if ( empty( $binaryFileid ) || !is_string( $binaryFileid ) )
+            throw new InvalidArgumentValue( "binaryFileid", $binaryFileid );
+
+        //@todo: is binaryFileid equal to path?
+        $spiBinaryFile = $this->ioHandler->load( $binaryFileid );
+
+        return $this->buildDomainBinaryFileObject( $spiBinaryFile );
+    }
 
     /**
      * Returns a read (mode: rb) file resource to the binary file identified by $path
@@ -102,7 +200,14 @@ class IOService implements IOServiceInterface
      *
      * @return resource
      */
-    public function getFileInputStream( BinaryFile $binaryFile ){}
+    public function getFileInputStream( BinaryFile $binaryFile )
+    {
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "id", $binaryFile->id, "BinaryFile" );
+
+        //@todo: is binary file ID equal to file path?
+        return $this->ioHandler->getFileResource( $binaryFile->id );
+    }
 
     /**
      * Returns the content of the binary file
@@ -111,5 +216,60 @@ class IOService implements IOServiceInterface
      *
      * @return string
      */
-    public function getFileContents( BinaryFile $binaryFile ){}
+    public function getFileContents( BinaryFile $binaryFile )
+    {
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "id", $binaryFile->id, "BinaryFile" );
+
+        //@todo: is binary file ID equal to file path?
+        return $this->ioHandler->getFileContents( $binaryFile->id );
+    }
+
+    /**
+     * Generates SPI BinaryFileCreateStruct object from provided API BinaryFileCreateStruct object
+     *
+     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
+     *
+     * @return \eZ\Publish\SPI\IO\BinaryFileCreateStruct
+     */
+    protected function buildSPIBinaryFileCreateStructObject( BinaryFileCreateStruct $binaryFileCreateStruct )
+    {
+        $spiBinaryCreateStruct = new SPIBinaryFileCreateStruct();
+
+        $spiBinaryCreateStruct->path = $binaryFileCreateStruct->uri;
+        $spiBinaryCreateStruct->size = $binaryFileCreateStruct->size;
+
+        $mimeType = $binaryFileCreateStruct->contentType->type .
+                    '/' .
+                    $binaryFileCreateStruct->contentType->subType;
+
+        $spiBinaryCreateStruct->mimeType = $mimeType;
+        $spiBinaryCreateStruct->originalFile = $binaryFileCreateStruct->originalFileName;
+        $spiBinaryCreateStruct->setInputStream( $binaryFileCreateStruct->inputStream );
+
+        return $spiBinaryCreateStruct;
+    }
+
+    /**
+     * Generates API BinaryFile object from provided SPI BinaryFile object
+     *
+     * @param \eZ\Publish\SPI\IO\BinaryFile $spiBinaryFile
+     *
+     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
+     */
+    protected function buildDomainBinaryFileObject( SPIBinaryFile $spiBinaryFile )
+    {
+        return new BinaryFile(
+            array(
+                //@todo is setting the id of file to path correct?
+                'id'           => $spiBinaryFile->path,
+                'size'         => $spiBinaryFile->size,
+                'mtime'        => $spiBinaryFile->mtime,
+                'ctime'        => $spiBinaryFile->ctime,
+                'contentType'  => $spiBinaryFile->mimeType,
+                'uri'          => $spiBinaryFile->uri,
+                'originalFile' => $spiBinaryFile->originalFile
+            )
+        );
+    }
 }

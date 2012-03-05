@@ -85,7 +85,7 @@ class EzcDatabase extends Gateway
     /**
      * Zeta Components database handler.
      *
-     * @var EzcDbHandler
+     * @var \ezcDbHandler
      */
     protected $dbHandler;
 
@@ -99,7 +99,8 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new gateway based on $db
      *
-     * @param EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct( EzcDbHandler $db, MaskGenerator $languageMaskGenerator )
     {
@@ -110,6 +111,7 @@ class EzcDatabase extends Gateway
     /**
      * Inserts the given $group.
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
      * @return mixed Group ID
      */
     public function insertGroup( Group $group )
@@ -310,7 +312,7 @@ class EzcDatabase extends Gateway
     /**
      * Inserts a new conten type.
      *
-     * @param Type $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      * @return mixed Type ID
      */
     public function insertType( Type $type )
@@ -345,7 +347,7 @@ class EzcDatabase extends Gateway
      * Set common columns for insert/update of a Type.
      *
      * @param \ezcQuery $q
-     * @param mixed $typeStruct
+     * @param mixed $type
      * @return void
      */
     protected function setCommonTypeColumns( ezcQuery $q, $type )
@@ -1249,8 +1251,8 @@ class EzcDatabase extends Gateway
     /**
      * Creates an array of select columns for $tableName.
      *
+     * @param \ezcQuerySelect $q
      * @param string $tableName
-     * @return array
      */
     protected function selectColumns( ezcQuerySelect $q, $tableName )
     {

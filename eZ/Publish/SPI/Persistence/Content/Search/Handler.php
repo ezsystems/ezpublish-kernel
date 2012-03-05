@@ -10,7 +10,7 @@
 namespace eZ\Publish\SPI\Persistence\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -25,10 +25,10 @@ abstract class Handler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param string[] $translations
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
      */
@@ -45,7 +45,7 @@ abstract class Handler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string[] $translations
      * @return \eZ\Publish\SPI\Persistence\Content
      * @todo Define exceptions (InMemory uses NotFound while Legazy uses InvalidObjectCount)

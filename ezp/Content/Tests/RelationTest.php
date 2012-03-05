@@ -13,8 +13,8 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Relation,
     ezp\Base\ServiceContainer,
     ezp\Base\Configuration,
-    ezp\Persistence\Content\Relation as RelationValue,
-    ezp\Persistence\Content\Type as TypeValue,
+    eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
     ezp\User\Proxy as ProxyUser,
     PHPUnit_Framework_TestCase;
 
@@ -36,7 +36,7 @@ class RelationTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             Configuration::getInstance('service')->getAll(),
             array(
-                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@persistence_handler' => new \eZ\Publish\SPI\Persistence\Storage\InMemory\Handler(),
                 '@io_handler' => new \ezp\Io\Storage\InMemory(),
             )
         );

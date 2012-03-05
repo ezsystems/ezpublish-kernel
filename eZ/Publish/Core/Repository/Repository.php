@@ -206,7 +206,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target
      * @return array|bool
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target )
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
     {
         $className = $value;
         $limitationArray = $this->hasAccess( $module, $function );
@@ -380,6 +380,22 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get IO Service
+     *
+     * Get service object to perform operations on binary files
+     *
+     * @return \eZ\Publish\API\Repository\IOService
+     */
+    public function getIOService()
+    {
+        if ( $this->ioService !== null )
+            return $this->ioService;
+
+        $this->ioService = new IOService( $this, $this->ioHandler, $this->serviceSettings['io'] );
+        return $this->ioService;
+    }
+
+    /**
      * Get RoleService
      *
      * @return \eZ\Publish\API\Repository\RoleService
@@ -391,22 +407,6 @@ class Repository implements RepositoryInterface
 
         $this->roleService = new RoleService( $this, $this->persistenceHandler, $this->serviceSettings['role'] );
         return $this->roleService;
-    }
-
-    /**
-     * Get IO Service
-     *
-     * Get service object to perform IO operations
-     *
-     * @return \eZ\Publish\API\Repository\IOService
-     */
-    public function getIOService()
-    {
-        if ( $this->ioService !== null )
-            return $this->ioService;
-
-        $this->ioService = new IOService( $this, $this->ioHandler, $this->serviceSettings['io'] );
-        return $this->ioService;
     }
 
     /**

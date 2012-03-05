@@ -12,8 +12,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
-    eZ\Publish\SPI\Persistence\Content\Query\SortClause,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     ezp\Content\Query,
     eZ\Publish\SPI\Persistence;
 

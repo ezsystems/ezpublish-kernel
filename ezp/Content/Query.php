@@ -14,13 +14,13 @@ class Query
     /**
      * The Query criterion
      * Can contain multiple criterion, as items of a logical one (by default AND)
-     * @var \ezp\Persistence\Content\Query\Criterion
+     * @var \eZ\Publish\SPI\Persistence\Content\Query\Criterion
      */
     public $criterion;
 
     /**
      * Query sorting clauses
-     * @var \ezp\Persistence\Content\Query\SortClause[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Query\SortClause[]
      */
     public $sortClauses;
 

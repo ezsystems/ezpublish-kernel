@@ -20,8 +20,8 @@ use ezp\Base\Exception,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\Logic,
-    ezp\Persistence\Content\Location\Trashed as TrashedLocationValue,
-    ezp\Persistence\ValueObject;
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedLocationValue,
+    eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Location service, used for complex subtree operations
@@ -136,7 +136,7 @@ class Service extends BaseService
 
     /**
      * Builds Trashed location domain object from $vo ValueObject returned by Persistence API
-     * @param \ezp\Persistence\Location\Trashed $vo Location value object (extending \ezp\Persistence\ValueObject)
+     * @param \eZ\Publish\SPI\Persistence\Location\Trashed $vo Location value object (extending \eZ\Publish\SPI\Persistence\ValueObject)
      *                                      returned by persistence
      * @return \ezp\Content\Location\Trashed
      * @throws \ezp\Base\Exception\InvalidArgumentType

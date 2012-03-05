@@ -13,12 +13,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezp\Content\FieldType\Integer\Value as IntegerValue,
-    ezp\Content\FieldType\FieldSettings;
+    eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings;
 
 class Integer implements Converter
 {
-    const INTEGER_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\Integer\\IntegerValueValidator';
+    const INTEGER_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\IntegerValueValidator';
 
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;

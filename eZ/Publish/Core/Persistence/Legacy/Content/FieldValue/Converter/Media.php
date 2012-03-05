@@ -13,12 +13,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezp\Content\FieldType\Media\Value as MediaValue,
-    ezp\Content\FieldType\FieldSettings;
+    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings;
 
 class Media implements Converter
 {
-    const FILESIZE_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator';
+    const FILESIZE_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator';
 
     /**
      * Converts data from $value to $storageFieldValue.

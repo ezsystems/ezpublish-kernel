@@ -18,9 +18,9 @@ interface Parser
     /**
      * Construct an instance of Parser
      *
-     * @param array $globalConfiguration
+     * @param array $settings
      */
-    public function __construct( array $globalConfiguration );
+    public function __construct( array $settings );
 
     /**
      * Parse file and return raw configuration data

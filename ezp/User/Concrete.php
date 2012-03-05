@@ -10,7 +10,7 @@
 namespace ezp\User;
 use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
-    ezp\Persistence\User as UserValue,
+    eZ\Publish\SPI\Persistence\User as UserValue,
     ezp\User;
 
 /**

@@ -10,7 +10,7 @@
     <directory>.</directory>
     <ignore>doc/*</ignore>
     <ignore>ezp/*/Tests/*</ignore>
-    <ignore>ezp/Persistence/Storage/*/Tests/*</ignore>
+    <ignore>eZ/Publish/SPI/Persistence/Storage/*/Tests/*</ignore>
     <ignore>eZ/Publish/Core/*/Tests/*</ignore>
   </files>
 </docblox>

@@ -17,8 +17,8 @@ use ezp\Base\Configuration,
     ezp\Base\Collection\ReadOnly,
     ezp\Content\Field,
     ezp\Content\Version,
-    ezp\Content\FieldType\Factory as FieldTypeFactory,
-    ezp\Content\FieldType\Value as FieldValue,
+    eZ\Publish\Core\Repository\FieldType\Factory as FieldTypeFactory,
+    eZ\Publish\Core\Repository\FieldType\Value as FieldValue,
     RuntimeException;
 
 /**
@@ -55,7 +55,7 @@ class StaticCollection extends TypeCollection
      * Tries to assign $value as field value to a Field object identified by $identifier
      *
      * @param string $identifier Field identifier
-     * @param \ezp\Content\FieldType\Value $value Field value object
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value Field value object
      * @throws \ezp\Base\Exception\Logic If any field identified by $identifier doesn't exist in the collection
      * @throws \ezp\Base\Exception\InvalidArgumentType If $value is not a field value object
      * @todo Direct string assignation ? If we decide to implement this, magic should be done here

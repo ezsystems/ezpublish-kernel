@@ -20,9 +20,15 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
  */
 class RoleStub extends Role
 {
-    protected $names;
+    /**
+     * @var string[]
+     */
+    protected $names = array();
 
-    protected $descriptions;
+    /**
+     * @var string[]
+     */
+    protected $descriptions = array();
 
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]
@@ -72,7 +78,11 @@ class RoleStub extends Role
      */
     public function getName($languageCode)
     {
-        // TODO: Implement getName() method.
+        if ( isset( $this->names[$languageCode] ) )
+        {
+            return $this->names[$languageCode];
+        }
+        return null;
     }
 
     /**
@@ -103,7 +113,11 @@ class RoleStub extends Role
      */
     public function getDescription($languageCode)
     {
-        // TODO: Implement getDescription() method.
+        if ( isset( $this->descriptions[$languageCode] ) )
+        {
+            return $this->descriptions[$languageCode];
+        }
+        return null;
     }
 
     /**

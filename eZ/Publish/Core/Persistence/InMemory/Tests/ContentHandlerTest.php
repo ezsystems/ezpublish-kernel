@@ -14,12 +14,12 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content as ContentDomainObject,
     ezp\Content\Version,
     ezp\Content\Relation,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -76,7 +76,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Removes stuff created in setUp().
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
 

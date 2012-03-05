@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the XmlText\FieldTypeTest class
+ * File containing the FieldType\XmlTextTypeTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,10 +8,10 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\XmlText\Type as XmlTextType,
-    ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\XmlText\Value as XmlTextValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\XmlText\Type as XmlTextType,
+    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
     ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
     ReflectionObject, ReflectionProperty;
@@ -25,12 +25,12 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      * This test will make sure a correct mapping for the field type string has
      * been made.
      *
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\XmlText\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Type",
             Factory::build( "ezxmltext" ),
             "XmlText object not returned for 'ezxmltext'. Incorrect mapping?"
         );
@@ -39,7 +39,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
      */
     public function testAllowedSettings()
     {
@@ -52,57 +52,54 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\XmlText\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::acceptValue
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
-    public function testCanParseValueInvalidType()
+    public function testAcceptValueInvalidType()
     {
         $ft = new XmlTextType;
-        $ft->setValue( $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
+        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\XmlText\Type::canParseValue
-     * @expectedException \ezp\Base\Exception\BadFieldTypeInput
-     * @dataProvider providerForTestCanParseValueInvalidFormat
+     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::acceptValue
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @dataProvider providerForTestAcceptValueInvalidFormat
      */
-    public function testCanParseValueInvalidFormat( $text, $format )
-    {
-        $ft = new XmlTextType;
-        $value = new XmlTextValue( $text, $format );
-        $ft->setValue( $value );
-    }
-
-    /**
-     * @covers \ezp\Content\FieldType\Author\Type::canParseValue
-     * @dataProvider providerForTestCanParseValueValidFormat
-     */
-    public function testCanParseValueValidFormat( $text, $format )
+    public function testAcceptValueInvalidFormat( $text, $format )
     {
         $ft = new XmlTextType;
         $value = new XmlTextValue( $text, $format );
-        $ft->setValue( $value );
-        self::assertSame( $value, $ft->getValue() );
+        $ft->acceptValue( $value );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\XmlText\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
+     * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testToFieldValue()
+    public function testAcceptValueValidFormat( $text, $format )
+    {
+        $ft = new XmlTextType;
+        $value = new XmlTextValue( $text, $format );
+        $ft->acceptValue( $value );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::toPersistenceValue
+     */
+    public function testToPersistenceValue()
     {
         // @todo Do one per value class
         $value = new XmlTextValue( '', XmlTextValue::INPUT_FORMAT_PLAIN );
 
         $ft = new XmlTextType();
-        $ft->setValue( $value );
 
-        $fieldValue = $ft->toFieldValue();
+        $fieldValue = $ft->toPersistenceValue( $value );
 
-        self::assertSame( $value, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( "", $fieldValue->data );
     }
 
-    public function providerForTestCanParseValueInvalidFormat()
+    public function providerForTestAcceptValueInvalidFormat()
     {
         return array(
 
@@ -114,7 +111,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public static function providerForTestCanParseValueValidFormat()
+    public static function providerForTestAcceptValueValidFormat()
     {
         return array(
 

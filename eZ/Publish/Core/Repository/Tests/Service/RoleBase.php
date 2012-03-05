@@ -274,7 +274,6 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $createdRole->getPolicies() as $policy )
         {
-            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
             self::assertGreaterThan( 0, $policy->id );
             self::assertEquals( $createdRole->id, $policy->roleId );
@@ -283,7 +282,6 @@ abstract class RoleBase extends BaseServiceTest
 
             foreach ( $policy->getLimitations() as $limitation )
             {
-                /** @var $limitation \eZ\Publish\API\Repository\Values\User\Limitation */
                 self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Limitation', $limitation );
 
                 if ( $policy->module == 'content' && $policy->function == 'read' )
@@ -419,7 +417,6 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $updatedRole->getPolicies() as $policy )
         {
-            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
             self::assertGreaterThan( 0, $policy->id );
             self::assertEquals( $role->id, $policy->roleId );
@@ -463,7 +460,6 @@ abstract class RoleBase extends BaseServiceTest
         $policyUpdateStruct->addLimitation( $limitation );
 
         $updatedPolicy = $roleService->updatePolicy( $policy, $policyUpdateStruct );
-        /** @var $limitations \eZ\Publish\API\Repository\Values\User\Limitation[] */
         $limitations = $updatedPolicy->getLimitations();
 
         self::assertCount( 1, $limitations );
@@ -591,7 +587,6 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $policies as $policy )
         {
-            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
             self::assertGreaterThan( 0, $policy->id );
             self::assertGreaterThan( 0, $policy->roleId );

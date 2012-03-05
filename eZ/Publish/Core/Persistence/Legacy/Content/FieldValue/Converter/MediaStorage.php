@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Media class
+ * File containing the MediaStorage class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Fields\Storage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    ezp\Content\FieldType\Media\Value as MediaValue,
+    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
     ezp\Io\ContentType;
 
 /**
@@ -36,8 +36,8 @@ class MediaStorage implements Storage
     /**
      * Populates $field value property based on the external data.
      * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
-     * This value holds the data as a {@link ezp\Content\FieldType\Value} based object,
-     * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
+     * This value holds the data as a {@link eZ\Publish\Core\Repository\FieldType\Value} based object,
+     * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\Repository\FieldType\TextLine\Value} object).
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context

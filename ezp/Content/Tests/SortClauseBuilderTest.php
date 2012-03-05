@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Content\Tests\SortClauseBuilder class
+ * File containing the ezp\Content\Tests\SortClauseBuilderTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -31,8 +31,8 @@ class SortClauseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         array_push( $extraParameters, Query::SORT_ASC );
         $sortClause = call_user_func_array( array( $this->sb, $sortClauseCall ), $extraParameters );
-        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause', $sortClause );
-        self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause\\$sortClauseClass", $sortClause );
+        self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\SortClause', $sortClause );
+        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\SortClause\\$sortClauseClass", $sortClause );
         self::assertEquals( $sortClauseField, $sortClause->target );
         self::assertEquals( Query::SORT_ASC, $sortClause->direction );
 

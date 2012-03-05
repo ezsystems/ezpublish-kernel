@@ -9,15 +9,15 @@
 
 namespace ezp\Content\Tests;
 use PHPUnit_Framework_TestCase,
-    ezp\Content\FieldType\Factory,
-    ezp\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     ezp\Base\Configuration;
 
 class FieldTypeFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::getFieldTypeNamespace
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::getFieldTypeNamespace
      */
     public function testGetFieldTypeNSKnownType()
     {
@@ -28,7 +28,7 @@ class FieldTypeFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException \ezp\Base\Exception\MissingClass
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::getFieldTypeNamespace
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::getFieldTypeNamespace
      */
     public function testGetFieldTypeNSUnknownType()
     {
@@ -37,12 +37,12 @@ class FieldTypeFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testBuild()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType",
+            "eZ\\Publish\\Core\\Repository\\FieldType",
             Factory::build( "ezstring" ),
             "Factory did not build a class of kind FieldType."
         );
@@ -50,12 +50,12 @@ class FieldTypeFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::buildValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::buildValue
      */
     public function testBuildValueFromStringKnownType()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Value",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Value",
             Factory::buildValue( "ezstring", "Working test" ),
             "Factory did not build a class of kind FieldType\\Value"
         );

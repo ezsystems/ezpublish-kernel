@@ -10,8 +10,12 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\Repository;
-use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\ValueObject;
+use \eZ\Publish\API\Repository\Values\Content\Content;
+use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use \eZ\Publish\API\Repository\Values\User\User;
+use \eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Repository}
@@ -72,6 +76,11 @@ class RepositoryStub implements Repository
     private $locationService;
 
     /**
+     * @var integer
+     */
+    private $initializing = 0;
+
+    /**
      * Instantiates the stubbed repository.
      *
      * @param string $fixtureDir
@@ -110,11 +119,16 @@ class RepositoryStub implements Repository
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @return boolean|array if limitations are on this function an array of limitations is returned
+     * @return boolean|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        $limitations = array();
+        if ( $this->initializing > 0 )
+        {
+            return true;
+        }
+
+        $limitations = null;
 
         $user = $user ?: $this->getCurrentUser();
 
@@ -129,7 +143,7 @@ class RepositoryStub implements Repository
             {
                 continue;
             }
-            if ( $policy->function === '*' )
+            if ( $policy->function === '*' && $policy->module === $module )
             {
                 return true;
             }
@@ -139,6 +153,10 @@ class RepositoryStub implements Repository
             }
 
             // TODO: $policy->getLimitations() === '*'
+            if ( null === $limitations )
+            {
+                $limitations = array();
+            }
 
             foreach ( $policy->getLimitations() as $limitation )
             {
@@ -146,11 +164,7 @@ class RepositoryStub implements Repository
             }
         }
 
-        if ( 0 === count( $limitations ) )
-        {
-            return $limitations;
-        }
-        return false;
+        return is_array( $limitations ) ? $limitations : false;
     }
 
     /**
@@ -161,10 +175,58 @@ class RepositoryStub implements Repository
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\ValueObject $value
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target
+     * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target )
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
     {
-        // TODO: Implement canUser() method.
+        if ( $this->initializing > 0 )
+        {
+            return true;
+        }
+
+        $hasAccess = $this->hasAccess( $module, $function );
+        if ( is_bool( $hasAccess ) )
+        {
+            return $hasAccess;
+        }
+
+        $contentInfoValue = null;
+        if ( $value instanceof ContentInfo )
+        {
+            $contentInfoValue = $value;
+        }
+        else if ( $value instanceof Content )
+        {
+            $contentInfoValue = $value->contentInfo;
+        }
+        else if ( $value instanceof VersionInfo )
+        {
+            $contentInfoValue = $value->contentInfo;
+        }
+
+        if ( null === $contentInfoValue || false === $contentInfoValue->published )
+        {
+            return true;
+        }
+
+        $locationService = $this->getLocationService();
+        $locations = $locationService->loadLocations( $contentInfoValue );
+
+        foreach ( $hasAccess as $limitation )
+        {
+            if ( $limitation->getIdentifier() !== Limitation::SUBTREE )
+            {
+                continue;
+            }
+            foreach ( $locations as $location )
+            {
+                if ( 0 === strpos( $location->pathString, $limitation->limitationValues ) )
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -278,6 +340,18 @@ class RepositoryStub implements Repository
     }
 
     /**
+     * Get IO Service
+     *
+     * Get service object to perform operations on binary files
+     *
+     * @return \eZ\Publish\API\Repository\IOService
+     */
+    public function getIOService()
+    {
+        // TODO: Implement getIOService() method.
+    }
+
+    /**
      * Get RoleService
      *
      * @return \eZ\Publish\API\Repository\RoleService
@@ -336,6 +410,10 @@ class RepositoryStub implements Repository
      */
     public function loadFixture( $fixtureName, array $scopeValues = array() )
     {
-        return include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
+        ++$this->initializing;
+        $fixture = include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
+        --$this->initializing;
+
+        return $fixture;
     }
 }

@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator,
     ezcQuerySelect;
 
 /**
@@ -25,11 +26,11 @@ abstract class CriterionHandler
      * @var array
      */
     protected $comparatorMap = array(
-        Criterion\Operator::EQ => "eq",
-        Criterion\Operator::GT => "gt",
-        Criterion\Operator::GTE => "gte",
-        Criterion\Operator::LT => "lt",
-        Criterion\Operator::LTE => "lte",
+        CriterionOperator::EQ => "eq",
+        CriterionOperator::GT => "gt",
+        CriterionOperator::GTE => "gte",
+        CriterionOperator::LT => "lt",
+        CriterionOperator::LTE => "lte",
     );
 
     /**

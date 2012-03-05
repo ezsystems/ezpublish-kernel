@@ -11,7 +11,7 @@ namespace eZ\Publish\SPI\Persistence\Content\Location\Trash;
 use eZ\Publish\SPI\Persistence\Content\Location,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.
@@ -61,10 +61,10 @@ interface Handler
      * sorted with SortClause objects contained in $sort (if any).
      * If no criterion is provided (null), no filter is applied
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param $offset Offset to start listing from, 0 by default
      * @param $limit Limit for the listing. Null by default (no limit)
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
     public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );

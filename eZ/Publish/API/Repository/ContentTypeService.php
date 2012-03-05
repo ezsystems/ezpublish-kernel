@@ -60,7 +60,7 @@ interface ContentTypeService
     /**
      * Get all Content Type Groups
      *
-     * @return array an array of {@link ContentTypeGroup}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function loadContentTypeGroups();
 

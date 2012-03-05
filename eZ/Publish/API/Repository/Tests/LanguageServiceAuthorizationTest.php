@@ -12,9 +12,11 @@ namespace eZ\Publish\API\Repository\Tests;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
- * Test case for operations in the LanguageServiceAuthorization using in memory storage.
+ * Test case for operations in the LanguageService using in memory storage.
  *
- * @see eZ\Publish\API\Repository\LanguageServiceAuthorization
+ * @see \eZ\Publish\API\Repository\LanguageService
+ * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  */
 class LanguageServiceAuthorizationTest extends BaseTest
@@ -29,7 +31,23 @@ class LanguageServiceAuthorizationTest extends BaseTest
      */
     public function testCreateLanguageThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::createLanguage() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService     = $repository->getUserService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreate               = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled      = true;
+        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $languageService->createLanguage( $languageCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -42,8 +60,27 @@ class LanguageServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateLanguageNameThrowsUnauthorizedException()
     {
+        $repository = $this->getRepository();
 
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::updateLanguageName() is not implemented." );
+        /* BEGIN: Use Case */
+        $userService     = $repository->getUserService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreate               = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled      = false;
+        $languageCreate->name         = 'English';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        $languageId = $languageService->createLanguage( $languageCreate )->id;
+
+        $language = $languageService->loadLanguageById( $languageId );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $languageService->updateLanguageName( $language, 'New language name.' );
+        /* END: Use Case */
     }
 
     /**
@@ -56,7 +93,25 @@ class LanguageServiceAuthorizationTest extends BaseTest
      */
     public function testEnableLanguageThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::enableLanguage() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService     = $repository->getUserService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreate               = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled      = false;
+        $languageCreate->name         = 'English';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        $language = $languageService->createLanguage( $languageCreate );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $languageService->enableLanguage( $language );
+        /* END: Use Case */
     }
 
     /**
@@ -69,7 +124,25 @@ class LanguageServiceAuthorizationTest extends BaseTest
      */
     public function testDisableLanguageThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::disableLanguage() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService     = $repository->getUserService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreate               = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled      = true;
+        $languageCreate->name         = 'English';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        $language = $languageService->createLanguage( $languageCreate );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $languageService->disableLanguage( $language );
+        /* END: Use Case */
     }
 
     /**
@@ -82,6 +155,24 @@ class LanguageServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteLanguageThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::deleteLanguage() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService     = $repository->getUserService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreateEnglish               = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled      = false;
+        $languageCreateEnglish->name         = 'English';
+        $languageCreateEnglish->languageCode = 'eng-NZ';
+
+        $language = $languageService->createLanguage( $languageCreateEnglish );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $languageService->deleteLanguage( $language );
+        /* END: Use Case */
     }
 }

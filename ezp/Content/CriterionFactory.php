@@ -8,11 +8,11 @@
  */
 
 namespace ezp\Content;
-use eZ\Publish\SPI\Persistence\Content\Query\Criterion,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalOr,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalNot,
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot,
     InvalidArgumentException;
 
 /**

@@ -99,7 +99,7 @@ class Handler implements BaseSectionHandler
     public function loadAll()
     {
         $rows = $this->sectionGateway->loadAllSectionData();
-        return $this->createSectionFromArray( reset( $rows ) );
+        return $this->createSectionsFromArray( $rows );
     }
 
     /**
@@ -135,6 +135,22 @@ class Handler implements BaseSectionHandler
         $section->identifier = $data['identifier'];
 
         return $section;
+    }
+
+    /**
+     * Creates a Section from the given $data
+     *
+     * @param array $data
+     * @return \eZ\Publish\SPI\Persistence\Content\Section[]
+     */
+    protected function createSectionsFromArray( array $data )
+    {
+        $sections = array();
+        foreach ( $data as $sectionData )
+        {
+            $sections[] = $this->createSectionFromArray( $sectionData );
+        }
+        return $sections;
     }
 
     /**

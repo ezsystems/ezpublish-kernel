@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Rating\Type as Rating,
-    ezp\Content\FieldType\Rating\Value as RatingValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Rating\Type as Rating,
+    eZ\Publish\Core\Repository\FieldType\Rating\Value as RatingValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -21,12 +21,12 @@ class RatingTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Rating\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Type",
             Factory::build( "ezsrrating" ),
             "Rating object not returned for 'ezsrrating', incorrect mapping? "
         );
@@ -34,7 +34,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testRatingSupportedValidators()
     {
@@ -46,15 +46,15 @@ class RatingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Rating\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new Rating();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
         $ratingValue = new RatingValue();
         $ratingValue->isDisabled = "Strings should not work.";
@@ -63,13 +63,13 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new Rating();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new RatingValue( false );
@@ -78,23 +78,20 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $rating = false;
         $ft = new Rating();
-        $ft->setValue( $fv = new RatingValue( $rating ) );
+        $fieldValue = $ft->toPersistenceValue( $fv = new RatingValue( $rating ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( $rating, $fieldValue->data );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithParamFalse()
     {
@@ -104,7 +101,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithParamTrue()
     {
@@ -114,7 +111,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -124,31 +121,31 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::fromString
      */
     public function testBuildFieldValueFromStringFalse()
     {
         $rating = "0";
         $value = RatingValue::fromString( $rating );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Rating\\Value", $value );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $value );
         self::assertSame( false, $value->isDisabled );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::fromString
      */
     public function testBuildFieldValueFromStringTrue()
     {
         $rating = "1";
         $value = RatingValue::fromString( $rating );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Rating\\Value", $value );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $value );
         self::assertSame( true, $value->isDisabled );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__toString
      */
     public function testFieldValueToStringFalse()
     {
@@ -165,7 +162,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Rating\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__toString
      */
     public function testFieldValueToStringTrue()
     {

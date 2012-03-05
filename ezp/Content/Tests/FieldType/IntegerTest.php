@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Integer\Type as Integer,
-    ezp\Content\FieldType\Integer\Value as IntegerValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Integer\Type as Integer,
+    eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -21,12 +21,12 @@ class IntegerTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Integer\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\Type",
             Factory::build( "ezinteger" ),
             "Integer object not returned for 'ezinteger', incorrect mapping? "
         );
@@ -34,41 +34,41 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testIntegerSupportedValidators()
     {
         $ft = new Integer();
         self::assertSame(
-            array( "ezp\\Content\\FieldType\\Integer\\IntegerValueValidator" ),
+            array( "eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\IntegerValueValidator" ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Integer\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::acceptValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @group fieldType
      */
-    public function testCanParseValueInvalidFormat()
+    public function testAcceptValueInvalidFormat()
     {
         $ft = new Integer();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
         $refMethod->invoke( $ft, new IntegerValue( "Strings should not work." ) );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::acceptValue
      */
-    public function testCanParseValueValidFormat()
+    public function testAcceptValueValidFormat()
     {
         $ft = new Integer();
         $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
+        $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new IntegerValue( 42 );
@@ -77,24 +77,21 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $integer = 42;
         $ft = new Integer();
-        $ft->setValue( $fv = new IntegerValue( $integer ) );
+        $fieldValue = $ft->toPersistenceValue( new IntegerValue( $integer ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( $integer, $fieldValue->data );
         self::assertSame( array( "sort_key_int" => $integer ), $fieldValue->sortKey );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -104,7 +101,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -114,19 +111,19 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $integer = 4200;
         $value = IntegerValue::fromString( $integer );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Integer\\Value", $value );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\Value", $value );
         self::assertSame( $integer, $value->value );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::__toString
      */
     public function testFieldValueToString()
     {

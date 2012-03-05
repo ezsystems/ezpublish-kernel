@@ -16,8 +16,8 @@ use ezp\Content,
     ezp\Content\Version\Concrete as ConcreteVersion,
     ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\Content\Type as TypeValue,
+    eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
+    eZ\Publish\SPI\Persistence\Content\Type as TypeValue,
     ezp\User\Proxy as ProxyUser,
     ReflectionObject;
 

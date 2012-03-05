@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\BinaryFile\Handler as BinaryFileHandler,
+use eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
     ezp\Io\SysInfo,
     ezp\Io\FileInfo,
     ezp\Base\BinaryRepository,
     PHPUnit_Framework_TestCase;
 
 /**
- * Test case for {@link \ezp\Content\FieldType\BinaryFile\Handler}
+ * Test case for {@link \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler}
  */
 class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Binary file handler object
-     * @var \ezp\Content\FieldType\BinaryFile\Handler
+     * @var \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler
      */
     protected $handler;
 
@@ -49,7 +49,7 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Handler::createFromLocalPath
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler::createFromLocalPath
      */
     public function testCreateFromLocalPath()
     {
@@ -66,7 +66,7 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Handler::getBinaryRepository
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler::getBinaryRepository
      */
     public function testGetBinaryRepository()
     {

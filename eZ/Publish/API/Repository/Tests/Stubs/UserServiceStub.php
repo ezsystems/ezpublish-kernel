@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\UserService;
+use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -163,7 +164,7 @@ class UserServiceStub implements UserService
      */
     public function deleteUserGroup( UserGroup $userGroup )
     {
-        // TODO: Implement deleteUserGroup() method.
+        unset( $this->userGroups[$userGroup->id] );
     }
 
     /**
@@ -176,7 +177,42 @@ class UserServiceStub implements UserService
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
-        // TODO: Implement moveUserGroup() method.
+        $contentService = $this->repository->getContentService();
+
+        $oldParent = $this->userGroups[$userGroup->parentId];
+
+        $this->userGroups[$oldParent->id] = new UserGroupStub(
+            array(
+                'id'             =>  $oldParent->id,
+                'parentId'       =>  $oldParent->parentId,
+                'subGroupCount'  =>  $oldParent->subGroupCount - 1,
+                'content'        =>  $contentService->loadContent(
+                    $oldParent->contentId
+                )
+            )
+        );
+
+        $this->userGroups[$userGroup->id] = new UserGroupStub(
+            array(
+                'id'             =>  $userGroup->id,
+                'parentId'       =>  $newParent->id,
+                'subGroupCount'  =>  $userGroup->subGroupCount,
+                'content'        =>  $contentService->loadContent(
+                    $userGroup->contentId
+                )
+            )
+        );
+
+        $this->userGroups[$newParent->id] = new UserGroupStub(
+            array(
+                'id'             =>  $newParent->id,
+                'parentId'       =>  $newParent->parentId,
+                'subGroupCount'  =>  $newParent->subGroupCount + 1,
+                'content'        =>  $contentService->loadContent(
+                    $newParent->contentId
+                )
+            )
+        );
     }
 
     /**
@@ -196,7 +232,41 @@ class UserServiceStub implements UserService
      */
     public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
-        // TODO: Implement updateUserGroup() method.
+        $contentService = $this->repository->getContentService();
+
+        $content = null;
+        if ( $userGroupUpdateStruct->contentUpdateStruct )
+        {
+            $draft = $contentService->createContentDraft( $userGroup->contentInfo );
+            $draft = $contentService->updateContent(
+                $draft->getVersionInfo(),
+                $userGroupUpdateStruct->contentUpdateStruct
+            );
+
+            $content = $contentService->publishVersion( $draft->getVersionInfo() );
+        }
+
+        if ( $userGroupUpdateStruct->contentMetaDataUpdateStruct )
+        {
+            $content = $contentService->updateContentMetadata(
+                $userGroup->contentInfo,
+                $userGroupUpdateStruct->contentMetaDataUpdateStruct
+            );
+        }
+
+        if ( null !== $content )
+        {
+            $this->userGroups[$userGroup->id] = new UserGroupStub(
+                array(
+                    'id'             =>  $userGroup->id,
+                    'parentId'       =>  $userGroup->parentId,
+                    'subGroupCount'  =>  $userGroup->subGroupCount,
+                    'content'        =>  $content
+                )
+            );
+        }
+
+        return $this->userGroups[$userGroup->id];
     }
 
     /**
@@ -245,7 +315,7 @@ class UserServiceStub implements UserService
                     2
                 ),
                 'hashAlgorithm'  =>  2,
-                'isEnabled'      =>  true,
+                'isEnabled'      =>  $userCreateStruct->enabled,
                 'content'        =>  $content
             )
         );
@@ -337,11 +407,13 @@ class UserServiceStub implements UserService
      * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct )
     {
@@ -425,7 +497,7 @@ class UserServiceStub implements UserService
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
      * @param string $mainLanguageCode the main language for the underlying content object
-     * @param ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserCreateStruct
      */
@@ -484,7 +556,7 @@ class UserServiceStub implements UserService
      */
     public function newUserGroupUpdateStruct()
     {
-        // TODO: Implement newUserGroupUpdateStruct() method.
+        return new UserGroupUpdateStruct();
     }
 
     /**

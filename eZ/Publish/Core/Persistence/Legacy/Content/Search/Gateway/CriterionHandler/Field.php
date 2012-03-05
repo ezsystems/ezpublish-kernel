@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHan
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion\FieldIdentifierStruct,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
@@ -26,7 +25,7 @@ class Field extends CriterionHandler
     /**
      * DB handler to fetch additional field information
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 
@@ -68,10 +67,10 @@ class Field extends CriterionHandler
      * identifier and the sort column, which should be used.
      *
      * @caching
-     * @param Criterion\FieldIdentifierStruct $target
+     * @param string $fieldIdentifier
      * @return array
      */
-    protected function getFieldInformation( FieldIdentifierStruct $target )
+    protected function getFieldInformation( $fieldIdentifier )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
@@ -80,39 +79,40 @@ class Field extends CriterionHandler
                 $this->dbHandler->quoteColumn( 'data_type_string', 'ezcontentclass_attribute' )
             )
             ->from(
-                $this->dbHandler->quoteTable( 'ezcontentclass' ),
                 $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
             )
             ->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentclass_attribute' ),
-                        $this->dbHandler->quoteColumn( 'id', 'ezcontentclass' )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass' ),
-                        $query->bindValue( $target->contentTypeIdentifier )
-                    ),
-                    $query->expr->eq(
                         $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass_attribute' ),
-                        $query->bindValue( $target->fieldIdentifier )
+                        $query->bindValue( $fieldIdentifier )
                     )
                 )
             );
 
         $statement = $query->prepare();
         $statement->execute();
-        if ( !( $row = $statement->fetch( \PDO::FETCH_ASSOC ) ) )
+        if ( !( $rows = $statement->fetchAll( \PDO::FETCH_ASSOC ) ) )
         {
-            throw new NotFoundException( 'Content type', $target->contentTypeIdentifier . '/' . $target->fieldIdentifier );
+            throw new NotFoundException( 'Content type field', $fieldIdentifier );
         }
 
-        $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
+        $fieldMapArray = array();
+        foreach ( $rows as $row )
+        {
+            if ( !isset( $fieldMapArray[ $row['data_type_string'] ] ) )
+            {
+                $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
+                $fieldMapArray[ $row['data_type_string'] ] = array(
+                    'ids' => array(),
+                    'column' => $converter->getIndexColumn(),
+                );
+            }
 
-        return array(
-            'id' => $row['id'],
-            'column' => $converter->getIndexColumn(),
-        );
+            $fieldMapArray[ $row['data_type_string'] ]['ids'][] = $row['id'];
+        }
+
+        return $fieldMapArray;
     }
 
     /**
@@ -125,59 +125,66 @@ class Field extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $fieldInformation = $this->getFieldInformation( $criterion->target );
-        $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
+        $fieldInformations = $this->getFieldInformation( $criterion->target );
 
         $subSelect = $query->subSelect();
         $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn( 'contentobject_id' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
-            );
+        ->select(
+            $this->dbHandler->quoteColumn( 'contentobject_id' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
+        );
 
-        switch ( $criterion->operator )
+        $whereExpressions = array();
+        foreach ( $fieldInformations as $fieldInformation )
         {
-            case Criterion\Operator::IN:
-                $filter = $subSelect->expr->in(
-                    $column,
-                    $criterion->value
-                );
-                break;
+            $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
+            switch ( $criterion->operator )
+            {
+                case Criterion\Operator::IN:
+                    $filter = $subSelect->expr->in(
+                        $column,
+                        $criterion->value
+                    );
+                    break;
 
-            case Criterion\Operator::BETWEEN:
-                $filter = $subSelect->expr->between(
-                    $column,
-                    $subSelect->bindValue( $criterion->value[0] ),
-                    $subSelect->bindValue( $criterion->value[1] )
-                );
-                break;
+                case Criterion\Operator::BETWEEN:
+                    $filter = $subSelect->expr->between(
+                        $column,
+                        $subSelect->bindValue( $criterion->value[0] ),
+                        $subSelect->bindValue( $criterion->value[1] )
+                    );
+                    break;
 
-            case Criterion\Operator::EQ:
-            case Criterion\Operator::GT:
-            case Criterion\Operator::GTE:
-            case Criterion\Operator::LT:
-            case Criterion\Operator::LTE:
-                $operatorFunction = $this->comparatorMap[$criterion->operator];
-                $filter = $subSelect->expr->$operatorFunction(
-                    $column,
-                    $subSelect->bindValue( $criterion->value )
-                );
-                break;
+                case Criterion\Operator::EQ:
+                case Criterion\Operator::GT:
+                case Criterion\Operator::GTE:
+                case Criterion\Operator::LT:
+                case Criterion\Operator::LTE:
+                    $operatorFunction = $this->comparatorMap[$criterion->operator];
+                    $filter = $subSelect->expr->$operatorFunction(
+                        $column,
+                        $subSelect->bindValue( $criterion->value )
+                    );
+                    break;
 
-            default:
-                throw new \RuntimeException( 'Unknown operator.' );
-        }
+                default:
+                    throw new \RuntimeException( 'Unknown operator.' );
+            }
 
-        $subSelect->where(
-            $subSelect->expr->lAnd(
-                $subSelect->expr->eq(
+            $whereExpressions[] = $subSelect->expr->lAnd(
+                $subSelect->expr->in(
                     $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
-                    $subSelect->bindValue( $fieldInformation['id'] )
+                    $fieldInformation['ids']
                 ),
                 $filter
-            )
-        );
+            );
+        }
+
+        if ( isset( $whereExpressions[1] ) )
+            $subSelect->where( $subSelect->expr->lOr( $whereExpressions ) );
+        else
+            $subSelect->where( $whereExpressions[0] );
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),

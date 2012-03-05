@@ -142,7 +142,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         self::$initial = false;
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset( $this->handler );
     }

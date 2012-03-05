@@ -50,7 +50,7 @@ class Ini implements Parser
      *
      * @var boolean
      */
-    protected $strictMode = false;
+    protected $strictMode = true;
 
     /**
      * @var int
@@ -65,18 +65,18 @@ class Ini implements Parser
     /**
      * Construct an instance of Ini Parser
      *
-     * @param array $globalConfiguration
+     * @param array $settings
      */
-    public function __construct( array $globalConfiguration )
+    public function __construct( array $settings )
     {
-        if ( isset( $globalConfiguration['base']['Configuration']['IniParserStrict'] ) )
-            $this->strictMode = $globalConfiguration['base']['Configuration']['IniParserStrict'];
+        if ( isset( $settings['IniParserStrict'] ) )
+            $this->strictMode = $settings['IniParserStrict'];
 
-        if ( isset( $globalConfiguration['base']['Configuration']['CacheFilePermission'] ) )
-            $this->filePermission = $globalConfiguration['base']['Configuration']['CacheFilePermission'];
+        if ( isset( $settings['CacheFilePermission'] ) )
+            $this->filePermission = $settings['CacheFilePermission'];
 
-        if ( isset( $globalConfiguration['base']['Configuration']['CacheDirPermission'] ) )
-            $this->dirPermission = $globalConfiguration['base']['Configuration']['CacheDirPermission'];
+        if ( isset( $settings['CacheDirPermission'] ) )
+            $this->dirPermission = $settings['CacheDirPermission'];
     }
 
     /**

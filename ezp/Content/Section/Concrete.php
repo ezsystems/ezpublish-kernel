@@ -13,7 +13,7 @@ use ezp\Base\Model,
     ezp\Base\Exception\Logic,
     ezp\Content,
     ezp\Content\Section,
-    ezp\Persistence\Content\Section as SectionValue;
+    eZ\Publish\SPI\Persistence\Content\Section as SectionValue;
 
 /**
  * This class represents a Concrete Section object

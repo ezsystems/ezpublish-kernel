@@ -373,7 +373,7 @@ class Service extends BaseService
      * Refreshes provided $location. Useful if backend data has changed
      *
      * @param \ezp\Content\Location $location Location to refresh
-     * @param \ezp\Persistence\Location $vo Location value object. If provided, $location will be updated with $vo's data
+     * @param \eZ\Publish\SPI\Persistence\Location $vo Location value object. If provided, $location will be updated with $vo's data
      * @return \ezp\Content\Location
      * @throws \ezp\Base\Exception\InvalidArgumentType
      */

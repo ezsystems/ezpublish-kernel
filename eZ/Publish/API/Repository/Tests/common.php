@@ -10,19 +10,23 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
-
-// TODO: REMOVE THIS WORKAROUND AND CREATE A FRESH USER
-$user   = new UserStub( array( 'id' => 1 ) );
-$policy = new PolicyStub( array( 'module' => '*', 'function' => '*' ) );
 
 $repository = new RepositoryStub(
     __DIR__ . '/Fixtures',
     ( isset( $_ENV['backendVersion'] ) ? (int) $_ENV['backendVersion'] : 5 )
 );
-$repository->setCurrentUser( $user );
-// TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
-$repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );
+
+$repository->setCurrentUser(
+    new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
+        array(
+            'id' => 14,
+            'content'  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
+                array(
+                    'contentId' => 14
+                )
+            )
+        )
+    )
+);
 
 return $repository;

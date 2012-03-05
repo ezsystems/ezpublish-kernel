@@ -46,15 +46,31 @@ class ClassLoader
     protected $mode;
 
     /**
+     * @var array
+     */
+    protected $lazyClassLoaders;
+
+    /**
      * Construct a autoload instance
      *
      * @param array $repositories containing namespace as key and path as value
      * @param int $mode One or more of of the MODE constance, these are opt-in to make class loader stricter
+     * @param \Closure[] $lazyClassLoaders Hash with class name prefix as key and callback as function to setup loader
+     *          Example:
+     *          array(
+     *              'ezc' => function( $className ){
+     *                  require 'ezc/Base/base.php';
+     *                  spl_autoload_register( array( 'ezcBase', 'autoload' ) );
+     *                  return true;
+     *              }
+     *          )
+     *          Return true signals that autoloader was successfully registered and can be removed from $loders.
      */
-    public function __construct( array $repositories, $mode = 0 )
+    public function __construct( array $repositories, $mode = 0, array $lazyClassLoaders = array() )
     {
         $this->repositories = $repositories;
         $this->mode = $mode;
+        $this->lazyClassLoaders = $lazyClassLoaders;
     }
 
     /**
@@ -68,7 +84,7 @@ class ClassLoader
         $className = ltrim( $className, '\\' );// PHP 5.3.1 issue
         foreach ( $this->repositories as $namespace => $subPath )
         {
-            if ( stripos( $className, $namespace . '\\' ) !== 0 )
+            if ( strpos( $className, $namespace . '\\' ) !== 0 )
                 continue;
 
             if ( $this->mode & self::MODE_PSR_0_STRICT )
@@ -95,6 +111,18 @@ class ClassLoader
             }
 
             require $file;
+            return true;
+        }
+
+        // No match where found, see if we have any lazy loaded closures that should register other autoloaders
+        foreach ( $this->lazyClassLoaders as $prefix => $callable )
+        {
+            if ( strpos( $className, $prefix ) !== 0 )
+                continue;
+
+            if ( $callable( $className ) )
+                unset( $this->lazyClassLoaders[$prefix] );
+
             return true;
         }
     }

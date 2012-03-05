@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\TextBlock\Value as TextBlockValue,
-    ezp\Content\FieldType\FieldSettings,
+use eZ\Publish\Core\Repository\FieldType\TextBlock\Value as TextBlockValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -75,7 +75,7 @@ EOT;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextBlock\\Value', $fieldValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock\\Value', $fieldValue->data );
         self::assertSame( $storageFieldValue->dataText, $fieldValue->data->text );
         self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey['sort_key_string'] );
     }
@@ -124,8 +124,8 @@ EOT;
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertNull( $fieldDef->fieldTypeConstraints->validators );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextBlock\\Value', $fieldDef->defaultValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock\\Value', $fieldDef->defaultValue->data );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
             array( 'textColumns' => 20 ),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()

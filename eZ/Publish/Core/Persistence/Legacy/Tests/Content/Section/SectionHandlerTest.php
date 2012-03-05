@@ -136,6 +136,55 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::loadAll
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionsFromArray
+     */
+    public function testLoadAll()
+    {
+        $handler = $this->getSectionHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+        ->method( 'loadAllSectionData' )
+        ->will(
+            $this->returnValue(
+                array(
+                    array(
+                        'id' => '23',
+                        'identifier' => 'new_section',
+                        'name' => 'New Section',
+                    ),
+                    array(
+                        'id' => '46',
+                        'identifier' => 'new_section2',
+                        'name' => 'New Section2',
+                    ),
+                )
+            )
+        );
+
+        $sectionRef = new Section();
+        $sectionRef->id = 23;
+        $sectionRef->name = 'New Section';
+        $sectionRef->identifier = 'new_section';
+
+        $sectionRef2 = new Section();
+        $sectionRef2->id = 46;
+        $sectionRef2->name = 'New Section2';
+        $sectionRef2->identifier = 'new_section2';
+
+        $result = $handler->loadAll();
+
+        $this->assertEquals(
+            array( $sectionRef, $sectionRef2 ),
+            $result
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::loadByIdentifier
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
      */

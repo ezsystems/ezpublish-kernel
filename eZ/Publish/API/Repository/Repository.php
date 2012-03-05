@@ -4,18 +4,15 @@
  */
 namespace eZ\Publish\API\Repository;
 
-
 use eZ\Publish\API\Repository\Values\ValueObject;
-
 use eZ\Publish\API\Repository\Values\User\User;
 
 /**
- * Repository class
+ * Repository interface
  * @package eZ\Publish\API\Repository
  */
 interface Repository
 {
-
     /**
      * Get current user
      *
@@ -49,7 +46,7 @@ interface Repository
      * @param \eZ\Publish\API\Repository\Values\ValueObject $value
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target );
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null );
 
     /**
      * Get Content Service
@@ -118,6 +115,15 @@ interface Repository
     public function getUserService();
 
     /**
+     * Get IO Service
+     *
+     * Get service object to perform operations on binary files
+     *
+     * @return \eZ\Publish\API\Repository\IOService
+     */
+    public function getIOService();
+
+    /**
      * Get RoleService
      * 
      * @return \eZ\Publish\API\Repository\RoleService
@@ -137,7 +143,7 @@ interface Repository
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit();
 
@@ -146,7 +152,7 @@ interface Repository
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback();
 }

@@ -34,9 +34,9 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tear down test
+     * Tear down test (properties)
      */
-    public function tearDown()
+    protected function tearDown()
     {
         unset( $this->persistenceHandler );
         parent::tearDown();

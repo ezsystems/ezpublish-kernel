@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Query\Criterion;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -24,7 +24,7 @@ abstract class Gateway
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param string[] $translations
      * @return mixed[][]
      */
