@@ -488,7 +488,7 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroupWithoutSubUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroup
      */
     public function testUpdateUserGroupWithSubContentUpdateStruct()
     {
@@ -529,7 +529,7 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroupWithoutSubUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroup
      */
     public function testUpdateUserGroupWithSubContentMetadataUpdateStruct()
     {
