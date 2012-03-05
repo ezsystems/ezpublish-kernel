@@ -131,7 +131,9 @@ abstract class Gateway
 
     /**
      * Loads info for content identified by $contentId.
-     * Will basically return a hash containing all field values for ezcontentobject table.
+     * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
+     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
+     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
      *
      * @param int $contentId
      * @return array
