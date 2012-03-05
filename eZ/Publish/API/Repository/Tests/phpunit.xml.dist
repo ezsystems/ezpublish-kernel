@@ -28,18 +28,19 @@
             <file>LocationServiceAuthorizationTest.php</file>
             <file>UserServiceAuthorizationTest.php</file>
             <file>RoleServiceAuthorizationTest.php</file>
-            <directory>./Exceptions</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
             <directory suffix=".php">../</directory>
+            <!--
             <exclude>
                 <directory>../Examples</directory>
                 <directory>../Tests</directory>
                 <directory>../Tutorials</directory>
             </exclude>
             <directory>../Tests/Stubs</directory>
+            -->
         </whitelist>
     </filter>
 </phpunit>
