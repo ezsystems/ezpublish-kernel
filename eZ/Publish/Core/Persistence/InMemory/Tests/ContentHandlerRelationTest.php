@@ -98,7 +98,7 @@ class ContentHandlerRelationTest extends HandlerTest
                           'data' => new TextLineValue( $textValue )
                      )
                  ),
-                 'language' => 'eng-GB',
+                 'languageCode' => 'eng-GB',
             )
         );
         return $struct;

@@ -285,7 +285,7 @@ class Mapper
         $field->fieldDefinitionId = (int)$row['ezcontentobject_attribute_contentclassattribute_id'];
         $field->type = $row['ezcontentobject_attribute_data_type_string'];
         $field->value = $this->extractFieldValueFromRow( $row, $field->type );
-        $field->language = $row['ezcontentobject_attribute_language_code'];
+        $field->languageCode = $row['ezcontentobject_attribute_language_code'];
         $field->versionNo = (int)$row['ezcontentobject_attribute_version'];
 
         return $field;

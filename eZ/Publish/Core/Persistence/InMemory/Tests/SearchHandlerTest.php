@@ -59,7 +59,7 @@ class SearchHandlerTest extends HandlerTest
                         "data" => new TextLineValue( "Welcome" )
                     )
                 ),
-                "language" => "eng-GB",
+                "languageCode" => "eng-GB",
             )
         );
 

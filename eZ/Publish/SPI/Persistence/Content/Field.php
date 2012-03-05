@@ -44,9 +44,11 @@ class Field extends ValueObject
     public $value;
 
     /**
-     * @todo What is supposed to be stored here? Object or languageCode?
+     * Language code of this Field
+     *
+     * @var string
      */
-    public $language;
+    public $languageCode;
 
     /**
      * @var int|null Null if not created yet
