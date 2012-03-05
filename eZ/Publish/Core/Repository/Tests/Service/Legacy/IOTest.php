@@ -25,6 +25,9 @@ class IOTest extends BaseIOServiceTest
 
     protected function getRepository()
     {
+        if ( !class_exists( 'eZClusterFileHandler' ) )
+            $this->markTestSkipped( 'Cluster files could not be loaded' );
+
         try
         {
             return include 'common.php';
