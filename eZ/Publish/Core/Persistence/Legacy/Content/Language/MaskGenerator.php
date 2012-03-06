@@ -111,7 +111,8 @@ class MaskGenerator
      */
     public function extractLanguageIdsFromMask( $languageMask )
     {
-        $languageMask = $this->removeAlwaysAvailableFlag( $languageMask );
+        // We ignore the "always available" flag:
+        $languageMask = $languageMask >> 1;
         $exp = 2;
         $result = array();
 
