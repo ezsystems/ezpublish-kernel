@@ -111,22 +111,15 @@ class MaskGenerator
      */
     public function extractLanguageIdsFromMask( $languageMask )
     {
-        // We ignore the "always available" flag:
-        $languageMask = $languageMask >> 1;
         $exp = 2;
         $result = array();
 
         // Decomposition of $languageMask into its binary components.
-        // Loop until we reach initial $exp value.
-        // Each loop will shift $languageMask of 1 step (divide by 2)
-        // @see http://doc.ez.no/eZ-Publish/Technical-manual/4.x/Features/Multi-language/The-bit-field-algorithm
-        // @see http://php.net/manual/en/language.operators.bitwise.php
-        $languageMask = $languageMask >> 1;
-        while ( $languageMask > 0 )
+        while ( $exp <= $languageMask )
         {
-            if ( $languageMask & 1 )
+            if ( $languageMask & $exp )
                 $result[] = $exp;
-            $languageMask = $languageMask >> 1;
+
             $exp *= 2;
         }
 
