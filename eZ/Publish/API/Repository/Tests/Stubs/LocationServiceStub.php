@@ -67,8 +67,7 @@ class LocationServiceStub implements LocationService
     {
         return new LocationCreateStruct(
             array(
-                'parentLocationId'  =>  $parentLocationId,
-                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
+                'parentLocationId'  =>  $parentLocationId
             )
         );
     }
@@ -98,6 +97,11 @@ class LocationServiceStub implements LocationService
 
         $this->checkContentNotInTree( $contentInfo, $parentLocation );
         $this->checkRemoteIdNotTaken( $locationCreateStruct->remoteId );
+
+        if ( null === $locationCreateStruct->remoteId )
+        {
+            $locationCreateStruct->remoteId = md5( uniqid( __METHOD__, true ) );
+        }
 
         $data = array();
         foreach ( $locationCreateStruct as $propertyName => $propertyValue )
@@ -601,6 +605,81 @@ class LocationServiceStub implements LocationService
     public function moveSubtree( Location $location, Location $newParentLocation )
     {
         throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
+     * Internal helper method used to trash a location tree.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $trashed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     */
+    public function __trashLocation( Location $location, array $trashed = array() )
+    {
+        // Decrement child count on parent location
+        if ( 0 === count( $trashed ) && isset( $this->locations[$location->parentLocationId] ) )
+        {
+            $this->locations[$location->parentLocationId]->__setChildCount(
+                $this->locations[$location->parentLocationId]->childCount - 1
+            );
+        }
+
+        $trashed[] = $location;
+        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        {
+            $trashed = $this->__trashLocation( $childLocation, $trashed );
+        }
+
+        unset( $this->locations[$location->id] );
+
+        return $trashed;
+    }
+
+    /**
+     * Internal helper method used to recover a location tree.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreate
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function __recoverLocation( Location $location, LocationCreateStruct $locationCreate = null )
+    {
+        if ( $locationCreate )
+        {
+            foreach ( get_object_vars( $locationCreate ) as $name => $value )
+            {
+                if ( null === $value )
+                {
+                    $locationCreate->{$name} = $location->{$name};
+                }
+            }
+
+            $contentInfo = $location->getContentInfo();
+            $newLocation = $this->createLocation( $contentInfo, $locationCreate );
+
+            // Restore child count
+            $newLocation->__setChildCount( $location->childCount );
+
+            // Update main location id
+            if ( $contentInfo->mainLocationId === $location->id )
+            {
+                $contentInfo->__setMainLocationId( $newLocation->id );
+            }
+
+            // Update child count on new parent
+            if ( isset( $this->locations[$newLocation->parentLocationId] ) )
+            {
+                $this->locations[$newLocation->parentLocationId]->__setChildCount(
+                    $this->locations[$newLocation->parentLocationId]->childCount + 1
+                );
+            }
+
+            return $newLocation;
+        }
+        return ( $this->locations[$location->id] = $location );
+
     }
 
     /**

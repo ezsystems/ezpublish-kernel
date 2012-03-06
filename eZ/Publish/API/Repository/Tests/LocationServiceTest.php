@@ -201,7 +201,7 @@ class LocationServiceTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @todo This test case is not well-defined, yet. Re-check.
      */
-    public function testCreateLocationThrowsInvalidArgumentExceptionParentIsSublocationOfContent()
+    public function testCreateLocationThrowsInvalidArgumentExceptionParentIsSubLocationOfContent()
     {
         $this->markTestIncomplete( "@TODO: Test for LocationService::createLocation() is not implemented." );
     }
@@ -228,7 +228,7 @@ class LocationServiceTest extends BaseTest
         $locationCreate->remoteId = 'f3e90596361e31d496d4026eb624c983';
 
         // Throws exception, since remote ID is already in use
-        $location = $locationService->createLocation(
+        $locationService->createLocation(
             $contentInfo,
             $locationCreate
         );

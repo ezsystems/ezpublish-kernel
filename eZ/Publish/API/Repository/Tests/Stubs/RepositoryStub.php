@@ -327,7 +327,10 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->trashService )
         {
-            $this->trashService = new TrashServiceStub( $this );
+            $this->trashService = new TrashServiceStub(
+                $this,
+                $this->getLocationService()
+            );
         }
         return $this->trashService;
     }
