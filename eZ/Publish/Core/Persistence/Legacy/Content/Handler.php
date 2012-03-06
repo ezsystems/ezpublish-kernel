@@ -422,7 +422,7 @@ class Handler implements BaseContentHandler
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
-        $rows = $this->contentGateway->loadRelations( $sourceContentId, $orientation = true, $sourceContentVersionNo, $type );
+        $rows = $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type );
 
         $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
         return $relationObjects;

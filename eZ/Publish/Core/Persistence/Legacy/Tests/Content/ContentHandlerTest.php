@@ -16,6 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
@@ -427,12 +428,71 @@ class ContentHandlerTest extends TestCase
 
     public function testLoadRelations()
     {
-        throw new Exception( "@todo implement ContentHandlerTest::testLoadRelations()" );
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadRelations' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( null ),
+                $this->equalTo( null )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractRelationsFromRows' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( $this->getRelationFixture() ) );
+
+        $result = $handler->loadRelations( 23 );
+
+        $this->assertEquals(
+            $result,
+            $this->getRelationFixture()
+        );
     }
 
     public function testLoadReverseRelations()
     {
-        throw new Exception( "@todo implement ContentHandlerTest::testLoadReverseRelations()" );
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadReverseRelations' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( null )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractRelationsFromRows' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( $this->getRelationFixture() ) );
+
+        $result = $handler->loadReverseRelations( 23 );
+
+        $this->assertEquals(
+            $result,
+            $this->getRelationFixture()
+        );
+    }
+
+    protected function getRelationFixture()
+    {
+        $relation = new Relation();
+        $relation->sourceContentId = 23;
+        $relation->sourceContentVersionNo = 1;
+        $relation->destinationContentId = 69;
+
+        return $relation;
     }
 
     /**
