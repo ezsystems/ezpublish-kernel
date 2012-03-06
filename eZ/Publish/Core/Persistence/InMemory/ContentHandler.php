@@ -178,6 +178,8 @@ class ContentHandler implements ContentHandlerInterface
         if ( !$content )
             throw new NotFound( "Content", "contentId: $contentId" );
 
+        $time = time();
+
         $currentVersionNo = $versionNo === false ? $content->currentVersionNo : $versionNo;
         $contentObj = $this->backend->create(
             "Content", array(
@@ -186,10 +188,12 @@ class ContentHandler implements ContentHandlerInterface
                 "ownerId" => $content->ownerId,
                 "status" => $content->status,
                 "currentVersionNo" => $currentVersionNo,
+                "initialLanguageId" => $content->initialLanguageId,
+                "modified" => $time,
+                "published" => $time
             )
         );
 
-        $time = time();
         // Copy version(s)
         foreach (
             $this->backend->find(
