@@ -319,7 +319,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
      */
-    protected function searchChildrenLocations( $parentLocationId, $sortField, $sortOrder, $offset = 0, $limit = -1 )
+    protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
         $searchCriterion = new CriterionLogicalAnd(
             array(
@@ -328,16 +328,15 @@ class LocationService implements LocationServiceInterface
             )
         );
 
+        $sortClause = null;
+        if ( $sortField !== null )
+            $sortClause = $this->getSortClauseBySortField( $sortField, $sortOrder );
+
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
             $offset,
             $limit > 0 ? $limit : null,
-            array(
-                $this->getSortClauseBySortField(
-                    $sortField,
-                    $sortOrder
-                )
-            )
+            $sortClause
         );
     }
 
@@ -655,9 +654,7 @@ class LocationService implements LocationServiceInterface
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
 
         $childrenLocations = $this->searchChildrenLocations(
-            $spiLocation->id,
-            $spiLocation->sortField,
-            $spiLocation->sortOrder
+            $spiLocation->id
         );
 
         return new Location(
