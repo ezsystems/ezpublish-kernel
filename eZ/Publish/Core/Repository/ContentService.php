@@ -170,6 +170,10 @@ class ContentService implements ContentServiceInterface
         );
         $published = $spiContent->status === SPIContent::STATUS_PUBLISHED;
 
+        $mainLocationId = null;
+        if ( is_array( $spiContent->locations ) && !empty( $spiContent->locations ) )
+            $mainLocationId = $spiContent->locations[0]->mainLocationId;
+
         // @todo add content name
         return new ContentInfo(
             array(
@@ -185,7 +189,8 @@ class ContentService implements ContentServiceInterface
                 "publishedDate"    => $publishedDate,
                 "alwaysAvailable"  => $spiContent->alwaysAvailable,
                 "remoteId"         => $spiContent->remoteId,
-                "mainLanguageCode" => $language->languageCode
+                "mainLanguageCode" => $language->languageCode,
+                "mainLocationId"   => $mainLocationId
             )
         );
     }
