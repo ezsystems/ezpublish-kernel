@@ -18,12 +18,13 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
  */
 class TrashServiceTest extends BaseTest
 {
+
     /**
      * Test for the loadTrashItem() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::loadTrashItem()
-     * 
+     * @depends eZ\Publish\
      */
     public function testLoadTrashItem()
     {

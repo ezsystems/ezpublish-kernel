@@ -23,6 +23,19 @@ use \eZ\Publish\API\Repository\Values\Content\TrashItem;
 class TrashServiceStub implements TrashService
 {
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     */
+    public function __construct( RepositoryStub $repository )
+    {
+        $this->repository = $repository;
+    }
+
+    /**
      * Loads a trashed location object from its $id.
      *
      * Note that $id is identical to original location, which has been previously trashed
@@ -52,6 +65,7 @@ class TrashServiceStub implements TrashService
      */
     public function trash( Location $location )
     {
+        $this->repository->getLocationService()->loadLocationChildren()
         // TODO: Implement trash() method.
     }
 
@@ -112,5 +126,4 @@ class TrashServiceStub implements TrashService
     {
         // TODO: Implement findTrashItems() method.
     }
-
 }

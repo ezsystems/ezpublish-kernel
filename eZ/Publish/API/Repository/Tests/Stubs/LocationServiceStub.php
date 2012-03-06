@@ -509,7 +509,7 @@ class LocationServiceStub implements LocationService
      */
     public function deleteLocation( Location $location )
     {
-        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        if ( false === $this->repository->canUser( 'content', 'remove', $location->contentInfo ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -526,6 +526,14 @@ class LocationServiceStub implements LocationService
         foreach ( $this->loadLocationChildren( $location ) as $child )
         {
             $this->deleteLocation( $child );
+        }
+
+        // Decrement $childCount property
+        if ( isset( $this->locations[$location->parentLocationId] ) )
+        {
+            $this->locations[$location->parentLocationId]->__setChildCount(
+                $this->locations[$location->parentLocationId]->childCount - 1
+            );
         }
     }
 

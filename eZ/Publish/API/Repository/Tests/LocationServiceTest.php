@@ -1128,10 +1128,6 @@ class LocationServiceTest extends BaseTest
         }
         catch ( Exceptions\NotFoundException $e ) {}
 
-        $this->markTestIncomplete( 'Needs implementation of ContentService::deleteContent().' );
-
-        // TODO: These assertions fail until ContentService::deleteContent() is
-        // implemented.
         $contentService = $repository->getContentService();
         try
         {
@@ -1145,6 +1141,49 @@ class LocationServiceTest extends BaseTest
             $this->fail( "Content 14 at location 15 not delete." );
         }
         catch ( Exceptions\NotFoundException $e ) {}
+    }
+
+    /**
+     * Test for the deleteLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
+     */
+    public function testDeleteLocationDecrementsChildCountOnParent()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" group in an eZ Publish demo installation
+        $administratorsLocationId = 13;
+
+        $locationService = $repository->getLocationService();
+
+        // Load the current the user group location
+        $location = $locationService->loadLocation( $administratorsLocationId );
+
+        // Load the parent location
+        $parentLocation = $locationService->loadLocation(
+            $location->parentLocationId
+        );
+
+        // Get child count
+        $childCountBefore = $parentLocation->childCount;
+
+        // Delete the user group location
+        $locationService->deleteLocation( $location );
+
+        // Reload parent location
+        $parentLocation = $locationService->loadLocation(
+            $location->parentLocationId
+        );
+
+        // This will be $childCountBefore - 1
+        $childCountAfter = $parentLocation->childCount;
+        /* END: Use Case */
+
+        $this->assertEquals( $childCountBefore - 1, $childCountAfter );
     }
 
     /**

@@ -185,7 +185,6 @@ interface LocationService
      */
     public function deleteLocation( Location $location );
 
-
     /**
      * Instantiates a new location create class
      *
