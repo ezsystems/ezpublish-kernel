@@ -670,7 +670,7 @@ class LocationService implements LocationServiceInterface
                 'remoteId'                => $spiLocation->remoteId,
                 'parentLocationId'        => $spiLocation->parentId,
                 'pathString'              => $spiLocation->pathString,
-                'modifiedSubLocationDate' => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
+                'modifiedSubLocationDate' => new \DateTime( "@{$spiLocation->modifiedSubLocation}" ),
                 'depth'                   => $spiLocation->depth,
                 'sortField'               => $spiLocation->sortField,
                 'sortOrder'               => $spiLocation->sortOrder,

@@ -236,7 +236,7 @@ class TrashService implements TrashServiceInterface
                 'remoteId'                => $spiTrashItem->remoteId,
                 'parentLocationId'        => $spiTrashItem->parentId,
                 'pathString'              => $spiTrashItem->pathString,
-                'modifiedSubLocationDate' => new \DateTime("{@$spiTrashItem->modifiedSubLocation}"),
+                'modifiedSubLocationDate' => new \DateTime( "@{$spiTrashItem->modifiedSubLocation}" ),
                 'depth'                   => $spiTrashItem->depth,
                 'sortField'               => $spiTrashItem->sortField,
                 'sortOrder'               => $spiTrashItem->sortOrder,
