@@ -193,7 +193,6 @@ class SearchHandler extends SearchHandlerInterface
                         throw new Exception( "Unsuported StatusCriterion->value[0]: " . $criterion->value[0] );
 
                 }
-                $match['status'] = $criterion->value[0];
             }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
             {
