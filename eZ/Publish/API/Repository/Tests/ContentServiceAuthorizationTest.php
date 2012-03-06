@@ -879,6 +879,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
+        // Get ContentInfo instance of version 2
+        $contentInfo = $contentVersion2->contentInfo;
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -886,7 +889,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadVersions( $contentVersion2->contentInfo );
+        $contentService->loadVersions( $contentInfo );
         /* END: Use Case */
     }
 
@@ -910,6 +913,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
 
+        // Get ContentInfo instance of version 2
+        $contentInfo = $contentVersion2->contentInfo;
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -927,7 +933,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->copyContent(
-            $contentVersion2->contentInfo,
+            $contentInfo,
             $targetLocationCreate
         );
         /* END: Use Case */

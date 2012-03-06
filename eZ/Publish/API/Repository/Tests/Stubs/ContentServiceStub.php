@@ -717,31 +717,6 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * Translate a version
-     *
-     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     *
-     * @since 5.0
-     */
-    public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null )
-    {
-        // TODO: Implement translateVersion() method.
-    }
-
-    /**
      * Updates the fields of a draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
@@ -961,7 +936,7 @@ class ContentServiceStub implements ContentService
             {
                 continue;
             }
-            else if ( $content->contentId !== $versionInfo->contentInfo->contentId )
+            else if ( $content->contentId !== $versionInfo->contentId )
             {
                 continue;
             }
@@ -969,9 +944,21 @@ class ContentServiceStub implements ContentService
             unset( $this->content[$i] );
             unset( $this->versionInfo[$versionInfo->id] );
 
-            // TODO: Delete ContentInfo if this was the last reference.
+            break;
+        }
 
-            return;
+        $references = 0;
+        foreach ( $this->content as $i => $content )
+        {
+            if ( $content->contentId === $versionInfo->contentId )
+            {
+                ++$references;
+            }
+        }
+
+        if ( count( $references ) === 0 )
+        {
+            unset( $this->contentInfo[$versionInfo->contentId] );
         }
     }
 
@@ -1377,40 +1364,6 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * add translation information to the content object
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     *
-     * @since 5.0
-     */
-    public function addTranslationInfo( TranslationInfo $translationInfo )
-    {
-        // TODO: Implement addTranslationInfo() method.
-    }
-
-    /**
-     * lists the translations done on this content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
-     * @todo TBD - filter by sourceversion destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
-     *
-     * @since 5.0
-     */
-    public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
-    {
-        // TODO: Implement loadTranslationInfos() method.
-    }
-
-    /**
      * Instantiates a new content create struct object
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -1448,24 +1401,6 @@ class ContentServiceStub implements ContentService
     public function newContentUpdateStruct()
     {
         return new ContentUpdateStructStub();
-    }
-
-    /**
-     * Instantiates a new TranslationInfo object
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo()
-    {
-        // TODO: Implement newTranslationInfo() method.
-    }
-
-    /**
-     * Instantiates a Translation object
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
-    {
-        // TODO: Implement newTranslationValues() method.
     }
 
     /**
@@ -1580,4 +1515,87 @@ class ContentServiceStub implements ContentService
             $this->content
         ) = $this->repository->loadFixture( 'Content' );
     }
+
+    // Ignore this eZ Publish 5 feature by now.
+
+    // @codeCoverageIgnoreStart
+
+    /**
+     * Translate a version
+     *
+     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
+     *
+     * @example Examples/translation_5x.php
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
+     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
+     *
+     * @since 5.0
+     */
+    public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null )
+    {
+        // TODO: Implement translateVersion() method.
+    }
+
+    /**
+     * add translation information to the content object
+     *
+     * @example Examples/translation_5x.php
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
+     *
+     * @since 5.0
+     */
+    public function addTranslationInfo( TranslationInfo $translationInfo )
+    {
+        // TODO: Implement addTranslationInfo() method.
+    }
+
+    /**
+     * lists the translations done on this content object
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param array $filter
+     * @todo TBD - filter by sourceversion destination version and languages
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
+     *
+     * @since 5.0
+     */
+    public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
+    {
+        // TODO: Implement loadTranslationInfos() method.
+    }
+
+    /**
+     * Instantiates a new TranslationInfo object
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     */
+    public function newTranslationInfo()
+    {
+        // TODO: Implement newTranslationInfo() method.
+    }
+
+    /**
+     * Instantiates a Translation object
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
+     */
+    public function newTranslationValues()
+    {
+        // TODO: Implement newTranslationValues() method.
+    }
+
+    // @codeCoverageIgnoreEnd
 }
