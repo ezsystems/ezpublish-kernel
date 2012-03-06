@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  0 => 
+  0 =>
   array (
     'ezcontentobject_version_id' => '675',
     'ezcontentobject_name_name' => 'Something',
@@ -13,9 +13,10 @@ return array (
     'ezcontentobject_version_status' => '3',
     'ezcontentobject_version_contentobject_id' => '226',
     'ezcontentobject_version_language_mask' => '3',
+    'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_language_code' => 'eng-US',
   ),
-  1 => 
+  1 =>
   array (
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_name_name' => 'Something',
@@ -27,6 +28,7 @@ return array (
     'ezcontentobject_version_status' => '1',
     'ezcontentobject_version_contentobject_id' => '226',
     'ezcontentobject_version_language_mask' => '3',
+    'ezcontentobject_version_initial_language_id' => '2',
     'ezcontentobject_attribute_language_code' => 'eng-US',
   ),
 );
