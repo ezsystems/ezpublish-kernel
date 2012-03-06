@@ -148,14 +148,7 @@ class LocationServiceTest extends BaseTest
             $createdLocation
         );
 
-        $this->assertNotNull(
-            $createdLocation->id
-        );
-
-        // TODO: Update $mainLocationId in ContentInfo, if set in
-        // LocationCreateStruct
-        // TODO: Check parent location childCount raised
-        $this->markTestIncomplete( 'Outstanding TODOs.' );
+        $this->assertNotNull( $createdLocation->id );
     }
 
     /**
