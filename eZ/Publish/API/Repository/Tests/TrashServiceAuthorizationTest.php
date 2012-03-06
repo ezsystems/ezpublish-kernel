@@ -85,7 +85,21 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      */
     public function testRecoverThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for TrashService::recover() is not implemented." );
+        $repository   = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        /* BEGIN: Use Case */
+        $trashItem = $this->createTrashItem();
+
+        // Load user service
+        $userService = $repository->getUserService();
+
+        // Set "Anonymous" as current user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with an "UnauthorizedException"
+        $trashService->recover( $trashItem );
+        /* END: Use Case */
     }
 
     /**
@@ -95,9 +109,30 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testRecoverThrowsUnauthorizedExceptionWithSecondParameter()
+    public function testRecoverThrowsUnauthorizedExceptionWithLocationCreateStructParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for TrashService::recover() is not implemented." );
+        $repository      = $this->getRepository();
+        $trashService    = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        // ID of the "Home" location in an eZ Publish demo installation
+        $homeLocationId = 2;
+
+        $trashItem = $this->createTrashItem();
+
+        // Get a location create without property changes.
+        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+
+        // Load user service
+        $userService = $repository->getUserService();
+
+        // Set "Anonymous" as current user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with an "UnauthorizedException"
+        $trashService->recover( $trashItem, $locationCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -109,7 +144,21 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      */
     public function testEmptyTrashThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for TrashService::emptyTrash() is not implemented." );
+        $repository   = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        /* BEGIN: Use Case */
+        $this->createTrashItem();
+
+        // Load user service
+        $userService = $repository->getUserService();
+
+        // Set "Anonymous" as current user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with an "UnauthorizedException"
+        $trashService->emptyTrash();
+        /* END: Use Case */
     }
 
     /**
@@ -121,6 +170,20 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      */
     public function testDeleteTrashItemThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for TrashService::deleteTrashItem() is not implemented." );
+        $repository   = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        /* BEGIN: Use Case */
+        $trashItem = $this->createTrashItem();
+
+        // Load user service
+        $userService = $repository->getUserService();
+
+        // Set "Anonymous" as current user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with an "UnauthorizedException"
+        $trashService->deleteTrashItem( $trashItem );
+        /* END: Use Case */
     }
 }

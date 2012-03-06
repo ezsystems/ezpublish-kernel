@@ -75,7 +75,7 @@ class TrashServiceStub implements TrashService
         {
             throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
-        if ( false === $this->repository->canUser( 'content', 'read', $this->locations[$trashItemId][$trashItemId] ) )
+        if ( false === $this->repository->canUser( 'content', 'edit', $this->locations[$trashItemId][$trashItemId] ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -95,7 +95,7 @@ class TrashServiceStub implements TrashService
      */
     public function trash( Location $location )
     {
-        if ( false === $this->repository->canUser( 'content', 'remove', $location ) )
+        if ( false === $this->repository->canUser( 'content', 'edit', $location ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -142,6 +142,11 @@ class TrashServiceStub implements TrashService
      */
     public function recover( TrashItem $trashItem, LocationCreateStruct $newParentLocation = null )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $trashItem ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $location = $this->locationService->__recoverLocation(
             $this->locations[$trashItem->id][$trashItem->id],
             $newParentLocation
@@ -172,6 +177,11 @@ class TrashServiceStub implements TrashService
      */
     public function emptyTrash()
     {
+        if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $this->trashItems = array();
         $this->locations  = array();
     }
@@ -187,6 +197,11 @@ class TrashServiceStub implements TrashService
      */
     public function deleteTrashItem( TrashItem $trashItem )
     {
+        if ( false === $this->repository->canUser( 'content', 'remove', $trashItem ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         unset(
             $this->trashItems[$trashItem->id],
             $this->locations[$trashItem->id]

@@ -32,6 +32,11 @@ class LanguageServiceStub implements LanguageService
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub
+     */
+    private $contentService;
+
+    /**
      * @var integer
      */
     private $nextId = 0;
@@ -50,10 +55,12 @@ class LanguageServiceStub implements LanguageService
      * Instantiates the language service.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub $contentService
      */
-    public function __construct( RepositoryStub $repository )
+    public function __construct( RepositoryStub $repository, ContentServiceStub $contentService )
     {
-        $this->repository = $repository;
+        $this->repository     = $repository;
+        $this->contentService = $contentService;
 
         $this->initFromFixture();
     }
@@ -232,6 +239,10 @@ class LanguageServiceStub implements LanguageService
         if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+        if ( count( $this->contentService->__loadContentInfoByLanguageCode( $language->languageCode ) ) )
+        {
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
         unset( $this->languages[$language->id], $this->codes[$language->languageCode] );
     }

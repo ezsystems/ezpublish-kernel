@@ -1469,6 +1469,27 @@ class ContentServiceStub implements ContentService
     }
 
     /**
+     * Internal helper method used to load ContentInfo objects by their main
+     * language code.
+     *
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
+     */
+    public function __loadContentInfoByLanguageCode( $languageCode )
+    {
+        $matches = array();
+        foreach ( $this->contentInfo as $contentInfo )
+        {
+            if ( $contentInfo->mainLanguageCode === $languageCode )
+            {
+                $matches[] = $contentInfo;
+            }
+        }
+        return $matches;
+    }
+
+    /**
      * Replaces an object internally.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $oldContent
