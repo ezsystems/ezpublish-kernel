@@ -115,13 +115,16 @@ class MaskGenerator
         $exp = 2;
         $result = array();
 
+        // Decomposition of $languageMask into its binary components.
         // Loop until we reach initial $exp value.
         // Each loop will shift $languageMask of 1 step (divide by 2)
         // @see http://doc.ez.no/eZ-Publish/Technical-manual/4.x/Features/Multi-language/The-bit-field-algorithm
         // @see http://php.net/manual/en/language.operators.bitwise.php
-        while ( $languageMask > 2 )
+        $languageMask = $languageMask >> 1;
+        while ( $languageMask > 0 )
         {
-            $result[] = $exp;
+            if ( $languageMask & 1 )
+                $result[] = $exp;
             $languageMask = $languageMask >> 1;
             $exp *= 2;
         }
