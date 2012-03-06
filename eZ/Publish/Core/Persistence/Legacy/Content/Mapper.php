@@ -33,13 +33,14 @@ class Mapper
     /**
      * Location mapper
      *
-     * @var \eZ\Publish\SPI\Persistence\Storage\Persistence\Converter\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
     /**
      * Creates a new mapper.
      *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
     public function __construct( LocationMapper $locationMapper, Registry $converterRegistry )
