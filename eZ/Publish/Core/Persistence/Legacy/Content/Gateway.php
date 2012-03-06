@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\Field;
 
@@ -47,12 +48,13 @@ abstract class Gateway
     abstract public function insertVersion( Version $version, array $fields, $alwaysAvailable );
 
     /**
-     * Updates the content object in respect to $struct
+     * Updates an existing content identified by $contentId in respect to $struct
      *
-     * @param UpdateStruct $struct
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
      * @return void
      */
-    abstract public function updateContent( UpdateStruct $struct );
+    abstract public function updateContent( $contentId, MetadataUpdateStruct $struct );
 
     /**
      * Updates the version of a Content object in respect to $struct

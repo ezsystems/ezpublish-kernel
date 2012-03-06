@@ -18,7 +18,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Version;
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase.
@@ -88,7 +89,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'language_mask' => '1',
                     'modified' => '456',
                     'published' => '123',
-                    'status' => Content::STATUS_DRAFT,
+                    'status' => Content\VersionInfo::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -267,7 +268,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( Content::STATUS_DRAFT ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            array( array( VersionInfo::STATUS_DRAFT ) ), // 1 === ezp\Content::STATUS_PUBLISHED
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -1340,12 +1341,37 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     {
         if ( !isset( $this->languageHandler ) )
         {
+            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $innerLanguageHandler->expects( $this->any() )
+                ->method( 'loadAll' )
+                ->will(
+                    $this->returnValue(
+                        array(
+                            new Language( array(
+                                'id'            => 2,
+                                'languageCode'  => 'eng-GB',
+                                'name'          => 'British english'
+                            ) ),
+                            new Language( array(
+                                'id'            => 4,
+                                'languageCode'  => 'eng-US',
+                                'name'          => 'US english'
+                            ) ),
+                            new Language( array(
+                                'id'            => 8,
+                                'languageCode'  => 'fre-FR',
+                                'name'          => 'Français franchouillard'
+                            ) )
+                        )
+                    )
+                );
             $this->languageHandler = $this->getMock(
                 '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
                 array( 'getByLocale' ),
-                array(),
-                '',
-                false
+                array(
+                    $innerLanguageHandler,
+                    $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language' )
+                )
             );
         }
         return $this->languageHandler;

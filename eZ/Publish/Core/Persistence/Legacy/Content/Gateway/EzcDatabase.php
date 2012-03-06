@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Base\Exceptions\NotFound,
     ezp\Content as ContentDo,
@@ -144,7 +145,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $struct->published, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
-            $q->bindValue( Content::STATUS_DRAFT, null, \PDO::PARAM_INT )
+            $q->bindValue( VersionInfo::STATUS_DRAFT, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
@@ -252,6 +253,7 @@ class EzcDatabase extends Gateway
     /**
      * Updates an existing content identified by $contentId in respect to $struct
      *
+     * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
      * @return void
      */
