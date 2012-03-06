@@ -416,7 +416,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $field->type )
         )->set(
             $this->dbHandler->quoteColumn( 'language_code' ),
-            $q->bindValue( $field->language )
+            $q->bindValue( $field->languageCode )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $field->versionNo )
@@ -439,7 +439,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_id' ),
             $q->bindValue(
                 $this->languageMaskGenerator->generateLanguageIndicator(
-                    $field->language,
+                    $field->languageCode,
                     $content->alwaysAvailable
                 ),
                 null,

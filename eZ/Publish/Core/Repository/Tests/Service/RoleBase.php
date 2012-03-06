@@ -451,7 +451,8 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 1 );
-        $policy = $role->policies[2];
+        $policies = $role->getPolicies();
+        $policy = $policies[2];
 
         $limitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
         $limitation->limitationValues = array( '12', '13', '14' );
@@ -460,6 +461,17 @@ abstract class RoleBase extends BaseServiceTest
         $policyUpdateStruct->addLimitation( $limitation );
 
         $updatedPolicy = $roleService->updatePolicy( $policy, $policyUpdateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'       => $policy->id,
+                'roleId'   => $policy->roleId,
+                'module'   => $policy->module,
+                'function' => $policy->function
+            ),
+            $updatedPolicy
+        );
+
         $limitations = $updatedPolicy->getLimitations();
 
         self::assertCount( 1, $limitations );

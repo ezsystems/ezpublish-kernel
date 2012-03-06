@@ -81,6 +81,7 @@ class AddField extends Action
      *
      * @param Content $content
      * @return void
+     * @todo Handle ->languageCode
      */
     protected function createField( Content $content )
     {
@@ -89,7 +90,7 @@ class AddField extends Action
         $field->type = $this->fieldDefinition->fieldType;
         $field->value = clone $this->fieldDefinition->defaultValue;
         $field->versionNo = $content->version->versionNo;
-        // $field->language = ...;
+        //$field->languageCode = $content->initialLanguageId;
         return $field;
     }
 }

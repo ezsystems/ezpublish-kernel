@@ -94,7 +94,10 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\Role',
+            $role
+        );
     }
 
     /**

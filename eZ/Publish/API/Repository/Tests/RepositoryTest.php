@@ -142,7 +142,11 @@ class RepositoryTest extends BaseTest
      */
     public function testGetTrashService()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::getTrashService() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\TrashService',
+            $repository->getTrashService()
+        );
     }
 
     /**

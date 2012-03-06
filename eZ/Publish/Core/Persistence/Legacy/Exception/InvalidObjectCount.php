@@ -10,9 +10,11 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Exception;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
 /**
  * Exception thrown when a result had an invalid object count
  */
-class InvalidObjectCount extends \RuntimeException
+class InvalidObjectCount extends NotFoundException
 {
 }

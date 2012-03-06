@@ -12,6 +12,8 @@ namespace eZ\Publish\API\Repository\Tests;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 use \eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
@@ -167,7 +169,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $pseudoEditor );
 
         // This call will fail with a "UnauthorizedException"
-        $versionInfo = $contentService->loadVersionInfo( $contentInfo );
+        $contentService->loadVersionInfo( $contentInfo );
         /* END: Use Case */
     }
 
@@ -177,10 +179,29 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
      */
     public function testLoadVersionInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Anonymous User" in an eZ Publish demo installation
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadVersionInfo( $contentInfo, 1 );
+        /* END: Use Case */
     }
 
     /**
@@ -189,10 +210,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfoById() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Anonymous User" in an eZ Publish demo installation
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadVersionInfoById( $anonymousUserId );
+        /* END: Use Case */
     }
 
     /**
@@ -201,10 +238,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoByIdWithSecondParameter
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadVersionInfoById() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Anonymous User" in an eZ Publish demo installation
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadVersionInfoById( $anonymousUserId, 1 );
+        /* END: Use Case */
     }
 
     /**
@@ -213,10 +266,28 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByContentInfo( $contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -225,10 +296,28 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithSecondParameter
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByContentInfo( $contentInfo, array( 'eng-US' ) );
+        /* END: Use Case */
     }
 
     /**
@@ -237,10 +326,28 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithThirdParameter
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByContentInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByContentInfo( $contentInfo, array( 'eng-US' ), 1 );
+        /* END: Use Case */
     }
 
     /**
@@ -249,10 +356,31 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByVersionInfo()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByVersionInfo
      */
     public function testLoadContentByVersionInfoThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByVersionInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        // Load the current VersionInfo
+        $versionInfo = $contentService->loadVersionInfo( $contentInfo );
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByVersionInfo( $versionInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -261,10 +389,31 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByVersionInfo($versionInfo, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByVersionInfoWithSecondParameter
      */
     public function testLoadContentByVersionInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByVersionInfo() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Anonymous User"
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        // Load the current VersionInfo
+        $versionInfo = $contentService->loadVersionInfo( $contentInfo );
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByVersionInfo( $versionInfo, array( 'eng-US' ) );
+        /* END: Use Case */
     }
 
     /**
@@ -273,10 +422,25 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testLoadContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContent( $anonymousUserId );
+        /* END: Use Case */
     }
 
     /**
@@ -285,10 +449,24 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithSecondParameter
      */
     public function testLoadContentThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContent( $anonymousUserId, array( 'eng-US' ) );
     }
 
     /**
@@ -297,10 +475,24 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithThirdParameter
      */
     public function testLoadContentThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $anonymousUserId = 10;
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContent( $anonymousUserId, array( 'eng-US' ), 1 );
     }
 
     /**
@@ -309,10 +501,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Remote id of the "Anonymous" user in a eZ Publish demo installation
+        $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByRemoteId( $anonymousRemoteId );
+        /* END: Use Case */
     }
 
     /**
@@ -321,10 +529,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithSecondParameter
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Remote id of the "Anonymous" user in a eZ Publish demo installation
+        $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByRemoteId( $anonymousRemoteId, array( 'eng-US' ) );
+        /* END: Use Case */
     }
 
     /**
@@ -333,10 +557,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Remote id of the "Anonymous" user in a eZ Publish demo installation
+        $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
+
+        $contentService = $repository->getContentService();
+
+        $pseudoEditor = $this->createAnonymousWithEditorRole();
+
+        // Set restricted editor user
+        $repository->setCurrentUser( $pseudoEditor );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentByRemoteId( $anonymousRemoteId, array( 'eng-US' ), 1 );
+        /* END: Use Case */
     }
 
     /**
@@ -472,10 +712,23 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
      */
     public function testLoadContentDraftsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentDrafts();
     }
 
     /**
@@ -484,10 +737,29 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts($user)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
      */
     public function testLoadContentDraftsThrowsUnauthorizedExceptionWithFirstParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator" user in a eZ Publish demo installation.
+        $administratorUserId = 14;
+
+        $contentService = $repository->getContentService();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Load the "Administrator" user
+        $administratorUser = $userService->loadUser( $administratorUserId );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadContentDrafts( $administratorUser );
     }
 
     /**
@@ -705,22 +977,31 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
      */
-    public function testFindSingleThrowsUnauthorizedException()
+    public function testFindSingleThrowsUnauthorizedExceptionWithFilterByPermissionsParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
-    }
+        $repository = $this->getRepository();
 
-    /**
-     * Test for the findSingle() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     */
-    public function testFindSingleThrowsUnauthorizedExceptionWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
+        /* BEGIN: Use Case */
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // Load content service
+        $contentService = $repository->getContentService();
+
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Systems*' )
+            )
+        );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->findSingle( $query, array(), false );
+        /* END: Use Case */
     }
 
     /**
@@ -792,7 +1073,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {

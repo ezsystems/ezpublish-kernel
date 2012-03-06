@@ -101,7 +101,7 @@ class TrashHandlerTest extends HandlerTest
                                             "data" => new TextLineValue( "Welcome $i" )
                                         )
                                     ),
-                                    "language" => "eng-GB",
+                                    "languageCode" => "eng-GB",
                                 )
                             )
                         )

@@ -11,13 +11,14 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
-use \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
+use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Test case for operations in the RoleService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\RoleService
+ * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest
+ * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest
  */
 class RoleServiceAuthorizationTest extends BaseTest
 {
@@ -31,7 +32,23 @@ class RoleServiceAuthorizationTest extends BaseTest
      */
     public function testCreateRoleThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::createRole() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // Get the role service
+        $roleService = $repository->getRoleService();
+
+        // Instantiate a role create struct.
+        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->createRole( $roleCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -44,7 +61,20 @@ class RoleServiceAuthorizationTest extends BaseTest
      */
     public function testLoadRoleThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::loadRole() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->loadRole( $role->id );
+        /* END: Use Case */
     }
 
     /**
@@ -57,7 +87,20 @@ class RoleServiceAuthorizationTest extends BaseTest
      */
     public function testLoadRoleByIdentifierThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::loadRoleByIdentifier() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->loadRoleByIdentifier( $role->identifier );
+        /* END: Use Case */
     }
 
     /**
@@ -69,7 +112,20 @@ class RoleServiceAuthorizationTest extends BaseTest
      */
     public function testLoadRolesThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::loadRoles() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // Get the role service
+        $roleService = $repository->getRoleService();
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->loadRoles();
+        /* END: Use Case */
     }
 
     /**
@@ -82,7 +138,24 @@ class RoleServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateRoleThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::updateRole() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // Get a new role update struct and set new values
+        $roleUpdateStruct = $roleService->newRoleUpdateStruct();
+        $roleUpdateStruct->mainLanguageCode = 'eng-GB';
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->updateRole( $role, $roleUpdateStruct );
+        /* END: Use Case */
     }
 
     /**
@@ -95,7 +168,20 @@ class RoleServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteRoleThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::deleteRole() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->deleteRole( $role );
+        /* END: Use Case */
     }
 
     /**
@@ -104,10 +190,27 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
      */
     public function testAddPolicyThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::addPolicy() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->addPolicy(
+            $role,
+            $roleService->newPolicyCreateStruct( 'content', 'delete' )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -116,10 +219,38 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdatePolicy
      */
     public function testUpdatePolicyThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::updatePolicy() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Get first role policy
+        $policies = $role->getPolicies();
+        $policy   = reset( $policies );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // Get a policy update struct and add a limitation
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => '/1/'
+                )
+            )
+        );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->updatePolicy( $policy, $policyUpdate );
+        /* END: Use Case */
     }
 
     /**
@@ -128,10 +259,28 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::removePolicy()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testRemovePolicy
      */
     public function testRemovePolicyThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::removePolicy() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Get first role policy
+        $policies = $role->getPolicies();
+        $policy   = reset( $policies );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->removePolicy( $role, $policy );
+        /* END: Use Case */
     }
 
     /**
@@ -140,10 +289,30 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
     public function testAssignRoleToUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUserGroup() is not implemented." );
+        $repository  = $this->getRepository();
+        $userService = $repository->getUserService();
+        $roleService = $repository->getRoleService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Load the "Editors" user group
+        $userGroup = $userService->loadUserGroup( $editorsGroupId );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->assignRoleToUserGroup( $role, $userGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -152,10 +321,37 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
-    public function testAssignRoleToUserGroupThrowsUnauthorizedExceptionWithThirdParameter()
+    public function testAssignRoleToUserGroupThrowsUnauthorizedExceptionWithRoleLimitationParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUserGroup() is not implemented." );
+        $repository  = $this->getRepository();
+        $userService = $repository->getUserService();
+        $roleService = $repository->getRoleService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Load the "Editors" user group
+        $userGroup = $userService->loadUserGroup( $editorsGroupId );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // Create a subtree role limitation
+        $limitation = new SubtreeLimitation(
+            array(
+                'limitationValues'  =>  '/1/2/'
+            )
+        );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->assignRoleToUserGroup( $role, $userGroup, $limitation );
+        /* END: Use Case */
     }
 
     /**
@@ -164,10 +360,33 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUnassignRoleFromUserGroup
      */
     public function testUnassignRoleFromUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUserGroup() is not implemented." );
+        $repository  = $this->getRepository();
+        $userService = $repository->getUserService();
+        $roleService = $repository->getRoleService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Load the "Editors" user group
+        $userGroup = $userService->loadUserGroup( $editorsGroupId );
+
+        // Assign new role to "Editors" user group
+        $roleService->assignRoleToUserGroup( $role, $userGroup );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->unassignRoleFromUserGroup( $role, $userGroup );
+        /* END: Use Case */
     }
 
     /**
@@ -176,10 +395,24 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      */
     public function testAssignRoleToUserThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->assignRoleToUser( $role, $user );
+        /* END: Use Case */
     }
 
     /**
@@ -188,10 +421,31 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      */
-    public function testAssignRoleToUserThrowsUnauthorizedExceptionWithThirdParameter()
+    public function testAssignRoleToUserThrowsUnauthorizedExceptionWithRoleLimitationParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::assignRoleToUser() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // Create a subtree role limitation
+        $limitation = new SubtreeLimitation(
+            array(
+                'limitationValues'  =>  '/1/2/'
+            )
+        );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->assignRoleToUser( $role, $user, $limitation );
+        /* END: Use Case */
     }
 
     /**
@@ -200,10 +454,27 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUnassignRoleFromUser
      */
     public function testUnassignRoleFromUserThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::unassignRoleFromUser() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Assign new role to "Editor" user
+        $roleService->assignRoleToUser( $role, $user );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->unassignRoleFromUser( $role, $user );
+        /* END: Use Case */
     }
 
     /**
@@ -212,10 +483,24 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignments()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignments
      */
     public function testGetRoleAssignmentsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignments() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->getRoleAssignments( $role );
+        /* END: Use Case */
     }
 
     /**
@@ -224,10 +509,24 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignmentsForUser
      */
     public function testGetRoleAssignmentsForUserThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignmentsForUser() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $this->createRole();
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->getRoleAssignmentsForUser( $user );
+        /* END: Use Case */
     }
 
     /**
@@ -236,9 +535,96 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignmentsForUserGroup
      */
     public function testGetRoleAssignmentsForUserGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for RoleService::getRoleAssignmentsForUserGroup() is not implemented." );
+        $repository  = $this->getRepository();
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = 13;
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $this->createRole();
+
+        // Load the "Editors" user group
+        $userGroup = $userService->loadUserGroup( $editorsGroupId );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->getRoleAssignmentsForUserGroup( $userGroup );
+        /* END: Use Case */
+    }
+
+    /**
+     * Create a role fixture in a variable named <b>$role</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     */
+    private function createRole()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // Get the role service
+        $roleService = $repository->getRoleService();
+
+        // Get new policy create struct
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', '*' );
+
+        // Get a role create struct instance and set properties
+        $roleCreate = $roleService->newRoleCreateStruct( 'testRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
+
+        $roleCreate->addPolicy( $policyCreate );
+
+        // Create a new role instance.
+        $role = $roleService->createRole( $roleCreate );
+        /* END: Inline */
+
+        return $role;
+    }
+
+    /**
+     * Create a user fixture in a variable named <b>$user</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createUserVersion1()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $editorsGroupId = 13;
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $group ) );
+        /* END: Inline */
+
+        return $user;
     }
 }

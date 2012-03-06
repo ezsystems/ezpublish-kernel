@@ -159,10 +159,6 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
-        if ( false === $this->repository->canUser( 'content', 'read', $contentInfo ) )
-        {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
-        }
         return $this->loadVersionInfoById( $contentInfo->contentId, $versionNo );
     }
 
@@ -188,7 +184,13 @@ class ContentServiceStub implements ContentService
             {
                 continue;
             }
-            else if ( $versionInfo->versionNo === $versionNo )
+
+            if ( false === $this->repository->canUser( 'content', 'read', $versionInfo ) )
+            {
+                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            }
+
+            if ( $versionInfo->versionNo === $versionNo )
             {
                 return $versionInfo;
             }
@@ -269,10 +271,17 @@ class ContentServiceStub implements ContentService
             {
                 continue;
             }
-            else if ( $versionNo === $content->getVersionInfo()->versionNo )
+
+            if ( false === $this->repository->canUser( 'content', 'read', $content ) )
+            {
+                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            }
+
+            if ( $versionNo === $content->getVersionInfo()->versionNo )
             {
                 return $this->filterFieldsByLanguages( $content, $languages );
             }
+
             $contents[$content->getVersionInfo()->status] = $content;
         }
 
@@ -612,7 +621,7 @@ class ContentServiceStub implements ContentService
      */
     public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null )
     {
-        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        if ( false === $this->repository->canUser( 'content', 'edit', $contentInfo ) )
         {
             throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
         }
@@ -679,6 +688,11 @@ class ContentServiceStub implements ContentService
     public function loadContentDrafts( User $user = null )
     {
         $user = $user ?: $this->repository->getCurrentUser();
+
+        if ( false === $this->repository->hasAccess( 'content', 'pendinglist' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
 
         $contentDrafts = array();
         foreach ( $this->versionInfo as $versionInfo )
@@ -1190,6 +1204,14 @@ class ContentServiceStub implements ContentService
                 )
             );
         }
+
+        if ( 1 === $searchResult->count
+            && false === $filterOnUserPermissions
+            && false === $this->repository->canUser( 'content', 'read', $searchResult->items[0] ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         return $searchResult;
     }
 
@@ -1396,6 +1418,7 @@ class ContentServiceStub implements ContentService
                 'contentType'       =>  $contentType,
                 'mainLanguageCode'  =>  $mainLanguageCode,
                 'modificationDate'  =>  new \DateTime(),
+                'remoteId'          =>  md5( uniqid( __CLASS__, true ) ),
                 'ownerId'           =>  $this->repository->getCurrentUser()->id
             )
         );

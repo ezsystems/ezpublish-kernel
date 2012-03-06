@@ -321,7 +321,7 @@ class EzcDatabase extends Gateway
         $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass' ) );
         $q->set(
             $this->dbHandler->quoteColumn( 'id' ),
-            $this->dbHandler->getAutoIncrementValue( 'ezcontentclass', 'contentclass_id' )
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentclass', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $type->status, null, \PDO::PARAM_INT )
@@ -855,11 +855,11 @@ class EzcDatabase extends Gateway
             $q->expr->lAnd(
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'id', 'ezcontentclass' ),
-                    $q->bindValue( $typeId )
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
-                    $q->bindValue( $status )
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
                 )
             )
         );

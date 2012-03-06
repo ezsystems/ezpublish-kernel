@@ -1247,7 +1247,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $field->fieldDefinitionId = 231;
         $field->type = 'ezstring';
-        $field->language = 'eng-GB';
+        $field->languageCode = 'eng-GB';
         $field->versionNo = 1;
 
         return $field;
@@ -1261,7 +1261,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     protected function getOtherLanguageFieldFixture()
     {
         $field = $this->getFieldFixture();
-        $field->language = 'eng-US';
+        $field->languageCode = 'eng-US';
         return $field;
     }
 

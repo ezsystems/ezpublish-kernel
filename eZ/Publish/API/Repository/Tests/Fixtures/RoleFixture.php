@@ -609,13 +609,5 @@ return array(
                     "identifier" => "Subtree",
                     "value" => "/1/43/",
                 ),
-    ),
-    array(
-        "14"  =>  array(
-                    0 => 12,
-                ),
-        "10"  =>  array(
-                    0 => 42,
-                ),
     )
 );
