@@ -236,14 +236,14 @@ class Handler implements BaseLocationHandler
     /**
      * Creates a new location rooted at $location->parentId.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $locationStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function create( CreateStruct $locationStruct )
+    public function create( CreateStruct $createStruct )
     {
-        $parentNodeData = $this->locationGateway->getBasicNodeData( $locationStruct->parentId );
-        $locationStruct = $this->locationGateway->create( $locationStruct, $parentNodeData );
-        $this->locationGateway->createNodeAssignment( $locationStruct, $parentNodeData['node_id'], LocationGateway::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP );
+        $parentNodeData = $this->locationGateway->getBasicNodeData( $createStruct->parentId );
+        $locationStruct = $this->locationGateway->create( $createStruct, $parentNodeData );
+        $this->locationGateway->createNodeAssignment( $createStruct, $parentNodeData['node_id'], LocationGateway::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP );
 
         return $locationStruct;
     }
