@@ -346,13 +346,13 @@ class Mapper
 
             if (
                 !in_array(
-                    $row['ezcontentobject_attribute_language_code'],
-                    $versionList[$versionId]->languageIds
+                    $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
+                    $versionList[$versionId]->languageIds              // eng-US can be either 2 or 3, see fixture data
                 )
             )
             {
                 $versionList[$versionId]->languageIds[] =
-                    $row['ezcontentobject_attribute_language_code'];
+                    $row['ezcontentobject_attribute_language_id'] & ~1;
             }
         }
         return array_values( $versionList );

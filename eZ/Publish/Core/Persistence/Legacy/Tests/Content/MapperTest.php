@@ -494,7 +494,7 @@ class MapperTest extends TestCase
         $version->created = 1313047865;
         $version->status = 3;
         $version->contentId = 226;
-        $version->languageIds = array( 'eng-US' );
+        $version->languageIds = array( 2 );
 
         $versions[] = $version;
 
@@ -507,7 +507,7 @@ class MapperTest extends TestCase
         $version->created = 1313061317;
         $version->status = 1;
         $version->contentId = 226;
-        $version->languageIds = array( 'eng-US' );
+        $version->languageIds = array( 2 );
 
         $versions[] = $version;
 

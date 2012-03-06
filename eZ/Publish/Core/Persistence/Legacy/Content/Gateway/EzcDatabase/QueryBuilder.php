@@ -68,6 +68,7 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'contentclassattribute_id', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'data_type_string', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
+            $this->dbHandler->aliasedColumn( $query, 'language_id', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_attribute' ),
             // Content object field data
             $this->dbHandler->aliasedColumn( $query, 'data_float', 'ezcontentobject_attribute' ),

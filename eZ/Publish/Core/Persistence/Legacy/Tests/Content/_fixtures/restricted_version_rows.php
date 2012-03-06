@@ -14,6 +14,7 @@ return array (
     'ezcontentobject_version_contentobject_id' => '226',
     'ezcontentobject_version_language_mask' => '3',
     'ezcontentobject_attribute_language_code' => 'eng-US',
+    'ezcontentobject_attribute_language_id' => '3',
   ),
   1 => 
   array (
@@ -28,5 +29,6 @@ return array (
     'ezcontentobject_version_contentobject_id' => '226',
     'ezcontentobject_version_language_mask' => '3',
     'ezcontentobject_attribute_language_code' => 'eng-US',
+    'ezcontentobject_attribute_language_id' => '3',
   ),
 );
