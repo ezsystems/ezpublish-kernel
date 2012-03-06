@@ -519,7 +519,7 @@ abstract class LocationBase extends BaseServiceTest
     {
         $locationService = $this->repository->getLocationService();
 
-        $location = $locationService->loadLocation( 43 );
+        $location = $locationService->loadLocation( 44 );
         $locationService->deleteLocation( $location );
 
         try
