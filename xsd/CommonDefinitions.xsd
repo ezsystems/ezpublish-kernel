@@ -11,6 +11,16 @@
     <xsd:attribute name="media-type" type="xsd:string" />
   </xsd:complexType>
 
+  <xsd:complexType name="controllerRef">
+    <xsd:annotation>
+      <xsd:documentation>
+        A base schema for referencing controllers and methods
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="href" type="xsd:string" />
+    <xsd:attribute name="method" type="xsd:string" />
+  </xsd:complexType>
+
   <xsd:complexType name="fieldInputValueType">
     <xsd:annotation>
       <xsd:documentation>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UserGroupCreate>
+  <mainLanguageCode>eng-US</mainLanguageCode>
+  <remoteId>remoteId-qwert098</remoteId>
+  <fields>
+    <field>
+      <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>UserGroup</value>
+    </field>
+    <field>
+      <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>Group Descruption</value>
+    </field>
+  </fields>
+</UserGroupCreate>

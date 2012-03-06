@@ -44,7 +44,7 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="ContentTypes" type="vnd.ez.api.ContentTypeInfoList"/>
+          <xsd:element name="ContentTypes" type="vnd.ez.api.ContentTypeInfoList" />
         </xsd:all>
       </xsd:extension>
     </xsd:complexContent>
@@ -63,8 +63,18 @@
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:sequence>
-          <xsd:element name="ContentTypeGroupRef" type="ref"
-            maxOccurs="unbounded"></xsd:element>
+          <xsd:element name="ContentTypeGroupRef" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:complexContent>
+                <xsd:extension base="ref">
+                  <xsd:all>
+                    <xsd:element name="unlink" type="controllerRef"
+                      minOccurs="0" />
+                  </xsd:all>
+                </xsd:extension>
+              </xsd:complexContent>
+            </xsd:complexType>
+          </xsd:element>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>

@@ -40,7 +40,7 @@ If activated the user has to login and the client has to send the session cookie
         :login:  the login of the user
         :password:  the password
 :Response: 200 Set-Cookie: SessionId : <sessionID>  A unique session id containing encryped information of client host and expiretime  
-           UserInfo_
+           <Uri of user>
 :Error codes: 
        :401: If the authorization failed
 
@@ -2055,8 +2055,10 @@ Overview
 /content/typegroups                                create new group    load all groups     .                       .            
 /content/typegroups/<ID>                           .                   load group          update group            delete group
 /content/typegroups/<ID>/types                     create content type list content types  .                       .                  
-/content/types                                     copy content type   list content types  .                       .            
-/content/types/<ID>                                create draft        load content type   .                       delete content type
+/content/types                                     .                   list content types  .                       .            
+/content/types/<ID>                                copy content type   load content type   create draft            delete content type
+/content/types/<ID>/groups                         link group          list groups         .                       .                  
+/content/types/<ID>/groups/<ID>                    .                   .                   .                       unlink group       
 /content/types/<ID>/draft                          publish draft       load draft          update draft            delete draft       
 /content/types/<ID>/draft/fieldDefinitions         create field def.   .                   .                       .            
 /content/types/<ID>/draft/fieldDefinitions/<ID>    .                   load field def.     update field definition delete field definition
@@ -2486,17 +2488,17 @@ Copy Content Type
 :Description: copies a content type. The identifier of the copy is changed to copy_of_<identifier> anda new remoteIdis generated. 
 :Response:
 
-::
+    ::
 
-     HTTP/1.1 201 Created
-     Location: /content/types/<newId>
+         HTTP/1.1 201 Created
+         Location: /content/types/<newId>
 
 
 :Error Codes:
     :401: If the user is not authorized to copy this content type  
         
-Get Content Types
-`````````````````
+List Content Types
+``````````````````
 :Resource: /content/types
 :Method: GET
 :Description: Returns a list of content types 
@@ -2614,7 +2616,7 @@ XML Example
 
 ::
 
-    PATCH /content/types/32 HTTO/1.1
+    PATCH /content/types/32/draft HTTO/1.1
     Accept: application/vnd.ez.api.ContentTypeInfo+xml 
     Content-Type: application/vnd.ez.api.ContentTypeUpdate+xml
     Content-Length: xxx
@@ -2749,9 +2751,9 @@ Delete Fielddefinition
 :Description: the given field definition is deleted
 :Response: 
 
-::
+    ::
 
-    HTTP/1.1 204 No Content
+        HTTP/1.1 204 No Content
 
 :Error Codes:
     :401: If the user is not authorized to delete this content type
@@ -2796,7 +2798,7 @@ Delete Content Type
 
 Get Groups of Content Type
 ``````````````````````````
-:Resource: /content/type/<ID>/groups/<ID>
+:Resource: /content/type/<ID>/groups
 :Method: GET
 :Description: Returns the content type groups the content type belongs to.
 :Headers:
@@ -2817,11 +2819,29 @@ Get Groups of Content Type
     :401: If the user is not authorized to read this content type  
     :404: If the content type does not exist
 
+XML Example
+'''''''''''
+
+::
+
+    GET /content/types/32/groups
+    Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
+    
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
+    Gontent-Length: xxx
+
+    <ContentTypeGroupRefList>
+      <ContentTypeGroupRef href="/content/typegroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml"/>
+    </ContentTypeGroupRefList>
+
 Link Group to Content Type
 ``````````````````````````
 :Resource: /content/types/<ID>/groups
 :Method: POST
 :Description: links a content type group to the content type and returns the updated group list
+:Parameters: 
+    :group: (uri) the uri of the group to which the content type should be linked
 :Headers:
     :Accept:
          :application/vnd.ez.api.ContentTypeGroupRefList+xml:  if set the list is returned in xml format (see ContentTypeGroup_)
@@ -2840,12 +2860,32 @@ Link Group to Content Type
     :401: If the user is not authorized to add a group
     :403: If the content type is already assigned to the group
 
+XML Example
+'''''''''''
 
+::
+
+    POST /content/types/32/groups?/content/typegroups/10
+    Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
+    
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
+    Gontent-Length: xxx
+
+    <ContentTypeGroupRefList>
+      <ContentTypeGroupRef href="/content/typegroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+          <unlink href="/content/type/32/groups/7" method="DELETE"/>
+      </ContentTypeGroupRefList>
+      <ContentTypeGroupRef href="/content/typegroups/10" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
+          <unlink href="/content/type/32/groups/10" method="DELETE"/>
+      </ContentTypeGroupRefList>
+
+    </ContentTypeGroupRefList>
 
 Unlink Group from Content Type
 ``````````````````````````````
 :Resource: /content/type/<ID>/groups/<ID>
-:Method: DELETE
+:Method: POST
 :Description: removes the given group from the content type and returns the updated group list
 :Headers:
     :Accept:
@@ -2865,6 +2905,22 @@ Unlink Group from Content Type
     :403: If the given group is the last one
     :404: If the resource does not exist
         
+XML Example
+'''''''''''
+
+::
+
+    POST /content/types/32/unlinkgroup?/content/typegroups/7
+    Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
+    
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
+    Gontent-Length: xxx
+
+    <ContentTypeGroupRefList>
+      <ContentTypeGroupRef href="/content/typegroups/10" media-type="application/vnd.ez.api.ContentTypeGroup+xml"/>
+    </ContentTypeGroupRefList>
+
 
 User Management
 ===============
@@ -2875,17 +2931,20 @@ Overview
 ============================================= ===================== ===================== ===================== =======================
 Resource                                      POST                  GET                   PUT                   DELETE
 --------------------------------------------- --------------------- --------------------- --------------------- -----------------------
-/user/groups                                  create user group     load all topl. groups .                     .            
-/user/groups/<ID>                             .                     load user group       update user group     delete user group
-/user/groups/<ID>/users                       .                     load users of group   .                     delete all users in this group
-/user/groups/<ID>/children                    create sub group      load sub groups       .                     remove all sub groups
-/user/groups/<ID>/roles                       assign role to group  load roles of group   .                     .            
-/user/groups/<ID>/roles/<ID>                  .                     .                     .                     unassign role from group
+/user/groups                                  .                     load all topl. groups .                     .            
+/user/groups/root                             .                     redirect to root      .                     .            
+/user/groups/<path>                           .                     load user group       update user group     delete user group
+/user/groups/<path>/users                     .                     load users of group   .                     .                             
+/user/groups/<path>/subgroups                 create user group     load sub groups       .                     remove all sub groups
+/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .            
+/user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group
 /user/users                                   create user           list users            .                     .            
 /user/users/<ID>                              .                     load user             update user           delete user
 /user/users/<ID>/groups                       .                     load groups of user   add to group          .            
 /user/users/<ID>/drafts                       .                     list all drafts owned .                     .                
                                                                     by the user                                                     
+/user/users/<ID>/roles                        assign role to group  load roles of group   .                     .            
+/user/users/<ID>/roles/<ID>                   .                     .                     .                     unassign role from group
 /user/roles                                   create new role       load all roles        .                     .            
 /user/roles/<ID>                              .                     load role             update role           delete role
 /user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
@@ -2896,59 +2955,331 @@ Resource                                      POST                  GET         
 Managing Users and Groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create User Group
-`````````````````
-:Resource: - /user/groups
-           - /user/groups/<ID>/children
-:Method: POST
-:Description: Creates a new user group
-:Request Format: application/json
-:Parameters: 
-:Inputschema: UserGroupInput_
-:Response: 200 UserGroup_
-:Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this user group
-
-Load User Groups
-````````````````
-:Resource: /user/groups
+Get Root User Group
+```````````````````
+:Resource: /user/groups/root
 :Method: GET
-:Description: Returns a list of all user groups (TBD - depth parameter)
-:Response: 200 array of UserGroup_
-:Error Codes:
-    :401: If the user has no permission to read user groups
+:Description: Redirects to the root user group
+:Response: 
+
+::
+
+    HTTP/1.1 301 Moved Permanently
+    Location: /user/groups/<rootPath>
+
+Example see UserGroupExample_
 
 Load User Group
 ```````````````
-:Resource: /user/groups/<ID>
+:Resource: /user/groups/<path>
 :Method: GET
-:Description: loads a user groups for the given <ID>
-:Response: 200 UserGroup_
+:Description: loads a user groups for the given <path>
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroup+xml:  if set the new user group is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroup+json:  if set the new user group is returned in json format (see UserGroup_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
+          ETag: "<Etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          UserGroup_      
+
 :Error Codes:
     :401: If the user has no permission to read user groups
     :404: If the user group does not exist
 
+Example see UserGroupExample_
+
+Create User Group
+`````````````````
+:Resource: /user/groups/<path>/subgroups
+:Method: POST
+:Description: Creates a new user group under the given parent. To create a top level group use /user/groups/subgroups
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroup+xml:  if set the new user group is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroup+json:  if set the new user group is returned in json format (see UserGroup_)
+    :Content-Type:
+         :application/vnd.ez.api.UserGroupCreate+json: the UserGroupCreate_  schema encoded in json
+         :application/vnd.ez.api.UserGroupCreate+xml: the UserGroupCreate_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /user/groups/<newpath>
+          Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          UserGroup_      
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to create this user group
+
+
+.. _UserGroupExample:
+
+
+XNL Example
+'''''''''''
+
+Creating a top level group
+
+::
+
+    GET /user/groups/root HTTP/1.1
+    Accept: application/vnd.ez.api.UserGroup+xml
+    
+    HTTP/1.1 301 Moved Permanently
+    Location: /user/groups/1/5
+
+    GET /user/groups/1/5 HTTP/1.1
+    Accept: application/vnd.ez.api.UserGroup+xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroup href="/user/groups/1/5" id="5" media-type="vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert001">
+      <ContentType href="/content/types/5" media-type="vnd.ez.api.ContentType+xml" />
+      <name>Users</name>
+      <Versions href="/content/objects/4/versions" media-type="vnd.ez.api.VersionList+xml" />
+      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5" media-type="vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/4/locations" media-type="vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/13" media-type="vnd.ez.api.User+xml" />
+      <publishDate>2011-02-31T16:00:00</publishDate>
+      <lastModificationDate>2011-02-31T16:00:00</lastModificationDate>
+      <mainLanguageCode>eng-UK</mainLanguageCode>
+      <alwaysAvailable>true</alwaysAvailable>
+      <Content>
+        <VersionInfo>
+          <id>22</id>
+          <versionNo>1</versionNo>
+          <status>PUBLISHED</status>
+          <modificationDate>2011-02-31T16:00:00</modificationDate>
+          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <creationDate>2011-02-31T16:00:00</creationDate>
+          <initialLanguageCode>eng-UK</initialLanguageCode>
+          <Content href="/content/objects/4" media-type="application/vnd.ez.api.ContentInfo+xml" />
+        </VersionInfo>
+        <Fields>
+          <field>
+            <id>1234</id>
+            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <languageCode>eng-UK</languageCode>
+            <value>Users</value>
+          </field>
+          <field>
+            <id>1235</id>
+            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <languageCode>eng-UK</languageCode>
+            <value>Main Group</value>
+          </field>
+        </Fields>
+        <Relations />
+      </Content>
+      <SubGroups href="/user/groups/1/5/subgroups" media-type="vnd.ez.api.UserGroupList+xml"/>
+      <Users href="/user/groups/1/5/users" media-type="vnd.ez.api.UserList+xml"/>
+      <Roles href="/user/groups/1/5/roles" media-type="vnd.ez.api.RoleList+xml"/>
+    </UserGroup>
+        
+
+    POST /user/groups/1/5/subgroups HTTP/1.1
+    Accept: application/vnd.ez.api.UserGroup+xml
+    Content-Type: application/vnd.ez.api.UserGroupCreate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroupCreate>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <remoteId>remoteId-qwert098</remoteId>
+      <fields>
+        <field>
+          <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>UserGroup</value>
+        </field>
+        <field>
+          <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>This is the description of the user group</value>
+        </field>
+      </fields>
+    </UserGroupCreate>
+         
+    HTTP/1.1 201 Created
+    Location: /user/groups/1/5/65
+    Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
+    ETag: "348506873565465"
+    Content-Type: application/vnd.ez.api.UserGroup+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroup href="/user/groups/1/5/65" id="65" media-type="vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
+      <ContentType href="/content/types/5" media-type="vnd.ez.api.ContentType+xml" />
+      <name>UserGroup</name>
+      <Versions href="/content/objects/123/versions" media-type="vnd.ez.api.VersionList+xml" />
+      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5/65" media-type="vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/123/locations" media-type="vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/13" media-type="vnd.ez.api.User+xml" />
+      <publishDate>2012-02-31T16:00:00</publishDate>
+      <lastModificationDate>2012-02-31T16:00:00</lastModificationDate>
+      <mainLanguageCode>eng-UK</mainLanguageCode>
+      <alwaysAvailable>true</alwaysAvailable>
+      <Content>
+        <VersionInfo>
+          <id>123</id>
+          <versionNo>2</versionNo>
+          <status>PUBLISHED</status>
+          <modificationDate>2012-02-31T16:00:00</modificationDate>
+          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <creationDate>2012-02-31T16:00:00</creationDate>
+          <initialLanguageCode>eng-UK</initialLanguageCode>
+          <Content href="/content/objects/123" media-type="application/vnd.ez.api.ContentInfo+xml" />
+        </VersionInfo>
+        <Fields>
+          <field>
+            <id>1234</id>
+            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <languageCode>eng-UK</languageCode>
+            <value>UserGroup</value>
+          </field>
+          <field>
+            <id>1235</id>
+            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <languageCode>eng-UK</languageCode>
+            <value>This is the description of the user group</value>
+          </field>
+        </Fields>
+        <Relations />
+      </Content>
+      <ParentUserGroup href="/user/groups/1/5" media-type="vnd.ez.api.UserGroup+xml" />
+      <SubGroups href="/user/groups/1/5/65/subgroups" media-type="vnd.ez.api.UserGroupList+xml"/>
+      <Users href="/user/groups/1/5/65/users" media-type="vnd.ez.api.UserList+xml"/>
+      <Roles href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleList+xml"/>
+    </UserGroup>
+
+    
+
 Update User Group
 `````````````````
-:Resource: /user/groups/<ID>
-:Method: PUT
+:Resource: /user/groups/<path>
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
 :Description: Updates a user group
-:Request Format: application/json
-:Parameters:
-:Inputschema: UserGroupInput_
-:Response: 200 UserGroup_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroup+xml:  if set the new user group is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroup+json:  if set the new user group is returned in json format (see UserGroup_)
+    :Content-Type:
+         :application/vnd.ez.api.UserGroupUpdate+json: the UserGroupUpdate_  schema encoded in json
+         :application/vnd.ez.api.UserGroupUpdate+xml: the UserGroupUpdate_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          UserGroup_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the user group
 
+
+XML Example
+'''''''''''
+
+::
+
+    PATCH /user/groups/1/5/65 HTTP/1.1
+    Accept: application/vnd.ez.api.UserGroup+xml
+    Content-Type: application/vnd.ez.api.UserGroupUpdate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroupUpdate>
+      <fields>
+        <field>
+          <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>This is another description</value>
+        </field>
+      </fields>
+    </UserGroupUpdate>
+
+    HTTP/1.1 200 OK
+    Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
+    ETag: "348506873465777"
+    Content-Type: application/vnd.ez.api.UserGroup+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroup href="/user/groups/1/5/65" id="65" media-type="vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
+      <ContentType href="/content/types/5" media-type="vnd.ez.api.ContentType+xml" />
+      <name>UserGroup</name>
+      <Versions href="/content/objects/123/versions" media-type="vnd.ez.api.VersionList+xml" />
+      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5/65" media-type="vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/123/locations" media-type="vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/13" media-type="vnd.ez.api.User+xml" />
+      <publishDate>2012-02-31T16:00:00</publishDate>
+      <lastModificationDate>2012-02-31T16:00:00</lastModificationDate>
+      <mainLanguageCode>eng-UK</mainLanguageCode>
+      <alwaysAvailable>true</alwaysAvailable>
+      <Content>
+        <VersionInfo>
+          <id>125</id>
+          <versionNo>3</versionNo>
+          <status>PUBLISHED</status>
+          <modificationDate>2012-03-31T16:00:00</modificationDate>
+          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <creationDate>2012-03-31T16:00:00</creationDate>
+          <initialLanguageCode>eng-UK</initialLanguageCode>
+          <Content href="/content/objects/123" media-type="application/vnd.ez.api.ContentInfo+xml" />
+        </VersionInfo>
+        <Fields>
+          <field>
+            <id>1234</id>
+            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <languageCode>eng-UK</languageCode>
+            <value>UserGroup</value>
+          </field>
+          <field>
+            <id>1235</id>
+            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <languageCode>eng-UK</languageCode>
+            <value>This is another description of the user group</value>
+          </field>
+        </Fields>
+        <Relations />
+      </Content>
+      <ParentUserGroup href="/user/groups/1/5" media-type="vnd.ez.api.UserGroup+xml" />
+      <SubGroups href="/user/groups/1/5/65/subgroups" media-type="vnd.ez.api.UserGroupList+xml"/>
+      <Users href="/user/groups/1/5/65/users" media-type="vnd.ez.api.UserList+xml"/>
+      <Roles href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleList+xml"/>
+    </UserGroup>
+
+
 Delete User Group
 `````````````````
-:Resource: /user/groups/<ID>
+:Resource: /user/groups/<path>
 :Method: DELETE
 :Description: the given user group is deleted
-:Parameters: 
-:Response: 204
+:Response: 
+
+    ::
+
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this content type
     :403: If the user group is not empty
@@ -2958,56 +3289,42 @@ Load Users of Group
 :Resource: /user/groups/<ID>/users
 :Method: GET
 :Description: loads the users of the group with the given <ID>
-:Response: 200 array of User_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserList+xml:  if set the user list returned in xml format (see User_)
+         :application/vnd.ez.api.UserList+json:  if set the user list is returned in json format (see User_)
+         :application/vnd.ez.api.UserRefList+xml:  if set the link list of users returned in xml format (see User_)
+         :application/vnd.ez.api.UserRefList+json:  if set the link list of users is returned in json format (see User_)
+:Parameters: :limit:  only <limit> items will be returned started by offset
+             :offset: offset of the result set
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          User_      
+
 :Error Codes:
     :401: If the user has no permission to read user groups
     :404: If the user group does not exist
 
-Create User
-```````````
-:Resource: /user/groups/<ID>/users
-:Method: PUT  (idempotent because a user with the same login can't be created twice)
-:Description: Creates a new user in the given group
-:Request Format: application/json
-:Parameters: 
-:Inputschema: UserInput_
-:Response: 200 User_
-:Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this user 
-    :403: If a user with the same login already exists
-    :404: If the group with the given ID does not exist
-
-Delete Users of Group
-`````````````````````
-:Resource: /user/groups/<ID>/users
-:Method: DELETE
-:Description: All users of the given group are removed
-:Parameters: 
-:Response: 204
-:Error Codes:
-    :401: If the user is not authorized to delete users
-    :404: If the group with the given ID does not exist
-
-Load Parent Group
-`````````````````
-:Resource: /user/groups/<ID>/parent
-:Method: GET
-:Description: loads the parent group for the given <ID>
-:Response: 200 UserGroup_
-:Error Codes:
-    :401: If the user has no permission to read user groups
-    :404: If the user group does not exist
 
 Move user Group
 ```````````````
-:Resource: /user/groups/<ID>/parent
-:Method: PUT
-:Description: Moves the gropup to another parent
-:Request Format: 
-:Parameters: :destParentId: the new parent of the group  
-:Inputschema: 
-:Response: 200 
+:Resource: /user/groups/<path>
+:Method: MOVE or POST with header X-HTTP-Method-Override: MOVE
+:Description: moves the user group to another parent.
+:Headers:
+    :Destination: A parent group resource to which the location is moved
+:Response: 
+
+    ::
+    
+        HTTP/1.1 201 Created
+        Location: /user/groups/<newPath>
+
 :Error Codes:
     :401: If the user is not authorized to update the user group
     :403: If the new parenbt does not exist
@@ -3015,45 +3332,194 @@ Move user Group
 
 Load Subgroups
 ``````````````
-:Resource: /user/groups/<ID>/children
+:Resource: /user/groups/<ID>/subgroups
 :Method: GET
 :Description: Returns a list of the sub groups
-:Response: 200 array of UserGroup_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroupList+xml:  if set the user group list returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupList+json:  if set the user group list is returned in json format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          UserGroup_      
+
+
 :Error Codes:
     :401: If the user has no permission to read user groups
     :404: If the user group does not exist
 
-Delete Subgroups
-````````````````
-:Resource: /user/groups/<ID>/children
-:Method: DELETE
-:Description: All sub groups of the given group are removed
-:Parameters: 
-:Response: 204
+Create User
+```````````
+:Resource: /user/groups/<path>/users
+:Method: POST
+:Description: Creates a new user in the given group
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.User+xml:  if set the new user is returned in xml format (see User_)
+         :application/vnd.ez.api.User+json:  if set the new user is returned in json format (see User_)
+    :Content-Type:
+         :application/vnd.ez.api.UserCreate+json: the UserCreate_  schema encoded in json
+         :application/vnd.ez.api.UserCreate+xml: the UserCreate_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /user/users/<ID>
+          Accept-Patch:  application/vnd.ez.api.UserUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          User_      
+
 :Error Codes:
-    :401: If the user is not authorized to delete user groups
-    :403: If the removal of a sub group would delete users
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to create this user 
+    :403: If a user with the same login already exists
     :404: If the group with the given ID does not exist
+
+XML Example
+'''''''''''
+
+::
+
+    POST /user/groups/1/5/65/users HTTP/1.1
+    Accept: application/vnd.ez.api.User+xml
+    Content-Type: application/vnd.ez.api.UserCreate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserCreate>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <remoteId>remoteId-qwert426</remoteId>
+      <login>john</login>
+      <email>john.doe@example.net</email>
+      <password>john-does-password</password>
+      <fields>
+        <field>
+          <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>John</value>
+        </field>
+        <field>
+          <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>Doe</value>
+        </field>
+      </fields>
+    </UserCreate>
+        
+    HTTP/1.1 201 Created
+    Location: /user/users/99
+    Accept-Patch: application/vnd.ez.api.UserUpdate+xml
+    ETag: "34567340896734095867"
+    Content-Type: application/vnd.ez.api.User+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <User href="/user/users/99" id="99" media-type="vnd.ez.api.User+xml"
+      remoteId="remoteId-qwert426">
+      <ContentType href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+      <name>John</name>
+      <Versions href="/content/objects/79" media-type="vnd.ez.api.VersionList+xml" />
+      <Section href="/content/section/3" media-type="vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5/65"
+        media-type="vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/79/locations" media-type="vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/14" media-type="vnd.ez.api.User+xml" />
+      <publishDate>2001-04-01T12:00:00</publishDate>
+      <lastModificationDate>2001-04-01T12:00:00</lastModificationDate>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <alwaysAvailable>true</alwaysAvailable>
+      <login>john</login>
+      <email>john.doe@example.net</email>
+      <enabled>true</enabled>
+      <Content>
+        <VersionInfo>
+          <id>1243</id>
+          <versionNo>1</versionNo>
+          <status>PUBLISHED</status>
+          <modificationDate>2001-04-01T12:00:00</modificationDate>
+          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <creationDate>2001-04-01T12:00:00</creationDate>
+          <initialLanguageCode>eng-UK</initialLanguageCode>
+          <Content href="/content/objects/79" media-type="application/vnd.ez.api.ContentInfo+xml" />
+        </VersionInfo>
+        <fields>
+          <field>
+            <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+            <languageCode>eng-US</languageCode>
+            <value>John</value>
+          </field>
+          <field>
+            <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+            <languageCode>eng-US</languageCode>
+            <value>Doe</value>
+          </field>
+        </fields>
+      </Content>
+      <Roles href="/user/users/99/roles" media-type="vnd.ez.api.RoleAssignmentList+xml" />
+      <UserGroups href="/user/users/99/group" media-type="vns.ez.api.UserGroupRefList+xml" />
+    </User>
+
 
 List Users
 ``````````
 :Resource: /user/users
 :Method: GET
 :Description: List users
-:Parameters: :limit:  only <limit> items will be returned started by offset
-             :offset: offset of the result set
-:Response: 200 array of User_
+:Parameters: 
+    :remoteId: retieves the user the given remoteId 
+    :limit:    only <limit> items will be returned started by offset
+    :offset:   offset of the result set
+    :orderby:   one of (name | lastmodified)
+    :sort:      one of (asc|desc)
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserList+xml:  if set the user list returned in xml format (see User_)
+         :application/vnd.ez.api.UserList+json:  if set the user list is returned in json format (see User_)
+         :application/vnd.ez.api.UserRefList+xml:  if set the link list of users returned in xml format (see User_)
+         :application/vnd.ez.api.UserRefList+json:  if set the link list of users is returned in json format (see User_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          User_      
+ 
 :Error Codes:
     :401: If the user has no permission to read users
-
-(TBD - query/search parameters)
 
 Load User
 `````````
 :Resource: /user/users/<ID>
 :Method: GET
 :Description: loads the users of the group with the given <ID>
-:Response: 200 User_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.User+xml:  if set the new user is returned in xml format (see User_)
+         :application/vnd.ez.api.User+json:  if set the new user is returned in json format (see User_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Location: /user/users/<ID>
+          Accept-Patch:  application/vnd.ez.api.UserUpdate+(json|xml)
+          ETag: "<Etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          User_      
+
 :Error Codes:
     :401: If the user has no permission to read users
     :404: If the user does not exist
@@ -3061,24 +3527,132 @@ Load User
 Update User
 ```````````
 :Resource: /user/users/<ID>
-:Method: PUT
-:Description: Updates a user 
-:Request Format: application/json
-:Parameters:
-:Inputschema: UserInput_
-:Response: 200 User_
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Description: Updates a user
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.User+xml:  if set the new user  is returned in xml format (see User_)
+         :application/vnd.ez.api.User+json:  if set the new user  is returned in json format (see User_)
+    :Content-Type:
+         :application/vnd.ez.api.UserUpdate+json: the UserUpdate_  schema encoded in json
+         :application/vnd.ez.api.UserUpdate+xml: the UserUpdate_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.UserUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          User_      
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the user 
     :404: If the user does not exist
+
+XML Example
+'''''''''''
+
+::
+
+    PATCH /user/users/99HTTP/1.1
+    Accept: application/vnd.ez.api.User+xml
+    Content-Type: application/vnd.ez.api.UserUpdate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserUpdate>
+      <email>john.doe@mooglemail.com</email>
+      <fields>
+        <field>
+          <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>
+          John Doe
+          Example Systems
+          john.doe@mooglemail.com
+          skype: johndoe
+          </value>
+        </field>
+      </fields>
+    </UserUpdate>
+
+
+    HTTP/1.1 200 OK
+    Accept-Patch:  application/vnd.ez.api.UserUpdate+(json|xml)
+    ETag: "435908672409561"
+    Content-Type: application/vnd.ez.api.User+xml 
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <User href="/user/users/99" id="99" media-type="vnd.ez.api.User+xml"
+      remoteId="remoteId-qwert426">
+      <ContentType href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+      <name>John</name>
+      <Versions href="/content/objects/79" media-type="vnd.ez.api.VersionList+xml" />
+      <Section href="/content/section/3" media-type="vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5/65"
+        media-type="vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/79/locations" media-type="vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/14" media-type="vnd.ez.api.User+xml" />
+      <publishDate>2001-04-01T12:00:00</publishDate>
+      <lastModificationDate>2001-04-01T12:00:00</lastModificationDate>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <alwaysAvailable>true</alwaysAvailable>
+      <login>john</login>
+      <email>john.doe@mooglemail.com</email>
+      <enabled>true</enabled>
+      <Content>
+        <VersionInfo>
+          <id>1243</id>
+          <versionNo>1</versionNo>
+          <status>PUBLISHED</status>
+          <modificationDate>2001-04-01T12:00:00</modificationDate>
+          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <creationDate>2001-04-01T12:00:00</creationDate>
+          <initialLanguageCode>eng-UK</initialLanguageCode>
+          <Content href="/content/objects/79" media-type="application/vnd.ez.api.ContentInfo+xml" />
+        </VersionInfo>
+        <fields>
+          <field>
+            <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+            <languageCode>eng-US</languageCode>
+            <value>John</value>
+          </field>
+          <field>
+            <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+            <languageCode>eng-US</languageCode>
+            <value>Doe</value>
+          </field>
+        </fields>
+        <field>
+          <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>
+          John Doe
+          Example Systems
+          john.doe@mooglemail.com
+          skype: johndoe
+          </value>
+        </field>
+      </Content>
+      <Roles href="/user/users/99/roles" media-type="vnd.ez.api.RoleAssignmentList+xml" />
+      <UserGroups href="/user/users/99/group" media-type="vns.ez.api.UserGroupRefList+xml" />
+    </User>
+    
 
 Delete User
 ```````````
 :Resource: /user/users/<ID>
 :Method: DELETE
 :Description: the given user is deleted
-:Parameters: 
-:Response: 204
+:Response: 
+
+    ::
+
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this user
     :403: If the user is the same as the authenticated user
@@ -3088,26 +3662,143 @@ Load Groups Of User
 ```````````````````
 :Resource: /user/users/<ID>/groups
 :Method: GET
-:Description: Returns a list of user groups the user belongs to
-:Response: 200 array of UserGroup_
+:Description: Returns a list of user groups the user belongs to. The returned list includes the resources for unassigning a user group if the user is in multiple groups.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          UserGroup_      
 :Error Codes:
     :401: If the user has no permission to read user groups
     :404: If the user does not exist
 
+XML Example
+'''''''''''
+
+::
+
+    GET /user/users/45/groups HTTP/1.1
+    Accept: application/vnd.ez.api.UserGroupRefList+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.UserGroupRefList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroupRefList href="/user/users/45/groups"
+      media-type="vnd.ez.api.UserGroupRefList">
+      <UserGroup href="/user/groups/1/5/34" media-type="vnd.ez.api.UserGroup">
+        <unassign href="/user/users/45/groups/34" method="DELETE" />
+      </UserGroup>
+      <UserGroup href="/user/groups/1/5/78" media-type="vnd.ez.api.UserGroup">
+        <unassign href="/user/users/45/groups/78" method="DELETE" />
+      </UserGroup>
+    </UserGroupRefList>
+
+
 Assign User Group
 `````````````````
 :Resource: /user/users/<ID>/groups
-:Method: PUT
+:Method: POST
 :Description: Assigns the user to a user group
-:Request Format: 
-:Parameters: :groupId: the new parent group of the user  
-:Inputschema: 
-:Response: 204 
+:Parameters: :group: the new parent group resource of the user  
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          UserGroup_ 
 :Error Codes:
     :401: If the user is not authorized to assign user groups
     :403: - If the new user group does not exist
           - If the user is already in this group
     :404: If the user does not exist
+
+XML Example
+'''''''''''
+
+::
+
+    POST /user/users/45/groups?/user/groups/1/5/88 HTTP/1.1
+    Accept: application/vnd.ez.api.UserGroupRefList+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.UserGroupRefList+xml
+    Content-Length: xxx
+    
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroupRefList href="/user/users/45/groups"
+      media-type="vnd.ez.api.UserGroupRefList">
+      <UserGroup href="/user/groups/1/5/34" media-type="vnd.ez.api.UserGroup">
+        <unassign href="/user/users/45/groups/34" method="DELETE" />
+      </UserGroup>
+      <UserGroup href="/user/groups/1/5/78" media-type="vnd.ez.api.UserGroup">
+        <unassign href="/user/users/45/groups/78" method="DELETE" />
+      </UserGroup>
+      <UserGroup href="/user/groups/1/5/88" media-type="vnd.ez.api.UserGroup">
+        <unassign href="/user/users/45/groups/88" method="DELETE" />
+      </UserGroup>
+    </UserGroupRefList>
+
+
+Unassign User Group
+```````````````````
+:Resource: /user/users/<ID>/groups/<ID>
+:Method: DELETE
+:Description: Unassigns the user from a user group
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          UserGroup_      
+:Error Codes:
+    :401: If the user is not authorized to unassign user groups
+    :403: If the user is not in the given group
+    :404: If the user does not exist
+
+XML Example
+'''''''''''
+
+::
+
+    DELETE /user/users/45/groups/78 HTTP/1.1
+    Accept: application/vnd.ez.api.UserGroupRefList+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.UserGroupRefList+xml
+    Content-Length: xxx
+    
+    <?xml version="1.0" encoding="UTF-8"?>
+    <UserGroupRefList href="/user/users/45/groups"
+      media-type="vnd.ez.api.UserGroupRefList">
+      <UserGroup href="/user/groups/1/5/34" media-type="vnd.ez.api.UserGroup">
+        <unassign href="/user/users/45/groups/34" method="DELETE" />
+      </UserGroup>
+      <UserGroup href="/user/groups/1/5/88" media-type="vnd.ez.api.UserGroup">
+        <unassign href="/user/users/45/groups/88" method="DELETE" />
+      </UserGroup>
+    </UserGroupRefList>
+    
 
 
 Managing Roles and Policies
@@ -3118,10 +3809,6 @@ Create Role
 :Resource: /user/roles
 :Method: POST
 :Description: Creates a new role
-:Request Format: application/json
-:Parameters:  :name: the name of the role
-:Inputschema: 
-:Response: 200 Role_
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this role
@@ -3131,14 +3818,12 @@ Load Roles
 :Resource: /user/roles
 :Method: GET
 :Description: Returns a list of all roles
-:Response: 200 array of Role_
 :Error Codes:
     :401: If the user has no permission to read roles
 
 Load Role
 `````````
-:Resource: - /user/roles/<ID>
-           - /user/groups/<ID>/role/<ID>
+:Resource: /user/roles/<ID>
 :Method: GET
 :Description: loads a role for the given <ID>
 :Response: 200 Role_
@@ -3232,7 +3917,7 @@ Delete Policies
 
 Load Policy
 ```````````
-:Resource: /user/roles/<ID>/policies/<module>/<function>
+:Resource: /user/roles/<ID>/policies/<ID>
 :Method: GET
 :Description: loads a policy for the given module and function
 :Response: 200 Policy_
@@ -3242,7 +3927,7 @@ Load Policy
 
 Create or Update Policy
 ```````````````````````
-:Resource: /user/roles/<ID>/policies/<module>/function
+:Resource: /user/roles/<ID>/policies/<ID>
 :Method: PUT
 :Description: Creates or updates a policy for the given module/function
 :Request Format: application/json
@@ -3256,7 +3941,7 @@ Create or Update Policy
 
 Delete Policy
 `````````````
-:Resource: /user/roles/<ID>/policies/<module>/<function>
+:Resource: /user/roles/<ID>/policies/<ID>
 :Method: DELETE
 :Description: the given policy is deleted
 :Parameters: 
@@ -3274,7 +3959,7 @@ Common Definitions
 
 Common definition which are used from multiple schema definitions
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3374,7 +4059,7 @@ Common definition which are used from multiple schema definitions
 Content XML Schema
 ------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="utf-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3426,11 +4111,13 @@ Content XML Schema
 
 
 .. _Relation:
+.. _RelationList:
+.. _RelationCreate:
 
 Relation XML Schema
 -------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3460,10 +4147,6 @@ Relation XML Schema
         </xsd:complexContent>
       </xsd:complexType>
 
-.. _RelationList:
-
-::
-
       <xsd:complexType name="relationListType">
         <xsd:complexContent>
           <xsd:extension base="ref">
@@ -3473,10 +4156,6 @@ Relation XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-
-.. _RelationCreate:
-
-::
 
       <xsd:complexType name="relationCreateType">
         <xsd:all>
@@ -3497,7 +4176,7 @@ Version XML Schema
 VersionInfo
 ~~~~~~~~~~~
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3580,7 +4259,7 @@ VersionInfo
 Version
 ~~~~~~~
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3628,7 +4307,7 @@ Version
 VersionList XML Schema
 ----------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3654,7 +4333,7 @@ VersionList XML Schema
 VersionUpdate XML Schema
 ------------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3683,7 +4362,7 @@ VersionUpdate XML Schema
 ContentCreate XML Schema
 ------------------------
 
-::
+.. code:: xml
 
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
@@ -3718,7 +4397,7 @@ ContentCreate XML Schema
 ContentUpdate XML Schema
 ------------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3772,7 +4451,7 @@ View XML Schema
 ---------------
 
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -3974,7 +4653,7 @@ View XML Schema
 LocationCreate XML Schema
 -------------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -4028,7 +4707,7 @@ LocationCreate XML Schema
 LocationUpdate XML Schema
 -------------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -4070,7 +4749,7 @@ Location XML Schema
 -------------------
 
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -4185,7 +4864,7 @@ Location XML Schema
 Section XML Schema
 ------------------
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -4228,42 +4907,859 @@ Section XML Schema
 
 
 .. _ContentTypeGroup:
+.. _ContentTypeGroupInput:
 
 ContentTypeGroup XML Schema
 ---------------------------
 
+.. code:: xml
 
-.. _ContentTypeGroupInput:
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="ContentType.xsd" />
+      <xsd:complexType name="vnd.ez.api.ContentTypeGroup">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:int">
+              </xsd:element>
+              <xsd:element name="identifier" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Readable string identifier of a group
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="created" type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Created date
+                              </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="modified" type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Modified date
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="Creator" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Creator user
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="Modifier" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Modifier user
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="ContentTypes" type="vnd.ez.api.ContentTypeInfoList" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentTypeGroupList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="ContentTypeGroup" type="vnd.ez.api.ContentTypeGroup"
+                maxOccurs="unbounded"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentTypeGroupRefList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="ContentTypeGroupRef" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:complexContent>
+                    <xsd:extension base="ref">
+                      <xsd:all>
+                        <xsd:element name="unlink" type="controllerRef"
+                          minOccurs="0" />
+                      </xsd:all>
+                    </xsd:extension>
+                  </xsd:complexContent>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentTypeGroupInput">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string" />
+          <xsd:element name="User" type="ref" minOccurs="0" />
+          <xsd:element name="modificationDate" type="xsd:dateTime"
+            minOccurs="0" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ContentTypeGroupInput" type="vnd.ez.api.ContentTypeGroupInput" />
+      <xsd:element name="ContentTypeGroup" type="vnd.ez.api.ContentTypeGroup" />
+      <xsd:element name="ContentTypeGroupList" type="vnd.ez.api.ContentTypeGroupList" />
+      <xsd:element name="ContentTypeGroupRefList" type="vnd.ez.api.ContentTypeGroupRefList" />
+    </xsd:schema>
 
-ContentTypeGroupInput XML Schema
---------------------------------
+
 
 
 .. _ContentType:
-.. _ContentTypeCreate:
-.. _ContentTypeUpdate:
 
 ContentType XML Schema
 ----------------------
-.. _include: xsd/ContentType.xsd
-   :literal:
+.. code:: xml
 
-.. _ContentTypeInput:
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="FieldDefinition.xsd" />
 
-ContentTypeInput JSON Schema
+      <xsd:complexType name="vnd.ez.api.ContentTypeInfo">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="id" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Content type ID
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="status" type="contentTypeStatus">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The status of the content type.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="identifier" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    String identifier of a content type
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="names" type="multiLanguageValuesType" />
+              <xsd:element name="descriptions" type="multiLanguageValuesType" />
+              <xsd:element name="creationDate" type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Creation date of the content type
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="modificationDate" type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Last modification date of the content
+                    type
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="Creator" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The user which created the content type
+                  </xsd:documentation>
+                </xsd:annotation>
+
+              </xsd:element>
+              <xsd:element name="Modifier" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The userwhich last modified the content
+                    type
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="remoteId" type="xsd:string"
+                minOccurs="0">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Unique remote ID of the content type
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="urlAliasSchema" type="xsd:string"
+                minOccurs="0">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    URL alias schema
+                    If nothing is provided,
+                    nameSchema will be used
+                    instead.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="nameSchema" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Name schema.
+                    Can be composed of
+                    FieldDefinition
+                    identifier place
+                    holders.These place
+                    holders must comply this
+                    pattern :
+                    &lt;field_definition_identifier&gt;.
+                    An OR condition can
+                    be used :
+                    &lt;field_def|other_field_def&gt;
+                    In this
+                    example, field_def will be used if available. If not,
+                    other_field_def will be used for content name generation
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="isContainer" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Determines if the type is a container
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="mainLanguageCode" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Main language
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean"
+                default="true">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    if an instance of acontent type is
+                    created the always available
+                    flag is set by default this
+                    this value.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="defaultSortField" type="sortFieldType">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Specifies which property the child
+                    locations should be sorted on by
+                    default when created
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="defaultSortOrder" type="sortOrderType">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Specifies whether the sort order should
+                    be ascending or descending by
+                    default when created
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentTypeInfoList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="ContentTypeInfo" type="vnd.ez.api.ContentTypeInfo"
+                maxOccurs="unbounded" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentType">
+        <xsd:complexContent>
+          <xsd:extension base="vnd.ez.api.ContentTypeInfo">
+            <xsd:sequence>
+              <xsd:element name="FieldDefinitions" type="vnd.ez.api.FieldDefinitionList" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentTypeList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="ContentType" type="vnd.ez.api.ContentType" maxOccurs="unbounded"/>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:element name="ContentTypeInfo" type="vnd.ez.api.ContentTypeInfo"></xsd:element>
+      <xsd:element name="ContentTypeInfoList" type="vnd.ez.api.ContentTypeInfoList"></xsd:element>
+      <xsd:element name="ContentType" type="vnd.ez.api.ContentType"></xsd:element>
+      <xsd:element name="ContentTypeList" type="vnd.ez.api.ContentTypeList"></xsd:element>
+
+    </xsd:schema>
+
+
+.. _ContentTypeCreate:
+
+ContentTypeCreate XML Schema
 ----------------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="FieldDefinitionCreate.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.ContentTypeCreate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation>
+                String identifier of a content type
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType" />
+          <xsd:element name="modificationDate" type="xsd:dateTime">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set this date is used as modification
+                date
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="User" type="ref">
+            <xsd:annotation>
+              <xsd:documentation>
+                The user under which this creation should
+                be done
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Unique remote ID of the content type
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="urlAliasSchema" type="xsd:string"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                URL alias schema
+                If nothing is provided,
+                nameSchema will be used
+                instead.
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="nameSchema" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Name schema.
+                Can be composed of
+                FieldDefinition identifier place
+                holders.These place
+                holders
+                must comply this pattern :
+                &lt;field_definition_identifier&gt;.
+                An OR condition can
+                be
+                used :
+                &lt;field_def|other_field_def&gt;
+                In this
+                example,
+                field_def will be used if available. If not,
+                other_field_def
+                will be used for content name generation
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isContainer" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                Determines if the type is a container
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="mainLanguageCode" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Main language
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean"
+            default="true">
+            <xsd:annotation>
+              <xsd:documentation>
+                if an instance of acontent type is
+                created
+                the always available
+                flag is set by default this
+                this value.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultSortField" type="sortFieldType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Specifies which property the child
+                locations should be sorted on by
+                default when created
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultSortOrder" type="sortOrderType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Specifies whether the sort order should
+                be
+                ascending or descending by
+                default when created
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="FieldDefinitions">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinitionCreate"></xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ContentTypeCreate" type="vnd.ez.api.ContentTypeCreate"></xsd:element>
+    </xsd:schema>
+
+.. _ContentTypeUpdate:
+
+ContentTypeUpdate XML Schema
+----------------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.ContentTypeUpdate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                String identifier of a content type
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType"
+            minOccurs="0" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType"
+            minOccurs="0" />
+          <xsd:element name="modificationDate" type="xsd:dateTime"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set this date is used as modification
+                date
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="User" type="ref" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                The user under which this update should be
+                done
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Unique remote ID of the content type
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="urlAliasSchema" type="xsd:string"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                URL alias schema
+                If nothing is provided,
+                nameSchema will be used
+                instead.
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="nameSchema" type="xsd:string"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Name schema.
+                Can be composed of
+                FieldDefinition identifier place
+                holders.These place
+                holders
+                must comply this pattern :
+                &lt;field_definition_identifier&gt;.
+                An OR condition can
+                be
+                used :
+                &lt;field_def|other_field_def&gt;
+                In this
+                example,
+                field_def will be used if available. If not,
+                other_field_def
+                will be used for content name generation
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isContainer" type="xsd:boolean"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Determines if the type is a container
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="mainLanguageCode" type="xsd:string"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Main language
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                if an instance of acontent type is
+                created
+                the always available
+                flag is set by default this
+                this value.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultSortField" type="sortFieldType"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Specifies which property the child
+                locations should be sorted on by
+                default when created
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultSortOrder" type="sortOrderType"
+            minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Specifies whether the sort order should
+                be
+                ascending or descending by
+                default when created
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ContentTypeUpdate" type="vnd.ez.api.ContentTypeUpdate"></xsd:element>
+    </xsd:schema>
+
+
 
 .. _FieldDefinition:
 
 FieldDefinition JSON Schema
 ---------------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="vnd.ez.api.FieldDefinition">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the unique id of this field definition
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="identifier" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Readable string identifier of a field
+                    definition
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="fieldGroup" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Field group name
+                    </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="position" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the position of the field definition in
+                    the content typr
+                    </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="fieldType" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    String identifier of the field type
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="isTranslatable" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    If the field type is translatable
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="isRequired" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Is the field required
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="isInfoCollector" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the flag if this attribute is used for
+                    information collection
+                    </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="defaultValue" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Default value of the field
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="isSearchable" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates if th the content is
+                    searchable by this attribute
+                    </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="names" type="multiLanguageValuesType" />
+              <xsd:element name="descriptions" type="multiLanguageValuesType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.FieldDefinitionList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinition"
+                minOccurs="1" maxOccurs="unbounded" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="FieldDefinitionList" type="vnd.ez.api.FieldDefinitionList" />
+      <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinition" />
+    </xsd:schema>
 
 
 .. _FieldDefinitionCreate:
+
+FieldDefinitionCreate XML Schema
+--------------------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.FieldDefinitionCreate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Readable string identifier of a field
+                definition
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                the field type for this definition
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldGroup" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Field group name
+                    </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="position" type="xsd:int">
+            <xsd:annotation>
+              <xsd:documentation>
+                the position of the field definition in
+                the content typr
+                    </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isTranslatable" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                If the field type is translatable
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isRequired" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                Is the field required
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isInfoCollector" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                the flag if this attribute is used for
+                information collection
+                    </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultValue" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Default value of the field
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isSearchable" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                Indicates if th the content is
+                searchable by this attribute
+                    </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType" />
+        </xsd:all>
+      </xsd:complexType>
+      
+      <xsd:element name="FieldDefinitionInput" type="vnd.ez.api.FieldDefinitionCreate" />
+    </xsd:schema>
+
+
 .. _FieldDefinitionUpdate:
 
-FieldDefinitionInput JSON Schema
+FieldDefinitionUpdate XML Schema
 --------------------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="vnd.ez.api.FieldDefinitionUpdate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the identifier of a field
+                definition is changed
+               </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldGroup" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the field group is changed
+               </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="position" type="xsd:int">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the the position of the field definition in
+                the content typr is changed
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isTranslatable" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the translatable flag is set to this value
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isRequired" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the required flag is set to this value
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isInfoCollector" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the info collection flag is set to this value
+                    </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultValue" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the default value of the field is changed
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isSearchable" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+               If set the searchable flag is set to this value
+                     </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType" />
+        </xsd:all>
+      </xsd:complexType>
+      
+      <xsd:element name="FieldDefinitionInput" type="vnd.ez.api.FieldDefinitionUpdate" />
+    </xsd:schema>
 
 
 .. _UserGroup:
@@ -4271,24 +5767,296 @@ FieldDefinitionInput JSON Schema
 UserGroup JSON Schema
 ---------------------
 
-.. _UserGroupInput:
+.. code:: xml
 
-UserGroupInput JSON Schema
+    <?xml version="1.0" encoding="utf-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="Content.xsd" />
+      <xsd:include schemaLocation="Version.xsd" />
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.UserGroup">
+        <xsd:complexContent>
+          <xsd:extension base="contentInfoType">
+            <xsd:sequence>
+              <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
+              <xsd:element name="ParentUserGroup" type="ref" />
+              <xsd:element name="Subgroups" type="ref" />
+              <xsd:element name="Users" type="ref" />
+              <xsd:element name="Roles" type="ref" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.UserGroupList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:eleemnt name="User" type="vnd.ez.api.UserGroup"
+                maxOccurs="unbounded" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.UserGroupRefList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:eleemnt name="UserGroup" minOccurs="1" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:all>
+                    <xsd:element name="unassign" type="controllerRef" minOccurs="0"/>
+                  </xsd:all>
+                </xsd:complexType>
+              </xsd:eleemnt>
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="UserGroupRefList" type="vnd.ez.api.UserGroupRefList" />
+      <xsd:element name="UserGroupList" type="vnd.ez.api.UserGroupList" />
+      <xsd:element name="UserGroup" type="vnd.ez.api.UserGroup" />
+    </xsd:schema>
+
+
+
+.. _UserGroupCreate:
+
+UserGroupCreate XML Schema
 --------------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      
+      <xsd:complexType name="vnd.ez.api.UserGroupCreate">
+        <xsd:all>
+          <xsd:element name="ContentType" type="ref" minOccurs="0" />
+          <xsd:element name="mainLanguageCode" type="xsd:string" />
+          <xsd:element name="Section" type="ref" minOccurs="0"/>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="fields">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="field" type="fieldInputValueType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="UserGroupCreate" type="vnd.ez.api.UserGroupCreate"></xsd:element>
+    </xsd:schema>
+
+.. _UserGroupUpdate:
+
+UserGroupUpdate XML Schema
+--------------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      
+      <xsd:complexType name="vnd.ez.api.UserGroupUpdate">
+        <xsd:all>
+          <xsd:element name="mainLanguageCode" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Section" type="ref" minOccurs="0"/>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="fields">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="field" type="fieldInputValueType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="UserGroupUpdate" type="vnd.ez.api.UserGroupUpdate"></xsd:element>
+    </xsd:schema>
+
+UserGroup XML Schema
+--------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="Content.xsd" />
+      <xsd:include schemaLocation="Version.xsd" />
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.UserGroup">
+        <xsd:complexContent>
+          <xsd:extension base="contentInfoType">
+            <xsd:sequence>
+              <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
+              <xsd:element name="ParentUserGroup" type="ref" />
+              <xsd:element name="Subgroups" type="ref" />
+              <xsd:element name="Users" type="ref" />
+              <xsd:element name="Roles" type="ref" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.UserGroupList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:eleemnt name="User" type="vnd.ez.api.UserGroup"
+                maxOccurs="unbounded" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.UserGroupRefList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:eleemnt name="UserGroup" minOccurs="1" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:all>
+                    <xsd:element name="unassign" type="controllerRef" minOccurs="0"/>
+                  </xsd:all>
+                </xsd:complexType>
+              </xsd:eleemnt>
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="UserGroupRefList" type="vnd.ez.api.UserGroupRefList" />
+      <xsd:element name="UserGroupList" type="vnd.ez.api.UserGroupList" />
+      <xsd:element name="UserGroup" type="vnd.ez.api.UserGroup" />
+    </xsd:schema>
 
 
-.. _UserInfo:
+.. _UserCreate:
 
+UserCreate XML Schema
+---------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      
+      <xsd:complexType name="vnd.ez.api.UserCreate">
+        <xsd:all>
+          <xsd:element name="ContentType" type="ref" minOccurs="0" />
+          <xsd:element name="mainLanguageCode" type="xsd:string" />
+          <xsd:element name="Section" type="ref" minOccurs="0"/>
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="login" type="xsd:string"/>
+          <xsd:element name="email" type="xsd:string" />
+          <xsd:element name="enabled" type="xsd:boolean" default="true" minOccurs="0"  />
+          <xsd:element name="password" type="xsd:string"/>
+          <xsd:element name="fields">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="field" type="fieldInputValueType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="UserCreate" type="vnd.ez.api.UserCreate"></xsd:element>
+    </xsd:schema>
+
+
+.. _UserUpdate:
+
+UserUpdate XML Schema
+---------------------
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.UserUpdate">
+        <xsd:all>
+          <xsd:element name="mainLanguageCode" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="Section" type="ref" minOccurs="0" />
+          <xsd:element name="remoteId" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="login" type="xsd:string" minOccurs="0" />
+          <xsd:element name="email" type="xsd:string" minOccurs="0" />
+          <xsd:element name="enabled" type="xsd:boolean" minOccurs="0"  />
+          <xsd:element name="password" type="xsd:string" minOccurs="0"  />
+          <xsd:element name="fields">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="field" type="fieldInputValueType"
+                  maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="UserUpdate" type="vnd.ez.api.UserUpdate"></xsd:element>
+    </xsd:schema>
 
 .. _User:
 
-User JSON Schema
--------------------
+User XML Schema
+---------------
+.. code:: xml
 
-.. _UserInput:
+    <?xml version="1.0" encoding="utf-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="Content.xsd" />
+      <xsd:include schemaLocation="Version.xsd" />
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-UserInput JSON Schema
----------------------
+      <xsd:complexType name="vnd.ez.api.User">
+        <xsd:complexContent>
+          <xsd:extension base="contentInfoType">
+            <xsd:all>
+              <xsd:element name="login" type="xsd:string" />
+              <xsd:element name="email" type="xsd:string" />
+              <xsd:element name="enabled" type="xsd:boolean" />
+              <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
+              <xsd:element name="Roles" type="ref" />
+              <xsd:element name="UserGroups" type="ref" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.UserList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:eleemnt name="User" type="vnd.ez.api.User"
+                maxOccurs="unbounded" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.UserRefList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:eleemnt name="User" type="ref"
+                maxOccurs="unbounded" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="UserRefList" type="vnd.ez.api.UserRefList" />
+      <xsd:element name="UserList" type="vnd.ez.api.UserList" />
+      <xsd:element name="User" type="vnd.ez.api.User" />
+    </xsd:schema>
+
 
 
 .. _Limitation:
