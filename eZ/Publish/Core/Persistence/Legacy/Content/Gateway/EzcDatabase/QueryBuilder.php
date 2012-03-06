@@ -109,7 +109,7 @@ class QueryBuilder
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' ),
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
-                ),
+                ),-
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
@@ -154,6 +154,29 @@ class QueryBuilder
                 )
             );
         }
+
+        return $query;
+    }
+
+    /**
+     * Creates a select query for content relations
+     *
+     * @return ezcQuerySelect
+     */
+    public function createRelationFindQuery()
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'contentclassattribute_id', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'from_contentobject_id', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'from_contentobject_version', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'op_code', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'relation_type', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'to_contentobject_id', 'ezcontentobject_link' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_link' )
+        );
 
         return $query;
     }

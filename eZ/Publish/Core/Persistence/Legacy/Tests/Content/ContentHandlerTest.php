@@ -425,6 +425,16 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    public function testLoadRelations()
+    {
+        throw new Exception( "@todo implement ContentHandlerTest::testLoadRelations()" );
+    }
+
+    public function testLoadReverseRelations()
+    {
+        throw new Exception( "@todo implement ContentHandlerTest::testLoadReverseRelations()" );
+    }
+
     /**
      * Returns a CreateStruct fixture.
      *

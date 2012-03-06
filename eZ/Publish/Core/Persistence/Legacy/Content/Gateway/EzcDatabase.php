@@ -963,40 +963,89 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Loads relations from/to $contentId, depending on $relationOrientation. Returns every relation for every version,
-     * except if $contentVersionNo and/or $relationType are specified.
+     * Loads relations from $contentId to published content, optionally only from $contentVersionNo.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\int $contentId
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\bool $relationOrientation
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\int $contentVersionNo
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\int $relationType
+     * $relationType can also be filtered.
+     *
+     * @param int $contentId
+     * @param int $contentVersionNo
+     * @param int $relationType
      *
      * @return string[][] array of relation data
      */
-    public function loadRelatedContent( $contentId, $relationOrientation = true, $contentVersionNo = null, $relationType = null )
+    public function loadRelations( $contentId, $contentVersionNo = null, $relationType = null )
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->queryBuilder->createRelationFindQuery();
 
-        // @todo Finish me
-        $query->select(
-            // $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
-            // ...
-        )->from(
-            $this->dbHandler->quoteTable( 'ezcontentobject_link' )
-        )->leftJoin(
-            $this->dbHandler->quoteTable( 'ezcontentobject' ),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-                    $this->dbHandler->quoteColumn( '????', 'ezcontentobject_link' )
-                )
+        // Filters on from_contentobject_id
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id', 'from_contentobject_id' ),
+                $query->bindValue( $contentId )
             )
-        )->where(
         );
+
+        // relation type
+        if ( isset( $relationType ) )
+        {
+            $query->where(
+                $query->expr->neq(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                        $query->bindValue( $relationType )
+                    ),
+                    $query->bindValue( 0 )
+                )
+            );
+        }
+
+        // source version number
+        if ( isset( $contentVersionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' ),
+                    $query->bindValue( $contentVersionNo )
+                )
+            );
+        }
+        // from published version only
+        else
+        {
+            $query->leftJoin(
+                $this->dbHandler->quoteTable( 'ezcontentobject' ),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                        $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' ),
+                        $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' )
+                    )
+                )
+            );
+        }
 
         $statement = $query->prepare();
         $statement->execute();
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+
+    /**
+     * Loads data of related to/from $contentId
+     *
+     * @param int $contentId
+     * @param bool $reverse Reverse relation, default false
+     * @param int $contentVersionNo
+     * @param int $relationType
+     *
+     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
+     */
+    public function loadReverseRelations( $contentId, $relationType = null )
+    {
+        throw new Exception( "Not implemented yet" );
     }
 }

@@ -218,11 +218,22 @@ abstract class Gateway
      * Loads data of related to/from $contentId
      *
      * @param int $contentId
-     * @param bool $relationOrientation
      * @param int $contentVersionNo
      * @param int $relationType
      *
      * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
      */
-    abstract public function loadRelatedContent( $contentId, $relationOrientation = true, $contentVersionNo = null, $relationType = null);
+    abstract public function loadRelations( $contentId, $contentVersionNo = null, $relationType = null );
+
+    /**
+     * Loads data of related to/from $contentId
+     *
+     * @param int $contentId
+     * @param bool $reverse Reverse relation, default false
+     * @param int $contentVersionNo
+     * @param int $relationType
+     *
+     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
+     */
+    abstract public function loadReverseRelations( $contentId, $relationType = null );
 }
