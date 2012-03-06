@@ -336,7 +336,7 @@ class LocationService implements LocationServiceInterface
             $searchCriterion,
             $offset,
             $limit > 0 ? $limit : null,
-            $sortClause
+            array( $sortClause )
         );
     }
 
