@@ -330,13 +330,13 @@ class LocationService implements LocationServiceInterface
 
         $sortClause = null;
         if ( $sortField !== null )
-            $sortClause = $this->getSortClauseBySortField( $sortField, $sortOrder );
+            $sortClause = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
 
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
             $offset,
             $limit > 0 ? $limit : null,
-            array( $sortClause )
+            $sortClause
         );
     }
 
