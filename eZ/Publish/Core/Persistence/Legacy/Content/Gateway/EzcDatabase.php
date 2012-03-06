@@ -715,6 +715,10 @@ class EzcDatabase extends Gateway
         $rows = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
+            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
+            $row['ezcontentobject_main_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_initial_language_id'] )->languageCode;
+            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['language_mask'] );
+            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->getById( $row['initial_language_id'] )->languageCode;
             $rows[] = $row;
         }
 

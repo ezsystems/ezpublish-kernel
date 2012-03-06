@@ -151,13 +151,14 @@ class Mapper
         $contentObjs = array();
         $versions = array();
         $locations = array();
+        $fields = array();
 
         foreach ( $rows as $row )
         {
             $contentId = (int)$row['ezcontentobject_id'];
             if ( !isset( $contentObjs[$contentId] ) )
             {
-                $contentObjs[$contentId] = $this->extractContentFromRow( $row );
+                $contentObjs[$contentId] = $this->extractContentInfoFromRow( $row, 'ezcontentobject' );
             }
             if ( !isset( $versions[$contentId] ) )
             {
@@ -171,7 +172,7 @@ class Mapper
             $versionId = (int)$row['ezcontentobject_version_id'];
             if ( !isset( $versions[$contentId][$versionId] ) )
             {
-                $versions[$contentId][$versionId] = $this->extractVersionFromRow( $row );
+                $versions[$contentId][$versionId] = $this->extractVersionInfoFromRow( $row, 'ezcontentobject_version' );
             }
             if ( !isset( $versions[$contentId][$versionId]->name[$row['ezcontentobject_name_content_translation']] ) )
             {
@@ -183,19 +184,9 @@ class Mapper
             }
 
             $fieldId = (int)$row['ezcontentobject_attribute_id'];
-            if ( !isset( $versions[$contentId][$versionId]->fields[$fieldId] ) )
+            if ( !isset( $fields[$contentId][$versionId][$fieldId] ) )
             {
-                $versions[$contentId][$versionId]->fields[$fieldId] = $this->extractFieldFromRow( $row );
-                if (
-                    !in_array(
-                        $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
-                        $versions[$contentId][$versionId]->languageIds     // eng-US can be either 2 or 3, see fixture data
-                    )
-                )
-                {
-                    $versions[$contentId][$versionId]->languageIds[] =
-                        $row['ezcontentobject_attribute_language_id'] & ~1;
-                }
+                $versions[$contentId][$versionId][$fieldId] = $this->extractFieldFromRow( $row );
             }
 
             $locationId = (int)$row['ezcontentobject_tree_node_id'];
@@ -209,18 +200,16 @@ class Mapper
         }
 
         $results = array();
-        foreach ( $contentObjs as $contentId => $content )
+        foreach ( $contentObjs as $contentId => $contentInfo )
         {
             foreach ( $versions[$contentId] as $versionId => $version )
             {
-                $version->fields = array_values( $version->fields );
-
-                $newContent = clone $content;
-                $newContent->version = $version;
-                $newContent->locations = array_values(
-                    $locations[$contentId][$versionId]
-                );
-                $results[] = $newContent;
+                $content = new Content;
+                $content->contentInfo = $contentInfo;
+                $content->versionInfo = $version;
+                $content->locations = array_values( $locations[$contentId][$versionId] );
+                $content->fields = array_values( $fields[$contentId][$versionId] );
+                $results[] = $content;
             }
         }
         return $results;
@@ -256,48 +245,54 @@ class Mapper
      * Extracts a ContentInfo object from $row
      *
      * @param array $row
+     * @param string $prefix Prefix for row keys, which are initially mapped by ezcontentobject fields
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function extractContentInfoFromRow( array $row )
+    public function extractContentInfoFromRow( array $row, $prefix = '' )
     {
         $contentInfo = new ContentInfo;
-        $contentInfo->contentId = (int)$row['id'];
-        $contentInfo->name = $row['name'];
-        $contentInfo->contentTypeId = (int)$row['contentclass_id'];
-        $contentInfo->sectionId = (int)$row['section_id'];
-        $contentInfo->currentVersionNo = (int)$row['current_version'];
-        $contentInfo->ownerId = (int)$row['owner_id'];
-        $contentInfo->publicationDate = (int)$row['published'];
-        $contentInfo->modificationDate = (int)$row['modified'];
-        $contentInfo->isAlwaysAvailable = $row['always_available'];
-        $contentInfo->mainLanguageCode = $row['main_language_code'];
-        $contentInfo->remoteId = $row['remote_id'];
+        $contentInfo->contentId = (int)$row["{$prefix}id"];
+        $contentInfo->name = $row["{$prefix}name"];
+        $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
+        $contentInfo->sectionId = (int)$row["{$prefix}section_id"];
+        $contentInfo->currentVersionNo = (int)$row["{$prefix}current_version"];
+        $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
+        $contentInfo->publicationDate = (int)$row["{$prefix}published"];
+        $contentInfo->modificationDate = (int)$row["{$prefix}modified"];
+        $contentInfo->isAlwaysAvailable = $row["{$prefix}always_available"];
+        $contentInfo->mainLanguageCode = $row["{$prefix}main_language_code"];
+        $contentInfo->remoteId = $row["{$prefix}remote_id"];
 
         return $contentInfo;
     }
 
     /**
      * Extracts a VersionInfo object from $row
-     * 
+     *
      * @param array $row
+     * @param string $prefix Prefix for row keys, which are initially mapped by ezcontentobject fields
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
-    public function extractVersionInfoFromRow( array $row )
+    public function extractVersionInfoFromRow( array $row, $prefix = '' )
     {
         $versionInfo = new VersionInfo;
-        $versionInfo->id = (int)$row['id'];
-        $versionInfo->contentId = (int)$row['contentobject_id'];
-        $versionInfo->versionNo = (int)$row['version'];
-        $versionInfo->creatorId = (int)$row['creator_id'];
-        $versionInfo->creationDate = (int)$row['created'];
-        $versionInfo->modificationDate = (int)$row['modified'];
-        $versionInfo->initialLanguageCode = $row['initial_language_code'];
-        $versionInfo->languageIds = $row['languages'];
-        $versionInfo->status = (int)$row['status'];
+        $versionInfo->id = (int)$row["{$prefix}id"];
+        $versionInfo->contentId = (int)$row["{$prefix}contentobject_id"];
+        $versionInfo->versionNo = (int)$row["{$prefix}version"];
+        $versionInfo->creatorId = (int)$row["{$prefix}creator_id"];
+        $versionInfo->creationDate = (int)$row["{$prefix}created"];
+        $versionInfo->modificationDate = (int)$row["{$prefix}modified"];
+        $versionInfo->initialLanguageCode = $row["{$prefix}initial_language_code"];
+        $versionInfo->languageIds = $row["{$prefix}languages"];
+        $versionInfo->status = (int)$row["{$prefix}status"];
         $versionInfo->names = array();
-        foreach ( $row['names'] as $name )
+
+        if ( isset( $row["{$prefix}names"] ) )
         {
-            $versionInfo->names[$name['content_translation']] = $name['name'];
+            foreach ( $row["{$prefix}names"] as $name )
+            {
+                $versionInfo->names[$name['content_translation']] = $name['name'];
+            }
         }
 
         return $versionInfo;
