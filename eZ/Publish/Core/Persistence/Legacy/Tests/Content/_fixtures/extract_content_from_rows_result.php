@@ -18,6 +18,7 @@ $content->modified = 1313061404;
 $content->published = 1313047907;
 $content->currentVersionNo = 2;
 $content->initialLanguageId = 2;
+$content->status = 1;
 
 $version = new Version();
 $version->id = 675;

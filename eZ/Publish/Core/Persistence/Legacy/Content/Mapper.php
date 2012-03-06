@@ -179,14 +179,14 @@ class Mapper
                 $locations[$contentId][$versionId] = array();
             }
 
-            $fieldIdx = (int)$row['ezcontentobject_attribute_id'];
-            if ( !isset( $versions[$contentId][$versionId]->fields[$fieldIdx] ) )
+            $fieldId = (int)$row['ezcontentobject_attribute_id'];
+            if ( !isset( $versions[$contentId][$versionId]->fields[$fieldId] ) )
             {
                 $field = $this->extractFieldFromRow( $row );
-                $versions[$contentId][$versionId]->fields[$fieldIdx] = $field;
-                if ( !in_array( $field->language, $versions[$contentId][$versionId]->languageIds ) )
+                $versions[$contentId][$versionId]->fields[$fieldId] = $field;
+                if ( !in_array( $field->languageCode, $versions[$contentId][$versionId]->languageIds ) )
                 {
-                    $versions[$contentId][$versionId]->languageIds[] = $field->language;
+                    $versions[$contentId][$versionId]->languageIds[] = $field->languageCode;
                 }
             }
 
@@ -208,10 +208,6 @@ class Mapper
                 $version->fields = array_values( $version->fields );
 
                 $newContent = clone $content;
-                if ( $newContent->currentVersionNo === $version->versionNo )
-                {
-                    $newContent->status = $version->status;
-                }
                 $newContent->version = $version;
                 $newContent->locations = array_values(
                     $locations[$contentId][$versionId]
@@ -242,6 +238,7 @@ class Mapper
         $content->initialLanguageId = (int)$row['ezcontentobject_initial_language_id'];
         $content->modified = (int)$row['ezcontentobject_modified'];
         $content->published = (int)$row['ezcontentobject_published'];
+        $content->status = (int)$row['ezcontentobject_status'];
         $content->locations = array();
 
         return $content;
