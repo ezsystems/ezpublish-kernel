@@ -11,99 +11,46 @@
 namespace eZ\Publish\SPI\Persistence;
 
 /**
+ * Content value object, bound to a version.
+ * This object aggregates the following:
+ *  - Version metadata
+ *  - Content metadata
+ *  - Relations
+ *  - Fields
+ *  - Locations
  */
 class Content extends ValueObject
 {
     /**
-     * Publication status constants
-     * @var int
-     */
-    const STATUS_DRAFT = 0;
-    const STATUS_PUBLISHED = 1;
-    const STATUS_ARCHIVED = 2;
-
-    /**
-     * @var int
-     */
-    public $id;
-
-    /**
-     * One of Content::STATUS_DRAFT, Content::STATUS_PUBLISHED, Content::STATUS_ARCHIVED
+     * VersionInfo object for this content's version.
      *
-     * @var int Constant.
+     * @var \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
-    public $status;
+    public $versionInfo;
 
     /**
-     * @var int
-     */
-    public $typeId;
-
-    /**
-     * @var int
-     */
-    public $sectionId;
-
-    /**
-     * @var int
-     */
-    public $ownerId;
-
-    /**
-     * Content modification date
-     * @var int Unix timestamp
-     */
-    public $modified;
-
-    /**
-     * Content publication date
-     * @var int Unix timestamp
-     */
-    public $published;
-
-    /**
-     * Current Version number
+     * ContentInfo object for this content.
      *
-     * Contains the current version number of the published version.
-     * If no published version exists, last draft is used, and if published version is removed, current version is
-     * set to latest modified version.
-     *
-     * Eg: When creating a new Content object current version will point to version 1 even if it is a draft.
-     *
-     * @var int
+     * @var \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public $currentVersionNo;
+    public $contentInfo;
 
     /**
-     * The loaded version
+     * Relation objects for this content.
      *
-     * The Version, containing version information and all
-     * {@link \eZ\Publish\SPI\Persistence\Content\Field}s in this version (in all languages).
-     * Non-translatable fields will only occur once!
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Version
+     * @var \eZ\Publish\SPI\Persistence\Content\Relation
      */
-    public $version;
+    public $relations;
+
+    /**
+     * Field objects for this content.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Field
+     */
+    public $fields;
 
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public $locations = array();
-
-    /**
-     * @var boolean Always available flag
-     */
-    public $alwaysAvailable = false;
-
-    /**
-     * Remote identifier used as a custom identifier for the object
-     * @var string
-     */
-    public $remoteId;
-
-    /**
-     * Language id the content was initially created in
-     * @var mixed
-     */
-    public $initialLanguageId;
 }
