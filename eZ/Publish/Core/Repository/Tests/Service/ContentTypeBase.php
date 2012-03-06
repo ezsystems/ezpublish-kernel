@@ -161,11 +161,15 @@ abstract class ContentTypeBase extends BaseServiceTest
             'new-group'
         );
         $groupCreate->creatorId = 23;
+        $groupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        $groupCreate->descriptions = array();
         $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $secondGroupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
+        $secondGroupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        $secondGroupCreate->descriptions = array();
 
         // Throws an exception because group with identifier "new-group" already exists
         $contentTypeService->createContentTypeGroup( $secondGroupCreate );
@@ -586,6 +590,8 @@ abstract class ContentTypeBase extends BaseServiceTest
             'updated-group'
         );
         $groupCreate->creatorId = 23;
+        $groupCreate->names            = array( 'eng-US' => 'Name' );
+        $groupCreate->descriptions     = array( 'eng-US' => 'Description' );
         $groupToOverwrite = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
