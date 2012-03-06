@@ -65,7 +65,6 @@ class TrashServiceStub implements TrashService
      */
     public function trash( Location $location )
     {
-        $this->repository->getLocationService()->loadLocationChildren()
         // TODO: Implement trash() method.
     }
 

@@ -268,7 +268,7 @@ class ContentServiceTest extends BaseTest
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentWithSecondParameter()
+    public function testCreateContentWithLocationCreateParameter()
     {
         $repository = $this->getRepository();
 
@@ -291,10 +291,41 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentThrowsInvalidArgumentExceptionWithSecondParameter()
+    public function testCreateContentWithLocationCreateParameterSetsMainLocationId()
+    {
+        $repository = $this->getRepository();
+
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // This location will contain the above content object
+        $location = $locationService->loadLocationByRemoteId(
+            '0123456789abcdef0123456789abcdef'
+        );
+
+        // These two values are equal
+        $locationId     = $location->id;
+        $mainLocationId = $draft->contentInfo->mainLocationId;
+        /* END: Use Case */
+
+        $this->assertEquals( $mainLocationId, $locationId );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     */
+    public function testCreateContentThrowsInvalidArgumentExceptionWithLocationCreateParameter()
     {
         $repository = $this->getRepository();
 
@@ -671,7 +702,7 @@ class ContentServiceTest extends BaseTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
      */
     public function testPublishVersion()
     {

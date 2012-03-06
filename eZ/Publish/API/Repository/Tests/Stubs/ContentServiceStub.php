@@ -474,6 +474,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $this->repository->getCurrentUser()->id,
                 'published'         =>  false,
                 'publishedDate'     =>  null,
+                'mainLocationId'    =>  null,
 
                 'repository'      =>  $this->repository
             )
@@ -505,7 +506,10 @@ class ContentServiceStub implements ContentService
         $locationService = $this->repository->getLocationService();
         foreach ( $locationCreateStructs as $locationCreateStruct )
         {
-            $locationService->createLocation( $contentInfo, $locationCreateStruct );
+            $locationService->createLocation(
+                $contentInfo,
+                $locationCreateStruct
+            );
         }
 
         return $content;
@@ -548,6 +552,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $contentMetadataUpdateStruct->ownerId ?: $contentInfo->ownerId,
                 'published'         =>  $contentInfo->published,
                 'publishedDate'     =>  $contentMetadataUpdateStruct->publishedDate ?: $contentInfo->publishedDate,
+                'mainLocationId'    =>  $contentInfo->mainLocationId,
 
                 'repository'      =>  $this->repository
             )
@@ -874,6 +879,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $contentInfo->ownerId,
                 'published'         =>  true,
                 'publishedDate'     =>  new \DateTime(),
+                'mainLocationId'    =>  $contentInfo->mainLocationId,
 
                 'contentTypeId'     =>  $contentInfo->getContentType()->id,
                 'repository'        =>  $this->repository
@@ -1031,6 +1037,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $contentInfo->ownerId,
                 'published'         =>  $contentInfo->published,
                 'publishedDate'     =>  new \DateTime(),
+                'mainLocationId'    =>  $contentInfo->mainLocationId,
 
                 'contentTypeId'     =>  $contentInfo->getContentType()->id,
                 'repository'        =>  $this->repository

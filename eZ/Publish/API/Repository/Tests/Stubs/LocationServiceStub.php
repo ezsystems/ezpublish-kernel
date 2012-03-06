@@ -118,6 +118,12 @@ class LocationServiceStub implements LocationService
         $parentLocation = $this->loadLocation( $location->parentLocationId );
         $parentLocation->__setChildCount( $parentLocation->childCount + 1 );
 
+        // Set main location if not set before.
+        if ( null === $contentInfo->mainLocationId )
+        {
+            $contentInfo->__setMainLocationId( $location->id );
+        }
+
         return $location;
     }
 
