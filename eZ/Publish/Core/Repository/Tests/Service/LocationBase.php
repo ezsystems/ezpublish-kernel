@@ -174,11 +174,21 @@ abstract class LocationBase extends BaseServiceTest
     public function testLoadLocationByRemoteId()
     {
         self::markTestSkipped( "@todo: enable when LocationRemoteId criterion is implemented" );
-        $location = $this->repository->getLocationService()->loadLocationByRemoteId( "f3e90596361e31d496d4026eb624c983" );
+        $location = $this->repository->getLocationService()->loadLocationByRemoteId( "769380b7aa94541679167eab817ca893" );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
         self::assertGreaterThan( 0, $location->id );
-        self::assertEquals( "f3e90596361e31d496d4026eb624c983", $location->remoteId );
+        self::assertEquals( "769380b7aa94541679167eab817ca893", $location->remoteId );
+    }
+
+   /**
+     * Test loading location by remote ID
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId
+     */
+    public function testLoadLocationByRemoteIdThrowsNotFoundException()
+    {
+        $this->repository->getLocationService()->loadLocationByRemoteId( "not-existing" );
     }
 
     /**
