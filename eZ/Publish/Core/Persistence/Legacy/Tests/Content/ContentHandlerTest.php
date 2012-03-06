@@ -426,6 +426,9 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadRelations
+     */
     public function testLoadRelations()
     {
         $handler = $this->getContentHandler();
@@ -456,6 +459,9 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadReverseRelations
+     */
     public function testLoadReverseRelations()
     {
         $handler = $this->getContentHandler();
