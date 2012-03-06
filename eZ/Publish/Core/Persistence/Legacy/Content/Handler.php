@@ -228,10 +228,8 @@ class Handler implements BaseContentHandler
     {
         $rows = $this->contentGateway->load( $id, $version, $translations );
 
-        if ( !count( $rows ) )
-        {
-            throw new NotFound( 'content', $id );
-        }
+        if ( empty( $rows ) )
+            throw new NotFound( 'content', "contentId: $id, versionNo: $version" );
 
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
         $content = $contentObjects[0];
