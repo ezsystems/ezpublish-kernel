@@ -226,6 +226,8 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
+        $modifiedSubLocationDate = (int) $spiTrashItem->modifiedSubLocation;
+
         return new TrashItem(
             array(
                 'contentInfo'             => $contentInfo,
@@ -236,7 +238,7 @@ class TrashService implements TrashServiceInterface
                 'remoteId'                => $spiTrashItem->remoteId,
                 'parentLocationId'        => $spiTrashItem->parentId,
                 'pathString'              => $spiTrashItem->pathString,
-                'modifiedSubLocationDate' => new \DateTime( "@{$spiTrashItem->modifiedSubLocation}" ),
+                'modifiedSubLocationDate' => new \DateTime( "@{$modifiedSubLocationDate}" ),
                 'depth'                   => $spiTrashItem->depth,
                 'sortField'               => $spiTrashItem->sortField,
                 'sortOrder'               => $spiTrashItem->sortOrder,
