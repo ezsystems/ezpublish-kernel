@@ -215,7 +215,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
         $userGroup = $userService->loadUserGroup( 4 );
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $userGroup );
@@ -228,7 +227,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserGroupThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
         $userService->loadUserGroup( PHP_INT_MAX );
     }
@@ -255,7 +253,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadSubUserGroupsThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $parentGroup = new UserGroup( array( "id" => PHP_INT_MAX ) );
@@ -268,10 +265,9 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testDeleteUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
-        $userGroup = $userService->loadUserGroup( 13 );
+        $userGroup = $userService->loadUserGroup( 12 );
         $userService->deleteUserGroup( $userGroup );
 
         try
@@ -289,7 +285,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testDeleteUserGroupThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $userGroup = new UserGroup( array( "id" => PHP_INT_MAX ) );
@@ -302,15 +297,16 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testMoveUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
+        $locationService = $this->repository->getLocationService();
 
-        $userGroupToMove = $userService->loadUserGroup( 13 );
+        $userGroupToMove = $userService->loadUserGroup( 42 );
         $parentUserGroup = $userService->loadUserGroup( 12 );
+        $parentUserGroupLocation = $locationService->loadMainLocation( $parentUserGroup->getVersionInfo()->getContentInfo() );
         $userService->moveUserGroup( $userGroupToMove, $parentUserGroup );
 
         $movedUserGroup = $userService->loadUserGroup( $userGroupToMove->id );
-        self::assertEquals( $parentUserGroup->id, $movedUserGroup->parentId );
+        self::assertEquals( $parentUserGroupLocation->id, $movedUserGroup->parentId );
     }
 
     /**
@@ -320,7 +316,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testMoveUserGroupThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $userGroupToMove = new UserGroup( array( "id" => PHP_INT_MAX ) );
@@ -340,9 +335,9 @@ abstract class UserBase extends BaseServiceTest
         $initialLanguageCode = "eng-GB";
         $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
         $userGroupUpdateStruct->contentUpdateStruct->initialLanguageCode = $initialLanguageCode;
-        $userGroupUpdateStruct->contentUpdateStruct->setField( "name", "New editors" );
+        $userGroupUpdateStruct->contentUpdateStruct->setField( "name", "New anonymous group" );
 
-        $userGroup = $userService->loadUserGroup( 13 );
+        $userGroup = $userService->loadUserGroup( 42 );
 
         $updatedUserGroup = $userService->updateUserGroup( $userGroup, $userGroupUpdateStruct );
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $updatedUserGroup );
@@ -366,7 +361,7 @@ abstract class UserBase extends BaseServiceTest
         $userGroupUpdateStruct->contentUpdateStruct->initialLanguageCode = $initialLanguageCode;
         $userGroupUpdateStruct->contentUpdateStruct->setField( "name", null );
 
-        $userGroup = new UserGroup( array( "id" => 13 ) );
+        $userGroup = new UserGroup( array( "id" => 42 ) );
 
         $userService->updateUserGroup( $userGroup, $userGroupUpdateStruct );
     }
@@ -394,7 +389,7 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField( "first_name", "New" );
         $userCreateStruct->setField( "last_name", "User" );
 
-        $parentGroup = $userService->loadUserGroup( 13 );
+        $parentGroup = $userService->loadUserGroup( 42 );
         $createdUser = $userService->createUser( $userCreateStruct, array( $parentGroup ) );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $createdUser );
@@ -436,7 +431,7 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField( "first_name", null );
         $userCreateStruct->setField( "last_name", null );
 
-        $parentGroup = $userService->loadUserGroup( 13 );
+        $parentGroup = $userService->loadUserGroup( 12 );
         $userService->createUser( $userCreateStruct, array( $parentGroup ) );
     }
 
@@ -452,7 +447,7 @@ abstract class UserBase extends BaseServiceTest
 
         $userCreateStruct = $userService->newUserCreateStruct( "new_user", "new_user@ez.no", "password", "eng-GB" );
 
-        $parentGroup = $userService->loadUserGroup( 13 );
+        $parentGroup = $userService->loadUserGroup( 12 );
         $userService->createUser( $userCreateStruct, array( $parentGroup ) );
     }
 
@@ -462,7 +457,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUser()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $loadedUser = $userService->loadUser( 14 );
@@ -478,7 +472,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $userService->loadUser( PHP_INT_MAX );
@@ -490,7 +483,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadAnonymousUser()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $loadedUser = $userService->loadAnonymousUser();
@@ -512,7 +504,7 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField( "first_name", "New" );
         $userCreateStruct->setField( "last_name", "User" );
 
-        $parentGroup = $userService->loadUserGroup( 13 );
+        $parentGroup = $userService->loadUserGroup( 12 );
         $userService->createUser( $userCreateStruct, array( $parentGroup ) );
 
         $loadedUser = $userService->loadUserByCredentials( $userCreateStruct->login, $userCreateStruct->password );
@@ -526,7 +518,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserByCredentialsThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $userService->loadUserByCredentials( "non_existing_user", "some_password" );
@@ -538,7 +529,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testDeleteUser()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $user = $userService->loadUser( 14 );
@@ -619,12 +609,11 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testAssignUserToUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
         $user = $userService->loadUser( 14 );
-        $userGroup = $userService->loadUserGroup( 13 );
+        $userGroup = $userService->loadUserGroup( 42 );
         $userGroupMainLocation = $locationService->loadMainLocation( $userGroup->getVersionInfo()->getContentInfo() );
 
         $userService->assignUserToUserGroup( $user, $userGroup );
@@ -665,7 +654,6 @@ abstract class UserBase extends BaseServiceTest
         $userService->unAssignUserFromUserGroup( $user, $userGroup );
 
         $userLocations = $locationService->loadLocations( $user->getVersionInfo()->getContentInfo() );
-
         if ( is_array( $userLocations ) && !empty( $userLocations ) )
         {
             $hasRemovedLocation = false;
@@ -690,11 +678,10 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUnAssignUserFromUserGroupThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
         $user = $userService->loadUser( 14 );
-        $userGroup = $userService->loadUserGroup( 13 );
+        $userGroup = $userService->loadUserGroup( 42 );
         $userService->unAssignUserFromUserGroup( $user, $userGroup );
     }
 
@@ -704,7 +691,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserGroupsOfUser()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
@@ -738,7 +724,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUsersOfUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
+        self::markTestSkipped( "@todo: enable when content service is completed" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
