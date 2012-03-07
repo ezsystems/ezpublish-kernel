@@ -8,6 +8,10 @@
     <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
     <creationDate>22012-02-20T12:00:00</creationDate>
     <initialLanguageCode>ger-DE</initialLanguageCode>
+    <names>
+      <value languageCode="eng-US">Name</value>
+      <value languageCode="ger-DE">Name</value>
+    </names>
     <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
   </VersionInfo>
   <Fields>

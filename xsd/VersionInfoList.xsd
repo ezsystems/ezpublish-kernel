@@ -3,14 +3,14 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="Version.xsd" />
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
-  <xsd:complexType name="versionListType">
+  <xsd:complexType name="vnd.ez.api.VersionList">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:sequence>
-          <xsd:element name="Version" type="versionType"/>
+          <xsd:element name="Version" type="vnd.ez.api.Version"/>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:element name="VersionList" type="versionListType"></xsd:element>
+  <xsd:element name="VersionList" type="vnd.ez.api.VersionList"></xsd:element>
 </xsd:schema>

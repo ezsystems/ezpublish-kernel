@@ -892,10 +892,13 @@ XML Example
           <versionNo>1</versionNo>
           <status>ARCHIVED</status>
           <modificationDate>2012-02-15T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml"/>
+          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-15T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
-          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+          <names>
+            <value languageCode="eng-US">Name</value>
+          </names>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
       </Version>
       <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
@@ -904,10 +907,13 @@ XML Example
           <versionNo>2</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2012-02-17T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml"/>
+          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-17T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
-          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+          <names>
+            <value languageCode="eng-US">Name</value>
+          </names>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
       </Version>
       <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml">
@@ -916,10 +922,14 @@ XML Example
           <versionNo>3</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-19T12:00:00</modificationDate>
-          <Creator href="/users/user/65" media-type="application/vnd.ez.api.User+xml"/>
+          <Creator href="/users/user/65" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-19T12:00:00</creationDate>
           <initialLanguageCode>fra-FR</initialLanguageCode>
-          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+          <names>
+            <value languageCode="eng-US">Name</value>
+            <value languageCode="fra-FR">Nom</value>
+          </names>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
       </Version>
       <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
@@ -928,13 +938,17 @@ XML Example
           <versionNo>4</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-20T12:00:00</modificationDate>
-          <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml"/>
+          <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-20T12:00:00</creationDate>
           <initialLanguageCode>ger-DE</initialLanguageCode>
-          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml"/>
+          <names>
+            <value languageCode="eng-US">Name</value>
+            <value languageCode="ger-DE">Name</value>
+          </names>
+          <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
       </Version>
-    <VersionList>
+    </VersionList>
 
 Load Version
 ````````````
@@ -989,6 +1003,9 @@ XML Example
         <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
+        <names>
+          <value languageCode="ger-DE">Name</value>
+        </names>
         <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
       </VersionInfo>
       <Fields>
@@ -1025,8 +1042,6 @@ XML Example
       </Relations>
     </Version>
 
-
-            
 Update Version
 ``````````````
 :Resource: /content/objects/<ID>/version/<versionNo>
@@ -1061,8 +1076,6 @@ Update Version
     :403: If the version is not allowed to change - i.e is not a DRAFT
     :404: If the content id or version id does not exist
     :412: If the current ETag does not match with the provided one in the If-Match header
-    :415: If the media-type is not one of those specified in Headers
-        
 
 XML Example
 '''''''''''
@@ -1113,6 +1126,9 @@ XML Example
         <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
+        <names>
+          <value languageCode="ger-DE">Neuer Titel</value>
+        </names>
         <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
       </VersionInfo>
       <Fields>
@@ -4884,13 +4900,6 @@ VersionInfo
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      <xsd:simpleType name="versionStatus">
-        <xsd:restriction base="xsd:string">
-          <xsd:enumeration value="DRAFT" />
-          <xsd:enumeration value="PUBLISHED" />
-          <xsd:enumeration value="ARCHIVED" />
-        </xsd:restriction>
-      </xsd:simpleType>
       <xsd:complexType name="versionInfoType">
         <xsd:all>
           <xsd:element name="id" type="xsd:int">
@@ -4953,10 +4962,14 @@ VersionInfo
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType"/>
           <xsd:element name="Content" type="ref" />
         </xsd:all>
       </xsd:complexType>
+      <xsd:element name="VersionInfo" type="versionInfoType"/>
     </xsd:schema>
+
+
 
 Version
 ~~~~~~~
@@ -4976,7 +4989,7 @@ Version
           <xsd:element name="value" type="xsd:anyType" />
         </xsd:all>
       </xsd:complexType>
-      <xsd:complexType name="versionType">
+      <xsd:complexType name="vnd.ez.api.Version">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
@@ -4991,17 +5004,21 @@ Version
               </xsd:element>
               <xsd:element name="Relations" minOccurs="0">
                 <xsd:complexType>
-                  <xsd:sequence>
-                    <xsd:element name="Relation" type="relationValueType"
-                      minOccurs="0" maxOccurs="unbounded" />
-                  </xsd:sequence>
+                  <xsd:complexContent>
+                    <xsd:extension base="ref">
+                      <xsd:sequence>
+                        <xsd:element name="Relation" type="vnd.ez.api.Relation"
+                          minOccurs="0" maxOccurs="unbounded" />
+                      </xsd:sequence>
+                    </xsd:extension>
+                  </xsd:complexContent>
                 </xsd:complexType>
               </xsd:element>
             </xsd:all>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:element name="Version" type="versionType"></xsd:element>
+      <xsd:element name="Version" type="vnd.ez.api.Version"></xsd:element>
     </xsd:schema>
 
 .. _VersionList:
@@ -5011,21 +5028,22 @@ VersionList XML Schema
 
 .. code:: xml
 
+
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="Version.xsd" />
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      <xsd:complexType name="versionListType">
+      <xsd:complexType name="vnd.ez.api.VersionList">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:sequence>
-              <xsd:element name="Version" type="versionType"/>
+              <xsd:element name="Version" type="vnd.ez.api.Version"/>
             </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:element name="VersionList" type="versionListType"></xsd:element>
+      <xsd:element name="VersionList" type="vnd.ez.api.VersionList"></xsd:element>
     </xsd:schema>
 
 
@@ -5362,7 +5380,7 @@ LocationCreate XML Schema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-      <xsd:complexType name="locationCreateType">
+      <xsd:complexType name="vnd.ez.api.LocationCreate">
         <xsd:all>
           <xsd:element name="ParentLocation" type="ref">
             <xsd:annotation>
@@ -5399,7 +5417,7 @@ LocationCreate XML Schema
           <xsd:element name="sortOrder" type="sortOrderType" />
         </xsd:all>
       </xsd:complexType>
-      <xsd:element name="LocationCreate" type="locationCreateType" />
+      <xsd:element name="LocationCreate" type="vnd.ez.api.LocationCreate" />
     </xsd:schema>
 
 
@@ -5416,7 +5434,7 @@ LocationUpdate XML Schema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-      <xsd:complexType name="locationUpdateType">
+      <xsd:complexType name="vnd.ez.api.LocationUpdate">
         <xsd:all>
           <xsd:element name="priority" type="xsd:int" minOccurs="0">
             <xsd:annotation>
@@ -5439,7 +5457,7 @@ LocationUpdate XML Schema
           <xsd:element name="sortOrder" type="sortOrderType" />
         </xsd:all>
       </xsd:complexType>
-      <xsd:element name="LocationUpdate" type="locationUpdateType" />
+      <xsd:element name="LocationUpdate" type="vnd.ez.api.LocationUpdate" />
     </xsd:schema>
 
 
@@ -5458,7 +5476,7 @@ Location XML Schema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-      <xsd:complexType name="locationType">
+      <xsd:complexType name="vnd.ez.api.Location">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
@@ -5546,7 +5564,7 @@ Location XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:complexType name="locationListType">
+      <xsd:complexType name="vnd.ez.api.LocationList">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:sequence>
@@ -5556,8 +5574,8 @@ Location XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:element name="Location" type="locationType" />
-      <xsd:element name="LocationList" type="locationListType" />
+      <xsd:element name="Location" type="vnd.ez.api.Location" />
+      <xsd:element name="LocationList" type="vnd.ez.api.LocationList" />
     </xsd:schema>
 
 
@@ -5574,7 +5592,7 @@ Section XML Schema
 
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
       
-        <xsd:complexType name="sectionValueType">
+      <xsd:complexType name="vnd.ez.api.Section">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
@@ -5585,24 +5603,24 @@ Section XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:complexType name="sectionListType">
+      <xsd:complexType name="vnd.ez.api.SectionList">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:sequence>
-              <xsd:element name="Section" type="sectionValueType" />
+              <xsd:element name="Section" type="vnd.ez.api.Section" />
             </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:complexType name="sectionInputType">
+      <xsd:complexType name="vnd.ez.api.SectionInput">
         <xsd:all>
             <xsd:element name="identifier" type="xsd:string" minOccurs="0"/>
             <xsd:element name="name" type="xsd:string" minOccurs="0"/>
         </xsd:all>
       </xsd:complexType>
-      <xsd:element name="Section" type="sectionValueType"></xsd:element>
-      <xsd:element name="SectionList" type="sectionListType"></xsd:element>
-      <xsd:element name="SectionInput" type="sectionInputType"></xsd:element>
+      <xsd:element name="Section" type="vnd.ez.api.Section"></xsd:element>
+      <xsd:element name="SectionList" type="vnd.ez.api.SectionList"></xsd:element>
+      <xsd:element name="SectionInput" type="vnd.ez.api.SectionInput"></xsd:element>
       
       
     </xsd:schema>
