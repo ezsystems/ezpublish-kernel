@@ -683,7 +683,7 @@ class UserService implements UserServiceInterface
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionLocationId( array( $parentLocationIds ) ),
+                new CriterionLocationId( $parentLocationIds ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
             )
         );
