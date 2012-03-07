@@ -13,6 +13,7 @@ use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Values\ValueObject;
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\Limitation;
@@ -207,6 +208,7 @@ class RepositoryStub implements Repository
 
         ++$this->initializing;
 
+        $locations = null;
         $contentInfoValue = null;
         if ( $value instanceof ContentInfo )
         {
@@ -220,15 +222,22 @@ class RepositoryStub implements Repository
         {
             $contentInfoValue = $value->contentInfo;
         }
+        else if ( $value instanceof Location )
+        {
+            $locations = array( $value );
+        }
 
-        if ( null === $contentInfoValue || false === $contentInfoValue->published )
+        if ( null !== $contentInfoValue && true === $contentInfoValue->published )
+        {
+            $locationService = $this->getLocationService();
+            $locations = $locationService->loadLocations( $contentInfoValue );
+        }
+
+        if ( null === $locations )
         {
             --$this->initializing;
             return true;
         }
-
-        $locationService = $this->getLocationService();
-        $locations = $locationService->loadLocations( $contentInfoValue );
 
         foreach ( $hasAccess as $limitation )
         {

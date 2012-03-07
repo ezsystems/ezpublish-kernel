@@ -26,7 +26,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the newLocationCreateStruct() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
      * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
@@ -43,7 +43,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct',
+            '\eZ\Publish\API\Repository\Values\Content\LocationCreateStruct',
             $locationCreate
         );
 
@@ -52,6 +52,8 @@ class LocationServiceTest extends BaseTest
 
     /**
      * Test for the newLocationCreateStruct() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreate
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
@@ -105,7 +107,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            '\eZ\Publish\API\Repository\Values\Content\Location',
             $location
         );
 
@@ -238,7 +240,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocation() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * 
      */
@@ -253,7 +255,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            '\eZ\Publish\API\Repository\Values\Content\Location',
             $location
         );
         return $location;
@@ -261,6 +263,8 @@ class LocationServiceTest extends BaseTest
 
     /**
      * Test for the loadLocation() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
@@ -287,7 +291,7 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
+            '\eZ\Publish\API\Repository\Values\Content\ContentInfo',
             $location->contentInfo
         );
         $this->assertEquals(
@@ -461,7 +465,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations as $loadedLocation )
         {
             $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                '\eZ\Publish\API\Repository\Values\Content\Location',
                 $loadedLocation
             );
         }
@@ -489,7 +493,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocations() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * 
      */
@@ -528,15 +532,13 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocations() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationsLimitedSubtree
      */
     public function testLoadLocationsLimitedSubtreeContent( array $locations )
     {
-        $repository = $this->getRepository();
-        $locationService = $repository->getLocationService();
-
         $this->assertEquals( 1, count( $locations ) );
 
         $this->assertEquals(
@@ -649,7 +651,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations as $location )
         {
             $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                '\eZ\Publish\API\Repository\Values\Content\Location',
                 $location
             );
         }
@@ -669,7 +671,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * 
      */
@@ -696,6 +698,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffset
@@ -707,7 +710,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations as $location )
         {
             $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                '\eZ\Publish\API\Repository\Values\Content\Location',
                 $location
             );
         }
@@ -727,7 +730,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
      * 
      */
@@ -754,6 +757,8 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     * 
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffsetAndLimit
@@ -765,7 +770,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations as $location )
         {
             $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                '\eZ\Publish\API\Repository\Values\Content\Location',
                 $location
             );
         }
@@ -800,7 +805,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */;
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
+            '\eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct',
             $updateStruct
         );
     }
@@ -833,7 +838,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */;
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            '\eZ\Publish\API\Repository\Values\Content\Location',
             $updatedLocation
         );
 
@@ -936,7 +941,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            '\eZ\Publish\API\Repository\Values\Content\Location',
             $hiddenLocation
         );
 
@@ -1008,7 +1013,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            '\eZ\Publish\API\Repository\Values\Content\Location',
             $unHiddenLocation
         );
 
@@ -1052,7 +1057,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            '\eZ\Publish\API\Repository\Values\Content\Location',
             $unHiddenHigherLocation
         );
 
@@ -1212,6 +1217,248 @@ class LocationServiceTest extends BaseTest
      */
     public function testMoveSubtree()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::moveSubtree() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation( $communityLocationId );
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+
+        // Move location from "Home" to "Support"
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+
+        // Load moved location
+        $movedLocation = $locationService->loadLocation( $communityLocationId );
+        /* END: Use Case */
+
+        $this->assertPropertiesCorrect(
+            array(
+                'depth'             =>  $newParentLocation->depth + 1,
+                'parentLocationId'  =>  $newParentLocation->id,
+                'pathString'        =>  "{$newParentLocation->pathString}{$movedLocation->id}/"
+            ),
+            $movedLocation
+        );
     }
+
+    /**
+     * Test for the moveSubtree() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
+     */
+    public function testMoveSubtreeUpdatesSubtreeProperties()
+    {
+        $repository      = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $locationToMove    = $locationService->loadLocation( 167 );
+        $newParentLocation = $locationService->loadLocation( 96 );
+
+        // Load Subtree properties before move
+        $expected = $this->loadSubtreeProperties( $locationToMove );
+        foreach ( $expected as $id => $properties )
+        {
+            $expected[$id]['depth']      = $properties['depth'] + 1;
+            $expected[$id]['pathString'] = str_replace(
+                $locationToMove->pathString,
+                "{$newParentLocation->pathString}{$locationToMove->id}/",
+                $properties['pathString']
+            );
+        }
+
+        /* BEGIN: Use Case */
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation( $communityLocationId );
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+
+        // Move location from "Home" to "Support"
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+
+        // Load moved location
+        $movedLocation = $locationService->loadLocation( $communityLocationId );
+        /* END: Use Case */
+
+        // Load Subtree properties after move
+        $actual = $this->loadSubtreeProperties( $movedLocation );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
+     * Test for the moveSubtree() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
+     */
+    public function testMoveSubtreeIncrementsChildCountOfNewParent()
+    {
+        $repository      = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $newParentLocation = $locationService->loadLocation( 96 );
+
+        // Load expected properties before move
+        $expected = $this->loadLocationProperties( $newParentLocation );
+        $expected['childCount'] += 1;
+
+        /* BEGIN: Use Case */
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation( $communityLocationId );
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+
+        // Move location from "Home" to "Support"
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+
+        // Reload new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+        /* END: Use Case */
+
+        // Load Subtree properties after move
+        $actual = $this->loadLocationProperties( $newParentLocation );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
+     * Test for the moveSubtree() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
+     */
+    public function testMoveSubtreeDecrementsChildCountOfOldParent()
+    {
+        $repository      = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $oldParentLocation = $locationService->loadLocation( 2 );
+
+        // Load expected properties before move
+        $expected = $this->loadLocationProperties( $oldParentLocation );
+        $expected['childCount'] -= 1;
+
+        /* BEGIN: Use Case */
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation( $communityLocationId );
+
+        // Get the location id of the old parent
+        $oldParentLocationId = $locationToMove->parentLocationId;
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+
+        // Move location from "Home" to "Support"
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+
+        // Reload old parent location
+        $oldParentLocation = $locationService->loadLocation( $oldParentLocationId );
+        /* END: Use Case */
+
+        // Load Subtree properties after move
+        $actual = $this->loadLocationProperties( $oldParentLocation );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
+     * Loads properties from all locations in the $location's subtree
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param array $properties
+     * @return array
+     */
+    private function loadSubtreeProperties( Location $location, array $properties = array() )
+    {
+        $locationService = $this->getRepository()->getLocationService();
+
+        foreach ( $locationService->loadLocationChildren( $location ) as $childLocation )
+        {
+            $properties[$childLocation->id] = $this->loadLocationProperties( $childLocation );
+
+            $properties = $this->loadSubtreeProperties( $childLocation, $properties );
+        }
+
+        return $properties;
+    }
+
+    /**
+     * Loads assertable properties from the given location.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @return array
+     */
+    private function loadLocationProperties( Location $location )
+    {
+        return array(
+            'id'                =>  $location->id,
+            'depth'             =>  $location->depth,
+            'parentLocationId'  =>  $location->parentLocationId,
+            'pathString'        =>  $location->pathString,
+            'childCount'        =>  $location->childCount,
+            'remoteId'          =>  $location->remoteId,
+            'hidden'            =>  $location->hidden,
+            'invisible'         =>  $location->invisible,
+            'priority'          =>  $location->priority,
+            'sortField'         =>  $location->sortField,
+            'sortOrder'         =>  $location->sortOrder,
+        );
+    }
+
 }

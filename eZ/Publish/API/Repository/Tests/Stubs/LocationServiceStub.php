@@ -188,7 +188,7 @@ class LocationServiceStub implements LocationService
         {
             throw new Exceptions\NotFoundExceptionStub;
         }
-        if ( false === $this->repository->canUser( 'content', 'read', $this->locations[$locationId]->contentInfo ) )
+        if ( false === $this->repository->canUser( 'content', 'read', $this->locations[$locationId]->getContentInfo() ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -214,7 +214,7 @@ class LocationServiceStub implements LocationService
             {
                 continue;
             }
-            if ( false === $this->repository->canUser( 'content', 'create', $location->contentInfo ) )
+            if ( false === $this->repository->canUser( 'content', 'create', $location->getContentInfo() ) )
             {
                 throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
@@ -352,12 +352,12 @@ class LocationServiceStub implements LocationService
         $locations = array();
         foreach ( $this->locations as $candidateLocation )
         {
-            if ( $candidateLocation->contentInfo === null )
+            if ( $candidateLocation->getContentInfo() === null )
             {
                 // Skip root location
                 continue;
             }
-            if ( $contentInfo->contentId == $candidateLocation->contentInfo->contentId
+            if ( $contentInfo->contentId == $candidateLocation->getContentInfo()->contentId
                  && strpos( $candidateLocation->pathString, $subPath ) === 0
                 )
             {
@@ -550,19 +550,19 @@ class LocationServiceStub implements LocationService
     /**
      * Returns if a location for the given $contentInfo exists.
      *
-     * @param ContentInfo $contentInfo
-     * @return bool
+     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $contentInfo
+     * @return boolean
      */
     protected function hasLocation( ContentInfo $contentInfo )
     {
         foreach ( $this->locations as $location )
         {
-            if ( $location->contentInfo == null )
+            if ( $location->getContentInfo() == null )
             {
                 // Skip root location
                 continue;
             }
-            if ( $location->contentInfo->contentId == $contentInfo->contentId )
+            if ( $location->getContentInfo()->contentId == $contentInfo->contentId )
             {
                 return true;
             }
@@ -604,7 +604,50 @@ class LocationServiceStub implements LocationService
      */
     public function moveSubtree( Location $location, Location $newParentLocation )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->canUser( 'content', 'move', $location, $newParentLocation ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $oldParentLocation = $this->loadLocation( $location->parentLocationId );
+        $oldParentLocation->__setChildCount( $oldParentLocation->childCount - 1 );
+
+        $newParentLocation->__setChildCount( $newParentLocation->childCount + 1 );
+
+        $this->moveSubtreeInternal( $location, $newParentLocation );
+    }
+
+    /**
+     * Moves the subtree to $newParentLocation
+     *
+     * If a user has the permission to move the location to a target location
+     * he can do it regardless of an existing descendant on which the user has no permission.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
+     */
+    private function moveSubtreeInternal( Location $location, Location $newParentLocation )
+    {
+        $values = array_merge(
+            $this->locationToArray( $location ),
+            array(
+                'depth'             =>  $newParentLocation->depth + 1,
+                'pathString'        =>  "{$newParentLocation->pathString}{$location->id}/",
+                'parentLocationId'  =>  $newParentLocation->id,
+            )
+        );
+
+        $this->locations[$location->id] = new LocationStub( $values );
+
+        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        {
+            $this->moveSubtreeInternal(
+                $childLocation,
+                $this->locations[$location->id]
+            );
+        }
     }
 
     /**

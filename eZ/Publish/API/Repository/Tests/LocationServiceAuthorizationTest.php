@@ -300,6 +300,34 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testMoveSubtreeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::moveSubtree() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation( $communityLocationId );
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+        /* END: Use Case */
     }
 }

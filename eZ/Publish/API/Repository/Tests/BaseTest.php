@@ -10,11 +10,10 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use \PHPUnit_Framework_TestCase;
+
 use \eZ\Publish\API\Repository\Repository;
-
-
 use \eZ\Publish\API\Repository\Values\ValueObject;
-
+use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Base class for api specific tests.
@@ -217,6 +216,62 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         // Create a new user instance.
         $user = $userService->createUser( $userCreate, array( $group ) );
+        /* END: Inline */
+
+        return $user;
+    }
+
+    /**
+     * Create a user fixture in a variable named <b>$user</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createMediaUserVersion1()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // ID of the "Users" user group in an eZ Publish demo installation
+        $usersGroupId = 4;
+
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        // Get a group create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Media Editor' );
+
+        // Create new group with media editor rights
+        $userGroup = $userService->createUserGroup(
+            $userGroupCreate,
+            $userService->loadUserGroup( $usersGroupId )
+        );
+        $roleService->assignRoleToUserGroup(
+            $roleService->loadRoleByIdentifier( 'Editor' ),
+            $userGroup,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues'  =>  '/1/43/'
+                )
+            )
+        );
+
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $userGroup ) );
         /* END: Inline */
 
         return $user;
