@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
@@ -40,15 +41,23 @@ class Mapper
     protected $locationMapper;
 
     /**
+     * Caching language handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+     */
+    protected $languageHandler;
+
+    /**
      * Creates a new mapper.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
-    public function __construct( LocationMapper $locationMapper, Registry $converterRegistry )
+    public function __construct( LocationMapper $locationMapper, Registry $converterRegistry, LanguageHandler $languageHandler )
     {
         $this->converterRegistry = $converterRegistry;
         $this->locationMapper = $locationMapper;
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -59,18 +68,20 @@ class Mapper
      */
     public function createContentFromCreateStruct( CreateStruct $struct )
     {
-        $content = new Content();
+        $content = new Content;
+        $contentInfo = new ContentInfo;
 
-        $content->typeId = $struct->typeId;
-        $content->sectionId = $struct->sectionId;
-        $content->ownerId = $struct->ownerId;
-        $content->alwaysAvailable = $struct->alwaysAvailable;
-        $content->remoteId = $struct->remoteId;
-        $content->initialLanguageId = $struct->initialLanguageId;
-        $content->published = $struct->published;
-        $content->modified = $struct->modified;
-        $content->currentVersionNo = 1;
-        $content->status = Content::STATUS_DRAFT;
+        $contentInfo->contentTypeId = $struct->typeId;
+        $contentInfo->sectionId = $struct->sectionId;
+        $contentInfo->ownerId = $struct->ownerId;
+        $contentInfo->isAlwaysAvailable = $struct->alwaysAvailable;
+        $contentInfo->remoteId = $struct->remoteId;
+        $contentInfo->mainLanguageCode = $this->languageHandler->getById( $struct->initialLanguageId )->languageCode;
+        $contentInfo->publicationDate = $struct->published;
+        $contentInfo->modificationDate = $struct->modified;
+        $contentInfo->currentVersionNo = 1;
+
+        $content->contentInfo = $contentInfo;
 
         return $content;
     }
@@ -95,12 +106,12 @@ class Mapper
     /**
      * Creates a new version for the given $content
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param int $versionNo
-     * @return Version
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      * @todo: created, modified, initial_language_id, status, user_id?
      */
-    public function createVersionForContent( Content $content, $versionNo )
+    public function createVersionInfoForContent( Content $content, $versionNo )
     {
         $versionInfo = new VersionInfo;
 

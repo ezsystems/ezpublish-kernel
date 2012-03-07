@@ -313,7 +313,8 @@ class Handler implements HandlerInterface
         {
             $this->contentMapper = new ContentMapper(
                 $this->getLocationMapper(),
-                $this->getFieldValueConverterRegistry()
+                $this->getFieldValueConverterRegistry(),
+                $this->contentLanguageHandler()
             );
         }
         return $this->contentMapper;
