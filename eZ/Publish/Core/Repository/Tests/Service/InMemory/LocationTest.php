@@ -19,6 +19,11 @@ use eZ\Publish\Core\Repository\Tests\Service\LocationBase as BaseLocationService
  */
 class LocationTest extends BaseLocationServiceTest
 {
+    public function __construct()
+    {
+        $this->existingRemoteID = "remoteIDForLocation4";
+    }
+
     protected function getRepository( array $serviceSettings )
     {
         return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );

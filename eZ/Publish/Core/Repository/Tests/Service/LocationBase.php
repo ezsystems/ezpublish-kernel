@@ -24,6 +24,11 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 abstract class LocationBase extends BaseServiceTest
 {
     /**
+     * @var string
+     */
+    var $existingRemoteID;
+
+    /**
      * Test a new class and default values on properties
      * @covers \eZ\Publish\API\Repository\Values\Content\Location::__construct
      */
@@ -170,11 +175,11 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationByRemoteId()
     {
-        $location = $this->repository->getLocationService()->loadLocationByRemoteId( "769380b7aa94541679167eab817ca893" );
+        $location = $this->repository->getLocationService()->loadLocationByRemoteId( $this->existingRemoteID );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
         self::assertGreaterThan( 0, $location->id );
-        self::assertEquals( "769380b7aa94541679167eab817ca893", $location->remoteId );
+        self::assertEquals( $this->existingRemoteID, $location->remoteId );
     }
 
    /**
@@ -413,7 +418,7 @@ abstract class LocationBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
-        $locationCreateStruct->remoteId = "769380b7aa94541679167eab817ca893";
+        $locationCreateStruct->remoteId = $this->existingRemoteID;
         $contentInfo = $contentService->loadContentInfo( 4 );
         $locationService->createLocation( $contentInfo, $locationCreateStruct );
     }
@@ -473,7 +478,7 @@ abstract class LocationBase extends BaseServiceTest
 
         $location = $locationService->loadLocation( 5 );
         $locationUpdateStruct = $locationService->newLocationUpdateStruct();
-        $locationUpdateStruct->remoteId = "769380b7aa94541679167eab817ca893";
+        $locationUpdateStruct->remoteId = $this->existingRemoteID;
 
         $locationService->updateLocation( $location, $locationUpdateStruct );
     }
