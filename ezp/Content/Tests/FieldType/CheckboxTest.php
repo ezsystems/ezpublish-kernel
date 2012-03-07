@@ -8,31 +8,13 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Checkbox\Type as Checkbox,
+use eZ\Publish\Core\Repository\FieldType\Checkbox\Type as Checkbox,
     eZ\Publish\Core\Repository\FieldType\Checkbox\Value as CheckboxValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class CheckboxTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testBuildFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Type",
-            Factory::build( "ezboolean" ),
-            "Checkbox object not returned for 'ezstring', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @group ezboolean

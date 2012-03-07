@@ -79,6 +79,11 @@ class ContentService implements ContentServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -1171,6 +1176,19 @@ class ContentService implements ContentServiceInterface
     public function newTranslationValues()
     {
         return new TranslationValues();
+    }
+
+    /**
+     * Instantiates a FieldType\Type object
+     *
+     * @return \eZ\Publish\Core\Repository\FieldTypeInterface
+     */
+    public function newFieldType( $type )
+    {
+        if ( !isset( $this->settings["field_type"][$type] ) )
+            throw new InvalidArgumentException( '$type', "Provided type is unknown" );
+
+        return $this->settings["field_type"][$type]();
     }
 
     /**

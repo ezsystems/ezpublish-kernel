@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\DateAndTime\Type as DateAndTime,
+use eZ\Publish\Core\Repository\FieldType\DateAndTime\Type as DateAndTime,
     eZ\Publish\Core\Repository\FieldType\DateAndTime\Value as DateAndTimeValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject,
@@ -17,23 +16,6 @@ use eZ\Publish\Core\Repository\FieldType\Factory,
 
 class DateAndTimeTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testBuildFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Type",
-            Factory::build( "ezdatetime" ),
-            "DateAndTime object not returned for 'ezstring', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @group dateTime

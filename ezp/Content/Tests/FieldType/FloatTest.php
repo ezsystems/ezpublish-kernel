@@ -8,30 +8,13 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Float\Type as Float,
+use eZ\Publish\Core\Repository\FieldType\Float\Type as Float,
     eZ\Publish\Core\Repository\FieldType\Float\Value as FloatValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class FloatTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Float\\Type",
-            Factory::build( "ezfloat" ),
-            "Float object not returned for 'ezfloat', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators

@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\BinaryFile\Type as BinaryFileType,
+use eZ\Publish\Core\Repository\FieldType\BinaryFile\Type as BinaryFileType,
     eZ\Publish\Core\Repository\FieldType\BinaryFile\Value as BinaryFileValue,
     eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
     ezp\Io\FileInfo,
@@ -37,23 +36,6 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
         BinaryRepository::setOverrideOptions( 'inmemory' );
         $this->imagePath = __DIR__ . '/squirrel-developers.jpg';
         $this->imageFileInfo = new FileInfo( $this->imagePath );
-    }
-
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testBuildFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\Type",
-            Factory::build( "ezbinaryfile" ),
-            "BinaryFile object not returned for 'ezbinaryfile', incorrect mapping? "
-        );
     }
 
     /**

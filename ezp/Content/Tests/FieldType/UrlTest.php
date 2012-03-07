@@ -8,30 +8,13 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Url\Type as Url,
+use eZ\Publish\Core\Repository\FieldType\Url\Type as Url,
     eZ\Publish\Core\Repository\FieldType\Url\Value as UrlValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class UrlTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Url\\Type",
-            Factory::build( "ezurl" ),
-            "Url object not returned for 'ezurl', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators

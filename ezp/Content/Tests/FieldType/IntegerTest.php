@@ -8,30 +8,13 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Integer\Type as Integer,
+use eZ\Publish\Core\Repository\FieldType\Integer\Type as Integer,
     eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class IntegerTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\Type",
-            Factory::build( "ezinteger" ),
-            "Integer object not returned for 'ezinteger', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
