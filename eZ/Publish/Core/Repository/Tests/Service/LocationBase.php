@@ -115,7 +115,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testCopySubtree()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $locationToCopy = $locationService->loadLocation( 5 );
         $targetLocation = $locationService->loadLocation( 2 );
@@ -134,7 +133,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testCopySubtreeThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $locationToCopy = $locationService->loadLocation( 5 );
         $targetLocation = $locationService->loadLocation( 44 );
@@ -148,7 +146,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $loadedLocation = $locationService->loadLocation( 2 );
 
@@ -173,7 +170,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationByRemoteId()
     {
-        self::markTestSkipped( "@todo: enable when LocationRemoteId criterion is implemented" );
         $location = $this->repository->getLocationService()->loadLocationByRemoteId( "769380b7aa94541679167eab817ca893" );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
@@ -197,13 +193,31 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadMainLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 65 );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 42 );
         $location = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
         self::assertGreaterThan( 0, $location->id );
-        self::assertEquals( true, $location->id == $location->getContentInfo()->mainLocationId );
+        self::assertEquals( true, $location->id == $contentInfo->mainLocationId );
+    }
+
+    protected function createContentDraft()
+    {
+        $contentTypeService = $this->repository->getContentTypeService();
+        $contentService = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentType( 3 ),
+            'eng-GB'
+        );
+
+        $contentCreateStruct->setField( 'name', 'New group' );
+        $contentCreateStruct->setField( 'description', 'New group description' );
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+
+        return $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
     }
 
     /**
@@ -213,7 +227,12 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadMainLocationThrowsBadStateException()
     {
-        self::markTestIncomplete( "@todo: implement when content service is implemented" );
+        self::markTestSkipped( "@todo: enable when content type and content services are done" );
+        $contentDraft = $this->createContentDraft();
+
+        $this->repository->getLocationService()->loadMainLocation(
+            $contentDraft->getVersionInfo()->getContentInfo()
+        );
     }
 
     /**
@@ -222,7 +241,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocations()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $contentInfo = $this->repository->getContentService()->loadContentInfo( 4 );
 
         $locationService = $this->repository->getLocationService();
@@ -239,7 +257,7 @@ abstract class LocationBase extends BaseServiceTest
 
         $locationsCount = count( $locations );
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( 43 );
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
         $locationService->createLocation( $contentInfo, $locationCreateStruct );
 
         $locations = $locationService->loadLocations( $contentInfo );
@@ -264,14 +282,10 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationsWithRootLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 4 );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 10 );
 
         $locationService = $this->repository->getLocationService();
-        $parentLocation = $locationService->loadLocation( 43 );
-
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $parentLocation->id );
-        $locationService->createLocation( $contentInfo, $locationCreateStruct );
+        $parentLocation = $locationService->loadLocation( 5 );
 
         $locations = $locationService->loadLocations( $contentInfo, $parentLocation );
 
@@ -297,7 +311,12 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationsThrowsBadStateException()
     {
-        self::markTestIncomplete( "@todo: implement when content service is implemented" );
+        self::markTestSkipped( "@todo: enable when content type and content services are done" );
+        $contentDraft = $this->createContentDraft();
+
+        $this->repository->getLocationService()->loadLocations(
+            $contentDraft->getVersionInfo()->getContentInfo()
+        );
     }
 
     /**
@@ -306,11 +325,9 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationChildren()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
-
         $locationService = $this->repository->getLocationService();
 
-        $rootLocation = $locationService->loadLocation( 2 );
+        $rootLocation = $locationService->loadLocation( 5 );
         $childrenLocations = $locationService->loadLocationChildren( $rootLocation );
 
         self::assertInternalType( "array", $childrenLocations );
@@ -329,11 +346,10 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testCreateLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $contentService = $this->repository->getContentService();
 
-        $parentLocation = $locationService->loadLocation( 52 );
+        $parentLocation = $locationService->loadLocation( 2 );
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $parentLocation->id );
         $locationCreateStruct->priority = 42;
@@ -342,10 +358,10 @@ abstract class LocationBase extends BaseServiceTest
         $locationCreateStruct->sortField = Location::SORT_FIELD_DEPTH;
         $locationCreateStruct->sortOrder = Location::SORT_ORDER_DESC;
 
-        $content = $contentService->loadContent( 49 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
 
         $createdLocation = $locationService->createLocation(
-            $content->getVersionInfo()->getContentInfo(),
+            $contentInfo,
             $locationCreateStruct
         );
 
@@ -368,46 +384,52 @@ abstract class LocationBase extends BaseServiceTest
             $createdLocation
         );
 
-        self::assertEquals( $content->getVersionInfo()->getContentInfo()->contentId, $createdLocation->getContentInfo()->contentId );
+        self::assertEquals( $contentInfo->contentId, $createdLocation->getContentInfo()->contentId );
+    }
+
+    /**
+     * Test creating a location throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation
+     */
+    public function testCreateLocationThrowsInvalidArgumentExceptionLocationExistsBelowParent()
+    {
+        $locationService = $this->repository->getLocationService();
+        $contentService = $this->repository->getContentService();
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+        $contentInfo = $contentService->loadContentInfo( 12 );
+        $locationService->createLocation( $contentInfo, $locationCreateStruct );
+    }
+
+    /**
+     * Test creating a location throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation
+     */
+    public function testCreateLocationThrowsInvalidArgumentExceptionExistingRemoteID()
+    {
+        $locationService = $this->repository->getLocationService();
+        $contentService = $this->repository->getContentService();
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
+        $locationCreateStruct->remoteId = "769380b7aa94541679167eab817ca893";
+        $contentInfo = $contentService->loadContentInfo( 4 );
+        $locationService->createLocation( $contentInfo, $locationCreateStruct );
     }
 
     /**
      * Test creating a location throwing InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LocationService::createLocation
      */
-    public function testCreateLocationThrowsInvalidArgumentException()
+    public function testCreateLocationThrowsInvalidArgumentExceptionParentIsASubLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $contentService = $this->repository->getContentService();
 
-        try
-        {
-            $locationCreateStruct = $locationService->newLocationCreateStruct( 43 );
-            $content = $contentService->loadContent( 49 );
-            $locationService->createLocation( $content->getVersionInfo()->getContentInfo(), $locationCreateStruct );
-            self::fail( "succeeded adding a location to content where content already has a location below specified parent" );
-        }
-        catch ( InvalidArgumentException $e ) {}
-
-        try
-        {
-            $locationCreateStruct = $locationService->newLocationCreateStruct( 52 );
-            $locationCreateStruct->remoteId = "4fdf0072da953bb276c0c7e0141c5c9b";
-            $content = $contentService->loadContent( 49 );
-            $locationService->createLocation( $content->getVersionInfo()->getContentInfo(), $locationCreateStruct );
-            self::fail( "succeeded adding a location with existing remote ID" );
-        }
-        catch ( InvalidArgumentException $e ) {}
-
-        try
-        {
-            $locationCreateStruct = $locationService->newLocationCreateStruct( 52 );
-            $content = $contentService->loadContent( 41 );
-            $locationService->createLocation( $content->getVersionInfo()->getContentInfo(), $locationCreateStruct );
-            self::fail( "succeeded adding a location where parent is a sub location of the content" );
-        }
-        catch ( InvalidArgumentException $e ) {}
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 44 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
+        $locationService->createLocation( $contentInfo, $locationCreateStruct );
     }
 
     /**
@@ -416,7 +438,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testUpdateLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
 
         $location = $locationService->loadLocation( 5 );
@@ -448,12 +469,11 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testUpdateLocationThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
 
         $location = $locationService->loadLocation( 5 );
         $locationUpdateStruct = $locationService->newLocationUpdateStruct();
-        $locationUpdateStruct->remoteId = "4fdf0072da953bb276c0c7e0141c5c9b";
+        $locationUpdateStruct->remoteId = "769380b7aa94541679167eab817ca893";
 
         $locationService->updateLocation( $location, $locationUpdateStruct );
     }
@@ -464,19 +484,18 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testSwapLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
 
-        $location1 = $locationService->loadLocation( 13 );
-        $location2 = $locationService->loadLocation( 14 );
+        $location1 = $locationService->loadLocation( 2 );
+        $location2 = $locationService->loadLocation( 5 );
 
         $contentId1 = $location1->getContentInfo()->contentId;
         $contentId2 = $location2->getContentInfo()->contentId;
 
         $locationService->swapLocation( $location1, $location2 );
 
-        $location1 = $locationService->loadLocation( 13 );
-        $location2 = $locationService->loadLocation( 14 );
+        $location1 = $locationService->loadLocation( 2 );
+        $location2 = $locationService->loadLocation( 5 );
 
         self::assertEquals( $contentId1, $location2->getContentInfo()->contentId );
         self::assertEquals( $contentId2, $location1->getContentInfo()->contentId );
@@ -489,7 +508,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testHideUnhideLocation()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
 
         $location = $locationService->loadLocation( 5 );
@@ -510,7 +528,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testMoveSubtree()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
 
         $locationToMove = $locationService->loadLocation( 5 );
