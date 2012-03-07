@@ -608,6 +608,13 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * @param $contentType
+     */
+    private function generateContentNames( $contentType )
+    {
+    }
+
+    /**
      * Validates a field against validators from FieldDefinition
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
