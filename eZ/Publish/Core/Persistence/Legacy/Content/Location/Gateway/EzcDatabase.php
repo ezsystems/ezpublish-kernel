@@ -472,12 +472,13 @@ class EzcDatabase extends Gateway
         $location->id = $this->handler->lastInsertId( $this->handler->getSequenceName( 'ezcontentobject_tree', 'node_id' ) );
 
         $location->mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
+        $location->pathString = $parentNode['path_string'] . $location->id . '/';
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->set(
                 $this->handler->quoteColumn( 'path_string' ),
-                $query->bindValue( $parentNode['path_string'] . $location->id . '/' )
+                $query->bindValue( $location->pathString )
             )
             ->set(
                 $this->handler->quoteColumn( 'main_node_id' ),
@@ -748,7 +749,7 @@ class EzcDatabase extends Gateway
      */
     public function removeSubtree( $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
     }
 
     /**
