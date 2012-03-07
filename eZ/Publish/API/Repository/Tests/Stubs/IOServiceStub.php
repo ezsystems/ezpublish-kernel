@@ -10,8 +10,12 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\IOService;
-use eZ\Publish\API\Repository\Values\IO\BinaryFile;
-use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+use \eZ\Publish\API\Repository\Values\IO\BinaryFile;
+use \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+use \eZ\Publish\API\Repository\Values\IO\ContentType;
+
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Service used to handle io operations.
@@ -20,6 +24,37 @@ use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
  */
 class IOServiceStub implements IOService
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Values\IO\BinaryFile[]
+     */
+    private $binary = array();
+
+    /**
+     * @var string[]
+     */
+    private $content = array();
+
+    /**
+     * @var integer
+     */
+    private $binaryId = 0;
+
+    /**
+     * @var string[]
+     */
+    private $tempFile = array();
+
+    /**
+     * Delete all temporary created files.
+     */
+    public function __destruct()
+    {
+        foreach ( $this->tempFile as $tempFile )
+        {
+            unlink( $tempFile );
+        }
+    }
+
     /**
      * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
      *
@@ -31,7 +66,24 @@ class IOServiceStub implements IOService
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
-        // TODO: Implement newBinaryCreateStructFromUploadedFile() method.
+        if ( false === is_uploaded_file( $uploadedFile['tmp_name'] ) )
+        {
+            throw new InvalidArgumentExceptionStub;
+        }
+        if ( false === ( $stream = fopen( $uploadedFile['tmp_name'], 'rb' ) ) )
+        {
+            throw new InvalidArgumentExceptionStub;
+        }
+
+        return new BinaryFileCreateStruct(
+            array(
+                'contentType'       =>  new ContentType( $uploadedFile['type'] ),
+                'uri'               =>  'file://' . realpath( $uploadedFile['tmp_name'] ),
+                'originalFileName'  =>  $uploadedFile['name'],
+                'size'              =>  filesize( $uploadedFile['tmp_name'] ),
+                'inputStream'       =>  $stream
+            )
+        );
     }
 
     /**
@@ -45,7 +97,24 @@ class IOServiceStub implements IOService
      */
     public function newBinaryCreateStructFromLocalFile( $localFile )
     {
-        // TODO: Implement newBinaryCreateStructFromLocalFile() method.
+        if ( false === file_exists( $localFile ) || false === is_readable( $localFile ) )
+        {
+            throw new InvalidArgumentExceptionStub;
+        }
+        if ( false === ( $stream = fopen( $localFile, 'rb' ) ) )
+        {
+            throw new InvalidArgumentExceptionStub;
+        }
+
+        return new BinaryFileCreateStruct(
+            array(
+                'contentType'       =>  new ContentType( mime_content_type( $localFile ) ),
+                'uri'               =>  'file://' . realpath( $localFile ),
+                'originalFileName'  =>  basename( $localFile ),
+                'size'              =>  filesize( $localFile ),
+                'inputStream'       =>  $stream
+            )
+        );
     }
 
     /**
@@ -57,7 +126,28 @@ class IOServiceStub implements IOService
      */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
-        // TODO: Implement createBinaryFile() method.
+        $this->binary[++$this->binaryId] = new BinaryFile(
+            array(
+                'id'            =>  $this->binaryId,
+                'size'          =>  $binaryFileCreateStruct->size,
+                'ctime'         =>  time(),
+                'mtime'         =>  time(),
+                'uri'           =>  $binaryFileCreateStruct->uri,
+                'originalFile'  =>  $binaryFileCreateStruct->originalFileName,
+                'contentType'   =>  (string) $binaryFileCreateStruct->contentType
+            )
+        );
+
+        $this->content[$this->binaryId] = '';
+        while ( false === feof( $binaryFileCreateStruct->inputStream ) )
+        {
+            $this->content[$this->binaryId] .= fgets( $binaryFileCreateStruct->inputStream );
+        }
+
+        // ???
+        // fclose( $binaryFileCreateStruct->inputStream );
+
+        return $this->binary[$this->binaryId];
     }
 
     /**
@@ -67,7 +157,7 @@ class IOServiceStub implements IOService
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
-        // TODO: Implement deleteBinaryFile() method.
+        unset( $this->binary[$binaryFile->id] );
     }
 
     /**
@@ -79,9 +169,13 @@ class IOServiceStub implements IOService
      *
      * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
      */
-    public function loadBinaryFile( $binaryFileid )
+    public function loadBinaryFile( $binaryFileId )
     {
-        // TODO: Implement loadBinaryFile() method.
+        if ( false === isset( $this->binary[$binaryFileId] ) )
+        {
+            throw new NotFoundExceptionStub;
+        }
+        return $this->binary[$binaryFileId];
     }
 
     /**
@@ -93,7 +187,13 @@ class IOServiceStub implements IOService
      */
     public function getFileInputStream( BinaryFile $binaryFile )
     {
-        // TODO: Implement getFileInputStream() method.
+        // We use a temp file here, because it makes streaming really simple
+        $tempFile = tempnam( sys_get_temp_dir(), __CLASS__ );
+        file_put_contents( $tempFile, $this->content[$binaryFile->id] );
+
+        $this->tempFile[] = $tempFile;
+
+        return fopen( $tempFile, 'rb' );
     }
 
     /**
@@ -105,7 +205,6 @@ class IOServiceStub implements IOService
      */
     public function getFileContents( BinaryFile $binaryFile )
     {
-        // TODO: Implement getFileContents() method.
+        return $this->content[$binaryFile->id];
     }
-
 }

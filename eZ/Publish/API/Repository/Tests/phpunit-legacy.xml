@@ -22,6 +22,7 @@
             <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>
             <file>IOServiceTest.php</file>
+            <file>IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
             <file>ContentTypeServiceAuthorizationTest.php</file>
@@ -29,6 +30,7 @@
             <file>LocationServiceAuthorizationTest.php</file>
             <file>UserServiceAuthorizationTest.php</file>
             <file>RoleServiceAuthorizationTest.php</file>
+            <file>TrashServiceAuthorizationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
