@@ -1168,7 +1168,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $user,
             new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/51/'
+                    'limitationValues'  =>  array( '/1/43/51/' )
                 )
             )
         );

@@ -247,10 +247,13 @@ class RepositoryStub implements Repository
             }
             foreach ( $locations as $location )
             {
-                if ( 0 === strpos( $location->pathString, $limitation->limitationValues ) )
+                foreach ( $limitation->limitationValues as $pathString )
                 {
-                    --$this->initializing;
-                    return true;
+                    if ( 0 === strpos( $location->pathString, $pathString ) )
+                    {
+                        --$this->initializing;
+                        return true;
+                    }
                 }
             }
         }

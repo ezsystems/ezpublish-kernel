@@ -894,7 +894,7 @@ class RoleServiceTest extends BaseTest
             $user,
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues'  =>  array( '/1/43/' )
                 )
             )
         );
@@ -920,7 +920,7 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues'  =>  array( '/1/43/' )
                 )
             ),
             $roleLimitation
@@ -1083,7 +1083,7 @@ class RoleServiceTest extends BaseTest
             $userGroup,
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues'  =>  array( '/1/43/' )
                 )
             )
         );
@@ -1109,7 +1109,7 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues'  =>  array( '/1/43/' )
                 )
             ),
             $roleLimitation

@@ -569,7 +569,7 @@ function generateRoleFixture( array $fixture )
             'roleId'      =>  $data['role_id'],
             'contentId'   =>  $data['contentobject_id'],
             'identifier'  =>  $data['limit_identifier'],
-            'value'       =>  $data['limit_value']
+            'value'       =>  array( $data['limit_value'] )
         );
     }
 
