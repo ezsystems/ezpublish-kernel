@@ -39,9 +39,9 @@ class AuthorTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->converter = new AuthorConverter;
         $this->authors = array(
-            new Author( array( 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com' ) ),
-            new Author( array( 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz' ) ),
-            new Author( array( 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net' ) )
+            array( 'id' => 21, 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com' ),
+            array( 'id' => 42, 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz' ),
+            array( 'id' => 63, 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net' )
         );
     }
 
@@ -57,7 +57,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new AuthorValue( $this->authors );
+        $value->data = $this->authors;
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
@@ -74,10 +74,10 @@ class AuthorTest extends PHPUnit_Framework_TestCase
         {
             foreach ( $this->authors as $i => $author )
             {
-                if ( $authorXml->getAttribute( 'id' ) == $author->id )
+                if ( $authorXml->getAttribute( 'id' ) == $author["id"] )
                 {
-                    self::assertSame( $author->name, $authorXml->getAttribute( 'name' ) );
-                    self::assertSame( $author->email, $authorXml->getAttribute( 'email' ) );
+                    self::assertSame( $author["name"], $authorXml->getAttribute( 'name' ) );
+                    self::assertSame( $author["email"], $authorXml->getAttribute( 'email' ) );
                     unset( $this->authors[$i] );
                     break;
                 }
@@ -109,21 +109,20 @@ EOT;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value', $fieldValue->data );
+        self::assertInternalType( 'array', $fieldValue->data );
 
         $authorsXml = $doc->getElementsByTagName( 'author' );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection', $fieldValue->data->authors );
-        self::assertSame( $authorsXml->length, count( $fieldValue->data->authors ) );
+        self::assertSame( $authorsXml->length, count( $fieldValue->data ) );
 
-        $aAuthors = $fieldValue->data->authors->getArrayCopy();
-        foreach ( $fieldValue->data->authors as $i => $author )
+        $aAuthors = $fieldValue->data;
+        foreach ( $fieldValue->data as $i => $author )
         {
             foreach ( $authorsXml as $authorXml )
             {
-                if ( $authorXml->getAttribute( 'id' ) == $author->id )
+                if ( $authorXml->getAttribute( 'id' ) == $author["id"] )
                 {
-                    self::assertSame( $authorXml->getAttribute( 'name' ), $author->name );
-                    self::assertSame( $authorXml->getAttribute( 'email' ), $author->email );
+                    self::assertSame( $authorXml->getAttribute( 'name' ), $author["name"] );
+                    self::assertSame( $authorXml->getAttribute( 'email' ), $author["email"] );
                     unset($aAuthors[$i]);
                     break;
                 }
