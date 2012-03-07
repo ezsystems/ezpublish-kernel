@@ -288,7 +288,7 @@ class SectionService implements SectionServiceInterface
     {
         return new Section(
             array(
-                'id'         => $spiSection->id,
+                'id'         => (int) $spiSection->id,
                 'identifier' => $spiSection->identifier,
                 'name'       => $spiSection->name
             )

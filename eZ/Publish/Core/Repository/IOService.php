@@ -251,7 +251,7 @@ class IOService implements IOServiceInterface
             array(
                 //@todo is setting the id of file to path correct?
                 'id'           => $spiBinaryFile->path,
-                'size'         => $spiBinaryFile->size,
+                'size'         => (int) $spiBinaryFile->size,
                 'mtime'        => $spiBinaryFile->mtime,
                 'ctime'        => $spiBinaryFile->ctime,
                 'contentType'  => $spiBinaryFile->mimeType,

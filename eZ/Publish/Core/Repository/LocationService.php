@@ -662,17 +662,17 @@ class LocationService implements LocationServiceInterface
         return new Location(
             array(
                 'contentInfo'             => $contentInfo,
-                'id'                      => $spiLocation->id,
-                'priority'                => $spiLocation->priority,
-                'hidden'                  => $spiLocation->hidden,
-                'invisible'               => $spiLocation->invisible,
+                'id'                      => (int) $spiLocation->id,
+                'priority'                => (int) $spiLocation->priority,
+                'hidden'                  => (bool) $spiLocation->hidden,
+                'invisible'               => (bool) $spiLocation->invisible,
                 'remoteId'                => $spiLocation->remoteId,
-                'parentLocationId'        => $spiLocation->parentId,
+                'parentLocationId'        => (int) $spiLocation->parentId,
                 'pathString'              => $spiLocation->pathString,
                 'modifiedSubLocationDate' => new \DateTime( "@{$modifiedSubLocationDate}" ),
-                'depth'                   => $spiLocation->depth,
-                'sortField'               => $spiLocation->sortField,
-                'sortOrder'               => $spiLocation->sortOrder,
+                'depth'                   => (int) $spiLocation->depth,
+                'sortField'               => (int) $spiLocation->sortField,
+                'sortOrder'               => (int) $spiLocation->sortOrder,
                 'childCount'              => $childrenLocations->count
             )
         );
