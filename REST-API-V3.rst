@@ -6674,6 +6674,8 @@ Policy XML Schema
 
 
 .. _Role:
+.. _RoleAssignInput:
+.. _RoleInput:
 
 Role XML Schema
 ---------------
