@@ -40,7 +40,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new RatingValue( false );
+        $value->data = false;
         $value->sortKey = false;
         $storageFieldValue = new StorageFieldValue;
 
@@ -56,7 +56,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     public function testToStorageValueDisabled()
     {
         $value = new FieldValue;
-        $value->data = new RatingValue( true );
+        $value->data = true;
         $value->sortKey = false;
         $storageFieldValue = new StorageFieldValue;
 
@@ -76,8 +76,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $fieldValue->data );
-        self::assertSame( false, $fieldValue->data->isDisabled );
+        self::assertSame( false, $fieldValue->data );
     }
 
     /**
@@ -92,8 +91,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $fieldValue->data );
-        self::assertSame( true, $fieldValue->data->isDisabled );
+        self::assertSame( true, $fieldValue->data );
     }
 
     /**
