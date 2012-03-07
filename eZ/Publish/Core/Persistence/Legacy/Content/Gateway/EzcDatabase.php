@@ -321,12 +321,14 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Updates an existing version in respect to $struct
+     * Updates version $versionNo for content identified by $contentId, in respect to $struct
      *
-     * @param UpdateStruct $struct
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
      * @return void
      */
-    public function updateVersion( UpdateStruct $struct )
+    public function updateVersion( $contentId, $versionNo, UpdateStruct $struct )
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q->update(

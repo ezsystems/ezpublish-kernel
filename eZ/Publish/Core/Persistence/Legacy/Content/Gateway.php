@@ -58,12 +58,14 @@ abstract class Gateway
     abstract public function updateContent( $contentId, MetadataUpdateStruct $struct );
 
     /**
-     * Updates the version of a Content object in respect to $struct
+     * Updates version $versionNo for content identified by $contentId, in respect to $struct
      *
-     * @param UpdateStruct $struct
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
      * @return void
      */
-    abstract public function updateVersion( UpdateStruct $struct );
+    abstract public function updateVersion( $contentId, $versionNo, UpdateStruct $struct );
 
     /**
      * Updates "always available" flag for content identified by $contentId, in respect to $isAlwaysAvailable.
