@@ -15,7 +15,7 @@
   <alwaysAvailable>true</alwaysAvailable>
   <login>john</login>
   <email>john.doe@example.net</email>
-  <password>john-does-password</password>
+  <enabled>true</enabled>
   <Content>
     <VersionInfo>
       <id>1243</id>

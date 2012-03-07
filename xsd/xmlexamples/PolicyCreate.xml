@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PolicyCreate>
+  <module>content</module>
+  <function>create</function>
+  <limitations>
+    <limitation identifier="Class">
+      <values>
+        <ref href="/content/types/13"/>
+      </values>
+    </limitation>
+    <limitation identifier="ParentClass">
+      <values>
+        <ref href="/content/types/12"/>
+      </values>
+    </limitation>
+  </limitations>
+</PolicyCreate>

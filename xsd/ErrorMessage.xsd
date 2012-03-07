@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.ErrorMessage">
+    <xsd:all>
+      <xsd:element name="errorCode" type="xsd:string"></xsd:element>
+      <xsd:element name="errorMessage" type="xsd:string"></xsd:element>
+      <xsd:element name="errorDescription" type="xsd:string"></xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="ErrorMessage" type="vnd.ez.api.ErrorMessage"></xsd:element>
+</xsd:schema>

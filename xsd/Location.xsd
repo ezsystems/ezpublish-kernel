@@ -7,7 +7,7 @@
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
-          <xsd:element name="id" type="xsd:int">
+          <xsd:element name="id" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation>
                 Location ID.

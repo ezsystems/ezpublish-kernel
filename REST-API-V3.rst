@@ -2943,8 +2943,8 @@ Resource                                      POST                  GET         
 /user/users/<ID>/groups                       .                     load groups of user   add to group          .            
 /user/users/<ID>/drafts                       .                     list all drafts owned .                     .                
                                                                     by the user                                                     
-/user/users/<ID>/roles                        assign role to group  load roles of group   .                     .            
-/user/users/<ID>/roles/<ID>                   .                     .                     .                     unassign role from group
+/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .            
+/user/users/<ID>/roles/<ID>                   .                     .                     .                     unassign role from user 
 /user/roles                                   create new role       load all roles        .                     .            
 /user/roles/<ID>                              .                     load role             update role           delete role
 /user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
@@ -3809,15 +3809,80 @@ Create Role
 :Resource: /user/roles
 :Method: POST
 :Description: Creates a new role
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
+         :application/vnd.ez.api.Role+json:  if set the new user is returned in json format (see Role_)
+    :Content-Type:
+         :application/vnd.ez.api.RoleInput+json: the RoleInput_  schema encoded in json
+         :application/vnd.ez.api.RoleInput+xml: the RoleInput_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>
+          Accept-Patch:  application/vnd.ez.api.RoleUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Role_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this role
 
+XML Example
+'''''''''''
+
+::
+
+    POST /user/roles HTTP/1.1
+    Accept: application/vnd.ez.api.Role+xml
+    Content-Type: application/vnd.ez.api.RoleInput+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleInput>
+      <identifier>NewRole</identifier>
+    </RoleInput>
+
+    HTTP/1.1 201 Created
+    Location: /user/roles/11
+    Accept-Patch: application/vnd.ez.api.RoleUpdate+xml
+    ETag: "465897639450694836"
+    Content-Type: application/vnd.ez.api.Role+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Role href="/user/roles/11" media-type="vnd.ez.api.Role+xml">
+      <identifier>NewRole</identifier>
+      <Policies href="/user/roles/11/policies" media-type="vnd.ez.api.PolicyList+xml"/>
+    </Role>
+        
+
+ 
 Load Roles
 ``````````
 :Resource: /user/roles
 :Method: GET
 :Description: Returns a list of all roles
+:Parameters: 
+    :limit:    only <limit> items will be returned started by offset
+    :offset:   offset of the result set
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.RoleList+xml:  if set the user list returned in xml format (see Role_)
+         :application/vnd.ez.api.RoleList+json:  if set the user list is returned in json format (see Role_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Role_      
+
 :Error Codes:
     :401: If the user has no permission to read roles
 
@@ -3826,7 +3891,19 @@ Load Role
 :Resource: /user/roles/<ID>
 :Method: GET
 :Description: loads a role for the given <ID>
-:Response: 200 Role_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Role+xml:  if set the user list returned in xml format (see Role_)
+         :application/vnd.ez.api.Role+json:  if set the user list is returned in json format (see Role_)
+:Response:
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Role_      
+
 :Error Codes:
     :401: If the user has no permission to read roles
     :404: If the role does not exist
@@ -3834,12 +3911,25 @@ Load Role
 Update Role
 ```````````
 :Resource: /user/roles/<ID>
-:Method: PUT
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
 :Description: Updates a role
-:Request Format: application/json
-:Parameters: :name: the new name of the role
-:Inputschema: 
-:Response: 200 Role_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Role+xml:  if set the new user  is returned in xml format (see Role_)
+         :application/vnd.ez.api.Role+json:  if set the new user  is returned in json format (see Role_)
+    :Content-Type:
+         :application/vnd.ez.api.RoleInput+json: the RoleInput  schema encoded in json
+         :application/vnd.ez.api.RoleInput+xml: the RoleInput  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.RoleInput+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Role_      
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the role
@@ -3849,69 +3939,268 @@ Delete Role
 :Resource: /user/roles/<ID>
 :Method: DELETE
 :Description: the given role is deleted
-:Parameters: 
-:Response: 204
+:Response: 
+
+    ::
+
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this content type
-    :403: If the role is assigned to a user group
+    :403: If the role is assigned to a user or user group
 
-Assign Role
-```````````
-:Resource: /user/groups/<ID>/roles
-:Method: POST
-:Description: assign a role to a user group
-:Request Format: 
-:Parameters:  :roleId: the id of the role
-:Inputschema: 
-:Response: 200 
-:Error Codes:
-    :401: If the user is not authorized to assign this role
-
-Load Roles for User Group
-`````````````````````````
-:Resource: /user/groups/<ID>/roles
+Load Roles for User or User Group
+`````````````````````````````````
+:Resource: - /user/groups/<path>/roles for user group
+           - /user/users/<ID>/roles for user
 :Method: GET
 :Description: Returns a list of all roles assigned to the given user group
-:Response: 200 array of Role_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.RoleAssignmentList+xml:  if set the role assignment list  is returned in xml format (see Role_)
+         :application/vnd.ez.api.RoleAssignmentList+json:  if set the role assignment list  is returned in json format (see Role_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Role_      
+
 :Error Codes:
     :401: If the user has no permission to read roles
 
-Remove Role from User Group
-```````````````````````````
-:Resource: /user/groups/<ID>/roles/<ID>
+XML Example
+'''''''''''
+
+::
+
+    GET /user/groups/1/5/65/roles HTTP/1.1
+    Accept: application/vnd.ez.api.RoleAssignmentList+xml
+    
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.RoleAssignmentList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleAssignmentList+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="vnd.ez.api.RoleAssignment+xml">
+        <Role href="/user/roles/5" media-type="vnd.ez.api.Role+xml"/>
+      </RoleAssignment>
+      <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="vnd.ez.api.RoleAssignment+xml">
+        <limitation identifier="Subtree">
+          <values>/1/23/88 /1/32/67</values>
+        </limitation>
+        <Role href="/user/roles/7" media-type="vnd.ez.api.Role+xml"/>
+      </RoleAssignment>
+    </RoleAssignmentList>
+
+
+Assign Role to User or User Group
+`````````````````````````````````
+:Resource: - /user/groups/<path>/roles for user group
+           - /user/users/<ID>/roles for user
+:Method: POST
+:Description: assign a role to a user or user group.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.RoleAssignmentList+xml:  if set the updated role assignment list  is returned in xml format (see Role_)
+         :application/vnd.ez.api.RoleAssignmentList+json:  if set the updated role assignment list  is returned in json format (see Role_)
+    :Content-Type:
+         :application/vnd.ez.api.RoleAssignInput+json: the RoleAssignInput_  schema encoded in json
+         :application/vnd.ez.api.RoleAssignInput+xml: the RoleAssignInput_  schema encoded in xml
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Role_      
+
+:Error Codes:
+    :401: If the user is not authorized to assign this role
+    :403: If the role is already assigned to the user or user group
+
+XML Example
+'''''''''''
+
+::
+
+    POST /user/groups/1/5/65/roles HTTP/1.1
+    Accept: application/vnd.ez.api.RoleAssignmentList+xml
+    Content-Type:  application/vnd.ez.api.RoleAssignInput+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleAssignInput>
+      <Role href="/user/role/11" media-type="vnd.ez.api.RoleAssignInput+xml"/>
+      <limitation identifier="Section">
+        <values>1 4</values>
+      </limitation>
+    </RoleAssignInput>
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.RoleAssignmentList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleAssignmentList+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="vnd.ez.api.RoleAssignment+xml">
+        <Role href="/user/roles/5" media-type="vnd.ez.api.Role+xml"/>
+      </RoleAssignment>
+      <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="vnd.ez.api.RoleAssignment+xml">
+        <limitation identifier="Subtree">
+          <values>/1/23/88 /1/32/67</values>
+        </limitation>
+        <Role href="/user/roles/7" media-type="vnd.ez.api.Role+xml"/>
+      </RoleAssignment>
+      <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="vnd.ez.api.RoleAssignment+xml">
+        <limitation identifier="Section">
+          <values>1 4</values>
+        </limitation>
+        <Role href="/user/roles/11" media-type="vnd.ez.api.Role+xml"/>
+      </RoleAssignment>
+    </RoleAssignmentList>
+     
+         
+
+
+Unassign Role from User or User Group
+``````````````````````````````````````
+:Resource: - /user/groups/<path>/roles/<ID> for user group
+           - /user/users/<ID>/roles/<ID> for user 
 :Method: DELETE
-:Description: the given role is removed from the user group
-:Parameters: 
-:Response: 204
+:Description: the given role is removed from the user or user group
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.RoleAssignmentList+xml:  if set the updated role assignment list  is returned in xml format (see Role_)
+         :application/vnd.ez.api.RoleAssignmentList+json:  if set the updated role assignment list  is returned in json format (see Role_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Role_      
+
 :Error Codes:
     :401: If the user is not authorized to delete this content type
 
-Load Role
-`````````
-:Resource: /user/roles/<ID>
-:Method: GET
-:Description: loads a role for the given <ID>
-:Response: 200 Role_
-:Error Codes:
-    :401: If the user has no permission to read roles
+XML Example
+'''''''''''
+
+::
+
+    DELETE /user/groups/1/5/65/roles/7 HTTP/1.1
+    Accept: application/vnd.ez.api.RoleAssignmentList+xml
+    
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.RoleAssignmentList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleAssignmentList+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="vnd.ez.api.RoleAssignment+xml">
+        <Role href="/user/roles/5" media-type="vnd.ez.api.Role+xml"/>
+      </RoleAssignment>
+      <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="vnd.ez.api.RoleAssignment+xml">
+        <limitation identifier="Section">
+          <values>1 4</values>
+        </limitation>
+        <Role href="/user/roles/11" media-type="vnd.ez.api.Role+xml"/>
+      </RoleAssignment>
+    </RoleAssignmentList>
+    
+
 
 Load Policies
 `````````````
 :Resource: /user/roles/<ID>/policies
 :Method: GET
 :Description: loads policies for the given role
-:Response: 200 array of Policy_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.PolicyList+xml:  if set the policy list  is returned in xml format (see Policy_)
+         :application/vnd.ez.api.PolicyList+json:  if set the policy list  is returned in json format (see Policy_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Policy_      
+
+
 :Error Codes:
     :401: If the user has no permission to read roles
     :404: If the role does not exist
+
+
+XML Example
+'''''''''''
+
+::
+
+    GET /user/roles/7/policies HTTP/1.1
+    Accept: application/vnd.ez.api.PolicyList+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.PolicyList+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <PolicyList href="/user/roles/11/policies" media-type="vnd.ez.api.PolicyList">
+      <Policy href="/user/roles/11/policies/45" media-type="vnd.ez.api.Policy+xml">
+        <id>45</id>
+        <module>content</module>
+        <function>create</function>
+        <limitations>
+          <limitation identifier="Class">
+            <values>
+              <ref href="/content/types/10" media-type="vnd.ez.api.ContentType+xml" />
+              <ref href="/content/types/11" media-type="vnd.ez.api.ContentType+xml" />
+              <ref href="/content/types/12" media-type="vnd.ez.api.ContentType+xml" />
+            </values>
+          </limitation>
+          <limitation identifier="ParentClass">
+            <values>
+              <ref href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+            </values>
+          </limitation>
+        </limitations>
+      </Policy>
+      <Policy href="/user/roles/11/policies/49" media-type="vnd.ez.api.Policy+xml">
+        <id>49</id>
+        <module>content</module>
+        <function>read</function>
+        <limitations>
+          <limitation identifier="Section">
+            <values>
+              <ref href="/content/sections/1" media-type="vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/2" media-type="vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
+            </values>
+          </limitation>
+        </limitations>
+      </Policy>
+    </PolicyList>
+
 
 Delete Policies
 ```````````````
 :Resource: /user/roles/<ID>/policies
 :Method: DELETE
 :Description: all policies of the given role are deleted
-:Parameters: 
-:Response: 204
+:Response: 
+
+    ::
+
+        HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this content type
 
@@ -3920,32 +4209,236 @@ Load Policy
 :Resource: /user/roles/<ID>/policies/<ID>
 :Method: GET
 :Description: loads a policy for the given module and function
-:Response: 200 Policy_
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Policy+xml:  if set the policy is returned in xml format (see Policy_)
+         :application/vnd.ez.api.Policy+json:  if set the policy is returned in json format (see Policy_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Policy_      
+
 :Error Codes:
     :401: If the user has no permission to read roles
     :404: If the role or policy does not exist
 
-Create or Update Policy
-```````````````````````
+
+XML Example
+'''''''''''
+
+::
+
+    GET /user/roles/7/policies/45 HTTP/1.1
+    Accept: application/vnd.ez.api.Policy+xml
+
+    HTTP/1.1 200 OK
+    Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
+    ETag: "697850469873045967"
+    Content-Type: application/vnd.ez.api.Policy+xml
+    Content-Length: xxx
+
+    <Policy href="/user/roles/11/policies/45" media-type="vnd.ez.api.Policy+xml">
+      <id>45</id>
+      <module>content</module>
+      <function>create</function>
+      <limitations>
+        <limitation identifier="Class">
+          <values>
+            <ref href="/content/types/10" media-type="vnd.ez.api.ContentType+xml" />
+            <ref href="/content/types/11" media-type="vnd.ez.api.ContentType+xml" />
+            <ref href="/content/types/12" media-type="vnd.ez.api.ContentType+xml" />
+          </values>
+        </limitation>
+        <limitation identifier="ParentClass">
+          <values>
+            <ref href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+          </values>
+        </limitation>
+      </limitations>
+    </Policy>
+
+     
+
+Create Policy
+`````````````
 :Resource: /user/roles/<ID>/policies/<ID>
-:Method: PUT
-:Description: Creates or updates a policy for the given module/function
-:Request Format: application/json
-:Parameters: 
-:Inputschema: PolicyInput_
-:Response: 200 Policy_
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Description: updates a policy 
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Policy+xml:  if set the updated policy is returned in xml format (see Policy_)
+         :application/vnd.ez.api.Policy+json:  if set the updated policy is returned in json format (see Policy_)
+    :Content-Type:
+         :application/vnd.ez.api.PolicyCreate+xml:  if set the updated policy is returned in xml format (see Policy_)
+         :application/vnd.ez.api.PolicyCreate+json:  if set the updated policy is returned in json format (see Policy_)
+
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>/policies/<newId>
+          Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
+          ETag: "<new_etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Policy_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to update or create the policy
+    :401: If the user is not authorized to create the policy
     :404: If the role does not exist
+
+
+XML Example
+'''''''''''
+
+::
+
+    POST /user/roles/7/policies HTTP/1.1
+    Content-Type: application/vnd.ez.api.PolicyCreate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <PolicyCreate>
+      <module>content</module>
+      <function>create</function>
+      <limitations>
+        <limitation identifier="Class">
+          <values>
+            <ref href="/content/types/13"/>
+          </values>
+        </limitation>
+        <limitation identifier="ParentClass">
+          <values>
+            <ref href="/content/types/12"/>
+          </values>
+        </limitation>
+      </limitations>
+    </PolicyCreate>
+     
+    HTTP/1.1 201 Created
+    Location: /user/roles/7/policies/55
+    Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
+    ETag: "697850469873043234234"
+    Content-Type: application/vnd.ez.api.Policy+xml
+    Content-Length: xxx
+
+    <Policy href="/user/roles/11/policies/55" media-type="vnd.ez.api.Policy+xml">
+      <id>55</id>
+      <module>content</module>
+      <function>create</function>
+      <limitations>
+        <limitation identifier="Class">
+          <values>
+            <ref href="/content/types/13"/>
+          </values>
+        </limitation>
+        <limitation identifier="ParentClass">
+          <values>
+            <ref href="/content/types/12"/>
+          </values>
+        </limitation>
+      </limitations>
+     </Policy>
+        
+
+Update Policy
+`````````````
+:Resource: /user/roles/<ID>/policies/<ID>
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Description: updates a policy 
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Policy+xml:  if set the updated policy is returned in xml format (see Policy_)
+         :application/vnd.ez.api.Policy+json:  if set the updated policy is returned in json format (see Policy_)
+    :Content-Type:
+         :application/vnd.ez.api.PolicyUpdate+xml:  if set the updated policy is returned in xml format (see Policy_)
+         :application/vnd.ez.api.PolicyUpdate+json:  if set the updated policy is returned in json format (see Policy_)
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
+          ETag: "<new_etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Policy_      
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to update the policy
+    :404: If the role does not exist
+
+XML Example
+'''''''''''
+
+::
+
+    PATCH /user/roles/7/policies/55 HTTP/1.1
+    Accept: application/vnd.ez.api.Policy+xml
+    Content-Type: application/vnd.ez.api.PolicyUpdate+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <PolicyUpdate>
+      <limitations>
+        <limitation identifier="Class">
+          <values>
+            <ref href="/content/types/14"/>
+          </values>
+        </limitation>
+        <limitation identifier="ParentClass">
+          <values>
+            <ref href="/content/types/10"/>
+          </values>
+        </limitation>
+      </limitations>
+    </PolicyUpdate>
+
+    HTTP/1.1 200 OK
+    Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
+    ETag: "697850469873043234234"
+    Content-Type: application/vnd.ez.api.Policy+xml
+    Content-Length: xxx
+
+    <Policy href="/user/roles/11/policies/55" media-type="vnd.ez.api.Policy+xml">
+      <id>55</id>
+      <module>content</module>
+      <function>create</function>
+      <limitations>
+        <limitation identifier="Class">
+          <values>
+            <ref href="/content/types/14"/>
+          </values>
+        </limitation>
+        <limitation identifier="ParentClass">
+          <values>
+            <ref href="/content/types/10"/>
+          </values>
+        </limitation>
+      </limitations>
+     </Policy>
+    
 
 Delete Policy
 `````````````
 :Resource: /user/roles/<ID>/policies/<ID>
 :Method: DELETE
+:Response: 
+
+    ::
+
+        HTTP/1.1 204 No Content
+
 :Description: the given policy is deleted
-:Parameters: 
-:Response: 204
 :Error Codes:
     :401: If the user is not authorized to delete this content type
     :404: If the role or policy does not exist
@@ -6061,45 +6554,243 @@ User XML Schema
 
 .. _Limitation:
 
-Limitation JSON Schema
-----------------------
+Limitation XML Schema
+---------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:simpleType name="limitationIdentifierType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Class" />
+          <xsd:enumeration value="Language" />
+          <xsd:enumeration value="Node" />
+          <xsd:enumeration value="Owner" />
+          <xsd:enumeration value="ParentOwner" />
+          <xsd:enumeration value="ParentClass" />
+          <xsd:enumeration value="ParentDepth" />
+          <xsd:enumeration value="Section" />
+          <xsd:enumeration value="Siteaccess" />
+          <xsd:enumeration value="State" />
+          <xsd:enumeration value="Subtree" />
+          <xsd:enumeration value="Group" />
+          <xsd:enumeration value="ParentGroup" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:simpleType name="roleLimitationIdentifierType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Section" />
+          <xsd:enumeration value="Subtree" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:complexType name="roleLimitationType">
+        <xsd:all>
+          <xsd:element name="values" type="stringList" />
+        </xsd:all>
+        <xsd:attribute name="identifier" type="roleLimitationIdentifierType" />
+      </xsd:complexType>
+
+      <xsd:complexType name="limitationType">
+        <xsd:all>
+          <xsd:element name="values" type="refValueList" />
+        </xsd:all>
+        <xsd:attribute name="identifier" type="limitationIdentifierType" />
+      </xsd:complexType>
+
+      <xsd:complexType name="limitationListType">
+        <xsd:sequence>
+          <xsd:element name="limitation" type="limitationType"
+            maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+      
+    </xsd:schema>
 
 
 .. _Policy:
+.. _PolicyCreate:
+.. _PolicyUpdate:
 
-Policy JSON Schema
-------------------
+Policy XML Schema
+-----------------
 
-.. _PolicyInput:
+.. code:: xml
 
-PolicyInput JSON Schema
------------------------
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="Limitation.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.Policy">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:string" />
+              <xsd:element name="module" type="xsd:string" />
+              <xsd:element name="function" type="xsd:string" />
+              <xsd:element name="limitations" type="limitationListType"></xsd:element>
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.PolityCreate">
+        <xsd:all>
+          <xsd:element name="module" type="xsd:string" />
+          <xsd:element name="function" type="xsd:string" />
+          <xsd:element name="limitations" type="limitationListType"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.PolityUpdate">
+        <xsd:all>
+          <xsd:element name="limitations" type="limitationListType"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.PolicyList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="Policy" type="vnd.ez.api.Policy"
+                maxOccurs="unbounded" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="Policy" type="vnd.ez.api.Policy"/>
+      <xsd:element name="PolicyList" type="vnd.ez.api.PolicyList"/>
+      <xsd:element name="PolicyCreate" type="vnd.ez.api.PolityCreate"/>
+      <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolityUpdate"/>
+    </xsd:schema>
+
 
 .. _Role:
 
-Role JSON Schema
-----------------
+Role XML Schema
+---------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="Limitation.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.RoleInput">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                String identifier of the role
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="mainLanguageCode" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="names" type="multiLanguageValuesType"
+            minOccurs="0" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType"
+            minOccurs="0" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.Role">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="identifier" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    String identifier of the role
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="mainLanguageCode" type="xsd:string"
+                minOccurs="0" />
+              <xsd:element name="names" type="multiLanguageValuesType"
+                minOccurs="0" />
+              <xsd:element name="descriptions" type="multiLanguageValuesType"
+                minOccurs="0" />
+              <xsd:element name="Policies" type="ref" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.RoleList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="Role" type="vnd.ez.api.Role"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.RoleAssignInput">
+        <xsd:all>
+          <xsd:element name="Role" type="ref" />
+          <xsd:element name="limitation" type="roleLimitationType" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.RoleAssignment">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="limitation" type="roleLimitationType" />
+              <xsd:element name="Role" type="ref"/>
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.RoleAssignmentList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="RoleAssignment" type="vnd.ez.api.RoleAssignment" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      
+      <xsd:element name="RoleInput" type="vnd.ez.api.RoleInput"/>
+      <xsd:element name="Role" type="vnd.ez.api.Role"/>
+      <xsd:element name="RoleAssignInput" type="vnd.ez.api.RoleAssignInput"/>
+      <xsd:element name="RoleAssignmentList" type="vnd.ez.api.RoleAssignmentList"/>
+    </xsd:schema>
 
 
 .. _ErrorMessage:
 
-ErrorMessage JSON Schema
-------------------------
+ErrorMessage XML Schema
+-----------------------
 
-::
+.. code:: xml
 
-    {
-        "name":"ErrorMessage",
-        "properties: {
-            "errorCode": {
-                "required" : true
-                "type":"integer"
-            }
-            "errorMessage": {
-                "type":"string"
-            }
-            "errorDescription": {
-                "type":"string"
-            }
-        }
-    }
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.ErrorMessage">
+        <xsd:all>
+          <xsd:element name="errorCode" type="xsd:string"></xsd:element>
+          <xsd:element name="errorMessage" type="xsd:string"></xsd:element>
+          <xsd:element name="errorDescription" type="xsd:string"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ErrorMessage" type="vnd.ez.api.ErrorMessage"></xsd:element>
+    </xsd:schema>
+
