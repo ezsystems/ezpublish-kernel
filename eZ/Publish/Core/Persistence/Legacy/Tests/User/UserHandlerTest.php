@@ -119,9 +119,10 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
         $handler->create( $user = $this->getValidUser() );
 
+        $users = $handler->loadByLogin( $user->login );
         $this->assertEquals(
             $user,
-            $handler->loadByLogin( $user->login )
+            $users[0]
         );
     }
 
@@ -141,9 +142,10 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
         $handler->create( $user = $this->getValidUser() );
 
+        $users = $handler->loadByLogin( $user->email, true );
         $this->assertEquals(
             $user,
-            $handler->loadByLogin( $user->email, true )
+            $users[0]
         );
     }
 

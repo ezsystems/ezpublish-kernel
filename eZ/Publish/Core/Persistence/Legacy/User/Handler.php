@@ -88,7 +88,7 @@ class Handler implements BaseUserHandler
             throw new NotFound( 'user', $userId );
         }
 
-        return $this->mapper->mapUser( $data );
+        return $this->mapper->mapUser( reset( $data ) );
     }
 
     /**
@@ -107,7 +107,7 @@ class Handler implements BaseUserHandler
             throw new NotFound( 'user', $login );
         }
 
-        return $this->mapper->mapUser( $data );
+        return $this->mapper->mapUsers( $data );
     }
 
     /**
