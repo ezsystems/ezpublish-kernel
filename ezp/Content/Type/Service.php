@@ -161,8 +161,7 @@ class Service extends BaseService
             if ( in_array( $fieldDefinition->identifier, $identifiers ) )
                 throw new InvalidArgumentValue( '$field->identifier', "{$fieldDefinition->identifier} (already exists)" );
 
-            $fieldDefStruct = $fieldDefinition->getState( 'properties' );
-            $fieldDefStruct->defaultValue = $fieldDefinition->type->getDefaultDefaultValue();
+            $fieldDefStruct = $this->prepareFieldDefinitionStruct( $fieldDefinition );
             $struct->fieldDefinitions[] = $fieldDefStruct;
             $identifiers[] = $fieldDefStruct->identifier;
         }
@@ -448,8 +447,7 @@ class Service extends BaseService
                 throw new InvalidArgumentValue( '$field->identifier', "{$field->identifier} (already exists)" );
         }
 
-        $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->getDefaultDefaultValue();
+        $fieldDefStruct = $this->prepareFieldDefinitionStruct( $field );
         $fieldDefStruct = $this->handler->contentTypeHandler()->addFieldDefinition(
             $type->id,
             $type->status,
@@ -521,8 +519,7 @@ class Service extends BaseService
                 throw new InvalidArgumentValue( '$field->identifier', "{$field->identifier} (already exists on another field)" );
         }
 
-        $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->getDefaultDefaultValue();
+        $fieldDefStruct = $this->prepareFieldDefinitionStruct( $field );
         $this->handler->contentTypeHandler()->updateFieldDefinition(
             $type->id,
             $type->status,
@@ -632,5 +629,22 @@ class Service extends BaseService
             )
         );
         return $group;
+    }
+
+    /**
+     * Prepare field definition struct
+     *
+     * @param \ezp\Content\Type\FieldDefinition $fieldDefinition
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    private function prepareFieldDefinitionStruct( FieldDefinition $fieldDefinition )
+    {
+        $fieldDefinitionStruct = $fieldDefinition->getState( 'properties' );
+        // @FIXME: the default value of the field definition must first be inspected
+        // and only if it is not set, using the getDefaultDefaultValue() of the type.
+        $fieldDefinitionStruct->defaultValue = $fieldDefinition->type->getDefaultDefaultValue();
+
+        return $fieldDefinitionStruct;
     }
 }
