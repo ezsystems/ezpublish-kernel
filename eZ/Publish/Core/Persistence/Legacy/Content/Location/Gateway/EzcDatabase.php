@@ -119,6 +119,7 @@ class EzcDatabase extends Gateway
         $query
             ->select(
                 $this->handler->quoteColumn( 'node_id' ),
+                $this->handler->quoteColumn( 'parent_node_id' ),
                 $this->handler->quoteColumn( 'path_string' )
             )
             ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -136,7 +137,12 @@ class EzcDatabase extends Gateway
         foreach ( $rows as $row )
         {
             $newLocation = str_replace( $oldParentLocation, $toPathString, $row['path_string'] );
-            $newParentId = (int) implode( '', array_slice( explode( '/', $newLocation ), -3, 1 ) );
+
+            $newParentId = $row['parent_node_id'];
+            if ( $row['path_string'] === $fromPathString )
+            {
+                $newParentId = (int) implode( '', array_slice( explode( '/', $newLocation ), -3, 1 ) );
+            }
 
             $query = $this->handler->createUpdateQuery();
             $query
