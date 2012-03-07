@@ -92,14 +92,14 @@ class Handler implements BaseContentHandler
             $struct
         );
 
-        $content->id = $this->contentGateway->insertContentObject( $struct );
+        $content->contentInfo->contentId = $this->contentGateway->insertContentObject( $struct );
 
-        $content->version = $this->mapper->createVersionForContent( $content, 1 );
-        $content->version->id = $this->contentGateway->insertVersion(
-            $content->version, $struct->fields, $content->alwaysAvailable
+        $content->versionInfo = $this->mapper->createVersionInfoForContent( $content, 1 );
+        $content->versionInfo->id = $this->contentGateway->insertVersion(
+            $content->versionInfo, $struct->fields, $content->contentInfo->isAlwaysAvailable
         );
-        $content->version->fields = $struct->fields;
-        $content->version->name = $struct->name;
+        $content->fields = $struct->fields;
+        $content->versionInfo->names = $struct->name;
 
         $this->fieldHandler->createNewFields( $content );
 
@@ -114,11 +114,11 @@ class Handler implements BaseContentHandler
         }
 
         // Create name
-        foreach ( $content->version->name as $language => $name )
+        foreach ( $content->versionInfo->names as $language => $name )
         {
             $this->contentGateway->setName(
-                $content->id,
-                $content->version->versionNo,
+                $content->contentInfo->contentId,
+                $content->versionInfo->versionNo,
                 $name, $language
             );
         }
@@ -182,7 +182,7 @@ class Handler implements BaseContentHandler
         $fields = $content->fields;
 
         // Create new version
-        $content->versionInfo = $this->mapper->createVersionForContent(
+        $content->versionInfo = $this->mapper->createVersionInfoForContent(
             $content,
             $content->versionInfo->versionNo + 1
         );
