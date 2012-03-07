@@ -136,6 +136,7 @@ class EzcDatabase extends Gateway
         foreach ( $rows as $row )
         {
             $newLocation = str_replace( $oldParentLocation, $toPathString, $row['path_string'] );
+            $newParentId = (int) implode( '', array_slice( explode( '/', $newLocation ), -3, 1 ) );
 
             $query = $this->handler->createUpdateQuery();
             $query
@@ -147,6 +148,10 @@ class EzcDatabase extends Gateway
                 ->set(
                     $this->handler->quoteColumn( 'depth' ),
                     $query->bindValue( substr_count( $newLocation, '/' ) - 2 )
+                )
+                ->set(
+                    $this->handler->quoteColumn( 'parent_node_id' ),
+                    $query->bindValue( $newParentId )
                 )
                 ->where(
                     $query->expr->eq(
