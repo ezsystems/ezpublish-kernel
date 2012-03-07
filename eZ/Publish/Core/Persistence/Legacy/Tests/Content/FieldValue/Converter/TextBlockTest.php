@@ -52,12 +52,12 @@ EOT;
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new TextBlockValue( $this->longText );
+        $value->data = $this->longText;
         $value->sortKey = array( 'sort_key_string' => 'Now that we know who you are' );
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data->text, $storageFieldValue->dataText );
+        self::assertSame( $value->data, $storageFieldValue->dataText );
         self::assertSame( $value->sortKey['sort_key_string'], $storageFieldValue->sortKeyString );
         self::assertSame( 0, $storageFieldValue->sortKeyInt );
     }
@@ -75,8 +75,7 @@ EOT;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock\\Value', $fieldValue->data );
-        self::assertSame( $storageFieldValue->dataText, $fieldValue->data->text );
+        self::assertSame( $storageFieldValue->dataText, $fieldValue->data );
         self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey['sort_key_string'] );
     }
 
@@ -124,7 +123,6 @@ EOT;
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertNull( $fieldDef->fieldTypeConstraints->validators );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock\\Value', $fieldDef->defaultValue->data );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
             array( 'textColumns' => 20 ),

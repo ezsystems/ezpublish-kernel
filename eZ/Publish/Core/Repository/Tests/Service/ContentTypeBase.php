@@ -1000,7 +1000,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable    = true;
         $bodyFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
+                "data" => ''
             )
         );
         //$bodyFieldCreate->validators
@@ -1122,7 +1122,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable    = true;
         $bodyFieldCreate->defaultValue   = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
+                "data" => ''
             )
         );
         //$bodyFieldCreate->validators
@@ -2855,7 +2855,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                 "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
+                 "data" => ""
             )
         );
         //$bodyUpdateStruct->validators
