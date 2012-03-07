@@ -17,7 +17,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content\Relation,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
@@ -95,7 +94,7 @@ class ContentHandlerRelationTest extends HandlerTest
                  // FieldValue object compatible with ezstring
                  'value' => new FieldValue(
                      array(
-                          'data' => new TextLineValue( $textValue )
+                          'data' => $textValue
                      )
                  ),
                  'languageCode' => 'eng-GB',

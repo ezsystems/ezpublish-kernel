@@ -28,7 +28,7 @@ class TextLine implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data->text;
+        $storageFieldValue->dataText = $value->data;
         $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
         // @TODO: This shouldn't be done here, a converter shouldn't add missing data, it should only convert.
         $storageFieldValue->sortKeyInt = 0;
@@ -42,7 +42,7 @@ class TextLine implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new TextLineValue( $value->dataText );
+        $fieldValue->data = $value->dataText;
         // @todo: Feel there is room for some improvement here, to generalize this code across field types.
         $fieldValue->sortKey = array( 'sort_key_string' => $value->sortKeyString );
     }
@@ -64,7 +64,7 @@ class TextLine implements Converter
             $storageDef->dataInt1 = 0;
         }
 
-        $storageDef->dataText1 = $fieldDef->defaultValue->data->text;
+        $storageDef->dataText1 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -82,7 +82,7 @@ class TextLine implements Converter
             );
         }
 
-        $fieldDef->defaultValue->data = new TextLineValue( isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '' );
+        $fieldDef->defaultValue->data = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
     }
 
     /**

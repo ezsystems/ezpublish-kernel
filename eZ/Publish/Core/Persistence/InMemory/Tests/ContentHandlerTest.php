@@ -18,8 +18,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content as ContentDomainObject,
     ezp\Content\Version,
-    ezp\Content\Relation,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
+    ezp\Content\Relation;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -61,7 +60,7 @@ class ContentHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 'value' => new FieldValue(
                     array(
-                        'data' => new TextLineValue( "Welcome" )
+                        'data' => "Welcome"
                     )
                 ),
                 'languageCode' => 'eng-GB',
@@ -115,7 +114,7 @@ class ContentHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
                     array(
-                        "data" => new TextLineValue( "Welcome" )
+                        "data" => "Welcome"
                     )
                 ),
                 'languageCode' => 'eng-GB',
@@ -140,7 +139,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->languageCode );
-        $this->assertEquals( 'Welcome', $field->value->data->text );
+        $this->assertEquals( 'Welcome', $field->value->data );
         $this->assertEquals( $content->version->versionNo, $field->versionNo );
     }
 
@@ -281,7 +280,7 @@ class ContentHandlerTest extends HandlerTest
                 "type" => "ezstring",
                 "value" => new FieldValue(
                     array(
-                        "data" => new TextLineValue( "Welcome2" )
+                        "data" => "Welcome2"
                     )
                 ),
                 "languageCode" => "eng-GB",

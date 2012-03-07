@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -57,7 +56,7 @@ class SearchHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
                     array(
-                        "data" => new TextLineValue( "Welcome" )
+                        "data" => "Welcome"
                     )
                 ),
                 "languageCode" => "eng-GB",
