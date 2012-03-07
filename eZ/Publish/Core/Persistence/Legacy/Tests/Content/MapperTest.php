@@ -114,7 +114,7 @@ class MapperTest extends TestCase
         $content = $this->getContentFixture();
 
         $mapper = $this->getMapper();
-        $version = $mapper->createVersionForContent( $content, 1 );
+        $version = $mapper->createVersionInfoForContent( $content, 1 );
 
         $this->assertPropertiesCorrect(
             array(

@@ -10,12 +10,15 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
@@ -120,16 +123,22 @@ class ContentHandlerTest extends TestCase
                     'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'
                 )
             )->will(
-                $this->returnValue( new Content() )
+                $this->returnValue(
+                    new Content(
+                        array(
+                            'contentInfo' => new ContentInfo
+                        )
+                    )
+                )
             );
         $mapperMock->expects( $this->once() )
-            ->method( 'createVersionForContent' )
+            ->method( 'createVersionInfoForContent' )
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content'
                 )
             )->will(
-                $this->returnValue( new Version() )
+                $this->returnValue( new VersionInfo )
             );
         $mapperMock->expects( $this->once() )
             ->method( 'createLocationCreateStruct' )
@@ -150,7 +159,7 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Version' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
                 $this->isType( 'array' )
             )->will( $this->returnValue( 1 ) );
 
@@ -179,22 +188,22 @@ class ContentHandlerTest extends TestCase
         );
         $this->assertEquals(
             23,
-            $res->id,
+            $res->contentInfo->contentId,
             'Content ID not set correctly'
         );
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\SPI\\Persistence\\Content\\Version',
-            $res->version,
+            '\\eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo',
+            $res->versionInfo,
             'Version infos not created'
         );
         $this->assertEquals(
             1,
-            $res->version->id,
+            $res->versionInfo->id,
             'Version ID not set correctly'
         );
         $this->assertEquals(
             2,
-            count( $res->version->fields ),
+            count( $res->fields ),
             'Fields not set correctly in version'
         );
     }
@@ -205,6 +214,7 @@ class ContentHandlerTest extends TestCase
      */
     public function testPublish()
     {
+        self::markTestIncomplete( 'Reimplement this test with new updateMetadata() and updateContent(). See #EZPNEXT-215' );
         $handler = $this->getPartlyMockedHandler( array( 'update' ) );
 
         $gatewayMock = $this->getGatewayMock();
@@ -262,15 +272,15 @@ class ContentHandlerTest extends TestCase
             ->will( $this->returnValue( $this->getContentFixtureForDraft() ) );
 
         $mapperMock->expects( $this->once() )
-            ->method( 'createVersionForContent' )
+            ->method( 'createVersionInfoForContent' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
                 $this->equalTo( 3 )
-            )->will( $this->returnValue( new Version() ) );
+            )->will( $this->returnValue( new VersionInfo ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Version' ) )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ) )
             ->will( $this->returnValue( 42 ) );
 
         $fieldHandlerMock->expects( $this->once() )
@@ -280,7 +290,7 @@ class ContentHandlerTest extends TestCase
         $result = $handler->createDraftFromVersion( 23, 2 );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Version',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo',
             $result
         );
         $this->assertEquals(
@@ -331,7 +341,7 @@ class ContentHandlerTest extends TestCase
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadErrorNotFound()
     {
@@ -355,14 +365,16 @@ class ContentHandlerTest extends TestCase
      */
     protected function getContentFixtureForDraft()
     {
-        $content = new Content();
-        $content->version = new Version();
-        $content->version->versionNo = 2;
+        $content = new Content;
+        $content->versionInfo = new VersionInfo;
+        $content->versionInfo->versionNo = 2;
 
-        $field = new Field();
+        $content->contentInfo = new ContentInfo;
+
+        $field = new Field;
         $field->versionNo = 2;
 
-        $content->version->fields = array( $field );
+        $content->fields = array( $field );
 
         return $content;
     }
@@ -373,17 +385,17 @@ class ContentHandlerTest extends TestCase
      */
     public function testUpdateContent()
     {
-        $handler = $this->getPartlyMockedHandler( array( 'load' ) );
+        $handler = $this->getPartlyMockedHandler( array( 'load', 'loadContentInfo' ) );
 
         $gatewayMock = $this->getGatewayMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
         $gatewayMock->expects( $this->once() )
             ->method( 'updateContent' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' ) );
+            ->with( 14, $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct' ) );
         $gatewayMock->expects( $this->once() )
             ->method( 'updateVersion' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' ) );
+            ->with( 14, 4, $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' ) );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'updateFields' )
@@ -395,13 +407,18 @@ class ContentHandlerTest extends TestCase
             ->method( 'load' )
             ->with( 14, 4 );
 
-        $result = $handler->update(
+        $handler->expects( $this->at( 1 ) )
+            ->method( 'loadContentInfo' )
+            ->with( 14 );
+
+        $resultContent = $handler->updateContent(
+            14, // ContentId
+            4, // VersionNo
             new UpdateStruct(
                 array(
-                    'id' => 14,
-                    'versionNo' => 4,
                     'creatorId' => 14,
-                    'ownerId' => 14,
+                    'modificationDate' => time(),
+                    'initialLanguageId' => 2,
                     'fields' => array(
                         new Field(
                             array(
@@ -420,6 +437,18 @@ class ContentHandlerTest extends TestCase
                             )
                         ),
                     )
+                )
+            )
+        );
+
+        $resultContentInfo = $handler->updateMetadata(
+            14, // ContentId
+            new MetadataUpdateStruct(
+                array(
+                    'ownerId' => 14,
+                    'name' => 'Some name',
+                    'modificationDate' => time(),
+                    'alwaysAvailable' => true
                 )
             )
         );
