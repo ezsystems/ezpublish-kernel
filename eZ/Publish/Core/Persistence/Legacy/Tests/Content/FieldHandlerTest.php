@@ -10,10 +10,12 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
@@ -141,7 +143,7 @@ class FieldHandlerTest extends TestCase
             ->method( 'storeFieldData' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
-        $fieldHandler->updateFields( $this->getUpdateStructFixture() );
+        $fieldHandler->updateFields( 42, 3, $this->getUpdateStructFixture() );
     }
 
     /**
@@ -172,7 +174,7 @@ class FieldHandlerTest extends TestCase
                 $this->isInstanceOf(
                     'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' )
+                42
             );
 
         $storageHandlerMock = $this->getStorageHandlerMock();
@@ -180,7 +182,7 @@ class FieldHandlerTest extends TestCase
             ->method( 'storeFieldData' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
-        $fieldHandler->updateFields( $this->getUpdateStructFixture() );
+        $fieldHandler->updateFields( 42, 3, $this->getUpdateStructFixture() );
     }
 
     /**
@@ -219,10 +221,11 @@ class FieldHandlerTest extends TestCase
      */
     protected function getContentFixture()
     {
-        $content = new Content();
-        $content->id = 42;
-        $content->version = new Version();
-        $content->version->versionNo = 2;
+        $content = new Content;
+        $content->contentInfo = new ContentInfo;
+        $content->contentInfo->contentId = 42;
+        $content->versionInfo = new VersionInfo;
+        $content->versionInfo->versionNo = 2;
 
         $firstField = new Field();
         $firstField->type = 'some-type';
@@ -231,7 +234,7 @@ class FieldHandlerTest extends TestCase
 
         $secondField = clone $firstField;
 
-        $content->version->fields = array(
+        $content->fields = array(
             $firstField, $secondField
         );
 
@@ -249,8 +252,7 @@ class FieldHandlerTest extends TestCase
 
         $content = $this->getContentFixture();
 
-        $struct->versionNo = 3;
-        $struct->fields = $content->version->fields;
+        $struct->fields = $content->fields;
 
         return $struct;
     }

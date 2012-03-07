@@ -655,15 +655,15 @@ class EzcDatabase extends Gateway
     /**
      * Updates an existing, non-translatable field
      *
-     * @param Field $field
-     * @param StorageFieldValue $value
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param int $contentId
      * @return void
      */
     public function updateNonTranslatableField(
         Field $field,
         StorageFieldValue $value,
-        UpdateStruct $content )
+        $contentId )
     {
         // Note, no need to care for language_id here, since Content->$alwaysAvailable
         // cannot change on update
@@ -677,7 +677,7 @@ class EzcDatabase extends Gateway
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                    $q->bindValue( $content->id, null, \PDO::PARAM_INT )
+                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'version' ),

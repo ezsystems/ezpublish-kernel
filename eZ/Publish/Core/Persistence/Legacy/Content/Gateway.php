@@ -112,15 +112,15 @@ abstract class Gateway
     /**
      * Updates an existing, non-translatable field
      *
-     * @param Field $field
-     * @param StorageFieldValue $value
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param int $contentId
      * @return void
      */
     abstract public function updateNonTranslatableField(
         Field $field,
         StorageFieldValue $value,
-        UpdateStruct $content );
+        $contentId );
 
     /**
      * Load data for a content object

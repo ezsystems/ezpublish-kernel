@@ -109,23 +109,25 @@ class FieldHandler
      */
     public function loadExternalFieldData( Content $content )
     {
-        foreach ( $content->version->fields as $field )
+        foreach ( $content->fields as $field )
         {
             $this->storageHandler->getFieldData( $field );
         }
     }
 
     /**
-     * Updates the fields in $content in the database
+     * Updates the fields in for content identified by $contentId and $versionNo in the database in respect to $updateStruct
      *
-     * @param Content $content
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $updateStruct
      * @return void
      */
-    public function updateFields( UpdateStruct $updateStruct )
+    public function updateFields( $contentId, $versionNo, UpdateStruct $updateStruct )
     {
         foreach ( $updateStruct->fields as $field )
         {
-            $field->versionNo = $updateStruct->versionNo;
+            $field->versionNo = $versionNo;
 
             if (
                 $this->typeGateway->isFieldTranslatable(
@@ -144,7 +146,7 @@ class FieldHandler
                 $this->contentGateway->updateNonTranslatableField(
                     $field,
                     $this->mapper->convertToStorageValue( $field ),
-                    $updateStruct
+                    $contentId
                 );
             }
 

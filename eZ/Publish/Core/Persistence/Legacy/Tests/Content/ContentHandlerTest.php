@@ -400,6 +400,8 @@ class ContentHandlerTest extends TestCase
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'updateFields' )
             ->with(
+                14,
+                4,
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' )
             );
 
