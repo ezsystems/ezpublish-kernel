@@ -32,7 +32,7 @@ class Float implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataFloat = $value->data->value;
+        $storageFieldValue->dataFloat = $value->data;
         $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
     }
 
@@ -44,7 +44,7 @@ class Float implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new FloatValue( $value->dataFloat );
+        $fieldValue->data = $value->dataFloat;
         $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
     }
 
@@ -68,7 +68,7 @@ class Float implements Converter
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
         $storageDef->dataFloat4 = $this->getStorageDefValidatorState( $storageDef->dataFloat1, $storageDef->dataFloat2 );
-        $storageDef->dataFloat3 = $fieldDef->defaultValue->data->value;
+        $storageDef->dataFloat3 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -102,7 +102,7 @@ class Float implements Converter
                 'defaultValue' => $defaultValue
             )
         );
-        $fieldDef->defaultValue->data = new FloatValue( $defaultValue );
+        $fieldDef->defaultValue->data = $defaultValue;
     }
 
     /**
