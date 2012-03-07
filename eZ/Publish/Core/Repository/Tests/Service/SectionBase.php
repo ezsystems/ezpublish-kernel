@@ -289,21 +289,19 @@ abstract class SectionBase extends BaseServiceTest
      */
     public function testAssignSection()
     {
-        self::markTestSkipped( '@todo: Enable when content service is implemented' );
-
         $sectionService = $this->repository->getSectionService();
         $contentService = $this->repository->getContentService();
 
-        $section = $sectionService->loadSection( 2 );
-        $contentInfo = $contentService->loadContentInfo( 57 );
+        $section = $sectionService->loadSection( 1 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
 
-        self::assertEquals( 1, $contentInfo->sectionId );
+        self::assertEquals( 2, $contentInfo->sectionId );
 
         $sectionService->assignSection( $contentInfo, $section );
 
-        $contentInfo = $contentService->loadContentInfo( 57 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
 
-        self::assertEquals( 2, $contentInfo->sectionId );
+        self::assertEquals( $section->id, $contentInfo->sectionId );
     }
 
     /**
