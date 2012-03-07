@@ -15,6 +15,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
@@ -40,12 +41,12 @@ abstract class Gateway
     /**
      * Inserts a new version.
      *
-     * @param Version $version;
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
      * @return int ID
      */
-    abstract public function insertVersion( Version $version, array $fields, $alwaysAvailable );
+    abstract public function insertVersion( VersionInfo $versionInfo, array $fields, $alwaysAvailable );
 
     /**
      * Updates an existing content identified by $contentId in respect to $struct
@@ -90,9 +91,9 @@ abstract class Gateway
      * Only used when a new content object is created. After that, field IDs
      * need to stay the same, only the version number changes.
      *
-     * @param Content $content
-     * @param Field $field
-     * @param StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @return int ID
      */
     abstract public function insertNewField( Content $content, Field $field, StorageFieldValue $value );

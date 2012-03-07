@@ -193,12 +193,12 @@ class EzcDatabase extends Gateway
     /**
      * Inserts a new version.
      *
-     * @param Version $version
+     * @param \eZ\Publish\SPI\Persistence\Content\Version $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
      * @return int ID
      */
-    public function insertVersion( Version $version, array $fields, $alwaysAvailable )
+    public function insertVersion( VersionInfo $versionInfo, array $fields, $alwaysAvailable )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
@@ -208,25 +208,25 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_version', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
-            $q->bindValue( $version->versionNo, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
-            $q->bindValue( $version->modified, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->modificationDate, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'creator_id' ),
-            $q->bindValue( $version->creatorId, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->creatorId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'created' ),
-            $q->bindValue( $version->created, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->creationDate, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
-            $q->bindValue( $version->status, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->status, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
-            $q->bindValue( $version->initialLanguageId, null, \PDO::PARAM_INT )
+            $q->bindValue( $this->languageHandler->getByLocale( $versionInfo->initialLanguageCode )->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
-            $q->bindValue( $version->contentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->contentId, null, \PDO::PARAM_INT )
         )->set(
             // As described in field mapping document
             $this->dbHandler->quoteColumn( 'workflow_event_pos' ),
@@ -527,9 +527,9 @@ class EzcDatabase extends Gateway
      * Only used when a new content object is created. After that, field IDs
      * need to stay the same, only the version number changes.
      *
-     * @param Content $content
-     * @param Field $field
-     * @param StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @return int ID
      */
     public function insertNewField( Content $content, Field $field, StorageFieldValue $value )
@@ -542,7 +542,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_attribute', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
-            $q->bindValue( $content->id, null, \PDO::PARAM_INT )
+            $q->bindValue( $content->contentInfo->contentId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
             $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )
@@ -577,7 +577,7 @@ class EzcDatabase extends Gateway
             $q->bindValue(
                 $this->languageMaskGenerator->generateLanguageIndicator(
                     $field->languageCode,
-                    $content->alwaysAvailable
+                    $content->contentInfo->isAlwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT

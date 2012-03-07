@@ -179,33 +179,33 @@ class Handler implements BaseContentHandler
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
         $content = $this->load( $contentId, $srcVersion );
-        $fields = $content->version->fields;
+        $fields = $content->fields;
 
         // Create new version
-        $content->version = $this->mapper->createVersionForContent(
+        $content->versionInfo = $this->mapper->createVersionForContent(
             $content,
-            $content->version->versionNo + 1
+            $content->versionInfo->versionNo + 1
         );
 
-        $content->version->id = $this->contentGateway->insertVersion(
-            $content->version,
-            $content->version->fields,
-            $content->alwaysAvailable
+        $content->versionInfo->id = $this->contentGateway->insertVersion(
+            $content->versionInfo,
+            $content->fields,
+            $content->contentInfo->isAlwaysAvailable
         );
 
         // Clone fields from previous version and append them to the new one
         // @TODO Manage translations
-        $content->version->fields = array();
+        $content->fields = array();
         foreach ( $fields as $field )
         {
             $newField = clone $field;
-            $newField->versionNo = $content->version->versionNo;
-            $content->version->fields[] = $newField;
+            $newField->versionNo = $content->versionInfo->versionNo;
+            $content->fields[] = $newField;
         }
 
         $this->fieldHandler->createNewFields( $content );
 
-        return $content->version;
+        return $content->versionInfo;
     }
 
     /**

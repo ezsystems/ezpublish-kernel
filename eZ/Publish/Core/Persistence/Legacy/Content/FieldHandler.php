@@ -74,14 +74,14 @@ class FieldHandler
     /**
      * Creates new fields in the database from $content
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @return void
      */
     public function createNewFields( Content $content )
     {
-        foreach ( $content->version->fields as $field )
+        foreach ( $content->fields as $field )
         {
-            $field->versionNo = $content->version->versionNo;
+            $field->versionNo = $content->versionInfo->versionNo;
             $field->id = $this->contentGateway->insertNewField(
                 $content,
                 $field,

@@ -102,19 +102,20 @@ class Mapper
      */
     public function createVersionForContent( Content $content, $versionNo )
     {
-        $version = new Version();
+        $versionInfo = new VersionInfo;
 
-        $version->versionNo = $versionNo;
-        $version->created = time();
-        $version->modified = $version->created;
-        $version->creatorId = $content->ownerId;
+        $versionInfo->versionNo = $versionNo;
+        $versionInfo->creationDate = time();
+        $versionInfo->modificationDate = $versionInfo->created;
+        $versionInfo->creatorId = $content->ownerId;
         // @todo: Is draft version correct?
-        $version->status = Version::STATUS_DRAFT;
-        $version->contentId = $content->id;
+        $versionInfo->status = VersionInfo::STATUS_DRAFT;
+        $versionInfo->contentId = $content->id;
         // @todo Implement real language id for translation
-        $version->initialLanguageId = 2;
+        $versionInfo->languageIds = array( 2 );
+        $versionInfo->initialLanguageCode = 'eng-GB';
 
-        return $version;
+        return $versionInfo;
     }
 
     /**
