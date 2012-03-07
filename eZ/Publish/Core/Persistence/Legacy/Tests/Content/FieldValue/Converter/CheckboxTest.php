@@ -42,12 +42,12 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new CheckboxValue( true );
+        $value->data = true;
         $value->sortKey = array( 'sort_key_int' => 1 );
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( (int)$value->data->bool, $storageFieldValue->dataInt );
+        self::assertSame( (int)$value->data, $storageFieldValue->dataInt );
         self::assertSame( $value->sortKey['sort_key_int'], $storageFieldValue->sortKeyInt );
         self::assertSame( '', $storageFieldValue->sortKeyString );
     }
@@ -66,8 +66,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Value', $fieldValue->data );
-        self::assertSame( (bool)$storageFieldValue->dataInt, $fieldValue->data->bool );
+        self::assertSame( (bool)$storageFieldValue->dataInt, $fieldValue->data );
         self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey['sort_key_int'] );
     }
 
@@ -81,7 +80,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $defaultBool = false;
         $storageFieldDef = new StorageFieldDefinition;
         $defaultValue = new FieldValue;
-        $defaultValue->data = new CheckboxValue( $defaultBool );
+        $defaultValue->data = $defaultBool;
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
@@ -118,8 +117,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Value', $fieldDef->defaultValue->data );
-        self::assertSame( $defaultBool, $fieldDef->defaultValue->data->bool );
+        self::assertSame( $defaultBool, $fieldDef->defaultValue->data );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
             array( 'defaultValue' => $defaultBool ),
