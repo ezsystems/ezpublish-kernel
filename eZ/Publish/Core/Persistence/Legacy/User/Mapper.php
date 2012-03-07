@@ -29,15 +29,32 @@ class Mapper
     public function mapUser( array $data )
     {
         $user = new User();
-        $user->id = $data[0]['contentobject_id'];
-        $user->login = $data[0]['login'];
-        $user->email = $data[0]['email'];
-        $user->passwordHash = $data[0]['password_hash'];
-        $user->hashAlgorithm = $data[0]['password_hash_type'];
-        $user->isEnabled = (bool)$data[0]['is_enabled'];
-        $user->maxLogin = $data[0]['max_login'];
+        $user->id = $data['contentobject_id'];
+        $user->login = $data['login'];
+        $user->email = $data['email'];
+        $user->passwordHash = $data['password_hash'];
+        $user->hashAlgorithm = $data['password_hash_type'];
+        $user->isEnabled = (bool)$data['is_enabled'];
+        $user->maxLogin = $data['max_login'];
 
         return $user;
+    }
+
+    /**
+     * Map data for a set of user data
+     *
+     * @param array $data
+     * @return \eZ\Publish\SPI\Persistence\User\User[]
+     */
+    public function mapUsers( array $data )
+    {
+        $users = array();
+        foreach ( $data as $row )
+        {
+            $users[] = $this->mapUser( $row );
+        }
+
+        return $users;
     }
 
     /**
