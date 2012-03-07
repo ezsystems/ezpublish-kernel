@@ -64,8 +64,9 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new gateway based on $db
      *
-     * @param EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $db
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder $queryBuilder
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(

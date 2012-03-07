@@ -1366,11 +1366,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     )
                 );
             $this->languageHandler = $this->getMock(
-                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
                 array( 'getByLocale' ),
                 array(
                     $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language' )
+                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
                 )
             );
         }
