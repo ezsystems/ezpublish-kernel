@@ -18,6 +18,7 @@ $content->modified = 1313061404;
 $content->published = 1313047907;
 $content->currentVersionNo = 2;
 $content->initialLanguageId = 2;
+$content->status = 1;
 
 $version = new Version();
 $version->id = 675;
@@ -28,6 +29,8 @@ $version->creatorId = 14;
 $version->created = 1313047865;
 $version->status = 3;
 $version->contentId = 226;
+$version->initialLanguageId = 2;
+$version->languageIds = array( 2 );
 $version->fields = array();
 
 $field = new Field();
