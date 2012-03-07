@@ -25,6 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId as CriterionContentId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId as CriterionRemoteId;
 
@@ -907,7 +908,12 @@ class ContentService implements ContentServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters,  $filterOnUserPermissions = true )
     {
+        $searchResult = new SearchResult();
+        $searchResult->query = $query;
+        $searchResult->count = 0;
+        $searchResult->items = array();
 
+        return $searchResult;
     }
 
     /**
@@ -926,7 +932,12 @@ class ContentService implements ContentServiceInterface
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
+        $searchResult = new SearchResult();
+        $searchResult->query = $query;
+        $searchResult->count = 0;
+        $searchResult->items = array();
 
+        return $searchResult;
     }
 
     /**
