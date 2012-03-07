@@ -542,7 +542,7 @@ class ContentService implements ContentServiceInterface
                             "fieldDefinitionId" => $field->fieldDefIdentifier,
                             "type"              => $fieldDefinition->fieldTypeIdentifier,
                             "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                            "language"          => $field->languageCode,
+                            "languageCode"      => $field->languageCode,
                             "versionNo"         => null
                         )
                     );
@@ -570,7 +570,7 @@ class ContentService implements ContentServiceInterface
                             "fieldDefinitionId" => $fieldDefinition->identifier,
                             "type"              => $fieldDefinition->fieldTypeIdentifier,
                             "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                            "language"          => $languageCode,
+                            "languageCode"      => $languageCode,
                             "version"           => null
                         )
                     );
