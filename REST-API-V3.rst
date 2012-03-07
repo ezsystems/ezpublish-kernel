@@ -6,6 +6,97 @@ eZ Publish REST API DRAFT 1.50
 
 .. contents:: Table of Contents
 
+General considerations
+======================
+
+Media Types
+-----------
+
+The methods on resources provide multiple media types in their responses. A media type can be selected in the Accept Header.
+For each xml media type there is a unique name e.g. application/vnd.ez.api.User+xml. In this case the returned xml response
+conforms with the complex type definition with name vnd.ez.api.User in the user.xsd (see User_) xml schema definition file.
+Each JSON schema is implicit derived from the xml schema by making a uniform transformation from XML to JSON as shoen below.
+
+
+Example:
+
+::
+
+    <test attr1="attr1">
+       <value attr2="attr2">value</value>
+       <simpleValue>45</simpleValue>
+    </test>
+
+transforms to:
+
+::
+
+    {
+      "test": {
+        "_attr1": "attr1",
+        "value": {
+          "_attr2": "attr2",
+          "#text": "value"
+        },
+        "simpleValue": "45"
+      }
+    }
+
+Different schemas which induce different media types one on resource can be used to allow to make specific 
+representations optimized for purposes of clients. 
+It is possible to make a new schema for mobile devices for retieving e.g. an article.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="vnd.ez.api.MobileContent">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="Title" type="xsd:string" />
+              <xsd:element name="Summary" type="xsd:string" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="MobileContent" type="vnd.ez.api.MobileContent"/>
+    </xsd:schema>
+
+
+so that
+
+::
+
+   GET /content/objects/23 HTTP/1.1
+   Accept: application/vnd.ez.api.MobileContent+xml
+
+returns:
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <MobileContent href="/content/objects/23" media-type="application/vnd.ez.api.MobileContent+xml">
+      <Title>Title</Title>
+      <Summary>This is a summary</Summary>
+    </MobileContent>
+
+
+
+However in this specification only the standard schemas and media types are defined (see InputOutput_).
+If there is only one media type defined for xml or json, it is also possible to specify
+application/xml or application/json.
+
+URIs
+----
+
+The REST api is designed that the client has not to construct any uri's to resources by itself.
+Starting from the root resources (ListRoot_) every response includes further links to related resources.
+The uris should be used directly as identifiers on the client side and the client should not
+contruct an uri by using an id.  
+
 
 Authentication
 ==============
@@ -64,29 +155,6 @@ The REST API provides authenticating a user by a subject in a client certificate
 Content
 =======
 
-Concepts
---------
-
-This paragraph describes the relationchips between content, versions, drafts, languages and translations and how to use them.
-
-- Content is a composite of metadata and a list of versions.
-- A version is a composite of version metadata and fields.
-- A draft is a version with status DRAFT assigned to a user which is allowed to update the version.
-- Fields can depend on a language. With languages of a content we denote all existing languages in fields of the existing versions.
-- A translation is a result of a translation process and denotes the meta information for this process.
-  The meta information consists of source language, destination language, source version and destination version.
-  With this information it is possible to track translations (e.g. view differences) and to trigger workflows if
-  e.g. the source language has changed and the destination language has to be updated. (Note that in the current kernel
-  there are some restrictions - source language cannot be stored yet but this will change in the future)
-
-
-General considerations
-----------------------
-
-
-Actions and Parameters
-~~~~~~~~~~~~~~~~~~~~~~
-
 
 Overview
 --------
@@ -99,7 +167,6 @@ In the content module there are the root collections objects, locations, trash a
 /                                                     .                   list root resources     .                            .                             
 /content/objects                                      create new content  list/find content       .                            .            
 /content/objects/<ID>                                 -                   load content            update content meta data     delete content   copy content
-/content/objects/<ID>/translations                    create translation  list translations       .                            .                               
 /content/objects/<ID>/<lang_code>                     .                   .                       .                            delete language
                                                                                                                                from content   
 /content/objects/<ID>/versions                        create a new draft  load all versions       .                            .            
@@ -136,7 +203,108 @@ General Error Codes
 :501: The requested method was not implemented yet
 :404: Requested resource was not found
 :405: The request method is not available.  The available methods are returned for this resource
-        
+:406: The request contains an Accept header which is not supported.
+
+.. _ListRoot:
+
+List Root Resources
+~~~~~~~~~~~~~~~~~~~
+
+:Resource: /
+:Method: GET
+:Description: list the root resources of the ez publish installation
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Root+xml:  if set the list is return in xml format (see Root_)
+         :application/vnd.ez.api.Root+json:  if set the list is returned in json format (see Root_)
+:Parameters:
+    :languages: (comma separated list) restricts the output of translatable fields to the given languages
+:Response: 
+
+    .. parsed-literal::
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Root_     
+ 
+XML Example
+```````````
+
+::
+
+    GET / HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.Root+xml
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Root+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Root>
+      <content href="/content/objects" media-type=""/>
+      <contentTypes href="/content/types" media-type="application/vnd.ez.api.ContentTypeInfoList+xml"/>
+      <users href="/user/users" media-type="application/vnd.ez.api.UserRefList+xml"/>
+      <roles href="/user/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
+      <rootLocation href="/content/locations/1" media-type="application/vnd.ez.api.Location+xml"/>
+      <rootUserGroup href="/user/groups/1/3" media-type="application/vnd.ez.api.UserGroup+xml"/>
+      <rootMediaFolder href="/content/locations/1/43" media-type="application/vnd.ez.api.Location+xml"/>
+      <trash href="/content/trash" media-type="application/vnd.ez.api.LocationList+xml"/>
+      <sections href="/content/sections" media-type="application/vnd.ez.api.SectionList+xml"/>
+    </Root>
+
+JSON Example
+````````````
+
+::
+
+    GET / HTTP/1.1
+    Host: api.example.net
+    Accept: application/vnd.ez.api.Root+json
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Root+json
+    Content-Length: xxx
+
+    {
+      "Root": {
+        "content": { "_href": "/content/objects" },
+        "contentTypes": {
+          "_href": "/content/types",
+          "_media-type": "application/vnd.ez.api.ContentTypeInfoList+json"
+        },
+        "users": {
+          "_href": "/user/users",
+          "_media-type": "application/vnd.ez.api.UserRefList+json"
+        },
+        "roles": {
+          "_href": "/user/roles",
+          "_media-type": "application/vnd.ez.api.RoleList+json"
+        },
+        "rootLocation": {
+          "_href": "/content/locations/1",
+          "_media-type": "application/vnd.ez.api.Location+json"
+        },
+        "rootUserGroup": {
+          "_href": "/user/groups/1/5",
+          "_media-type": "application/vnd.ez.api.UserGroup+json"
+        },
+        "rootMediaFolder": {
+          "_href": "/content/locations/1/43",
+          "_media-type": "application/vnd.ez.api.Location+json"
+        }
+        "trash": {
+          "_href": "/content/trash",
+          "_media-type": "application/vnd.ez.api.LocationList+json"
+        },
+        "sections": {
+          "_href": "/content/sections",
+          "_media-type": "application/vnd.ez.api.SectionList+json"
+        }
+      }
+    }
+     
 
 Managing content
 ~~~~~~~~~~~~~~~~
@@ -464,8 +632,6 @@ List/Search Content
 :Description: List/Search content objects (published version)
 :Parameters:
     :q:               (required) query string in lucene format TBD
-    :fields:          comma separated list of fields which should be returned in the items of the response (see Content)
-    :responseGroups:  comma separated lists of predefined field groups (see REST API Spec v1)
     :limit:           only <limit> items will be returned started by offset
     :offset:          offset of the result set
     :sortField:       the field used for sorting TBD.
@@ -486,8 +652,6 @@ Load Content
          :application/vnd.ez.api.ContentInfo+xml:  if set all informations for the content object (excluding the current version) are returned in xml format (see Content_)
          :application/vnd.ez.api.ContentInfo+json:  if set all informations for the content object (excluding the current version) are returned in json format (see Content_)
 :Parameters:
-    :fields: comma separated list of fields which should be returned in the response (see Content_)
-    :responseGroups: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Response: 
 
@@ -1653,7 +1817,7 @@ Perform a query on articles with a specific title.
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <View href="/content/views/ArticleTitleView" media-type="vnd.ez.api.View+xml">
+    <View href="/content/views/ArticleTitleView" media-type="application/vnd.ez.api.View+xml">
       <identifier>ArticleTitleView</identifier>
       <Query>
         <Criteria>
@@ -1676,7 +1840,7 @@ Perform a query on articles with a specific title.
         </SortClauses>
       </Query>
       <Result href="/content/views/view1234/results"
-        media-type="vnd.ez.api.ViewResult+xml">
+        media-type="application/vnd.ez.api.ViewResult+xml">
         <count>1</count>
         <Content href="/content/objects/23" id="23"
           media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123"
@@ -1695,7 +1859,7 @@ Perform a query on articles with a specific title.
                 <versionNo>2</versionNo>
                 <status>PUBLISHED</status>
                 <modificationDate>2001-12-31T12:00:00</modificationDate>
-                <creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+                <creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
                 <creationDate>2001-12-31T12:00:00</creationDate>
                 <initialLanguageCode>eng-UK</initialLanguageCode>
                 <Content href="/content/objects/23"
@@ -1724,7 +1888,7 @@ Perform a query on articles with a specific title.
             media-type="application/vnd.ez.api.Location+xml" />
           <Locations href="/content/objects/23/locations"
             media-type="application/vnd.ez.api.LocationList+xml" />
-          <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <PublishDate>2001-12-31T12:00:00</PublishDate>
           <LastModificationDate>2001-12-31T12:00:00</LastModificationDate>
           <MainLanguageCode>eng-UK</MainLanguageCode>
@@ -1792,7 +1956,7 @@ XML Example
     Content-Length: xxxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <Section href="/content/sections/5" media-type="vnd.ez.api.Section+xml">
+    <Section href="/content/sections/5" media-type="application/vnd.ez.api.Section+xml">
       <sectionId>5</sectionId>
       <identifier>restricted</identifier>
       <name>Restriced</name>
@@ -1837,23 +2001,23 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <SectionList href="/content/sections" media-type="vnd.ez.api.SectionList+xml">
-      <Section href="/content/sections/1" media-type="vnd.ez.api.Section+xml">
+    <SectionList href="/content/sections" media-type="application/vnd.ez.api.SectionList+xml">
+      <Section href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml">
         <sectionId>1</sectionId>
         <identifier>standard</identifier>
         <name>Standard</name>
       </Section>
-      <Section href="/content/sections/2" media-type="vnd.ez.api.Section+xml">
+      <Section href="/content/sections/2" media-type="application/vnd.ez.api.Section+xml">
         <sectionId>2</sectionId>
         <identifier>users</identifier>
         <name>Users</name>
       </Section>
-      <Section href="/content/sections/3" media-type="vnd.ez.api.Section+xml">
+      <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml">
         <sectionId>3</sectionId>
         <identifier>media</identifier>
         <name>Media</name>
       </Section>
-      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml">
+      <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml">
         <sectionId>4</sectionId>
         <identifier>setup</identifier>
         <name>Setup</name>
@@ -1900,7 +2064,7 @@ XML Example
     Content-Length: xxxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <Section href="/content/sections/3" media-type="vnd.ez.api.Section+xml">
+    <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml">
       <sectionId>3</sectionId>
       <identifier>media</identifier>
       <name>Media</name>
@@ -2129,8 +2293,8 @@ XML Example
       <identifier>newContentTypeGroup</identifier>
       <created>2012-02-31T12:45:00</created>
       <modified>2012-02-31T12:45:00</modified>
-      <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
-      <Modifier href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
+      <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+      <Modifier href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
       <ContentTypes href="/content/typegroups/7/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
     </ContentTypeGroup>
      
@@ -2176,8 +2340,8 @@ XML Example
         <identifier>Content</identifier>
         <created>2010-06-31T12:00:00</created>
         <modified>2010-07-31T12:00:00</modified>
-        <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
-        <Modifier href="/users/user/6" media-type="application/vnd.ez.api.User+xml"/>
+        <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+        <Modifier href="/user/users/6" media-type="application/vnd.ez.api.User+xml"/>
         <ContentTypes href="/content/typegroups/1/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
       </ContentTypeGroup>
       <ContentTypeGroup href="/content/typegroups/2" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
@@ -2185,8 +2349,8 @@ XML Example
         <identifier>Media</identifier>
         <created>2010-06-31T14:00:00</created>
         <modified>2010-09-31T12:00:00</modified>
-        <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
-        <Modifier href="/users/user/9" media-type="application/vnd.ez.api.User+xml"/>
+        <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+        <Modifier href="/user/users/9" media-type="application/vnd.ez.api.User+xml"/>
         <ContentTypes href="/content/typegroups/2/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
       </ContentTypeGroup>
     </ContentTypeGroupList>
@@ -2274,8 +2438,8 @@ XML Example
       <identifier>updatedIdentifer</identifier>
       <created>2012-02-31T12:45:00</created>
       <modified>2012-04-13T12:45:00</modified>
-      <Creator href="/users/user/13" media-type="application/vnd.ez.api.User+xml"/>
-      <Modifier href="/users/user/8" media-type="application/vnd.ez.api.User+xml"/>
+      <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+      <Modifier href="/user/users/8" media-type="application/vnd.ez.api.User+xml"/>
       <ContentTypes href="/content/typegroups/7/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
     </ContentTypeGroup>
      
@@ -2417,7 +2581,7 @@ XML Example
 
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <ContentType href="/content/types/32/draft" media-type="vnd.ez.api.ContentType+xml">
+    <ContentType href="/content/types/32/draft" media-type="application/vnd.ez.api.ContentType+xml">
       <id>32</id>
       <status>DRAFT</status>
       <identifier>newContentType</identifier>
@@ -2429,8 +2593,8 @@ XML Example
       </descriptions>
       <creationDate>2001-01-01T16:37:00</creationDate>
       <modificationDate>2001-01-01T16:37:00</modificationDate>
-      <Creator href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
-      <Modifier href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
+      <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+      <Modifier href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
       <remoteId>remoteId-qwert548</remoteId>
       <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
       <nameSchema>&lt;title&gt;</nameSchema>
@@ -2439,8 +2603,8 @@ XML Example
       <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
       <defaultSortField>PATH</defaultSortField>
       <defaultSortOrder>ASC</defaultSortOrder>
-      <FieldDefinitions href="/content/types/32/draft/fielddefinitions" media-type="vnd.ez.api.FieldDefinitionList+xml">
-        <FieldDefinition href="/content/types/32/draft/fielddefinitions/34" media-type="vnd.ez.api.FieldDefinition+xml">
+      <FieldDefinitions href="/content/types/32/draft/fielddefinitions" media-type="application/vnd.ez.api.FieldDefinitionList+xml">
+        <FieldDefinition href="/content/types/32/draft/fielddefinitions/34" media-type="application/vnd.ez.api.FieldDefinition+xml">
           <id>34</id>
           <identifier>title</identifier>
           <fieldType>ezstring</fieldType>
@@ -2458,7 +2622,7 @@ XML Example
             <value languageCode="eng-US">This is the title</value>
           </descriptions>
         </FieldDefinition>
-        <FieldDefinition href="/content/types/32/draft/fielddefinitions/36" media-type="vnd.ez.api.FieldDefinition+xml">
+        <FieldDefinition href="/content/types/32/draft/fielddefinitions/36" media-type="application/vnd.ez.api.FieldDefinition+xml">
           <id>36</id>
           <identifier>summary</identifier>
           <fieldType>ezxmltext</fieldType>
@@ -2637,7 +2801,7 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <ContentType href="/content/types/32/draft" media-type="vnd.ez.api.ContentType+xml">
+    <ContentType href="/content/types/32/draft" media-type="application/vnd.ez.api.ContentType+xml">
       <id>32</id>
       <status>DRAFT</status>
       <identifier>newContentType</identifier>
@@ -2651,8 +2815,8 @@ XML Example
       </descriptions>
       <creationDate>2001-01-01T16:37:00</creationDate>
       <modificationDate>2001-01-01T16:37:00</modificationDate>
-      <Creator href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
-      <Modifier href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
+      <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+      <Modifier href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
       <remoteId>remoteId-qwert548</remoteId>
       <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
       <nameSchema>&lt;title&gt;</nameSchema>
@@ -3044,14 +3208,14 @@ Creating a top level group
     Accept: application/vnd.ez.api.UserGroup+xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <UserGroup href="/user/groups/1/5" id="5" media-type="vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert001">
-      <ContentType href="/content/types/5" media-type="vnd.ez.api.ContentType+xml" />
+    <UserGroup href="/user/groups/1/5" id="5" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert001">
+      <ContentType href="/content/types/5" media-type="application/vnd.ez.api.ContentType+xml" />
       <name>Users</name>
-      <Versions href="/content/objects/4/versions" media-type="vnd.ez.api.VersionList+xml" />
-      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
-      <MainLocation href="/content/locations/1/5" media-type="vnd.ez.api.Location+xml" />
-      <Locations href="/content/objects/4/locations" media-type="vnd.ez.api.LocationList+xml" />
-      <Owner href="/user/users/13" media-type="vnd.ez.api.User+xml" />
+      <Versions href="/content/objects/4/versions" media-type="application/vnd.ez.api.VersionList+xml" />
+      <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5" media-type="application/vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/4/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/13" media-type="application/vnd.ez.api.User+xml" />
       <publishDate>2011-02-31T16:00:00</publishDate>
       <lastModificationDate>2011-02-31T16:00:00</lastModificationDate>
       <mainLanguageCode>eng-UK</mainLanguageCode>
@@ -3062,7 +3226,7 @@ Creating a top level group
           <versionNo>1</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2011-02-31T16:00:00</modificationDate>
-          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>2011-02-31T16:00:00</creationDate>
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/4" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -3083,9 +3247,9 @@ Creating a top level group
         </Fields>
         <Relations />
       </Content>
-      <SubGroups href="/user/groups/1/5/subgroups" media-type="vnd.ez.api.UserGroupList+xml"/>
-      <Users href="/user/groups/1/5/users" media-type="vnd.ez.api.UserList+xml"/>
-      <Roles href="/user/groups/1/5/roles" media-type="vnd.ez.api.RoleList+xml"/>
+      <SubGroups href="/user/groups/1/5/subgroups" media-type="application/vnd.ez.api.UserGroupList+xml"/>
+      <Users href="/user/groups/1/5/users" media-type="application/vnd.ez.api.UserList+xml"/>
+      <Roles href="/user/groups/1/5/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
     </UserGroup>
         
 
@@ -3120,14 +3284,14 @@ Creating a top level group
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <UserGroup href="/user/groups/1/5/65" id="65" media-type="vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
-      <ContentType href="/content/types/5" media-type="vnd.ez.api.ContentType+xml" />
+    <UserGroup href="/user/groups/1/5/65" id="65" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
+      <ContentType href="/content/types/5" media-type="application/vnd.ez.api.ContentType+xml" />
       <name>UserGroup</name>
-      <Versions href="/content/objects/123/versions" media-type="vnd.ez.api.VersionList+xml" />
-      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
-      <MainLocation href="/content/locations/1/5/65" media-type="vnd.ez.api.Location+xml" />
-      <Locations href="/content/objects/123/locations" media-type="vnd.ez.api.LocationList+xml" />
-      <Owner href="/user/users/13" media-type="vnd.ez.api.User+xml" />
+      <Versions href="/content/objects/123/versions" media-type="application/vnd.ez.api.VersionList+xml" />
+      <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5/65" media-type="application/vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/123/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/13" media-type="application/vnd.ez.api.User+xml" />
       <publishDate>2012-02-31T16:00:00</publishDate>
       <lastModificationDate>2012-02-31T16:00:00</lastModificationDate>
       <mainLanguageCode>eng-UK</mainLanguageCode>
@@ -3138,7 +3302,7 @@ Creating a top level group
           <versionNo>2</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2012-02-31T16:00:00</modificationDate>
-          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>2012-02-31T16:00:00</creationDate>
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/123" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -3159,10 +3323,10 @@ Creating a top level group
         </Fields>
         <Relations />
       </Content>
-      <ParentUserGroup href="/user/groups/1/5" media-type="vnd.ez.api.UserGroup+xml" />
-      <SubGroups href="/user/groups/1/5/65/subgroups" media-type="vnd.ez.api.UserGroupList+xml"/>
-      <Users href="/user/groups/1/5/65/users" media-type="vnd.ez.api.UserList+xml"/>
-      <Roles href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleList+xml"/>
+      <ParentUserGroup href="/user/groups/1/5" media-type="application/vnd.ez.api.UserGroup+xml" />
+      <SubGroups href="/user/groups/1/5/65/subgroups" media-type="application/vnd.ez.api.UserGroupList+xml"/>
+      <Users href="/user/groups/1/5/65/users" media-type="application/vnd.ez.api.UserList+xml"/>
+      <Roles href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
     </UserGroup>
 
     
@@ -3223,14 +3387,14 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <UserGroup href="/user/groups/1/5/65" id="65" media-type="vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
-      <ContentType href="/content/types/5" media-type="vnd.ez.api.ContentType+xml" />
+    <UserGroup href="/user/groups/1/5/65" id="65" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
+      <ContentType href="/content/types/5" media-type="application/vnd.ez.api.ContentType+xml" />
       <name>UserGroup</name>
-      <Versions href="/content/objects/123/versions" media-type="vnd.ez.api.VersionList+xml" />
-      <Section href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
-      <MainLocation href="/content/locations/1/5/65" media-type="vnd.ez.api.Location+xml" />
-      <Locations href="/content/objects/123/locations" media-type="vnd.ez.api.LocationList+xml" />
-      <Owner href="/user/users/13" media-type="vnd.ez.api.User+xml" />
+      <Versions href="/content/objects/123/versions" media-type="application/vnd.ez.api.VersionList+xml" />
+      <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+      <MainLocation href="/content/locations/1/5/65" media-type="application/vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/123/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/13" media-type="application/vnd.ez.api.User+xml" />
       <publishDate>2012-02-31T16:00:00</publishDate>
       <lastModificationDate>2012-02-31T16:00:00</lastModificationDate>
       <mainLanguageCode>eng-UK</mainLanguageCode>
@@ -3241,7 +3405,7 @@ XML Example
           <versionNo>3</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2012-03-31T16:00:00</modificationDate>
-          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>2012-03-31T16:00:00</creationDate>
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/123" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -3262,10 +3426,10 @@ XML Example
         </Fields>
         <Relations />
       </Content>
-      <ParentUserGroup href="/user/groups/1/5" media-type="vnd.ez.api.UserGroup+xml" />
-      <SubGroups href="/user/groups/1/5/65/subgroups" media-type="vnd.ez.api.UserGroupList+xml"/>
-      <Users href="/user/groups/1/5/65/users" media-type="vnd.ez.api.UserList+xml"/>
-      <Roles href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleList+xml"/>
+      <ParentUserGroup href="/user/groups/1/5" media-type="application/vnd.ez.api.UserGroup+xml" />
+      <SubGroups href="/user/groups/1/5/65/subgroups" media-type="application/vnd.ez.api.UserGroupList+xml"/>
+      <Users href="/user/groups/1/5/65/users" media-type="application/vnd.ez.api.UserList+xml"/>
+      <Roles href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
     </UserGroup>
 
 
@@ -3424,16 +3588,16 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <User href="/user/users/99" id="99" media-type="vnd.ez.api.User+xml"
+    <User href="/user/users/99" id="99" media-type="application/vnd.ez.api.User+xml"
       remoteId="remoteId-qwert426">
-      <ContentType href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+      <ContentType href="/content/types/4" media-type="application/vnd.ez.api.ContentType+xml" />
       <name>John</name>
-      <Versions href="/content/objects/79" media-type="vnd.ez.api.VersionList+xml" />
-      <Section href="/content/section/3" media-type="vnd.ez.api.Section+xml" />
+      <Versions href="/content/objects/79" media-type="application/vnd.ez.api.VersionList+xml" />
+      <Section href="/content/section/3" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/5/65"
-        media-type="vnd.ez.api.Location+xml" />
-      <Locations href="/content/objects/79/locations" media-type="vnd.ez.api.LocationList+xml" />
-      <Owner href="/user/users/14" media-type="vnd.ez.api.User+xml" />
+        media-type="application/vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/79/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <publishDate>2001-04-01T12:00:00</publishDate>
       <lastModificationDate>2001-04-01T12:00:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
@@ -3447,7 +3611,7 @@ XML Example
           <versionNo>1</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2001-04-01T12:00:00</modificationDate>
-          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>2001-04-01T12:00:00</creationDate>
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/79" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -3465,7 +3629,7 @@ XML Example
           </field>
         </fields>
       </Content>
-      <Roles href="/user/users/99/roles" media-type="vnd.ez.api.RoleAssignmentList+xml" />
+      <Roles href="/user/users/99/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml" />
       <UserGroups href="/user/users/99/group" media-type="vns.ez.api.UserGroupRefList+xml" />
     </User>
 
@@ -3586,16 +3750,16 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <User href="/user/users/99" id="99" media-type="vnd.ez.api.User+xml"
+    <User href="/user/users/99" id="99" media-type="application/vnd.ez.api.User+xml"
       remoteId="remoteId-qwert426">
-      <ContentType href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+      <ContentType href="/content/types/4" media-type="application/vnd.ez.api.ContentType+xml" />
       <name>John</name>
-      <Versions href="/content/objects/79" media-type="vnd.ez.api.VersionList+xml" />
-      <Section href="/content/section/3" media-type="vnd.ez.api.Section+xml" />
+      <Versions href="/content/objects/79" media-type="application/vnd.ez.api.VersionList+xml" />
+      <Section href="/content/section/3" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/5/65"
-        media-type="vnd.ez.api.Location+xml" />
-      <Locations href="/content/objects/79/locations" media-type="vnd.ez.api.LocationList+xml" />
-      <Owner href="/user/users/14" media-type="vnd.ez.api.User+xml" />
+        media-type="application/vnd.ez.api.Location+xml" />
+      <Locations href="/content/objects/79/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <publishDate>2001-04-01T12:00:00</publishDate>
       <lastModificationDate>2001-04-01T12:00:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
@@ -3637,7 +3801,7 @@ XML Example
           </value>
         </field>
       </Content>
-      <Roles href="/user/users/99/roles" media-type="vnd.ez.api.RoleAssignmentList+xml" />
+      <Roles href="/user/users/99/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml" />
       <UserGroups href="/user/users/99/group" media-type="vns.ez.api.UserGroupRefList+xml" />
     </User>
     
@@ -3693,11 +3857,11 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupRefList href="/user/users/45/groups"
-      media-type="vnd.ez.api.UserGroupRefList">
-      <UserGroup href="/user/groups/1/5/34" media-type="vnd.ez.api.UserGroup">
+      media-type="application/vnd.ez.api.UserGroupRefList">
+      <UserGroup href="/user/groups/1/5/34" media-type="application/vnd.ez.api.UserGroup">
         <unassign href="/user/users/45/groups/34" method="DELETE" />
       </UserGroup>
-      <UserGroup href="/user/groups/1/5/78" media-type="vnd.ez.api.UserGroup">
+      <UserGroup href="/user/groups/1/5/78" media-type="application/vnd.ez.api.UserGroup">
         <unassign href="/user/users/45/groups/78" method="DELETE" />
       </UserGroup>
     </UserGroupRefList>
@@ -3741,14 +3905,14 @@ XML Example
     
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupRefList href="/user/users/45/groups"
-      media-type="vnd.ez.api.UserGroupRefList">
-      <UserGroup href="/user/groups/1/5/34" media-type="vnd.ez.api.UserGroup">
+      media-type="application/vnd.ez.api.UserGroupRefList">
+      <UserGroup href="/user/groups/1/5/34" media-type="application/vnd.ez.api.UserGroup">
         <unassign href="/user/users/45/groups/34" method="DELETE" />
       </UserGroup>
-      <UserGroup href="/user/groups/1/5/78" media-type="vnd.ez.api.UserGroup">
+      <UserGroup href="/user/groups/1/5/78" media-type="application/vnd.ez.api.UserGroup">
         <unassign href="/user/users/45/groups/78" method="DELETE" />
       </UserGroup>
-      <UserGroup href="/user/groups/1/5/88" media-type="vnd.ez.api.UserGroup">
+      <UserGroup href="/user/groups/1/5/88" media-type="application/vnd.ez.api.UserGroup">
         <unassign href="/user/users/45/groups/88" method="DELETE" />
       </UserGroup>
     </UserGroupRefList>
@@ -3790,11 +3954,11 @@ XML Example
     
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupRefList href="/user/users/45/groups"
-      media-type="vnd.ez.api.UserGroupRefList">
-      <UserGroup href="/user/groups/1/5/34" media-type="vnd.ez.api.UserGroup">
+      media-type="application/vnd.ez.api.UserGroupRefList">
+      <UserGroup href="/user/groups/1/5/34" media-type="application/vnd.ez.api.UserGroup">
         <unassign href="/user/users/45/groups/34" method="DELETE" />
       </UserGroup>
-      <UserGroup href="/user/groups/1/5/88" media-type="vnd.ez.api.UserGroup">
+      <UserGroup href="/user/groups/1/5/88" media-type="application/vnd.ez.api.UserGroup">
         <unassign href="/user/users/45/groups/88" method="DELETE" />
       </UserGroup>
     </UserGroupRefList>
@@ -3855,9 +4019,9 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <Role href="/user/roles/11" media-type="vnd.ez.api.Role+xml">
+    <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml">
       <identifier>NewRole</identifier>
-      <Policies href="/user/roles/11/policies" media-type="vnd.ez.api.PolicyList+xml"/>
+      <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
     </Role>
         
 
@@ -3984,15 +4148,15 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleAssignmentList+xml">
-      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="vnd.ez.api.RoleAssignment+xml">
-        <Role href="/user/roles/5" media-type="vnd.ez.api.Role+xml"/>
+    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="application/vnd.ez.api.RoleAssignment+xml">
+        <Role href="/user/roles/5" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
-      <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="vnd.ez.api.RoleAssignment+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Subtree">
           <values>/1/23/88 /1/32/67</values>
         </limitation>
-        <Role href="/user/roles/7" media-type="vnd.ez.api.Role+xml"/>
+        <Role href="/user/roles/7" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
     </RoleAssignmentList>
 
@@ -4035,7 +4199,7 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <RoleAssignInput>
-      <Role href="/user/role/11" media-type="vnd.ez.api.RoleAssignInput+xml"/>
+      <Role href="/user/role/11" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
       <limitation identifier="Section">
         <values>1 4</values>
       </limitation>
@@ -4046,21 +4210,21 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleAssignmentList+xml">
-      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="vnd.ez.api.RoleAssignment+xml">
-        <Role href="/user/roles/5" media-type="vnd.ez.api.Role+xml"/>
+    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="application/vnd.ez.api.RoleAssignment+xml">
+        <Role href="/user/roles/5" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
-      <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="vnd.ez.api.RoleAssignment+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Subtree">
           <values>/1/23/88 /1/32/67</values>
         </limitation>
-        <Role href="/user/roles/7" media-type="vnd.ez.api.Role+xml"/>
+        <Role href="/user/roles/7" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
-      <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="vnd.ez.api.RoleAssignment+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Section">
           <values>1 4</values>
         </limitation>
-        <Role href="/user/roles/11" media-type="vnd.ez.api.Role+xml"/>
+        <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
     </RoleAssignmentList>
      
@@ -4102,15 +4266,15 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="vnd.ez.api.RoleAssignmentList+xml">
-      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="vnd.ez.api.RoleAssignment+xml">
-        <Role href="/user/roles/5" media-type="vnd.ez.api.Role+xml"/>
+    <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/5" media-type="application/vnd.ez.api.RoleAssignment+xml">
+        <Role href="/user/roles/5" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
-      <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="vnd.ez.api.RoleAssignment+xml">
+      <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Section">
           <values>1 4</values>
         </limitation>
-        <Role href="/user/roles/11" media-type="vnd.ez.api.Role+xml"/>
+        <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
     </RoleAssignmentList>
     
@@ -4153,36 +4317,36 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <PolicyList href="/user/roles/11/policies" media-type="vnd.ez.api.PolicyList">
-      <Policy href="/user/roles/11/policies/45" media-type="vnd.ez.api.Policy+xml">
+    <PolicyList href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList">
+      <Policy href="/user/roles/11/policies/45" media-type="application/vnd.ez.api.Policy+xml">
         <id>45</id>
         <module>content</module>
         <function>create</function>
         <limitations>
           <limitation identifier="Class">
             <values>
-              <ref href="/content/types/10" media-type="vnd.ez.api.ContentType+xml" />
-              <ref href="/content/types/11" media-type="vnd.ez.api.ContentType+xml" />
-              <ref href="/content/types/12" media-type="vnd.ez.api.ContentType+xml" />
+              <ref href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
+              <ref href="/content/types/11" media-type="application/vnd.ez.api.ContentType+xml" />
+              <ref href="/content/types/12" media-type="application/vnd.ez.api.ContentType+xml" />
             </values>
           </limitation>
           <limitation identifier="ParentClass">
             <values>
-              <ref href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+              <ref href="/content/types/4" media-type="application/vnd.ez.api.ContentType+xml" />
             </values>
           </limitation>
         </limitations>
       </Policy>
-      <Policy href="/user/roles/11/policies/49" media-type="vnd.ez.api.Policy+xml">
+      <Policy href="/user/roles/11/policies/49" media-type="application/vnd.ez.api.Policy+xml">
         <id>49</id>
         <module>content</module>
         <function>read</function>
         <limitations>
           <limitation identifier="Section">
             <values>
-              <ref href="/content/sections/1" media-type="vnd.ez.api.Section+xml" />
-              <ref href="/content/sections/2" media-type="vnd.ez.api.Section+xml" />
-              <ref href="/content/sections/4" media-type="vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/2" media-type="application/vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
             </values>
           </limitation>
         </limitations>
@@ -4243,21 +4407,21 @@ XML Example
     Content-Type: application/vnd.ez.api.Policy+xml
     Content-Length: xxx
 
-    <Policy href="/user/roles/11/policies/45" media-type="vnd.ez.api.Policy+xml">
+    <Policy href="/user/roles/11/policies/45" media-type="application/vnd.ez.api.Policy+xml">
       <id>45</id>
       <module>content</module>
       <function>create</function>
       <limitations>
         <limitation identifier="Class">
           <values>
-            <ref href="/content/types/10" media-type="vnd.ez.api.ContentType+xml" />
-            <ref href="/content/types/11" media-type="vnd.ez.api.ContentType+xml" />
-            <ref href="/content/types/12" media-type="vnd.ez.api.ContentType+xml" />
+            <ref href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
+            <ref href="/content/types/11" media-type="application/vnd.ez.api.ContentType+xml" />
+            <ref href="/content/types/12" media-type="application/vnd.ez.api.ContentType+xml" />
           </values>
         </limitation>
         <limitation identifier="ParentClass">
           <values>
-            <ref href="/content/types/4" media-type="vnd.ez.api.ContentType+xml" />
+            <ref href="/content/types/4" media-type="application/vnd.ez.api.ContentType+xml" />
           </values>
         </limitation>
       </limitations>
@@ -4330,7 +4494,7 @@ XML Example
     Content-Type: application/vnd.ez.api.Policy+xml
     Content-Length: xxx
 
-    <Policy href="/user/roles/11/policies/55" media-type="vnd.ez.api.Policy+xml">
+    <Policy href="/user/roles/11/policies/55" media-type="application/vnd.ez.api.Policy+xml">
       <id>55</id>
       <module>content</module>
       <function>create</function>
@@ -4409,7 +4573,7 @@ XML Example
     Content-Type: application/vnd.ez.api.Policy+xml
     Content-Length: xxx
 
-    <Policy href="/user/roles/11/policies/55" media-type="vnd.ez.api.Policy+xml">
+    <Policy href="/user/roles/11/policies/55" media-type="application/vnd.ez.api.Policy+xml">
       <id>55</id>
       <module>content</module>
       <function>create</function>
@@ -4443,6 +4607,7 @@ Delete Policy
     :401: If the user is not authorized to delete this content type
     :404: If the role or policy does not exist
 
+.. _InputOutput:
 
 Input Output Specification
 ==========================
@@ -4465,6 +4630,23 @@ Common definition which are used from multiple schema definitions
         </xsd:annotation>
         <xsd:attribute name="href" type="xsd:string" />
         <xsd:attribute name="media-type" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:complexType name="refValueList">
+        <xsd:sequence>
+          <xsd:element name="ref" type="ref" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="controllerRef">
+        <xsd:annotation>
+          <xsd:documentation>
+            A base schema for referencing controllers and
+            methods
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="href" type="xsd:string" />
+        <xsd:attribute name="method" type="xsd:string" />
       </xsd:complexType>
 
       <xsd:complexType name="fieldInputValueType">
@@ -4546,6 +4728,33 @@ Common definition which are used from multiple schema definitions
       </xsd:simpleType>
     </xsd:schema>
 
+.. _Root:
+
+Root Resources
+--------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.Root">
+        <xsd:all>
+          <xsd:element name="content" type="ref" />
+          <xsd:element name="contentTypes" type="ref" />
+          <xsd:element name="users" type="ref"/>
+          <xsd:element name="roles" type="ref"/>
+          <xsd:element name="rootLocation" type="ref"/>
+          <xsd:element name="rootUserGroup" type="ref"/>
+          <xsd:element name="rootMediaFolder" type="ref"/>
+          <xsd:element name="trash" type="ref"/>
+          <xsd:element name="sections" type="ref"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="Root" type="vnd.ez.api.Root"/>
+    </xsd:schema>
 
 .. _Content:
 

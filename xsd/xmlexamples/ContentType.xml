@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentType href="/content/types/32/draft" media-type="vnd.ez.api.ContentType+xml">
+<ContentType href="/content/types/32/draft" media-type="application/vnd.ez.api.ContentType+xml">
   <id>32</id>
   <status>DRAFT</status>
   <identifier>newContentType</identifier>
@@ -11,8 +11,8 @@
   </descriptions>
   <creationDate>2001-01-01T16:37:00</creationDate>
   <modificationDate>2001-01-01T16:37:00</modificationDate>
-  <Creator href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
-  <Modifier href="/user/users/13" media-type="vnd.ez.api.User+xml"/>
+  <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+  <Modifier href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
   <remoteId>remoteId-qwert548</remoteId>
   <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
   <nameSchema>&lt;title&gt;</nameSchema>
@@ -21,8 +21,8 @@
   <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
   <defaultSortField>PATH</defaultSortField>
   <defaultSortOrder>ASC</defaultSortOrder>
-  <FieldDefinitions href="/content/types/32/draft/fielddefinitions" media-type="vnd.ez.api.FieldDefinitionList+xml">
-    <FieldDefinition href="/content/types/32/draft/fielddefinitions/34" media-type="vnd.ez.api.FieldDefinition+xml">
+  <FieldDefinitions href="/content/types/32/draft/fielddefinitions" media-type="application/vnd.ez.api.FieldDefinitionList+xml">
+    <FieldDefinition href="/content/types/32/draft/fielddefinitions/34" media-type="application/vnd.ez.api.FieldDefinition+xml">
       <id>34</id>
       <identifier>title</identifier>
       <fieldType>ezstring</fieldType>
@@ -40,7 +40,7 @@
         <value languageCode="eng-US">This is the title</value>
       </descriptions>
     </FieldDefinition>
-    <FieldDefinition href="/content/types/32/draft/fielddefinitions/36" media-type="vnd.ez.api.FieldDefinition+xml">
+    <FieldDefinition href="/content/types/32/draft/fielddefinitions/36" media-type="application/vnd.ez.api.FieldDefinition+xml">
       <id>36</id>
       <identifier>summary</identifier>
       <fieldType>ezxmltext</fieldType>

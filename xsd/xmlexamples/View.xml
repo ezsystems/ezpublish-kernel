@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<View href="/content/views/ArticleTitleView" media-type="vnd.ez.api.View+xml">
+<View href="/content/views/ArticleTitleView" media-type="application/vnd.ez.api.View+xml">
   <identifier>ArticleTitleView</identifier>
   <Query>
     <Criteria>
@@ -22,7 +22,7 @@
     </SortClauses>
   </Query>
   <Result href="/content/views/ArticleTitleView/results"
-    media-type="vnd.ez.api.ViewResult+xml">
+    media-type="application/vnd.ez.api.ViewResult+xml">
     <count>1</count>
     <Content href="/content/objects/23" id="23"
       media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123"

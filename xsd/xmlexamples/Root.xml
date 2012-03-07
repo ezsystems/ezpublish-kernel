@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+  <content href="/content/objects" media-type=""/>
+  <contentTypes href="/content/types" media-type="application/vnd.ez.api.ContentTypeInfoList+xml"/>
+  <users href="/user/users" media-type="application/vnd.ez.api.UserRefList+xml"/>
+  <roles href="/user/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
+  <rootLocation href="/content/locations/1" media-type="application/vnd.ez.api.Location+xml"/>
+  <rootUserGroup href="/user/groups/1/3" media-type="application/vnd.ez.api.UserGroup+xml"/>
+  <rootMediaFolder href="/content/locations/1/43" media-type="application/vnd.ez.api.Location+xml"/>
+  <trash href="/content/trash" media-type="application/vnd.ez.api.LocationList+xml"/>
+  <sections href="/content/sections" media-type="application/vnd.ez.api.SectionList+xml"/>
+</Root>
