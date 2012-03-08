@@ -1148,6 +1148,40 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelationsByVersion()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57, 1 );
+
+        $this->assertEquals( 1, count( $relations ), "Expecting one relation to be loaded" );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_to_contentobject_id',
+            array( 58 ),
+            $relations
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelationsNoResult()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57, 1, \eZ\Publish\API\Repository\Values\Content\Relation::EMBED );
+
+        $this->assertEquals( 0, count( $relations ), "Expecting no relation to be loaded" );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadReverseRelations
      */
     public function testLoadReverseRelations()
