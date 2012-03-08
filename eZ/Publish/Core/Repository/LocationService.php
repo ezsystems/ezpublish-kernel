@@ -334,8 +334,8 @@ class LocationService implements LocationServiceInterface
 
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
-            $offset,
-            $limit > 0 ? $limit : null,
+            $offset > 0 ? (int) $offset : 0,
+            $limit >= 1 ? (int) $limit : null,
             $sortClause
         );
     }

@@ -194,6 +194,9 @@ class UserService implements UserServiceInterface
     {
         $searchQuery = new Query();
 
+        $searchQuery->offset = 0;
+        $searchQuery->limit = null;
+
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
@@ -685,6 +688,9 @@ class UserService implements UserServiceInterface
 
         $searchQuery = new Query();
 
+        $searchQuery->offset = 0;
+        $searchQuery->limit = null;
+
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
@@ -734,8 +740,8 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchQuery->offset = $offset;
-        $searchQuery->limit = $limit;
+        $searchQuery->offset = $offset > 0 ? (int) $offset : 0;
+        $searchQuery->limit = $limit >= 1 ? (int) $limit : null;
 
         $searchQuery->sortClauses = array(
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )
