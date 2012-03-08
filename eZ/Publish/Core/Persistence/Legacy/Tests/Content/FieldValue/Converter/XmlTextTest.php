@@ -21,13 +21,14 @@ use eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
 /**
  * Test case for XmlText converter in Legacy storage
  *
+ * @FIXME: this test is obviously a copy of the AuthorTest and must be adapted to XmlText!
  * @group fieldType
  * @group ezxmltext
  */
 class XmlTextTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText
      */
     protected $converter;
 
@@ -42,9 +43,9 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->converter = new XmlTextConverter;
         $this->authors = array(
-            new Author( array( 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com' ) ),
-            new Author( array( 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz' ) ),
-            new Author( array( 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net' ) )
+            array( 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com' ),
+            array( 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz' ),
+            array( 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net' )
         );
     }
 
@@ -60,7 +61,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new AuthorValue( $this->authors );
+        $value->data = $this->authors;
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
@@ -112,22 +113,21 @@ EOT;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value', $fieldValue->data );
+        self::assertInternalType( 'array', $fieldValue->data );
 
         $authorsXml = $doc->getElementsByTagName( 'author' );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection', $fieldValue->data->authors );
-        self::assertSame( $authorsXml->length, count( $fieldValue->data->authors ) );
+        self::assertSame( $authorsXml->length, count( $fieldValue->data ) );
 
-        $aAuthors = $fieldValue->data->authors->getArrayCopy();
-        foreach ( $fieldValue->data->authors as $i => $author )
+        $aAuthors = $fieldValue->data;
+        foreach ( $fieldValue->data as $i => $author )
         {
             foreach ( $authorsXml as $authorXml )
             {
-                if ( $authorXml->getAttribute( 'id' ) == $author->id )
+                if ( $authorXml->getAttribute( 'id' ) == $author["id"] )
                 {
-                    self::assertSame( $authorXml->getAttribute( 'name' ), $author->name );
-                    self::assertSame( $authorXml->getAttribute( 'email' ), $author->email );
-                    unset($aAuthors[$i]);
+                    self::assertSame( $authorXml->getAttribute( 'name' ), $author["name"] );
+                    self::assertSame( $authorXml->getAttribute( 'email' ), $author["email"] );
+                    unset( $aAuthors[$i] );
                     break;
                 }
             }
