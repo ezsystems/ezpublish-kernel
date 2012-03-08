@@ -47,7 +47,7 @@ class RemoveField extends Action
      */
     public function apply( Content $content )
     {
-        foreach ( $content->version->fields as $field )
+        foreach ( $content->fields as $field )
         {
             if ( $field->fieldDefinitionId == $this->fieldDefinition->id )
             {

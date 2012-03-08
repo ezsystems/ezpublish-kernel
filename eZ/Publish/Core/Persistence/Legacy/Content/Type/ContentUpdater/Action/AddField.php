@@ -73,7 +73,7 @@ class AddField extends Action
             $storageValue
         );
 
-        $content->version->fields[] = $field;
+        $content->fields[] = $field;
     }
 
     /**
@@ -89,7 +89,7 @@ class AddField extends Action
         $field->fieldDefinitionId = $this->fieldDefinition->id;
         $field->type = $this->fieldDefinition->fieldType;
         $field->value = clone $this->fieldDefinition->defaultValue;
-        $field->versionNo = $content->version->versionNo;
+        $field->versionNo = $content->versionInfo->versionNo;
         //$field->languageCode = $content->initialLanguageId;
         return $field;
     }

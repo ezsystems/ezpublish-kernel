@@ -81,7 +81,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
         $this->getContentGatewayMock()->expects( $this->once() )
             ->method( 'insertNewField' )
             ->with(
-                $this->equalTo( $content ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
                 $this->equalTo( $this->getFieldReference() ),
                 $this->isInstanceOf(
                     'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
@@ -92,16 +92,16 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             1,
-            count( $content->version->fields ),
+            count( $content->fields ),
             'Field not added to content'
         );
         $this->assertInstanceOf(
             'eZ\\Publish\\SPI\\Persistence\\Content\\Field',
-            $content->version->fields[0]
+            $content->fields[0]
         );
         $this->assertEquals(
             23,
-            $content->version->fields[0]->id
+            $content->fields[0]->id
         );
     }
 
@@ -113,9 +113,9 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     protected function getContentFixture()
     {
         $content = new Content();
-        $content->version = new Content\Version();
-        $content->version->fields = array();
-        $content->version->versionNo = 3;
+        $content->versionInfo = new Content\VersionInfo();
+        $content->fields = array();
+        $content->versionInfo->versionNo = 3;
         return $content;
     }
 

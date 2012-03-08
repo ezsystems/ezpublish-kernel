@@ -87,12 +87,12 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
         $fieldRemove->fieldDefinitionId = 42;
 
         $content = new Content();
-        $content->version = new Content\Version();
-        $content->version->fields = array(
+        $content->versionInfo = new Content\VersionInfo();
+        $content->fields = array(
             $fieldNoRemove,
             $fieldRemove
         );
-        $content->version->versionNo = 3;
+        $content->versionInfo->versionNo = 3;
         return $content;
     }
 
