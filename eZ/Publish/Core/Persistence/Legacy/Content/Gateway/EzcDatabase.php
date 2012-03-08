@@ -174,10 +174,10 @@ class EzcDatabase extends Gateway
         $languages = array();
         foreach ( $fields as $field )
         {
-            if ( isset( $languages[$field->language] ) )
+            if ( isset( $languages[$field->languageCode] ) )
                 continue;
 
-            $languages[$field->language] = true;
+            $languages[$field->languageCode] = true;
         }
 
         if ( $alwaysAvailable )
