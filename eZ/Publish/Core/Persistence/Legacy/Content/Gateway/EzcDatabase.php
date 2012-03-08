@@ -977,10 +977,39 @@ class EzcDatabase extends Gateway
     {
         $query = $this->queryBuilder->createRelationFindQuery();
 
+        // source version number
+        if ( isset( $contentVersionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' ),
+                    $query->bindValue( $contentVersionNo )
+                )
+            );
+        }
+        // from published version only
+        else
+        {
+            $query->from(
+                'ezcontentobject'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                        $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' ),
+                        $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' )
+                    )
+                )
+            );
+        }
+
         // Filters on from_contentobject_id
         $query->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn( 'id', 'from_contentobject_id' ),
+                $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' ),
                 $query->bindValue( $contentId )
             )
         );
@@ -999,35 +1028,8 @@ class EzcDatabase extends Gateway
             );
         }
 
-        // source version number
-        if ( isset( $contentVersionNo ) )
-        {
-            $query->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' ),
-                    $query->bindValue( $contentVersionNo )
-                )
-            );
-        }
-        // from published version only
-        else
-        {
-            $query->leftJoin(
-                $this->dbHandler->quoteTable( 'ezcontentobject' ),
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-                        $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' ),
-                        $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' )
-                    )
-                )
-            );
-        }
-
         $statement = $query->prepare();
+
         $statement->execute();
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );

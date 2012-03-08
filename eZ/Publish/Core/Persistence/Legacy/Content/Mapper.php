@@ -418,11 +418,11 @@ class Mapper
     protected function extractRelationFromRow( array $row )
     {
         $relation = new Relation();
-        $relation->id = (int)$row['id'];
-        $relation->sourceContentId = (int)$row['from_contentobject_id'];
-        $relation->sourceContentVersionNo = (int)$row['from_contentobject_version'];
-        $relation->destinationContentId = (int)$row['to_contentobject_id'];
-        $relation->type = (int)$row['relation_type'];
+        $relation->id = (int)$row['ezcontentobject_link_id'];
+        $relation->sourceContentId = (int)$row['ezcontentobject_link_from_contentobject_id'];
+        $relation->sourceContentVersionNo = (int)$row['ezcontentobject_link_from_contentobject_version'];
+        $relation->destinationContentId = (int)$row['ezcontentobject_link_to_contentobject_id'];
+        $relation->type = (int)$row['ezcontentobject_link_relation_type'];
 
         return $relation;
     }

@@ -763,6 +763,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             array_values( $expectedValues ),
             true
         );
+
         $containedValues = array();
 
         foreach ( $actualRows as $row )
@@ -1086,6 +1087,81 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertEquals(
             $gateway->loadLatestPublishedData( 10 ),
             $gateway->load( 10, 2 )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelations()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57 );
+
+        $this->assertEquals( 3, count( $relations ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_to_contentobject_id',
+            array( 58, 59, 60 ),
+            $relations
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_id',
+            array( 57 ),
+            $relations
+        );
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_version',
+            array( 2 ),
+            $relations
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelationsByType()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57, null, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+
+        $this->assertEquals( 1, count( $relations ), "Expecting one relation to be loaded" );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_relation_type',
+            array( \eZ\Publish\API\Repository\Values\Content\Relation::COMMON ),
+            $relations
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_to_contentobject_id',
+            array( 58 ),
+            $relations
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadReverseRelations
+     */
+    public function testLoadReverseRelations()
+    {
+        self::markTestIncomplete( "@todo implement " . __METHOD__ );
+    }
+
+    /**
+     * Inserts the relation database fixture from relation_data.php
+     */
+    protected function insertRelationFixture()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/relations_data.php'
         );
     }
 

@@ -2,12 +2,12 @@
 
 return array(
     array(
-        'id' => 1,
-        'contentclassattribute_id' => 0,
-        'from_contentobject_id' => 1,
-        'from_contentobject_version' => 1,
-        'op_code' => 0,
-        'relation_type' => 1,
-        'to_contentobject_id' => 2
+        'ezcontentobject_link_id' => 1,
+        'ezcontentobject_link_contentclassattribute_id' => 0,
+        'ezcontentobject_link_from_contentobject_id' => 1,
+        'ezcontentobject_link_from_contentobject_version' => 1,
+        'ezcontentobject_link_op_code' => 0,
+        'ezcontentobject_link_relation_type' => 1,
+        'ezcontentobject_link_to_contentobject_id' => 2
     ),
 );
