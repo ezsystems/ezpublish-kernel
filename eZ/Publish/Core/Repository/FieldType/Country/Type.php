@@ -35,6 +35,11 @@ class Type extends FieldType
         $this->countriesInfo = $countriesInfo;
     }
 
+    /**
+     * @param array $countries
+     * @return Value
+     * @throws Exception\InvalidValue
+     */
     public function buildValue( $countries )
     {
         $countryValue = new Value( (array)$countries );

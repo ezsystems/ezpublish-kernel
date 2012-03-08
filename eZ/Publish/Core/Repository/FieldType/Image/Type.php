@@ -27,6 +27,20 @@ class Type extends FieldType
     );
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $imagePath as value.
+     *
+     * @param string $imagePath
+     * @return \eZ\Publish\Core\Repository\FieldType\Image\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $imagePath )
+    {
+        return new Value( $imagePath );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string

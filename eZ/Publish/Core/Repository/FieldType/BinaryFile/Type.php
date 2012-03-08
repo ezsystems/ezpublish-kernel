@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Repository\FieldType\BinaryFile;
 use eZ\Publish\Core\Repository\FieldType,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Io\BinaryFile;
+    eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
  * The TextLine field type.
@@ -23,6 +23,20 @@ class Type extends FieldType
     protected $allowedValidators = array(
         'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator'
     );
+
+    /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $file as value.
+     *
+     * @param string $file
+     * @return \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $file )
+    {
+        return new Value( $file );
+    }
 
     /**
      * Return the field type identifier for this field type

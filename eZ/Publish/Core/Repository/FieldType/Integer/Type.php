@@ -28,6 +28,20 @@ class Type extends FieldType
     );
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $value as value.
+     *
+     * @param int $value
+     * @return \eZ\Publish\Core\Repository\FieldType\Integer\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $value )
+    {
+        return new Value( $value );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string

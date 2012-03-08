@@ -21,6 +21,20 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $authors as value.
+     *
+     * @param array $authors
+     * @return \eZ\Publish\Core\Repository\FieldType\Author\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $authors )
+    {
+        return new Value( $authors );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string

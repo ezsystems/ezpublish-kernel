@@ -34,6 +34,20 @@ class Type extends FieldType
     );
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $dateTime as value.
+     *
+     * @param \DateTime|string $dateTime
+     * @return \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $dateTime )
+    {
+        return new Value( $dateTime );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string

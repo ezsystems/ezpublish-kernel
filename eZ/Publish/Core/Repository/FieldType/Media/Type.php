@@ -34,6 +34,20 @@ class Type extends FieldType
         'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator'
     );
 
+    /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $file as value.
+     *
+     * @param string $file
+     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $file )
+    {
+        return new Value( $file );
+    }
+
     /*
      * mediaType can be one of those values:
      *   - flash

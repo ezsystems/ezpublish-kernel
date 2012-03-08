@@ -60,6 +60,17 @@ interface FieldType
     public function allowedValidators();
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $plainValue as value.
+     *
+     * @param mixed $plainValue
+     * @return \eZ\Publish\Core\Repository\FieldType\ValueInterface
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $plainValue );
+
+    /**
      * Validates a field based on the validators in the field definition
      *
      * @todo Implementing this in all FieldTypes

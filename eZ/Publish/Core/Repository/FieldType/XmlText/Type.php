@@ -38,6 +38,20 @@ class Type extends FieldType
     );
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $text as value.
+     *
+     * @param string $text
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $text )
+    {
+        return new Value( $text );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string

@@ -1162,4 +1162,18 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         return new FieldDefinitionUpdateStruct;
     }
+
+    /**
+     * Instantiates a FieldType\Type object
+     *
+     * @param string $type
+     * @return \eZ\Publish\SPI\FieldType\FieldType
+     */
+    public function buildFieldType( $type )
+    {
+        if ( !isset( $this->settings["field_type"][$type] ) )
+            throw new InvalidArgumentException( '$type', "Provided \$type is unknown: '{$type}'" );
+
+        return $this->settings["field_type"][$type]();
+    }
 }

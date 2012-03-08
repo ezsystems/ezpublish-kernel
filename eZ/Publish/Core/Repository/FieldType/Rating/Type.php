@@ -22,6 +22,20 @@ class Type extends FieldType
     protected $allowedSettings = array();
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $isDisabled as value.
+     *
+     * @param bool $isDisabled
+     * @return \eZ\Publish\Core\Repository\FieldType\Rating\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $isDisabled )
+    {
+        return new Value( $isDisabled );
+    }
+
+    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *

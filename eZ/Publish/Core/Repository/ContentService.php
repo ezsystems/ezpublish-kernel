@@ -39,7 +39,6 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
 
-use eZ\Publish\Core\Repository\FieldType\Factory as FieldTypeFactory;
 use eZ\Publish\Core\Repository\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Value;
 
@@ -94,34 +93,7 @@ class ContentService implements ContentServiceInterface
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
-        $this->settings = $settings + array(
-            'content' => array(
-                "fields" => array(
-                    "Type" => array(
-                        "ezauthor"             => "eZ\\Publish\\Core\\Repository\\FieldType\\Author",
-                        "ezbinaryfile"         => "eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile",
-                        "ezboolean"            => "eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox",
-                        "ezcountry"            => "eZ\\Publish\\Core\\Repository\\FieldType\\Country",
-                        "ezdatetime"           => "eZ\\Publish\\Core\\Repository\\FieldType\\Integer",
-                        "ezemail"              => "eZ\\Publish\\Core\\Repository\\FieldType\\TextLine",
-                        "ezfloat"              => "eZ\\Publish\\Core\\Repository\\FieldType\\Float",
-                        "ezimage"              => "eZ\\Publish\\Core\\Repository\\FieldType\\Image",
-                        "ezinteger"            => "eZ\\Publish\\Core\\Repository\\FieldType\\Integer",
-                        "ezkeyword"            => "eZ\\Publish\\Core\\Repository\\FieldType\\TextLine",
-                        "ezmedia"              => "eZ\\Publish\\Core\\Repository\\FieldType\\Media",
-                        "ezobjectrelationlist" => "eZ\\Publish\\Core\\Repository\\FieldType\\ObjectRelationList",
-                        "ezpage"               => "eZ\\Publish\\Core\\Repository\\FieldType\\TextLine",
-                        "ezselection"          => "eZ\\Publish\\Core\\Repository\\FieldType\\Selection",
-                        "ezstring"             => "eZ\\Publish\\Core\\Repository\\FieldType\\TextLine",
-                        "ezsrrating"           => "eZ\\Publish\\Core\\Repository\\FieldType\\Rating",
-                        "eztext"               => "eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock",
-                        "ezurl"                => "eZ\\Publish\\Core\\Repository\\FieldType\\Url",
-                        "ezuser"               => "eZ\\Publish\\Core\\Repository\\FieldType\\Integer",
-                        "ezxmltext"            => "eZ\\Publish\\Core\\Repository\\FieldType\\XmlText",
-                    )
-                )
-            )
-        );
+        $this->settings = $settings;
     }
 
     /**
@@ -518,17 +490,17 @@ class ContentService implements ContentServiceInterface
         $failedValidators = array();
         foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
-            $fieldType = FieldTypeFactory::build( $fieldDefinition->fieldTypeIdentifier, $this->settings );
+            $fieldType = $this->repository->getContentTypeService()->buildFieldType(
+                $fieldDefinition->fieldTypeIdentifier
+            );
 
             foreach ( $languageCodes as $languageCode )
             {
                 if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
                 {
                     $field = $fields[$fieldDefinition->identifier][$languageCode];
-                    $fieldValue = FieldTypeFactory::buildValue(
-                        $fieldDefinition->fieldTypeIdentifier,
-                        $field->value,
-                        $this->settings
+                    $fieldValue = $fieldType->buildValue(
+                        $field->value
                     );
                     $fieldValue = $fieldType->acceptValue( $fieldValue );
 
@@ -554,10 +526,8 @@ class ContentService implements ContentServiceInterface
                 }
                 else
                 {
-                    $fieldValue = FieldTypeFactory::buildValue(
-                        $fieldDefinition->fieldTypeIdentifier,
-                        $fieldDefinition->defaultValue,
-                        $this->settings
+                    $fieldValue = $fieldType->buildValue(
+                        $fieldDefinition->defaultValue
                     );
                     $fieldValue = $fieldType->acceptValue( $fieldValue );
 
@@ -1179,16 +1149,17 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Instantiates a FieldType\Type object
+     * Instantiates a FieldType\Value object
      *
-     * @return \eZ\Publish\SPI\FieldType\FieldType
+     * Instantiates a FieldType\Value object by using FieldType\Type->buildValue().
+     *
+     * @param string $type
+     * @param mixed $plainValue
+     * @return \eZ\Publish\Core\Repository\FieldType\ValueInterface
      */
-    public function newFieldType( $type )
+    public function newFieldTypeValue( $type, $plainValue )
     {
-        if ( !isset( $this->settings["field_type"][$type] ) )
-            throw new InvalidArgumentException( '$type', "Provided type is unknown" );
-
-        return $this->settings["field_type"][$type]();
+        return $this->repository->getContentTypeService()->buildFieldType( $type )->buildValue( $plainValue );
     }
 
     /**

@@ -24,6 +24,20 @@ class Type extends FieldType
     );
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $link as value.
+     *
+     * @param string $link
+     * @return \eZ\Publish\Core\Repository\FieldType\Url\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $link )
+    {
+        return new Value( $link );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string

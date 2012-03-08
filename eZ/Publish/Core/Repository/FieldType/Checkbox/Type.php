@@ -24,6 +24,20 @@ class Type extends FieldType
     );
 
     /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $boolValue as value.
+     *
+     * @param bool $boolValue
+     * @return \eZ\Publish\Core\Repository\FieldType\Checkbox\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $boolValue )
+    {
+        return new Value( $boolValue );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string

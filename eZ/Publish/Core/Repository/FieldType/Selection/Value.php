@@ -26,7 +26,7 @@ class Value extends BaseValue implements ValueInterface
     /**
      * Construct a new Value object and initialize it $text
      *
-     * @param string $text
+     * @param string|string[] $selection
      */
     public function __construct( $selection = array() )
     {
