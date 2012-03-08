@@ -762,6 +762,9 @@ abstract class UserBase extends BaseServiceTest
 
         $users = $userService->loadUsersOfUserGroup( $userGroup );
 
+        self::assertInternalType( "array", $users );
+        self::assertNotEmpty( $users );
+
         foreach ( $users as $user )
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $user );

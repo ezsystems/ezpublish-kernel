@@ -752,7 +752,10 @@ class UserService implements UserServiceInterface
         $users = array();
         foreach ( $searchResult->items as $resultItem )
         {
-            $users = $this->buildDomainUserObject( $resultItem );
+            /** @var $resultItem \eZ\Publish\API\Repository\Values\Content\Content */
+            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->contentId );
+
+            $users[] = $this->buildDomainUserObject( $spiUser, $resultItem );
         }
 
         return $users;
