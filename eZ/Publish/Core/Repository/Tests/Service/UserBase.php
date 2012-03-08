@@ -237,7 +237,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadSubUserGroups()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
+        // self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
         $parentGroup = $userService->loadUserGroup( 4 );
 
@@ -497,18 +497,23 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserByCredentials()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
-        $userCreateStruct = $userService->newUserCreateStruct( "new_user", "new_user@ez.no", "password", "eng-GB" );
-        $userCreateStruct->setField( "first_name", "New" );
-        $userCreateStruct->setField( "last_name", "User" );
-
-        $parentGroup = $userService->loadUserGroup( 12 );
-        $userService->createUser( $userCreateStruct, array( $parentGroup ) );
-
-        $loadedUser = $userService->loadUserByCredentials( $userCreateStruct->login, $userCreateStruct->password );
+        $loadedUser = $userService->loadUserByCredentials( 'admin', 'publish' );
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $loadedUser );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'            => 14,
+                'login'         => 'admin',
+                'email'         => 'kn@ez.no',
+                'passwordHash'  => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
+                'hashAlgorithm' => User::PASSWORD_HASH_MD5_USER,
+                'isEnabled'     => true,
+                'maxLogin'      => 10
+            ),
+            $loadedUser
+        );
     }
 
     /**
@@ -520,7 +525,19 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $userService->loadUserByCredentials( "non_existing_user", "some_password" );
+        $userService->loadUserByCredentials( 'non_existing_user', 'invalid_password' );
+    }
+
+    /**
+     * Test loading a user by credentials throwing NotFoundException because of bad password
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\UserService::loadUser
+     */
+    public function testLoadUserByCredentialsThrowsNotFoundExceptionBadPassword()
+    {
+        $userService = $this->repository->getUserService();
+
+        $userService->loadUserByCredentials( 'admin', 'some_password' );
     }
 
     /**
@@ -643,7 +660,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUnAssignUserFromUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
@@ -653,7 +669,18 @@ abstract class UserBase extends BaseServiceTest
 
         $userService->unAssignUserFromUserGroup( $user, $userGroup );
 
+        try
+        {
+            $user = $userService->loadUser( 14 );
+        }
+        catch ( NotFoundException $e )
+        {
+            // user was deleted because the group we assigned him from was his last location
+            return;
+        }
+
         $userLocations = $locationService->loadLocations( $user->getVersionInfo()->getContentInfo() );
+
         if ( is_array( $userLocations ) && !empty( $userLocations ) )
         {
             $hasRemovedLocation = false;
@@ -789,20 +816,32 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testNewUserUpdateStruct()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
+        // self::markTestSkipped( "@todo: enable when content service is implemented" );
         $userService = $this->repository->getUserService();
 
         $userUpdateStruct = $userService->newUserUpdateStruct();
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserUpdateStruct', $userUpdateStruct );
+
+        self::assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\UserUpdateStruct',
+            $userUpdateStruct
+        );
+
+        self::assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
+            $userUpdateStruct->contentUpdateStruct
+        );
+
+        self::assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct',
+            $userUpdateStruct->contentMetaDataUpdateStruct
+        );
 
         $this->assertPropertiesCorrect(
             array(
                 'email'                       => null,
                 'password'                    => null,
                 'isEnabled'                   => null,
-                'maxLogin'                    => null,
-                'contentUpdateStruct'         => null,
-                'contentMetaDataUpdateStruct' => null
+                'maxLogin'                    => null
             ),
             $userUpdateStruct
         );
@@ -814,18 +853,24 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testNewUserGroupUpdateStruct()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
+        // self::markTestSkipped( "@todo: enable when content service is implemented" );
         $userService = $this->repository->getUserService();
 
         $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct', $userGroupUpdateStruct );
 
-        $this->assertPropertiesCorrect(
-            array(
-                'contentUpdateStruct'         => null,
-                'contentMetaDataUpdateStruct' => null
-            ),
+        self::assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct',
             $userGroupUpdateStruct
+        );
+
+        self::assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
+            $userGroupUpdateStruct->contentUpdateStruct
+        );
+
+        self::assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct',
+            $userGroupUpdateStruct->contentMetaDataUpdateStruct
         );
     }
 }
