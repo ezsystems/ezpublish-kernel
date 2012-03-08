@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 /**
  * This class holds version information data
  */
-class VersionInfo
+class VersionInfo extends ValueObject
 {
     /**
      * Version status constants
