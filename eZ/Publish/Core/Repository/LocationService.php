@@ -657,8 +657,6 @@ class LocationService implements LocationServiceInterface
             $spiLocation->id
         );
 
-        $modifiedSubLocationDate = (int) $spiLocation->modifiedSubLocation;
-
         return new Location(
             array(
                 'contentInfo'             => $contentInfo,
@@ -669,7 +667,7 @@ class LocationService implements LocationServiceInterface
                 'remoteId'                => $spiLocation->remoteId,
                 'parentLocationId'        => (int) $spiLocation->parentId,
                 'pathString'              => $spiLocation->pathString,
-                'modifiedSubLocationDate' => new \DateTime( "@{$modifiedSubLocationDate}" ),
+                'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiLocation->modifiedSubLocation ),
                 'depth'                   => (int) $spiLocation->depth,
                 'sortField'               => (int) $spiLocation->sortField,
                 'sortOrder'               => (int) $spiLocation->sortOrder,
