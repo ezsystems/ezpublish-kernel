@@ -1181,7 +1181,7 @@ class ContentService implements ContentServiceInterface
     /**
      * Instantiates a FieldType\Type object
      *
-     * @return \eZ\Publish\Core\Repository\FieldTypeInterface
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     public function newFieldType( $type )
     {

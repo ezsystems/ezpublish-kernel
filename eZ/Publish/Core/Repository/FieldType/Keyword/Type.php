@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Keyword;
 use eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType;
 
@@ -47,11 +46,11 @@ class Type extends FieldType
      * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
      * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Keyword\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Keyword\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
@@ -73,7 +72,7 @@ class Type extends FieldType
      *       According to me (PA) sorting on keywords should not be supported.
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         return false;
     }
@@ -83,7 +82,7 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\Keyword\Value $value
      */
     public function fromHash( $hash )
     {
@@ -93,11 +92,11 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\Keyword\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
         return $value->values;
     }

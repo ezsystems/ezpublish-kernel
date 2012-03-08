@@ -1,11 +1,18 @@
 <?php
 /**
- * @package FieldTypeProviderInterface
- * @author christianbacher
+ * File containing the FieldType interface
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  */
+
 namespace eZ\Publish\SPI\FieldType;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\SPI\FieldType\Value;
+
+use ezp\Content\Field,
+    eZ\Publish\API\Repository\Repository,
+    ezp\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The field type interface which all field types have to implement.
@@ -15,23 +22,24 @@ use eZ\Publish\SPI\FieldType\Value;
 interface FieldType
 {
     /**
+     * Return the field type identifier for this field type
      *
-     * @return the field type identifier for this field type
+     * @return string
      */
     public function getFieldTypeIdentifier();
 
     /**
+     * This method is called on occuring events. Implementations can perform corresponding actions
      *
-     * this method is called on occuring events. Implementations can perform corresponding actions
-     * @param string $event - prePublish, postPublish, preCreate, postCreate
-     * @param Repository $repository
-     * @param $fieldDef - the field definition of the field
-     * @param $field - the field for which an action is performed
+     * @param string $event prePublish, postPublish, preCreate, postCreate
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
+     * @param \ezp\Content\Field $field The field for which an action is performed
      */
-    public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field  $field );
+    public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field );
 
     /**
-     * returns a map of allowed setting including a default value used when not given in the field definition
+     * Returns a map of allowed setting including a default value used when not given in the field definition
      *
      * @return array
      */
@@ -52,70 +60,75 @@ interface FieldType
     public function allowedValidators();
 
     /**
+     * Validates a field based on the validators in the field definition
      *
-     * validates a field based on the validators in the field definition
-     * @param $fieldDef
-     * @param $field
+     * @todo Implementing this in all FieldTypes
+     *
+     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
+     * @param \ezp\Content\Field $field The field for which an action is performed
      */
-    public function validate( FieldDefinition $fieldDef, Field $field );
+    //public function validate( FieldDefinition $fieldDef, Field $field );
 
     /**
-     * indicates if the field type supports indexing and sort keys for searching
+     * Indicates if the field type supports indexing and sort keys for searching
      * 
-     * @return boolean
+     * @return bool
      */
     public function isSearchable();
     
     /**
-     * returns a default vlaue for the default value if not given in the field definition.
-     * 
-     * @return Value
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return mixed
      */
     public function getDefaultDefaultValue();
     
     /**
+     * Checks the type and structure of the $Value.
      *
-     * Checks the type and structure of the value.
-     * @param $value
-     * @return Value if the field accepts the given value
-     * @throws InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws InvalidArgumentValue if the value does not match the expected structure
+     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     *
+     * @param mixed $inputValue
+     *
+     * @return mixed
      */
-    public function acceptValue( $value );
+    public function acceptValue( $inputValue );
 
     /**
-     * Converts an hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type
      *
-     * @param array $hash
+     * @param mixed $hash
      *
-     * @return Value
+     * @return mixed
      */
-    public function fromHash( array $hash );
+    public function fromHash( $hash );
 
     /**
      * Converts a Value to a hash
      *
-     * @param Value $value
+     * @param mixed $value
      *
-     * @return array
+     * @return mixed
      */
-    public function toHash( Value $value );
+    public function toHash( $value );
 
     /**
-     * converts a Value to a persistence value
+     * Converts a $value to a persistence value
      *
-     * @param Value $value
+     * @param mixed $value
      *
-     * @return FieldValue
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( Value $value );
+    public function toPersistenceValue( $value );
 
     /**
-     * converts a persistence field value to a Value
+     * Converts a persistence $fieldValue to a Value
      *
-     * @param FieldValue $fieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return Value
+     * @return mixed
      */
     public function fromPersistenceValue( FieldValue $fieldValue );
 }

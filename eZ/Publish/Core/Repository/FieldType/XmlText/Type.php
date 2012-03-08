@@ -8,12 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
-use ezp\Base\Repository,
-    ezp\Content\Field,
+use ezp\Content\Field,
     ezp\Content\Version,
+    eZ\Publish\API\Repository\Repository,
     eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Repository\FieldType\XmlText\Value as Value,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType;
@@ -53,7 +51,7 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
     public function getDefaultDefaultValue()
     {
@@ -72,11 +70,11 @@ EOF;
      * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
      * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
@@ -105,16 +103,18 @@ EOF;
      *
      * @return array|bool
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         return false;
     }
 
     /**
      * Converts complex values to a Value\Raw object
+     *
      * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
-     * @param \ezp\Base\Repository $repository
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \ezp\Content\Field $field
+     *
      * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
     protected function convertValueToRawValue( Value $value, Repository $repository, Field $field )
@@ -132,10 +132,10 @@ EOF;
     /**
      * This method is called on occuring events. Implementations can perform corresponding actions
      *
-     * @param string $event - prePublish, postPublish, preCreate, postCreate
-     * @param Repository $repository
-     * @param $fieldDef - the field definition of the field
-     * @param $field - the field for which an action is performed
+     * @param string $event prePublish, postPublish, preCreate, postCreate
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
+     * @param \ezp\Content\Field $field The field for which an action is performed
      */
     public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field )
     {
@@ -150,7 +150,7 @@ EOF;
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
      */
     public function fromHash( $hash )
     {
@@ -160,11 +160,11 @@ EOF;
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
         return $value->text;
     }

@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\TextBlock;
-use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
+use eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType;
 
@@ -51,11 +50,11 @@ class Type extends TextLine
      * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
      * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\TextBlock\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\TextBlock\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
@@ -75,7 +74,7 @@ class Type extends TextLine
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         return array( 'sort_key_string' => '' );
     }
@@ -85,7 +84,7 @@ class Type extends TextLine
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\TextBlock\Value $value
      */
     public function fromHash( $hash )
     {
@@ -95,11 +94,11 @@ class Type extends TextLine
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\TextBlock\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
         return $value->text;
     }
