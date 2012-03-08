@@ -32,6 +32,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
 
     ezcMailTools;
 
@@ -444,6 +445,10 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "password", $password );
 
         $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
+
+        if ( empty( $spiUsers ) )
+            throw new NotFoundException( "user", $login );
+
         if ( count( $spiUsers ) > 1 )
         {
             // something went wrong, we should not have more than one
@@ -459,7 +464,7 @@ class UserService implements UserServiceInterface
         );
 
         if ( $spiUsers[0]->passwordHash !== $passwordHash )
-            throw new InvalidArgumentValue( "password", $password );
+            throw new NotFoundException( "user", $login );
 
         return $this->buildDomainUserObject( $spiUsers[0] );
     }
