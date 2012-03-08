@@ -8,7 +8,7 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
 
     eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Language as PersistenceLanguage,
+    eZ\Publish\SPI\Persistence\Content\Language as SPILanguage,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
 
     eZ\Publish\API\Repository\Values\Content\Language,
@@ -32,7 +32,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
-    protected $handler;
+    protected $persistenceHandler;
 
     /**
      * @var array
@@ -49,7 +49,7 @@ class LanguageService implements LanguageServiceInterface
     public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->handler = $handler;
+        $this->persistenceHandler = $handler;
         $this->settings = $settings + array(
             'languages' => array( 'eng-GB' ),// Union will skip this if $settings contains 'languages'
         );
@@ -67,6 +67,15 @@ class LanguageService implements LanguageServiceInterface
      */
     public function createLanguage( LanguageCreateStruct $languageCreateStruct )
     {
+        if ( !is_string( $languageCreateStruct->name ) || empty( $languageCreateStruct->name ) )
+            throw new InvalidArgumentValue( "name", $languageCreateStruct->name, "LanguageCreateStruct" );
+
+        if ( !is_string( $languageCreateStruct->languageCode ) || empty( $languageCreateStruct->languageCode ) )
+            throw new InvalidArgumentValue( "languageCode", $languageCreateStruct->languageCode, "LanguageCreateStruct" );
+
+        if ( !is_bool( $languageCreateStruct->enabled ) )
+            throw new InvalidArgumentValue( "enabled", $languageCreateStruct->enabled, "LanguageCreateStruct" );
+
         try
         {
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
@@ -77,12 +86,12 @@ class LanguageService implements LanguageServiceInterface
         $createStruct = new CreateStruct(
             array(
                 'languageCode' => $languageCreateStruct->languageCode,
-                'name' => $languageCreateStruct->name,
-                'isEnabled' => $languageCreateStruct->enabled
+                'name'         => $languageCreateStruct->name,
+                'isEnabled'    => $languageCreateStruct->enabled
             )
         );
-        $createdLanguage = $this->handler->contentLanguageHandler()->create( $createStruct );
 
+        $createdLanguage = $this->persistenceHandler->contentLanguageHandler()->create( $createStruct );
         return $this->buildDomainObject( $createdLanguage );
     }
 
@@ -100,21 +109,26 @@ class LanguageService implements LanguageServiceInterface
      */
     public function updateLanguageName( Language $language, $newName )
     {
-        if ( empty( $language->id ) )
-            throw new InvalidArgumentValue( "id", $language->id );
+        if ( !is_numeric( $language->id ) )
+            throw new InvalidArgumentValue( "id", $language->id, "Language" );
 
-        $updateLanguageStruct = new PersistenceLanguage(
+        if ( !is_string( $newName ) || empty( $newName ) )
+            throw new InvalidArgumentValue( "newName", $newName );
+
+        $loadedLanguage = $this->loadLanguageById( $language->id );
+
+        $updateLanguageStruct = new SPILanguage(
             array(
-                'id' => $language->id,
-                'languageCode' => $language->languageCode,
-                'name' => $newName,
-                'isEnabled' => $language->enabled
+                'id'           => $loadedLanguage->id,
+                'languageCode' => $loadedLanguage->languageCode,
+                'name'         => $newName,
+                'isEnabled'    => $loadedLanguage->enabled
             )
         );
 
-        $this->handler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
 
-        return $this->loadLanguageById( $updateLanguageStruct->id );
+        return $this->loadLanguageById( $loadedLanguage->id );
     }
 
     /**
@@ -128,21 +142,23 @@ class LanguageService implements LanguageServiceInterface
      */
     public function enableLanguage( Language $language )
     {
-        if ( empty( $language->id ) )
+        if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id );
 
-        $updateLanguageStruct = new PersistenceLanguage(
+        $loadedLanguage = $this->loadLanguageById( $language->id );
+
+        $updateLanguageStruct = new SPILanguage(
             array(
-                'id' => $language->id,
-                'languageCode' => $language->languageCode,
-                'name' => $language->name,
-                'isEnabled' => true
+                'id'           => $loadedLanguage->id,
+                'languageCode' => $loadedLanguage->languageCode,
+                'name'         => $loadedLanguage->name,
+                'isEnabled'    => true
             )
         );
 
-        $this->handler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
 
-        return $this->loadLanguageById( $language->id );
+        return $this->loadLanguageById( $loadedLanguage->id );
     }
 
     /**
@@ -156,21 +172,23 @@ class LanguageService implements LanguageServiceInterface
      */
     public function disableLanguage( Language $language )
     {
-        if ( empty( $language->id ) )
+        if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id );
 
-        $updateLanguageStruct = new PersistenceLanguage(
+        $loadedLanguage = $this->loadLanguageById( $language->id );
+
+        $updateLanguageStruct = new SPILanguage(
             array(
-                'id' => $language->id,
-                'languageCode' => $language->languageCode,
-                'name' => $language->name,
-                'isEnabled' => false
+                'id'           => $loadedLanguage->id,
+                'languageCode' => $loadedLanguage->languageCode,
+                'name'         => $loadedLanguage->name,
+                'isEnabled'    => false
             )
         );
 
-        $this->handler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
 
-        return $this->loadLanguageById( $language->id );
+        return $this->loadLanguageById( $loadedLanguage->id );
     }
 
     /**
@@ -186,10 +204,10 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguage( $languageCode )
     {
-        if ( !is_string( $languageCode ) )
-            throw new InvalidArgumentValue( "languageCode", $languageCode );
+        if ( !is_string( $languageCode ) || empty( $languageCode ) )
+            throw new InvalidArgumentException( "languageCode", "language code has an invalid value" );
 
-        $language = $this->handler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
+        $language = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
 
         return $this->buildDomainObject( $language );
     }
@@ -201,12 +219,12 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguages()
     {
-        $languages = $this->handler->contentLanguageHandler()->loadAll();
-        $returnArray = array();
+        $languages = $this->persistenceHandler->contentLanguageHandler()->loadAll();
 
-        foreach ( $languages as $languageCode => $language )
+        $returnArray = array();
+        foreach ( $languages as $language )
         {
-            $returnArray[$languageCode] = $this->buildDomainObject( $language );
+            $returnArray[] = $this->buildDomainObject( $language );
         }
 
         return $returnArray;
@@ -225,10 +243,10 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguageById( $languageId )
     {
-        if ( !is_int( $languageId ) )
+        if ( !is_numeric( $languageId ) )
             throw new InvalidArgumentValue( "languageId", $languageId );
 
-        $language = $this->handler->contentLanguageHandler()->load( $languageId );
+        $language = $this->persistenceHandler->contentLanguageHandler()->load( (int) $languageId );
 
         return $this->buildDomainObject( $language );
     }
@@ -247,8 +265,11 @@ class LanguageService implements LanguageServiceInterface
      */
     public function deleteLanguage( Language $language )
     {
-        $language = $this->loadLanguageById( $language->id );
-        $this->handler->contentLanguageHandler()->delete( $language->id );
+        if ( !is_numeric( $language->id ) )
+            throw new InvalidArgumentValue( "id", $language->id, "Language" );
+
+        $loadedLanguage = $this->loadLanguageById( $language->id );
+        $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
     }
 
     /**
@@ -268,25 +289,24 @@ class LanguageService implements LanguageServiceInterface
      */
     public function newLanguageCreateStruct()
     {
-        return new LanguageCreateStruct;
+        return new LanguageCreateStruct();
     }
 
     /**
      * Builds Language domain object from ValueObject returned by Persistence API
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Language $vo Language value object
-     *        (extending \eZ\Publish\SPI\Persistence\ValueObject) returned by persistence
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $spiLanguage
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    protected function buildDomainObject( PersistenceLanguage $vo )
+    protected function buildDomainObject( SPILanguage $spiLanguage )
     {
         return new Language(
             array(
-                'id' => $vo->id,
-                'languageCode' => $vo->languageCode,
-                'name' => $vo->name,
-                'enabled' => $vo->isEnabled
+                'id'           => $spiLanguage->id,
+                'languageCode' => $spiLanguage->languageCode,
+                'name'         => $spiLanguage->name,
+                'enabled'      => $spiLanguage->isEnabled
             )
         );
     }
