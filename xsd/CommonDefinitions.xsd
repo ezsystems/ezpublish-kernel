@@ -11,7 +11,7 @@
     <xsd:attribute name="media-type" type="xsd:string" />
   </xsd:complexType>
 
-  <xsd:complexType name="refValueList">
+  <xsd:complexType name="vnd.ez.api.RefList">
     <xsd:sequence>
       <xsd:element name="ref" type="ref" maxOccurs="unbounded" />
     </xsd:sequence>

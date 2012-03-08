@@ -15,7 +15,7 @@ Media Types
 The methods on resources provide multiple media types in their responses. A media type can be selected in the Accept Header.
 For each xml media type there is a unique name e.g. application/vnd.ez.api.User+xml. In this case the returned xml response
 conforms with the complex type definition with name vnd.ez.api.User in the user.xsd (see User_) xml schema definition file.
-Each JSON schema is implicit derived from the xml schema by making a uniform transformation from XML to JSON as shoen below.
+Each JSON schema is implicit derived from the xml schema by making a uniform transformation from XML to JSON as shown below.
 
 
 Example:
@@ -162,11 +162,11 @@ Overview
 In the content module there are the root collections objects, locations, trash and sections 
 
 ===================================================== =================== ======================= ============================ ================ ==============
-        :Resource:                                          POST                GET                  PATCH                       DELETE            COPY
+        :Resource:                                          POST                GET                  PATCH/PUT                   DELETE            COPY
 ----------------------------------------------------- ------------------- ----------------------- ---------------------------- ---------------- --------------
 /                                                     .                   list root resources     .                            .                             
 /content/objects                                      create new content  list/find content       .                            .            
-/content/objects/<ID>                                 -                   load content            update content meta data     delete content   copy content
+/content/objects/<ID>                                 .                   load content            update content meta data     delete content   copy content
 /content/objects/<ID>/<lang_code>                     .                   .                       .                            delete language
                                                                                                                                from content   
 /content/objects/<ID>/versions                        create a new draft  load all versions       .                            .            
@@ -183,10 +183,10 @@ In the content module there are the root collections objects, locations, trash a
 /content/locations/<path>                             .                   load a location         update location              delete location  copy subtree
 /content/locations/<path>/children                    .                   load children           .                            .                  
 /content/views                                        create view         list views              .                            .            
-/content/views/<ID>                                   .                   get view                replace view                 delete view
+/content/views/<ID>                                   .                   get view                .                            delete view
 /content/views/<ID>/results                           .                   get view results        .                            .          
 /content/sections                                     create section      list all sections       .                            .                    
-/content/sections/<ID>                                .                   load section            update setion                delete section
+/content/sections/<ID>                                .                   load section            update section               delete section
 /content/trash                                        .                   list trash items        .                            empty trash
 /content/trash/<ID>                                   .                   load trash item         untrash item                 delete from trsh
 ===================================================== =================== ======================= ============================ ================ ==============
@@ -252,6 +252,7 @@ XML Example
       <rootMediaFolder href="/content/locations/1/43" media-type="application/vnd.ez.api.Location+xml"/>
       <trash href="/content/trash" media-type="application/vnd.ez.api.LocationList+xml"/>
       <sections href="/content/sections" media-type="application/vnd.ez.api.SectionList+xml"/>
+      <views href="/content/views" media-type="application/vnd.ez.api.RefList+xml"/>
     </Root>
 
 JSON Example
@@ -301,6 +302,10 @@ JSON Example
         "sections": {
           "_href": "/content/sections",
           "_media-type": "application/vnd.ez.api.SectionList+json"
+        }
+        "sections": {
+          "_href": "/content/views",
+          "_media-type": "application/vnd.ez.api.ViewList+json"
         }
       }
     }
@@ -651,6 +656,7 @@ Load Content
          :application/vnd.ez.api.Content+json:  if set all informations for the content object including the embedded current version are returned in json format (see Content_)
          :application/vnd.ez.api.ContentInfo+xml:  if set all informations for the content object (excluding the current version) are returned in xml format (see Content_)
          :application/vnd.ez.api.ContentInfo+json:  if set all informations for the content object (excluding the current version) are returned in json format (see Content_)
+    :If-None-Match: <etag> If the provided etag matches the current etag then a 304 Not Modified is returned. The etag changes if the meta data was changed - this happens also if there is a new published version..
 :Parameters:
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Response: 
@@ -658,7 +664,7 @@ Load Content
     .. parsed-literal::
 
           HTTP/1.1 200 OK
-          ETag: "<new etag>"
+          ETag: "<ETag>"
           Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
@@ -675,7 +681,7 @@ XML Example
 
     GET /content/objects/23 HTTP/1.1
     Accept: application/vnd.ez.api.ContentInfo+xml
-    Content-length: 0
+    If-None-Match: "12340577"
 
     HTTP/1.1 200 OK
     ETag: "12345678"
@@ -712,7 +718,7 @@ Update Content
     :Accept:
          :application/vnd.ez.api.ContentInfo+xml:  if set all informations for the content object (excluding the current version) are returned in xml format (see Content_)
          :application/vnd.ez.api.ContentInfo+json:  if set all informations for the content object (excluding the current version) are returned in json format (see Content_)
-    :If-Match: Causes to patch only if the specified etag is the current one
+    :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
     :Content-Type: 
          :application/vnd.ez.api.ContentUpdate+json: the ContentUpdate_ schema encoded in json
          :application/vnd.ez.api.ContentUpdate+xml: the ContentUpdate_ schema encoded in xml
@@ -828,7 +834,7 @@ Example
     Destination: /content/locations/1/4/78
 
     HTTP/1.1 201 Created
-    Location: /content/objects/<newId>
+    Location: /content/objects/74
 
 
 Managing Versions
@@ -960,7 +966,7 @@ Load Version
     :responseGroups: alternative: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Headers:
-    :If-Match: <etag> Only return the version if the <etag> is the current one
+    :If-None-Match: <etag> Only return the version if the given <etag> is the not current one otherwise a 304 is returned.
     :Accept:
          :application/vnd.ez.api.Version+xml:  if set the version list is returned in xml format (see VersionList_)
          :application/vnd.ez.api.Version+json:  if set the version list is returned in json format 
@@ -985,6 +991,7 @@ XML Example
 
     GET /content/objects/23/versions/4 HTTP/1.1
     Host: api.example.com
+    If-None-Match: "1758f762"
     Accept: application/vnd.ez.api.Version+xml
        
     HTTP/1.1 200 OK
@@ -1048,8 +1055,6 @@ Update Version
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
 :Description: A specific draft is updated. 
 :Parameters: 
-    :fields: comma separated list of fields which should be returned in the response (see Content)
-    :responseGroups: alternative: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Headers:
     :Accept:
@@ -1182,14 +1187,13 @@ Create a Draft from a Version
 
 :Error Codes:
     :401: If the user is not authorized to update this object  
-    :403: If the given version is in status DRAFT
     :404: If the content object was not found
 
 Delete Content Version
 ``````````````````````
 :Resource: /content/objects/<ID>/version/<versionNo>
 :Method: DELETE
-:Description: The content  version is deleted
+:Description: The version is deleted
 :Response: 
 
 ::
@@ -1258,8 +1262,8 @@ Load relations of version
         RelationList_ 
 
 :Error Codes:
-:401: If the user is not authorized to read  this object
-:404: If the content object was not found
+    :401: If the user is not authorized to read  this object
+    :404: If the content object was not found
 
 XML Example
 '''''''''''
@@ -1478,6 +1482,7 @@ Get locations for a content object
     :Accept:
          :application/vnd.ez.api.LocationList+xml:  if set the new location is returned in xml format (see Location_)
          :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
+    :If-None-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -1521,6 +1526,7 @@ Load location
     :Accept:
          :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
          :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+    :If-None-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -1545,7 +1551,8 @@ XML Example
     GET /content/locations/1/4/73/133 HTTP/1.1
     Host: api.example.net
     Accept: application/vnd.ez.api.Location+xml
-    
+    If-None-Match: "2345503255"
+
     HTTP/1.1 200 OK
     ETag: "2345563422"
     Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
@@ -1582,6 +1589,7 @@ Update location
     :Content-Type:
          :application/vnd.ez.api.LocationUpdate+json: the LocationUpdate_ schema encoded in json
          :application/vnd.ez.api.LocationUpdate+xml: the LocationUpdate_ schema encoded in xml
+    :If-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -1662,8 +1670,6 @@ Get child locations
     .. parsed-literal::
 
           HTTP/1.1 200 OK
-          ETag: "<new etag>"
-          Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
           Location_      
@@ -1682,7 +1688,6 @@ XML Example
     Accept: application/vnd.ez.api.LocationList+xml
 
     HTTP/1.1 200 OK
-    ETag: "<etag>"
     Content-Type:  application/vnd.ez.api.LocationList+xml
     Content-Length: xxx
 
@@ -1805,6 +1810,7 @@ Perform a query on articles with a specific title.
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ViewInput>
+      <identifier>ArticleTitleView</identifier>
       <Query>
         <Criteria>
           <AND>
@@ -1835,6 +1841,8 @@ Perform a query on articles with a specific title.
     <?xml version="1.0" encoding="UTF-8"?>
     <View href="/content/views/ArticleTitleView" media-type="application/vnd.ez.api.View+xml">
       <identifier>ArticleTitleView</identifier>
+      <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
+      <public>false</public>
       <Query>
         <Criteria>
           <AND>
@@ -1914,6 +1922,83 @@ Perform a query on articles with a specific title.
     </View>
 
 
+List views
+``````````
+:Resource: /content/views
+:Method: GET
+:Description: Returns a list of view uris. The list includes public view and private view of the authenticated user.
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.RefList+xml: the view link list in xml format (see View_)
+        :application/vnd.ez.api.RefList+json: the view link list in xml format (see View_)
+:Response:
+ 
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Common_  
+
+Get View
+````````
+:Resource: /content/views/<identifier>
+:Method: GET
+:Description: Returns the view
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.View+xml: the view excluding results in xml format (see View_)
+        :application/vnd.ez.api.View+json: the view excluding results in json format (see View_)
+:Response:
+ 
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          View_  
+
+:Error Codes:
+    :401: if the view is not public and from another user
+
+
+Get Results of existing View
+````````````````````````````
+:Resource: /content/views/<identifier>/results
+:Method: GET
+:Description: Returns result of the view
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.ViewResult+xml: the view excluding results in xml format (see View_)
+        :application/vnd.ez.api.ViewResult+json: the view excluding results in json format (see View_)
+:Response:
+ 
+    .. parsed-literal::
+
+          HTTP/1.1 200
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          View_  
+
+:Error Codes:
+    :401: if the view is not public and from another user
+
+Delete View
+```````````
+:Resource: /content/views/<identifier>
+:Method: DELETE
+:Description: the given view is deleted
+:Parameters:
+:Response: 
+
+    ::
+        
+         HTTP/1.1 204 No Content
+:Error Codes:
+    :401: If the user is not authorized to delete this view
+    :404: If the view does not exist
+
+
 
 Managing Sections
 ~~~~~~~~~~~~~~~~~
@@ -1989,6 +2074,7 @@ Get Sections
     :Accept:
          :application/vnd.ez.api.SectionList+xml:  if set the new section list is returned in xml format (see Section_)
          :application/vnd.ez.api.SectionList+json:  if set the new section list is returned in json format (see Section_)
+    :If-None-Match: <etag>
 :Response:
  
     .. parsed-literal::
@@ -2009,6 +2095,7 @@ XML Example
 
     GET /content/sections
     Host: api.example.net
+    If-None-Match: "43450986749098765"
     Accept: application/vnd.ez.api.SectionList+xml
 
     HTTP/1.1 200 OK
@@ -2050,6 +2137,7 @@ Get Section
     :Accept:
          :application/vnd.ez.api.Section+xml:  if set the new section is returned in xml format (see Section_)
          :application/vnd.ez.api.Section+json:  if set the new section is returned in json format (see Section_)
+    :If-None-match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -2071,6 +2159,7 @@ XML Example
 
     GET /content/sections/3 HTTP/1.1
     Host: api.example.net
+    If-None-Match: "43450986749098765"
     Accept: application/vnd.ez.api.Section+xml
 
     HTTP/1.1 200 OK
@@ -2099,6 +2188,7 @@ Update a Section
     :Content-Type:
          :application/vnd.ez.api.SectionInput+json: the Section_ input schema encoded in json
          :application/vnd.ez.api.SectionInput+xml: the Section_ input schema encoded in xml
+    :If-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -2114,6 +2204,7 @@ Update a Section
     :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this section  
     :403: If a section with the given new identifier already exists
+    :412: If the current ETag does not match with the provided one in the If-Match header
 
 Delete Section
 ``````````````
@@ -2381,6 +2472,7 @@ Get Content Type Group
     :Accept:
          :application/vnd.ez.api.ContentTypeGroup+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
          :application/vnd.ez.api.ContentTypeGroup+json:  if set the new section is returned in json format (see ContentTypeGroup_)
+    :If-None-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -2408,6 +2500,7 @@ Update Content Type Group
     :Content-Type:
          :application/vnd.ez.api.ContentTypeGroupInput+json: the ContentTypeGroup_ input schema encoded in json
          :application/vnd.ez.api.ContentTypeGroupInput+xml: the ContentTypeGroup_ input schema encoded in xml
+    :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
     .. parsed-literal::
@@ -2423,6 +2516,7 @@ Update Content Type Group
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create this content type group
     :403: If a content type group with the given identifier already exists
+    :412: If the current ETag does not match with the provided one in the If-Match header
 
 
 XML Example
@@ -2432,6 +2526,7 @@ XML Example
 
     PATCH /content/typegroups/7 HTTP/1.1
     Host: api.example.net
+    If-Match: "958764986593830900"
     Accept: application/vnd.ez.api.ContentTypeGroup+xml
     Content-Type: application/vnd.ez.api.ContentTypeGroupInput+xml
     Content-Length: xxx
@@ -2716,6 +2811,7 @@ Get Content Type
     :Accept:
          :application/vnd.ez.api.ContentType+xml:  if set the list is returned in xml format (see ContentType_)
          :application/vnd.ez.api.ContentType+json:  if set the list is returned in json format (see ContentType_)
+    :If-None-Match: <etag>
 
 :Response: 
 
@@ -2750,7 +2846,6 @@ Create Draft
 
           HTTP/1.1 201 Created
           Location: /content/types/<ID>/draft
-          ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
           ContentType_
@@ -2780,7 +2875,6 @@ Update Draft
     .. parsed-literal::
 
           HTTP/1.1 200 OK
-          ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
           ContentType_
@@ -2812,7 +2906,6 @@ XML Example
     </ContentTypeUpdate>
 
     HTTP/1.1 200 OK
-    ETag: "56435634576543"
     Content-Type: application/vnd.ez.api.ContentTypeInfo+xml
     Content-Length: xxx
 
@@ -2862,7 +2955,6 @@ Add Field definition
           HTTP/1.1 201 Created
           Location: /content/types/<ID>/draft/fielddefinitions/<newId>
           Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
-          ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
           FieldDefinition_      
@@ -2887,7 +2979,6 @@ Get Fielddefinition
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
-          ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
           FieldDefinition_      
@@ -2914,7 +3005,6 @@ Update Fielddefinition
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
-          ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
           FieldDefinition_      
@@ -2949,7 +3039,6 @@ Publish content type
     .. parsed-literal::
 
           HTTP/1.1 200 OK
-          ETag: "<newEag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
           ContentType_
@@ -2990,7 +3079,6 @@ Get Groups of Content Type
     .. parsed-literal::
 
           HTTP/1.1 200 OK
-          ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
           ContentTypeGroup_
@@ -3158,6 +3246,7 @@ Load User Group
     :Accept:
          :application/vnd.ez.api.UserGroup+xml:  if set the new user group is returned in xml format (see UserGroup_)
          :application/vnd.ez.api.UserGroup+json:  if set the new user group is returned in json format (see UserGroup_)
+    :If-None-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -3213,12 +3302,6 @@ XNL Example
 Creating a top level group
 
 ::
-
-    GET /user/groups/root HTTP/1.1
-    Accept: application/vnd.ez.api.UserGroup+xml
-    
-    HTTP/1.1 301 Moved Permanently
-    Location: /user/groups/1/5
 
     GET /user/groups/1/5 HTTP/1.1
     Accept: application/vnd.ez.api.UserGroup+xml
@@ -3359,6 +3442,7 @@ Update User Group
     :Content-Type:
          :application/vnd.ez.api.UserGroupUpdate+json: the UserGroupUpdate_  schema encoded in json
          :application/vnd.ez.api.UserGroupUpdate+xml: the UserGroupUpdate_  schema encoded in xml
+    :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
     .. parsed-literal::
@@ -3373,6 +3457,7 @@ Update User Group
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the user group
+    :412: If the current ETag does not match with the provided one in the If-Match header
 
 
 XML Example
@@ -3382,6 +3467,7 @@ XML Example
 
     PATCH /user/groups/1/5/65 HTTP/1.1
     Accept: application/vnd.ez.api.UserGroup+xml
+    If-Match: "348506873463455"
     Content-Type: application/vnd.ez.api.UserGroupUpdate+xml
     Content-Length: xxx
 
@@ -3688,6 +3774,7 @@ Load User
     :Accept:
          :application/vnd.ez.api.User+xml:  if set the new user is returned in xml format (see User_)
          :application/vnd.ez.api.User+json:  if set the new user is returned in json format (see User_)
+    :If-None-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -3716,6 +3803,7 @@ Update User
     :Content-Type:
          :application/vnd.ez.api.UserUpdate+json: the UserUpdate_  schema encoded in json
          :application/vnd.ez.api.UserUpdate+xml: the UserUpdate_  schema encoded in xml
+    :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
     .. parsed-literal::
@@ -3730,6 +3818,7 @@ Update User
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the user 
     :404: If the user does not exist
+    :412: If the current ETag does not match with the provided one in the If-Match header
 
 XML Example
 '''''''''''
@@ -4075,6 +4164,7 @@ Load Role
     :Accept:
          :application/vnd.ez.api.Role+xml:  if set the user list returned in xml format (see Role_)
          :application/vnd.ez.api.Role+json:  if set the user list is returned in json format (see Role_)
+    :If-None-Match: <etag>
 :Response:
 
     .. parsed-literal::
@@ -4100,6 +4190,7 @@ Update Role
     :Content-Type:
          :application/vnd.ez.api.RoleInput+json: the RoleInput  schema encoded in json
          :application/vnd.ez.api.RoleInput+xml: the RoleInput  schema encoded in xml
+    :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
     .. parsed-literal::
@@ -4113,6 +4204,7 @@ Update Role
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the role
+    :412: If the current ETag does not match with the provided one in the If-Match header
 
 Delete Role
 ```````````
@@ -4393,6 +4485,7 @@ Load Policy
     :Accept:
          :application/vnd.ez.api.Policy+xml:  if set the policy is returned in xml format (see Policy_)
          :application/vnd.ez.api.Policy+json:  if set the policy is returned in json format (see Policy_)
+    :If-None-Match: <etag>
 :Response: 
 
     .. parsed-literal::
@@ -4541,6 +4634,7 @@ Update Policy
     :Content-Type:
          :application/vnd.ez.api.PolicyUpdate+xml:  if set the updated policy is returned in xml format (see Policy_)
          :application/vnd.ez.api.PolicyUpdate+json:  if set the updated policy is returned in json format (see Policy_)
+    :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
     .. parsed-literal::
@@ -4556,6 +4650,7 @@ Update Policy
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the policy
     :404: If the role does not exist
+    :412: If the current ETag does not match with the provided one in the If-Match header
 
 XML Example
 '''''''''''
@@ -4564,6 +4659,7 @@ XML Example
 
     PATCH /user/roles/7/policies/55 HTTP/1.1
     Accept: application/vnd.ez.api.Policy+xml
+    If-Match: "697850469873043236666"
     Content-Type: application/vnd.ez.api.PolicyUpdate+xml
     Content-Length: xxx
 
@@ -5338,7 +5434,7 @@ View XML Schema
             <xsd:sequence>
               <xsd:element name="count" type="xsd:int"
                 minOccurs="1" maxOccurs="1" />
-              <xsd:element name="Content" type="contentValueType"
+              <xsd:element name="Content" type="vnd.ez.api.Content"
                 maxOccurs="unbounded" />
             </xsd:sequence>
           </xsd:extension>
@@ -5348,6 +5444,7 @@ View XML Schema
       <xsd:complexType name="viewInputType">
         <xsd:all>
           <xsd:element name="identifier" type="xsd:string" minOccurs="0" />
+          <xsd:element name="public" type="xsd:boolean" default="false"/>
           <xsd:element name="Query" type="queryType" />
         </xsd:all>
       </xsd:complexType>
@@ -5357,6 +5454,8 @@ View XML Schema
           <xsd:extension base="ref">
             <xsd:all>
               <xsd:element name="identifier" type="xsd:string" />
+              <xsd:element name="User" type="ref"/>
+              <xsd:element name="public" type="xsd:boolean"/>
               <xsd:element name="Query" type="queryType" />
               <xsd:element name="Result" type="resultType" />
             </xsd:all>
@@ -5366,7 +5465,6 @@ View XML Schema
       <xsd:element name="ViewInput" type="viewInputType" />
       <xsd:element name="View" type="viewType" />
     </xsd:schema>
-
 
 .. _LocationCreate:
 
