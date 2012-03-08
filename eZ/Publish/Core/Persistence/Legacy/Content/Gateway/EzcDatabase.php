@@ -983,7 +983,7 @@ class EzcDatabase extends Gateway
             $query->where(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' ),
-                    $query->bindValue( $contentVersionNo )
+                    $query->bindValue( $contentVersionNo, null, \PDO::PARAM_INT  )
                 )
             );
         }
@@ -1010,7 +1010,7 @@ class EzcDatabase extends Gateway
         $query->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' ),
-                $query->bindValue( $contentId )
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
             )
         );
 
@@ -1018,12 +1018,9 @@ class EzcDatabase extends Gateway
         if ( isset( $relationType ) )
         {
             $query->where(
-                $query->expr->neq(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
-                        $query->bindValue( $relationType )
-                    ),
-                    $query->bindValue( 0 )
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                    $query->bindValue( $relationType )
                 )
             );
         }
