@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
@@ -588,7 +589,74 @@ class LocationServiceStub implements LocationService
      */
     public function copySubtree( Location $subtree,  Location $targetParentLocation )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        // Check permissions
+        if ( false === $this->repository->canUser( 'content', 'edit', $subtree, $targetParentLocation ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        // Check new parent is not tree
+        $this->checkLocationNotInTree( $subtree, $targetParentLocation );
+
+        $targetParentLocation->__setChildCount(
+            $targetParentLocation->childCount + 1
+        );
+
+        return $this->copySubtreeInternal( $subtree, $targetParentLocation );
+    }
+
+    /**
+     * Copies the subtree starting from $subtree as a new subtree of $targetLocation
+     *
+     * Only the items on which the user has read access are copied.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
+     */
+    private function copySubtreeInternal( Location $subtree,  Location $targetParentLocation )
+    {
+        $values = array_merge(
+            $this->locationToArray( $subtree ),
+            array(
+                'id'                =>  ++$this->nextLocationId,
+                'remoteId'          =>  md5( uniqid( $subtree->remoteId, true ) ),
+                'depth'             =>  $targetParentLocation->depth + 1,
+                'parentLocationId'  =>  $targetParentLocation->id,
+                'pathString'        =>  "{$targetParentLocation->pathString}{$this->nextLocationId}/"
+            )
+        );
+
+        $this->locations[$values['id']] = new LocationStub( $values );
+
+        foreach ( $this->loadLocationChildren( $subtree ) as $childLocation )
+        {
+            $this->copySubtreeInternal( $childLocation, $this->locations[$values['id']] );
+        }
+
+        return $this->locations[$values['id']];
+    }
+
+    /**
+     * Checks if the given <b>$location</b> is not a child of the given <b>$substree</b>.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @return void
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function checkLocationNotInTree( Location $subtree, Location $location )
+    {
+        if ( $subtree->id === $location->id )
+        {
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
+        }
+        foreach ( $this->loadLocationChildren( $subtree ) as $childLocation )
+        {
+            $this->checkLocationNotInTree( $childLocation, $location );
+        }
     }
 
     /**
