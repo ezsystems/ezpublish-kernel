@@ -277,7 +277,7 @@ class EzcDatabase extends Gateway
                 $q->bindValue( $struct->mainLanguageId, null, \PDO::PARAM_INT )
             );
         }
-        if ( isset( $struct->publicationDate ) )
+        if ( isset( $struct->modificationDate ) )
         {
             $q->set(
                 $this->dbHandler->quoteColumn( 'modified' ),
@@ -339,16 +339,16 @@ class EzcDatabase extends Gateway
             $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
-            $q->bindValue( $struct->modified, null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->modificationDate, null, \PDO::PARAM_INT )
         )->where(
             $q->expr->lAnd(
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                    $q->bindValue( $struct->id, null, \PDO::PARAM_INT )
+                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'version' ),
-                    $q->bindValue( $struct->versionNo, null, \PDO::PARAM_INT )
+                    $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
                 )
             )
         );
@@ -722,8 +722,8 @@ class EzcDatabase extends Gateway
         {
             $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
             $row['ezcontentobject_main_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_initial_language_id'] )->languageCode;
-            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['language_mask'] );
-            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->getById( $row['initial_language_id'] )->languageCode;
+            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
+            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
             $rows[] = $row;
         }
 
@@ -758,6 +758,10 @@ class EzcDatabase extends Gateway
         $rows = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
+            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
+            $row['ezcontentobject_main_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_initial_language_id'] )->languageCode;
+            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
+            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
             $rows[] = $row;
         }
 
