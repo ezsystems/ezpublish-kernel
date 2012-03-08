@@ -18,7 +18,9 @@ use ezp\Base\Legacy\Carpet,
 /**
  * Wraps eZImageManager class from old eZ Publish
  *
- * @note This implementation is to be changed not to be dependent on the old eZImageManager
+ * @todo This implementation is to be changed not to be dependent on the old eZImageManager
+ * @todo Rewrite image fieldtype
+ *
  */
 class Manager extends Carpet
 {

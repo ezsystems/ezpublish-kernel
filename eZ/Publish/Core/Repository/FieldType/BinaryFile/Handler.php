@@ -8,10 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\BinaryFile;
-use ezp\Io\ContentType,
-    ezp\Io\SysInfo,
-    ezp\Io\FileInfo,
-    ezp\Base\BinaryRepository;
+use eZ\Publish\API\Repository\IOService;
 
 /**
  * Binary file handler
@@ -20,60 +17,27 @@ use ezp\Io\ContentType,
 class Handler
 {
     /**
-     * @var \ezp\Base\BinaryRepository
+     * @var \eZ\Publish\API\Repository\IOService
      */
-    protected $binaryRepository;
+    protected $IOService;
 
-    public function __construct()
+    /**
+     * @param \eZ\Publish\API\Repository\IOService $IOService
+     */
+    public function __construct( IOService $IOService )
     {
-        //@todo Use Binary service available via injected Repository object!
-        $this->binaryRepository = new BinaryRepository;
+        $this->IOService = $IOService;
     }
 
     /**
-     * Returns binary repository used by handler
-     *
-     * @todo See todo in {@link __construct()}
-     * @return \ezp\Base\BinaryRepository
-     */
-    public function getBinaryRepository()
-    {
-        return $this->binaryRepository;
-    }
-
-    /**
-     * Creates a {@link \ezp\Io\BinaryFile} object from $localPath.
-     * Destination dir is to be something like <storageDir>/original/<MajorFileType>/ .
-     * e.g. for an MP3 file (mime-type = audio/mp3) => var/storage/original/audio/ .
-     * File name will be a hash with suffix added (if any).
+     * Creates a {@link \eZ\Publish\API\Repository\Values\IO\BinaryFile} object from $localPath.
      *
      * @param string $localPath Path to the local file, somewhere accessible in the system
-     * @return \ezp\Io\BinaryFile
+     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
      */
     public function createFromLocalPath( $localPath )
     {
-        $fileInfo = new FileInfo( $localPath );
-        $destination = SysInfo::storageDirectory() . '/original/' . $fileInfo->getContentType()->type;
-
-        // Grab suffix and prepend dot
-        $fileSuffix = $fileInfo->getExtension();
-        if ( $fileSuffix )
-            $fileSuffix = '.' . $fileSuffix;
-        // Create dest filename hash
-        $destFileName = md5( $fileInfo->getBasename( $fileSuffix ) . microtime() . mt_rand() ) . $fileSuffix;
-        $destination .= '/' . $destFileName;
-        return $this->binaryRepository->createFromLocalFile( $localPath, $destination );
-    }
-
-    /**
-     * Loads a file from its $filename and $contentType (aka MIME Type)
-     *
-     * @param string $filename Name of the file to retrieve (including its extension)
-     * @param \ezp\Io\ContentType $contentType ContentType object (aka MIME type)
-     */
-    public function loadFileFromContentType( $filename, ContentType $contentType )
-    {
-        $dir = SysInfo::storageDirectory() . '/original/' . $contentType->type;
-        return $this->binaryRepository->load( "$dir/$filename" );
+        $struct = $this->IOService->newBinaryCreateStructFromLocalFile( $localPath );
+        return $this->IOService->createBinaryFile( $struct );
     }
 }

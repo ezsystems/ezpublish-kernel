@@ -9,11 +9,12 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Media;
 use eZ\Publish\Core\Repository\FieldType,
+    eZ\Publish\API\Repository\Repository,
     ezp\Content\Field,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Observable,
-    ezp\Io\BinaryFile;
+    eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
  * The TextLine field type.
@@ -34,20 +35,6 @@ class Type extends FieldType
         'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator'
     );
 
-    /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $file as value.
-     *
-     * @param string $file
-     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $file )
-    {
-        return new Value( $file );
-    }
-
     /*
      * mediaType can be one of those values:
      *   - flash
@@ -63,6 +50,35 @@ class Type extends FieldType
     protected $allowedSettings = array(
         'mediaType' => self::TYPE_HTML5_VIDEO
     );
+
+    /**
+     * @var \eZ\Publish\API\Repository\IOService
+     */
+    protected $IOService;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->IOService = $repository->getIOService();
+    }
+
+    /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $file as value.
+     *
+     * @param string $file
+     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $file )
+    {
+        return new Value( $this->IOService, $file );
+    }
 
     /**
      * Return the field type identifier for this field type
@@ -82,7 +98,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value;
+        return new Value( $this->IOService );
     }
 
     /**
@@ -130,7 +146,7 @@ class Type extends FieldType
     public function fromHash( $hash )
     {
         throw new \Exception( "Not implemented yet" );
-        return new Value( $hash );
+        return new Value( $this->IOService, $hash );
     }
 
     /**

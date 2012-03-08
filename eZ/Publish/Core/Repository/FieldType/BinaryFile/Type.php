@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\BinaryFile;
 use eZ\Publish\Core\Repository\FieldType,
+    eZ\Publish\API\Repository\Repository,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\InvalidArgumentValue,
     eZ\Publish\API\Repository\Values\IO\BinaryFile;
@@ -25,6 +26,21 @@ class Type extends FieldType
     );
 
     /**
+     * @var \eZ\Publish\API\Repository\IOService
+     */
+    protected $IOService;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->IOService = $repository->getIOService();
+    }
+
+    /**
      * Build a Value object of current FieldType
      *
      * Build a FiledType\Value object with the provided $file as value.
@@ -35,7 +51,7 @@ class Type extends FieldType
      */
     public function buildValue( $file )
     {
-        return new Value( $file );
+        return new Value( $this->IOService, $file );
     }
 
     /**
@@ -56,7 +72,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value;
+        return new Value( $this->IOService );
     }
 
     /**
@@ -103,7 +119,7 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        return new Value( $this->IOService, $hash );
     }
 
     /**

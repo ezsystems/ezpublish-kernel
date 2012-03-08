@@ -100,7 +100,7 @@ class IOService implements IOServiceInterface
             throw new InvalidArgumentException( "localFile", "localFile has an invalid value" );
 
         if ( !is_file( $localFile ) || !is_readable( $localFile ) )
-            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable" );
+            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable: {$localFile}" );
 
         $fileHandle = fopen( $localFile, 'rb' );
         if ( $fileHandle === false )

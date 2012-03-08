@@ -24,6 +24,8 @@ use eZ\Publish\SPI\Persistence\ValueObject,
  * @property-read int $timestamp A UNIX timestamp pinpointing the exact date/time when the alias was last modified.
  *                               For the "original" alias, the timestamp will reveal the time when the image was originally uploaded.
  * @property-read int $filesize The number of bytes that the image consumes.
+ *
+ * @todo Rewrite image fieldtype
  */
 class Alias extends ValueObject
 {

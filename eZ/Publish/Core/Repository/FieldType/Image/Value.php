@@ -10,10 +10,12 @@
 namespace eZ\Publish\Core\Repository\FieldType\Image;
 use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    ezp\Base\BinaryRepository;
+    eZ\Publish\API\Repository\IOService;
 
 /**
  * Value for Image field type
+ *
+ * @todo Rewrite image fieldtype
  */
 class Value extends BaseValue implements ValueInterface
 {
@@ -55,12 +57,16 @@ class Value extends BaseValue implements ValueInterface
 
     /**
      * Construct a new Value object.
+     *
+     * @param \eZ\Publish\API\Repository\IOService $IOService
+     * @param string|null $file
+     * @param string $alternativeText
      */
-    public function __construct( $imagePath = null, $alternativeText = '' )
+    public function __construct( IOService $IOService, $file = null, $alternativeText = '' )
     {
         $this->alternativeText = $alternativeText;
-        $this->aliasList = new AliasCollection( $this, new BinaryRepository );
-        $this->aliasList->initializeFromLocalImage( $imagePath );
+        $this->aliasList = new AliasCollection( $this, $IOService );
+        $this->aliasList->initializeFromLocalImage( $file );
     }
 
     /**
@@ -79,7 +85,7 @@ class Value extends BaseValue implements ValueInterface
     public function __toString()
     {
         $string = $this->aliasList['original']->url;
-        if ( isset( $this->alternativeText ) )
+        if ( !empty( $this->alternativeText ) )
             $string .= "|$this->alternativeText";
 
         return $string;

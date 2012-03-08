@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
 use eZ\Publish\Core\Repository\FieldType,
+    eZ\Publish\API\Repository\Repository,
     ezp\Content\Field,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType,
@@ -27,6 +28,21 @@ class Type extends FieldType
     );
 
     /**
+     * @var \eZ\Publish\API\Repository\IOService
+     */
+    protected $IOService;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->IOService = $repository->getIOService();
+    }
+
+    /**
      * Build a Value object of current FieldType
      *
      * Build a FiledType\Value object with the provided $imagePath as value.
@@ -37,7 +53,7 @@ class Type extends FieldType
      */
     public function buildValue( $imagePath )
     {
-        return new Value( $imagePath );
+        return new Value( $this->IOService, $imagePath );
     }
 
     /**
@@ -55,7 +71,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value;
+        return new Value( $this->IOService );
     }
 
     /**
@@ -102,7 +118,7 @@ class Type extends FieldType
     public function fromHash( $hash )
     {
         throw new \Exception( "Not implemented yet" );
-        return new Value( $hash );
+        return new Value( $this->IOService, $hash );
     }
 
     /**

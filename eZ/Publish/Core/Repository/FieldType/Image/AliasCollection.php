@@ -10,20 +10,15 @@
 namespace eZ\Publish\Core\Repository\FieldType\Image;
 use ezp\Base\Collection\Type as TypeCollection,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\InvalidAlias,
-    eZ\Publish\Core\Repository\FieldType\Image\Exception\MissingClass,
-    ezp\Base\BinaryRepository,
-    ezp\Base\Configuration,
-    ezp\Io\BinaryFile,
-    ezp\Io\FileInfo,
-    ezp\Io\SysInfo,
-    ezp\Io\DirHandler,
-    ezp\Io\FileHandler,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Content\Version;
+    eZ\Publish\Core\Repository\FieldType\Image\Exception\MissingAlias,
+    eZ\Publish\API\Repository\IOService,
+    eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
  * Image alias collection.
  * This collection can only hold image Alias objects
+ *
+ * @todo Rewrite image fieldtype
  */
 class AliasCollection extends TypeCollection
 {
@@ -37,17 +32,12 @@ class AliasCollection extends TypeCollection
     /**
      * @var \ezp\Base\BinaryRepository
      */
-    protected $binaryRepository;
+    protected $IOService;
 
     /**
      * @var \eZ\Publish\Core\Repository\FieldType\Image\Manager
      */
     protected $imageManager;
-
-    /**
-     * @var \ezp\Base\Configuration
-     */
-    protected $imageConf;
 
     /**
      * The current serial number, the value will be 1 or higher.
@@ -63,12 +53,12 @@ class AliasCollection extends TypeCollection
      */
     protected $imageSerialNumber = 0;
 
-    public function __construct( Value $imageValue, BinaryRepository $binaryRepository, array $elements = array() )
+    public function __construct( Value $imageValue, IOService $IOService, array $settings = array(), array $elements = array() )
     {
         $this->imageValue = $imageValue;
-        $this->binaryRepository = $binaryRepository;
+        $this->IOService = $IOService;
         $this->imageConf = Configuration::getInstance( 'image' );
-        $this->imageManager = new Manager( $this, $binaryRepository );
+        $this->imageManager = new Manager( $this, $IOService );
         parent::__construct( 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Alias', $elements );
     }
 
