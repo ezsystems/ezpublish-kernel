@@ -237,7 +237,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadSubUserGroups()
     {
-        // self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
         $parentGroup = $userService->loadUserGroup( 4 );
 
@@ -816,7 +815,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testNewUserUpdateStruct()
     {
-        // self::markTestSkipped( "@todo: enable when content service is implemented" );
         $userService = $this->repository->getUserService();
 
         $userUpdateStruct = $userService->newUserUpdateStruct();
@@ -826,15 +824,8 @@ abstract class UserBase extends BaseServiceTest
             $userUpdateStruct
         );
 
-        self::assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
-            $userUpdateStruct->contentUpdateStruct
-        );
-
-        self::assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct',
-            $userUpdateStruct->contentMetaDataUpdateStruct
-        );
+        self::assertNull( $userUpdateStruct->contentUpdateStruct );
+        self::assertNull( $userUpdateStruct->contentMetaDataUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -853,7 +844,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testNewUserGroupUpdateStruct()
     {
-        // self::markTestSkipped( "@todo: enable when content service is implemented" );
         $userService = $this->repository->getUserService();
 
         $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
@@ -863,14 +853,7 @@ abstract class UserBase extends BaseServiceTest
             $userGroupUpdateStruct
         );
 
-        self::assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
-            $userGroupUpdateStruct->contentUpdateStruct
-        );
-
-        self::assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct',
-            $userGroupUpdateStruct->contentMetaDataUpdateStruct
-        );
+        self::assertNull( $userGroupUpdateStruct->contentUpdateStruct );
+        self::assertNull( $userGroupUpdateStruct->contentMetaDataUpdateStruct );
     }
 }
