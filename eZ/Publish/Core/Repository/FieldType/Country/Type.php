@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository\FieldType\Country;
 use eZ\Publish\Core\Repository\FieldType,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\Core\Repository\FieldType\Country\Exception\InvalidValue,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType,
     RuntimeException;
@@ -21,6 +22,41 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
+    /**
+     * @var array
+     */
+    protected $countriesInfo;
+
+    /**
+     * @param array $countriesInfo Array of countries data
+     */
+    public function __construct( array $countriesInfo )
+    {
+        parent::__construct();
+        $this->countriesInfo = $countriesInfo;
+    }
+
+    public function buildValue( $countries )
+    {
+        $countryValue = new Value( (array)$countries );
+        foreach ( $countryValue->values as $country )
+        {
+            foreach ( $this->countriesInfo as $countryInfo ) {
+                switch ( $country ) {
+                    case $countryInfo["Name"]:
+                    case $countryInfo["Alpha2"]:
+                    case $countryInfo["Alpha3"]:
+                        $countryValue->data[$countryInfo["Alpha2"]] = $countryInfo;
+                        continue 3;
+                }
+            }
+
+            throw new InvalidValue( $country );
+        }
+
+        return $countryValue;
+    }
+
     /**
      * Return the field type identifier for this field type
      *
@@ -72,7 +108,7 @@ class Type extends FieldType
     protected function getSortInfo( BaseValue $value )
     {
         $countries = array();
-        foreach ( $value->getCountriesInfo() as $countryInfo )
+        foreach ( $value->data as $countryInfo )
         {
             $countries[] = strtolower( $countryInfo["Name"] );
         }
@@ -105,7 +141,7 @@ class Type extends FieldType
      */
     public function toHash( BaseValue $value )
     {
-        return $value->getCountries();
+        return $value->values;
     }
 
     /**
