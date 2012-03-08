@@ -14,6 +14,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
+    eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     ezp\Content\Query,
     eZ\Publish\SPI\Persistence;
 
@@ -30,6 +32,11 @@ class SearchHandlerSortTest extends TestCase
      * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
      */
     protected $fieldRegistry;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
+     */
+    protected $languageHandler;
 
     /**
      * Returns the test suite with all tests declared in this class.
@@ -120,9 +127,17 @@ class SearchHandlerSortTest extends TestCase
         $mapperMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
             array( 'extractContentFromRows' ),
-            array(),
-            '',
-            false
+            array(
+                $this->locationMapperMock = $this->getMock(
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
+                    array(),
+                    array(),
+                    '',
+                    false
+                ),
+                $this->getFieldRegistry(),
+                $this->getLanguageHandlerMock()
+            )
         );
         $mapperMock->expects( $this->any() )
             ->method( 'extractContentFromRows' )
@@ -138,7 +153,8 @@ class SearchHandlerSortTest extends TestCase
                             if ( !isset( $contentObjs[$contentId] ) )
                             {
                                 $contentObjs[$contentId] = new ContentObject();
-                                $contentObjs[$contentId]->id = $contentId;
+                                $contentObjs[$contentId]->contentInfo = new ContentInfo;
+                                $contentObjs[$contentId]->contentInfo->contentId = $contentId;
                             }
                         }
                         return array_values( $contentObjs );
@@ -146,6 +162,67 @@ class SearchHandlerSortTest extends TestCase
                 )
             );
         return $mapperMock;
+    }
+
+    /**
+     * Returns a language handler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
+     */
+    protected function getLanguageHandlerMock()
+    {
+        if ( !isset( $this->languageHandler ) )
+        {
+            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $innerLanguageHandler->expects( $this->any() )
+                ->method( 'loadAll' )
+                ->will(
+                    $this->returnValue(
+                        array(
+                            new Language( array(
+                                'id'            => 2,
+                                'languageCode'  => 'eng-GB',
+                                'name'          => 'British english'
+                            ) ),
+                            new Language( array(
+                                'id'            => 4,
+                                'languageCode'  => 'eng-US',
+                                'name'          => 'US english'
+                            ) ),
+                            new Language( array(
+                                'id'            => 8,
+                                'languageCode'  => 'fre-FR',
+                                'name'          => 'Français franchouillard'
+                            ) )
+                        )
+                    )
+                );
+            $this->languageHandler = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
+                array( 'getByLocale', 'getById' ),
+                array(
+                    $innerLanguageHandler,
+                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
+                )
+            );
+        }
+        return $this->languageHandler;
+    }
+
+    /**
+     * Returns a field registry mock object
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
+     */
+    protected function getFieldRegistry()
+    {
+        if ( !isset( $this->fieldRegistry ) )
+        {
+            $this->fieldRegistry = $this->getMock(
+                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+            );
+        }
+        return $this->fieldRegistry;
     }
 
     /**
@@ -181,7 +258,7 @@ class SearchHandlerSortTest extends TestCase
             array_map(
                 function ( $content )
                 {
-                    return $content->id;
+                    return $content->contentInfo->contentId;
                 },
                 $result->content
             )
@@ -207,7 +284,7 @@ class SearchHandlerSortTest extends TestCase
             array_map(
                 function ( $content )
                 {
-                    return $content->id;
+                    return $content->contentInfo->contentId;
                 },
                 $result->content
             )
@@ -233,7 +310,7 @@ class SearchHandlerSortTest extends TestCase
             array_map(
                 function ( $content )
                 {
-                    return $content->id;
+                    return $content->contentInfo->contentId;
                 },
                 $result->content
             )
@@ -260,7 +337,7 @@ class SearchHandlerSortTest extends TestCase
             array_map(
                 function ( $content )
                 {
-                    return $content->id;
+                    return $content->contentInfo->contentId;
                 },
                 $result->content
             )
@@ -286,7 +363,7 @@ class SearchHandlerSortTest extends TestCase
             array_map(
                 function ( $content )
                 {
-                    return $content->id;
+                    return $content->contentInfo->contentId;
                 },
                 $result->content
             )

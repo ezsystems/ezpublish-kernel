@@ -14,6 +14,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\FieldHandler,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence;
 
 /**
@@ -29,6 +31,11 @@ class ContentSearchHandlerTest extends TestCase
      * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
      */
     protected $fieldRegistry;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
+     */
+    protected $languageHandler;
 
     /**
      * Returns the test suite with all tests declared in this class.
@@ -164,9 +171,17 @@ class ContentSearchHandlerTest extends TestCase
         $mapperMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
             array( 'extractContentFromRows' ),
-            array(),
-            '',
-            false
+            array(
+                $this->locationMapperMock = $this->getMock(
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
+                    array(),
+                    array(),
+                    '',
+                    false
+                ),
+                $this->fieldRegistry,
+                $this->getLanguageHandlerMock()
+            )
         );
         $mapperMock->expects( $this->any() )
             ->method( 'extractContentFromRows' )
@@ -182,7 +197,8 @@ class ContentSearchHandlerTest extends TestCase
                             if ( !isset( $contentObjs[$contentId] ) )
                             {
                                 $contentObjs[$contentId] = new ContentObject();
-                                $contentObjs[$contentId]->id = $contentId;
+                                $contentObjs[$contentId]->contentInfo = new ContentInfo;
+                                $contentObjs[$contentId]->contentInfo->contentId = $contentId;
                             }
                         }
                         return array_values( $contentObjs );
@@ -190,6 +206,51 @@ class ContentSearchHandlerTest extends TestCase
                 )
             );
         return $mapperMock;
+    }
+
+    /**
+     * Returns a language handler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
+     */
+    protected function getLanguageHandlerMock()
+    {
+        if ( !isset( $this->languageHandler ) )
+        {
+            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $innerLanguageHandler->expects( $this->any() )
+                ->method( 'loadAll' )
+                ->will(
+                    $this->returnValue(
+                        array(
+                            new Language( array(
+                                'id'            => 2,
+                                'languageCode'  => 'eng-GB',
+                                'name'          => 'British english'
+                            ) ),
+                            new Language( array(
+                                'id'            => 4,
+                                'languageCode'  => 'eng-US',
+                                'name'          => 'US english'
+                            ) ),
+                            new Language( array(
+                                'id'            => 8,
+                                'languageCode'  => 'fre-FR',
+                                'name'          => 'Français franchouillard'
+                            ) )
+                        )
+                    )
+                );
+            $this->languageHandler = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
+                array( 'getByLocale', 'getById' ),
+                array(
+                    $innerLanguageHandler,
+                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
+                )
+            );
+        }
+        return $this->languageHandler;
     }
 
     /**
@@ -306,7 +367,7 @@ class ContentSearchHandlerTest extends TestCase
 
         $content = $locator->findSingle( new Criterion\ContentId( 10 ) );
 
-        $this->assertEquals( 10, $content->id );
+        $this->assertEquals( 10, $content->contentInfo->contentId );
     }
 
     /**
@@ -348,7 +409,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 10 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -399,7 +460,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -431,7 +492,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 10, 12 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -465,7 +526,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -492,7 +553,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -517,7 +578,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -542,7 +603,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 10, 14 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -567,7 +628,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 11, 12, 13, 42, 225, 10, 14 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -594,7 +655,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 11, 225 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -621,7 +682,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -648,7 +709,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -675,7 +736,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -702,7 +763,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 131, 66, 225 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -727,7 +788,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 65 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -752,7 +813,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 41, 45, 56, 65 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -777,7 +838,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 10 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -827,7 +888,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -852,7 +913,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -891,7 +952,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 11 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -930,7 +991,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 11, 42 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -969,7 +1030,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 69, 71 ,72 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -1029,7 +1090,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 11, 69, 71 ,72 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -1054,7 +1115,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 191 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -1079,7 +1140,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 191 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -1108,7 +1169,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array(),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -1133,7 +1194,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array(),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );
@@ -1165,7 +1226,7 @@ class ContentSearchHandlerTest extends TestCase
                 array_map(
                     function ( $content )
                     {
-                        return $content->id;
+                        return $content->contentInfo->contentId;
                     },
                     $result->content
                 )
