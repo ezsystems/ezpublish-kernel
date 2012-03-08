@@ -15,9 +15,18 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  */
 class VersionInfo
 {
+    /**
+     * Version status constants
+     * @var int
+     */
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
-    const STATUS_ARCHIVED = 2;
+    const STATUS_PENDING = 2;
+    const STATUS_ARCHIVED = 3;
+    const STATUS_REJECTED = 4;
+    const STATUS_INTERNAL_DRAFT = 5;
+    const STATUS_REPEAT = 6;
+    const STATUS_QUEUED = 7;
 
     /**
  	 * Version ID.
