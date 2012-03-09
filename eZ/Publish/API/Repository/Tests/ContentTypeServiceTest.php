@@ -1169,19 +1169,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
-     * Test for the updateContentTypeDraft() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
-     */
-    public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionIncorrectUser()
-    {
-        $this->markTestIncomplete( "Is not implemented." );
-    }
-
-    /**
      * Test for the addFieldDefinition() method.
      *
      * @return void
