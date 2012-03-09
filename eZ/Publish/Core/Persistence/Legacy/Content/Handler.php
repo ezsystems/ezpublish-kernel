@@ -315,29 +315,6 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Updates a content object entity with data and identifier $content
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\Content
-     */
-    public function update( UpdateStruct $content )
-    {
-        $this->contentGateway->updateContent( $content );
-        $this->contentGateway->updateVersion( $content );
-        $this->fieldHandler->updateFields( $content );
-        foreach ( $content->name as $language => $name )
-        {
-            $this->contentGateway->setName(
-                $content->id,
-                $content->versionNo,
-                $name, $language
-            );
-        }
-
-        return $this->load( $content->id, $content->versionNo );
-    }
-
-    /**
      * Updates a content object meta data, identified by $contentId
      *
      * @param int $contentId
