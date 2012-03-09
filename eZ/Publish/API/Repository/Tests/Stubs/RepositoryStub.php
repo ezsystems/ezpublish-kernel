@@ -310,7 +310,10 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->contentTypeService )
         {
-            $this->contentTypeService = new ContentTypeServiceStub( $this );
+            $this->contentTypeService = new ContentTypeServiceStub(
+                $this,
+                $this->getContentService()
+            );
         }
         return $this->contentTypeService;
     }

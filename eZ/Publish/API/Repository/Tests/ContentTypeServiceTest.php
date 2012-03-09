@@ -1986,10 +1986,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
 
-        $commentTypeDraft = $contentTypeService->createContentTypeDraft( $commentType );
+        $contentTypeService->createContentTypeDraft( $commentType );
 
         // Throws exception, since type draft already exists
-        $invalidTypeDraft = $contentTypeService->createContentTypeDraft( $commentType );
+        $contentTypeService->createContentTypeDraft( $commentType );
         /* END: Use Case */
     }
 
@@ -2029,11 +2029,21 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentType
      */
     public function testDeleteContentTypeThrowsBadStateException()
     {
-        // TODO: Needs existsing content objects
-        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::deleteContentType() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+
+        // This call will fail with a "BadStateException" because there is at
+        // least on content object of type "article" in an eZ Publish demo
+        $contentTypeService->deleteContentType( $contentType );
+        /* END: Use Case */
     }
 
     /**

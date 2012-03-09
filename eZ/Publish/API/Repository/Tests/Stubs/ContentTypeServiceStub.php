@@ -22,11 +22,13 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
@@ -85,15 +87,22 @@ class ContentTypeServiceStub implements ContentTypeService
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub
+     */
+    private $contentService;
+
+    /**
      * Instantiates a new content type service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub $contentService
      */
-    public function __construct( RepositoryStub $repository )
+    public function __construct( RepositoryStub $repository, ContentServiceStub $contentService )
     {
         $this->initGroupProperties();
 
-        $this->repository = $repository;
+        $this->repository     = $repository;
+        $this->contentService = $contentService;
 
         $this->initFromFixture();
     }
@@ -844,6 +853,11 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
+        if ( $this->contentService->__loadContentInfoByContentType( $contentType ) )
+        {
+            throw new BadStateExceptionStub( 'What error code should be used?' );
+        }
+
         unset( $this->types[$contentType->id] );
     }
 

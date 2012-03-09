@@ -1420,6 +1420,28 @@ class ContentServiceStub implements ContentService
     }
 
     /**
+     * Internal helper method that returns all ContentInfo objects for the given
+     * <b>$contentType</b>.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     *
+     * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
+     */
+    public function __loadContentInfoByContentType( ContentType $contentType )
+    {
+        $result = array();
+        foreach ( $this->contentInfo as $contentInfo )
+        {
+            if ( $contentInfo->contentType->id === $contentType->id )
+            {
+                $result[] = $contentInfo;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Internal helper method used to load ContentInfo objects by their main
      * language code.
      *
