@@ -327,8 +327,8 @@ interface ContentService
     /**
      * Performs a query for a single content object
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the found content object
-     * @TODO throw an exception if the found object count is > 1
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
      * @TODO define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
@@ -336,7 +336,7 @@ interface ContentService
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
 

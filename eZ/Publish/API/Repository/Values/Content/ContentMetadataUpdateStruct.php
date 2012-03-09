@@ -60,5 +60,5 @@ class ContentMetaDataUpdateStruct extends ValueObject
      *
      * @var mixed
      */
-    protected $mainLocationId;
+    public $mainLocationId;
 }
