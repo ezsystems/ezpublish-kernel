@@ -17,6 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Location service, used for complex subtree operations
@@ -40,7 +42,7 @@ class LocationServiceStub implements LocationService
     protected $nextLocationId = 0;
 
     /**
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub[]
      */
     protected $locations = array();
 
@@ -65,7 +67,9 @@ class LocationServiceStub implements LocationService
     public function newLocationCreateStruct( $parentLocationId )
     {
         return new LocationCreateStruct(
-            array( 'parentLocationId' => $parentLocationId )
+            array(
+                'parentLocationId'  =>  $parentLocationId
+            )
         );
     }
 
@@ -85,10 +89,20 @@ class LocationServiceStub implements LocationService
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'create', $contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
         $this->checkContentNotInTree( $contentInfo, $parentLocation );
         $this->checkRemoteIdNotTaken( $locationCreateStruct->remoteId );
+
+        if ( null === $locationCreateStruct->remoteId )
+        {
+            $locationCreateStruct->remoteId = md5( uniqid( __METHOD__, true ) );
+        }
 
         $data = array();
         foreach ( $locationCreateStruct as $propertyName => $propertyValue )
@@ -108,6 +122,12 @@ class LocationServiceStub implements LocationService
 
         $parentLocation = $this->loadLocation( $location->parentLocationId );
         $parentLocation->__setChildCount( $parentLocation->childCount + 1 );
+
+        // Set main location if not set before.
+        if ( null === $contentInfo->mainLocationId )
+        {
+            $contentInfo->__setMainLocationId( $location->id );
+        }
 
         return $location;
     }
@@ -165,11 +185,16 @@ class LocationServiceStub implements LocationService
      */
     public function loadLocation( $locationId )
     {
-        if ( isset( $this->locations[$locationId] ) )
+        if ( false === isset( $this->locations[$locationId] ) )
         {
-            return $this->locations[$locationId];
+            throw new Exceptions\NotFoundExceptionStub;
         }
-        throw new Exceptions\NotFoundExceptionStub;
+        if ( false === $this->repository->canUser( 'content', 'read', $this->locations[$locationId]->getContentInfo() ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        return $this->locations[$locationId];
     }
 
     /**
@@ -186,10 +211,15 @@ class LocationServiceStub implements LocationService
     {
         foreach ( $this->locations as $location )
         {
-            if ( $location->remoteId == $remoteId )
+            if ( $location->remoteId != $remoteId )
             {
-                return $location;
+                continue;
             }
+            if ( false === $this->repository->canUser( 'content', 'create', $location->getContentInfo() ) )
+            {
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+            }
+            return $location;
         }
         throw new Exceptions\NotFoundExceptionStub;
     }
@@ -217,6 +247,11 @@ class LocationServiceStub implements LocationService
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $this->checkRemoteIdNotExist( $locationUpdateStruct );
 
         $data = $this->locationToArray( $location );
@@ -318,12 +353,12 @@ class LocationServiceStub implements LocationService
         $locations = array();
         foreach ( $this->locations as $candidateLocation )
         {
-            if ( $candidateLocation->contentInfo === null )
+            if ( $candidateLocation->getContentInfo() === null )
             {
                 // Skip root location
                 continue;
             }
-            if ( $contentInfo->contentId == $candidateLocation->contentInfo->contentId
+            if ( $contentInfo->contentId == $candidateLocation->getContentInfo()->contentId
                  && strpos( $candidateLocation->pathString, $subPath ) === 0
                 )
             {
@@ -393,6 +428,11 @@ class LocationServiceStub implements LocationService
      */
     public function hideLocation( Location $location )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $location->__hide();
 
         foreach ( $this->loadLocationChildren( $location ) as $child)
@@ -433,6 +473,11 @@ class LocationServiceStub implements LocationService
      */
     public function unhideLocation( Location $location )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $location->__unhide();
 
         foreach ( $this->loadLocationChildren( $location ) as $child )
@@ -475,6 +520,11 @@ class LocationServiceStub implements LocationService
      */
     public function deleteLocation( Location $location )
     {
+        if ( false === $this->repository->canUser( 'content', 'remove', $location->contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         unset( $this->locations[$location->id] );
@@ -488,24 +538,32 @@ class LocationServiceStub implements LocationService
         {
             $this->deleteLocation( $child );
         }
+
+        // Decrement $childCount property
+        if ( isset( $this->locations[$location->parentLocationId] ) )
+        {
+            $this->locations[$location->parentLocationId]->__setChildCount(
+                $this->locations[$location->parentLocationId]->childCount - 1
+            );
+        }
     }
 
     /**
      * Returns if a location for the given $contentInfo exists.
      *
-     * @param ContentInfo $contentInfo
-     * @return bool
+     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $contentInfo
+     * @return boolean
      */
     protected function hasLocation( ContentInfo $contentInfo )
     {
         foreach ( $this->locations as $location )
         {
-            if ( $location->contentInfo == null )
+            if ( $location->getContentInfo() == null )
             {
                 // Skip root location
                 continue;
             }
-            if ( $location->contentInfo->contentId == $contentInfo->contentId )
+            if ( $location->getContentInfo()->contentId == $contentInfo->contentId )
             {
                 return true;
             }
@@ -531,7 +589,74 @@ class LocationServiceStub implements LocationService
      */
     public function copySubtree( Location $subtree,  Location $targetParentLocation )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        // Check permissions
+        if ( false === $this->repository->canUser( 'content', 'edit', $subtree, $targetParentLocation ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        // Check new parent is not tree
+        $this->checkLocationNotInTree( $subtree, $targetParentLocation );
+
+        $targetParentLocation->__setChildCount(
+            $targetParentLocation->childCount + 1
+        );
+
+        return $this->copySubtreeInternal( $subtree, $targetParentLocation );
+    }
+
+    /**
+     * Copies the subtree starting from $subtree as a new subtree of $targetLocation
+     *
+     * Only the items on which the user has read access are copied.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
+     */
+    private function copySubtreeInternal( Location $subtree,  Location $targetParentLocation )
+    {
+        $values = array_merge(
+            $this->locationToArray( $subtree ),
+            array(
+                'id'                =>  ++$this->nextLocationId,
+                'remoteId'          =>  md5( uniqid( $subtree->remoteId, true ) ),
+                'depth'             =>  $targetParentLocation->depth + 1,
+                'parentLocationId'  =>  $targetParentLocation->id,
+                'pathString'        =>  "{$targetParentLocation->pathString}{$this->nextLocationId}/"
+            )
+        );
+
+        $this->locations[$values['id']] = new LocationStub( $values );
+
+        foreach ( $this->loadLocationChildren( $subtree ) as $childLocation )
+        {
+            $this->copySubtreeInternal( $childLocation, $this->locations[$values['id']] );
+        }
+
+        return $this->locations[$values['id']];
+    }
+
+    /**
+     * Checks if the given <b>$location</b> is not a child of the given <b>$substree</b>.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @return void
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function checkLocationNotInTree( Location $subtree, Location $location )
+    {
+        if ( $subtree->id === $location->id )
+        {
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
+        }
+        foreach ( $this->loadLocationChildren( $subtree ) as $childLocation )
+        {
+            $this->checkLocationNotInTree( $childLocation, $location );
+        }
     }
 
     /**
@@ -547,7 +672,125 @@ class LocationServiceStub implements LocationService
      */
     public function moveSubtree( Location $location, Location $newParentLocation )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->canUser( 'content', 'move', $location, $newParentLocation ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $oldParentLocation = $this->loadLocation( $location->parentLocationId );
+        $oldParentLocation->__setChildCount( $oldParentLocation->childCount - 1 );
+
+        $newParentLocation->__setChildCount( $newParentLocation->childCount + 1 );
+
+        $this->moveSubtreeInternal( $location, $newParentLocation );
+    }
+
+    /**
+     * Moves the subtree to $newParentLocation
+     *
+     * If a user has the permission to move the location to a target location
+     * he can do it regardless of an existing descendant on which the user has no permission.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
+     */
+    private function moveSubtreeInternal( Location $location, Location $newParentLocation )
+    {
+        $values = array_merge(
+            $this->locationToArray( $location ),
+            array(
+                'depth'             =>  $newParentLocation->depth + 1,
+                'pathString'        =>  "{$newParentLocation->pathString}{$location->id}/",
+                'parentLocationId'  =>  $newParentLocation->id,
+            )
+        );
+
+        $this->locations[$location->id] = new LocationStub( $values );
+
+        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        {
+            $this->moveSubtreeInternal(
+                $childLocation,
+                $this->locations[$location->id]
+            );
+        }
+    }
+
+    /**
+     * Internal helper method used to trash a location tree.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $trashed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     */
+    public function __trashLocation( Location $location, array $trashed = array() )
+    {
+        // Decrement child count on parent location
+        if ( 0 === count( $trashed ) && isset( $this->locations[$location->parentLocationId] ) )
+        {
+            $this->locations[$location->parentLocationId]->__setChildCount(
+                $this->locations[$location->parentLocationId]->childCount - 1
+            );
+        }
+
+        $trashed[] = $location;
+        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        {
+            $trashed = $this->__trashLocation( $childLocation, $trashed );
+        }
+
+        unset( $this->locations[$location->id] );
+
+        return $trashed;
+    }
+
+    /**
+     * Internal helper method used to recover a location tree.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreate
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function __recoverLocation( Location $location, LocationCreateStruct $locationCreate = null )
+    {
+        if ( $locationCreate )
+        {
+            foreach ( get_object_vars( $locationCreate ) as $name => $value )
+            {
+                if ( null === $value )
+                {
+                    $locationCreate->{$name} = $location->{$name};
+                }
+            }
+
+            $contentInfo = $location->getContentInfo();
+            $newLocation = $this->createLocation( $contentInfo, $locationCreate );
+
+            // Restore child count
+            $newLocation->__setChildCount( $location->childCount );
+
+            // Update main location id
+            if ( $contentInfo->mainLocationId === $location->id )
+            {
+                $contentInfo->__setMainLocationId( $newLocation->id );
+            }
+
+            // Update child count on new parent
+            if ( isset( $this->locations[$newLocation->parentLocationId] ) )
+            {
+                $this->locations[$newLocation->parentLocationId]->__setChildCount(
+                    $this->locations[$newLocation->parentLocationId]->childCount + 1
+                );
+            }
+
+            return $newLocation;
+        }
+        return ( $this->locations[$location->id] = $location );
+
     }
 
     /**

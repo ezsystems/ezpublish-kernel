@@ -25,7 +25,7 @@ class Rating implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = $value->data->isDisabled ? 1 : null;
+        $storageFieldValue->dataInt = $value->data ? 1 : null;
     }
 
     /**
@@ -36,7 +36,7 @@ class Rating implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new RatingValue( (bool)$value->dataInt );
+        $fieldValue->data = (bool)$value->dataInt;
     }
 
     /**

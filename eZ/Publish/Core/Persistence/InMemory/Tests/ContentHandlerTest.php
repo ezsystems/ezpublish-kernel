@@ -18,8 +18,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content as ContentDomainObject,
     ezp\Content\Version,
-    ezp\Content\Relation,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
+    ezp\Content\Relation;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -61,10 +60,10 @@ class ContentHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 'value' => new FieldValue(
                     array(
-                        'data' => new TextLineValue( "Welcome" )
+                        'data' => "Welcome"
                     )
                 ),
-                'language' => 'eng-GB',
+                'languageCode' => 'eng-GB',
             )
         );
 
@@ -115,10 +114,10 @@ class ContentHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
                     array(
-                        "data" => new TextLineValue( "Welcome" )
+                        "data" => "Welcome"
                     )
                 ),
-                'language' => 'eng-GB',
+                'languageCode' => 'eng-GB',
             )
         );
 
@@ -139,8 +138,8 @@ class ContentHandlerTest extends HandlerTest
         $field = $content->version->fields[0];
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 'ezstring', $field->type );
-        $this->assertEquals( 'eng-GB', $field->language );
-        $this->assertEquals( 'Welcome', $field->value->data->text );
+        $this->assertEquals( 'eng-GB', $field->languageCode );
+        $this->assertEquals( 'Welcome', $field->value->data );
         $this->assertEquals( $content->version->versionNo, $field->versionNo );
     }
 
@@ -281,10 +280,10 @@ class ContentHandlerTest extends HandlerTest
                 "type" => "ezstring",
                 "value" => new FieldValue(
                     array(
-                        "data" => new TextLineValue( "Welcome2" )
+                        "data" => "Welcome2"
                     )
                 ),
-                "language" => "eng-GB",
+                "languageCode" => "eng-GB",
             )
         );
 
@@ -337,7 +336,7 @@ class ContentHandlerTest extends HandlerTest
             self::assertTrue( isset( $aIndexedFields[$definitionId] ), 'Created version must have the same fields as original version' );
             self::assertSame( $field->type, $aIndexedFields[$definitionId]->type, 'Fields must have the same type' );
             self::assertEquals( $field->value, $aIndexedFields[$definitionId]->value, 'Fields must have the same value' );
-            self::assertEquals( $field->language, $aIndexedFields[$definitionId]->language, 'Fields language must be equal' );
+            self::assertEquals( $field->languageCode, $aIndexedFields[$definitionId]->languageCode, 'Fields language code must be equal' );
             self::assertSame( $field->versionNo + 1, $aIndexedFields[$definitionId]->versionNo, 'Field version number must be incremented' );
         }
     }

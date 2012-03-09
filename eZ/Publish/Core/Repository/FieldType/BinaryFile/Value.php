@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository\FieldType\BinaryFile;
 use eZ\Publish\Core\Repository\FieldType\ValueInterface,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\API\Repository\IOService,
     ezp\Base\Exception\PropertyNotFound;
 
 /**
@@ -27,7 +28,7 @@ class Value extends BaseValue implements ValueInterface
     /**
      * BinaryFile object
      *
-     * @var \ezp\Io\BinaryFile
+     * @var \eZ\Publish\API\Repository\Values\IO\BinaryFile
      */
     public $file;
 
@@ -58,10 +59,13 @@ class Value extends BaseValue implements ValueInterface
      * $binaryValue = new BinaryFile\Value;
      * $binaryValue->file = $binaryValue->getHandler()->createFromLocalPath( '/path/to/local/file.txt' );
      * </code>
+     *
+     * @param \eZ\Publish\API\Repository\IOService $IOService
+     * @param string|null $file
      */
-    public function __construct( $file = null )
+    public function __construct( IOService $IOService, $file = null )
     {
-        $this->handler = new Handler;
+        $this->handler = new Handler( $IOService );
         if ( $file !== null )
         {
             $this->file = $this->handler->createFromLocalPath( $file );
@@ -83,21 +87,10 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
-        if ( !isset( $this->file->path ) )
+        if ( !isset( $this->file->id ) )
             return "";
 
-        return $this->file->path;
-    }
-
-    /**
-     * Returns handler object.
-     * Useful manipulate {@link self::$file}
-     *
-     * @return \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler
-     */
-    public function getHandler()
-    {
-        return $this->handler;
+        return $this->file->id;
     }
 
     public function __get( $name )
@@ -105,7 +98,7 @@ class Value extends BaseValue implements ValueInterface
         switch ( $name )
         {
             case 'filename':
-                return basename( $this->file->path );
+                return basename( $this->file->id );
 
             case 'mimeType':
                 return $this->file->contentType->__toString();
@@ -120,7 +113,7 @@ class Value extends BaseValue implements ValueInterface
                 return $this->file->size;
 
             case 'filepath':
-                return $this->file->path;
+                return $this->file->id;
 
             default:
                 throw new PropertyNotFound( $name, get_class( $this ) );

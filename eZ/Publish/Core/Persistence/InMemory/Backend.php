@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\InMemory;
 use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\ValueObject;
@@ -81,6 +82,12 @@ class Backend
             if ( $item['id'] == $data['id'] && ( !isset( $item['status'] ) || $item['status'] == $data['status'] ) )
                 throw new Logic( 'create', 'provided id already exist' );
         }
+
+        /*foreach ( $data as $prop => $value )
+        {
+            if ( $value === null )
+                throw new InvalidArgumentValue( 'data', "'$prop' on '$type' was of value NULL" );
+        }*/
 
         $this->data[$type][] = $data;
         return $this->toValue( $type, $data );
@@ -188,6 +195,12 @@ class Backend
 
         // Make sure id isn't changed
         unset( $data['id'] );
+
+        /*foreach ( $data as $prop => $value )
+        {
+            if ( $value === null )
+                throw new InvalidArgumentValue( 'data', "'$prop' on '$type' was of value NULL" );
+        }*/
 
         $return = false;
         foreach ( $this->data[$type] as $key => $item )
@@ -401,7 +414,7 @@ class Backend
         {
             if ( isset( $data[$prop] ) )
             {
-                if ( $type === "Content\\Field" && $prop === "value" && ! $data["value"] instanceof FieldValue )
+                if ( $type === "Content\\Field" && $prop === "value" && !$data["value"] instanceof FieldValue )
                 {
                     $fieldTypeNS = $this->getFieldTypeNamespace( $obj );
                     $fieldValueClassName =  "$fieldTypeNS\\Value";
@@ -427,6 +440,10 @@ class Backend
                 {
                     $value = $data[$prop];
                 }
+            }
+            else if ( $value === null && !isset( $joinInfo[$prop] ) )
+            {
+                //throw new BadStateException( "\$prop", "Value of '$prop' is not optional on '$className'" );
             }
         }
         return $this->joinToValue( $obj, $joinInfo );
@@ -482,23 +499,23 @@ class Backend
      * @var array
      */
     private $tempFieldTypeMapping = array(
-        'ezstring' => 'eZ\Publish\Core\Repository\FieldType\TextLine',
-        'ezinteger' => 'eZ\Publish\Core\Repository\FieldType\Integer',
-        'ezauthor' => 'eZ\Publish\Core\Repository\FieldType\Author',
-        'ezfloat' => 'eZ\Publish\Core\Repository\FieldType\Float',
-        'eztext' => 'eZ\Publish\Core\Repository\FieldType\TextBlock',
-        'ezboolean' => 'eZ\Publish\Core\Repository\FieldType\Checkbox',
-        'ezdatetime' => 'eZ\Publish\Core\Repository\FieldType\DateAndTime',
-        'ezkeyword' => 'eZ\Publish\Core\Repository\FieldType\Keyword',
-        'ezurl' => 'eZ\Publish\Core\Repository\FieldType\Url',
-        'ezcountry' => 'eZ\Publish\Core\Repository\FieldType\Country',
-        'ezbinaryfile' => 'eZ\Publish\Core\Repository\FieldType\BinaryFile',
-        'ezmedia' => 'eZ\Publish\Core\Repository\FieldType\Media',
-        'ezxmltext' => 'eZ\Publish\Core\Repository\FieldType\XmlText',
-        'ezobjectrelationlist' => 'eZ\Publish\Core\Repository\FieldType\RelationList',
-        'ezselection' => 'eZ\Publish\Core\Repository\FieldType\Selection',
-        'ezsrrating' => 'eZ\Publish\Core\Repository\FieldType\Rating',
-        'ezimage' => 'eZ\Publish\Core\Repository\FieldType\Image',
-        'ezobjectrelation' => 'eZ\Publish\Core\Repository\FieldType\Relation',
+        'ezstring' => 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine',
+        'ezinteger' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Integer',
+        'ezauthor' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Author',
+        'ezfloat' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Float',
+        'eztext' => 'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock',
+        'ezboolean' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox',
+        'ezdatetime' => 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime',
+        'ezkeyword' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Keyword',
+        'ezurl' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Url',
+        'ezcountry' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Country',
+        'ezbinaryfile' => 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile',
+        'ezmedia' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Media',
+        'ezxmltext' => 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText',
+        'ezobjectrelationlist' => 'eZ\\Publish\\Core\\Repository\\FieldType\\RelationList',
+        'ezselection' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Selection',
+        'ezsrrating' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Rating',
+        'ezimage' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Image',
+        'ezobjectrelation' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Relation',
     );
 }

@@ -40,7 +40,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new KeywordValue( array( "key1", "key2" ) );
+        $value->data = array( "key1", "key2" );
         $value->sortKey = false;
         $storageFieldValue = new StorageFieldValue;
 
@@ -63,8 +63,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Keyword\\Value", $fieldValue->data );
-        $this->assertSame( array(), $fieldValue->data->values );
+        $this->assertSame( array(), $fieldValue->data );
         $this->assertNull( $fieldValue->fieldSettings );
         $this->assertNull( $fieldValue->sortKey );
     }

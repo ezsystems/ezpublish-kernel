@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Country\Type as Country,
+use eZ\Publish\Core\Repository\FieldType\Country\Type as Country,
     eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
@@ -17,18 +16,51 @@ use eZ\Publish\Core\Repository\FieldType\Factory,
 class CountryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
+     * @var \eZ\Publish\Core\Repository\FieldType\Country\Type
      */
-    public function testFactory()
+    protected $ft;
+
+    public function setUp()
     {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Type",
-            Factory::build( "ezcountry" ),
-            "Country object not returned for 'ezcountry', incorrect mapping? "
+        $this->ft = new Country(
+            array(
+                "BE" => array(
+                    "Name" => "Belgium",
+                    "Alpha2" => "BE",
+                    "Alpha3" => "BEL",
+                    "IDC" => 32,
+                ),
+                "FR" => array(
+                    "Name" => "France",
+                    "Alpha2" => "FR",
+                    "Alpha3" => "FRA",
+                    "IDC" => 33,
+                ),
+                "NO" => array(
+                    "Name" => "Norway",
+                    "Alpha2" => "NO",
+                    "Alpha3" => "NOR",
+                    "IDC" => 47,
+                ),
+                "KP" => array(
+                    "Name" => "Korea, Democratic People's Republic of",
+                    "Alpha2" => "KP",
+                    "Alpha3" => "PRK",
+                    "IDC" => 850,
+                ),
+                "TF" => array(
+                    "Name" => "French Southern Territories",
+                    "Alpha2" => "TF",
+                    "Alpha3" => "ATF",
+                    "IDC" => 0,
+                ),
+                "CF" => array(
+                    "Name" => "Central African Republic",
+                    "Alpha2" => "CF",
+                    "Alpha3" => "CAF",
+                    "IDC" => 236,
+                ),
+            )
         );
     }
 
@@ -38,8 +70,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      */
     public function testCountrySupportedValidators()
     {
-        $ft = new Country();
-        self::assertSame( array(), $ft->allowedValidators(), "The set of allowed validators does not match what is expected." );
+        self::assertSame( array(), $this->ft->allowedValidators(), "The set of allowed validators does not match what is expected." );
     }
 
     /**
@@ -48,13 +79,12 @@ class CountryTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormatSingle()
     {
-        $ft = new Country();
-        $ref = new ReflectionObject( $ft );
+        $ref = new ReflectionObject( $this->ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
-        $value = new CountryValue( "Belgium" );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
+        $value = new CountryValue( array( "Belgium" ) );
+        self::assertSame( $value, $refMethod->invoke( $this->ft, $value ) );
     }
 
     /**
@@ -63,13 +93,12 @@ class CountryTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormatMultiple()
     {
-        $ft = new Country();
-        $ref = new ReflectionObject( $ft );
+        $ref = new ReflectionObject( $this->ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
         $value = new CountryValue( array( "Belgium", "Norway" ) );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
+        self::assertSame( $value, $refMethod->invoke( $this->ft, $value ) );
     }
 
     /**
@@ -79,8 +108,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     public function testToPersistenceValue()
     {
         $countries = array( "Belgium", "Norway" );
-        $ft = new Country();
-        $fieldValue = $ft->toPersistenceValue( new CountryValue( $countries ) );
+        $fieldValue = $this->ft->toPersistenceValue( new CountryValue( $countries ) );
 
         self::assertSame( $countries, $fieldValue->data );
     }
@@ -88,35 +116,38 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__construct
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::getCountriesInfo
      */
     public function testBuildFieldValueWithParam()
     {
         $countries = array( "Belgium", "Norway" );
-        $value = new CountryValue( $countries );
-        self::assertSame(
-            array(
-                "BE" => array(
-                    "Name" => "Belgium",
-                    "Alpha2" => "BE",
-                    "Alpha3" => "BEL",
-                    "IDC" => 32,
-                ),
-                "NO" => array(
-                    "Name" => "Norway",
-                    "Alpha2" => "NO",
-                    "Alpha3" => "NOR",
-                    "IDC" => 47,
-                ),
+        $countriesData = array(
+            "BE" => array(
+                "Name" => "Belgium",
+                "Alpha2" => "BE",
+                "Alpha3" => "BEL",
+                "IDC" => 32,
             ),
-            $value->getCountriesInfo()
+            "NO" => array(
+                "Name" => "Norway",
+                "Alpha2" => "NO",
+                "Alpha3" => "NOR",
+                "IDC" => 47,
+            ),
+        );
+        $value = new CountryValue( $countries, $countriesData );
+        self::assertSame(
+            $countries,
+            $value->values
+        );
+        self::assertSame(
+            $countriesData,
+            $value->data
         );
     }
 
     /**
      * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::fromString
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::getCountriesInfo
      */
     public function testBuildFieldValueFromString()
     {
@@ -124,15 +155,8 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $value = CountryValue::fromString( $country );
         self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $value );
         self::assertSame(
-            array(
-                "BE" => array(
-                    "Name" => "Belgium",
-                    "Alpha2" => "BE",
-                    "Alpha3" => "BEL",
-                    "IDC" => 32,
-                ),
-            ),
-            $value->getCountriesInfo()
+            array( "Belgium" ),
+            $value->values
         );
     }
 
@@ -147,15 +171,8 @@ class CountryTest extends PHPUnit_Framework_TestCase
         self::assertSame( $country, (string)$value );
 
         self::assertSame(
-            array(
-                "BE" => array(
-                    "Name" => "Belgium",
-                    "Alpha2" => "BE",
-                    "Alpha3" => "BEL",
-                    "IDC" => 32,
-                ),
-            ),
-            CountryValue::fromString( (string)$value )->getCountriesInfo(),
+            array( "Belgium" ),
+            CountryValue::fromString( (string)$value )->values,
             "fromString() and __toString() must be compatible"
         );
     }
@@ -165,20 +182,22 @@ class CountryTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @dataProvider providerForConstructorOK
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::buildValue
      */
     public function testConstructorCorrectValues( $value )
     {
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", new CountryValue( $value ) );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
     }
 
     public function providerForConstructorOK()
     {
         return array(
             array( null ),
+            array( array() ),
             array( "Belgium" ),
-            array( "BE" ),
-            array( "BEL" ),
+            array( array( "Belgium" ) ),
+            array( array( "BE" ) ),
+            array( array( "BEL" ) ),
             array( array( "Belgium", "Norway", "France" ) ),
             array( array( "BE", "NO", "FR" ) ),
             array( array( "BEL", "NOR", "FRA" ) ),
@@ -187,8 +206,6 @@ class CountryTest extends PHPUnit_Framework_TestCase
                     "Korea, Democratic People's Republic of",
                     "French Southern Territories",
                     "Central African Republic",
-                    "Heard Island and McDonald Islands",
-                    "South Georgia and The South Sandwich Islands",
                 )
             ),
         );
@@ -201,11 +218,11 @@ class CountryTest extends PHPUnit_Framework_TestCase
      * @dataProvider providerForConstructorKO
      * @expectedException \eZ\Publish\Core\Repository\FieldType\Country\Exception\InvalidValue
      * @expectedExceptionMessage is not a valid value country identifier.
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::buildValue
      */
     public function testConstructorWrongValues( $value )
     {
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", new CountryValue( $value ) );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
     }
 
     public function providerForConstructorKO()

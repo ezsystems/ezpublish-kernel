@@ -13,6 +13,7 @@ use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Values\ValueObject;
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\Limitation;
@@ -71,14 +72,29 @@ class RepositoryStub implements Repository
     private $contentTypeService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\TrashServiceStub
+     */
+    private $trashService;
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\LocationServiceStub
      */
     private $locationService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\IOServiceStub
+     */
+    private $ioService;
+
+    /**
      * @var integer
      */
-    private $initializing = 0;
+    private $transactionDepth = 0;
+
+    /**
+     * @var integer
+     */
+    private $permissionChecks = 0;
 
     /**
      * Instantiates the stubbed repository.
@@ -123,7 +139,7 @@ class RepositoryStub implements Repository
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        if ( $this->initializing > 0 )
+        if ( $this->permissionChecks > 0 )
         {
             return true;
         }
@@ -137,6 +153,7 @@ class RepositoryStub implements Repository
         {
             if ( $policy->module === '*' )
             {
+
                 return true;
             }
             if ( $policy->module !== $module )
@@ -152,7 +169,6 @@ class RepositoryStub implements Repository
                 continue;
             }
 
-            // TODO: $policy->getLimitations() === '*'
             if ( null === $limitations )
             {
                 $limitations = array();
@@ -179,7 +195,7 @@ class RepositoryStub implements Repository
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
     {
-        if ( $this->initializing > 0 )
+        if ( $this->permissionChecks > 0 )
         {
             return true;
         }
@@ -190,6 +206,9 @@ class RepositoryStub implements Repository
             return $hasAccess;
         }
 
+        ++$this->permissionChecks;
+
+        $locations = null;
         $contentInfoValue = null;
         if ( $value instanceof ContentInfo )
         {
@@ -203,14 +222,22 @@ class RepositoryStub implements Repository
         {
             $contentInfoValue = $value->contentInfo;
         }
-
-        if ( null === $contentInfoValue || false === $contentInfoValue->published )
+        else if ( $value instanceof Location )
         {
-            return true;
+            $locations = array( $value );
         }
 
-        $locationService = $this->getLocationService();
-        $locations = $locationService->loadLocations( $contentInfoValue );
+        if ( null !== $contentInfoValue && true === $contentInfoValue->published )
+        {
+            $locationService = $this->getLocationService();
+            $locations = $locationService->loadLocations( $contentInfoValue );
+        }
+
+        if ( null === $locations )
+        {
+            --$this->permissionChecks;
+            return true;
+        }
 
         foreach ( $hasAccess as $limitation )
         {
@@ -220,12 +247,18 @@ class RepositoryStub implements Repository
             }
             foreach ( $locations as $location )
             {
-                if ( 0 === strpos( $location->pathString, $limitation->limitationValues ) )
+                foreach ( $limitation->limitationValues as $pathString )
                 {
-                    return true;
+                    if ( 0 === strpos( $location->pathString, $pathString ) )
+                    {
+                        --$this->permissionChecks;
+                        return true;
+                    }
                 }
             }
         }
+
+        --$this->permissionChecks;
         return false;
     }
 
@@ -256,7 +289,11 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->languageService )
         {
-            $this->languageService = new LanguageServiceStub( $this );
+            $this->languageService = new LanguageServiceStub(
+                $this,
+                $this->getContentService(),
+                'eng-US'
+            );
         }
         return $this->languageService;
     }
@@ -304,7 +341,14 @@ class RepositoryStub implements Repository
      */
     public function getTrashService()
     {
-        // TODO: Implement getTrashService() method.
+        if ( null === $this->trashService )
+        {
+            $this->trashService = new TrashServiceStub(
+                $this,
+                $this->getLocationService()
+            );
+        }
+        return $this->trashService;
     }
 
     /**
@@ -348,7 +392,11 @@ class RepositoryStub implements Repository
      */
     public function getIOService()
     {
-        // TODO: Implement getIOService() method.
+        if ( null === $this->ioService )
+        {
+            $this->ioService = new IOServiceStub( $this );
+        }
+        return $this->ioService;
     }
 
     /**
@@ -360,7 +408,7 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->roleService )
         {
-            $this->roleService = new RoleServiceStub( $this );
+            $this->roleService = new RoleServiceStub( $this, $this->getUserService() );
         }
         return $this->roleService;
     }
@@ -373,7 +421,7 @@ class RepositoryStub implements Repository
      */
     public function beginTransaction()
     {
-        // TODO: Implement beginTransaction() method.
+        ++$this->transactionDepth;
     }
 
     /**
@@ -381,11 +429,15 @@ class RepositoryStub implements Repository
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit()
     {
-        // TODO: Implement commit() method.
+        if ( 0 === $this->transactionDepth )
+        {
+            throw new \RuntimeException( 'What error code should be used?' );
+        }
+        --$this->transactionDepth;
     }
 
     /**
@@ -393,11 +445,15 @@ class RepositoryStub implements Repository
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback()
     {
-        // TODO: Implement rollback() method.
+        if ( 0 === $this->transactionDepth )
+        {
+            throw new \RuntimeException( 'What error code should be used?' );
+        }
+        --$this->transactionDepth;
     }
 
     /**
@@ -410,10 +466,30 @@ class RepositoryStub implements Repository
      */
     public function loadFixture( $fixtureName, array $scopeValues = array() )
     {
-        ++$this->initializing;
+        ++$this->permissionChecks;
         $fixture = include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
-        --$this->initializing;
+        --$this->permissionChecks;
 
         return $fixture;
+    }
+
+    /**
+     * Internal helper method used to disable permission checks.
+     *
+     * @return void
+     */
+    public function disableUserPermissions()
+    {
+        ++$this->permissionChecks;
+    }
+
+    /**
+     * Internal helper method used to enable permission checks.
+     *
+     * @return void
+     */
+    public function enableUserPermissions()
+    {
+        --$this->permissionChecks;
     }
 }

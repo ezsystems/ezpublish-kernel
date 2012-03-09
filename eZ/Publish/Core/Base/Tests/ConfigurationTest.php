@@ -33,7 +33,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->parserMock = $this->getMock( 'eZ\Publish\Core\Base\Configuration\Parser' );
+        $this->parserMock = $this->getMock( 'eZ\\Publish\\Core\\Base\\Configuration\\Parser' );
 
         $this->configuration = new Configuration(
             'test',

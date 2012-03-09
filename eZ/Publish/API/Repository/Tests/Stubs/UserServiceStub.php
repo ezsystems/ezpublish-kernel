@@ -18,7 +18,9 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
@@ -46,6 +48,11 @@ class UserServiceStub implements UserService
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
     private $userGroups;
+
+    /**
+     * @var array
+     */
+    private $user2groups = array();
 
     /**
      * Instantiates a new user service instance.
@@ -78,6 +85,11 @@ class UserServiceStub implements UserService
      */
     public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup )
     {
+        if ( false === $this->repository->canUser( 'content', 'create', $parentGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $contentService  = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
@@ -89,6 +101,7 @@ class UserServiceStub implements UserService
             $userGroupCreateStruct,
             array( $locationCreate )
         );
+
         $content = $contentService->publishVersion( $draft->getVersionInfo() );
 
         $userGroup = new UserGroupStub(
@@ -124,11 +137,15 @@ class UserServiceStub implements UserService
      */
     public function loadUserGroup( $id )
     {
-        if ( isset( $this->userGroups[$id] ) )
+        if ( false === isset( $this->userGroups[$id] ) )
         {
-            return $this->userGroups[$id];
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        if ( false === $this->repository->canUser( 'content', 'read', $this->userGroups[$id] ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+        return $this->userGroups[$id];
     }
 
     /**
@@ -142,6 +159,11 @@ class UserServiceStub implements UserService
      */
     public function loadSubUserGroups( UserGroup $userGroup )
     {
+        if ( false === $this->repository->canUser( 'content', 'read', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $subUserGroups = array();
         foreach ( $this->userGroups as $group )
         {
@@ -164,6 +186,15 @@ class UserServiceStub implements UserService
      */
     public function deleteUserGroup( UserGroup $userGroup )
     {
+        if ( false === $this->repository->canUser( 'content', 'remove', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( array_keys( $this->user2groups ) as $userId )
+        {
+            unset( $this->user2groups[$userId][$userGroup->id] );
+        }
         unset( $this->userGroups[$userGroup->id] );
     }
 
@@ -177,6 +208,11 @@ class UserServiceStub implements UserService
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
+        if ( false === $this->repository->canUser( 'content', 'move', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         $oldParent = $this->userGroups[$userGroup->parentId];
@@ -232,6 +268,11 @@ class UserServiceStub implements UserService
      */
     public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         $content = null;
@@ -284,12 +325,22 @@ class UserServiceStub implements UserService
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'create' ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $contentService  = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
         $locationCreateStruts = array();
         foreach ( $parentGroups as $parentGroup )
         {
+            if ( false === $this->repository->canUser( 'content', 'edit', $parentGroup ) )
+            {
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+            }
+
             $locationCreateStruts[] = $locationService->newLocationCreateStruct(
                 $parentGroup->contentInfo->mainLocationId
             );
@@ -321,6 +372,11 @@ class UserServiceStub implements UserService
         );
         $this->users[$user->id] = $user;
 
+        foreach ( $parentGroups as $parentGroup )
+        {
+            $this->assignUserToUserGroup( $user, $parentGroup );
+        }
+
         return $user;
     }
 
@@ -339,7 +395,7 @@ class UserServiceStub implements UserService
         {
             return $this->users[$userId];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -385,7 +441,7 @@ class UserServiceStub implements UserService
             }
             return $user;
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -397,7 +453,15 @@ class UserServiceStub implements UserService
      */
     public function deleteUser( User $user )
     {
-        unset( $this->users[$user->id] );
+        if ( false === $this->repository->canUser( 'content', 'remove', $user ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        unset(
+            $this->users[$user->id],
+            $this->user2groups[$user->id]
+        );
     }
 
     /**
@@ -417,6 +481,11 @@ class UserServiceStub implements UserService
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $user ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $contentService = $this->repository->getContentService();
 
         $contentUpdate = $userUpdateStruct->contentUpdateStruct ?:
@@ -473,7 +542,15 @@ class UserServiceStub implements UserService
      */
     public function assignUserToUserGroup( User $user, UserGroup $userGroup )
     {
-        // TODO: Implement assignUserToUserGroup() method.
+        if ( false === $this->repository->canUser( 'content', 'edit', $user, $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+        if ( false === isset( $this->user2groups[$user->id] ) )
+        {
+            $this->user2groups[$user->id] = array();
+        }
+        $this->user2groups[$user->id][$userGroup->id] = true;
     }
 
     /**
@@ -487,7 +564,97 @@ class UserServiceStub implements UserService
      */
     public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup )
     {
-        // TODO: Implement unAssignUssrFromUserGroup() method.
+        if ( false === $this->repository->canUser( 'content', 'edit', $user, $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+        if ( false === isset( $this->user2groups[$user->id][$userGroup->id] ) )
+        {
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
+        }
+        unset( $this->user2groups[$user->id][$userGroup->id] );
+    }
+
+    /**
+     * Loads the user groups ther user belongs to
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    public function loadUserGroupsOfUser( User $user)
+    {
+        if ( false === $this->repository->canUser( 'content', 'read', $user ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $userGroups = array();
+        foreach ( array_keys( $this->user2groups[$user->id] ) as $groupId )
+        {
+            $userGroups[] = $this->userGroups[$groupId];
+        }
+        return $userGroups;
+    }
+
+    /**
+     * loads the users of a user group
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1)
+    {
+        if ( false === $this->repository->canUser( 'content', 'read', $userGroup ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $users = array();
+        foreach ( $this->user2groups as $userId => $userGroupIds )
+        {
+            if ( isset( $userGroupIds[$userGroup->id] ) )
+            {
+                $users[] = $this->users[$userId];
+            }
+        }
+        return $users;
+    }
+
+    /**
+     * Internal helper method.
+     *
+     * @param mixed $userId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    public function __loadUserGroupsByUserId( $userId )
+    {
+        if ( false === isset( $this->user2groups[$userId] ) )
+        {
+            return array();
+        }
+
+        $groupIds   = array_keys( $this->user2groups[$userId] );
+        $userGroups = array();
+        while ( count( $groupIds ) > 0 )
+        {
+            $groupId = array_pop( $groupIds );
+
+            if ( $this->userGroups[$groupId]->parentId > 0 )
+            {
+                $groupIds[] = $this->userGroups[$groupId]->parentId;
+            }
+            $userGroups[$groupId] = $this->userGroups[$groupId];
+        }
+        return $userGroups;
     }
 
     /**
@@ -512,7 +679,8 @@ class UserServiceStub implements UserService
                 'email'             =>  $email,
                 'password'          =>  $password,
                 'mainLanguageCode'  =>  $mainLanguageCode,
-                'contentType'       =>  $contentType
+                'contentType'       =>  $contentType,
+                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
             )
         );
 
@@ -534,7 +702,8 @@ class UserServiceStub implements UserService
         return new UserGroupCreateStructStub(
             array(
                 'mainLanguageCode'  =>  $mainLanguageCode,
-                'contentType'       =>  $contentType
+                'contentType'       =>  $contentType,
+                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
             )
         );
     }
@@ -569,6 +738,10 @@ class UserServiceStub implements UserService
     {
         list( $this->userGroups ) = $this->repository->loadFixture( 'UserGroup' );
         list( $this->users )      = $this->repository->loadFixture( 'User' );
+
+        // Set the default relations.
+        $this->user2groups[10] = array( 42 => true );
+        $this->user2groups[14] = array( 12 => true );
     }
 
     private function createHash( $login, $password, $type )

@@ -15,7 +15,7 @@ class ContentCreateStruct extends APIContentCreateStruct
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields an array of {@link Field}
      */
-    protected $fields = array();
+    public $fields = array();
 
     /**
      * Adds a field to the field collection.

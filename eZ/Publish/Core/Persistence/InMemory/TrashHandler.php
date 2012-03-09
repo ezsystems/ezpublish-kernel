@@ -137,7 +137,7 @@ class TrashHandler implements TrashHandlerInterface
      */
     public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {
-        return array_splice(
+        return array_slice(
             $this->backend->find( 'Content\\Location\\Trashed' ),
             $offset,
             $limit

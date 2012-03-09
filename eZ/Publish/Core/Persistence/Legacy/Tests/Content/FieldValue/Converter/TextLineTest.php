@@ -42,12 +42,12 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new TextLineValue( "He's holding a thermal detonator!" );
+        $value->data = "He's holding a thermal detonator!";
         $value->sortKey = array( 'sort_key_string' => "He's holding" );
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data->text, $storageFieldValue->dataText );
+        self::assertSame( $value->data, $storageFieldValue->dataText );
         self::assertSame( $value->sortKey['sort_key_string'], $storageFieldValue->sortKeyString );
         self::assertSame( 0, $storageFieldValue->sortKeyInt );
     }
@@ -66,8 +66,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value', $fieldValue->data );
-        self::assertSame( $storageFieldValue->dataText, $fieldValue->data->text );
+        self::assertSame( $storageFieldValue->dataText, $fieldValue->data );
         self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey['sort_key_string'] );
     }
 
@@ -81,7 +80,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $defaultText = 'This is a default text';
         $storageFieldDef = new StorageFieldDefinition;
         $defaultValue = new FieldValue;
-        $defaultValue->data = new TextLineValue( $defaultText );
+        $defaultValue->data = $defaultText;
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->validators = array(
             TextLineConverter::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => 100 )
@@ -119,7 +118,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $defaultText = 'This is a default text';
         $storageFieldDef = new StorageFieldDefinition;
         $defaultValue = new FieldValue;
-        $defaultValue->data = new TextLineValue( $defaultText );
+        $defaultValue->data = $defaultText;
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldDef = new PersistenceFieldDefinition(
             array(
@@ -134,7 +133,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
             $storageFieldDef->dataInt1
         );
         self::assertSame(
-            $fieldDef->defaultValue->data->text,
+            $fieldDef->defaultValue->data,
             $storageFieldDef->dataText1
         );
     }
@@ -162,7 +161,6 @@ class TextLineTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef->fieldTypeConstraints->validators
         );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value', $fieldDef->defaultValue->data );
-        self::assertSame( $defaultText, $fieldDef->defaultValue->data->text );
+        self::assertSame( $defaultText, $fieldDef->defaultValue->data );
     }
 }

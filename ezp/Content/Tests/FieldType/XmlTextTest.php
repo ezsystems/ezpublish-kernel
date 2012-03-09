@@ -8,9 +8,7 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\XmlText\Type as XmlTextType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+use eZ\Publish\Core\Repository\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
     ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
@@ -21,21 +19,6 @@ use eZ\Publish\Core\Repository\FieldType\Factory,
  */
 class XmlTextTypeTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Type",
-            Factory::build( "ezxmltext" ),
-            "XmlText object not returned for 'ezxmltext'. Incorrect mapping?"
-        );
-    }
-
     /**
      * @group fieldType
      * @group dateTime

@@ -569,7 +569,7 @@ function generateRoleFixture( array $fixture )
             'roleId'      =>  $data['role_id'],
             'contentId'   =>  $data['contentobject_id'],
             'identifier'  =>  $data['limit_identifier'],
-            'value'       =>  $data['limit_value']
+            'value'       =>  array( $data['limit_value'] )
         );
     }
 
@@ -603,8 +603,7 @@ function generateRoleFixture( array $fixture )
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub', $policies ),
         $policyNextId,
         generateMapping( $role2policy ),
-        generateMapping( $roleLimitations ),
-        generateMapping( getUser2GroupMapping( $fixture ) )
+        generateMapping( $roleLimitations )
     );
 }
 

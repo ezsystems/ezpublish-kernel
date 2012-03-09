@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
+use eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
     eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
     eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
     ezp\Io\FileInfo,
@@ -37,23 +36,6 @@ class MediaTest extends PHPUnit_Framework_TestCase
         BinaryRepository::setOverrideOptions( 'inmemory' );
         $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
         $this->mediaFileInfo = new FileInfo( $this->mediaPath );
-    }
-
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testBuildFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Type",
-            Factory::build( "ezmedia" ),
-            "BinaryFile object not returned for 'ezmedia', incorrect mapping? "
-        );
     }
 
     /**

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
+use \eZ\Publish\API\Repository\Values\IO\ContentType;
 
 /**
  * Test case for operations in the IOService using in memory storage.
@@ -23,35 +23,77 @@ class IOServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromUploadedFile()
-     * 
-     */
-    public function testNewBinaryCreateStructFromUploadedFile()
-    {
-        $this->markTestIncomplete( "@TODO: Test for IOService::newBinaryCreateStructFromUploadedFile() is not implemented." );
-    }
-
-    /**
-     * Test for the newBinaryCreateStructFromUploadedFile() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromUploadedFile()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testNewBinaryCreateStructFromUploadedFileThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::newBinaryCreateStructFromUploadedFile() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // given file was not uploaded.
+        $ioService->newBinaryCreateStructFromUploadedFile(
+            array(
+                'tmp_name'  =>  __FILE__,
+                'name'      =>  basename( __FILE__ ),
+                'type'      =>  mime_content_type( __FILE__ ),
+                'size'      =>  filesize( __FILE__ ),
+                'error'     =>  0
+            )
+        );
+        /* END: Use Case */
     }
 
     /**
      * Test for the newBinaryCreateStructFromLocalFile() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
      * @see \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromLocalFile()
-     * 
+     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetIOService
      */
     public function testNewBinaryCreateStructFromLocalFile()
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::newBinaryCreateStructFromLocalFile() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // Get a file create struct
+        $binaryCreate = $ioService->newBinaryCreateStructFromLocalFile( __FILE__ );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct',
+            $binaryCreate
+        );
+
+        return $binaryCreate;
+    }
+
+    /**
+     * Test for the newBinaryCreateStructFromLocalFile() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct $binaryCreate
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromLocalFile()
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testNewBinaryCreateStructFromLocalFile
+     */
+    public function testNewBinaryCreateStructFromLocalFileSetsExpectedProperties( $binaryCreate )
+    {
+        $this->assertInternalType( 'resource', $binaryCreate->inputStream );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'originalFileName'  =>  basename( __FILE__ ),
+                'uri'               =>  'file://' . __FILE__,
+                'contentType'       =>  new ContentType( mime_content_type( __FILE__ ) ),
+                'size'              =>  filesize( __FILE__ ),
+            ),
+            $binaryCreate
+        );
     }
 
     /**
@@ -60,46 +102,133 @@ class IOServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromLocalFile()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testNewBinaryCreateStructFromLocalFile
      */
-    public function testNewBinaryCreateStructFromLocalFileThrowsInvalidArgumentException()
+    public function testNewBinaryCreateStructFromLocalFileThrowsInvalidArgumentExceptionIfFileNotExists()
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::newBinaryCreateStructFromLocalFile() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // This call will fail with an "InvalidArgumentException", because no
+        // such file exists.
+        $ioService->newBinaryCreateStructFromLocalFile( __FILE__ . '.not.exists' );
+        /* END: Use Case */
     }
 
     /**
      * Test for the createBinaryFile() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
      * @see \eZ\Publish\API\Repository\IOService::createBinaryFile()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testNewBinaryCreateStructFromLocalFile
      */
     public function testCreateBinaryFile()
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::createBinaryFile() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // Get a file create struct
+        $binaryCreate = $ioService->newBinaryCreateStructFromLocalFile( __FILE__ );
+
+        // Create a new file instance
+        $binary = $ioService->createBinaryFile( $binaryCreate );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\IO\BinaryFile',
+            $binary
+        );
+
+        return $binary;
     }
 
     /**
-     * Test for the deleteBinaryFile() method.
+     * Test for the createBinaryFile() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binary
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\IOService::deleteBinaryFile()
-     * 
+     * @see \eZ\Publish\API\Repository\IOService::createBinaryFile()
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testCreateBinaryFile
      */
-    public function testDeleteBinaryFile()
+    public function testCreateBinaryFileSetsExpectedProperties( $binary )
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::deleteBinaryFile() is not implemented." );
+        $this->assertNotNull( $binary->id );
+
+        // 60 seconds should avoid every latency issues.
+        $this->assertGreaterThan( time() - 60, $binary->mtime );
+        $this->assertGreaterThan( time() - 60, $binary->ctime );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'originalFile'  =>  basename( __FILE__ ),
+                'size'          =>  filesize( __FILE__ ),
+                'contentType'   =>  mime_content_type( __FILE__ )
+                // TODO What is the uri?
+                //'uri'  =>  'file://' . __FILE__,
+            ),
+            $binary
+        );
+    }
+
+
+    /**
+     * Test for the loadBinaryFile() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
+     * @see \eZ\Publish\API\Repository\IOService::loadBinaryFile()
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testCreateBinaryFile
+     */
+    public function testLoadBinaryFile()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // Get a file create struct
+        $binaryCreate = $ioService->newBinaryCreateStructFromLocalFile( __FILE__ );
+
+        // Create a new file instance
+        $binaryId = $ioService->createBinaryFile( $binaryCreate )->id;
+
+        // Load the binary by it's id
+        $binary = $ioService->loadBinaryFile( $binaryId );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\IO\BinaryFile',
+            $binary
+        );
+
+        return $binary;
     }
 
     /**
      * Test for the loadBinaryFile() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binary
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\IOService::loadBinaryFile()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testLoadBinaryFile
      */
-    public function testLoadBinaryFile()
+    public function testLoadBinaryFileSetsExpectedProperties( $binary )
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::loadBinaryFile() is not implemented." );
+        $this->assertPropertiesCorrect(
+            array(
+                'originalFile'  =>  basename( __FILE__ ),
+                'size'          =>  filesize( __FILE__ ),
+                'contentType'   =>  mime_content_type( __FILE__ )
+                // TODO What is the uri?
+                //'uri'  =>  'file://' . __FILE__,
+            ),
+            $binary
+        );
     }
 
     /**
@@ -108,10 +237,52 @@ class IOServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\IOService::loadBinaryFile()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testLoadBinaryFile
      */
     public function testLoadBinaryFileThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::loadBinaryFile() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // This call will fail with a "NotFoundException", because no binary file
+        // with an ID 2342 should exist in an eZ Publish demo installation
+        $ioService->loadBinaryFile( 2342 );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the deleteBinaryFile() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\IOService::deleteBinaryFile()
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testLoadBinaryFileThrowsNotFoundException
+     */
+    public function testDeleteBinaryFile()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // Get a file create struct
+        $binaryCreate = $ioService->newBinaryCreateStructFromLocalFile( __FILE__ );
+
+        // Create a new file instance
+        $binary = $ioService->createBinaryFile( $binaryCreate );
+
+        // Delete the new file again
+        $ioService->deleteBinaryFile( $binary );
+        /* END: Use Case */
+
+        // We use tested NotFoundException to verify that the file isn't present
+        try
+        {
+            $ioService->loadBinaryFile( $binary->id );
+            $this->fail( "Can still load file after delete." );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e ) {}
     }
 
     /**
@@ -123,7 +294,33 @@ class IOServiceTest extends BaseTest
      */
     public function testGetFileInputStream()
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::getFileInputStream() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // Get a file create struct
+        $binaryCreate = $ioService->newBinaryCreateStructFromLocalFile( __FILE__ );
+
+        // Create a new file instance
+        $binary = $ioService->createBinaryFile( $binaryCreate );
+
+        // Get stream for the contents of the binary file
+        $stream = $ioService->getFileInputStream( $binary );
+
+        // Read content with regular file functions
+        $content = '';
+        while ( false === feof( $stream ) )
+        {
+            $content .= fgets( $stream );
+        }
+        fclose( $stream );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            file_get_contents( __FILE__ ),
+            $content
+        );
     }
 
     /**
@@ -131,11 +328,29 @@ class IOServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\IOService::getFileContents()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\IOServiceTest::testCreateBinaryFile
      */
     public function testGetFileContents()
     {
-        $this->markTestIncomplete( "@TODO: Test for IOService::getFileContents() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $ioService = $repository->getIOService();
+
+        // Get a file create struct
+        $binaryCreate = $ioService->newBinaryCreateStructFromLocalFile( __FILE__ );
+
+        // Create a new file instance
+        $binary = $ioService->createBinaryFile( $binaryCreate );
+
+        // Load contents of the binary file
+        $content = $ioService->getFileContents( $binary );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            file_get_contents( __FILE__ ),
+            $content
+        );
     }
 
 }

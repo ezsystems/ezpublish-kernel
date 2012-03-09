@@ -23,6 +23,8 @@ interface ValueInterface
      * @param string $stringValue
      * @return \eZ\Publish\Core\Repository\FieldType\Value Instance of the field value
      * @throws \ezp\Base\Exception\InvalidArgumentValue
+     *
+     * @todo Change / remove as this is impossible with injection of dependecies
      */
     public static function fromString( $stringValue );
 

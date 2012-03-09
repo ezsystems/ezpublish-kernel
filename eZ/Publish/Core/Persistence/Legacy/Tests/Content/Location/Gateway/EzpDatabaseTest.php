@@ -91,14 +91,14 @@ class EzpDatabaseTest extends TestCase
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 65, '/1/2/', 1 ),
-                array( 67, '/1/2/77/69/', 3 ),
-                array( 69, '/1/2/77/69/70/71/', 5 ),
-                array( 73, '/1/2/77/69/72/75/', 5 ),
-                array( 75, '/1/2/77/', 2 ),
+                array( 65, '/1/2/', 1, 1 ),
+                array( 67, '/1/2/77/69/', 77, 3 ),
+                array( 69, '/1/2/77/69/70/71/', 70, 5 ),
+                array( 73, '/1/2/77/69/72/75/', 72, 5 ),
+                array( 75, '/1/2/77/', 2, 2 ),
             ),
             $query
-                ->select( 'contentobject_id', 'path_string', 'depth' )
+                ->select( 'contentobject_id', 'path_string', 'parent_node_id', 'depth' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 69, 71, 75, 77, 2 ) ) )
                 ->orderBy( 'contentobject_id' )
@@ -423,7 +423,7 @@ class EzpDatabaseTest extends TestCase
             array( 'contentId', '68' ),
             array( 'parentId', '77' ),
             array( 'pathIdentificationString', '' ),
-            array( 'pathString', '' ),
+            array( 'pathString', '/1/2/77/228/' ),
             array( 'mainLocationId', 228 ),
             array( 'depth', 3 ),
             array( 'sortField', 1 ),

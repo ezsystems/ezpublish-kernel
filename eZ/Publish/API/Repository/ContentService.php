@@ -322,7 +322,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findContent( Query $query, array $fieldFilters,  $filterOnUserPermissions = true );
+    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
 
     /**
      * Performs a query for a single content object

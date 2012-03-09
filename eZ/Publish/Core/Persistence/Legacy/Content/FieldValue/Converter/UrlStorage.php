@@ -27,12 +27,12 @@ class UrlStorage implements Storage
     public function storeFieldData( Field $field, array $context )
     {
         $dbHandler = $context["connection"];
-        if ( ( $row = $this->fetchByLink( $field->value->data->link, $dbHandler ) ) !== false )
+        if ( ( $row = $this->fetchByLink( $field->value->externalData, $dbHandler ) ) !== false )
             $urlId = $row["id"];
         else
-            $urlId = $this->insert( $field->value->data->link, $dbHandler );
+            $urlId = $this->insert( $field->value->externalData, $dbHandler );
 
-        $field->value->data->setState( array( "urlId" => $urlId ) );
+        $field->value->data["urlId"] = $urlId;
 
         // Signals that the Value has been modified and that an update is to be performed
         return true;
@@ -50,9 +50,9 @@ class UrlStorage implements Storage
      */
     public function getFieldData( Field $field, array $context )
     {
-        $url = $this->fetchById( $field->value->data->getState( "urlId" ), $context["connection"] );
+        $url = $this->fetchById( $field->value->data["urlId"], $context["connection"] );
 
-        $field->value->data->link = $url["link"];
+        $field->value->externalData = $url["link"];
     }
 
     /**
@@ -153,7 +153,6 @@ class UrlStorage implements Storage
      */
     private function insert( Field $field, EzcDbHandler $dbHandler )
     {
-        $data = $field->value->data;
         $time = time();
         $q = $dbHandler->createInsertQuery();
 
@@ -167,10 +166,10 @@ class UrlStorage implements Storage
             $q->bindValue( $time, null, \PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "original_url_md5" ),
-            $q->bindValue( md5( $data->link ) )
+            $q->bindValue( md5( $field->value->externalData ) )
         )->set(
             $dbHandler->quoteColumn( "url" ),
-            $q->bindValue( $data->link )
+            $q->bindValue( $field->value->externalData )
         );
 
         $stmt = $q->prepare();

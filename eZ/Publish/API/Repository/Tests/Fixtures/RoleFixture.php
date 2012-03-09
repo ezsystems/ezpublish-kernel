@@ -600,22 +600,18 @@ return array(
                     "roleId" => 3,
                     "contentId" => 13,
                     "identifier" => "Subtree",
-                    "value" => "/1/2/",
+                    "value" => array(
+                        0 => "/1/2/",
+                    ),
                 ),
         "33"  =>  array(
                     "id" => 33,
                     "roleId" => 3,
                     "contentId" => 13,
                     "identifier" => "Subtree",
-                    "value" => "/1/43/",
-                ),
-    ),
-    array(
-        "14"  =>  array(
-                    0 => 12,
-                ),
-        "10"  =>  array(
-                    0 => 42,
+                    "value" => array(
+                        0 => "/1/43/",
+                    ),
                 ),
     )
 );

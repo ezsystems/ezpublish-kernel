@@ -24,7 +24,7 @@ class KeywordStorage implements Storage
     public function storeFieldData( Field $field, array $context )
     {
         // If there is no keywords, there is nothing to store.
-        if ( empty( $field->value->data->values ) )
+        if ( empty( $field->value->data ) )
             return;
 
         $dbHandler = $context["connection"];
@@ -57,7 +57,7 @@ class KeywordStorage implements Storage
                 $q->expr->lAnd(
                     $q->expr->in(
                         "keyword",
-                        $field->value->data->values
+                        $field->value->data
                     ),
                     $q->expr->eq( "class_id", $contentTypeID )
                 )
@@ -66,7 +66,7 @@ class KeywordStorage implements Storage
         $statement->execute();
 
         // Hash of keyword IDs, indexed by the keyword
-        $keywordsIds = array_fill_keys( $field->value->data->values, true );
+        $keywordsIds = array_fill_keys( $field->value->data, true );
         // Set of keywords that will have to be inserted
         $keywordsToInsert = $keywordsIds;
         foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
@@ -113,7 +113,7 @@ class KeywordStorage implements Storage
 
         $statement = $insertQuery->prepare();
 
-        foreach ( $field->value->data->values as $keyword ) {
+        foreach ( $field->value->data as $keyword ) {
             $keywordId = $keywordsIds[$keyword];
             $statement->execute();
         }
@@ -157,7 +157,7 @@ class KeywordStorage implements Storage
         if ( $keywords === false )
             throw new Logic( "Fetching keywords data failed" );
 
-        $field->value->data->values = $keywords;
+        $field->value->data = $keywords;
     }
 
     /**

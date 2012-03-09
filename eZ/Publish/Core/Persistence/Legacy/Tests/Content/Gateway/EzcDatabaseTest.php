@@ -446,6 +446,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'data_text' => 'Test text',
                     'data_type_string' => 'ezstring',
                     'language_code' => 'eng-GB',
+                    'language_id' => '4',
                     'sort_key_int' => '23',
                     'sort_key_string' => 'Test',
                     'version' => '1',
@@ -463,6 +464,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'data_text',
                         'data_type_string',
                         'language_code',
+                        'language_id',
                         'sort_key_int',
                         'sort_key_string',
                         'version',
@@ -610,7 +612,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         foreach ( $res as $row )
         {
             $this->assertEquals(
-                11,
+                12,
                 count( $row )
             );
         }
@@ -653,6 +655,12 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_code',
             array( 'eng-US', 'eng-GB' ),
+            $res
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_id',
+            array( '2' ),
             $res
         );
     }
@@ -721,6 +729,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_code',
             array( 'eng-GB' ),
+            $res
+        );
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_id',
+            array( '2' ),
             $res
         );
         $this->assertEquals(
@@ -1247,7 +1260,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $field->fieldDefinitionId = 231;
         $field->type = 'ezstring';
-        $field->language = 'eng-GB';
+        $field->languageCode = 'eng-GB';
         $field->versionNo = 1;
 
         return $field;
@@ -1261,7 +1274,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     protected function getOtherLanguageFieldFixture()
     {
         $field = $this->getFieldFixture();
-        $field->language = 'eng-US';
+        $field->languageCode = 'eng-US';
         return $field;
     }
 

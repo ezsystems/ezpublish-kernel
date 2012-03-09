@@ -26,7 +26,7 @@ class TextBlock implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data->text;
+        $storageFieldValue->dataText = $value->data;
         $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
     }
 
@@ -38,7 +38,7 @@ class TextBlock implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new TextBlockValue( $value->dataText );
+        $fieldValue->data = $value->dataText;
         // @todo: Feel there is room for some improvement here, to generalize this code across field types.
         $fieldValue->sortKey = array( 'sort_key_string' => $value->sortKeyString );
     }
@@ -67,7 +67,7 @@ class TextBlock implements Converter
                 'textColumns' => $storageDef->dataInt1
             )
         );
-        $fieldDef->defaultValue->data = new TextBlockValue;
+        $fieldDef->defaultValue->data = "";
     }
 
     /**

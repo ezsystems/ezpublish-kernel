@@ -119,6 +119,7 @@ class EzcDatabase extends Gateway
         $query
             ->select(
                 $this->handler->quoteColumn( 'node_id' ),
+                $this->handler->quoteColumn( 'parent_node_id' ),
                 $this->handler->quoteColumn( 'path_string' )
             )
             ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -137,6 +138,12 @@ class EzcDatabase extends Gateway
         {
             $newLocation = str_replace( $oldParentLocation, $toPathString, $row['path_string'] );
 
+            $newParentId = $row['parent_node_id'];
+            if ( $row['path_string'] === $fromPathString )
+            {
+                $newParentId = (int) implode( '', array_slice( explode( '/', $newLocation ), -3, 1 ) );
+            }
+
             $query = $this->handler->createUpdateQuery();
             $query
                 ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -147,6 +154,10 @@ class EzcDatabase extends Gateway
                 ->set(
                     $this->handler->quoteColumn( 'depth' ),
                     $query->bindValue( substr_count( $newLocation, '/' ) - 2 )
+                )
+                ->set(
+                    $this->handler->quoteColumn( 'parent_node_id' ),
+                    $query->bindValue( $newParentId )
                 )
                 ->where(
                     $query->expr->eq(
@@ -467,12 +478,13 @@ class EzcDatabase extends Gateway
         $location->id = $this->handler->lastInsertId( $this->handler->getSequenceName( 'ezcontentobject_tree', 'node_id' ) );
 
         $location->mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
+        $location->pathString = $parentNode['path_string'] . $location->id . '/';
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->set(
                 $this->handler->quoteColumn( 'path_string' ),
-                $query->bindValue( $parentNode['path_string'] . $location->id . '/' )
+                $query->bindValue( $location->pathString )
             )
             ->set(
                 $this->handler->quoteColumn( 'main_node_id' ),
@@ -743,7 +755,7 @@ class EzcDatabase extends Gateway
      */
     public function removeSubtree( $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
     }
 
     /**

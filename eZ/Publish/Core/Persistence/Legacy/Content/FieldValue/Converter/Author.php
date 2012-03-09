@@ -13,8 +13,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Author\Value as AuthorValue,
-    eZ\Publish\Core\Repository\FieldType\Author\Author as AuthorItem,
     DOMDocument;
 
 class Author implements Converter
@@ -60,7 +58,7 @@ class Author implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->defaultValue->data = new AuthorValue;
+        $fieldDef->defaultValue->data = array();
     }
 
     /**
@@ -80,10 +78,10 @@ class Author implements Converter
     /**
      * Generates XML string from $authorValue to be stored in storage engine
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Author\Value $authorValue
+     * @param array $authorValue
      * @return string The generated XML string
      */
-    private function generateXmlString( AuthorValue $authorValue )
+    private function generateXmlString( array $authorValue )
     {
         $doc = new DOMDocument( '1.0', 'utf-8' );
 
@@ -93,12 +91,12 @@ class Author implements Converter
         $authors = $doc->createElement( 'authors' );
         $root->appendChild( $authors );
 
-        foreach ( $authorValue->authors as $author )
+        foreach ( $authorValue as $author )
         {
             $authorNode = $doc->createElement( 'author' );
-            $authorNode->setAttribute( 'id', $author->id );
-            $authorNode->setAttribute( 'name', $author->name );
-            $authorNode->setAttribute( 'email', $author->email );
+            $authorNode->setAttribute( 'id', $author["id"] );
+            $authorNode->setAttribute( 'name', $author["name"] );
+            $authorNode->setAttribute( 'email', $author["email"] );
             $authors->appendChild( $authorNode );
             unset( $authorNode );
         }
@@ -121,16 +119,14 @@ class Author implements Converter
         {
             foreach ( $dom->getElementsByTagName( 'author' ) as $author )
             {
-                $authors[] = new AuthorItem(
-                    array(
-                        'id' => $author->getAttribute( 'id' ),
-                        'name' => $author->getAttribute( 'name' ),
-                        'email' => $author->getAttribute( 'email' )
-                    )
+                $authors[] = array(
+                    'id' => $author->getAttribute( 'id' ),
+                    'name' => $author->getAttribute( 'name' ),
+                    'email' => $author->getAttribute( 'email' )
                 );
             }
         }
 
-        return new AuthorValue( $authors );
+        return $authors;
     }
 }

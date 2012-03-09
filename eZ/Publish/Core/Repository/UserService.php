@@ -25,6 +25,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
@@ -166,7 +167,7 @@ class UserService implements UserServiceInterface
         if ( $mainGroupLocation === null )
             return array();
 
-        $searchResult = $this->searchSubGroups( $mainGroupLocation );
+        $searchResult = $this->searchSubGroups( $mainGroupLocation->id, $mainGroupLocation->sortField, $mainGroupLocation->sortOrder );
         if ( $searchResult->count == 0 )
             return array();
 
@@ -182,21 +183,29 @@ class UserService implements UserServiceInterface
     /**
      * Returns (searches) subgroups of a user group described by its main location
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param int $locationId
+     * @param int|null $sortField
+     * @param int $sortOrder
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    protected function searchSubGroups( Location $location )
+    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC )
     {
         $searchQuery = new Query();
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionParentLocationId( $location->id ),
+                new CriterionParentLocationId( $locationId ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
             )
         );
+
+        $sortClause = null;
+        if ( $sortField !== null )
+            $sortClause = $this->getSortClauseBySortField( $sortField, $sortOrder );
+
+        $searchQuery->sortClauses = array( $sortClause );
 
         return $this->repository->getContentService()->findContent( $searchQuery, array() );
     }
@@ -252,7 +261,7 @@ class UserService implements UserServiceInterface
         if ( $newParentMainLocation === null )
             throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
-        $this->repository->getLocationService()->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
+        $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
     }
 
     /**
@@ -367,6 +376,7 @@ class UserService implements UserServiceInterface
         $spiUser = $this->persistenceHandler->userHandler()->create(
             new SPIUser(
                 array(
+                    'id'            => $publishedContent->contentId,
                     'login'         => $userCreateStruct->login,
                     'email'         => $userCreateStruct->email,
                     'passwordHash'  => $this->createPasswordHash(
@@ -645,6 +655,99 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Loads the user groups the user belongs to
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     */
+    public function loadUserGroupsOfUser( APIUser $user )
+    {
+        $locationService = $this->repository->getLocationService();
+
+        $userLocations = $locationService->loadLocations(
+            $user->getVersionInfo()->getContentInfo()
+        );
+
+        $parentLocationIds = array();
+        foreach ( $userLocations as $userLocation )
+        {
+            if ( $userLocation->parentLocationId !== null )
+                $parentLocationIds[] = $userLocation->parentLocationId;
+        }
+
+        $searchQuery = new Query();
+
+        $searchQuery->criterion = new CriterionLogicalAnd(
+            array(
+                new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
+                new CriterionLocationId( array( $parentLocationIds ) ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+            )
+        );
+
+        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+
+        $userGroups = array();
+        foreach ( $searchResult->items as $resultItem )
+        {
+            $userGroups = $this->buildDomainUserGroupObject( $resultItem );
+        }
+
+        return $userGroups;
+    }
+
+    /**
+     * loads the users of a user group
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersOfUserGroup( APIUserGroup $userGroup, $offset = 0, $limit = -1 )
+    {
+        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation(
+            $userGroup->getVersionInfo()->getContentInfo()
+        );
+
+        if ( $mainGroupLocation === null )
+            return array();
+
+        $searchQuery = new Query();
+
+        $searchQuery->criterion = new CriterionLogicalAnd(
+            array(
+                new CriterionContentTypeId( $this->settings['userClassID'] ),
+                new CriterionParentLocationId( $mainGroupLocation->id ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+            )
+        );
+
+        $searchQuery->offset = $offset;
+        $searchQuery->limit = $limit;
+
+        $searchQuery->sortClauses = array(
+            $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )
+        );
+
+        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+
+        $users = array();
+        foreach ( $searchResult->items as $resultItem )
+        {
+            $users = $this->buildDomainUserObject( $resultItem );
+        }
+
+        return $users;
+    }
+
+    /**
      * Instantiate a user create class
      *
      * @param string $login the login of the new user
@@ -756,7 +859,7 @@ class UserService implements UserServiceInterface
         $subGroupCount = 0;
         if ( $mainLocation !== null )
         {
-            $subGroups = $this->searchSubGroups( $mainLocation );
+            $subGroups = $this->searchSubGroups( $mainLocation->id );
             $subGroupCount = $subGroups->count;
         }
 
@@ -829,6 +932,60 @@ class UserService implements UserServiceInterface
 
             default:
                 return md5( $password );
+        }
+    }
+
+    /**
+     * Instantiates a correct sort clause object based on provided location sort field and sort order
+     *
+     * @param int $sortField
+     * @param int $sortOrder
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     */
+    protected function getSortClauseBySortField( $sortField, $sortOrder = Location::SORT_ORDER_ASC )
+    {
+        $sortOrder = $sortOrder == Location::SORT_ORDER_DESC ? Query::SORT_DESC : Query::SORT_ASC;
+        switch ( $sortField )
+        {
+            case Location::SORT_FIELD_PATH:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
+
+            case Location::SORT_FIELD_PUBLISHED:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateCreated( $sortOrder );
+
+            case Location::SORT_FIELD_MODIFIED:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified( $sortOrder );
+
+            case Location::SORT_FIELD_SECTION:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier( $sortOrder );
+
+            case Location::SORT_FIELD_DEPTH:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationDepth( $sortOrder );
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_CLASS_NAME:
+
+            case Location::SORT_FIELD_PRIORITY:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority( $sortOrder );
+
+            case Location::SORT_FIELD_NAME:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName( $sortOrder );
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_NODE_ID:
+
+            //@todo: enable
+            // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
+
+            default:
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
         }
     }
 }

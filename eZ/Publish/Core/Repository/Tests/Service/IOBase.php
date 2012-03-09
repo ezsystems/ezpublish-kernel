@@ -117,8 +117,12 @@ abstract class IOBase extends BaseServiceTest
     {
         $result = $this->fileUploadTest->run();
 
-        if ( $result->failureCount() > 0 || $result->errorCount() > 0 || $result->skippedCount() > 0 )
-            self::fail( "Failed file upload test" );
+        if ( $result->failureCount() > 0 )
+            self::fail( "Failed file upload test, failureCount() > 0" );
+        if ( $result->errorCount() > 0 )
+            self::fail( "Failed file upload test, errorCount() > 0" );
+        if ( $result->skippedCount() > 0 )
+            self::fail( "Failed file upload test, skippedCount() > 0" );
     }
 
     /**

@@ -15,8 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content\Location,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
+    ezp\Content\Location;
 
 /**
  * Test case for Location Handler using in memory storage.
@@ -98,10 +97,10 @@ class TrashHandlerTest extends HandlerTest
                                     // FieldValue object compatible with ezstring
                                     "value" => new FieldValue(
                                         array(
-                                            "data" => new TextLineValue( "Welcome $i" )
+                                            "data" => "Welcome $i"
                                         )
                                     ),
-                                    "language" => "eng-GB",
+                                    "languageCode" => "eng-GB",
                                 )
                             )
                         )

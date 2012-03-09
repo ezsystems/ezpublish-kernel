@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Country;
 use eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\Core\Repository\FieldType\Country\Exception\InvalidValue,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType,
     RuntimeException;
@@ -21,6 +21,48 @@ use eZ\Publish\Core\Repository\FieldType,
  */
 class Type extends FieldType
 {
+    /**
+     * @var array
+     */
+    protected $countriesInfo;
+
+    /**
+     * @param array $countriesInfo Array of countries data
+     */
+    public function __construct( array $countriesInfo )
+    {
+        parent::__construct();
+        $this->countriesInfo = $countriesInfo;
+    }
+
+    /**
+     * @param array $countries
+     * @return Value
+     * @throws Exception\InvalidValue
+     */
+    public function buildValue( $countries )
+    {
+        $countryValue = new Value( (array)$countries );
+        foreach ( $countryValue->values as $country )
+        {
+            foreach ( $this->countriesInfo as $countryInfo )
+            {
+                switch ( $country )
+                {
+                    case $countryInfo["Name"]:
+                    case $countryInfo["Alpha2"]:
+                    case $countryInfo["Alpha3"]:
+                        $countryValue->data[$countryInfo["Alpha2"]] = $countryInfo;
+                        continue 3;
+                }
+            }
+
+            throw new InvalidValue( $country );
+        }
+
+        return $countryValue;
+    }
+
     /**
      * Return the field type identifier for this field type
      *
@@ -50,11 +92,11 @@ class Type extends FieldType
      * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
      * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Country\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Country\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
@@ -69,10 +111,10 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         $countries = array();
-        foreach ( $value->getCountriesInfo() as $countryInfo )
+        foreach ( $value->data as $countryInfo )
         {
             $countries[] = strtolower( $countryInfo["Name"] );
         }
@@ -89,7 +131,7 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\Country\Value $value
      */
     public function fromHash( $hash )
     {
@@ -99,13 +141,13 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\Country\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
-        return $value->getCountries();
+        return $value->values;
     }
 
     /**

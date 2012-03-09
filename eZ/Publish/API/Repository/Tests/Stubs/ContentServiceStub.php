@@ -108,11 +108,11 @@ class ContentServiceStub implements ContentService
         {
             if ( false === $this->repository->canUser( 'content', 'read', $this->contentInfo[$contentId] ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
             return  $this->contentInfo[$contentId];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -137,11 +137,11 @@ class ContentServiceStub implements ContentService
             }
             if ( false === $this->repository->canUser( 'content', 'read', $contentInfo ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
             return $contentInfo;
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -187,7 +187,7 @@ class ContentServiceStub implements ContentService
 
             if ( false === $this->repository->canUser( 'content', 'read', $versionInfo ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
 
             if ( $versionInfo->versionNo === $versionNo )
@@ -206,7 +206,7 @@ class ContentServiceStub implements ContentService
             return $versions[VersionInfo::STATUS_DRAFT];
         }
 
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -274,7 +274,7 @@ class ContentServiceStub implements ContentService
 
             if ( false === $this->repository->canUser( 'content', 'read', $content ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
 
             if ( $versionNo === $content->getVersionInfo()->versionNo )
@@ -383,7 +383,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'create' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $fields = array();
@@ -439,7 +439,7 @@ class ContentServiceStub implements ContentService
 
         if ( $this->remoteIdExists( $contentCreateStruct->remoteId ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $languageCodes = array( $contentCreateStruct->mainLanguageCode );
@@ -474,6 +474,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $this->repository->getCurrentUser()->id,
                 'published'         =>  false,
                 'publishedDate'     =>  null,
+                'mainLocationId'    =>  null,
 
                 'repository'      =>  $this->repository
             )
@@ -505,7 +506,10 @@ class ContentServiceStub implements ContentService
         $locationService = $this->repository->getLocationService();
         foreach ( $locationCreateStructs as $locationCreateStruct )
         {
-            $locationService->createLocation( $contentInfo, $locationCreateStruct );
+            $locationService->createLocation(
+                $contentInfo,
+                $locationCreateStruct
+            );
         }
 
         return $content;
@@ -526,13 +530,13 @@ class ContentServiceStub implements ContentService
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
     {
-        if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $this->remoteIdExists( $contentMetadataUpdateStruct->remoteId ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $this->contentInfo[$contentInfo->contentId] = new ContentInfoStub(
@@ -548,6 +552,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $contentMetadataUpdateStruct->ownerId ?: $contentInfo->ownerId,
                 'published'         =>  $contentInfo->published,
                 'publishedDate'     =>  $contentMetadataUpdateStruct->publishedDate ?: $contentInfo->publishedDate,
+                'mainLocationId'    =>  $contentInfo->mainLocationId,
 
                 'repository'      =>  $this->repository
             )
@@ -567,7 +572,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         // Avoid cycles between ContentService and LocationService
@@ -623,7 +628,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $contentInfo ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
@@ -691,7 +696,7 @@ class ContentServiceStub implements ContentService
 
         if ( false === $this->repository->hasAccess( 'content', 'pendinglist' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $contentDrafts = array();
@@ -712,31 +717,6 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * Translate a version
-     *
-     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     *
-     * @since 5.0
-     */
-    public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null )
-    {
-        // TODO: Implement translateVersion() method.
-    }
-
-    /**
      * Updates the fields of a draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
@@ -753,11 +733,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $content     = $this->loadContentByVersionInfo( $versionInfo );
@@ -773,7 +753,7 @@ class ContentServiceStub implements ContentService
                  null === $contentUpdateStruct->initialLanguageCode &&
                 $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
             {
-                throw new ContentValidationExceptionStub( '@TODO: What error code should be used?' );
+                throw new ContentValidationExceptionStub( 'What error code should be used?' );
             }
 
             $fields[] = new Field(
@@ -851,11 +831,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $versionInfo ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $contentInfo = $versionInfo->getContentInfo();
@@ -874,6 +854,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $contentInfo->ownerId,
                 'published'         =>  true,
                 'publishedDate'     =>  new \DateTime(),
+                'mainLocationId'    =>  $contentInfo->mainLocationId,
 
                 'contentTypeId'     =>  $contentInfo->getContentType()->id,
                 'repository'        =>  $this->repository
@@ -941,12 +922,12 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'versionremove' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         if ( VersionInfo::STATUS_PUBLISHED === $versionInfo->status )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         foreach ( $this->content as $i => $content )
@@ -955,7 +936,7 @@ class ContentServiceStub implements ContentService
             {
                 continue;
             }
-            else if ( $content->contentId !== $versionInfo->contentInfo->contentId )
+            else if ( $content->contentId !== $versionInfo->contentId )
             {
                 continue;
             }
@@ -963,9 +944,21 @@ class ContentServiceStub implements ContentService
             unset( $this->content[$i] );
             unset( $this->versionInfo[$versionInfo->id] );
 
-            // TODO: Delete ContentInfo if this was the last reference.
+            break;
+        }
 
-            return;
+        $references = 0;
+        foreach ( $this->content as $i => $content )
+        {
+            if ( $content->contentId === $versionInfo->contentId )
+            {
+                ++$references;
+            }
+        }
+
+        if ( count( $references ) === 0 )
+        {
+            unset( $this->contentInfo[$versionInfo->contentId] );
         }
     }
 
@@ -982,7 +975,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'versionread' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $versions = array();
@@ -1012,7 +1005,7 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         ++$this->contentNextId;
@@ -1031,6 +1024,7 @@ class ContentServiceStub implements ContentService
                 'ownerId'           =>  $contentInfo->ownerId,
                 'published'         =>  $contentInfo->published,
                 'publishedDate'     =>  new \DateTime(),
+                'mainLocationId'    =>  $contentInfo->mainLocationId,
 
                 'contentTypeId'     =>  $contentInfo->getContentType()->id,
                 'repository'        =>  $this->repository
@@ -1137,9 +1131,18 @@ class ContentServiceStub implements ContentService
             }
         }
 
+        if ( false === $filterOnUserPermissions )
+        {
+            $this->repository->disableUserPermissions();
+        }
+
         $result = array();
         foreach ( $this->content as $content )
         {
+            if ( $filterOnUserPermissions && false === $this->repository->canUser( 'content', 'read', $content ) )
+            {
+                continue;
+            }
             if ( $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED )
             {
                 continue;
@@ -1166,6 +1169,8 @@ class ContentServiceStub implements ContentService
                 );
             }
         }
+
+        $this->repository->enableUserPermissions();
 
         return new SearchResult(
             array(
@@ -1209,7 +1214,7 @@ class ContentServiceStub implements ContentService
             && false === $filterOnUserPermissions
             && false === $this->repository->canUser( 'content', 'read', $searchResult->items[0] ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         return $searchResult;
@@ -1226,6 +1231,10 @@ class ContentServiceStub implements ContentService
      */
     public function loadRelations( VersionInfo $versionInfo )
     {
+        if ( false === $this->repository->canUser( 'content', 'read', $versionInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
         return $this->loadContentByVersionInfo( $versionInfo )->getRelations();
     }
 
@@ -1243,6 +1252,11 @@ class ContentServiceStub implements ContentService
      */
     public function loadReverseRelations( ContentInfo $contentInfo )
     {
+        if ( false === $this->repository->canUser( 'content', 'reverserelatedlist', $contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $relations = array();
         foreach ( $this->content as $content )
         {
@@ -1275,11 +1289,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $sourceVersion->status !== VersionInfo::STATUS_DRAFT )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $relation = new RelationStub(
@@ -1323,11 +1337,11 @@ class ContentServiceStub implements ContentService
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( VersionInfo::STATUS_DRAFT !== $sourceVersion->status )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
         $content   = $this->loadContentByVersionInfo( $sourceVersion );
@@ -1355,7 +1369,7 @@ class ContentServiceStub implements ContentService
 
         if ( $relationNotFound || $relationNoCommon )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $this->replaceContentObject(
@@ -1367,40 +1381,6 @@ class ContentServiceStub implements ContentService
                 )
             )
         );
-    }
-
-    /**
-     * add translation information to the content object
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     *
-     * @since 5.0
-     */
-    public function addTranslationInfo( TranslationInfo $translationInfo )
-    {
-        // TODO: Implement addTranslationInfo() method.
-    }
-
-    /**
-     * lists the translations done on this content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
-     * @todo TBD - filter by sourceversion destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
-     *
-     * @since 5.0
-     */
-    public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
-    {
-        // TODO: Implement loadTranslationInfos() method.
     }
 
     /**
@@ -1418,6 +1398,7 @@ class ContentServiceStub implements ContentService
                 'contentType'       =>  $contentType,
                 'mainLanguageCode'  =>  $mainLanguageCode,
                 'modificationDate'  =>  new \DateTime(),
+                'remoteId'          =>  md5( uniqid( __CLASS__, true ) ),
                 'ownerId'           =>  $this->repository->getCurrentUser()->id
             )
         );
@@ -1443,21 +1424,24 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * Instantiates a new TranslationInfo object
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     * Internal helper method used to load ContentInfo objects by their main
+     * language code.
+     *
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
      */
-    public function newTranslationInfo()
+    public function __loadContentInfoByLanguageCode( $languageCode )
     {
-        // TODO: Implement newTranslationInfo() method.
-    }
-
-    /**
-     * Instantiates a Translation object
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
-    {
-        // TODO: Implement newTranslationValues() method.
+        $matches = array();
+        foreach ( $this->contentInfo as $contentInfo )
+        {
+            if ( $contentInfo->mainLanguageCode === $languageCode )
+            {
+                $matches[] = $contentInfo;
+            }
+        }
+        return $matches;
     }
 
     /**
@@ -1551,4 +1535,87 @@ class ContentServiceStub implements ContentService
             $this->content
         ) = $this->repository->loadFixture( 'Content' );
     }
+
+    // Ignore this eZ Publish 5 feature by now.
+
+    // @codeCoverageIgnoreStart
+
+    /**
+     * Translate a version
+     *
+     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
+     *
+     * @example Examples/translation_5x.php
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
+     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
+     *
+     * @since 5.0
+     */
+    public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null )
+    {
+        // TODO: Implement translateVersion() method.
+    }
+
+    /**
+     * add translation information to the content object
+     *
+     * @example Examples/translation_5x.php
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
+     *
+     * @since 5.0
+     */
+    public function addTranslationInfo( TranslationInfo $translationInfo )
+    {
+        // TODO: Implement addTranslationInfo() method.
+    }
+
+    /**
+     * lists the translations done on this content object
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param array $filter
+     * @todo TBD - filter by sourceversion destination version and languages
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
+     *
+     * @since 5.0
+     */
+    public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
+    {
+        // TODO: Implement loadTranslationInfos() method.
+    }
+
+    /**
+     * Instantiates a new TranslationInfo object
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     */
+    public function newTranslationInfo()
+    {
+        // TODO: Implement newTranslationInfo() method.
+    }
+
+    /**
+     * Instantiates a Translation object
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
+     */
+    public function newTranslationValues()
+    {
+        // TODO: Implement newTranslationValues() method.
+    }
+
+    // @codeCoverageIgnoreEnd
 }

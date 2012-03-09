@@ -29,16 +29,8 @@ class Country implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $countriesAlpha2 = array();
-        $countriesLowercaseName = array();
-        foreach ( $value->data->getCountriesInfo() as $countryInfo ) {
-            $countriesAlpha2[] = $countryInfo["Alpha2"];
-            $countriesLowercaseName[] = strtolower( $countryInfo["Name"] );
-        }
-
-        $storageFieldValue->dataText = join( ",", $countriesAlpha2 );
-        sort( $countriesAlpha2 );
-        $storageFieldValue->sortKeyString = join( ",", $countriesLowercaseName );
+        $storageFieldValue->dataText = $value->data;
+        $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
     }
 
     /**
@@ -49,7 +41,7 @@ class Country implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new CountryValue( !empty( $value->dataText ) ? explode( ",", $value->dataText ) : null );
+        $fieldValue->data = $value->dataText;
     }
 
     /**
@@ -65,10 +57,9 @@ class Country implements Converter
         if ( isset( $fieldSettings["isMultiple"] ) )
             $storageDef->dataInt1 = (int)$fieldSettings["isMultiple"];
 
-        if ( !empty( $fieldSettings["default"] ) )
+        if ( !empty( $fieldSettings["defaultValue"] ) )
         {
-            $countries = new CountryValue( $fieldSettings["default"] );
-            $storageDef->dataText5 = join( ",", array_keys( $countries->getCountriesInfo() ) );
+            $storageDef->dataText5 = $fieldSettings["defaultValue"]->data;
         }
     }
 
@@ -83,7 +74,7 @@ class Country implements Converter
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-                "default" => !empty( $storageDef->dataText5 ) ? new CountryValue( explode( ",", $storageDef->dataText5 ) ) : null,
+                "default" => !empty( $storageDef->dataText5 ) ? $storageDef->dataText5 : null,
             )
         );
     }

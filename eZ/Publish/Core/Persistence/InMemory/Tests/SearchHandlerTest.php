@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -56,10 +56,10 @@ class SearchHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
                     array(
-                        "data" => new TextLineValue( "Welcome" )
+                        "data" => "Welcome"
                     )
                 ),
-                "language" => "eng-GB",
+                "languageCode" => "eng-GB",
             )
         );
 
@@ -100,5 +100,17 @@ class SearchHandlerTest extends HandlerTest
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( "test", $content->version->name );
         $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Version", $content->version );
+    }
+
+    /**
+     * Test finding content by location remote ID
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     */
+    public function testFindByLocationRemoteId()
+    {
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'remoteIDForLocation2' ) );
+        $this->assertTrue( $content instanceof Content );
+        $this->assertEquals( 1, $content->id );
     }
 }

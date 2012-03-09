@@ -49,7 +49,7 @@ class Handler implements BaseContentHandler
     /**
      * FieldHandler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\FieldHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected $fieldHandler;
 
@@ -60,7 +60,6 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      */
     public function __construct(
         Gateway $contentGateway,

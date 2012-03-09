@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
@@ -23,7 +21,7 @@ use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  *
  * @see eZ\Publish\API\Repository\ContentService
  */
-class ContentServiceTest extends BaseTest
+class ContentServiceTest extends BaseContentServiceTest
 {
     /**
      * Test for the newContentCreateStruct() method.
@@ -268,7 +266,7 @@ class ContentServiceTest extends BaseTest
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentWithSecondParameter()
+    public function testCreateContentWithLocationCreateParameter()
     {
         $repository = $this->getRepository();
 
@@ -291,10 +289,41 @@ class ContentServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentThrowsInvalidArgumentExceptionWithSecondParameter()
+    public function testCreateContentWithLocationCreateParameterSetsMainLocationId()
+    {
+        $repository = $this->getRepository();
+
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // This location will contain the above content object
+        $location = $locationService->loadLocationByRemoteId(
+            '0123456789abcdef0123456789abcdef'
+        );
+
+        // These two values are equal
+        $locationId     = $location->id;
+        $mainLocationId = $draft->contentInfo->mainLocationId;
+        /* END: Use Case */
+
+        $this->assertEquals( $mainLocationId, $locationId );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     */
+    public function testCreateContentThrowsInvalidArgumentExceptionWithLocationCreateParameter()
     {
         $repository = $this->getRepository();
 
@@ -671,7 +700,7 @@ class ContentServiceTest extends BaseTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithSecondParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
      */
     public function testPublishVersion()
     {
@@ -1608,7 +1637,48 @@ class ContentServiceTest extends BaseTest
      */
     public function testLoadContentDraftsWithFirstParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Get current user
+        $oldCurrentUser = $repository->getCurrentUser();
+
+        // Set new editor as user
+        $repository->setCurrentUser( $user );
+
+        // Remote id of the "Support" page in an eZ Publish demo installation.
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $contentService = $repository->getContentService();
+
+        // "Support" article content object
+        $supportContentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // Create a content draft
+        $contentService->createContentDraft( $supportContentInfo );
+
+        // Reset to previous current user
+        $repository->setCurrentUser( $oldCurrentUser );
+
+        // Now $contentDrafts for the previous current user and the new user
+        $newCurrentUserDrafts = $contentService->loadContentDrafts( $user );
+        $oldCurrentUserDrafts = $contentService->loadContentDrafts( $oldCurrentUser );
+        /* END: Use Case */
+
+        $this->assertSame( array(), $oldCurrentUserDrafts );
+
+        $this->assertEquals(
+            array(
+                VersionInfo::STATUS_DRAFT,
+                $supportRemoteId,
+            ),
+            array(
+                $newCurrentUserDrafts[0]->status,
+                $newCurrentUserDrafts[0]->getContentInfo()->remoteId
+            )
+        );
     }
 
     /**
@@ -2869,220 +2939,6 @@ class ContentServiceTest extends BaseTest
             $support
         );
         /* END: Use Case */
-    }
-
-    /**
-     * Creates a fresh clean content draft.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createContentDraftVersion1()
-    {
-        $repository = $this->getRepository();
-        /* BEGIN: Inline */
-        // Location id of the "Home > Community" node
-        $parentLocationId = 167;
-
-        $contentService     = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $locationService    = $repository->getLocationService();
-
-        // Configure new location
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
-
-        $locationCreate->priority  = 23;
-        $locationCreate->hidden    = true;
-        $locationCreate->remoteId  = '0123456789abcdef0123456789abcdef';
-        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
-        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
-
-        // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        // Configure new content object
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create a draft
-        $draft = $contentService->createContent( $contentCreate, array( $locationCreate ) );
-        /* END: Inline */
-
-        return $draft;
-    }
-
-    /**
-     * Creates a fresh clean published content instance.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createContentVersion1()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draft = $this->createContentDraftVersion1();
-
-        // Publish this draft
-        $content = $contentService->publishVersion( $draft->getVersionInfo() );
-        /* END: Inline */
-
-        return $content;
-    }
-
-    /**
-     * Creates a new content draft named <b>$draftVersion2</b> from a currently
-     * published content object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createContentDraftVersion2()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $content = $this->createContentVersion1();
-
-        // Create a new draft from the published content
-        $draftVersion2 = $contentService->createContentDraft( $content->contentInfo );
-        /* END: Inline */
-
-        return $draftVersion2;
-    }
-
-    /**
-     * Creates an updated content draft named <b>$draftVersion2</b> from
-     * a currently published content object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createUpdatedDraftVersion2()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draftVersion2 = $this->createContentDraftVersion2();
-
-        // Create an update struct and modify some fields
-        $contentUpdate = $contentService->newContentUpdateStruct();
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdate->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $draftVersion2 = $contentService->updateContent(
-            $draftVersion2->getVersionInfo(),
-            $contentUpdate
-        );
-        /* END: Inline */
-
-        return $draftVersion2;
-    }
-
-    /**
-     * Creates an updated content object named <b>$contentVersion2</b> from
-     * a currently published content object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createContentVersion2()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draftVersion2 = $this->createUpdatedDraftVersion2();
-
-        // Publish the updated draft
-        $contentVersion2 = $contentService->publishVersion( $draftVersion2->getVersionInfo() );
-        /* END: Inline */
-
-        return $contentVersion2;
-    }
-
-    /**
-     * Creates an updated content draft named <b>$draft</b>.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createMultipleLanguageDraftVersion1()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draft = $this->createContentDraftVersion1();
-
-        $contentUpdate = $contentService->newContentUpdateStruct();
-
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'index_title', 'British index title...' );
-
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-        $contentUpdate->setField( 'index_title', 'American index title...', 'eng-US' );
-
-        $contentUpdate->initialLanguageCode = 'eng-GB';
-
-        $draft = $contentService->updateContent(
-            $draft->getVersionInfo(),
-            $contentUpdate
-        );
-        /* END: Inline */
-
-        return $draft;
-    }
-
-    /**
-     * Creates a published content object with versionNo=2 named
-     * <b>$contentVersion2</b>.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createMultipleLanguageContentVersion2()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draft = $this->createMultipleLanguageDraftVersion1();
-
-        // Publish this version.
-        $contentVersion1 = $contentService->publishVersion(
-            $draft->getVersionInfo()
-        );
-
-        // Create a new draft and update with same values
-        $draftVersion2 = $contentService->createContentDraft(
-            $contentVersion1->contentInfo
-        );
-
-        $contentUpdate = $contentService->newContentUpdateStruct();
-
-        $contentService->updateContent(
-            $draftVersion2->getVersionInfo(),
-            $contentUpdate
-        );
-
-        // Finally publish version 2
-        $contentVersion2 = $contentService->publishVersion(
-            $draftVersion2->getVersionInfo()
-        );
-        /* END: Inline */
-
-        return $contentVersion2;
     }
 
     /**

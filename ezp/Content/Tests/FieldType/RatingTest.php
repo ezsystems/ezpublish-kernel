@@ -8,30 +8,13 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Rating\Type as Rating,
+use eZ\Publish\Core\Repository\FieldType\Rating\Type as Rating,
     eZ\Publish\Core\Repository\FieldType\Rating\Value as RatingValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class RatingTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Type",
-            Factory::build( "ezsrrating" ),
-            "Rating object not returned for 'ezsrrating', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators

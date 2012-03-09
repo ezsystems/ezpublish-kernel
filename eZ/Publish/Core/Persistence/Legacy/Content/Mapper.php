@@ -33,13 +33,14 @@ class Mapper
     /**
      * Location mapper
      *
-     * @var \eZ\Publish\SPI\Persistence\Storage\Persistence\Converter\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
     /**
      * Creates a new mapper.
      *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
     public function __construct( LocationMapper $locationMapper, Registry $converterRegistry )
@@ -179,10 +180,20 @@ class Mapper
                 $locations[$contentId][$versionId] = array();
             }
 
-            $field = (int)$row['ezcontentobject_attribute_id'];
-            if ( !isset( $versions[$contentId][$versionId]->fields[$field] ) )
+            $fieldId = (int)$row['ezcontentobject_attribute_id'];
+            if ( !isset( $versions[$contentId][$versionId]->fields[$fieldId] ) )
             {
-                $versions[$contentId][$versionId]->fields[$field] = $this->extractFieldFromRow( $row );
+                $versions[$contentId][$versionId]->fields[$fieldId] = $this->extractFieldFromRow( $row );
+                if (
+                    !in_array(
+                        $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
+                        $versions[$contentId][$versionId]->languageIds     // eng-US can be either 2 or 3, see fixture data
+                    )
+                )
+                {
+                    $versions[$contentId][$versionId]->languageIds[] =
+                        $row['ezcontentobject_attribute_language_id'] & ~1;
+                }
             }
 
             $locationId = (int)$row['ezcontentobject_tree_node_id'];
@@ -233,6 +244,7 @@ class Mapper
         $content->initialLanguageId = (int)$row['ezcontentobject_initial_language_id'];
         $content->modified = (int)$row['ezcontentobject_modified'];
         $content->published = (int)$row['ezcontentobject_published'];
+        $content->status = (int)$row['ezcontentobject_status'];
         $content->locations = array();
 
         return $content;
@@ -269,6 +281,7 @@ class Mapper
         $version->created = (int)$row['ezcontentobject_version_created'];
         $version->status = (int)$row['ezcontentobject_version_status'];
         $version->contentId = (int)$row['ezcontentobject_version_contentobject_id'];
+        $version->initialLanguageId = (int)$row['ezcontentobject_version_initial_language_id'];
     }
 
     /**
@@ -285,7 +298,7 @@ class Mapper
         $field->fieldDefinitionId = (int)$row['ezcontentobject_attribute_contentclassattribute_id'];
         $field->type = $row['ezcontentobject_attribute_data_type_string'];
         $field->value = $this->extractFieldValueFromRow( $row, $field->type );
-        $field->language = $row['ezcontentobject_attribute_language_code'];
+        $field->languageCode = $row['ezcontentobject_attribute_language_code'];
         $field->versionNo = (int)$row['ezcontentobject_attribute_version'];
 
         return $field;
@@ -346,13 +359,13 @@ class Mapper
 
             if (
                 !in_array(
-                    $row['ezcontentobject_attribute_language_code'],
-                    $versionList[$versionId]->languageIds
+                    $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
+                    $versionList[$versionId]->languageIds              // eng-US can be either 2 or 3, see fixture data
                 )
             )
             {
                 $versionList[$versionId]->languageIds[] =
-                    $row['ezcontentobject_attribute_language_code'];
+                    $row['ezcontentobject_attribute_language_id'] & ~1;
             }
         }
         return array_values( $versionList );

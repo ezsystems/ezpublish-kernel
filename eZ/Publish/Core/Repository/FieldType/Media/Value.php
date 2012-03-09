@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository\FieldType\Media;
 use eZ\Publish\Core\Repository\FieldType\ValueInterface,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\API\Repository\IOService,
     ezp\Base\Exception\PropertyNotFound;
 
 /**
@@ -24,7 +25,7 @@ class Value extends BaseValue implements ValueInterface
     /**
      * BinaryFile object
      *
-     * @var \ezp\Io\BinaryFile
+     * @var \eZ\Publish\API\Repository\Values\IO\BinaryFile
      */
     public $file;
 
@@ -106,12 +107,12 @@ class Value extends BaseValue implements ValueInterface
      * $binaryValue->file = $binaryValue->getHandler()->createFromLocalPath( '/path/to/local/file.txt' );
      * </code>
      *
-     * @param null|string $file File to use
+     * @param \eZ\Publish\API\Repository\IOService $IOService
+     * @param string|null $file
      */
-    public function __construct( $file = null )
+    public function __construct( IOService $IOService, $file = null )
     {
-        $this->handler = new Handler;
-
+        $this->handler = new Handler( $IOService );
         if ( $file !== null )
         {
             $this->file = $this->handler->createFromLocalPath( $file );
@@ -133,10 +134,10 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
-        if ( !isset( $this->file->path ) )
+        if ( !isset( $this->file->id ) )
             return "";
 
-        return $this->file->path;
+        return $this->file->id;
     }
 
     /**
@@ -148,9 +149,6 @@ class Value extends BaseValue implements ValueInterface
     {
         switch ( $name )
         {
-            case 'filename':
-                return basename( $this->file->path );
-
             case 'mimeType':
                 return $this->file->contentType->__toString();
 
@@ -164,22 +162,11 @@ class Value extends BaseValue implements ValueInterface
                 return $this->file->size;
 
             case 'filepath':
-                return $this->file->path;
+                return $this->file->id;
 
             default:
                 throw new PropertyNotFound( $name, get_class( $this ) );
         }
-    }
-
-    /**
-     * Returns handler object.
-     * Useful manipulate {@link self::$file}
-     *
-     * @return \eZ\Publish\Core\Repository\FieldType\Media\Handler
-     */
-    public function getHandler()
-    {
-        return $this->handler;
     }
 
     /**

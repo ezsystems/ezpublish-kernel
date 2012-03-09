@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\Repository;
 use ezp\Content\Field,
-    eZ\Publish\Core\Repository\FieldType\Value,
+    eZ\Publish\API\Repository\Repository as BaseRepository,
     eZ\Publish\Core\Repository\FieldType\Validator,
+    eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     ezp\Content\Type\FieldDefinition,
-    ezp\Base\Repository as BaseRepository,
     ezp\Base\Exception\InvalidArgumentType;
 
 /**
@@ -72,10 +72,10 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * This method is called on occuring events. Implementations can perform corresponding actions
      *
-     * @param string $event - prePublish, postPublish, preCreate, postCreate
-     * @param Repository $repository
-     * @param $fieldDef - the field definition of the field
-     * @param $field - the field for which an action is performed
+     * @param string $event prePublish, postPublish, preCreate, postCreate
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
+     * @param \ezp\Content\Field $field The field for which an action is performed
      */
     public function handleEvent( $event, BaseRepository $repository, FieldDefinition $fieldDef, Field $field )
     {
@@ -108,7 +108,7 @@ abstract class FieldType implements FieldTypeInterface
      *  - sort_key_int (sorting will be made with an integer algorithm)
      *
      * <code>
-     * protected function getSortInfo( Value $value )
+     * protected function getSortInfo( $value )
      * {
      *     // Example for a text line type:
      *     return array( 'sort_key_string' => $value->text );
@@ -123,11 +123,11 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @abstract
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param mixed $value
      *
      * @return array|bool Array with sortInfo, or false if the Type doesn't support sorting
      */
-    abstract protected function getSortInfo( Value $value );
+    abstract protected function getSortInfo( $value );
 
     /**
      * Used by the FieldDefinition to populate the $fieldTypeConstraints->validators field.
@@ -154,11 +154,11 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Converts a $value to a persistence value
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param mixed $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( Value $value )
+    public function toPersistenceValue( $value )
     {
         // @todo Evaluate if creating the sortKey in every case is really needed
         //       Couldn't this be retrieved with a method, which would initialize
@@ -177,7 +177,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return mixed
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {

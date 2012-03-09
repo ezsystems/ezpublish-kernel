@@ -53,6 +53,7 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'initial_language_id', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'published', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject' ),
             // Content object version
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
@@ -68,6 +69,7 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'contentclassattribute_id', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'data_type_string', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
+            $this->dbHandler->aliasedColumn( $query, 'language_id', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_attribute' ),
             // Content object field data
             $this->dbHandler->aliasedColumn( $query, 'data_float', 'ezcontentobject_attribute' ),

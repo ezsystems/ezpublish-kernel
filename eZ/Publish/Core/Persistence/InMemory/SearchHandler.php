@@ -17,12 +17,14 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     Exception;
 
@@ -171,9 +173,31 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $match['remoteId'] = $criterion->value[0];
             }
+            else if ( $criterion instanceof LocationRemoteId && !isset( $match['locations']['remoteId'] ) )
+            {
+                $match['locations']['remoteId'] = $criterion->value[0];
+            }
             else if ( $criterion instanceof SectionId && !isset( $match['sectionId'] ) )
             {
                 $match['sectionId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof Status && !isset( $match['status'] ) )
+            {
+                switch ( $criterion->value[0] )
+                {
+                    case Status::STATUS_ARCHIVED:
+                        $match['status'] = Content::STATUS_ARCHIVED;
+                        break;
+                    case Status::STATUS_DRAFT:
+                        $match['status'] = Content::STATUS_DRAFT;
+                        break;
+                    case Status::STATUS_PUBLISHED:
+                        $match['status'] = Content::STATUS_PUBLISHED;
+                        break;
+                    default:
+                        throw new Exception( "Unsuported StatusCriterion->value[0]: " . $criterion->value[0] );
+
+                }
             }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
             {

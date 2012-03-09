@@ -161,11 +161,15 @@ abstract class ContentTypeBase extends BaseServiceTest
             'new-group'
         );
         $groupCreate->creatorId = 23;
+        $groupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        $groupCreate->descriptions = array();
         $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $secondGroupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
+        $secondGroupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        $secondGroupCreate->descriptions = array();
 
         // Throws an exception because group with identifier "new-group" already exists
         $contentTypeService->createContentTypeGroup( $secondGroupCreate );
@@ -586,6 +590,8 @@ abstract class ContentTypeBase extends BaseServiceTest
             'updated-group'
         );
         $groupCreate->creatorId = 23;
+        $groupCreate->names            = array( 'eng-US' => 'Name' );
+        $groupCreate->descriptions     = array( 'eng-US' => 'Description' );
         $groupToOverwrite = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
@@ -967,7 +973,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isSearchable    = true;
         $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
+                "data" => 'New text line'
             )
         );
         //$titleFieldCreate->validators
@@ -994,7 +1000,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable    = true;
         $bodyFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
+                "data" => ''
             )
         );
         //$bodyFieldCreate->validators
@@ -1089,7 +1095,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isSearchable    = true;
         $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
+                "data" => 'New text line'
             )
         );
         //$titleFieldCreate->validators
@@ -1116,7 +1122,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable    = true;
         $bodyFieldCreate->defaultValue   = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
+                "data" => ''
             )
         );
         //$bodyFieldCreate->validators
@@ -1927,7 +1933,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isSearchable    = true;
         $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
+                "data" => 'New text line'
             )
         );
         //$titleFieldCreate->validators
@@ -2606,7 +2612,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
+                "data" => 'New text line'
             )
         );
         //$fieldDefCreate->validators
@@ -2849,7 +2855,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
             array(
-                 "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
+                 "data" => ""
             )
         );
         //$bodyUpdateStruct->validators

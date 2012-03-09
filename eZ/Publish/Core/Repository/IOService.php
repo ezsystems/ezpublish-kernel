@@ -65,20 +65,8 @@ class IOService implements IOServiceInterface
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
-        if ( empty( $uploadedFile['name'] ) || !is_string( $uploadedFile['name'] ) )
-            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['name'] does not exist or has invalid value" );
-
-        if ( empty( $uploadedFile['type'] ) || !is_string( $uploadedFile['type'] ) )
-            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['type'] does not exist or has invalid value" );
-
-        if ( empty( $uploadedFile['tmp_name'] ) || !is_string( $uploadedFile['tmp_name'] ) )
+        if ( !is_string( $uploadedFile['tmp_name'] ) || empty( $uploadedFile['tmp_name'] ) )
             throw new InvalidArgumentException( "uploadedFile", "uploadedFile['tmp_name'] does not exist or has invalid value" );
-
-        if ( empty( $uploadedFile['size'] ) || !is_int( $uploadedFile['size'] ) || $uploadedFile['size'] < 0 )
-            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['size'] does not exist or has invalid value" );
-
-        if ( isset( $uploadedFile['error'] ) && $uploadedFile['error'] !== 0 )
-            throw new InvalidArgumentException( "uploadedFile", "file was not uploaded correctly" );
 
         if ( !is_uploaded_file( $uploadedFile['tmp_name'] ) || !is_readable( $uploadedFile['tmp_name'] ) )
             throw new InvalidArgumentException( "uploadedFile", "file was not uploaded or is unreadable" );
@@ -112,7 +100,7 @@ class IOService implements IOServiceInterface
             throw new InvalidArgumentException( "localFile", "localFile has an invalid value" );
 
         if ( !is_file( $localFile ) || !is_readable( $localFile ) )
-            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable" );
+            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable: {$localFile}" );
 
         $fileHandle = fopen( $localFile, 'rb' );
         if ( $fileHandle === false )

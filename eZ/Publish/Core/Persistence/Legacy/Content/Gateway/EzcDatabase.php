@@ -174,10 +174,10 @@ class EzcDatabase extends Gateway
         $languages = array();
         foreach ( $fields as $field )
         {
-            if ( isset( $languages[$field->language] ) )
+            if ( isset( $languages[$field->languageCode] ) )
                 continue;
 
-            $languages[$field->language] = true;
+            $languages[$field->languageCode] = true;
         }
 
         if ( $alwaysAvailable )
@@ -416,7 +416,9 @@ class EzcDatabase extends Gateway
             $q->bindValue( $field->type )
         )->set(
             $this->dbHandler->quoteColumn( 'language_code' ),
-            $q->bindValue( $field->language )
+            $q->bindValue( $field->languageCode )
+            // @todo Deal with setting language_id ( needs to include always available flag if that is the case -
+            //       Eg: eg: eng-US can be either 2 or 3, see fixture data )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $field->versionNo )
@@ -439,7 +441,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_id' ),
             $q->bindValue(
                 $this->languageMaskGenerator->generateLanguageIndicator(
-                    $field->language,
+                    $field->languageCode,
                     $content->alwaysAvailable
                 ),
                 null,
@@ -640,6 +642,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
             // Language IDs
             $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
+            $this->dbHandler->aliasedColumn( $query, 'language_id', 'ezcontentobject_attribute' ),
             // Content object names
             $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject_name' ),
             $this->dbHandler->aliasedColumn( $query, 'content_translation', 'ezcontentobject_name' )

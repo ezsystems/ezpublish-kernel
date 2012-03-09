@@ -21,6 +21,7 @@
             <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>
             <file>IOServiceTest.php</file>
+            <file>IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
             <file>ContentTypeServiceAuthorizationTest.php</file>
@@ -28,18 +29,20 @@
             <file>LocationServiceAuthorizationTest.php</file>
             <file>UserServiceAuthorizationTest.php</file>
             <file>RoleServiceAuthorizationTest.php</file>
-            <directory>./Exceptions</directory>
+            <file>TrashServiceAuthorizationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
             <directory suffix=".php">../</directory>
             <exclude>
+                <directory suffix="Test.php">../Tests</directory>
+                <directory>../Tests/Fixtures</directory>
+                <file>../Tests/common.php</file>
+
                 <directory>../Examples</directory>
-                <directory>../Tests</directory>
                 <directory>../Tutorials</directory>
             </exclude>
-            <directory>../Tests/Stubs</directory>
         </whitelist>
     </filter>
 </phpunit>

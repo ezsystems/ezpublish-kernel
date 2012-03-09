@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Author\Type as AuthorType,
+use eZ\Publish\Core\Repository\FieldType\Author\Type as AuthorType,
     eZ\Publish\Core\Repository\FieldType\Author\Value as AuthorValue,
     eZ\Publish\Core\Repository\FieldType\Author\Author,
     eZ\Publish\Core\Repository\FieldType\Author\AuthorCollection,
@@ -41,21 +40,6 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     {
         unset( $this->authors );
         parent::tearDown();
-    }
-
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Type",
-            Factory::build( "ezauthor" ),
-            "Author object not returned for 'ezauthor', incorrect mapping? "
-        );
     }
 
     /**

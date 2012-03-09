@@ -35,7 +35,7 @@ class Keyword implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new KeywordValue();
+        $fieldValue->data = array();
     }
 
     /**

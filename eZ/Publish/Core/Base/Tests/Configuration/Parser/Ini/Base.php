@@ -181,7 +181,7 @@ conditions[routes][content][item][params][id]=\d+
 conditions[routes][content][item][controller]=%contentItem-controller::doList
 
 [contentItem-controller]
-class=eZ\Publish\Core\ContentItemController
+class=eZ\\Publish\\Core\\ContentItemController
 
 [-controller]
 public=true
@@ -206,7 +206,7 @@ public=true
                     ) ) ),
                 )
             ),
-            'contentItem-controller' => array( 'class' => 'eZ\Publish\Core\ContentItemController' ),
+            'contentItem-controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
             '-controller' => array( 'public' => true ),
         );
 

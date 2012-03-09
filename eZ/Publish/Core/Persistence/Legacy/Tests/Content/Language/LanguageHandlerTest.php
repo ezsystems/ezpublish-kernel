@@ -53,7 +53,7 @@ class LanguageHandlerTest extends TestCase
             ->method( 'createLanguageFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'eZ\Publish\SPI\Persistence\Content\Language\CreateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\CreateStruct'
                 )
             )->will( $this->returnValue( new Language() ) );
 
@@ -62,7 +62,7 @@ class LanguageHandlerTest extends TestCase
             ->method( 'insertLanguage' )
             ->with(
                 $this->isInstanceOf(
-                    'eZ\Publish\SPI\Persistence\Content\Language'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Language'
                 )
             )->will( $this->returnValue( 2 ) );
 
@@ -71,7 +71,7 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->create( $createStruct );
 
         $this->assertInstanceOf(
-            'eZ\Publish\SPI\Persistence\Content\Language',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
             $result
         );
         $this->assertEquals(
@@ -101,7 +101,7 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
             ->method( 'updateLanguage' )
-            ->with( $this->isInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language' ) );
 
         $handler->update( $this->getLanguageFixture() );
     }
@@ -139,7 +139,7 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->load( 2 );
 
         $this->assertInstanceOf(
-            'eZ\Publish\SPI\Persistence\Content\Language',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
             $result
         );
     }
@@ -192,7 +192,7 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->loadByLanguageCode( 'eng-US' );
 
         $this->assertInstanceOf(
-            'eZ\Publish\SPI\Persistence\Content\Language',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
             $result
         );
     }
@@ -292,7 +292,7 @@ class LanguageHandlerTest extends TestCase
         if ( !isset( $this->mapperMock ) )
         {
             $this->mapperMock = $this->getMock(
-                'eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Mapper'
             );
         }
         return $this->mapperMock;
@@ -308,7 +308,7 @@ class LanguageHandlerTest extends TestCase
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Gateway'
             );
         }
         return $this->gatewayMock;

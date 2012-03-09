@@ -8,31 +8,13 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
+use eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
     eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class TextLineTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testBuildFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Type",
-            Factory::build( "ezstring" ),
-            "TextLine object not returned for 'ezstring', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @group textLine

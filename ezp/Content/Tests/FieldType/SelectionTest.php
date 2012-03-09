@@ -8,31 +8,13 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Factory,
-    eZ\Publish\Core\Repository\FieldType\Selection\Type as Selection,
+use eZ\Publish\Core\Repository\FieldType\Selection\Type as Selection,
     eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class SelectionTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * This test will make sure a correct mapping for the field type string has
-     * been made.
-     *
-     * @group fieldType
-     * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
-     */
-    public function testBuildFactory()
-    {
-        self::assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Type",
-            Factory::build( "ezselection" ),
-            "Selection object not returned for 'ezstring', incorrect mapping? "
-        );
-    }
-
     /**
      * @group fieldType
      * @group selection
