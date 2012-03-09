@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the StringLengthValidatorTest class
+ * File containing the FloatValueValidatorTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator,
+namespace eZ\Publish\Core\Repository\Tests\FieldType;
+use eZ\Publish\Core\Repository\FieldType\Float\Value as FloatValue,
+    eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator,
     PHPUnit_Framework_TestCase;
 
-class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
+class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * This test ensure an StringLengthValidator can be created
+     * This test ensure an FloatValueValidator can be created
      *
      * @group fieldType
      * @group validator
@@ -24,7 +24,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             "eZ\\Publish\\Core\\Repository\\FieldType\\Validator",
-            new StringLengthValidator
+            new FloatValueValidator
         );
     }
 
@@ -39,10 +39,10 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
     public function testInitializeConstraints()
     {
         $constraints = array(
-            "minStringLength" => 5,
-            "maxStringLength" => 10,
+            "minFloatValue" => 0.5,
+            "maxFloatValue" => 22/7,
         );
-        $validator = new StringLengthValidator;
+        $validator = new FloatValueValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
@@ -60,15 +60,15 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstraintsInitializeGet()
     {
         $constraints = array(
-            "minStringLength" => 5,
-            "maxStringLength" => 10,
+            "minFloatValue" => 0.5,
+            "maxFloatValue" => 22/7,
         );
-        $validator = new StringLengthValidator;
+        $validator = new FloatValueValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
-        $this->assertSame( $constraints["minStringLength"], $validator->minStringLength );
-        $this->assertSame( $constraints["maxStringLength"], $validator->maxStringLength );
+        $this->assertSame( $constraints["minFloatValue"], $validator->minFloatValue );
+        $this->assertSame( $constraints["maxFloatValue"], $validator->maxFloatValue );
     }
 
     /**
@@ -82,14 +82,14 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstraintsSetGet()
     {
         $constraints = array(
-            "minStringLength" => 5,
-            "maxStringLength" => 10,
+            "minFloatValue" => 0.5,
+            "maxFloatValue" => 22/7,
         );
-        $validator = new StringLengthValidator;
-        $validator->minStringLength = $constraints["minStringLength"];
-        $validator->maxStringLength = $constraints["maxStringLength"];
-        $this->assertSame( $constraints["minStringLength"], $validator->minStringLength );
-        $this->assertSame( $constraints["maxStringLength"], $validator->maxStringLength );
+        $validator = new FloatValueValidator;
+        $validator->minFloatValue = $constraints["minFloatValue"];
+        $validator->maxFloatValue = $constraints["maxFloatValue"];
+        $this->assertSame( $constraints["minFloatValue"], $validator->minFloatValue );
+        $this->assertSame( $constraints["maxFloatValue"], $validator->maxFloatValue );
     }
 
     /**
@@ -105,7 +105,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
         $constraints = array(
             "unexisting" => 0,
         );
-        $validator = new StringLengthValidator;
+        $validator = new FloatValueValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
@@ -121,7 +121,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testSetBadConstraint()
     {
-        $validator = new StringLengthValidator;
+        $validator = new FloatValueValidator;
         $validator->unexisting = 0;
     }
 
@@ -135,7 +135,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBadConstraint()
     {
-        $validator = new StringLengthValidator;
+        $validator = new FloatValueValidator;
         $null = $validator->unexisting;
     }
 
@@ -145,24 +145,26 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateOK
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator::validate
      * @covers \eZ\Publish\Core\Repository\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
     {
-        $validator = new StringLengthValidator;
-        $validator->minStringLength = 5;
-        $validator->maxStringLength = 10;
-        $this->assertTrue( $validator->validate( new TextLineValue( $value ) ) );
+        $validator = new FloatValueValidator;
+        $validator->minFloatValue = 10/7;
+        $validator->maxFloatValue = 11/7;
+        $this->assertTrue( $validator->validate( new FloatValue( $value ) ) );
         $this->assertSame( array(), $validator->getMessage() );
     }
 
     public function providerForValidateOK()
     {
         return array(
-            array( "hello" ),
-            array( "hello!" ),
-            array( "0123456789" ),
+            array( 100/70 ),
+            array( 101/70 ),
+            array( 105/70 ),
+            array( 109/70 ),
+            array( 110/70 ),
         );
     }
 
@@ -172,14 +174,14 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateKO
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator::validate
      */
     public function testValidateWrongValues( $value, $message )
     {
-        $validator = new StringLengthValidator;
-        $validator->minStringLength = 5;
-        $validator->maxStringLength = 10;
-        $this->assertFalse( $validator->validate( new TextLineValue( $value ) ) );
+        $validator = new FloatValueValidator;
+        $validator->minFloatValue = 10/7;
+        $validator->maxFloatValue = 11/7;
+        $this->assertFalse( $validator->validate( new FloatValue( $value ) ) );
         $messages = $validator->getMessage();
         $this->assertStringStartsWith( $message, $messages[0] );
     }
@@ -187,9 +189,10 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
     public function providerForValidateKO()
     {
         return array(
-            array( "", "The string can not be shorter than" ),
-            array( "Hi!", "The string can not be shorter than" ),
-            array( "0123456789!", "The string can not exceed" ),
+            array( -10/7, "The value can not be lower than" ),
+            array( 0, "The value can not be lower than" ),
+            array( 99/70, "The value can not be lower than" ),
+            array( 111/70, "The value can not be higher than" ),
         );
     }
 }

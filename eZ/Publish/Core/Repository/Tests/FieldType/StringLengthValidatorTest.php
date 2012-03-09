@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the IntegerValueValidatorTest class
+ * File containing the StringLengthValidatorTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
-    eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator,
+namespace eZ\Publish\Core\Repository\Tests\FieldType;
+use eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator,
     PHPUnit_Framework_TestCase;
 
-class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
+class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * This test ensure an IntegerValueValidator can be created
+     * This test ensure an StringLengthValidator can be created
      *
      * @group fieldType
      * @group validator
@@ -24,7 +24,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             "eZ\\Publish\\Core\\Repository\\FieldType\\Validator",
-            new IntegerValueValidator
+            new StringLengthValidator
         );
     }
 
@@ -39,10 +39,10 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testInitializeConstraints()
     {
         $constraints = array(
-            "minIntegerValue" => 0,
-            "maxIntegerValue" => 100,
+            "minStringLength" => 5,
+            "maxStringLength" => 10,
         );
-        $validator = new IntegerValueValidator;
+        $validator = new StringLengthValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
@@ -60,15 +60,15 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstraintsInitializeGet()
     {
         $constraints = array(
-            "minIntegerValue" => 0,
-            "maxIntegerValue" => 100,
+            "minStringLength" => 5,
+            "maxStringLength" => 10,
         );
-        $validator = new IntegerValueValidator;
+        $validator = new StringLengthValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
-        $this->assertSame( $constraints["minIntegerValue"], $validator->minIntegerValue );
-        $this->assertSame( $constraints["maxIntegerValue"], $validator->maxIntegerValue );
+        $this->assertSame( $constraints["minStringLength"], $validator->minStringLength );
+        $this->assertSame( $constraints["maxStringLength"], $validator->maxStringLength );
     }
 
     /**
@@ -82,14 +82,14 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstraintsSetGet()
     {
         $constraints = array(
-            "minIntegerValue" => 0,
-            "maxIntegerValue" => 100,
+            "minStringLength" => 5,
+            "maxStringLength" => 10,
         );
-        $validator = new IntegerValueValidator;
-        $validator->minIntegerValue = $constraints["minIntegerValue"];
-        $validator->maxIntegerValue = $constraints["maxIntegerValue"];
-        $this->assertSame( $constraints["minIntegerValue"], $validator->minIntegerValue );
-        $this->assertSame( $constraints["maxIntegerValue"], $validator->maxIntegerValue );
+        $validator = new StringLengthValidator;
+        $validator->minStringLength = $constraints["minStringLength"];
+        $validator->maxStringLength = $constraints["maxStringLength"];
+        $this->assertSame( $constraints["minStringLength"], $validator->minStringLength );
+        $this->assertSame( $constraints["maxStringLength"], $validator->maxStringLength );
     }
 
     /**
@@ -105,7 +105,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
         $constraints = array(
             "unexisting" => 0,
         );
-        $validator = new IntegerValueValidator;
+        $validator = new StringLengthValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
@@ -121,7 +121,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testSetBadConstraint()
     {
-        $validator = new IntegerValueValidator;
+        $validator = new StringLengthValidator;
         $validator->unexisting = 0;
     }
 
@@ -135,7 +135,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBadConstraint()
     {
-        $validator = new IntegerValueValidator;
+        $validator = new StringLengthValidator;
         $null = $validator->unexisting;
     }
 
@@ -145,28 +145,24 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateOK
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator::validate
      * @covers \eZ\Publish\Core\Repository\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
     {
-        $validator = new IntegerValueValidator;
-        $validator->minIntegerValue = 10;
-        $validator->maxIntegerValue = 15;
-        $this->assertTrue( $validator->validate( new IntegerValue( $value ) ) );
+        $validator = new StringLengthValidator;
+        $validator->minStringLength = 5;
+        $validator->maxStringLength = 10;
+        $this->assertTrue( $validator->validate( new TextLineValue( $value ) ) );
         $this->assertSame( array(), $validator->getMessage() );
     }
 
     public function providerForValidateOK()
     {
         return array(
-            array( 10 ),
-            array( 11 ),
-            array( 12 ),
-            array( 12.5 ),
-            array( 13 ),
-            array( 14 ),
-            array( 15 ),
+            array( "hello" ),
+            array( "hello!" ),
+            array( "0123456789" ),
         );
     }
 
@@ -176,24 +172,24 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateKO
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator::validate
      */
     public function testValidateWrongValues( $value, $message )
     {
-        $validator = new IntegerValueValidator;
-        $validator->minIntegerValue = 10;
-        $validator->maxIntegerValue = 15;
-        $this->assertFalse( $validator->validate( new IntegerValue( $value ) ) );
-        $this->assertSame( array( $message ), $validator->getMessage() );
+        $validator = new StringLengthValidator;
+        $validator->minStringLength = 5;
+        $validator->maxStringLength = 10;
+        $this->assertFalse( $validator->validate( new TextLineValue( $value ) ) );
+        $messages = $validator->getMessage();
+        $this->assertStringStartsWith( $message, $messages[0] );
     }
 
     public function providerForValidateKO()
     {
         return array(
-            array( -12, "The value can not be lower than 10." ),
-            array( 0, "The value can not be lower than 10." ),
-            array( 9, "The value can not be lower than 10." ),
-            array( 16, "The value can not be higher than 15." ),
+            array( "", "The string can not be shorter than" ),
+            array( "Hi!", "The string can not be shorter than" ),
+            array( "0123456789!", "The string can not exceed" ),
         );
     }
 }

@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the FloatValueValidatorTest class
+ * File containing the IntegerValueValidatorTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Float\Value as FloatValue,
-    eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator,
+namespace eZ\Publish\Core\Repository\Tests\FieldType;
+use eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
+    eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator,
     PHPUnit_Framework_TestCase;
 
-class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
+class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * This test ensure an FloatValueValidator can be created
+     * This test ensure an IntegerValueValidator can be created
      *
      * @group fieldType
      * @group validator
@@ -24,7 +24,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             "eZ\\Publish\\Core\\Repository\\FieldType\\Validator",
-            new FloatValueValidator
+            new IntegerValueValidator
         );
     }
 
@@ -39,10 +39,10 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testInitializeConstraints()
     {
         $constraints = array(
-            "minFloatValue" => 0.5,
-            "maxFloatValue" => 22/7,
+            "minIntegerValue" => 0,
+            "maxIntegerValue" => 100,
         );
-        $validator = new FloatValueValidator;
+        $validator = new IntegerValueValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
@@ -60,15 +60,15 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstraintsInitializeGet()
     {
         $constraints = array(
-            "minFloatValue" => 0.5,
-            "maxFloatValue" => 22/7,
+            "minIntegerValue" => 0,
+            "maxIntegerValue" => 100,
         );
-        $validator = new FloatValueValidator;
+        $validator = new IntegerValueValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
-        $this->assertSame( $constraints["minFloatValue"], $validator->minFloatValue );
-        $this->assertSame( $constraints["maxFloatValue"], $validator->maxFloatValue );
+        $this->assertSame( $constraints["minIntegerValue"], $validator->minIntegerValue );
+        $this->assertSame( $constraints["maxIntegerValue"], $validator->maxIntegerValue );
     }
 
     /**
@@ -82,14 +82,14 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstraintsSetGet()
     {
         $constraints = array(
-            "minFloatValue" => 0.5,
-            "maxFloatValue" => 22/7,
+            "minIntegerValue" => 0,
+            "maxIntegerValue" => 100,
         );
-        $validator = new FloatValueValidator;
-        $validator->minFloatValue = $constraints["minFloatValue"];
-        $validator->maxFloatValue = $constraints["maxFloatValue"];
-        $this->assertSame( $constraints["minFloatValue"], $validator->minFloatValue );
-        $this->assertSame( $constraints["maxFloatValue"], $validator->maxFloatValue );
+        $validator = new IntegerValueValidator;
+        $validator->minIntegerValue = $constraints["minIntegerValue"];
+        $validator->maxIntegerValue = $constraints["maxIntegerValue"];
+        $this->assertSame( $constraints["minIntegerValue"], $validator->minIntegerValue );
+        $this->assertSame( $constraints["maxIntegerValue"], $validator->maxIntegerValue );
     }
 
     /**
@@ -105,7 +105,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
         $constraints = array(
             "unexisting" => 0,
         );
-        $validator = new FloatValueValidator;
+        $validator = new IntegerValueValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
@@ -121,7 +121,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testSetBadConstraint()
     {
-        $validator = new FloatValueValidator;
+        $validator = new IntegerValueValidator;
         $validator->unexisting = 0;
     }
 
@@ -135,7 +135,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBadConstraint()
     {
-        $validator = new FloatValueValidator;
+        $validator = new IntegerValueValidator;
         $null = $validator->unexisting;
     }
 
@@ -145,26 +145,28 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateOK
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator::validate
      * @covers \eZ\Publish\Core\Repository\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
     {
-        $validator = new FloatValueValidator;
-        $validator->minFloatValue = 10/7;
-        $validator->maxFloatValue = 11/7;
-        $this->assertTrue( $validator->validate( new FloatValue( $value ) ) );
+        $validator = new IntegerValueValidator;
+        $validator->minIntegerValue = 10;
+        $validator->maxIntegerValue = 15;
+        $this->assertTrue( $validator->validate( new IntegerValue( $value ) ) );
         $this->assertSame( array(), $validator->getMessage() );
     }
 
     public function providerForValidateOK()
     {
         return array(
-            array( 100/70 ),
-            array( 101/70 ),
-            array( 105/70 ),
-            array( 109/70 ),
-            array( 110/70 ),
+            array( 10 ),
+            array( 11 ),
+            array( 12 ),
+            array( 12.5 ),
+            array( 13 ),
+            array( 14 ),
+            array( 15 ),
         );
     }
 
@@ -174,25 +176,24 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateKO
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\FloatValueValidator::validate
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator::validate
      */
     public function testValidateWrongValues( $value, $message )
     {
-        $validator = new FloatValueValidator;
-        $validator->minFloatValue = 10/7;
-        $validator->maxFloatValue = 11/7;
-        $this->assertFalse( $validator->validate( new FloatValue( $value ) ) );
-        $messages = $validator->getMessage();
-        $this->assertStringStartsWith( $message, $messages[0] );
+        $validator = new IntegerValueValidator;
+        $validator->minIntegerValue = 10;
+        $validator->maxIntegerValue = 15;
+        $this->assertFalse( $validator->validate( new IntegerValue( $value ) ) );
+        $this->assertSame( array( $message ), $validator->getMessage() );
     }
 
     public function providerForValidateKO()
     {
         return array(
-            array( -10/7, "The value can not be lower than" ),
-            array( 0, "The value can not be lower than" ),
-            array( 99/70, "The value can not be lower than" ),
-            array( 111/70, "The value can not be higher than" ),
+            array( -12, "The value can not be lower than 10." ),
+            array( 0, "The value can not be lower than 10." ),
+            array( 9, "The value can not be lower than 10." ),
+            array( 16, "The value can not be higher than 15." ),
         );
     }
 }

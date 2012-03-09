@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
     ezp\Io\SysInfo,
     ezp\Io\FileInfo,

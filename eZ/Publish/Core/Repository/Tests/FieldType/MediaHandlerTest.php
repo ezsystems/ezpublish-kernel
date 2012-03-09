@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
     ezp\Io\FileInfo,
