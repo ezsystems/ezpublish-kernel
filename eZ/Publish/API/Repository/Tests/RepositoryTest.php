@@ -20,70 +20,6 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class RepositoryTest extends BaseTest
 {
     /**
-     * Test for the getCurrentUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::getCurrentUser()
-     */
-    public function testGetCurrentUser()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $currentUser = $repository->getCurrentUser();
-        /* END: Use Case */
-
-        $this->assertNotNull( $currentUser );
-    }
-
-    /**
-     * Test for the setCurrentUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::setCurrentUser()
-     */
-    public function testSetCurrentUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::testSetCurrentUser() is not implemented." );
-    }
-
-    /**
-     * Test for the hasAccess() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess()
-     * 
-     */
-    public function testHasAccess()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::hasAccess() is not implemented." );
-    }
-
-    /**
-     * Test for the hasAccess() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess($module, $function, $user)
-     * 
-     */
-    public function testHasAccessWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::hasAccess() is not implemented." );
-    }
-
-    /**
-     * Test for the canUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
-     * 
-     */
-    public function testCanUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::canUser() is not implemented." );
-    }
-
-    /**
      * Test for the getContentService() method.
      *
      * @return void
@@ -93,7 +29,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\ContentService',
+            '\\eZ\\Publish\\API\\Repository\\ContentService',
             $repository->getContentService()
         );
     }
@@ -108,7 +44,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\LanguageService',
+            '\\eZ\\Publish\\API\\Repository\\LanguageService',
             $repository->getContentLanguageService()
         );
     }
@@ -124,7 +60,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\ContentTypeService',
+            '\\eZ\\Publish\\API\\Repository\\ContentTypeService',
             $repository->getContentTypeService()
         );
     }
@@ -140,7 +76,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\LocationService',
+            '\\eZ\\Publish\\API\\Repository\\LocationService',
             $repository->getLocationService()
         );
     }
@@ -156,7 +92,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\TrashService',
+            '\\eZ\\Publish\\API\\Repository\\TrashService',
             $repository->getTrashService()
         );
     }
@@ -171,7 +107,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\SectionService',
+            '\\eZ\\Publish\\API\\Repository\\SectionService',
             $repository->getSectionService()
         );
     }
@@ -186,7 +122,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\UserService',
+            '\\eZ\\Publish\\API\\Repository\\UserService',
             $repository->getUserService()
         );
     }
@@ -201,7 +137,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\RoleService',
+            '\\eZ\\Publish\\API\\Repository\\RoleService',
             $repository->getRoleService()
         );
     }
@@ -216,7 +152,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\IOService',
+            '\\eZ\\Publish\\API\\Repository\\IOService',
             $repository->getIOService()
         );
     }

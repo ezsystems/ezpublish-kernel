@@ -46,7 +46,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentCreateStruct', $contentCreate );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentCreateStruct', $contentCreate );
     }
 
     /**
@@ -81,7 +81,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $contentService->createContent( $contentCreate );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Content', $content );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content );
 
         return $content;
     }
@@ -127,7 +127,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentSetsContentInfo( $content )
     {
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $content->contentInfo );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo', $content->contentInfo );
 
         return $content;
     }
@@ -178,7 +178,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentSetsVersionInfo( $content )
     {
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\VersionInfo', $content->getVersionInfo() );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo', $content->getVersionInfo() );
 
         return $content;
     }
@@ -396,7 +396,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentInfo',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
             $contentInfo
         );
     }
@@ -439,7 +439,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentInfo = $contentService->loadContentInfoByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', $contentInfo );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo', $contentInfo );
     }
 
     /**
@@ -486,7 +486,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\VersionInfo',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
             $versionInfo
         );
     }
@@ -512,7 +512,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\VersionInfo',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
             $versionInfo
         );
     }
@@ -561,7 +561,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
     }
@@ -593,7 +593,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
     }
@@ -619,7 +619,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
     }
@@ -666,7 +666,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
     }
@@ -709,7 +709,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
 
@@ -837,7 +837,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $draftedContent
         );
 
@@ -1061,7 +1061,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
             $updateStruct
         );
     }
@@ -1081,7 +1081,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $draftVersion2
         );
 
@@ -1393,7 +1393,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentMetadataUpdateStruct',
             $metadataUpdate
         );
     }
@@ -1432,7 +1432,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
 
@@ -2295,7 +2295,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $contentCopied
         );
 
@@ -2356,7 +2356,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Content',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $contentCopied
         );
 
@@ -2405,7 +2405,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\SearchResult',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult',
             $searchResult
         );
 
@@ -2427,7 +2427,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals( $searchResult->count, count( $searchResult->items ) );
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Query',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Query',
             $searchResult->query
         );
     }
@@ -2477,7 +2477,7 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the findSingle() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::findSingle()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
@@ -2497,35 +2497,29 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         // Search for a matching content object
-        $searchResult = $contentService->findSingle( $query, array() );
+        $content = $contentService->findSingle( $query, array() );
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\SearchResult',
-            $searchResult
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $content
         );
 
-        return $searchResult;
+        return $content;
     }
 
     /**
      * Test for the findSingle() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\SearchResult $searchResult
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findSingle()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
      */
-    public function testFindSingleSearchResultContainsExpectedProperties( $searchResult )
+    public function testFindSingleResultContainsExpectedProperties( $content )
     {
-        $this->assertEquals( 1, $searchResult->count );
-        $this->assertEquals( 1, count( $searchResult->items ) );
-
-        $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Query',
-            $searchResult->query
-        );
+        $this->assertRegExp( '(eZ Systems)i', $content->getFieldValue( 'body', 'eng-US' ) );
     }
 
     /**
@@ -2557,17 +2551,88 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         // Search for matching content with field language filter
-        $searchResult = $contentService->findSingle(
+        $content = $contentService->findSingle(
             $query,
             array( 'languages' => array( 'eng-US' ) )
         );
         /* END: Use Case */
 
-        $this->assertEquals( 1, $searchResult->count );
         $this->assertLocaleFieldsEquals(
-            $searchResult->items[0]->getFields(),
+            $content->getFields(),
             'eng-US'
         );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
+     */
+    public function testFindSingleThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // Publish the newly created draft
+        $contentService->publishVersion( $draft->getVersionInfo() );
+
+        // Create a search query for the created content object
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, 'TestingThisWithAnInvalidSearchQuery' )
+            )
+        );
+
+        // This call will fail with an "NotFoundException", because the above
+        // search query should not match against any object in an eZ Publish demo
+        $contentService->findSingle( $query, array() );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
+     */
+    public function testFindSingleThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // Publish the newly created draft
+        $contentService->publishVersion( $draft->getVersionInfo() );
+
+        // Create a search query for the created content object
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*ez*' )
+            )
+        );
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // above query would return more than one result
+        $contentService->findSingle( $query, array() );
+        /* END: Use Case */
     }
 
     /**
@@ -2599,7 +2664,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Relation',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Relation',
             $relation
         );
 

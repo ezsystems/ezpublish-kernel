@@ -984,41 +984,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
-     * Test for the findSingle() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     */
-    public function testFindSingleThrowsUnauthorizedExceptionWithFilterByPermissionsParameter()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        // Load the user service
-        $userService = $repository->getUserService();
-
-        // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
-
-        // Load content service
-        $contentService = $repository->getContentService();
-
-        // Create a search query for content objects about "eZ Publish"
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Systems*' )
-            )
-        );
-
-        // This call will fail with a "UnauthorizedException"
-        $contentService->findSingle( $query, array(), false );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the loadRelations() method.
      *
      * @return void
@@ -1216,7 +1181,66 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testFindSingleWithUserPermissionFilter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
+
+        $contentService = $repository->getContentService();
+
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
+            )
+        );
+
+        // Search for matching content
+        $content = $contentService->findSingle( $query, array(), false );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $content
+        );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
+     */
+    public function testFindSingleThrowsNotFoundExceptionWithUserPermissionFilter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
+
+        $contentService = $repository->getContentService();
+
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
+            )
+        );
+
+        // This call will fail with a "NotFoundException", because the current
+        // user has no access to the "Admin Users" user group
+        $contentService->findSingle( $query, array(), true );
+        /* END: Use Case */
     }
 
     /**
