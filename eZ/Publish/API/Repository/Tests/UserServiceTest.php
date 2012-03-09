@@ -267,10 +267,33 @@ class UserServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
     public function testCreateUserGroupThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the main "Users" group
+        $mainGroupId = 4;
+
+        $userService = $repository->getUserService();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
+        $userGroupCreate->remoteId = '5f7f0bdb3381d6a461d8c29ff53d908f';
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // specified remoteId is already used for the "Members" user group.
+        $userService->createUserGroup(
+            $userGroupCreate,
+            $parentUserGroup
+        );
+        /* END: Use Case */
     }
 
     /**
