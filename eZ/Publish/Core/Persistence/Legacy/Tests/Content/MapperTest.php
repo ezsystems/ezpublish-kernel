@@ -138,7 +138,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionForContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionInfoForContent
      */
     public function testCreateVersionFromContent()
     {
@@ -481,6 +481,98 @@ class MapperTest extends TestCase
             $this->assertNull( $field->id );
         }
     }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
+     * @dataProvider extractContentInfoFromRowProvider
+     * @param array $fixtures
+     * @param string $prefix
+     */
+    public function testExtractContentInfoFromRow( array $fixtures, $prefix )
+    {
+        $contentInfoReference = $this->getContentExtractReference()->contentInfo;
+        $mapper = new Mapper(
+            $this->getLocationMapperMock(),
+            $this->getValueConverterRegistryMock(),
+            $this->getLanguageHandlerMock()
+        );
+        self::assertEquals( $contentInfoReference, $mapper->extractContentInfoFromRow( $fixtures, $prefix) );
+    }
+
+    /**
+     * Returns test data for {@link testExtractContentInfoFromRow()}
+     *
+     * @return array
+     */
+    public function extractContentInfoFromRowProvider()
+    {
+        $fixtures = $this->getContentExtractFixture();
+        $fixturesNoPrefix = array();
+        foreach ( $fixtures[0] as $key => $value )
+        {
+            $keyNoPrefix = str_replace( 'ezcontentobject_', '', $key );
+            $fixturesNoPrefix[$keyNoPrefix] = $value;
+        }
+
+        return array(
+            array( $fixtures[0], 'ezcontentobject_' ),
+            array( $fixturesNoPrefix, '' )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionInfoFromRow
+     * @dataProvider extractVersionInfoFromRowProvider
+     * @param array $fixtures
+     * @param string $prefix
+     */
+    public function testExtractVersionInfoFromRow( array $fixtures, $prefix )
+    {
+        $versionInfoReference = $this->getContentExtractReference()->versionInfo;
+        $mapper = new Mapper(
+            $this->getLocationMapperMock(),
+            $this->getValueConverterRegistryMock(),
+            $this->getLanguageHandlerMock()
+        );
+
+        $versionInfo = $mapper->extractVersionInfoFromRow( $fixtures, $prefix );
+        foreach ( $versionInfoReference as $property => $value )
+        {
+            switch ( $property )
+            {
+                default:
+                    self::assertSame( $value, $versionInfo->$property );
+            }
+        }
+    }
+
+    /**
+     * Returns test data for {@link testExtractVersionInfoFromRow()}
+     *
+     * @return array
+     */
+    public function extractVersionInfoFromRowProvider()
+    {
+        $fixturesAll = $this->getContentExtractFixture();
+        $fixtures = $fixturesAll[0];
+        $fixtures['ezcontentobject_version_names'] = array(
+            array( 'content_translation' => 'eng-US', 'name' => 'Something' )
+        );
+        $fixtures['ezcontentobject_version_languages'] = array( 2 );
+        $fixtures['ezcontentobject_version_initial_language_code'] = 'eng-US';
+        $fixturesNoPrefix = array();
+        foreach ( $fixtures as $key => $value )
+        {
+            $keyNoPrefix = str_replace( 'ezcontentobject_version_', '', $key );
+            $fixturesNoPrefix[$keyNoPrefix] = $value;
+        }
+
+        return array(
+            array( $fixtures, 'ezcontentobject_version_' ),
+            array( $fixturesNoPrefix, '' )
+        );
+    }
+
 
     /**
      * Returns a fixture of database rows for content extraction
