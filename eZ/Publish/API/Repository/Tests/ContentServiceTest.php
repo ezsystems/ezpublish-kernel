@@ -2600,6 +2600,42 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the findSingle() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
+     */
+    public function testFindSingleThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createMultipleLanguageDraftVersion1();
+
+        // Publish the newly created draft
+        $contentService->publishVersion( $draft->getVersionInfo() );
+
+        // Create a search query for the created content object
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*ez*' )
+            )
+        );
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // above query would return more than one result
+        $contentService->findSingle( $query, array() );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the addRelation() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content

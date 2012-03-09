@@ -1199,9 +1199,13 @@ class ContentServiceStub implements ContentService
     {
         $searchResult = $this->findContent( $query, $fieldFilters, $filterOnUserPermissions );
 
-        if ( $searchResult->count >= 1 )
+        if ( $searchResult->count === 1 )
         {
             return reset( $searchResult->items );
+        }
+        if ( $searchResult->count > 1 )
+        {
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
         throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
