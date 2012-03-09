@@ -93,9 +93,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             chdir( realpath( str_repeat( '../', $count ) ) );
 
             $this->repository = include $file;
-
+/*
             $userService = $this->repository->getUserService();
-            $this->repository->setCurrentUser( $userService->loadUser( 14 ) );
+            $this->repository->setCurrentUser( $userService->loadUser( 14 ) );*/
         }
         return $this->repository;
     }
