@@ -2285,7 +2285,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 $this->fail(
                     sprintf(
                         'Group with ID "%s" not unassigned.',
-                        $groupToUnassign->id
+                        $assignedGroup->id
                     )
                 );
             }
