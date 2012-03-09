@@ -1233,6 +1233,39 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentThrowsContentValidationExceptionWhenMandatoryFieldIsEmpty()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'title', null );
+
+        // Don't set this, then the above call without languageCode will fail
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+
+        // This call will fail with a "ContentValidationException", because the
+        // mandatory "title" field is empty.
+        $contentService->updateContent(
+            $draft->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the createContentDraft() method.
      *
      * @return void
