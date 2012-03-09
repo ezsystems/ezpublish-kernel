@@ -1028,7 +1028,28 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadRelationsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadRelations() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Remote id of the "Support" page of a eZ Publish demo installation.
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $versionInfo = $contentService->loadVersionInfo(
+            $contentService->loadContentInfoByRemoteId(
+                $supportRemoteId
+            )
+        );
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadRelations( $versionInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -1041,7 +1062,26 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadReverseRelations() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Remote id of the "Support" page of a eZ Publish demo installation.
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $contentInfo = $contentService->loadContentInfoByRemoteId(
+            $supportRemoteId
+        );
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadReverseRelations( $contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -1064,6 +1104,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $draft = $this->createContentDraftVersion1();
 
+        // Get the draft's version info
+        $versionInfo = $draft->getVersionInfo();
+
         // Load other content object
         $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
 
@@ -1075,7 +1118,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->addRelation(
-            $draft->getVersionInfo(),
+            $versionInfo,
             $support
         );
         /* END: Use Case */
@@ -1103,6 +1146,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $draft = $this->createContentDraftVersion1();
 
+        // Get the draft's version info
+        $versionInfo = $draft->getVersionInfo();
+
         $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
         $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
 
@@ -1117,7 +1163,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->deleteRelation( $draft->getVersionInfo(), $support );
+        $contentService->deleteRelation( $versionInfo, $support );
         /* END: Use Case */
     }
 
@@ -1126,11 +1172,39 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
      */
     public function testFindContentWithUserPermissionFilter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
+
+        $contentService = $repository->getContentService();
+
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*ez*' )
+            )
+        );
+
+        // Search for matching content
+        $searchResultWithoutPermissions = $contentService->findContent( $query, array(), false );
+
+        // Search for matching content
+        $searchResultWithPermissions = $contentService->findContent( $query, array() );
+        /* END: Use Case */
+
+        $this->assertGreaterThan(
+            $searchResultWithPermissions->count,
+            $searchResultWithoutPermissions->count
+        );
     }
 
     /**

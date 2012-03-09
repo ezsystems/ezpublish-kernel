@@ -94,7 +94,7 @@ class RepositoryStub implements Repository
     /**
      * @var integer
      */
-    private $initializing = 0;
+    private $permissionChecks = 0;
 
     /**
      * Instantiates the stubbed repository.
@@ -139,7 +139,7 @@ class RepositoryStub implements Repository
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        if ( $this->initializing > 0 )
+        if ( $this->permissionChecks > 0 )
         {
             return true;
         }
@@ -195,7 +195,7 @@ class RepositoryStub implements Repository
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
     {
-        if ( $this->initializing > 0 )
+        if ( $this->permissionChecks > 0 )
         {
             return true;
         }
@@ -206,7 +206,7 @@ class RepositoryStub implements Repository
             return $hasAccess;
         }
 
-        ++$this->initializing;
+        ++$this->permissionChecks;
 
         $locations = null;
         $contentInfoValue = null;
@@ -235,7 +235,7 @@ class RepositoryStub implements Repository
 
         if ( null === $locations )
         {
-            --$this->initializing;
+            --$this->permissionChecks;
             return true;
         }
 
@@ -251,14 +251,14 @@ class RepositoryStub implements Repository
                 {
                     if ( 0 === strpos( $location->pathString, $pathString ) )
                     {
-                        --$this->initializing;
+                        --$this->permissionChecks;
                         return true;
                     }
                 }
             }
         }
 
-        --$this->initializing;
+        --$this->permissionChecks;
         return false;
     }
 
@@ -466,10 +466,30 @@ class RepositoryStub implements Repository
      */
     public function loadFixture( $fixtureName, array $scopeValues = array() )
     {
-        ++$this->initializing;
+        ++$this->permissionChecks;
         $fixture = include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
-        --$this->initializing;
+        --$this->permissionChecks;
 
         return $fixture;
+    }
+
+    /**
+     * Internal helper method used to disable permission checks.
+     *
+     * @return void
+     */
+    public function disableUserPermissions()
+    {
+        ++$this->permissionChecks;
+    }
+
+    /**
+     * Internal helper method used to enable permission checks.
+     *
+     * @return void
+     */
+    public function enableUserPermissions()
+    {
+        --$this->permissionChecks;
     }
 }

@@ -1131,9 +1131,18 @@ class ContentServiceStub implements ContentService
             }
         }
 
+        if ( false === $filterOnUserPermissions )
+        {
+            $this->repository->disableUserPermissions();
+        }
+
         $result = array();
         foreach ( $this->content as $content )
         {
+            if ( $filterOnUserPermissions && false === $this->repository->canUser( 'content', 'read', $content ) )
+            {
+                continue;
+            }
             if ( $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED )
             {
                 continue;
@@ -1160,6 +1169,8 @@ class ContentServiceStub implements ContentService
                 );
             }
         }
+
+        $this->repository->enableUserPermissions();
 
         return new SearchResult(
             array(
@@ -1220,6 +1231,10 @@ class ContentServiceStub implements ContentService
      */
     public function loadRelations( VersionInfo $versionInfo )
     {
+        if ( false === $this->repository->canUser( 'content', 'read', $versionInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
         return $this->loadContentByVersionInfo( $versionInfo )->getRelations();
     }
 
@@ -1237,6 +1252,11 @@ class ContentServiceStub implements ContentService
      */
     public function loadReverseRelations( ContentInfo $contentInfo )
     {
+        if ( false === $this->repository->canUser( 'content', 'reverserelatedlist', $contentInfo ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $relations = array();
         foreach ( $this->content as $content )
         {
