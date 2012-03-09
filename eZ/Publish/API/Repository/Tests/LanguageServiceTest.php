@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
+use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 /**
@@ -507,5 +506,154 @@ class LanguageServiceTest extends BaseTest
         $languageCreate->languageCode = 'eng-US';
 
         return $languageService->createLanguage( $languageCreate );
+    }
+
+    /**
+     * Test for the createLanguage() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     */
+    public function testCreateLanguageInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get create struct and set properties
+        $languageCreate               = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled      = true;
+        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        // Create new language
+        $languageService->createLanguage( $languageCreate );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $languageService->loadLanguage( 'eng-NZ' );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected execution path
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Can still load language after rollback' );
+    }
+
+    /**
+     * Test for the createLanguage() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     */
+    public function testCreateLanguageInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get create struct and set properties
+        $languageCreate               = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled      = true;
+        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        // Create new language
+        $languageService->createLanguage( $languageCreate );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load new language
+        $language = $languageService->loadLanguage( 'eng-NZ' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'eng-NZ', $language->languageCode );
+    }
+
+    /**
+     * Test for the updateLanguageName() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
+     */
+    public function testUpdateLanguageNameInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Load an existing language
+        $language = $languageService->loadLanguage( 'eng-US' );
+
+        // Update the language name
+        $languageService->updateLanguageName( $language, 'My English' );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // Load updated version, name will still be "English (American)"
+        $updatedLanguage = $languageService->loadLanguage( 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'English (American)', $updatedLanguage->name );
+    }
+
+    /**
+     * Test for the updateLanguageName() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
+     */
+    public function testUpdateLanguageNameInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Load an existing language
+        $language = $languageService->loadLanguage( 'eng-US' );
+
+        // Update the language name
+        $languageService->updateLanguageName( $language, 'My English' );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load updated version, name will be "My English"
+        $updatedLanguage = $languageService->loadLanguage( 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'My English', $updatedLanguage->name );
     }
 }
