@@ -327,7 +327,7 @@ interface ContentService
     /**
      * Performs a query for a single content object
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
      * @TODO define structs for the field filters
