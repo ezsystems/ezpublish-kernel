@@ -89,13 +89,14 @@ class LocationServiceStub implements LocationService
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
-        if ( false === $this->repository->canUser( 'content', 'create', $contentInfo ) )
+        $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
+
+        if ( false === $this->repository->canUser( 'content', 'create', $parentLocation ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
-
+        $this->checkContentNotInPath( $contentInfo, $parentLocation );
         $this->checkContentNotInTree( $contentInfo, $parentLocation );
         $this->checkRemoteIdNotTaken( $locationCreateStruct->remoteId );
 
@@ -174,6 +175,32 @@ class LocationServiceStub implements LocationService
     }
 
     /**
+     * Checks that the given $contentInfo does not occur in the tree starting
+     * at $location.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *         if the content is in the tree of $location.
+     * @param ContentInfo $contentInfo
+     * @param Location $location
+     * @return void
+     */
+    protected function checkContentNotInPath( ContentInfo $contentInfo, Location $location )
+    {
+        if ( $location->contentInfo == $contentInfo )
+        {
+            throw new Exceptions\InvalidArgumentExceptionStub;
+        }
+
+        if ( $location->parentLocationId !== $location->id )
+        {
+            $this->checkContentNotInPath(
+                $contentInfo,
+                $this->loadLocation( $location->parentLocationId )
+            );
+        }
+    }
+
+    /**
      * Loads a location object from its $locationId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
@@ -189,7 +216,7 @@ class LocationServiceStub implements LocationService
         {
             throw new Exceptions\NotFoundExceptionStub;
         }
-        if ( false === $this->repository->canUser( 'content', 'read', $this->locations[$locationId]->getContentInfo() ) )
+        if ( false === $this->repository->canUser( 'content', 'read', $this->locations[$locationId] ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -215,7 +242,7 @@ class LocationServiceStub implements LocationService
             {
                 continue;
             }
-            if ( false === $this->repository->canUser( 'content', 'create', $location->getContentInfo() ) )
+            if ( false === $this->repository->canUser( 'content', 'create', $location ) )
             {
                 throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
@@ -247,7 +274,7 @@ class LocationServiceStub implements LocationService
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
-        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        if ( false === $this->repository->canUser( 'content', 'edit', $location ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -529,7 +556,7 @@ class LocationServiceStub implements LocationService
      */
     public function deleteLocation( Location $location )
     {
-        if ( false === $this->repository->canUser( 'content', 'remove', $location->contentInfo ) )
+        if ( false === $this->repository->canUser( 'content', 'remove', $location ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }

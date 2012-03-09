@@ -188,7 +188,7 @@ class LocationServiceTest extends BaseTest
         $locationCreate = $locationService->newLocationCreateStruct( 2 );
 
         // Throws exception, since content is already located at "/1/2/107/110/"
-        $location = $locationService->createLocation(
+        $locationService->createLocation(
             $contentInfo,
             $locationCreate
         );
@@ -205,7 +205,23 @@ class LocationServiceTest extends BaseTest
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionParentIsSubLocationOfContent()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::createLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo( 65 );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 110 );
+
+        // Throws exception, since content is already located at "/1/2/"
+        $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
     }
 
     /**
