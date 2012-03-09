@@ -9,9 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
-use eZ\Publish\API\Repository\Values\Content\Section;
+use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use \eZ\Publish\API\Repository\Values\Content\Section;
 
 /**
  * Test case for operations in the SectionService using in memory storage.
@@ -685,5 +684,86 @@ class SectionServiceTest extends BaseTest
         // This call should fail with a BadStateException, because there are assigned contents
         $sectionService->deleteSection( $section );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::createSection()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
+     */
+    public function testCreateSectionInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get a create struct and set some properties
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        // Create a new section
+        $sectionService->createSection( $sectionCreate );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a not found exception
+            $sectionService->loadSectionByIdentifier( 'uniqueKey' );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected execution path
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Can still load section after rollback.' );
+    }
+
+    /**
+     * Test for the createSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::createSection()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
+     */
+    public function testCreateSectionInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get a create struct and set some properties
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        // Create a new section
+        $sectionService->createSection( $sectionCreate );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load new section
+        $section = $sectionService->loadSectionByIdentifier( 'uniqueKey' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'uniqueKey', $section->identifier );
     }
 }
