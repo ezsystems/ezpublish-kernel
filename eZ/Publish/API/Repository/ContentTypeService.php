@@ -151,7 +151,7 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return array an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\IO\ContentType[] an array of {@link ContentType} which have status DEFINED
      */
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup );
 

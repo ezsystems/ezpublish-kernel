@@ -268,6 +268,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
      */
     public function testLoadContentTypeGroupByIdentifierThrowsNotFoundException()
     {
@@ -288,7 +289,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroups()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testLoadContentTypeGroups()
     {
@@ -348,7 +349,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupUpdateStruct()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testNewContentTypeGroupUpdateStruct()
     {
@@ -371,7 +372,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupUpdateStruct
      */
     public function testUpdateContentTypeGroup()
     {
@@ -446,7 +447,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupThrowsInvalidArgumentException()
     {
@@ -472,7 +473,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testDeleteContentTypeGroup()
     {
@@ -509,7 +510,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeCreateStruct()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testNewContentTypeCreateStruct()
     {
@@ -564,7 +565,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testNewFieldDefinitionCreateStruct()
     {
@@ -640,7 +641,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
      */
     public function testCreateContentType()
     {
@@ -1719,16 +1722,16 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         // Throws exception, since type with ID 2342 does not exist
-        $userGroupType = $contentTypeService->loadContentType( 2342 );
+        $contentTypeService->loadContentType( 2342 );
         /* END: Use Case */
     }
 
     /**
      * Test for the loadContentTypeByIdentifier() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService;
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testLoadContentTypeByIdentifier()
     {
@@ -1977,6 +1980,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeDraft
      */
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
@@ -1999,7 +2003,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeThrowsNotFoundException
      */
     public function testDeleteContentType()
     {
@@ -2050,9 +2055,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the copyContentType() method.
      *
-     * @return void
+     * @return array
      * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testCopyContentType()
     {
@@ -2080,6 +2085,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
     /**
      * Test for the copyContentType() method.
+     *
+     * @param array $data
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
@@ -2163,7 +2170,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType($contentType, $user)
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
      */
     public function testCopyContentTypeWithSecondParameter()
     {
@@ -2194,7 +2201,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
      */
     public function testAssignContentTypeGroup()
     {
@@ -2416,5 +2425,534 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         /* END: Use Case */
 
         $this->assertEquals( $groupId, $group->id );
+    }
+
+    /**
+     * Test for the updateContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
+     */
+    public function testUpdateContentTypeGroupInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Load an existing group
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' );
+
+        // Get an update struct and change the identifier
+        $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+        $groupUpdate->identifier = 'Teardown';
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Apply update to group
+        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // Load updated group, it will be unchanged
+        $updatedGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'Setup', $updatedGroup->identifier );
+    }
+
+    /**
+     * Test for the updateContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
+     */
+    public function testUpdateContentTypeGroupInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Load an existing group
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' );
+
+        // Get an update struct and change the identifier
+        $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+        $groupUpdate->identifier = 'Teardown';
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Apply update to group
+        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load updated group by it's new identifier "Teardown"
+        $updatedGroup = $contentTypeService->loadContentTypeGroupByIdentifier(
+            'Teardown'
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( 'Teardown', $updatedGroup->identifier );
+    }
+
+    /**
+     * Test for the deleteContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifierThrowsNotFoundException
+     */
+    public function testDeleteContentTypeGroupWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Get a group create struct
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create the new group
+        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        // Delete the currently created group
+        $contentTypeService->deleteContentTypeGroup( $group );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with an "NotFoundException"
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected error path
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Group not deleted after rollback' );
+    }
+
+    /**
+     * Test for the deleteContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifierThrowsNotFoundException
+     */
+    public function testDeleteContentTypeGroupWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Get a group create struct
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create the new group
+        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        // Delete the currently created group
+        $contentTypeService->deleteContentTypeGroup( $group );
+
+        // Commit all changes
+        $repository->commit();
+
+        try
+        {
+            // This call will fail with an "NotFoundException"
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected error path
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Group not deleted after commit.' );
+    }
+
+    /**
+     * Test for the createContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifierThrowsNotFoundException
+     */
+    public function testCreateContentTypeInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get create struct and set some properties
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->mainLanguageCode = 'eng-US';
+        $typeCreate->names            = array( 'eng-US' => 'Blog post' );
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+        $titleFieldCreate->names = array( 'eng-US' => 'Title' );
+
+        $groups = array(
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+        );
+
+        // Create content type
+        $contentTypeDraft = $contentTypeService->createContentType(
+            $typeCreate,
+            $groups
+        );
+
+        // Publish the content type draft
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        // Rollback all changes.
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentTypeService->loadContentTypeByIdentifier( 'blog-post' );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected execution path
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Can still load content type after rollback.' );
+    }
+
+    /**
+     * Test for the createContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifierThrowsNotFoundException
+     */
+    public function testCreateContentTypeInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get create struct and set some properties
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->mainLanguageCode = 'eng-US';
+        $typeCreate->names            = array( 'eng-US' => 'Blog post' );
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+        $titleFieldCreate->names = array( 'eng-US' => 'Title' );
+
+        $groups = array(
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+        );
+
+        // Create content type
+        $contentTypeDraft = $contentTypeService->createContentType(
+            $typeCreate,
+            $groups
+        );
+
+        // Publish the content type draft
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        // Commit all changes.
+        $repository->commit();
+
+        // Load the newly created content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'blog-post' );
+        /* END: Use Case */
+
+        $this->assertEquals( $contentTypeDraft->id, $contentType->id );
+    }
+
+    /**
+     * Test for the copyContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeThrowsNotFoundException
+     */
+    public function testCopyContentTypeInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Load content type to copy
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Complete copy of the content type
+        $copiedType = $contentTypeService->copyContentType( $contentType );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentTypeService->loadContentType( $copiedType->id );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected execution path
+        } catch ( E $e1 ) {
+
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Can still load copied content type after rollback.' );
+    }
+
+    /**
+     * Test for the copyContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeThrowsNotFoundException
+     */
+    public function testCopyContentTypeInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Load content type to copy
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Complete copy of the content type
+        $contentTypeId = $contentTypeService->copyContentType( $contentType )->id;
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load the new content type copy.
+        $copiedContentType = $contentTypeService->loadContentType( $contentTypeId );
+        /* END: Use Case */
+
+        $this->assertEquals( $contentTypeId, $copiedContentType->id );
+    }
+
+    /**
+     * Test for the deleteContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifierThrowsNotFoundException
+     */
+    public function testDeleteContentTypeInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Load content type to copy
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Delete the "comment" content type.
+        $contentTypeService->deleteContentType( $contentType );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // Load currently deleted and rollbacked content type
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'comment', $commentType->identifier );
+    }
+
+    /**
+     * Test for the deleteContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifierThrowsNotFoundException
+     */
+    public function testDeleteContentTypeInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Load content type to copy
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Delete the "comment" content type.
+        $contentTypeService->deleteContentType( $contentType );
+
+        // Commit all changes
+        $repository->commit();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected execution path
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Can still load content type after rollback.' );
+    }
+
+    /**
+     * Test for the assignContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAssignContentTypeGroup
+     */
+    public function testAssignContentTypeGroupInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Assign group to content type
+        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // Load all content types assigned to media group
+        $contentTypes = $contentTypeService->loadContentTypes( $mediaGroup );
+
+        $contentTypeIds = array();
+        foreach ( $contentTypes as $contentType )
+        {
+            $contentTypeIds[] = $contentType->id;
+        }
+        /* END: Use Case */
+
+        $this->assertFalse(
+            in_array( $folderType->id, $contentTypeIds ),
+            'Folder content type is still in media group after rollback.'
+        );
+    }
+
+    /**
+     * Test for the assignContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAssignContentTypeGroup
+     */
+    public function testAssignContentTypeGroupInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Assign group to content type
+        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load all content types assigned to media group
+        $contentTypes = $contentTypeService->loadContentTypes( $mediaGroup );
+
+        $contentTypeIds = array();
+        foreach ( $contentTypes as $contentType )
+        {
+            $contentTypeIds[] = $contentType->id;
+        }
+        /* END: Use Case */
+
+        $this->assertTrue(
+            in_array( $folderType->id, $contentTypeIds ),
+            'Folder content type not in media group after commit.'
+        );
     }
 }
