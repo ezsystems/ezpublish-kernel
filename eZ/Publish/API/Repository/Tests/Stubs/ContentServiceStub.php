@@ -1184,8 +1184,8 @@ class ContentServiceStub implements ContentService
     /**
      * Performs a query for a single content object
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the found content object
-     * @TODO throw an exception if the found object count is > 1
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
      * @TODO define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
@@ -1193,31 +1193,17 @@ class ContentServiceStub implements ContentService
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
         $searchResult = $this->findContent( $query, $fieldFilters, $filterOnUserPermissions );
 
-        if ( $searchResult->count > 1 )
+        if ( $searchResult->count >= 1 )
         {
-            $searchResult = new SearchResult(
-                array(
-                    'query'  =>  $query,
-                    'count'  =>  1,
-                    'items'  =>  array( reset( $searchResult->items ) )
-                )
-            );
+            return reset( $searchResult->items );
         }
-
-        if ( 1 === $searchResult->count
-            && false === $filterOnUserPermissions
-            && false === $this->repository->canUser( 'content', 'read', $searchResult->items[0] ) )
-        {
-            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
-        }
-
-        return $searchResult;
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**

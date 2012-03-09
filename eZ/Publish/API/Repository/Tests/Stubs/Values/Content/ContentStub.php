@@ -95,6 +95,7 @@ class ContentStub extends Content
             }
             if ( $translatable && $field->languageCode !== $languageCode )
             {
+echo "SKIP 2 ({$field->fieldDefIdentifier}, $field->languageCode !== $languageCode)\n";
                 continue;
             }
             return $field->value;

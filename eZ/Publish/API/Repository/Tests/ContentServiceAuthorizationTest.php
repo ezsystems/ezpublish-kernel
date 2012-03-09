@@ -984,41 +984,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
-     * Test for the findSingle() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     */
-    public function testFindSingleThrowsUnauthorizedExceptionWithFilterByPermissionsParameter()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        // Load the user service
-        $userService = $repository->getUserService();
-
-        // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
-
-        // Load content service
-        $contentService = $repository->getContentService();
-
-        // Create a search query for content objects about "eZ Publish"
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Systems*' )
-            )
-        );
-
-        // This call will fail with a "UnauthorizedException"
-        $contentService->findSingle( $query, array(), false );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the loadRelations() method.
      *
      * @return void
