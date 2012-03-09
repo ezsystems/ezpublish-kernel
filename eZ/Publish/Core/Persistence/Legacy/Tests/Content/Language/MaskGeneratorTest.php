@@ -165,6 +165,95 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
+     * @param int $languageMask
+     * @param bool $expectedResult
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isAlwaysAvailable
+     * @dataProvider isAlwaysAvailableProvider
+     */
+    public function testIsAlwaysAvailable( $langMask, $expectedResult )
+    {
+        $generator = $this->getMaskGenerator();
+        self::assertSame( $expectedResult, $generator->isAlwaysAvailable( $langMask ) );
+    }
+
+    /**
+     * Returns test data for {@link testIsAlwaysAvailable()}
+     *
+     * @return array
+     */
+    public function isAlwaysAvailableProvider()
+    {
+        return array(
+            array( 2, false ),
+            array( 3, true ),
+            array( 62, false ),
+            array( 14, false ),
+            array( 15, true )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::removeAlwaysAlwaysAvailableFlag
+     * @dataProvider removeAlwaysAvailableFlagProvider
+     */
+    public function testRemoveAlwaysAvailableFlag( $langMask, $expectedResult )
+    {
+        $generator = $this->getMaskGenerator();
+        self::assertSame( $expectedResult, $generator->removeAlwaysAvailableFlag( $langMask ) );
+    }
+
+    /**
+     * Returns test data for {@link testRemoveAlwaysAvailableFlag}
+     *
+     * @return array
+     */
+    public function removeAlwaysAvailableFlagProvider()
+    {
+        return array(
+            array( 3, 2 ),
+            array( 7, 6 ),
+            array( 14, 14 ),
+            array( 62, 62 )
+        );
+    }
+
+    /**
+     * @param int $langMask
+     * @param array $expectedResult
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::extractLanguageIdFromMask
+     * @dataProvider languageIdFromMaskProvider
+     */
+    public function testExtractLanguageIdFromMask( $langMask, array $expectedResult )
+    {
+        $generator = $this->getMaskGenerator();
+        self::assertSame( $expectedResult, $generator->extractLanguageIdsFromMask( $langMask ) );
+    }
+
+    /**
+     * Returns test data for {@link testExtractLanguageIdFromMask}
+     *
+     * @return array
+     */
+    public function languageIdFromMaskProvider()
+    {
+        return array(
+            array(
+                2,
+                array( 2 )
+            ),
+            array(
+                15,
+                array( 2, 4, 8 )
+            ),
+            array(
+                62,
+                array( 2, 4, 8, 16, 32 )
+            ),
+        );
+    }
+
+    /**
      * Returns the mask generator to test
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
