@@ -853,6 +853,16 @@ class LocationServiceStub implements LocationService
     }
 
     /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
+    }
+
+    /**
      * Helper method that initializes some default data from an existing legacy
      * test fixture.
      *

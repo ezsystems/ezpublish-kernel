@@ -1463,6 +1463,16 @@ class ContentServiceStub implements ContentService
     }
 
     /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
+    }
+
+    /**
      * Replaces an object internally.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $oldContent

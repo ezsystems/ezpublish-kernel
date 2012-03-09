@@ -16,6 +16,8 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
+use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
 /**
  * Test case for operations in the ContentService using in memory storage.
  *
@@ -3038,6 +3040,110 @@ class ContentServiceTest extends BaseContentServiceTest
             $support
         );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContent() method.
+     * TODO Transaction
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testBeginTransaction
+     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     */
+    public function testCreateContentInTransactionWithRollback()
+    {
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( "This test requires eZ Publish 5" );
+        }
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+
+        // Start a transaction
+        $repository->beginTransaction();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        // Get a content create struct and set mandatory properties
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a new content object
+        $contentId = $contentService->createContent( $contentCreate )->contentId;
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentService->loadContent( $contentId );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            // This is expected
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Content object still exists after rollback.' );
+    }
+
+    /**
+     * Test for the createContent() method.
+     * TODO Transaction
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testBeginTransaction
+     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     */
+    public function testCreateContentInTransactionWithCommit()
+    {
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( "This test requires eZ Publish 5" );
+        }
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService     = $repository->getContentService();
+
+        // Start a transaction
+        $repository->beginTransaction();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+
+        // Get a content create struct and set mandatory properties
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+
+        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // Create a new content object
+        $contentId = $contentService->createContent( $contentCreate )->contentId;
+
+        // Rollback all changes
+        $repository->commit();
+
+        // Load the new content object
+        $content = $contentService->loadContent( $contentId );
+        /* END: Use Case */
+
+        $this->assertEquals( $contentId, $content->contentId );
     }
 
     /**

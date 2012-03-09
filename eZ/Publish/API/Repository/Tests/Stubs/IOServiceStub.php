@@ -207,4 +207,16 @@ class IOServiceStub implements IOService
     {
         return $this->content[$binaryFile->id];
     }
+
+    /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->binary   = array();
+        $this->binaryId = 0;
+        $this->content  = array();
+    }
 }

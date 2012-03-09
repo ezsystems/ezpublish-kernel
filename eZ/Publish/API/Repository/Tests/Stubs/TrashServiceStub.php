@@ -246,4 +246,14 @@ class TrashServiceStub implements TrashService
             )
         );
     }
+
+    /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->emptyTrash();
+    }
 }

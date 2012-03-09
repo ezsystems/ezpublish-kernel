@@ -456,6 +456,44 @@ class RepositoryStub implements Repository
         {
             throw new \RuntimeException( 'What error code should be used?' );
         }
+
+        if ( $this->contentService )
+        {
+            $this->contentService->__rollback();
+        }
+        if ( $this->contentTypeService )
+        {
+            $this->contentTypeService->__rollback();
+        }
+        if ( $this->ioService )
+        {
+            $this->ioService->__rollback();
+        }
+        if ( $this->languageService )
+        {
+            $this->languageService->__rollback();
+        }
+        if ( $this->locationService )
+        {
+            $this->locationService->__rollback();
+        }
+        if ( $this->roleService )
+        {
+            $this->roleService->__rollback();
+        }
+        if ( $this->sectionService )
+        {
+            $this->sectionService->__rollback();
+        }
+        if ( $this->trashService )
+        {
+            $this->trashService->__rollback();
+        }
+        if ( $this->userService )
+        {
+            $this->userService->__rollback();
+        }
+
         --$this->transactionDepth;
     }
 

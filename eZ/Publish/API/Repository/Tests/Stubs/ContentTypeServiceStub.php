@@ -1053,6 +1053,16 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
+    }
+
+    /**
      * Helper method that initializes some default data from an existing legacy
      * test fixture.
      *
@@ -1060,6 +1070,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     private function initFromFixture()
     {
+        $this->groups = array();
+        $this->groupsById = array();
+
         list(
             $contentTypeGroups,
             $this->nextGroupId
