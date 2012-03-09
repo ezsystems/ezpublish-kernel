@@ -414,7 +414,16 @@ class LocationServiceStub implements LocationService
      */
     public function swapLocation( Location $location1,  Location $location2 )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->canUser( 'content', 'edit', $location1, $location2 ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $parentLocation1 = $this->loadLocation( $location1->parentLocationId );
+        $parentLocation2 = $this->loadLocation( $location2->parentLocationId );
+
+        $this->moveSubtree( $location1, $parentLocation2 );
+        $this->moveSubtree( $location2, $parentLocation1 );
     }
 
     /**
@@ -473,7 +482,7 @@ class LocationServiceStub implements LocationService
      */
     public function unhideLocation( Location $location )
     {
-        if ( false === $this->repository->canUser( 'content', 'edit', $location->contentInfo ) )
+        if ( false === $this->repository->canUser( 'content', 'edit', $location ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }

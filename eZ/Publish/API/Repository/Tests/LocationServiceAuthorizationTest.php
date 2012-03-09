@@ -189,7 +189,35 @@ class LocationServiceAuthorizationTest extends BaseTest
      */
     public function testSwapLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::swapLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load first child of the "Community" location
+        $locationLeft = $locationService->loadLocationChildren(
+            $locationService->loadLocation( $communityLocationId ), 0, 1
+        );
+        $locationLeft = reset( $locationLeft );
+
+        // Load "Support" location
+        $locationRight = $locationService->loadLocation( $supportLocationId );
+
+        $user = $this->createMediaUserVersion1();
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->swapLocation( $locationLeft, $locationRight );
+        /* END: Use Case */
     }
 
     /**

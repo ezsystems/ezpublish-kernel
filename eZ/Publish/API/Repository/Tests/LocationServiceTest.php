@@ -903,7 +903,7 @@ class LocationServiceTest extends BaseTest
         $updateStruct->remoteId  = '629709ba256fe317c3ddcee35453a96a';
 
         // Throws exception, since remote ID is already taken
-        $updatedLocation = $locationService->updateLocation(
+        $locationService->updateLocation(
             $originalLocation, $updateStruct
         );
         /* END: Use Case */;
@@ -918,7 +918,128 @@ class LocationServiceTest extends BaseTest
      */
     public function testSwapLocation()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::swapLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load first child of the "Community" location
+        $locationLeft = $locationService->loadLocationChildren(
+            $locationService->loadLocation( $communityLocationId ), 0, 1
+        );
+        $locationLeft = reset( $locationLeft );
+
+        // Load "Support" location
+        $locationRight = $locationService->loadLocation( $supportLocationId );
+
+        // Swap both locations
+        $locationService->swapLocation( $locationLeft, $locationRight );
+
+        // Reload the swapped locations
+        $locationLeftReloaded  = $locationService->loadLocation( $locationLeft->id );
+        $locationRightReloaded = $locationService->loadLocation( $locationRight->id );
+        /* END: Use Case */
+
+        $pathStringLeft  = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
+        $pathStringRight = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationRight->pathString );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'depth'             =>  $locationLeft->depth,
+                'parentLocationId'  =>  $locationLeft->parentLocationId,
+                'pathString'        =>  "{$pathStringLeft}{$locationRight->id}/"
+            ),
+            $locationRightReloaded
+        );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'depth'             =>  $locationRight->depth,
+                'parentLocationId'  =>  $locationRight->parentLocationId,
+                'pathString'        =>  "{$pathStringRight}{$locationLeft->id}/"
+            ),
+            $locationLeftReloaded
+        );
+    }
+
+    /**
+     * Test for the swapLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testSwapLocation
+     */
+    public function testSwapLocationUpdatesSubtreeProperties()
+    {
+        $repository = $this->getRepository();
+
+        $locationService = $repository->getLocationService();
+
+        // Load first child of the "Community" location
+        $locationLeft = $locationService->loadLocationChildren(
+            $locationService->loadLocation( 167 ), 0, 1
+        );
+        $locationLeft = reset( $locationLeft );
+
+        // Load "Support" location
+        $locationRight = $locationService->loadLocation( 96 );
+
+        $pathStringLeft  = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
+        $pathStringRight = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationRight->pathString );
+
+        $expectedLeft = $this->loadSubtreeProperties( $locationLeft );
+        foreach ( $expectedLeft as $i => $properties )
+        {
+            $expectedLeft[$i]['depth']      -= 1;
+            $expectedLeft[$i]['pathString']  = str_replace( $pathStringLeft, $pathStringRight, $properties['pathString'] );
+        }
+
+        $expectedRight = $this->loadSubtreeProperties( $locationRight );
+        foreach ( $expectedRight as $i => $properties )
+        {
+            $expectedRight[$i]['depth']      += 1;
+            $expectedRight[$i]['pathString']  = str_replace( $pathStringRight, $pathStringLeft, $properties['pathString'] );
+        }
+
+        /* BEGIN: Use Case */
+        // ID of the "Community" page location in an eZ Publish demo installation
+        $communityLocationId = 167;
+
+        // ID of the "Support" page location in an eZ Publish demo installation
+        $supportLocationId = 96;
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load first child of the "Community" location
+        $locationLeft = $locationService->loadLocationChildren(
+            $locationService->loadLocation( $communityLocationId ), 0, 1
+        );
+        $locationLeft = reset( $locationLeft );
+
+        // Load "Support" location
+        $locationRight = $locationService->loadLocation( $supportLocationId );
+
+        // Swap both locations
+        $locationService->swapLocation( $locationLeft, $locationRight );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $expectedLeft,
+            $this->loadSubtreeProperties( $locationLeft )
+        );
+
+        $this->assertEquals(
+            $expectedRight,
+            $this->loadSubtreeProperties( $locationRight )
+        );
     }
 
     /**
