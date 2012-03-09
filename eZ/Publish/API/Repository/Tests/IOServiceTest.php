@@ -51,7 +51,7 @@ class IOServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
      * @see \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromLocalFile()
-     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetIOService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetIOService
      */
     public function testNewBinaryCreateStructFromLocalFile()
     {

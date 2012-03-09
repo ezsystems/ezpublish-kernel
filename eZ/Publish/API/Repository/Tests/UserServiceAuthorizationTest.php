@@ -361,7 +361,7 @@ class UserServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
      */
     public function testLoadUserGroupsOfUserThrowsUnauthorizedException()
     {

@@ -75,7 +75,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupCreateStruct
      */
     public function testCreateContentTypeGroup()
     {
@@ -105,67 +105,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'createStruct' => $groupCreate,
             'group'        => $group,
         );
-    }
-
-    public function testCreateContentTypeGroupInTransactionWithRollback()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        // Get create struct and set language property
-        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
-        $groupCreate->mainLanguageCode = 'eng-US';
-
-        // Start a new transaction
-        $repository->beginTransaction();
-
-        // Create the new content type group
-        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
-
-        // Rollback all changes
-        $repository->rollback();
-
-        try
-        {
-            // This call will fail with a "NotFoundException"
-            $contentTypeService->loadContentTypeGroup( $groupId );
-        }
-        catch ( NotFoundException $e )
-        {
-            return;
-        }
-        /* END: Use Case */
-
-        $this->fail( 'Can still load content type group after rollback' );
-    }
-
-    public function testCreateContentTypeGroupInTransactionWithCommit()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
-
-        // Get create struct and set language property
-        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
-        $groupCreate->mainLanguageCode = 'eng-US';
-
-        // Start a new transaction
-        $repository->beginTransaction();
-
-        // Create the new content type group
-        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
-
-        // Rollback all changes
-        $repository->commit();
-
-        // Load created content type group
-        $group = $contentTypeService->loadContentTypeGroup( $groupId );
-        /* END: Use Case */
-
-        $this->assertEquals( $groupId, $group->id );
     }
 
     /**
@@ -2398,5 +2337,84 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $contentTypeService->unassignContentTypeGroup( $folderType, $assignedGroup );
         }
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     */
+    public function testCreateContentTypeGroupInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Get create struct and set language property
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        $groupCreate->mainLanguageCode = 'eng-US';
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create the new content type group
+        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentTypeService->loadContentTypeGroup( $groupId );
+        }
+        catch ( NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Can still load content type group after rollback' );
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     */
+    public function testCreateContentTypeGroupInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Get create struct and set language property
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        $groupCreate->mainLanguageCode = 'eng-US';
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create the new content type group
+        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+
+        // Rollback all changes
+        $repository->commit();
+
+        // Load created content type group
+        $group = $contentTypeService->loadContentTypeGroup( $groupId );
+        /* END: Use Case */
+
+        $this->assertEquals( $groupId, $group->id );
     }
 }

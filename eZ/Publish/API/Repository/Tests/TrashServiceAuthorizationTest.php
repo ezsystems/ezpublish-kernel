@@ -13,8 +13,6 @@ namespace eZ\Publish\API\Repository\Tests;
  * Test case for operations in the TrashService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\TrashService
- * @d epends \eZ\Publish\API\Repository\Tests\TrashServiceTest
- * @d epends \eZ\Publish\API\Repository\Tests\UserServiceTest
  */
 class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 {
@@ -24,6 +22,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::loadTrashItem()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testLoadTrashItem
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
     public function testLoadTrashItemThrowsUnauthorizedException()
     {
@@ -50,6 +50,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::trash()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
     public function testTrashThrowsUnauthorizedException()
     {
@@ -82,6 +84,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
     public function testRecoverThrowsUnauthorizedException()
     {
@@ -108,6 +112,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
     public function testRecoverThrowsUnauthorizedExceptionWithLocationCreateStructParameter()
     {
@@ -141,6 +147,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::emptyTrash()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testEmptyTrash
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
     public function testEmptyTrashThrowsUnauthorizedException()
     {
@@ -167,6 +175,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::deleteTrashItem()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testDeleteTrashItem
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
     public function testDeleteTrashItemThrowsUnauthorizedException()
     {

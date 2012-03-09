@@ -15,7 +15,6 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
  * Test case for operations in the LanguageService using in memory storage.
  *
  * @see \eZ\Publish\API\Repository\LanguageService
- * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  */

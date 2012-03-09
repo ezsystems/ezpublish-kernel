@@ -18,6 +18,7 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
  * Test case for operations in the LocationService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\LocationService
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
  */
 class LocationServiceAuthorizationTest extends BaseTest
 {
@@ -27,6 +28,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testCreateLocationThrowsUnauthorizedException()
     {
@@ -67,6 +69,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadLocationThrowsUnauthorizedException()
     {
@@ -93,6 +96,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      */
     public function testLoadLocationByRemoteIdThrowsUnauthorizedException()
     {
@@ -120,6 +124,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUpdateLocation
      */
     public function testUpdateLocationThrowsUnauthorizedException()
     {
@@ -157,6 +162,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadMainLocation
      */
     public function testLoadMainLocationThrowsUnauthorizedException()
     {
@@ -186,6 +192,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testSwapLocation
      */
     public function testSwapLocationThrowsUnauthorizedException()
     {
@@ -226,6 +233,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testHideLocation
      */
     public function testHideLocationThrowsUnauthorizedException()
     {
@@ -254,6 +262,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUnhideLocation
      */
     public function testUnhideLocationThrowsUnauthorizedException()
     {
@@ -285,6 +294,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
      */
     public function testDeleteLocationThrowsUnauthorizedException()
     {
@@ -313,6 +323,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
      */
     public function testCopySubtreeThrowsUnauthorizedException()
     {
@@ -353,6 +364,7 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      */
     public function testMoveSubtreeThrowsUnauthorizedException()
     {

@@ -17,8 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentService
- * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
- * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  */
 class ContentServiceAuthorizationTest extends BaseContentServiceTest
@@ -585,7 +584,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
@@ -1141,7 +1140,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
      */
     public function testFindContentWithUserPermissionFilter()
     {

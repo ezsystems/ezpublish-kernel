@@ -401,7 +401,7 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::deleteLanguage()
-     * @d epends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguages
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguages
      */
     public function testDeleteLanguage()
     {

@@ -15,7 +15,6 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValida
  * Test case for operations in the ContentTypeServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentTypeService
- * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  */
