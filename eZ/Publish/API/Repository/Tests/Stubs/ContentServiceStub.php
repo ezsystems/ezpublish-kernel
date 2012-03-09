@@ -749,9 +749,15 @@ class ContentServiceStub implements ContentService
         {
             $fieldIds[$field->fieldDefIdentifier] = true;
 
+            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+
             if ( null === $field->languageCode &&
                  null === $contentUpdateStruct->initialLanguageCode &&
-                $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
+                $fieldDefinition->isTranslatable )
+            {
+                throw new ContentValidationExceptionStub( 'What error code should be used?' );
+            }
+            if ( '' === trim( $field->value ) && $fieldDefinition->isRequired )
             {
                 throw new ContentValidationExceptionStub( 'What error code should be used?' );
             }

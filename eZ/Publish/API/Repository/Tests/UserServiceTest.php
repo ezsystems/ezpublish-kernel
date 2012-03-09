@@ -574,10 +574,31 @@ class UserServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroup
      */
     public function testUpdateUserGroupThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUserGroup() is not implemented." );
+        $repository  = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $userGroup = $this->createUserGroupVersion1();
+
+        // Load the content service
+        $contentService = $repository->getContentService();
+
+        // Create a content update struct and update the group name
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'name', null, 'eng-US' );
+
+        // Create a group update struct and set content update struct
+        $groupUpdate = $userService->newUserGroupUpdateStruct();
+        $groupUpdate->contentUpdateStruct = $contentUpdate;
+
+        // This call will fail with a "ContentValidationException", because the
+        // mandatory field "name" is set to an empty value
+        $userService->updateUserGroup( $userGroup, $groupUpdate );
+        /* END: Use Case */
     }
 
     /**
@@ -1142,10 +1163,35 @@ class UserServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
     public function testUpdateUserThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUser() is not implemented." );
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Get the ContentService implementation
+        $contentService = $repository->getContentService();
+
+        // Create a content update struct and change the remote id.
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'first_name', null, 'eng-US' );
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set the content update struct.
+        $userUpdate->contentUpdateStruct = $contentUpdate;
+
+        // This call will fail with a "ContentValidationException" because the
+        // mandary field "first_name" is set to an empty value.
+        $userService->updateUser( $user, $userUpdate );
+
+        /* END: Use Case */
     }
 
     /**
