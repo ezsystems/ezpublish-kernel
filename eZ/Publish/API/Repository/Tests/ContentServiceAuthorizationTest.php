@@ -1195,7 +1195,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Adminstrator users' )
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
             )
         );
 
@@ -1233,7 +1233,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Adminstrator users' )
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
             )
         );
 
