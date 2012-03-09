@@ -291,7 +291,8 @@ class RepositoryStub implements Repository
         {
             $this->languageService = new LanguageServiceStub(
                 $this,
-                $this->getContentService()
+                $this->getContentService(),
+                'eng-US'
             );
         }
         return $this->languageService;

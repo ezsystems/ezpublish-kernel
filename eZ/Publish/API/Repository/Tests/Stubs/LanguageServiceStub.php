@@ -37,6 +37,11 @@ class LanguageServiceStub implements LanguageService
     private $contentService;
 
     /**
+     * @var string
+     */
+    private $defaultLanguageCode;
+
+    /**
      * @var integer
      */
     private $nextId = 0;
@@ -56,11 +61,17 @@ class LanguageServiceStub implements LanguageService
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
      * @param \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub $contentService
+     * @param string $defaultLanguageCode
      */
-    public function __construct( RepositoryStub $repository, ContentServiceStub $contentService )
+    public function __construct(
+        RepositoryStub $repository,
+        ContentServiceStub $contentService,
+        $defaultLanguageCode
+    )
     {
-        $this->repository     = $repository;
-        $this->contentService = $contentService;
+        $this->repository          = $repository;
+        $this->contentService      = $contentService;
+        $this->defaultLanguageCode = $defaultLanguageCode;
 
         $this->initFromFixture();
     }
@@ -254,7 +265,7 @@ class LanguageServiceStub implements LanguageService
      */
     public function getDefaultLanguageCode()
     {
-        // TODO: Implement getDefaultLanguageCode() method.
+        return $this->defaultLanguageCode;
     }
 
     /**

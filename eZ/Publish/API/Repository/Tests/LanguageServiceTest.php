@@ -480,7 +480,13 @@ class LanguageServiceTest extends BaseTest
      */
     public function testGetDefaultLanguageCode()
     {
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::getDefaultLanguageCode() is not implemented." );
+        $repository      = $this->getRepository();
+        $languageService = $repository->getContentLanguageService();
+
+        $this->assertRegExp(
+            '(^[a-z]{3}\-[A-Z]{2}$)',
+            $languageService->getDefaultLanguageCode()
+        );
     }
 
     /**
