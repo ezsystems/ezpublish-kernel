@@ -2169,8 +2169,26 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      */
     public function testCopyContentTypeWithSecondParameter()
     {
-        // TODO: Needs UserService
-        $this->markTestIncomplete( "@TODO: Test for ContentTypeService::copyContentType() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $user = $this->createUserVersion1();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        // Complete copy of the "comment" type
+        $copiedType = $contentTypeService->copyContentType( $commentType, $user );
+        /* END: Use Case */
+
+        $this->assertPropertiesCorrect(
+            array(
+                'creatorId'   =>  $user->id,
+                'modifierId'  =>  $user->id
+            ),
+            $copiedType
+        );
     }
 
     /**

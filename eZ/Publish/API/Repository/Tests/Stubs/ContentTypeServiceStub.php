@@ -868,11 +868,14 @@ class ContentTypeServiceStub implements ContentTypeService
         }
         $contentTypeData = $this->getTypeAsArray( $contentType );
 
-        $contentTypeData['id'] = $this->nextTypeId++;
-        $contentTypeData['identifier'] = $contentTypeData['identifier'] . '_' . uniqid();
-        $contentTypeData['remoteId'] = $contentTypeData['remoteId'] . '_' . uniqid();
-        $contentTypeData['creationDate'] = new \DateTime();
+        $contentTypeData['id']               = $this->nextTypeId++;
+        $contentTypeData['identifier']       = $contentTypeData['identifier'] . '_' . uniqid();
+        $contentTypeData['remoteId']         = $contentTypeData['remoteId'] . '_' . uniqid();
+        $contentTypeData['creationDate']     = new \DateTime();
         $contentTypeData['modificationDate'] = new \DateTime();
+        $contentTypeData['creatorId']        = $user ? $user->id : $contentTypeData['creatorId'];
+        $contentTypeData['modifierId']       = $user ? $user->id : $contentTypeData['modifierId'];
+
 
         $newFieldDefinitions = array();
         foreach ( $contentTypeData['fieldDefinitions'] as $fieldDefinition )
