@@ -1357,7 +1357,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
-
     /**
      * Test for the publishVersion() method.
      *
@@ -3044,13 +3043,12 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContent() method.
-     * TODO Transaction
+     * 
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testBeginTransaction
-     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testCreateContentInTransactionWithRollback()
     {
@@ -3100,13 +3098,12 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContent() method.
-     * TODO Transaction
+     * 
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testBeginTransaction
-     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testCreateContentInTransactionWithCommit()
     {
@@ -3144,6 +3141,740 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertEquals( $contentId, $content->contentId );
+    }
+
+    /**
+     * Test for the createContent() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
+     */
+    public function testCreateContentWithLocationCreateParameterInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // Start a transaction
+        $repository->beginTransaction();
+
+        $draft = $this->createContentDraftVersion1();
+
+        $contentId = $draft->contentId;
+
+        // Roleback the transaction
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentService->loadContent( $contentId );
+        }
+        catch ( NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Can still load content object after rollback.' );
+    }
+
+    /**
+     * Test for the createContent() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
+     */
+    public function testCreateContentWithLocationCreateParameterInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        // Start a transaction
+        $repository->beginTransaction();
+
+        $draft = $this->createContentDraftVersion1();
+
+        $contentId = $draft->contentId;
+
+        // Roleback the transaction
+        $repository->commit();
+
+        // Load the new content object
+        $content = $contentService->loadContent( $contentId );
+        /* END: Use Case */
+
+        $this->assertEquals( $contentId, $content->contentId );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     */
+    public function testCreateContentDraftInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" user group
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Load the user group content object
+        $content = $contentService->loadContent( $contentId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create a new draft
+        $drafted = $contentService->createContentDraft( $content->contentInfo );
+
+        // Store version number for later reuse
+        $versionNo = $drafted->versionInfo->versionNo;
+
+        // Rollback
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentService->loadContent( $contentId, null, $versionNo );
+        }
+        catch ( NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Can still load content draft after rollback' );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     */
+    public function testCreateContentDraftInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" user group
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Load the user group content object
+        $content = $contentService->loadContent( $contentId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create a new draft
+        $drafted = $contentService->createContentDraft( $content->contentInfo );
+
+        // Store version number for later reuse
+        $versionNo = $drafted->versionInfo->versionNo;
+
+        // Commit all changes
+        $repository->commit();
+
+        $content = $contentService->loadContent( $contentId, null, $versionNo );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $versionNo,
+            $content->getVersionInfo()->versionNo
+        );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     */
+    public function testPublishVersionInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" user group
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Load the user group content object
+        $content = $contentService->loadContent( $contentId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Publish a new version
+        $content = $contentService->publishVersion(
+            $contentService->createContentDraft( $content->contentInfo )->getVersionInfo()
+        );
+
+
+        // Store version number for later reuse
+        $versionNo = $content->versionInfo->versionNo;
+
+        // Rollback
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentService->loadContent( $contentId, null, $versionNo );
+        }
+        catch ( NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Can still load content draft after rollback' );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
+     */
+    public function testPublishVersionInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" user group
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Load the user group content object
+        $template = $contentService->loadContent( $contentId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Publish a new version
+        $content = $contentService->publishVersion(
+            $contentService->createContentDraft( $template->contentInfo )->getVersionInfo()
+        );
+
+        // Store version number for later reuse
+        $versionNo = $content->versionInfo->versionNo;
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load current version info
+        $versionInfo = $contentService->loadVersionInfo( $content->contentInfo );
+        /* END: Use Case */
+
+        $this->assertEquals( $versionNo, $versionInfo->versionNo );
+    }
+
+    /**
+     * Test for the updateContent() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     */
+    public function testUpdateContentInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" group in an eZ Publish demo installation
+        $contentId = 12;
+
+        // Load content service
+        $contentService = $repository->getContentService();
+
+        // Create a new user group draft
+        $draft = $contentService->createContentDraft(
+            $contentService->loadContentInfo( $contentId )
+        );
+
+        // Get an update struct and change the group name
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'name', 'Administrators', 'eng-US' );
+
+        // Start a transaction
+        $repository->beginTransaction();
+
+        // Update the group name
+        $draft = $contentService->updateContent(
+            $draft->getVersionInfo(),
+            $contentUpdate
+        );
+
+        // Publish updated version
+        $contentService->publishVersion( $draft->getVersionInfo() );
+
+        // Rollback all changes.
+        $repository->rollback();
+
+        // Name will still be "Administrator users"
+        $name = $contentService->loadContent( $contentId )->getFieldValue( 'name' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'Administrator users', $name );
+    }
+
+    /**
+     * Test for the updateContent() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     */
+    public function testUpdateContentInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" group in an eZ Publish demo installation
+        $contentId = 12;
+
+        // Load content service
+        $contentService = $repository->getContentService();
+
+        // Create a new user group draft
+        $draft = $contentService->createContentDraft(
+            $contentService->loadContentInfo( $contentId )
+        );
+
+        // Get an update struct and change the group name
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'name', 'Administrators', 'eng-US' );
+
+        // Start a transaction
+        $repository->beginTransaction();
+
+        // Update the group name
+        $draft = $contentService->updateContent(
+            $draft->getVersionInfo(),
+            $contentUpdate
+        );
+
+        // Publish updated version
+        $contentService->publishVersion( $draft->getVersionInfo() );
+
+        // Commit all changes.
+        $repository->commit();
+
+        // Name is now "Administrators"
+        $name = $contentService->loadContent( $contentId )->getFieldValue( 'name' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'Administrators', $name );
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     */
+    public function testUpdateContentMetadataInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" group in an eZ Publish demo installation
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Load a ContentInfo object
+        $contentInfo = $contentService->loadContentInfo( $contentId );
+
+        // Store remoteId for later testing
+        $remoteId = $contentInfo->remoteId;
+
+        // Start a transaction
+        $repository->beginTransaction();
+
+        // Get metadata update struct and change remoteId
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+        $metadataUpdate->remoteId = md5( microtime( true ) );
+
+        // Update the metadata of the published content object
+        $contentService->updateContentMetadata(
+            $contentInfo,
+            $metadataUpdate
+        );
+
+        // Rollback all changes.
+        $repository->rollback();
+
+        // Load current remoteId
+        $remoteIdReloaded = $contentService->loadContentInfo( $contentId )->remoteId;
+        /* END: Use Case */
+
+        $this->assertEquals( $remoteId, $remoteIdReloaded );
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     */
+    public function testUpdateContentMetadataInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" group in an eZ Publish demo installation
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Load a ContentInfo object
+        $contentInfo = $contentService->loadContentInfo( $contentId );
+
+        // Store remoteId for later testing
+        $remoteId = $contentInfo->remoteId;
+
+        // Start a transaction
+        $repository->beginTransaction();
+
+        // Get metadata update struct and change remoteId
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+        $metadataUpdate->remoteId = md5( microtime( true ) );
+
+        // Update the metadata of the published content object
+        $contentService->updateContentMetadata(
+            $contentInfo,
+            $metadataUpdate
+        );
+
+        // Commit all changes.
+        $repository->commit();
+
+        // Load current remoteId
+        $remoteIdReloaded = $contentService->loadContentInfo( $contentId )->remoteId;
+        /* END: Use Case */
+
+        $this->assertNotEquals( $remoteId, $remoteIdReloaded );
+    }
+
+    /**
+     * Test for the deleteVersion() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
+     */
+    public function testDeleteVersionInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" group in an eZ Publish demo installation
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create a new draft
+        $draft = $contentService->createContentDraft(
+            $contentService->loadContentInfo( $contentId )
+        );
+
+        $contentService->deleteVersion( $draft->getVersionInfo() );
+
+        // Rollback all changes.
+        $repository->rollback();
+
+        // This array will be empty
+        $drafts = $contentService->loadContentDrafts();
+        /* END: Use Case */
+
+        $this->assertSame( array(), $drafts );
+    }
+
+    /**
+     * Test for the deleteVersion() method.
+     * 
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
+     */
+    public function testDeleteVersionInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Administrator users" group in an eZ Publish demo installation
+        $contentId = 12;
+
+        // Get the content service
+        $contentService = $repository->getContentService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create a new draft
+        $draft = $contentService->createContentDraft(
+            $contentService->loadContentInfo( $contentId )
+        );
+
+        $contentService->deleteVersion( $draft->getVersionInfo() );
+
+        // Commit all changes.
+        $repository->commit();
+
+        // This array will contain no element
+        $drafts = $contentService->loadContentDrafts();
+        /* END: Use Case */
+
+        $this->assertSame( array(), $drafts );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     */
+    public function testDeleteContentInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Members" user group in an eZ Publish demo installation
+        $contentId = 11;
+
+        // Get content service
+        $contentService = $repository->getContentService();
+
+        // Load a ContentInfo instance
+        $contentInfo = $contentService->loadContentInfo( $contentId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Delete content object
+        $contentService->deleteContent( $contentInfo );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // This call will return the original content object
+        $contentInfo = $contentService->loadContentInfo( $contentId );
+        /* END: Use Case */
+
+        $this->assertEquals( $contentId, $contentInfo->contentId );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     */
+    public function testDeleteContentInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Members" user group in an eZ Publish demo installation
+        $contentId = 11;
+
+        // Get content service
+        $contentService = $repository->getContentService();
+
+        // Load a ContentInfo instance
+        $contentInfo = $contentService->loadContentInfo( $contentId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Delete content object
+        $contentService->deleteContent( $contentInfo );
+
+        // Commit all changes
+        $repository->commit();
+
+        try
+        {
+            $contentService->loadContentInfo( $contentId );
+        }
+        catch ( NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Can still load ContentInfo after commit.' );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::copyContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testCopyContentInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Members" group content
+        $contentId = 11;
+
+        // ID of the "Adminstrator users" group location
+        $locationId = 13;
+
+        // Get services
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // Load content object to copy
+        $content = $contentService->loadContent( $contentId );
+
+        // Create new target location
+        $locationCreate = $locationService->newLocationCreateStruct( $locationId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Copy content with all versions and drafts
+        $contentService->copyContent(
+            $content->contentInfo,
+            $locationCreate
+        );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // This array will only contain a single admin user object
+        $locations = $locationService->loadLocationChildren(
+            $locationService->loadLocation( $locationId )
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, count( $locations ) );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::copyContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testCopyContentInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the "Members" group content
+        $contentId = 11;
+
+        // ID of the "Adminstrator users" group location
+        $locationId = 13;
+
+        // Get services
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // Load content object to copy
+        $content = $contentService->loadContent( $contentId );
+
+        // Create new target location
+        $locationCreate = $locationService->newLocationCreateStruct( $locationId );
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Copy content with all versions and drafts
+        $contentCopied = $contentService->copyContent(
+            $content->contentInfo,
+            $locationCreate
+        );
+
+        // Commit all changes
+        $repository->commit();
+
+        // This will contain the admin user and the new child location
+        $locations = $locationService->loadLocationChildren(
+            $locationService->loadLocation( $locationId )
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( 2, count( $locations ) );
     }
 
     /**

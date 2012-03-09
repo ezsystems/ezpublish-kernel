@@ -581,6 +581,9 @@ class ContentServiceStub implements ContentService
             return;
         }
 
+        // Load utilized content service
+        $locationService = $this->repository->getLocationService();
+
         foreach ( $this->versionInfo as $key => $versionInfo )
         {
             if ( $versionInfo->contentInfo->contentId === $contentInfo->contentId )
@@ -600,8 +603,6 @@ class ContentServiceStub implements ContentService
         unset( $this->contentInfo[$contentInfo->contentId] );
 
         // Delete all locations for the given $contentInfo
-        $locationService = $this->repository->getLocationService();
-
         $locations = $locationService->loadLocations( $contentInfo );
         foreach ( $locations as $location )
         {
