@@ -381,7 +381,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::update
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateContent
      */
     public function testUpdateContent()
     {
@@ -454,6 +454,44 @@ class ContentHandlerTest extends TestCase
                 )
             )
         );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateMetadata
+     */
+    public function testUpdateMetadata()
+    {
+        $handler = $this->getPartlyMockedHandler( array( 'load', 'loadContentInfo' ) );
+
+        $gatewayMock = $this->getGatewayMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+        $updateStruct = new MetadataUpdateStruct(
+                array(
+                    'ownerId' => 14,
+                    'name' => 'Some name',
+                    'modificationDate' => time(),
+                    'alwaysAvailable' => true
+                )
+            );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'updateContent' )
+            ->with( 14, $updateStruct );
+
+        $handler->expects( $this->once() )
+            ->method( 'loadContentInfo' )
+            ->with( 14 )
+            ->will(
+                $this->returnValue(
+                    $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo' )
+                )
+            );
+
+        $resultContentInfo = $handler->updateMetadata(
+            14, // ContentId
+            $updateStruct
+        );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo', $resultContentInfo );
     }
 
     /**
