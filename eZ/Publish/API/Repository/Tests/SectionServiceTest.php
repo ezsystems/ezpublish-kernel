@@ -766,4 +766,82 @@ class SectionServiceTest extends BaseTest
 
         $this->assertEquals( 'uniqueKey', $section->identifier );
     }
+
+    /**
+     * Test for the createSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::createSection()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
+     */
+    public function testUpdateSectionInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Load standard section
+        $section = $sectionService->loadSectionByIdentifier( 'standard' );
+
+        // Get an update struct and change section name
+        $sectionUpdate       = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'My Standard';
+
+        // Update section
+        $sectionService->updateSection( $section, $sectionUpdate );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // Load updated section, name will still be "Standard"
+        $updatedStandard = $sectionService->loadSectionByIdentifier( 'standard' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'Standard', $updatedStandard->name );
+    }
+
+    /**
+     * Test for the createSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::createSection()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
+     */
+    public function testUpdateSectionInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Load standard section
+        $section = $sectionService->loadSectionByIdentifier( 'standard' );
+
+        // Get an update struct and change section name
+        $sectionUpdate       = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'My Standard';
+
+        // Update section
+        $sectionService->updateSection( $section, $sectionUpdate );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load updated section, name will now be "My Standard"
+        $updatedStandard = $sectionService->loadSectionByIdentifier( 'standard' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'My Standard', $updatedStandard->name );
+    }
 }
