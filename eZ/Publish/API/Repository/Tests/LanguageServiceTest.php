@@ -466,7 +466,6 @@ class LanguageServiceTest extends BaseTest
             $metadataUpdate
         );
 
-
         // This call will fail with an "InvalidArgumentException", because the
         // new language is used by a content object.
         $languageService->deleteLanguage( $language );
