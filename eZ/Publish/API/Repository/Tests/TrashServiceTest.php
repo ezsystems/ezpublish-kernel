@@ -17,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  * Test case for operations in the TrashService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\TrashService
+ * @group integration
  */
 class TrashServiceTest extends BaseTrashServiceTest
 {

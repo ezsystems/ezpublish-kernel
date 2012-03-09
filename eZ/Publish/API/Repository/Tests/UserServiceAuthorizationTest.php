@@ -15,6 +15,7 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
  * Test case for operations in the UserService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\UserService
+ * @group integration
  */
 class UserServiceAuthorizationTest extends BaseTest
 {

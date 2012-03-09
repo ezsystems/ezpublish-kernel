@@ -21,6 +21,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValida
  * Test case for operations in the ContentTypeService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentTypeService
+ * @group integration
  */
 class ContentTypeServiceTest extends BaseContentTypeServiceTest
 {
@@ -2749,8 +2750,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         catch ( NotFoundException $e )
         {
             // Expected execution path
-        } catch ( E $e1 ) {
-
         }
         /* END: Use Case */
 

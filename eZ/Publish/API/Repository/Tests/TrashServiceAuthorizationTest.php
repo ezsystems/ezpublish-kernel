@@ -13,6 +13,7 @@ namespace eZ\Publish\API\Repository\Tests;
  * Test case for operations in the TrashService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\TrashService
+ * @group integration
  */
 class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 {

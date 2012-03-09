@@ -18,6 +18,7 @@ use \eZ\Publish\API\Repository\Values\User\User;
  * Test case for operations in the UserService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\UserService
+ * @group integration
  */
 class UserServiceTest extends BaseTest
 {
