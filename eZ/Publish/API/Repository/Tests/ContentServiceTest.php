@@ -1637,7 +1637,48 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentDraftsWithFirstParameter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadContentDrafts() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Get current user
+        $oldCurrentUser = $repository->getCurrentUser();
+
+        // Set new editor as user
+        $repository->setCurrentUser( $user );
+
+        // Remote id of the "Support" page in an eZ Publish demo installation.
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $contentService = $repository->getContentService();
+
+        // "Support" article content object
+        $supportContentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+
+        // Create a content draft
+        $contentService->createContentDraft( $supportContentInfo );
+
+        // Reset to previous current user
+        $repository->setCurrentUser( $oldCurrentUser );
+
+        // Now $contentDrafts for the previous current user and the new user
+        $newCurrentUserDrafts = $contentService->loadContentDrafts( $user );
+        $oldCurrentUserDrafts = $contentService->loadContentDrafts( $oldCurrentUser );
+        /* END: Use Case */
+
+        $this->assertSame( array(), $oldCurrentUserDrafts );
+
+        $this->assertEquals(
+            array(
+                VersionInfo::STATUS_DRAFT,
+                $supportRemoteId,
+            ),
+            array(
+                $newCurrentUserDrafts[0]->status,
+                $newCurrentUserDrafts[0]->getContentInfo()->remoteId
+            )
+        );
     }
 
     /**
