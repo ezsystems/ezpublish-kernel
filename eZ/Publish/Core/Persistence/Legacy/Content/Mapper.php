@@ -228,32 +228,6 @@ class Mapper
     }
 
     /**
-     * Extracts a Content object from $row
-     *
-     * @param array $row
-     * @return Content
-     */
-    protected function extractContentFromRow( array $row )
-    {
-        $content = new \eZ\Publish\Core\Repository\Values\Content\ContentInfo;
-
-        $content->id = (int)$row['ezcontentobject_id'];
-        $content->typeId = (int)$row['ezcontentobject_contentclass_id'];
-        $content->sectionId = (int)$row['ezcontentobject_section_id'];
-        $content->ownerId = (int)$row['ezcontentobject_owner_id'];
-        $content->remoteId = $row['ezcontentobject_remote_id'];
-        $content->alwaysAvailable = (bool)( $row['ezcontentobject_version_language_mask'] & 1 );
-        $content->currentVersionNo = (int)$row['ezcontentobject_current_version'];
-        $content->initialLanguageId = (int)$row['ezcontentobject_initial_language_id'];
-        $content->modified = (int)$row['ezcontentobject_modified'];
-        $content->published = (int)$row['ezcontentobject_published'];
-        $content->status = (int)$row['ezcontentobject_status'];
-        $content->locations = array();
-
-        return $content;
-    }
-
-    /**
      * Extracts a ContentInfo object from $row
      *
      * @param array $row
