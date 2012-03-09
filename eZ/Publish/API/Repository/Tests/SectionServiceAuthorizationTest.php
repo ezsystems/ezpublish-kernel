@@ -145,7 +145,7 @@ class SectionServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->loadSections();
-        /* BEGIN: Use Case */
+        /* END: Use Case */
     }
 
     /**

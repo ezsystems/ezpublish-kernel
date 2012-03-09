@@ -465,6 +465,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContent( $anonymousUserId, array( 'eng-US' ) );
+        /* END: Use Case */
     }
 
     /**
@@ -491,6 +492,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContent( $anonymousUserId, array( 'eng-US' ), 1 );
+        /* END: Use Case */
     }
 
     /**
@@ -737,6 +739,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContentDrafts();
+        /* END: Use Case */
     }
 
     /**
@@ -768,6 +771,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContentDrafts( $administratorUser );
+        /* END: Use Case */
     }
 
     /**

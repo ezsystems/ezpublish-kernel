@@ -13,6 +13,7 @@ use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use \eZ\Publish\API\Repository\Exceptions;
+use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
 
@@ -86,9 +87,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId        = 23;
+        $groupCreate->creatorId        = $repository->getCurrentUser()->id;
         $groupCreate->creationDate     = new \DateTime();
-        $groupCreate->mainLanguageCode = 'de-DE';
+        $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names            = array( 'eng-US' => 'A name.' );
         $groupCreate->descriptions     = array( 'eng-US' => 'A description.' );
 
@@ -104,6 +105,67 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'createStruct' => $groupCreate,
             'group'        => $group,
         );
+    }
+
+    public function testCreateContentTypeGroupInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Get create struct and set language property
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        $groupCreate->mainLanguageCode = 'eng-US';
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create the new content type group
+        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $contentTypeService->loadContentTypeGroup( $groupId );
+        }
+        catch ( NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Can still load content type group after rollback' );
+    }
+
+    public function testCreateContentTypeGroupInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        // Get create struct and set language property
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        $groupCreate->mainLanguageCode = 'eng-US';
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Create the new content type group
+        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+
+        // Rollback all changes
+        $repository->commit();
+
+        // Load created content type group
+        $group = $contentTypeService->loadContentTypeGroup( $groupId );
+        /* END: Use Case */
+
+        $this->assertEquals( $groupId, $group->id );
     }
 
     /**
@@ -148,7 +210,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
 
         // Throws an Exception, since group "Content" already exists
-        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+        $contentTypeService->createContentTypeGroup( $groupCreate );
         /* END: Use Case */
     }
 
@@ -655,13 +717,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->nameSchema       = 'name|scheme';
         $typeCreate->names            = array(
             'eng-US' => 'Blog post',
-            'de-DE'  => 'Blog-Eintrag',
+            'ger-DE'  => 'Blog-Eintrag',
         );
         $typeCreate->descriptions = array(
             'eng-US' => 'A blog post',
-            'de-DE'  => 'Ein Blog-Eintrag',
+            'ger-DE'  => 'Ein Blog-Eintrag',
         );
-        $typeCreate->creatorId = 23;
+        $typeCreate->creatorId    = $repository->getCurrentUser()->id;
         $typeCreate->creationDate = new \DateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
@@ -669,11 +731,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $titleFieldCreate->names = array(
             'eng-US' => 'Title',
-            'de-DE'  => 'Titel',
+            'ger-DE'  => 'Titel',
         );
         $titleFieldCreate->descriptions = array(
             'eng-US' => 'Title of the blog post',
-            'de-DE'  => 'Titel des Blog-Eintrages',
+            'ger-DE'  => 'Titel des Blog-Eintrages',
         );
         $titleFieldCreate->fieldGroup      = 'blog-content';
         $titleFieldCreate->position        = 1;
@@ -695,11 +757,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $bodyFieldCreate->names = array(
             'eng-US' => 'Body',
-            'de-DE'  => 'Textkörper',
+            'ger-DE'  => 'Textkörper',
         );
         $bodyFieldCreate->descriptions = array(
             'eng-US' => 'Body of the blog post',
-            'de-DE'  => 'Textkörper des Blog-Eintrages',
+            'ger-DE'  => 'Textkörper des Blog-Eintrages',
         );
         $bodyFieldCreate->fieldGroup      = 'blog-content';
         $bodyFieldCreate->position        = 2;
@@ -1052,17 +1114,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeUpdate->urlAliasSchema         = 'url@alias|scheme';
         $typeUpdate->nameSchema             = '@name@scheme@';
         $typeUpdate->isContainer            = true;
-        $typeUpdate->mainLanguageCode       = 'de-DE';
+        $typeUpdate->mainLanguageCode       = 'ger-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
         $typeUpdate->modifierId             = 42;
         $typeUpdate->modificationDate       = new \DateTime();
         $typeUpdate->names                  = array(
             'eng-US' => 'News article',
-            'de-DE'  => 'Nachrichten-Artikel',
+            'ger-DE'  => 'Nachrichten-Artikel',
         );
         $typeUpdate->descriptions = array(
             'eng-US' => 'A news article',
-            'de-DE'  => 'Ein Nachrichten-Artikel',
+            'ger-DE'  => 'Ein Nachrichten-Artikel',
         );
 
         $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
@@ -1188,11 +1250,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $fieldDefCreate->names = array(
             'eng-US' => 'Tags',
-            'de-DE' => 'Schlagworte',
+            'ger-DE' => 'Schlagworte',
         );
         $fieldDefCreate->descriptions = array(
             'eng-US' => 'Tags of the blog post',
-            'de-DE' => 'Schlagworte des Blog-Eintrages',
+            'ger-DE' => 'Schlagworte des Blog-Eintrages',
         );
         $fieldDefCreate->fieldGroup      = 'blog-meta';
         $fieldDefCreate->position        = 1;
@@ -1404,11 +1466,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->identifier = 'blog-body';
         $bodyUpdateStruct->names = array(
             'eng-US' => 'Blog post body',
-            'de-DE' => 'Blog-Eintrags-Textkörper',
+            'ger-DE' => 'Blog-Eintrags-Textkörper',
         );
         $bodyUpdateStruct->descriptions = array(
             'eng-US' => 'Blog post body of the blog post',
-            'de-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
+            'ger-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
         );
         $bodyUpdateStruct->fieldGroup      = 'updated-blog-content';
         $bodyUpdateStruct->position        = 3;

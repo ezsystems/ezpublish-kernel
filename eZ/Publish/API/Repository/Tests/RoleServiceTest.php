@@ -249,7 +249,7 @@ class RoleServiceTest extends BaseTest
             }
         }
 
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertEquals( 'roleName', $role->identifier );
     }
@@ -275,7 +275,7 @@ class RoleServiceTest extends BaseTest
         {
             $roleNames[] = $role->identifier;
         }
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         sort( $roleNames );
 
