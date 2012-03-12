@@ -47,7 +47,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->converter = new MediaTypeConverter;
-        $this->mediaPath = 'ezp/Content/Tests/FieldType/developer-got-hurt.m4v';
+        $this->mediaPath = 'eZ/Publish/Core/Repository/Tests/FieldType/developer-got-hurt.m4v';
 
         $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $mediaValue = new MediaTypeValue( $repository->getIOService(), $this->mediaPath );
