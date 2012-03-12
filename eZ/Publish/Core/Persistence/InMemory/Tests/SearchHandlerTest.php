@@ -99,7 +99,7 @@ class SearchHandlerTest extends HandlerTest
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( "test", $content->version->name );
-        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Version", $content->version );
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->version );
     }
 
     /**

@@ -88,7 +88,7 @@ class SearchHandler extends SearchHandlerInterface
         }
 
         $list = $this->backend->find(
-            'Content',
+            'Content\\ContentInfo',
             $match,
             array(
                 'locations' => array(
@@ -96,7 +96,7 @@ class SearchHandler extends SearchHandlerInterface
                     'match' => array( 'contentId' => 'id' )
                 ),
                 'version' => array(
-                    'type' => 'Content\\Version',
+                    'type' => 'Content\\VersionInfo',
                     'single' => true,
                     'match' => array( 'contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
                     'sub' => array(
