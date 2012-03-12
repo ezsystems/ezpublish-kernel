@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="binaryFieldInput">
+    <xsd:sequence>
+      <xsd:element name="originalFileName" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="cid" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="imageFieldInput">
+    <xsd:complexContent>
+      <xsd:extension base="binaryFieldInput">
+        <xsd:sequence>
+          <xsd:element name="alternativeText" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="mediaFieldInput">
+    <xsd:complexContent>
+      <xsd:extension base="binaryFieldInput">
+        <xsd:sequence>
+          <xsd:element name="width" type="xsd:int" />
+          <xsd:element name="height" type="xsd:int" />
+          <xsd:element name="controller" type="xsd:boolean" />
+          <xsd:element name="autoplay" type="xsd:boolean" />
+          <xsd:element name="loop" type="xsd:boolean" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  
+  
+  <xsd:element name="fileInput" type="binaryFieldInput"/>
+  <xsd:element name="imageInput" type="imageFieldInput"/>
+  <xsd:element name="mediaInput" type="mediaFieldInput"/>
+  
+</xsd:schema>

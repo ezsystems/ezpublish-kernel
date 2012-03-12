@@ -5261,6 +5261,161 @@ RelationListInput
 ~~~~~~~~~~~~~~~~~
 
 
+Binary field types 
+~~~~~~~~~~~~~~~~~~
+
+Creating and Updating
+`````````````````````
+
+Creating or updating content which contains image/file/media fields has to be done with a multpart/related message according to http://tools.ietf.org/html/rfc2387
+
+The root content type equals to the defined content types for creating and updating content. The actual field of type image, file of media must contain
+a cid attribute referencing the body part of the actual binary content.
+
+Inputschema
+'''''''''''
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="binaryFieldInput">
+        <xsd:sequence>
+          <xsd:element name="originalFileName" type="xsd:string" />
+        </xsd:sequence>
+        <xsd:attribute name="cid" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:complexType name="imageFieldInput">
+        <xsd:complexContent>
+          <xsd:extension base="binaryFieldInput">
+            <xsd:sequence>
+              <xsd:element name="alternativeText" type="xsd:string" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="mediaFieldInput">
+        <xsd:complexContent>
+          <xsd:extension base="binaryFieldInput">
+            <xsd:sequence>
+              <xsd:element name="width" type="xsd:int" />
+              <xsd:element name="height" type="xsd:int" />
+              <xsd:element name="controller" type="xsd:boolean" />
+              <xsd:element name="autoplay" type="xsd:boolean" />
+              <xsd:element name="loop" type="xsd:boolean" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      
+      
+      <xsd:element name="fileInput" type="binaryFieldInput"/>
+      <xsd:element name="imageInput" type="imageFieldInput"/>
+      <xsd:element name="mediaInput" type="mediaFieldInput"/>
+      
+    </xsd:schema>
+
+
+XML Example
+'''''''''''
+
+::
+
+    POST /content/objects HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Content+xml
+    Content-Type: Multipart/Related; boundary=ezboundary0001
+             type="application/vnd.ez.api.ContentCreate+xml"
+    Content-Length: xxx
+
+    <ContentCreate>
+      <ContentType href="/content/types/10"/>
+      <mainLanguageCode>eng-US</mainLanguageCode>
+      <LocationCreate>
+        <ParentLocation href="/content/locations/1/4/89" />
+        <priority>0</priority>
+        <hidden>false</hidden>
+        <sortField>PATH</sortField>
+        <sortOrder>ASC</sortOrder>
+      </LocationCreate>
+      <Section href="/content/sections/4"/>
+      <alwaysAvailable>true</alwaysAvailable>
+      <remoteId>remoteId12345678</remoteId>
+      <fields>
+        <field>
+          <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>name</value>
+        </field>
+        <field>
+          <fieldDefinitionIdentifer>file</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>
+            <file cid="cid12345678">
+              <originalFileName>test.bin</file>
+            </file>  
+          </value>
+        </field>
+        <field>
+          <fieldDefinitionIdentifer>image</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>
+            <image cid="cid12345679">
+              <originalFileName>image.png</file>
+              <alternativeText>An image</alternativeText>
+            </image>  
+          </value>
+        </field>
+        <field>
+          <fieldDefinitionIdentifer>swf</fieldDefinitionIdentifer>
+          <languageCode>eng-US</languageCode>
+          <value>
+            <media cid="cid12345680">
+              <originalFileName>test.swf</file>
+              <width>2400</width>
+              <height>180</height>
+              <controller>true</controller>
+              <autoplay>false</autoplay>
+              <loop>false</loop>
+            </media>  
+          </value>
+        </field>
+      </fields>
+    </ContentCreate>
+    --ezboundary0001
+    Content-Type: application/octetstream
+    Content-Transfer-Encoding: base64
+    Content-ID: cid12345678 
+
+    T2xkIE1hY0RvbmFsZCBoYWQgYSBmYXJtCkUgSS
+    BFIEkgTwpBbmQgb24gaGlzIGZhcm0gaGUgaGFk
+    IHNvbWUgZHVja3MKRSBJIEUgSSBPCldpdGggYS
+    ...
+    BxdWFjayBxdWFjayBoZXJlLAphIHF1YWNrIHF1
+    YWNrIHRoZXJlLApldmVyeSB3aGVyZSBhIHF1YW
+    NrIHF1YWNrCkUgSSBFIEkgTwo=
+    --ezboundary0001
+    Content-Type: image/png
+    Content-Transfer-Encoding: base64
+    Content-ID: cid12345679 
+    
+    [encoded png image]
+    --ezboundary0001
+    Content-Type: application/shockwave-flash
+    Content-Transfer-Encoding: base64
+    Content-ID: cid12345680
+    
+    [encoded swf]
+    --ezboundar0001--
+ 
+
+
+
 .. _View:
 
 View XML Schema
