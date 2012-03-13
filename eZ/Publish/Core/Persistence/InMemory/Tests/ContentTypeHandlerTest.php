@@ -160,7 +160,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::load
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadUnExistingTypeId()
     {
@@ -171,7 +171,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::load
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadUnExistingStatus()
     {
@@ -196,7 +196,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadByIdentifier
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadByIdentifierUnExistingType()
     {
@@ -222,7 +222,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::loadByRemoteId
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadByRemoteIdUnExistingType()
     {
@@ -284,7 +284,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test delete function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::delete
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testDelete()
     {
@@ -356,7 +356,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test createDraft function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::createDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCreateDraftNonExistingTypeId()
     {
@@ -367,7 +367,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test createDraft function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::createDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCreateDraftNonExistingDefinedType()
     {
@@ -403,7 +403,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::copy
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCopyNonExistingTypeId()
     {
@@ -414,7 +414,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::copy
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCopyNonExistingStatus()
     {
@@ -440,7 +440,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test link function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::link
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLinkMissingGroup()
     {
@@ -451,7 +451,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test link function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::link
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLinkMissingType()
     {
@@ -500,7 +500,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test unlink function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::unlink
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testUnLinkMissingType()
     {
@@ -548,7 +548,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test addFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::addFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testAddFieldDefinitionInvalidTypeId()
     {
@@ -561,7 +561,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test addFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::addFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testAddFieldDefinitionInvalidStatus()
     {
@@ -587,7 +587,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test removeFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::removeFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testRemoveFieldDefinitionInvalidTypeId()
     {
@@ -599,7 +599,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test removeFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::removeFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testRemoveFieldDefinitionInvalidStatus()
     {
@@ -611,7 +611,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test removeFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::removeFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testRemoveFieldDefinitionInvalidFieldId()
     {
@@ -640,7 +640,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test updateFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::updateFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testUpdateFieldDefinitionDefinitionInvalidTypeId()
     {
@@ -655,7 +655,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test updateFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::updateFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testUpdateFieldDefinitionDefinitionInvalidStatus()
     {
@@ -670,7 +670,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test updateFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::updateFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testUpdateFieldDefinitionDefinitionInvalidFieldDefinitionId()
     {
@@ -717,7 +717,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test publish function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::publish
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testPublishInvalidTypeId()
     {
@@ -729,7 +729,7 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test publish function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::publish
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testPublishNoDraft()
     {

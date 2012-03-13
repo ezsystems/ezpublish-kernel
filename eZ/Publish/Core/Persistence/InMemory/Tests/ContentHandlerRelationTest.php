@@ -173,7 +173,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test addRelation function with unexisting source content ID
      *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelationSourceDoesNotExist1()

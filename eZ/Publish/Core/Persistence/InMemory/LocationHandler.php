@@ -65,8 +65,8 @@ class LocationHandler implements LocationHandlerInterface
         $newLocation = $this->create(
             new CreateStruct(
                 array(
-                    "contentId" => $contentCopy->id,
-                    "contentVersion" => $contentCopy->currentVersionNo,
+                    "contentId" => $contentCopy->contentInfo->contentId,
+                    "contentVersion" => $contentCopy->contentInfo->currentVersionNo,
                     "sortField" => $location->sortField,
                     "sortOrder" => $location->sortOrder,
                     "parentId" => $destinationParentId,
@@ -473,13 +473,13 @@ class LocationHandler implements LocationHandlerInterface
     private function getStrippedContentName( LocationValue $vo )
     {
         $version = $this->backend->find(
-            "Content\\Version",
+            "Content\\VersionInfo",
             array(
                 "contentId" => $vo->contentId,
-                "versionNo" => $this->backend->load( 'Content', $vo->contentId )->currentVersionNo
+                "versionNo" => $this->backend->load( 'Content\\ContentInfo', $vo->contentId, 'contentId' )->currentVersionNo
             )
         );
-        return isset( $version[0]->name["eng-GB"] )
+        return isset( $version[0]->names["eng-GB"] )
             ? preg_replace(
                 '`[^a-z0-9_]`i',
                 '_',
@@ -487,7 +487,7 @@ class LocationHandler implements LocationHandlerInterface
                     trim(
                         strtr(
                             // @todo Remove hardcoding of eng-GB
-                            $version[0]->name["eng-GB"],
+                            $version[0]->names["eng-GB"],
                             self::CHARS_ACCENT,
                             self::CHARS_NOACCENT
                         )

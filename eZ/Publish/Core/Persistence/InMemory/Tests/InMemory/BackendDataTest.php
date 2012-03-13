@@ -83,7 +83,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 array(
                     "languageCode" => "lan-{$i}",
                     "isEnabled" => true,
-                    "names" => "lang{$i}"
+                    "name" => "lang{$i}"
                 )
             );
     }
@@ -131,7 +131,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $this->backend->find( "Content\\VersionInfo", $searchData ) as $key => $version )
         {
             $this->assertEquals( $result[$key]['id'], $version->id );
-            $this->assertEquals( array( "eng-GB" => $result[$key]['name'] ), $version->name );
+            $this->assertEquals( array( "eng-GB" => $result[$key]['names'] ), $version->names );
         }
     }
 
@@ -139,20 +139,20 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array( "name" => "bar0" ),
+                array( "names" => "bar0" ),
                 array(
                     array(
                         "id" => 1,
-                        "name" => "bar0",
+                        "names" => "bar0",
                     )
                 )
             ),
             array(
-                array( "name" => "foo5" ),
+                array( "names" => "foo5" ),
                 array(
                     array(
                         "id" => 16,
-                        "name" => "foo5",
+                        "names" => "foo5",
                     )
                 )
             ),
@@ -161,43 +161,43 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 array(
                     array(
                         "id" => 1,
-                        "name" => "bar0",
+                        "names" => "bar0",
                     ),
                     array(
                         "id" => 2,
-                        "name" => "bar1",
+                        "names" => "bar1",
                     ),
                     array(
                         "id" => 3,
-                        "name" => "bar2",
+                        "names" => "bar2",
                     ),
                     array(
                         "id" => 4,
-                        "name" => "bar3",
+                        "names" => "bar3",
                     ),
                     array(
                         "id" => 5,
-                        "name" => "bar4",
+                        "names" => "bar4",
                     ),
                     array(
                         "id" => 6,
-                        "name" => "bar5",
+                        "names" => "bar5",
                     ),
                     array(
                         "id" => 7,
-                        "name" => "bar6",
+                        "names" => "bar6",
                     ),
                     array(
                         "id" => 8,
-                        "name" => "bar7",
+                        "names" => "bar7",
                     ),
                     array(
                         "id" => 9,
-                        "name" => "bar8",
+                        "names" => "bar8",
                     ),
                     array(
                         "id" => 10,
-                        "name" => "bar9",
+                        "names" => "bar9",
                     ),
                 ),
             ),
@@ -238,7 +238,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( 'folder', $types[0]->identifier );
         $this->assertEquals( 13, $types[1]->id );
         $this->assertEquals( 'comment', $types[1]->identifier );
-    }
+        }
 
     /**
      * Test finding content with results using join
@@ -252,23 +252,31 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
          * @var \eZ\Publish\SPI\Persistence\Content[] $list
          */
         $list = $this->backend->find(
-            'Content\\ContentInfo',
-            array( "id" => 1 ),
-            array( 'locations' => array(
-                'type' => 'Content\\Location',
-                'match' => array( 'contentId' => 'id' ) )
+            'Content',
+            array( 'id' => 1 ),
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                ),
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'contentId' => 'id' ),
+                    'single' => true
+                )
             )
         );
+
         $this->assertEquals( 1, count( $list ) );
         foreach ( $list as $key => $content )
         {
-            $this->assertTrue( $content instanceof Content );
-            $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 1, $content->sectionId );
+            $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
+            $this->assertEquals( 1, $content->contentInfo->contentId );
+            $this->assertEquals( 1, $content->contentInfo->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
-                $this->assertTrue( $location instanceof Location );
+                $this->assertInstanceof( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location', $location );
                 $this->assertEquals( 2, $location->id );
                 $this->assertEquals( 1, $location->contentId );
             }
@@ -287,11 +295,18 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
          * @var \eZ\Publish\SPI\Persistence\Content[] $list
          */
         $list = $this->backend->find(
-            'Content\\ContentInfo',
+            'Content',
             array( "locations" => array( 'id' => 2 ) ),
-            array( 'locations' => array(
-                'type' => 'Content\\Location',
-                'match' => array( 'contentId' => 'id' ) )
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                ),
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'contentId' => 'id' ),
+                    'single' => true
+                )
             )
         );
 
@@ -299,8 +314,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $content )
         {
             $this->assertTrue( $content instanceof Content );
-            $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 1, $content->sectionId );
+            $this->assertEquals( 1, $content->contentInfo->contentId );
+            $this->assertEquals( 1, $content->contentInfo->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -334,19 +349,26 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
          * @var \eZ\Publish\SPI\Persistence\Content[] $list
          */
         $list = $this->backend->find(
-            'Content\\ContentInfo',
+            'Content',
             array( "locations" => array( 'id' => 2 ) ),
-            array( 'locations' => array(
-                'type' => 'Content\\Location',
-                'match' => array( 'contentId' => 'id' ) )
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                ),
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'contentId' => 'id' ),
+                    'single' => true
+                )
             )
         );
         $this->assertEquals( 1, count( $list ) );
         foreach ( $list as $content )
         {
             $this->assertTrue( $content instanceof Content );
-            $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 1, $content->sectionId );
+            $this->assertEquals( 1, $content->contentInfo->contentId );
+            $this->assertEquals( 1, $content->contentInfo->sectionId );
             $this->assertEquals( 2, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -359,14 +381,14 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     /**
      * Test finding content with results using join and deep matching where match collides with join
      *
-     * @expectedException ezp\Base\Exception\Logic
+     * @expectedException eZ\Publish\Core\Base\Exceptions\Logic
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
      * @group inMemoryBackend
      */
     public function testFindJoinDeepMatchCollision()
     {
         $this->backend->find(
-            'Content\\ContentInfo',
+            'Content',
             array( "locations" => array( 'contentId' => 2 ) ),
             array( 'locations' =>
                 array(
@@ -385,6 +407,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindSubJoin()
     {
+        self::markTestIncomplete( "Reimplement this test as Fields are not version sub joins any more" );
         /**
          * @var \eZ\Publish\SPI\Persistence\Content[] $list
          */
@@ -490,11 +513,15 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             1,
             $this->backend->count(
-                'Content\\ContentInfo',
+                'Content',
                 array( "locations" => array( 'id' => 2 ) ),
-                array( 'locations' =>
-                    array(
+                array(
+                    'locations' => array(
                         'type' => 'Content\\Location',
+                        'match' => array( 'contentId' => 'id' )
+                    ),
+                    'contentInfo' => array(
+                        'type' => 'Content\\ContentInfo',
                         'match' => array( 'contentId' => 'id' )
                     )
                 )
@@ -505,14 +532,14 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     /**
      * Test count content with results using join and deep matching where match collides with join
      *
-     * @expectedException ezp\Base\Exception\Logic
+     * @expectedException eZ\Publish\Core\Base\Exceptions\Logic
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
      * @group inMemoryBackend
      */
     public function testCountJoinDeepMatchCollision()
     {
         $this->backend->count(
-            'Content\\ContentInfo',
+            'Content',
             array( "locations" => array( 'contentId' => 2 ) ),
             array( 'locations' =>
                 array(
@@ -527,13 +554,13 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test loading content without results
      *
      * @dataProvider providerForLoadEmpty
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::load
      * @group inMemoryBackend
      */
     public function testLoadEmpty( $searchData )
     {
-        $this->backend->load( 'Content\\ContentInfo', $searchData );
+        $this->backend->load( 'Content', $searchData );
     }
 
     public function providerForLoadEmpty()
@@ -569,7 +596,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 1,
                 array(
                     "id" => 1,
-                    "name" => array( "eng-GB" => "bar0" ),
+                    "names" => array( "eng-GB" => "bar0" ),
                     "creatorId" => 42,
                 )
             ),
@@ -577,7 +604,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 2,
                 array(
                     "id" => 2,
-                    "name" => array( "eng-GB" => "bar1" ),
+                    "names" => array( "eng-GB" => "bar1" ),
                     "creatorId" => 42,
                 )
             ),
@@ -585,7 +612,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 11,
                 array(
                     "id" => 11,
-                    "name" => array( "eng-GB" => "foo0" ),
+                    "names" => array( "eng-GB" => "foo0" ),
                     "creatorId" => null,
                 )
             ),
@@ -614,10 +641,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testUpdateNewAttribute()
     {
         $this->assertTrue(
-            $this->backend->update( 'Content\\ContentInfo', 1, array( "ownerId" => 5 ) )
+            $this->backend->update( 'Content\\ContentInfo', 1, array( "ownerId" => 5 ), true, 'contentId' )
         );
-        $content = $this->backend->load( 'Content\\ContentInfo', 1 );
-        $this->assertEquals( 1, $content->id );
+        $content = $this->backend->load( 'Content\\ContentInfo', 1, 'contentId' );
+        $this->assertEquals( 1, $content->contentId );
         $this->assertEquals( 1, $content->sectionId );
         $this->assertEquals( 5, $content->ownerId );
     }
@@ -631,10 +658,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $this->assertTrue(
-            $this->backend->update( "Content\\VersionInfo", 2, array( "name" => array( "eng-GB" => "Testing" ) ) )
+            $this->backend->update( "Content\\VersionInfo", 2, array( "names" => array( "eng-GB" => "Testing" ) ) )
         );
-        $content = $this->backend->load( "Content\\VersionInfo", 2 );
-        $this->assertEquals( array( "eng-GB" => "Testing" ), $content->name );
+        $versionInfo = $this->backend->load( "Content\\VersionInfo", 2 );
+        $this->assertEquals( array( "eng-GB" => "Testing" ), $versionInfo->names );
     }
 
     /**
@@ -646,10 +673,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testUpdateWithNullValue()
     {
         $this->assertTrue(
-            $this->backend->update( "Content\\VersionInfo", 3, array( "name" => null ) )
+            $this->backend->update( "Content\\VersionInfo", 3, array( "names" => null ) )
         );
-        $content = $this->backend->load( "Content\\VersionInfo", 3 );
-        $this->assertEquals( null, $content->name );
+        $versionInfo = $this->backend->load( "Content\\VersionInfo", 3 );
+        $this->assertEquals( null, $versionInfo->names );
     }
 
     /**
@@ -674,7 +701,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     /**
      * Test deleting content which does not exist
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::delete
      * @group inMemoryBackend
      */

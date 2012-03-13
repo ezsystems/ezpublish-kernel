@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 
 use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\Search\Result,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -88,36 +89,57 @@ class SearchHandler extends SearchHandlerInterface
         }
 
         $list = $this->backend->find(
-            'Content\\ContentInfo',
+            'Content',
             $match,
             array(
                 'locations' => array(
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'version' => array(
-                    'type' => 'Content\\VersionInfo',
-                    'single' => true,
-                    'match' => array( 'contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
-                    'sub' => array(
-                        'fields' => array(
-                            'type' => 'Content\\Field',
-                            'match' => array( '_contentId' => 'contentId', 'versionNo' => 'versionNo' ),
-                        )
-                    )
-                ),
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'contentId' => 'id' ),
+                    'single' => true
+                )
             )
         );
 
+        $resultList = array();
+        foreach ( $list as $item )
+        {
+            if ( $item->contentInfo instanceof ContentInfo )
+            {
+                $aVersionInfo = $this->backend->find(
+                    'Content\\VersionInfo',
+                    array(
+                        'contentId' => $item->contentInfo->contentId,
+                        'versionNo' => $item->contentInfo->currentVersionNo
+                    )
+                );
+                if ( !empty( $aVersionInfo ) )
+                    $item->versionInfo = $aVersionInfo[0];
+
+                $item->fields = $this->backend->find(
+                    'Content\\Field',
+                    array(
+                        '_contentId' => $item->contentInfo->contentId,
+                        'versionNo' => $item->contentInfo->currentVersionNo
+                    )
+                );
+
+                $resultList[] = $item;
+            }
+        }
+
         $result = new Result();
-        $result->count = count( $list );
+        $result->count = count( $resultList );
 
         if ( $limit === null && $offset === 0 )
-            $result->content = $list;
+            $result->content = $resultList;
         else if ( $limit === null )
-             $result->content = array_slice( $list, $offset );
+             $result->content = array_slice( $resultList, $offset );
         else
-            $result->content = array_slice( $list, $offset, $limit );
+            $result->content = array_slice( $resultList, $offset, $limit );
 
         return $result;
     }

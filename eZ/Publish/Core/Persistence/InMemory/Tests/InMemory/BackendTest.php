@@ -30,7 +30,12 @@ class BackendTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->backend = new Backend( array( 'Content' => array() ) );
+        $this->backend = new Backend(
+            array(
+                'Content' => array(),
+                'Content\\ContentInfo' => array()
+            )
+        );
     }
 
     /**
@@ -46,7 +51,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test creating content with a wrong type.
      *
      * @param mixed $type Wrong type to create
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::create
      */
@@ -59,7 +64,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test loading content with a wrong type.
      *
      * @param mixed $type Wrong type to load
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::load
      */
@@ -72,7 +77,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test finding content with a wrong type.
      *
      * @param mixed $type Wrong type to find
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
      */
@@ -85,7 +90,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test counting content with a wrong type.
      *
      * @param mixed $type Wrong type to count
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::count
      */
@@ -98,7 +103,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test updating content with a wrong type.
      *
      * @param mixed $type Wrong type to update
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::update
      */
@@ -111,7 +116,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test deleting content with a wrong type.
      *
      * @param mixed $type Wrong type to delete
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::delete
      */
@@ -127,8 +132,8 @@ class BackendTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $content = $this->backend->create( "Content", array( "sectionId" => 2 ));
-        $this->assertEquals( 1, $content->id );
+        $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true, 'contentId' );
+        $this->assertEquals( 1, $content->contentId );
         $this->assertEquals( 2, $content->sectionId );
         $this->assertEquals( null, $content->ownerId );
     }
@@ -142,8 +147,8 @@ class BackendTest extends PHPUnit_Framework_TestCase
     {
         for ( $i = 1; $i <= 10; ++$i)
         {
-            $content = $this->backend->create( "Content", array( "sectionId" => 2 ) );
-            $this->assertEquals( $i, $content->id );
+            $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true, 'contentId' );
+            $this->assertEquals( $i, $content->contentId );
         }
     }
 

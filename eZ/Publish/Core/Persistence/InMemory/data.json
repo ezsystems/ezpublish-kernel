@@ -1,11 +1,19 @@
 {
+    "Content": [
+        {"id": 1},
+        {"id": 4},
+        {"id": 12},
+        {"id": 14},
+        {"id": 42},
+        {"id": 10}
+    ],
     "Content\\ContentInfo": [
-        {"id": 1, "contentTypeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent1", "mainLanguageCode": "eng-GB"},
-        {"id": 4, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent4", "mainLanguageCode": "eng-GB"},
-        {"id": 12, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent12", "mainLanguageCode": "eng-GB"},
-        {"id": 14, "contentTypeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent14", "mainLanguageCode": "eng-GB"},
-        {"id": 42, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent42", "mainLanguageCode": "eng-GB"},
-        {"id": 10, "contentTypeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent10", "mainLanguageCode": "eng-GB"}
+        {"contentId": 1, "contentTypeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent1", "mainLanguageCode": "eng-GB"},
+        {"contentId": 4, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent4", "mainLanguageCode": "eng-GB"},
+        {"contentId": 12, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent12", "mainLanguageCode": "eng-GB"},
+        {"contentId": 14, "contentTypeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent14", "mainLanguageCode": "eng-GB"},
+        {"contentId": 42, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent42", "mainLanguageCode": "eng-GB"},
+        {"contentId": 10, "contentTypeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent10", "mainLanguageCode": "eng-GB"}
     ],
     "Content\\Field": [
         {"id": 1, "fieldDefinitionId": 1, "type": "ezstring", "value": {"text": "eZ Publish NextGen"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 1},

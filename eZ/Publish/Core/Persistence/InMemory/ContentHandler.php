@@ -57,17 +57,20 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function create( CreateStruct $content )
     {
-        $contentObj = new Content;
+        $contentObj = $this->backend->create( 'Content', array() );
         $contentObj->contentInfo = $this->backend->create(
-            'Content\\ContentInfo', array(
-                'typeId' => $content->typeId,
+            'Content\\ContentInfo',
+            array(
+                'contentTypeId' => $content->typeId,
                 'sectionId' => $content->sectionId,
                 'ownerId' => $content->ownerId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'currentVersionNo' => 1,
-                'modified' => $content->modified,
-                'published' => $content->published,
-            )
+                'modificationDate' => $content->modified,
+                'publicationDate' => $content->published,
+            ),
+            true,
+            'contentId'
         );
         $time = time();
         $versionInfo = $this->backend->create(
@@ -176,7 +179,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function copy( $contentId, $versionNo )
     {
-        $contentInfo = $this->backend->load( 'Content\\ContentInfo', $contentId );
+        $contentInfo = $this->backend->load( 'Content\\ContentInfo', $contentId, 'contentId' );
         if ( !$contentInfo )
             throw new NotFound( 'Content\\ContentInfo', "contentId: $contentId" );
 
@@ -194,7 +197,9 @@ class ContentHandler implements ContentHandlerInterface
                 "mainLanguageCode" => $content->mainLanguageCode,
                 "modificationDate" => $time,
                 "publicationDate" => $time
-            )
+            ),
+            true,
+            'contentId'
         );
 
         // Copy version(s)
@@ -271,10 +276,27 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function load( $id, $version, $translations = null )
     {
-        $content = new Content;
-        $content->contentInfo = $this->backend->load( 'Content\\ContentInfo', $id );
-        if ( !$content->contentInfo )
-            return null;
+        $res = $this->backend->find(
+            'Content',
+            array( 'id' => $id ),
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                ),
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'contentId' => 'id' ),
+                    'single' => true
+                )
+            )
+        );
+        if ( empty( $res ) )
+            throw new NotFound( "Content", "contentId:{$id}" );
+
+        $content = $res[0];
+        if ( !$content->contentInfo instanceof ContentInfo )
+            throw new NotFound( "Content\\ContentInfo", "contentId:{$id}" );
 
         $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $content->contentInfo->contentId, 'versionNo' => $version ) );
         if ( !isset( $versions[0] ) )
@@ -301,7 +323,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadContentInfo( $contentId )
     {
-        return $this->backend->load( 'Content\\ContentInfo', $contentId );
+        return $this->backend->load( 'Content\\ContentInfo', $contentId, 'contentId' );
     }
 
     /**
@@ -417,7 +439,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function delete( $contentId )
     {
-        $this->backend->delete( 'Content\\ContentInfo', $contentId );
+        $this->backend->delete( 'Content\\ContentInfo', $contentId, 'contentId' );
 
         $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $contentId ) );
         foreach ( $versions as $version )
@@ -516,10 +538,10 @@ class ContentHandler implements ContentHandlerInterface
     public function addRelation( RelationCreateStruct $relation )
     {
         // Ensure source content exists
-        $sourceContent = $this->backend->find( 'Content\\ContentInfo', array( "id" => $relation->sourceContentId ) );
+        $sourceContent = $this->backend->find( 'Content\\ContentInfo', array( "contentId" => $relation->sourceContentId ) );
 
         if ( empty( $sourceContent ) )
-            throw new NotFound( 'Content\\ContentInfo', "id: {$relation->sourceContentId}" );
+            throw new NotFound( 'Content\\ContentInfo', "contentId: {$relation->sourceContentId}" );
 
         // Ensure source content exists if version is specified
         if ( $relation->sourceContentVersionNo !== null )
@@ -531,10 +553,10 @@ class ContentHandler implements ContentHandlerInterface
         }
 
         // Ensure destination content exists
-        $destinationContent = $this->backend->find( 'Content\\ContentInfo', array( "id" => $relation->destinationContentId ) );
+        $destinationContent = $this->backend->find( 'Content\\ContentInfo', array( "contentId" => $relation->destinationContentId ) );
 
         if ( empty( $destinationContent ) )
-            throw new NotFound( 'Content\\ContentInfo', "id: {$relation->destinationContentId}" );
+            throw new NotFound( 'Content\\ContentInfo', "contentId: {$relation->destinationContentId}" );
 
         return $this->backend->create( "Content\\Relation", (array)$relation );
     }

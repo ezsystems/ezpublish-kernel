@@ -19,6 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterfa
     eZ\Publish\SPI\Persistence\Content\Type\Group,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
+    ezp\Base\Exception\BadRequest,
     eZ\Publish\Core\Persistence\InMemory\Handler,
     eZ\Publish\Core\Persistence\InMemory\Backend,
     RuntimeException;
@@ -81,9 +82,9 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( $this->backend->count( 'Content\\Type', array( 'groupIds' => $groupId ) ) )
         {
             throw new BadStateException( '$groupId', "Group {$groupId} still contains Types and can not be deleted" );
-        }
+                }
         $this->backend->delete( 'Content\\Type\\Group', $groupId );
-    }
+            }
 
     /**
      * @param mixed $groupId

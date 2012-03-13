@@ -15,7 +15,8 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content\Location;
+    ezp\Content\Location,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for Location Handler using in memory storage.
@@ -108,7 +109,7 @@ class TrashHandlerTest extends HandlerTest
                 )
             );
 
-            $this->lastContentId = $content->id;
+            $this->lastContentId = $content->contentInfo->contentId;
 
             $this->locations[] = $location = $this->persistenceHandler->locationHandler()->create(
                 new CreateStruct(
@@ -156,7 +157,7 @@ class TrashHandlerTest extends HandlerTest
         {
             try
             {
-                $contentHandler->delete( $content->id );
+                $contentHandler->delete( $content->contentInfo->contentId );
             }
             catch ( NotFound $e )
             {
@@ -188,7 +189,7 @@ class TrashHandlerTest extends HandlerTest
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::load
      * @group trashHandler
      */

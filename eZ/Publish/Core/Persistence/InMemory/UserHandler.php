@@ -229,11 +229,11 @@ class UserHandler implements UserHandlerInterface
      */
     public function loadRolesByGroupId( $groupId )
     {
-        $content = $this->backend->load( 'Content', $groupId );
+        $content = $this->backend->load( 'Content\\ContentInfo', $groupId, 'contentId' );
 
         if ( !$content )
             throw new NotFound( 'Group', $groupId );
-        if ( $content->typeId != 3 )
+        if ( $content->contentTypeId != 3 )
             throw new NotFoundWithType( "Content with TypeId:3", $groupId );
 
         return $this->backend->find(
@@ -347,6 +347,11 @@ class UserHandler implements UserHandlerInterface
                 'locations' => array(
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
+                ),
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'contentId' => 'id' ),
+                    'single' => true
                 )
             )
         );
@@ -373,6 +378,11 @@ class UserHandler implements UserHandlerInterface
                         'locations' => array(
                             'type' => 'Content\\Location',
                             'match' => array( 'contentId' => 'id' )
+                        ),
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'contentId' => 'id' ),
+                            'single' => true
                         )
                     )
                 );
@@ -394,13 +404,13 @@ class UserHandler implements UserHandlerInterface
      */
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {
-        if ( $content->typeId != $typeId )
-            throw new NotFoundWithType( "Content with TypeId:$typeId", $content->id );
+        if ( $content->contentInfo->contentTypeId != $typeId )
+            throw new NotFoundWithType( "Content with TypeId:$typeId", $content->contentInfo->contentId );
 
         // fetch possible roles assigned to this object
         $list = $this->backend->find(
             'User\\Role',
-            array( 'groupIds' => $content->id ),
+            array( 'groupIds' => $content->contentInfo->contentId ),
             array(
                 'policies' => array(
                     'type' => 'User\\Policy',
@@ -449,12 +459,12 @@ class UserHandler implements UserHandlerInterface
      */
     public function assignRole( $groupId, $roleId, array $limitation = null )
     {
-        $content = $this->backend->load( 'Content', $groupId );
+        $content = $this->backend->load( 'Content\\ContentInfo', $groupId, 'contentId' );
         if ( !$content )
             throw new NotFound( 'User Group', $groupId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
-        if ( $content->typeId != 3 )
+        if ( $content->contentTypeId != 3 )
             throw new NotFoundWithType( 3, $groupId );
 
         $role = $this->loadRole( $roleId );
@@ -476,12 +486,12 @@ class UserHandler implements UserHandlerInterface
      */
     public function unAssignRole( $groupId, $roleId )
     {
-        $content = $this->backend->load( 'Content', $groupId );
+        $content = $this->backend->load( 'Content\\ContentInfo', $groupId, 'contentId' );
         if ( !$content )
             throw new NotFound( 'User Group', $groupId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
-        if ( $content->typeId != 3 && $content->typeId != 4 )
+        if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
             throw new NotFoundWithType( "3 or 4", $groupId );
 
         $role = $this->loadRole( $roleId );
