@@ -40,7 +40,7 @@ class Content extends APIContent
     protected $versionNo;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
+     * @var array an array of field values like $fields[$fieldDefIdentifier][$languageCode]
      */
     protected $fields;
 
@@ -48,6 +48,23 @@ class Content extends APIContent
      * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     protected $relations;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
+     */
+    private $internalFields;
+
+    function __construct( array $data = array() )
+    {
+        foreach ( $data as $propertyName => $propertyValue )
+        {
+            $this->$propertyName = $propertyValue;
+        }
+        foreach ( $this->internalFields as $field )
+        {
+            $this->fields[$field->fieldDefIdentifier][$field->languageCode] = $field->value;
+        }
+    }
 
     /**
      * returns the VersionInfo for this version
@@ -73,30 +90,18 @@ class Content extends APIContent
      * @param string $languageCode
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
+     * @todo should an exception be thrown here if nothing is found?
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        $contentType  = $this->getContentType();
-        $translatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
-
         if ( null === $languageCode )
         {
             $languageCode = $this->getContentInfo()->mainLanguageCode;
         }
 
-        foreach ( $this->getFields() as $field )
+        if ( isset( $this->fields[$fieldDefIdentifier][$languageCode] ) )
         {
-            if ( $field->fieldDefIdentifier !== $fieldDefIdentifier )
-            {
-                continue;
-            }
-
-            if ( $translatable && $field->languageCode !== $languageCode )
-            {
-                continue;
-            }
-
-            return $field->value;
+            return $this->fields[$fieldDefIdentifier][$languageCode];
         }
 
         return null;
@@ -119,13 +124,13 @@ class Content extends APIContent
      */
     public function getFields()
     {
-        return $this->fields;
+        return $this->internalFields;
     }
 
     /**
      * This method returns the fields for a given language and non translatable fields
      *
-     * If note set the initialLanguage of the content version is used.
+     * If not set the initialLanguage of the content version is used.
      *
      * @param string $languageCode
      *
@@ -134,7 +139,6 @@ class Content extends APIContent
     public function getFieldsByLanguage( $languageCode = null )
     {
         $fields = array();
-        $contentType  = $this->getContentType();
 
         if ( null === $languageCode )
         {
@@ -143,16 +147,40 @@ class Content extends APIContent
 
         foreach ( $this->getFields() as $field )
         {
-            if ( $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable
-              && $field->languageCode !== $languageCode )
-            {
-                continue;
-            }
-
+            if ( $field->languageCode !== $languageCode ) continue;
             $fields[$field->fieldDefIdentifier] = $field;
         }
 
         return $fields;
+    }
+
+    /**
+     * This method returns the field for a given field definition identifier and language
+     *
+     * If not set the initialLanguage of the content version is used.
+     *
+     * @param $fieldDefIdentifier
+     * @param null $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
+     */
+    public function getField( $fieldDefIdentifier, $languageCode = null )
+    {
+        if ( null === $languageCode )
+        {
+            $languageCode = $this->getContentInfo()->mainLanguageCode;
+        }
+
+        foreach ( $this->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $fieldDefIdentifier
+                && $field->languageCode === $languageCode )
+            {
+                return $field;
+            }
+        }
+
+        return null;
     }
 
     /**
