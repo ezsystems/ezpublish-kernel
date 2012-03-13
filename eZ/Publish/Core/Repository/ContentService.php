@@ -959,13 +959,29 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      */
     public function publishVersion( APIVersionInfo $versionInfo )
     {
+        if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
+            throw new BadStateException( "versionInfo", "only versions in draft status can be published" );
 
+        $updateStruct = new SPIContentUpdateStruct();
+
+        $updateStruct->name = $versionInfo->getNames();
+        $updateStruct->creatorId = $versionInfo->creatorId;
+        // we need not to update any fields if only publishing the version
+        $updateStruct->fields = array();
+        $updateStruct->modificationDate = time();
+
+        $updateStruct->initialLanguageId = $this->repository
+            ->getContentLanguageService()
+            ->loadLanguage(
+                $versionInfo->initialLanguageCode
+            )->id;
+
+        $publishedContent = $this->persistenceHandler->contentHandler()->publish( $updateStruct );
+
+        return $this->buildContentDomainObject( $publishedContent );
     }
 
     /**
