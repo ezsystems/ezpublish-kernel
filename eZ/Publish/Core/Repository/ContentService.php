@@ -47,6 +47,7 @@ use eZ\Publish\SPI\Persistence\Content\Version as SPIVersion;
 use eZ\Publish\SPI\Persistence\Content\RestrictedVersion as SPIRestrictedVersion;
 use eZ\Publish\SPI\Persistence\ValueObject as SPIValueObject;
 
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
@@ -426,7 +427,7 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
      *                                                            or (4.x) there is no location provided
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an empty value
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
      * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
@@ -474,9 +475,40 @@ class ContentService implements ContentServiceInterface
         $fields = array();
         $languageCodes = array( $contentCreateStruct->mainLanguageCode );
 
+        // Map fields to array $fields[$field->fieldDefIdentifier][$field->languageCode]
+        // Check for inconsistencies along the way and throw exceptions where needed
         foreach ( $contentCreateStruct->fields as $field )
         {
-            $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
+            $fieldDefinition = $contentCreateStruct->contentType->getFieldDefinition( $field->fieldDefIdentifier );
+            if ( null === $fieldDefinition )
+                throw new ContentFieldValidationException(
+                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
+                );
+
+            if ( $fieldDefinition->isTranslatable )
+            {
+                if ( empty( $field->languageCode ) )
+                    throw new ContentFieldValidationException(
+                        "Language code is missing on a field for translatable field definition '{$field->fieldDefIdentifier}'"
+                    );
+
+                if ( isset( $fields[$field->fieldDefIdentifier][$field->languageCode] ) )
+                    throw new ContentValidationException(
+                        "More than one field is given for translatable field definition '{$field->fieldDefIdentifier}' on language '{$field->languageCode}'"
+                    );
+
+                $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
+            }
+            else
+            {
+                if ( isset( $fields[$field->fieldDefIdentifier] ) )
+                    throw new ContentValidationException(
+                        "More than one field is given for untranslatable field definition '{$field->fieldDefIdentifier}'"
+                    );
+
+                $fields[$field->fieldDefIdentifier] = $field;
+            }
+
             $languageCodes[] = $field->languageCode;
         }
 
@@ -493,13 +525,27 @@ class ContentService implements ContentServiceInterface
 
             foreach ( $languageCodes as $languageCode )
             {
-                if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
+                unset( $field );
+
+                if ( $fieldDefinition->isTranslatable )
                 {
-                    $field = $fields[$fieldDefinition->identifier][$languageCode];
-                    $fieldValue = $fieldType->buildValue(
-                        $field->value
+                    if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
+                    {
+                        $field = $fields[$fieldDefinition->identifier][$languageCode];
+                    }
+                }
+                elseif ( isset( $fields[$fieldDefinition->identifier] ) )
+                {
+                    $field = $fields[$fieldDefinition->identifier];
+                }
+
+                if ( isset( $field ) )
+                {
+                    $fieldValue = $fieldType->acceptValue(
+                        $field->value instanceof Value ?
+                            $field->value :
+                            $fieldType->buildValue( $field->value )
                     );
-                    $fieldValue = $fieldType->acceptValue( $fieldValue );
 
                     if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
                     {
@@ -516,7 +562,7 @@ class ContentService implements ContentServiceInterface
                             "fieldDefinitionId" => $field->fieldDefIdentifier,
                             "type"              => $fieldDefinition->fieldTypeIdentifier,
                             "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                            "languageCode"      => $field->languageCode,
+                            "languageCode"      => $languageCode,
                             "versionNo"         => null
                         )
                     );
@@ -543,7 +589,7 @@ class ContentService implements ContentServiceInterface
                             "type"              => $fieldDefinition->fieldTypeIdentifier,
                             "value"             => $fieldType->toPersistenceValue( $fieldValue ),
                             "languageCode"      => $languageCode,
-                            "version"           => null
+                            "versionNo"         => null
                         )
                     );
                 }
@@ -552,7 +598,6 @@ class ContentService implements ContentServiceInterface
 
         if ( count( $failedValidators ) )
         {
-            // @TODO: revisit when exception is implemented
             throw new ContentFieldValidationException();
         }
 
@@ -607,7 +652,7 @@ class ContentService implements ContentServiceInterface
             {
                 foreach ( $allowedValidators as $allowedValidatorClass )
                 {
-                    if ( $validator instanceOf $allowedValidatorClass && !$validator->validate( $fieldValue ) )
+                    if ( $validator instanceof $allowedValidatorClass && !$validator->validate( $fieldValue ) )
                     {
                         $failedValidators[] = $validator;
                     }
@@ -631,34 +676,63 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContentMetadata( APIContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
     {
+        $hasPropertySet = false;
         foreach ( $contentMetadataUpdateStruct as $propertyName => $propertyValue )
         {
-            // @TODO: throw exception if nothing is set?
+            if ( isset( $contentMetadataUpdateStruct->$propertyName ) )
+            {
+                $hasPropertySet = true;
+                break;
+            }
+        }
+        if ( !$hasPropertySet )
+        {
+            throw new InvalidArgumentException(
+                "\$contentMetadataUpdateStruct",
+                "at least one property in update struct must be set"
+            );
         }
 
-        $mainLanguage = $this->repository->getContentLanguageService()->loadLanguage(
-            $contentMetadataUpdateStruct->mainLanguageCode
-        );
+        if ( isset( $contentMetadataUpdateStruct->remoteId ) )
+        {
+            try
+            {
+                $this->persistenceHandler->searchHandler()->findSingle(
+                    new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
+                );
+            }
+            catch ( APINotFoundException $e )
+            {
+                throw new InvalidArgumentException(
+                    "\$contentMetadataUpdateStruct->remoteId",
+                    "remoteId already exists",
+                    $e
+                );
+            }
+        }
 
-        // @TODO: missing from ContentMetaDataUpdateStruct: $alwaysAvailable, $remoteId, $mainLocationId
-        $spiUpdateStruct = new SPIContentUpdateStruct(
+        $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
             array(
-                "id"                => $contentInfo->contentId,
-                "versionNo"         => $contentInfo->currentVersionNo,
-                "name"              => array(),
-                // @TODO: creatorId is not used by contentHandler::update
-                "creatorId"         => $contentMetadataUpdateStruct->ownerId,
-                "ownerId"           => $contentMetadataUpdateStruct->ownerId,
-                "fields"            => array(),
-                "published"         => $contentMetadataUpdateStruct->publishedDate->getTimestamp(),
-                "modified"          => $contentMetadataUpdateStruct->modificationDate->getTimestamp(),
-                // @TODO: updates ezcontentobject_version but should not
-                "initialLanguageId" => $mainLanguage->id
+                "ownerId"          => $contentMetadataUpdateStruct->ownerId,
+                "name"             => $contentMetadataUpdateStruct->name,
+                "publicationDate"  => isset( $contentMetadataUpdateStruct->publishedDate ) ?
+                                        $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
+                "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
+                                        $contentMetadataUpdateStruct->modificationDate->getTimestamp() : null,
+                "mainLanguageId"   => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
+                                        $this->repository->getContentLanguageService()->loadLanguage(
+                                            $contentMetadataUpdateStruct->mainLanguageCode
+                                        )->id : null,
+                "alwaysAvailable"  => $contentMetadataUpdateStruct->alwaysAvailable,
+                "remoteId"         => $contentMetadataUpdateStruct->remoteId
             )
         );
 
         return $this->buildContentDomainObject(
-            $this->persistenceHandler->contentHandler()->update( $spiUpdateStruct )
+            $this->persistenceHandler->contentHandler()->updateMetadata(
+                $contentInfo->contentId,
+                $spiMetadataUpdateStruct
+            )
         );
     }
 
@@ -777,7 +851,103 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent( APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct )
     {
+        if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
+            throw new BadStateException( "\$versionInfo", "version is not a draft" );
 
+        $fields = array();
+        $languageCodes = array( $contentUpdateStruct->initialLanguageCode );
+        $contentType = $versionInfo->getContentInfo()->getContentType();
+
+        foreach ( $contentUpdateStruct->fields as $field )
+        {
+            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+            if ( null === $fieldDefinition )
+                throw new ContentFieldValidationException(
+                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
+                );
+
+            if ( $fieldDefinition->isTranslatable )
+            {
+                if ( empty( $field->languageCode ) )
+                    throw new ContentFieldValidationException(
+                        "Language code is missing on a field for translatable field definition '{$field->fieldDefIdentifier}'"
+                    );
+
+                if ( isset( $fields[$field->fieldDefIdentifier][$field->languageCode] ) )
+                    throw new ContentValidationException(
+                        "More than one field is given for translatable field definition '{$field->fieldDefIdentifier}' on language '{$field->languageCode}'"
+                    );
+
+                $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
+            }
+            else
+            {
+                if ( isset( $fields[$field->fieldDefIdentifier] ) )
+                    throw new ContentValidationException(
+                        "More than one field is given for untranslatable field definition '{$field->fieldDefIdentifier}'"
+                    );
+
+                $fields[$field->fieldDefIdentifier] = $field;
+            }
+
+            $languageCodes[] = $field->languageCode;
+        }
+
+        $languageCodes = array_unique( $languageCodes );
+
+        $spiFields = array();
+        /** @var $failedValidators \eZ\Publish\Core\Repository\FieldType\Validator[] */
+        $failedValidators = array();
+        foreach ( $fields as $fieldDefinitionId => $field )
+        {
+            $fieldValue = $fieldType->acceptValue(
+                $field->value instanceof Value ?
+                    $field->value :
+                    $fieldType->buildValue( $field->value )
+            );
+
+            if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
+            {
+                throw new ContentValidationException( '@TODO: What error code should be used?' );
+            }
+
+            $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
+            if ( count( $failedValidators ) ) continue;
+
+            $spiFields[] = new SPIField(
+                array(
+                    // @TODO: is id really needed here?
+                    "id"                => $field->id,
+                    "fieldDefinitionId" => $field->fieldDefIdentifier,
+                    "type"              => $fieldDefinition->fieldTypeIdentifier,
+                    "value"             => $fieldType->toPersistenceValue( $fieldValue ),
+                    "languageCode"      => $languageCode,
+                    "versionNo"         => null
+                )
+            );
+        }
+
+        if ( count( $failedValidators ) )
+        {
+            throw new ContentFieldValidationException();
+        }
+
+        $modifiedTimestamp = isset( $contentUpdateStruct->modificationDate ) ? $contentUpdateStruct->modificationDate->getTimestamp() : time();
+        $userId = isset( $contentUpdateStruct->userId ) ? $contentUpdateStruct->userId : $this->repository->getCurrentUser()->id;
+
+        $spiContentUpdateStruct = new SPIContentUpdateStruct(
+            array(
+                "name"              => array(),
+                "creatorId"         => $userId,
+                "fields"            => $spiFields,
+                "modificationDate"  => $modifiedTimestamp,
+                "initialLanguageId" => $contentUpdateStruct->initialLanguageCode
+            )
+        );
+
+        $spiContent = $this->persistenceHandler->contentHandler()->updateContent( $spiContentUpdateStruct );
+
+        return $this->buildContentDomainObject( $spiContent );
     }
 
     /**
@@ -933,8 +1103,8 @@ class ContentService implements ContentServiceInterface
     /**
      * Performs a query for a single content object
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the found content object
-     * @TODO throw an exception if the found object count is > 1
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
      * @TODO define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
@@ -942,7 +1112,7 @@ class ContentService implements ContentServiceInterface
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
@@ -950,10 +1120,10 @@ class ContentService implements ContentServiceInterface
 
         if ( $searchResult->count > 1 )
         {
-            // @TODO: throw undefined exception here
+            throw new InvalidArgumentException( "\$query", "Search with given \$query returned more than one result" );
         }
 
-        return $searchResult;
+        return reset( $searchResult->items );
     }
 
     /**
@@ -1120,6 +1290,7 @@ class ContentService implements ContentServiceInterface
 
     /**
      * Instantiates a new content update struct
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct()
