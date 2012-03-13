@@ -61,6 +61,13 @@ class ContentType extends APIContentType
      */
     private $fieldDefinitionsByIdentifier;
 
+    /**
+     * Field definitions indexed by id
+     *
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
+     */
+    private $fieldDefinitionsById;
+
     function __construct( array $data = array() )
     {
         foreach ( $data as $propertyName => $propertyValue )
@@ -70,6 +77,7 @@ class ContentType extends APIContentType
         foreach ( $this->fieldDefinitions as $fieldDefinition )
         {
             $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
+            $this->fieldDefinitionsById[$fieldDefinition->id] = $fieldDefinition;
         }
     }
 
@@ -167,6 +175,22 @@ class ContentType extends APIContentType
         if ( array_key_exists( $fieldDefinitionIdentifier, $this->fieldDefinitionsByIdentifier ) )
         {
             return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
+        }
+
+        return null;
+    }
+
+    /**
+     * this method returns the field definition for the given id
+     *
+     * @param mixed $fieldDefinitionId
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     */
+    public function getFieldDefinitionById( $fieldDefinitionId )
+    {
+        if ( array_key_exists( $fieldDefinitionId, $this->fieldDefinitionsById ) )
+        {
+            return $this->fieldDefinitionsById[$fieldDefinitionId];
         }
 
         return null;
