@@ -1332,7 +1332,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $filter
-     * @todo TBD - filter by sourceversion destination version and languages
+     * @todo TBD - filter by source version destination version and languages
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
      *
@@ -1545,15 +1545,9 @@ class ContentService implements ContentServiceInterface
         $sourceFieldDefinitionIdentifier = null;
         if ( $spiRelation->type !== APIRelation::COMMON )
         {
-            $fieldDefinitions = $sourceContentInfo->getContentType()->getFieldDefinitions();
-            foreach ( $fieldDefinitions as $fieldDefinition )
-            {
-                if ( $fieldDefinition->id == $spiRelation->sourceFieldDefinitionId )
-                {
-                    $sourceFieldDefinitionIdentifier = $fieldDefinition->identifier;
-                    break;
-                }
-            }
+            $sourceFieldDefinitionIdentifier = $sourceContentInfo->getContentType()->getFieldDefinitionById(
+                $spiRelation->sourceFieldDefinitionId
+            );
         }
 
         return new Relation(
