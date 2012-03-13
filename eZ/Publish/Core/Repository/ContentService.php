@@ -59,6 +59,10 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as SPIFieldValue;
 
+use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
+use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 
 /**
 * This class provides service methods for managing content
@@ -1188,7 +1192,23 @@ class ContentService implements ContentServiceInterface
      */
     public function loadRelations( APIVersionInfo $versionInfo )
     {
+        $contentInfo = $versionInfo->getContentInfo();
 
+        $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
+            $contentInfo->contentId,
+            $versionInfo->versionNo
+        );
+
+        $returnArray = array();
+        foreach ( $spiRelations as $spiRelation )
+        {
+            $returnArray[] = $this->buildRelationDomainObject(
+                $spiRelation,
+                $contentInfo
+            );
+        }
+
+        return $returnArray;
     }
 
     /**
@@ -1205,7 +1225,21 @@ class ContentService implements ContentServiceInterface
      */
     public function loadReverseRelations( APIContentInfo $contentInfo )
     {
+        $spiRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
+            $contentInfo->contentId
+        );
 
+        $returnArray = array();
+        foreach ( $spiRelations as $spiRelation )
+        {
+            $returnArray[] = $this->buildRelationDomainObject(
+                $spiRelation,
+                null,
+                $contentInfo
+            );
+        }
+
+        return $returnArray;
     }
 
     /**
@@ -1224,7 +1258,22 @@ class ContentService implements ContentServiceInterface
      */
     public function addRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent )
     {
+        if ( $sourceVersion->status !== APIVersionInfo::STATUS_DRAFT )
+            throw new BadStateException( "sourceVersion", "relations of type common can only be added to versions of status draft" );
 
+        $sourceContentInfo = $sourceVersion->getContentInfo();
+
+        $relationCreateStruct = new SPIRelationCreateStruct();
+        $relationCreateStruct->sourceContentId = $sourceContentInfo->contentId;
+        $relationCreateStruct->sourceContentVersionNo = $sourceVersion->versionNo;
+        // we create the relation of type Relation::COMMON, no need for field definition ID
+        $relationCreateStruct->sourceFieldDefinitionId = null;
+        $relationCreateStruct->destinationContentId = $destinationContent->contentId;
+        $relationCreateStruct->type = APIRelation::COMMON;
+
+        $spiRelation = $this->persistenceHandler->contentHandler()->addRelation( $relationCreateStruct );
+
+        return $this->buildRelationDomainObject( $spiRelation, $sourceContentInfo, $destinationContent );
     }
 
     /**
@@ -1239,7 +1288,25 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent)
     {
+        if ( $sourceVersion->status !== APIVersionInfo::STATUS_DRAFT )
+            throw new BadStateException( "sourceVersion", "relations of type common can only be removed from versions of status draft" );
 
+        $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
+            $sourceVersion->getContentInfo()->contentId,
+            $sourceVersion->versionNo,
+            APIRelation::COMMON
+        );
+
+        if ( count( $spiRelations ) == 0 )
+            throw new InvalidArgumentException( "sourceVersion", "there are no relations of type COMMON for the given destination" );
+
+        // there should be only one relation of type COMMON for each destination,
+        // but in case there were ever more then one, we will remove them all
+        // @todo: alternatively, throw BadStateException?
+        foreach ( $spiRelations as $spiRelation )
+        {
+            $this->persistenceHandler->contentHandler()->removeRelation( $spiRelation->id );
+        }
     }
 
     /**
@@ -1454,6 +1521,48 @@ class ContentService implements ContentServiceInterface
                 "status"              => $persistenceVersionInfo->status,
                 "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
                 "languageCodes"       => $languageCodes
+            )
+        );
+    }
+
+    /**
+     * Builds API Relation object from provided SPI Relation object
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation $spiRelation
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo|null $sourceContentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo|null $destinationContentInfo
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation
+     */
+    protected function buildRelationDomainObject( SPIRelation $spiRelation, APIContentInfo $sourceContentInfo = null, APIContentInfo $destinationContentInfo = null )
+    {
+        if ( $sourceContentInfo === null )
+            $sourceContentInfo = $this->loadContentInfo( $spiRelation->sourceContentId );
+
+        if ( $destinationContentInfo === null )
+            $destinationContentInfo = $this->loadContentInfo( $spiRelation->destinationContentId );
+
+        $sourceFieldDefinitionIdentifier = null;
+        if ( $spiRelation->type !== APIRelation::COMMON )
+        {
+            $fieldDefinitions = $sourceContentInfo->getContentType()->getFieldDefinitions();
+            foreach ( $fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->id == $spiRelation->sourceFieldDefinitionId )
+                {
+                    $sourceFieldDefinitionIdentifier = $fieldDefinition->identifier;
+                    break;
+                }
+            }
+        }
+
+        return new Relation(
+            array(
+                'id'                              => $spiRelation->id,
+                'sourceFieldDefinitionIdentifier' => $sourceFieldDefinitionIdentifier,
+                'type'                            => $spiRelation->type,
+                'sourceContentInfo'               => $sourceContentInfo,
+                'destinationContentInfo'          => $destinationContentInfo
             )
         );
     }
