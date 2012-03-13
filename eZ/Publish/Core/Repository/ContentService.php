@@ -505,12 +505,12 @@ class ContentService implements ContentServiceInterface
             }
             else
             {
-                if ( isset( $fields[$field->fieldDefIdentifier] ) )
+                if ( isset( $fields[$field->fieldDefIdentifier][$contentCreateStruct->mainLanguageCode] ) )
                     throw new ContentValidationException(
                         "More than one field is given for untranslatable field definition '{$field->fieldDefIdentifier}'"
                     );
 
-                $fields[$field->fieldDefIdentifier] = $field;
+                $fields[$field->fieldDefIdentifier][$contentCreateStruct->mainLanguageCode] = $field;
             }
 
             $languageCodes[] = $field->languageCode;
@@ -519,7 +519,6 @@ class ContentService implements ContentServiceInterface
         $languageCodes = array_unique( $languageCodes );
 
         $spiFields = array();
-        /** @var $failedValidators \eZ\Publish\Core\Repository\FieldType\Validator[] */
         $failedValidators = array();
         foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
@@ -529,74 +528,38 @@ class ContentService implements ContentServiceInterface
 
             foreach ( $languageCodes as $languageCode )
             {
-                unset( $field );
-
-                if ( $fieldDefinition->isTranslatable )
+                if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
                 {
-                    if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
-                    {
-                        $field = $fields[$fieldDefinition->identifier][$languageCode];
-                    }
-                }
-                elseif ( isset( $fields[$fieldDefinition->identifier] ) )
-                {
-                    $field = $fields[$fieldDefinition->identifier];
-                }
-
-                if ( isset( $field ) )
-                {
-                    $fieldValue = $fieldType->acceptValue(
-                        $field->value instanceof Value ?
+                    $field = $fields[$fieldDefinition->identifier][$languageCode];
+                    $fieldValue = $field->value instanceof Value ?
                             $field->value :
-                            $fieldType->buildValue( $field->value )
-                    );
-
-                    if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
-                    {
-                        throw new ContentValidationException( '@TODO: What error code should be used?' );
-                    }
-
-                    $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
-                    if ( count( $failedValidators ) ) continue;
-
-                    $spiFields[] = new SPIField(
-                        array(
-                            // @TODO: is id really needed here?
-                            "id"                => $field->id,
-                            "fieldDefinitionId" => $field->fieldDefIdentifier,
-                            "type"              => $fieldDefinition->fieldTypeIdentifier,
-                            "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                            "languageCode"      => $languageCode,
-                            "versionNo"         => null
-                        )
-                    );
+                            $fieldType->buildValue( $field->value );
                 }
                 else
                 {
-                    $fieldValue = $fieldType->buildValue(
-                        $fieldDefinition->defaultValue
-                    );
-                    $fieldValue = $fieldType->acceptValue( $fieldValue );
-
-                    if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
-                    {
-                        throw new ContentValidationException( '@TODO: What error code should be used?' );
-                    }
-
-                    $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
-                    if ( count( $failedValidators ) ) continue;
-
-                    $spiFields[] = new SPIField(
-                        array(
-                            "id"                => null,
-                            "fieldDefinitionId" => $fieldDefinition->identifier,
-                            "type"              => $fieldDefinition->fieldTypeIdentifier,
-                            "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                            "languageCode"      => $languageCode,
-                            "versionNo"         => null
-                        )
-                    );
+                    $fieldValue = $fieldType->buildValue( $fieldDefinition->defaultValue );
                 }
+
+                $fieldValue = $fieldType->acceptValue( $fieldValue );
+
+                if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
+                {
+                    throw new ContentValidationException( '@TODO: What error code should be used?' );
+                }
+
+                $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
+                if ( count( $failedValidators ) ) continue;
+
+                $spiFields[] = new SPIField(
+                    array(
+                        "id"                => null,
+                        "fieldDefinitionId" => $fieldDefinition->identifier,
+                        "type"              => $fieldDefinition->fieldTypeIdentifier,
+                        "value"             => $fieldType->toPersistenceValue( $fieldValue ),
+                        "languageCode"      => $languageCode,
+                        "versionNo"         => null
+                    )
+                );
             }
         }
 
@@ -858,8 +821,12 @@ class ContentService implements ContentServiceInterface
         if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
             throw new BadStateException( "\$versionInfo", "version is not a draft" );
 
+        $content = $this->loadContent(
+            $versionInfo->id,
+            null,
+            $versionInfo->status
+        );
         $fields = array();
-        $languageCodes = array( $contentUpdateStruct->initialLanguageCode );
         $contentType = $versionInfo->getContentInfo()->getContentType();
 
         foreach ( $contentUpdateStruct->fields as $field )
@@ -877,58 +844,66 @@ class ContentService implements ContentServiceInterface
                         "Language code is missing on a field for translatable field definition '{$field->fieldDefIdentifier}'"
                     );
 
+                if ( !in_array( $field->languageCode, $versionInfo->languageCodes ) )
+                    throw new ContentValidationException(
+                        "Content draft does not contain language with code '{$field->languageCode}'"
+                    );
+
                 if ( isset( $fields[$field->fieldDefIdentifier][$field->languageCode] ) )
                     throw new ContentValidationException(
-                        "More than one field is given for translatable field definition '{$field->fieldDefIdentifier}' on language '{$field->languageCode}'"
+                        "More than one field is given for translatable field definition '{$field->fieldDefIdentifier}' on language with code '{$field->languageCode}'"
                     );
 
                 $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
             }
             else
             {
-                if ( isset( $fields[$field->fieldDefIdentifier] ) )
+                if ( isset( $fields[$field->fieldDefIdentifier][$versionInfo->initialLanguageCode] ) )
                     throw new ContentValidationException(
                         "More than one field is given for untranslatable field definition '{$field->fieldDefIdentifier}'"
                     );
 
-                $fields[$field->fieldDefIdentifier] = $field;
+                $fields[$field->fieldDefIdentifier][$versionInfo->initialLanguageCode] = $field;
             }
-
-            $languageCodes[] = $field->languageCode;
         }
 
-        $languageCodes = array_unique( $languageCodes );
-
         $spiFields = array();
-        /** @var $failedValidators \eZ\Publish\Core\Repository\FieldType\Validator[] */
         $failedValidators = array();
-        foreach ( $fields as $fieldDefinitionId => $field )
+        foreach ( $fields as $fieldDefIdentifier => $languageFields )
         {
-            $fieldValue = $fieldType->acceptValue(
-                $field->value instanceof Value ?
-                    $field->value :
-                    $fieldType->buildValue( $field->value )
+            $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
+            $fieldType = $this->repository->getContentTypeService()->buildFieldType(
+                $fieldDefinition->fieldTypeIdentifier
             );
 
-            if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
+            foreach ( $languageFields as $languageCode => $field )
             {
-                throw new ContentValidationException( '@TODO: What error code should be used?' );
+                $contentField = $content->getField( $fieldDefIdentifier, $languageCode );
+                $fieldValue = $fieldType->acceptValue(
+                    $field->value instanceof Value ?
+                        $field->value :
+                        $fieldType->buildValue( $field->value )
+                );
+
+                if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
+                {
+                    throw new ContentValidationException( '@TODO: What error code should be used?' );
+                }
+
+                $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
+                if ( count( $failedValidators ) ) continue;
+
+                $spiFields[] = new SPIField(
+                    array(
+                        "id"                => $contentField->id,
+                        "fieldDefinitionId" => $field->fieldDefIdentifier,
+                        "type"              => $fieldDefinition->fieldTypeIdentifier,
+                        "value"             => $fieldType->toPersistenceValue( $fieldValue ),
+                        "languageCode"      => $languageCode,
+                        "versionNo"         => $versionInfo->versionNo
+                    )
+                );
             }
-
-            $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
-            if ( count( $failedValidators ) ) continue;
-
-            $spiFields[] = new SPIField(
-                array(
-                    // @TODO: is id really needed here?
-                    "id"                => $field->id,
-                    "fieldDefinitionId" => $field->fieldDefIdentifier,
-                    "type"              => $fieldDefinition->fieldTypeIdentifier,
-                    "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                    "languageCode"      => $languageCode,
-                    "versionNo"         => null
-                )
-            );
         }
 
         if ( count( $failedValidators ) )
@@ -1432,9 +1407,9 @@ class ContentService implements ContentServiceInterface
         return new Content(
             array(
                 "repository"               => $this->repository,
-                "contentId"                => $spiContent->contentInfo->contentId,
-                "contentTypeId"            => $spiContent->contentInfo->contentTypeId,
-                "fields"                   => $fields,
+                "contentId"                => $spiContent->id,
+                "contentTypeId"            => $spiContent->typeId,
+                "internalFields"           => $fields,
                 // @TODO: implement loadRelations()
                 //"relations"                => $this->loadRelations( $versionInfo )
             )
@@ -1482,7 +1457,7 @@ class ContentService implements ContentServiceInterface
                 "repository"               => $this->repository,
                 "contentId"                => $spiVersion->contentId,
                 "contentTypeId"            => $contentTypeId,
-                "fields"                   => $spiVersion->fields,
+                "internalFields"           => $spiVersion->fields,
                 // @TODO: implement loadRelations()
                 //"relations"                => $this->loadRelations( $versionInfo )
             )
