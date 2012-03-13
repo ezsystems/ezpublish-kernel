@@ -361,7 +361,7 @@ XML Example
     Content-Type: application/vnd.ez.api.ContentCreate+xml
     Content-Length: xxx
 
-    <ContentCreate>
+    <ContentCreate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <ContentType href="/content/types/10"/>
       <mainLanguageCode>eng-US</mainLanguageCode>
       <LocationCreate>
@@ -378,17 +378,17 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value xsi:type="anyType">This is a title</value>
+          <value xsi:type="xsd:string">This is a title</value>
         </field>
         <field>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value xsi:type="anyType">This is a summary</value>
+          <value xsi:type="xsd:string">This is a summary</value>
         </field>
         <field>
           <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value xsi:type="anyType">
+          <value xsi:type="authorsInputType">
             <authors>
               <author name="John Doe" email="john.doe@example.net"/>
               <author name="Bruce Willis" email="bruce.willis@example.net"/>
@@ -407,7 +407,7 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Content href="/content/objects/23" id="23"
-      media-type="application/vnd.ez.api.Content+xml" remoteId="remoteId12345678">
+      media-type="application/vnd.ez.api.Content+xml" remoteId="remoteId12345678" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
       <Name>This is a title</Name>
       <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
@@ -429,21 +429,21 @@ XML Example
               <id>1234</id>
               <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
               <languageCode>eng-UK</languageCode>
-              <value>This is a title</value>
+              <value xsi:type="xsd:string">This is a title</value>
             </field>
             <field>
               <id>1235</id>
               <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
               <languageCode>eng-UK</languageCode>
-              <value>This is a summary</value>
+              <value xsi:type="xsd:string">This is a summary</value>
             </field>
             <field>
               <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
               <languageCode>eng-US</languageCode>
-              <value>
+              <value xsi:type="authorsType">
                 <authors>
-                  <author name="John Doe" email="john.doe@example.net" />
-                  <author name="Bruce Willis" email="bruce.willis@example.net" />
+                  <author id="1" name="John Doe" email="john.doe@example.net" />
+                  <author id="2" name="Bruce Willis" email="bruce.willis@example.net" />
                 </authors>
               </value>
             </field>
@@ -1001,7 +1001,8 @@ XML Example
     Content-Length: xxx
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+    <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <VersionInfo>
         <id>45</id>
         <versionNo>4</versionNo>
@@ -1020,18 +1021,18 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>Titel</value>
+          <value xsi:type="xsd:string">Titel</value>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>Dies ist eine Zusammenfassungy</value>
+          <value xsi:type="xsd:string">Dies ist eine Zusammenfassungy</value>
         </field>
         <field>
           <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>
+          <value xsi:type="autorsType">
             <authors>
               <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
             </authors>
@@ -1104,13 +1105,13 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>Neuer Titel</value>
+          <value xsi:type="xsd:string">Neuer Titel</value>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>Dies ist eine neue Zusammenfassungy</value>
+          <value xsi:type="xsd:string">Dies ist eine neue Zusammenfassungy</value>
         </field>
       </fields>
     </VersionUpdate>
@@ -1141,18 +1142,18 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>Neuer Titel</value>
+          <value xsi:type="xsd:string">Neuer Titel</value>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>Dies ist eine neuse Zusammenfassungy</value>
+          <value xsi:type="xsd:string">Dies ist eine neuse Zusammenfassungy</value>
         </field>
         <field>
           <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value>
+          <value xsi:type="authorsType">
             <authors>
               <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
             </authors>
@@ -4724,6 +4725,8 @@ Delete Policy
 Input Output Specification
 ==========================
 
+.. _Common:
+
 Common Definitions
 ------------------
 
@@ -5245,20 +5248,149 @@ Specific Field type formats
 Author
 ~~~~~~
 
+.. code:: xml
 
-Selection
-~~~~~~~~~
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:simpleType name="emailAddress">
+        <xsd:restriction base="xsd:string">
+          <xsd:pattern
+            value="^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="authorInputType">
+        <xsd:all>
+          <xsd:element name="name" type="xsd:string" />
+          <xsd:element name="email" type="emailAddress"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
 
-Keyword
-~~~~~~~
+      <xsd:complexType name="authorOutputType">
+        <xsd:all>
+          <xsd:element name="id" type="xsd:int" />
+          <xsd:element name="name" type="xsd:string" />
+          <xsd:element name="email" type="emailAddress"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="authorsInputType">
+        <xsd:all>
+          <xsd:element name="authors">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="author" type="authorInputType"
+                  maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="authorsType">
+        <xsd:all>
+          <xsd:element name="authors">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="author" type="authorOutputType"
+                  maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+
+    </xsd:schema>
+
+XML Example
+```````````
+
+::
+
+    <value xsi:type="authorsInputType">
+      <authors>
+        <author name="John Doe" email="john.doe@example.net"/>
+        <author name="Bruce Willis" email="bruce.willis@example.net"/>
+      </authors>
+    </value>
 
 
-Country
-~~~~~~~
+StringList Types
+~~~~~~~~~~~~~~~~
 
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="ISOCountryCodeType-V2006.xsd" />
+
+      <xsd:complexType name="selectionType">
+        <xsd:sequence>
+          <xsd:element name="selection" type="xsd:string"
+            maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="keywordType">
+        <xsd:sequence>
+          <xsd:element name="selection" type="xsd:string"
+            maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="countryType">
+        <xsd:sequence>
+          <xsd:element name="country" type="ISOCountryCodeType"
+            maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+     
+    </xsd:schema>
+
+XML Example
+```````````
+
+::
+
+    <value xsi:type="selectionType">
+      <selection>Selection1</selection>
+      <selection>Selection2</selection>
+    </value>
+ 
 
 RelationListInput
 ~~~~~~~~~~~~~~~~~
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+      <xsd:complexType name="relationListType">
+        <xsd:sequence>
+          <xsd:element name="relation" type="ref"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+
+    </xsd:schema>
+
+XML Example
+```````````
+
+::
+
+    <value xsi:type="relationListType">
+      <relation href="/content/objects/34" media-type="vnd.ez.api.ContentInfo+xml"/>  
+      <relation href="/content/objects/55" media-type="vnd.ez.api.ContentInfo+xml"/>  
+      <relation href="/content/objects/89" media-type="vnd.ez.api.ContentInfo+xml"/>  
+    </value>
+ 
 
 
 Binary field types 
@@ -5282,44 +5414,57 @@ Inputschema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
 
-      <xsd:complexType name="binaryFieldInput">
+      <xsd:complexType name="binaryBaseType">
         <xsd:sequence>
           <xsd:element name="originalFileName" type="xsd:string" />
         </xsd:sequence>
         <xsd:attribute name="cid" type="xsd:string" />
       </xsd:complexType>
 
-      <xsd:complexType name="imageFieldInput">
-        <xsd:complexContent>
-          <xsd:extension base="binaryFieldInput">
-            <xsd:sequence>
-              <xsd:element name="alternativeText" type="xsd:string" />
-            </xsd:sequence>
-          </xsd:extension>
-        </xsd:complexContent>
+      <xsd:complexType name="fileFieldInputType">
+        <xsd:all>
+          <xsd:element name="file" type="binaryBaseType">
+          </xsd:element>
+        </xsd:all>
       </xsd:complexType>
 
-      <xsd:complexType name="mediaFieldInput">
-        <xsd:complexContent>
-          <xsd:extension base="binaryFieldInput">
-            <xsd:sequence>
-              <xsd:element name="width" type="xsd:int" />
-              <xsd:element name="height" type="xsd:int" />
-              <xsd:element name="controller" type="xsd:boolean" />
-              <xsd:element name="autoplay" type="xsd:boolean" />
-              <xsd:element name="loop" type="xsd:boolean" />
-            </xsd:sequence>
-          </xsd:extension>
-        </xsd:complexContent>
+      <xsd:complexType name="imageFieldInputType">
+        <xsd:all>
+          <xsd:element name="image">
+            <xsd:complexType>
+              <xsd:complexContent>
+                <xsd:extension base="binaryBaseType">
+                  <xsd:sequence>
+                    <xsd:element name="alternativeText" type="xsd:string" />
+                  </xsd:sequence>
+                </xsd:extension>
+              </xsd:complexContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
       </xsd:complexType>
-      
-      
-      <xsd:element name="fileInput" type="binaryFieldInput"/>
-      <xsd:element name="imageInput" type="imageFieldInput"/>
-      <xsd:element name="mediaInput" type="mediaFieldInput"/>
-      
+
+      <xsd:complexType name="mediaFieldInputType">
+        <xsd:all>
+          <xsd:element name="media">
+            <xsd:complexType>
+              <xsd:complexContent>
+                <xsd:extension base="binaryBaseType">
+                  <xsd:sequence>
+                    <xsd:element name="width" type="xsd:int" />
+                    <xsd:element name="height" type="xsd:int" />
+                    <xsd:element name="controller" type="xsd:boolean" />
+                    <xsd:element name="autoplay" type="xsd:boolean" />
+                    <xsd:element name="loop" type="xsd:boolean" />
+                  </xsd:sequence>
+                </xsd:extension>
+              </xsd:complexContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+
     </xsd:schema>
-
 
 XML Example
 '''''''''''
@@ -5333,11 +5478,11 @@ XML Example
              type="application/vnd.ez.api.ContentCreate+xml"
     Content-Length: xxx
 
-    <ContentCreate>
-      <ContentType href="/content/types/10"/>
+    <ContentCreate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <ContentType href="/content/types/54"/>
       <mainLanguageCode>eng-US</mainLanguageCode>
       <LocationCreate>
-        <ParentLocation href="/content/locations/1/4/89" />
+        <ParentLocation href="/content/locations/1/4/163" />
         <priority>0</priority>
         <hidden>false</hidden>
         <sortField>PATH</sortField>
@@ -5355,7 +5500,7 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>file</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>
+          <value xsi:type="fileFieldInputType">
             <file cid="cid12345678">
               <originalFileName>test.bin</file>
             </file>  
@@ -5364,7 +5509,7 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>image</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>
+          <value xsi:type="imageFieldInputType">
             <image cid="cid12345679">
               <originalFileName>image.png</file>
               <alternativeText>An image</alternativeText>
@@ -5374,7 +5519,7 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>swf</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>
+          <value xsi:type="mediaFieldInputType">
             <media cid="cid12345680">
               <originalFileName>test.swf</file>
               <width>2400</width>
@@ -5411,8 +5556,13 @@ XML Example
     Content-ID: cid12345680
     
     [encoded swf]
-    --ezboundar0001--
+    --ezboundary0001--
  
+Retrieving Binary Types
+```````````````````````
+
+
+
 
 
 

@@ -38,7 +38,16 @@
     <xsd:all>
       <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
       <xsd:element name="languageCode" type="xsd:string" />
-      <xsd:element name="value" type="xsd:anyType" />
+      <xsd:element name="value" type="xsd:anyType"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldValueType">
+    <xsd:all>
+      <xsd:element name="id" type="xsd:integer" />
+      <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+      <xsd:element name="languageCode" type="xsd:string" />
+      <xsd:element name="value" type="xsd:anyType"/>
     </xsd:all>
   </xsd:complexType>
 
