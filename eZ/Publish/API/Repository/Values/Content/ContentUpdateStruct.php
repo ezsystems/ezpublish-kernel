@@ -8,7 +8,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 abstract class ContentUpdateStruct extends ValueObject
 {
- 
     /**
      * The language code of the version. In 4.x this code will be used as the language code of the translation
      * (which is shown in the admin interface).
