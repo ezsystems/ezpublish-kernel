@@ -1238,15 +1238,17 @@ class ContentService implements ContentServiceInterface
 
         $sourceContentInfo = $sourceVersion->getContentInfo();
 
-        $relationCreateStruct = new SPIRelationCreateStruct();
-        $relationCreateStruct->sourceContentId = $sourceContentInfo->contentId;
-        $relationCreateStruct->sourceContentVersionNo = $sourceVersion->versionNo;
-        // we create the relation of type Relation::COMMON, no need for field definition ID
-        $relationCreateStruct->sourceFieldDefinitionId = null;
-        $relationCreateStruct->destinationContentId = $destinationContent->contentId;
-        $relationCreateStruct->type = APIRelation::COMMON;
-
-        $spiRelation = $this->persistenceHandler->contentHandler()->addRelation( $relationCreateStruct );
+        $spiRelation = $this->persistenceHandler->contentHandler()->addRelation(
+            new SPIRelationCreateStruct(
+                array(
+                    'sourceContentId'         => $sourceContentInfo->contentId,
+                    'sourceContentVersionNo'  => $sourceVersion->versionNo,
+                    'sourceFieldDefinitionId' => null,
+                    'destinationContentId'    => $destinationContent->contentId,
+                    'type'                    => APIRelation::COMMON
+                )
+            )
+        );
 
         return $this->buildRelationDomainObject( $spiRelation, $sourceContentInfo, $destinationContent );
     }
