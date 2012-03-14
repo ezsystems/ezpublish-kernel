@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Repository\FieldType\BinaryFile;
 use eZ\Publish\Core\Repository\FieldType,
     eZ\Publish\API\Repository\Repository,
-    ezp\Base\Exception\InvalidArgumentType,
-    ezp\Base\Exception\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
@@ -78,8 +78,8 @@ class Type extends FieldType
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
      * @param \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value $inputValue
      *

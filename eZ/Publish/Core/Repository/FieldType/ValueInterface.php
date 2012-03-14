@@ -18,11 +18,11 @@ interface ValueInterface
     /**
      * Initializes the field value with a simple string.
      * It's up to the field value to define $stringValue format.
-     * If $stringValue format is not supported, an {@link \ezp\Base\Exception\InvalidArgumentValue} exception should be thrown.
+     * If $stringValue format is not supported, an {@link \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException} exception should be thrown.
      *
      * @param string $stringValue
      * @return \eZ\Publish\Core\Repository\FieldType\Value Instance of the field value
-     * @throws \ezp\Base\Exception\InvalidArgumentValue
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @todo Change / remove as this is impossible with injection of dependecies
      */

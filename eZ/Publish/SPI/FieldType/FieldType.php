@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\SPI\FieldType;
 
-use ezp\Content\Field,
+use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Repository,
-    ezp\Content\Type\FieldDefinition,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
@@ -33,8 +33,8 @@ interface FieldType
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
-     * @param \ezp\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
     public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field );
 
@@ -75,8 +75,8 @@ interface FieldType
      *
      * @todo Implementing this in all FieldTypes
      *
-     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
-     * @param \ezp\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
     //public function validate( FieldDefinition $fieldDef, Field $field );
 
@@ -98,8 +98,8 @@ interface FieldType
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
      * @param mixed $inputValue
      *

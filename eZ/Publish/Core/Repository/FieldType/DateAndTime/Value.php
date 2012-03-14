@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Repository\FieldType\DateAndTime;
 use eZ\Publish\Core\Repository\FieldType\ValueInterface,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\InvalidArgumentType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     Exception,
     DateTime;
 
@@ -38,8 +38,8 @@ class Value extends BaseValue implements ValueInterface
      * Construct a new Value object and initialize with $dateTime
      *
      * @param \DateTime|string $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
-     * @throws \ezp\Base\Exception\InvalidArgumentType If $dateTime does not comply to a valid dateTime or string
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $dateTime does not comply to a valid date format string
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid dateTime or string
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid date format string
      */
     public function __construct( $dateTime = "now" )
     {
@@ -67,7 +67,7 @@ class Value extends BaseValue implements ValueInterface
     /**
      * @param string $stringValue A valid date/time string.
      *                            Valid formats are explained in {@link http://php.net/manual/en/datetime.formats.php Date and Time Formats}.
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $stringValue does not comply a valid date format
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $stringValue does not comply a valid date format
      * @return \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value
      * @see \eZ\Publish\Core\Repository\FieldType\Value
      */

@@ -101,13 +101,7 @@ class Value extends BaseValue implements ValueInterface
                 return basename( $this->file->id );
 
             case 'mimeType':
-                return $this->file->contentType->__toString();
-
-            case 'mimeTypeCategory':
-                return $this->file->contentType->type;
-
-            case 'mimeTypePart':
-                return $this->file->contentType->subType;
+                return $this->file->contentType;
 
             case 'filesize':
                 return $this->file->size;

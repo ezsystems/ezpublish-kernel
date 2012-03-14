@@ -33,7 +33,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group selection
      * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidFormat()
     {

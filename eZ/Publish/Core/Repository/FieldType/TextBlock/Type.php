@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\TextBlock;
 use eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The TextBlock field type.
@@ -61,8 +61,8 @@ class Type extends TextLine
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
      * @param \eZ\Publish\Core\Repository\FieldType\TextBlock\Value $inputValue
      *

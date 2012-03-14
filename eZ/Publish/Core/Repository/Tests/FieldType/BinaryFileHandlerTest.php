@@ -11,7 +11,9 @@ namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
     ezp\Io\SysInfo,
     ezp\Io\FileInfo,
-    ezp\Base\BinaryRepository,
+    eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
+    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -40,10 +42,10 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        BinaryRepository::setOverrideOptions( 'inmemory' );
+        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $this->imagePath = __DIR__ . '/squirrel-developers.jpg';
         $this->imageFileInfo = new FileInfo( $this->imagePath );
-        $this->handler = new BinaryFileHandler;
+        $this->handler = new BinaryFileHandler( $repository->getIOService() );
     }
 
     /**
@@ -54,22 +56,6 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
     public function testCreateFromLocalPath()
     {
         $file = $this->handler->createFromLocalPath( $this->imagePath );
-        self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $file );
-
-        $pathPattern = '#^' . SysInfo::storageDirectory() . '/original/' .
-                       $this->imageFileInfo->getContentType()->type .
-                       '/[a-z0-9]{32}.' . $this->imageFileInfo->getExtension() . '$#';
-        self::assertRegExp( $pathPattern, $file->path );
-        self::assertSame( $file->originalFile, $this->imageFileInfo->getBasename() );
-    }
-
-    /**
-     * @group fieldType
-     * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler::getBinaryRepository
-     */
-    public function testGetBinaryRepository()
-    {
-        self::assertInstanceOf( 'ezp\\Base\\BinaryRepository', $this->handler->getBinaryRepository() );
+        self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFile', $file );
     }
 }

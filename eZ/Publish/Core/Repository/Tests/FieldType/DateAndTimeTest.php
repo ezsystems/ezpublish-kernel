@@ -65,7 +65,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
-     * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group dateTime
      */
@@ -80,7 +80,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group dateTime
      */
@@ -178,7 +178,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::fromString
      */
     public function testBuildFieldValueFromInvalidString()

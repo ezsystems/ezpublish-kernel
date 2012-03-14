@@ -8,14 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use ezp\Content\Field,
+use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Repository as BaseRepository,
     eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    ezp\Content\Type\FieldDefinition,
-    ezp\Base\Exception\InvalidArgumentType;
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -74,8 +74,8 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
-     * @param \ezp\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
     public function handleEvent( $event, BaseRepository $repository, FieldDefinition $fieldDef, Field $field )
     {
@@ -144,7 +144,7 @@ abstract class FieldType implements FieldTypeInterface
     {
         $validatorClass = get_class( $validator );
         if ( !in_array( $validatorClass, $this->allowedValidators() ) )
-            throw new InvalidArgumentType( '$validator', implode( ', ', $this->allowedValidators() ) );
+            throw new InvalidArgumentException( '$validator', implode( ', ', $this->allowedValidators() ) );
 
         $fieldTypeConstraints->validators = array(
             $validatorClass => $validator->getValidatorConstraints()

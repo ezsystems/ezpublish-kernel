@@ -30,7 +30,7 @@ class AliasCollection extends TypeCollection
     protected $imageValue;
 
     /**
-     * @var \ezp\Base\BinaryRepository
+     * @var \eZ\Publish\API\Repository\IOService
      */
     protected $IOService;
 

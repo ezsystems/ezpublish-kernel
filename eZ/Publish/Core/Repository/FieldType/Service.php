@@ -35,7 +35,7 @@ class Service extends BaseService
      *                           id we are relating to.
      * @param null|mixed $fieldDefinitionId The id of the field definition that
      *                                      holds the attribute level relation.
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $relationType has an unsupported value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $relationType has an unsupported value
      * @throws \ezp\Base\Exception\Logic If there is a mismatch between $relationType and provided values.
      * @return \ezp\Content\Relation
      */

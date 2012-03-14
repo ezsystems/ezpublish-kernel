@@ -8,19 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
-use ezp\Content\Field,
-    ezp\Content\Version,
+use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\Core\Repository\FieldType,
-    ezp\Content\Type\FieldDefinition,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\InvalidArgumentType;
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * XmlBlock field type.
- *
- * This field
- * @package
  */
 class Type extends FieldType
 {
@@ -81,8 +77,8 @@ EOF;
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
      * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $inputValue
      *
@@ -92,7 +88,8 @@ EOF;
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' );
+            // @todo Consider adding a InvalidArgumentType exception
+            throw new InvalidArgumentException( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' );
         }
 
         if ( !is_string( $inputValue->text ) )
@@ -113,7 +110,9 @@ EOF;
     /**
      * Returns sortKey information
      *
-     * @see eZ\Publish\Core\Repository\FieldType
+     * @see \eZ\Publish\Core\Repository\FieldType
+     *
+     * @param mixed $value
      *
      * @return array|bool
      */
@@ -127,7 +126,7 @@ EOF;
      *
      * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \ezp\Content\Field $field
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      *
      * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
@@ -138,6 +137,7 @@ EOF;
         //    return $value;
 
         $handler = $value->getInputHandler( $value );
+        throw new \RuntimeException( '@todo XMLText has a dependency on version id and version number, after refactoring that is not available' );
         $handler->process( $value->text, $repository, $field->version );
 
         $value->setRawText( $handler->getDocumentAsXml() );
@@ -148,8 +148,8 @@ EOF;
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \ezp\Content\Type\FieldDefinition $fieldDef The field definition of the field
-     * @param \ezp\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
     public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field )
     {

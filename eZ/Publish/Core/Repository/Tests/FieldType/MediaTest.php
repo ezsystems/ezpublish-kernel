@@ -11,8 +11,10 @@ namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
     eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
     eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
-    ezp\Io\FileInfo,
-    ezp\Base\BinaryRepository,
+    eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
+    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
+    SplFileInfo as FileInfo,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -26,14 +28,19 @@ class MediaTest extends PHPUnit_Framework_TestCase
 
     /**
      * FileInfo object for test image
-     * @var \ezp\Io\FileInfo
+     * @var \splFileInfo
      */
     protected $mediaFileInfo;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
 
     protected function setUp()
     {
         parent::setUp();
-        BinaryRepository::setOverrideOptions( 'inmemory' );
+        $this->repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
         $this->mediaFileInfo = new FileInfo( $this->mediaPath );
     }
@@ -45,7 +52,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testMediaSupportedValidators()
     {
-        $ft = new MediaType;
+        $ft = new MediaType( $this->repository );
         self::assertSame(
             array( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator' ),
             $ft->allowedValidators(),
@@ -60,7 +67,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testMediaAllowedSettings()
     {
-        $ft = new MediaType;
+        $ft = new MediaType( $this->repository );
         self::assertSame(
             array( 'mediaType' ),
             $ft->allowedSettings(),
@@ -70,14 +77,14 @@ class MediaTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezmedia
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new MediaType;
-        $invalidValue = new MediaValue;
+        $ft = new MediaType( $this->repository );
+        $invalidValue = $ft->getDefaultDefaultValue();
         $invalidValue->file = 'This is definitely not a binary file !';
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
@@ -87,13 +94,13 @@ class MediaTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
-     * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezmedia
      */
     public function testAcceptInvalidValue()
     {
-        $ft = new MediaType;
+        $ft = new MediaType( $this->repository );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -107,26 +114,13 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new MediaType;
+        $ft = new MediaType( $this->repository );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
 
-        $handler = new MediaHandler;
-        $value = new MediaValue;
-        $value->file = $handler->createFromLocalPath( $this->mediaPath );
+        $value = $ft->buildValue( $this->mediaPath );
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
-    }
-
-    /**
-     * @group fieldType
-     * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::getHandler
-     */
-    public function testValueGetHandler()
-    {
-        $value = new MediaValue;
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Handler', $value->getHandler() );
     }
 
     /**
@@ -136,9 +130,10 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildFieldValueFromString()
     {
-        $value = MediaValue::fromString( $this->mediaPath );
+        $ft = new MediaType( $this->repository );
+        $value = $ft->buildValue( $this->mediaPath );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Value', $value );
-        self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $value->file );
+        self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFile', $value->file );
         self::assertSame( $this->mediaFileInfo->getBasename(), $value->originalFilename );
         self::assertSame( $value->originalFilename, $value->file->originalFile );
     }
@@ -150,8 +145,9 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testFieldValueToString()
     {
-        $value = MediaValue::fromString( $this->mediaPath );
-        self::assertSame( $value->file->path, (string)$value );
+        $ft = new MediaType( $this->repository );
+        $value = $ft->buildValue( $this->mediaPath );
+        self::assertSame( $value->file->id, (string)$value );
     }
 
     /**
@@ -163,13 +159,10 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testVirtualLegacyProperty()
     {
-        $value = MediaValue::fromString( $this->mediaPath );
-        self::assertSame( basename( $value->file->path ), $value->filename );
-        self::assertSame( $value->file->contentType->__toString(), $value->mimeType );
-        self::assertSame( $value->file->contentType->type, $value->mimeTypeCategory );
-        self::assertSame( $value->file->contentType->subType, $value->mimeTypePart );
-        self::assertSame( $value->file->path, $value->filepath );
-        self::assertSame( $value->file->size, $value->filesize );
+        $ft = new MediaType( $this->repository );
+        $value = $ft->buildValue( $this->mediaPath );
+        self::assertSame( basename( $value->file->id ), $value->filename );
+        self::assertSame( $value->file->contentType, $value->mimeType );
     }
 
     /**
@@ -180,7 +173,8 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidVirtualProperty()
     {
-        $value = MediaValue::fromString( $this->mediaPath );
+        $ft = new MediaType( $this->repository );
+        $value = $ft->buildValue( $this->mediaPath );
         $value->nonExistingProperty;
     }
 }

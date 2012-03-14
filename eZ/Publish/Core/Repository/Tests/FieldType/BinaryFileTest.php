@@ -11,8 +11,10 @@ namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\BinaryFile\Type as BinaryFileType,
     eZ\Publish\Core\Repository\FieldType\BinaryFile\Value as BinaryFileValue,
     eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
-    ezp\Io\FileInfo,
-    ezp\Base\BinaryRepository,
+    eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
+    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
+    SplFileInfo as FileInfo,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -26,14 +28,19 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
 
     /**
      * FileInfo object for test image
-     * @var \ezp\Io\FileInfo
+     * @var \splFileInfo
      */
     protected $imageFileInfo;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
 
     protected function setUp()
     {
         parent::setUp();
-        BinaryRepository::setOverrideOptions( 'inmemory' );
+        $this->repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $this->imagePath = __DIR__ . '/squirrel-developers.jpg';
         $this->imageFileInfo = new FileInfo( $this->imagePath );
     }
@@ -45,7 +52,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      */
     public function testBinaryFileSupportedValidators()
     {
-        $ft = new BinaryFileType;
+        $ft = new BinaryFileType( $this->repository );
         self::assertSame(
             array( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator' ),
             $ft->allowedValidators(),
@@ -55,14 +62,14 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
-     * @expectedException ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group binaryFile
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new BinaryFileType;
-        $invalidValue = new BinaryFileValue;
+        $ft = new BinaryFileType( ( $this->repository ) );
+        $invalidValue = $ft->getDefaultDefaultValue();
         $invalidValue->file = 'This is definitely not a binary file !';
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
@@ -72,13 +79,13 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
-     * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group binaryFile
      */
     public function testAcceptInvalidValue()
     {
-        $ft = new BinaryFileType;
+        $ft = new BinaryFileType( $this->repository );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -92,26 +99,13 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new BinaryFileType;
+        $ft = new BinaryFileType( $this->repository );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
 
-        $handler = new BinaryFileHandler;
-        $value = new BinaryFileValue;
-        $value->file = $handler->createFromLocalPath( $this->imagePath );
+        $value = $ft->buildValue( $this->imagePath );
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
-    }
-
-    /**
-     * @group fieldType
-     * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::getHandler
-     */
-    public function testValueGetHandler()
-    {
-        $value = new BinaryFileValue;
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\Handler', $value->getHandler() );
     }
 
     /**
@@ -121,9 +115,10 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildFieldValueFromString()
     {
-        $value = BinaryFileValue::fromString( $this->imagePath );
+        $ft = new BinaryFileType( $this->repository );
+        $value = $ft->buildValue( $this->imagePath );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\Value', $value );
-        self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $value->file );
+        self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFile', $value->file );
         self::assertSame( $this->imageFileInfo->getBasename(), $value->originalFilename );
         self::assertSame( $value->originalFilename, $value->file->originalFile );
     }
@@ -135,8 +130,9 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      */
     public function testFieldValueToString()
     {
-        $value = BinaryFileValue::fromString( $this->imagePath );
-        self::assertSame( $value->file->path, (string)$value );
+        $ft = new BinaryFileType( $this->repository );
+        $value = $ft->buildValue( $this->imagePath );
+        self::assertSame( $value->file->id, (string)$value );
     }
 
     /**
@@ -148,12 +144,11 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      */
     public function testVirtualLegacyProperty()
     {
-        $value = BinaryFileValue::fromString( $this->imagePath );
-        self::assertSame( basename( $value->file->path ), $value->filename );
-        self::assertSame( $value->file->contentType->__toString(), $value->mimeType );
-        self::assertSame( $value->file->contentType->type, $value->mimeTypeCategory );
-        self::assertSame( $value->file->contentType->subType, $value->mimeTypePart );
-        self::assertSame( $value->file->path, $value->filepath );
+        $ft = new BinaryFileType( $this->repository );
+        $value = $ft->buildValue( $this->imagePath );
+        self::assertSame( basename( $value->file->id ), $value->filename );
+        self::assertSame( $value->file->contentType, $value->mimeType );
+        self::assertSame( $value->file->id, $value->filepath );
         self::assertSame( $value->file->size, $value->filesize );
     }
 
@@ -165,7 +160,8 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidVirtualProperty()
     {
-        $value = BinaryFileValue::fromString( $this->imagePath );
+        $ft = new BinaryFileType( $this->repository );
+        $value = $ft->buildValue( $this->imagePath );
         $value->nonExistingProperty;
     }
 }

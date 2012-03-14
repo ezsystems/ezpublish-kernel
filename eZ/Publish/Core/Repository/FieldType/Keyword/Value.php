@@ -54,7 +54,7 @@ class Value extends BaseValue implements ValueInterface
      * @param string $stringValue A comma separated list of tags, eg: "php, eZ Publish, html5"
      *                            Space after comma is optional, each tag is trimmed to remove it.
      * @return \eZ\Publish\Core\Repository\FieldType\Keyword\Value Instance of the keyword value
-     * @throws \ezp\Base\Exception\InvalidArgumentValue
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public static function fromString( $stringValue )
     {

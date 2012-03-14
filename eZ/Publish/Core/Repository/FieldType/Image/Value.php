@@ -16,6 +16,10 @@ use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
  * Value for Image field type
  *
  * @todo Rewrite image fieldtype
+ *
+ * @property string $filename The name of the file in the eZ publish var directory
+ *                            (for example "44b963c9e8d1ffa80cbb08e84d576735.avi").
+ * @property string $mimeType
  */
 class Value extends BaseValue implements ValueInterface
 {
@@ -101,16 +105,10 @@ class Value extends BaseValue implements ValueInterface
         switch ( $name )
         {
             case 'filename':
-                return basename( $this->file->path );
+                return basename( $this->file->id );
 
             case 'mimeType':
-                return $this->file->contentType->__toString();
-
-            case 'mimeTypeCategory':
-                return $this->file->contentType->type;
-
-            case 'mimeTypePart':
-                return $this->file->contentType->subType;
+                return $this->file->contentType;
 
             case 'filesize':
                 return $this->file->size;

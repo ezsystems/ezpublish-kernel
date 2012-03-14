@@ -17,21 +17,21 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
  * @use: throw new InvalidArgument( 'nodes', 'array' );
  *
  */
-class InvalidArgumentValue extends InvalidArgumentException
+class InvalidArgumentType extends InvalidArgumentException
 {
     /**
-     * Generates: "Argument '{$argumentName}' is invalid: '{$value}' is wrong value[ in class '{$className}']"
+     * Generates: "Argument '{$argumentName}' is invalid: '{$expectedType}' is wrong type[ in class '{$className}']"
      *
      * @param string $argumentName
-     * @param mixed $value
+     * @param string $expectedType
      * @param string|null $className Optionally to specify class in abstract/parent classes
      * @param \Exception|null $previous
      */
-    public function __construct( $argumentName, $value, $className = null, Exception $previous = null )
+    public function __construct( $argumentName, $expectedType, $className = null, Exception $previous = null )
     {
         parent::__construct(
             $argumentName,
-            "'" . var_export( $value, true ) . "' is wrong value" .( $className ? " in class '{$className}'" : "" ),
+            "'{$expectedType}' is wrong type" .( $className ? " in class '{$className}'" : "" ),
             $previous
         );
     }

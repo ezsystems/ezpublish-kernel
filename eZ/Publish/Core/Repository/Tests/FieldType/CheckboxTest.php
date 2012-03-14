@@ -47,7 +47,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
-     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezboolean
      */
@@ -62,7 +62,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
-     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezboolean
      */

@@ -11,7 +11,9 @@ namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
     ezp\Io\FileInfo,
-    ezp\Base\BinaryRepository,
+    eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
+    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -40,10 +42,10 @@ class MediaHandlerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        BinaryRepository::setOverrideOptions( 'inmemory' );
+        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
         $this->mediaFileInfo = new FileInfo( $this->mediaPath );
-        $this->handler = new MediaHandler;
+        $this->handler = new MediaHandler( $repository->getIOService() );
     }
 
     /**

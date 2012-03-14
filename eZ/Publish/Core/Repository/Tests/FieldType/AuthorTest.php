@@ -53,7 +53,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
-     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidType()
     {
@@ -63,7 +63,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
-     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidFormat()
     {

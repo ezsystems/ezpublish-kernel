@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Image\Exception;
-use ezp\Base\Exception\InvalidArgumentValue,
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     Exception as PHPException;
 
 /**
