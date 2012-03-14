@@ -124,7 +124,7 @@ class Backend
         }
 
         if ( !$found )
-            throw new NotFoundException( $type, $id );
+            throw new NotFound( $type, $id );
 
         return $return;
     }
@@ -259,7 +259,7 @@ class Backend
         }
 
         if ( !$found )
-            throw new NotFoundException( $type, $match );
+            throw new NotFound( $type, $match );
     }
 
     /**

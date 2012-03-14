@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     ezp\Content\FieldType\TextLine\Value as TextLineValue;
 
 /**
