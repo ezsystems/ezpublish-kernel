@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
-use eZ\Publish\Core\Repository\FieldType,
+use eZ\Publish\Core\Repository\FieldType\FieldType,
     eZ\Publish\API\Repository\Repository,
     ezp\Content\Field,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Repository,
-    eZ\Publish\Core\Repository\FieldType,
+    eZ\Publish\Core\Repository\FieldType\FieldType,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;

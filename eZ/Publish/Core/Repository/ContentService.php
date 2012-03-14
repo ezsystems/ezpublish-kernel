@@ -39,7 +39,7 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
 
-use eZ\Publish\Core\Repository\FieldType;
+use eZ\Publish\Core\Repository\FieldType\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Value;
 
 use eZ\Publish\SPI\Persistence\Content\Version as SPIVersion;
