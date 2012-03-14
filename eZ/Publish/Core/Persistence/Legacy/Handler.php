@@ -495,7 +495,9 @@ class Handler implements HandlerInterface
                             new SortClauseHandler\LocationPriority( $db ),
                         )
                     ),
-                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() )
+                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
+                    $this->contentLanguageHandler(),
+                    $this->getLanguageMaskGenerator()
                 ),
                 $this->getContentMapper(),
                 $this->getFieldHandler()

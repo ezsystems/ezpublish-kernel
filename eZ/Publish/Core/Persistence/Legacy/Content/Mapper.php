@@ -185,6 +185,7 @@ class Mapper
             if ( !isset( $versions[$contentId][$versionId] ) )
             {
                 $versions[$contentId][$versionId] = $this->extractVersionInfoFromRow( $row, 'ezcontentobject_version_' );
+                $contentObjs[$contentId]->isPublished = $versions[$contentId][$versionId]->status == VersionInfo::STATUS_PUBLISHED;
             }
             if ( !isset( $versions[$contentId][$versionId]->names[$row['ezcontentobject_name_content_translation']] ) )
             {

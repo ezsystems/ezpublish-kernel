@@ -42,6 +42,7 @@ use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
 use eZ\Publish\Core\Repository\FieldType\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Value;
 
+use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Version as SPIVersion;
 use eZ\Publish\SPI\Persistence\Content\RestrictedVersion as SPIRestrictedVersion;
 use eZ\Publish\SPI\Persistence\ValueObject as SPIValueObject;
@@ -169,30 +170,26 @@ class ContentService implements ContentServiceInterface
      */
     protected function buildContentInfoDomainObject( SPIContent $spiContent )
     {
-        $modificationDate = new \DateTime( "@{$spiContent->modified}" );
-        $publishedDate = new \DateTime( "@{$spiContent->published}" );
-        $language = $this->persistenceHandler->contentLanguageHandler()->load(
-            $spiContent->initialLanguageId
-        );
-        $published = $spiContent->status === SPIContent::STATUS_PUBLISHED;
+        $modificationDate = new \DateTime( "@{$spiContent->contentInfo->modificationDate}" );
+        $publishedDate = new \DateTime( "@{$spiContent->contentInfo->publicationDate}" );
         $mainLocationId = count( $spiContent->locations ) ? reset( $spiContent->locations )->mainLocationId : null;
 
         return new ContentInfo(
             array(
                 "repository"       => $this->repository,
-                "contentTypeId"    => $spiContent->typeId,
+                "contentTypeId"    => $spiContent->contentInfo->contentTypeId,
 
-                "contentId"        => $spiContent->id,
-                "name"             => $spiContent->version->name[$language->languageCode],
-                "sectionId"        => $spiContent->sectionId,
-                "currentVersionNo" => $spiContent->currentVersionNo,
-                "published"        => $published,
-                "ownerId"          => $spiContent->ownerId,
+                "contentId"        => $spiContent->contentInfo->contentId,
+                "name"             => $spiContent->versionInfo->names[$spiContent->contentInfo->mainLanguageCode],
+                "sectionId"        => $spiContent->contentInfo->sectionId,
+                "currentVersionNo" => $spiContent->contentInfo->currentVersionNo,
+                "published"        => $spiContent->contentInfo->isPublished,
+                "ownerId"          => $spiContent->contentInfo->ownerId,
                 "modificationDate" => $modificationDate,
                 "publishedDate"    => $publishedDate,
-                "alwaysAvailable"  => $spiContent->alwaysAvailable,
-                "remoteId"         => $spiContent->remoteId,
-                "mainLanguageCode" => $language->languageCode,
+                "alwaysAvailable"  => $spiContent->contentInfo->isAlwaysAvailable,
+                "remoteId"         => $spiContent->contentInfo->remoteId,
+                "mainLanguageCode" => $spiContent->contentInfo->mainLanguageCode,
                 "mainLocationId"   => $mainLocationId
             )
         );
@@ -219,7 +216,7 @@ class ContentService implements ContentServiceInterface
             {
                 $versionNo = $this->persistenceHandler->searchHandler()->findSingle(
                     new CriterionContentId( $contentInfo->contentId )
-                )->currentVersionNo;
+                )->contentInfo->currentVersionNo;
             }
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(
@@ -236,7 +233,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildVersionInfoDomainObject( $spiContent->version );
+        return $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
     }
 
     /**
@@ -1239,19 +1236,17 @@ class ContentService implements ContentServiceInterface
     /**
      * Builds a VersionInfo domain object from value object returned from persistence
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\RestrictedVersion|\eZ\Publish\SPI\Persistence\Content\Version|\eZ\Publish\SPI\Persistence\ValueObject $version
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $persistenceVersionInfo
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIValueObject $version )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $persistenceVersionInfo )
     {
-        $modifiedDate = new \DateTime( "@{$version->modified}" );
-        $createdDate = new \DateTime( "@{$version->created}" );
-        $language = $this->persistenceHandler->contentLanguageHandler()->load(
-            $version->initialLanguageId
-        );
+        $modifiedDate = new \DateTime( "@{$persistenceVersionInfo->modificationDate}" );
+        $createdDate = new \DateTime( "@{$persistenceVersionInfo->creationDate}" );
+
         $languageCodes = array();
-        foreach ( $version->languageIds as $languageId )
+        foreach ( $persistenceVersionInfo->languageIds as $languageId )
         {
             $languageCodes[] = $this->persistenceHandler->contentLanguageHandler()->load(
                 $languageId
@@ -1261,14 +1256,14 @@ class ContentService implements ContentServiceInterface
         return new VersionInfo(
             array(
                 "repository"          => $this->repository,
-                "contentId"           => $version->contentId,
-                "id"                  => $version->id,
-                "versionNo"           => $version->versionNo,
+                "contentId"           => $persistenceVersionInfo->contentId,
+                "id"                  => $persistenceVersionInfo->id,
+                "versionNo"           => $persistenceVersionInfo->versionNo,
                 "modificationDate"    => $modifiedDate,
-                "creatorId"           => $version->creatorId,
+                "creatorId"           => $persistenceVersionInfo->creatorId,
                 "creationDate"        => $createdDate,
-                "status"              => $version->status,
-                "initialLanguageCode" => $language->languageCode,
+                "status"              => $persistenceVersionInfo->status,
+                "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
                 "languageCodes"       => $languageCodes
             )
         );

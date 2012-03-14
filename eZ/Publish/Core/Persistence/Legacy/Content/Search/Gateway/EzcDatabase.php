@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -50,6 +52,20 @@ class EzcDatabase extends Gateway
     protected $queryBuilder;
 
     /**
+     * Caching language handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+     */
+    protected $languageHandler;
+
+    /**
+     * Language mask generator
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
+
+    /**
      * Construct from handler handler
      *
      * @param EzcDbHandler $handler
@@ -59,13 +75,17 @@ class EzcDatabase extends Gateway
         EzcDbHandler $handler,
         CriteriaConverter $criteriaConverter,
         SortClauseConverter $sortClauseConverter,
-        QueryBuilder $queryBuilder
+        QueryBuilder $queryBuilder,
+        CachingHandler $languageHandler,
+        LanguageMaskGenerator $languageMaskGenerator
     )
     {
         $this->handler = $handler;
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
         $this->queryBuilder = $queryBuilder;
+        $this->languageHandler = $languageHandler;
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
@@ -225,6 +245,14 @@ class EzcDatabase extends Gateway
                     $contentIdOrder[$next['ezcontentobject_id']];
             }
         );
+
+        foreach ( $rows as &$row )
+        {
+            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
+            $row['ezcontentobject_main_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_initial_language_id'] )->languageCode;
+            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
+            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
+        }
 
         return $rows;
     }
