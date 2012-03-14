@@ -174,7 +174,7 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param int|bool $srcVersion
-     * @return \eZ\Publish\SPI\Persistence\Content\Version
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {

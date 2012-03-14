@@ -120,6 +120,8 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
+        $content = $this->load( $contentId, $srcVersion );
+        $fields = $content->fields;
         $aVersion = $this->backend->find(
             'Content\\VersionInfo',
             array(
@@ -133,7 +135,7 @@ class ContentHandler implements ContentHandlerInterface
         // Create new version
         $newVersionNo = $this->getLastVersionNumber( $contentId ) + 1;
         $time = time();
-        $newVersion = $this->backend->create(
+        $content->versionInfo = $this->backend->create(
             'Content\\VersionInfo',
             array(
                 'modificationDate' => $time,
@@ -148,21 +150,16 @@ class ContentHandler implements ContentHandlerInterface
 
         // Duplicate fields
         // @todo: language support
-        foreach (
-            $this->backend->find(
-                'Content\\Field',
-                // Using internal _contentId since it's not directly exposed by Persistence
-                array( '_contentId' => $contentId, 'versionNo' => $srcVersion )
-            ) as $field
-        )
+        $content->fields = array();
+        foreach ( $fields as $field )
         {
-            $fieldVo = $this->backend->create(
+            $content->fields[] = $this->backend->create(
                 'Content\\Field',
                 array( 'versionNo' => $newVersionNo, '_contentId' => $contentId ) + (array)$field
             );
         }
 
-        return $newVersion;
+        return $content;
     }
 
     /**
@@ -186,7 +183,7 @@ class ContentHandler implements ContentHandlerInterface
         $time = time();
 
         $currentVersionNo = $versionNo === false ? $contentInfo->currentVersionNo : $versionNo;
-        $contentObj = new Content;
+        $contentObj = $this->backend->create( 'Content', array() );
         $contentObj->contentInfo = $this->backend->create(
             'Content\\ContentInfo', array(
                 "contentTypeId" => $contentInfo->contentTypeId,

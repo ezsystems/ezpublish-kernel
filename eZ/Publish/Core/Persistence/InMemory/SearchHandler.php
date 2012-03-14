@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\InMemory;
 
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\Search\Result,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -208,13 +209,13 @@ class SearchHandler extends SearchHandlerInterface
                 switch ( $criterion->value[0] )
                 {
                     case Status::STATUS_ARCHIVED:
-                        $match['status'] = Content::STATUS_ARCHIVED;
+                        $match['status'] = VersionInfo::STATUS_ARCHIVED;
                         break;
                     case Status::STATUS_DRAFT:
-                        $match['status'] = Content::STATUS_DRAFT;
+                        $match['status'] = VersionInfo::STATUS_DRAFT;
                         break;
                     case Status::STATUS_PUBLISHED:
-                        $match['status'] = Content::STATUS_PUBLISHED;
+                        $match['status'] = VersionInfo::STATUS_PUBLISHED;
                         break;
                     default:
                         throw new Exception( "Unsuported StatusCriterion->value[0]: " . $criterion->value[0] );

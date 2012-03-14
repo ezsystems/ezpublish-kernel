@@ -314,16 +314,16 @@ class ContentHandlerTest extends HandlerTest
         $this->contentToDelete[] = $content;
 
         $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->contentId, 1 );
-        self::assertSame( $content->contentInfo->currentVersionNo + 1, $draft->versionNo );
-        self::assertGreaterThanOrEqual( $time, $draft->creationDate );
-        self::assertGreaterThanOrEqual( $time, $draft->modificationDate );
-        self::assertSame( VersionInfo::STATUS_DRAFT, $draft->status, 'Created version must be a draft' );
-        self::assertSame( $content->contentInfo->contentId, $draft->contentId );
+        self::assertSame( $content->contentInfo->currentVersionNo + 1, $draft->versionInfo->versionNo );
+        self::assertGreaterThanOrEqual( $time, $draft->versionInfo->creationDate );
+        self::assertGreaterThanOrEqual( $time, $draft->versionInfo->modificationDate );
+        self::assertSame( VersionInfo::STATUS_DRAFT, $draft->versionInfo->status, 'Created version must be a draft' );
+        self::assertSame( $content->contentInfo->contentId, $draft->versionInfo->contentId );
 
         // Indexing fields by defition id to be able to compare them
         $aOriginalIndexedFields = array();
         $aIndexedFields = array();
-        foreach ( $content->version->fields as $field )
+        foreach ( $content->fields as $field )
         {
             $aOriginalIndexedFields[$field->fieldDefinitionId] = $field;
         }

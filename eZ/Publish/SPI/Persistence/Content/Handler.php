@@ -47,7 +47,7 @@ interface Handler
      *
      * @param mixed $contentId
      * @param int $srcVersion
-     * @return \eZ\Publish\SPI\Persistence\Content\Version
+     * @return \eZ\Publish\SPI\Persistence\Content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException Thrown if $contentId and/or $srcVersion are invalid
      */
     public function createDraftFromVersion( $contentId, $srcVersion );

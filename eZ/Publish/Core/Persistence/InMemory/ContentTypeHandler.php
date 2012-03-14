@@ -258,7 +258,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function delete( $contentTypeId, $status )
     {
-        if ( Type::STATUS_DEFINED === $status && $this->backend->count( 'Content', array( 'typeId' => $contentTypeId ) ) )
+        if ( Type::STATUS_DEFINED === $status && $this->backend->count( 'Content\\ContentInfo', array( 'contentTypeId' => $contentTypeId ) ) )
         {
             throw new BadStateException( '$contentTypeId', "Content of Type {$contentTypeId} still exists, can not delete" );
         }

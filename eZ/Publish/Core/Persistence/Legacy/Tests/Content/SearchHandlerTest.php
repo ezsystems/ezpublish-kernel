@@ -863,7 +863,7 @@ class ContentSearchHandlerTest extends TestCase
         $this->assertEquals(
             array( 4, 65 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content ) { return $content->contentInfo->contentId; },
                 $result->content
             )
         );

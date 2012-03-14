@@ -112,6 +112,6 @@ class SearchHandlerTest extends HandlerTest
     {
         $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'remoteIDForLocation2' ) );
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( 1, $content->id );
-}
+        $this->assertEquals( 1, $content->contentInfo->contentId );
+    }
 }
