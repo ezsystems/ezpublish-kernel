@@ -10,7 +10,7 @@ The public API is built on top of a layered architecture including a new persist
 The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Etna, and fully stable as the core of Kilimanjaro (Q4 2012). But contribution is very open today, go for it !
 
 #Directory Layout
-* [eZ/Publish/API](/ezsystems/publicapi/tree/master/eZ/Publish/API/)  *Public API Interface (interfaces eZ Publish implemnts)*
+* [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interface (interfaces eZ Publish implemnts)*
 * [eZ/Publish/API/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/)  *Public API Repository Interfaces*
 * [eZ/Publish/API/Repository/Examples](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Examples/)  *Examples of Public API use*
 
@@ -20,10 +20,10 @@ The API is still very much work in progress, and so is documentation, hence why 
 
 * [eZ/Publish/Core/Base](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Base/)  *Common code needed by Core parts bellow*
 * [eZ/Publish/Core/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Repository/)  *Public API Repository implementation*
-* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistencee/Legacy/)  *Legacy Storage-Engine aka Persistence-handler*
+* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine aka Persistence-handler*
 * [eZ/Publish/Core/Persistence/InMemory](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/InMemory/)  *InMemory  Storage-Engine aka Persistence-handler (for unit testing)*
-* [eZ/Publish/Core/IO/Legacy](/ezsystems/ezp-next/tree/master/[eZ/Publish/Core/IO/Legacy/)  *Legacy Io (file) Handler*
-* [eZ/Publish/Core/IO/InMemory](/ezsystems/ezp-next/tree/master/[eZ/Publish/Core/IO/InMemory/)  *InMemory Io handler (for unit testing)*
+* [eZ/Publish/Core/IO/LegacyHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *Legacy Io (file) Handler*
+* [eZ/Publish/Core/IO/InMemoryHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *InMemory Io handler (for unit testing)*
 
 * [design/](/ezsystems/ezp-next/tree/master/design/)	 *Early uml class diagrams*
 * [doc/](/ezsystems/ezp-next/tree/master/doc/)  *Placeholder for bc doc and other doc that can not be on wiki or inline*
