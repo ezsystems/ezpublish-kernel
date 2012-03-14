@@ -10,11 +10,11 @@ The public API is built on top of a layered architecture including a new persist
 The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Etna, and fully stable as the core of Kilimanjaro (Q4 2012). But contribution is very open today, go for it !
 
 #Directory Layout
-* [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interface (interfaces eZ Publish implemnts)*
+* [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interface (interfaces eZ Publish implements)*
 * [eZ/Publish/API/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/)  *Public API Repository Interfaces*
 * [eZ/Publish/API/Repository/Examples](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Examples/)  *Examples of Public API use*
 
-* [eZ/Publish/SPI](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/)  *Service provider interfaces (interfaces extensions can implemnt)*
+* [eZ/Publish/SPI](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/)  *Service provider interfaces (interfaces extensions can implement)*
 * [eZ/Publish/SPI/Persistence](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/Persistence/)  *Persistence Interface (private api for now)*
 * [eZ/Publish/SPI/IO](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/IO/)  *Io (file) Interface (private api for now)*
 
