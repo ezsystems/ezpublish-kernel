@@ -9,7 +9,7 @@ The public API is built on top of a layered architecture including a new persist
 ## Alpha Notice
 The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Etna, and fully stable as the core of Kilimanjaro (Q4 2012). But contribution is very open today, go for it !
 
-#Directory Layout
+##Directory Layout
 * [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interface (interfaces eZ Publish implements)*
 * [eZ/Publish/API/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/)  *Public API Repository Interfaces*
 * [eZ/Publish/API/Repository/Examples](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Examples/)  *Examples of Public API use*
@@ -32,12 +32,12 @@ The API is still very much work in progress, and so is documentation, hence why 
 * Readme.md  *This text*
 * bootstrap.php  *System Bootstrap*
 
-#Dependencies
+##Dependencies
 * pear: PHPUnit 3.6 & eZ Components
 * PHP 5 Module: php5_sqlit
 * Database: sqlite3 if not installed by above stage
 
-#How to get started
+##How to get started
 * Clone this repo
 * Copy config.php-DEVELOPMENT to config.php
 * Modify config.php if needed (if eZ Components is not in pear for instance)
