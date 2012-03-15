@@ -176,6 +176,41 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
+     * Test loadDraftsForUser function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadDraftsForUser
+     * @group contentHandler
+     */
+    public function testLoadDraftsForUser()
+    {
+        $contentHandler = $this->persistenceHandler->contentHandler();
+
+        $versionInfos = $contentHandler->loadDraftsForUser( 14 );
+
+        $this->assertEquals(
+            2,
+            count( $versionInfos )
+        );
+
+        $this->assertEquals(
+            2,
+            $versionInfos[0]->id
+        );
+        $this->assertEquals(
+            0,
+            $versionInfos[0]->status
+        );
+        $this->assertEquals(
+            8,
+            $versionInfos[1]->id
+        );
+        $this->assertEquals(
+            0,
+            $versionInfos[1]->status
+        );
+    }
+
+    /**
      * Test copy function
      *
      * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::copy

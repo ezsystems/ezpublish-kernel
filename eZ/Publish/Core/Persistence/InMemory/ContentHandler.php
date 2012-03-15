@@ -344,6 +344,20 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
+    public function loadDraftsForUser( $userId )
+    {
+        return $this->backend->find(
+            "Content\\VersionInfo",
+            array(
+                "status"    => VersionInfo::STATUS_DRAFT,
+                "creatorId" => $userId
+            )
+        );
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     */
     public function setStatus( $contentId, $status, $version )
     {
         $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $contentId, 'versionNo' => $version ) );

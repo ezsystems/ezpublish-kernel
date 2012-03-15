@@ -17,6 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
@@ -263,6 +264,20 @@ class Handler implements BaseContentHandler
     {
         return $this->mapper->extractVersionInfoFromRow(
             $this->contentGateway->loadVersionInfo( $contentId, $versionNo )
+        );
+    }
+
+    /**
+     * Returns all versions with draft status created by the given $userId
+     *
+     * @param int $userId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
+     */
+    public function loadDraftsForUser( $userId )
+    {
+        return $this->mapper->extractVersionInfoListFromRows(
+            $this->contentGateway->listVersionsForUser( $userId, VersionInfo::STATUS_DRAFT )
         );
     }
 

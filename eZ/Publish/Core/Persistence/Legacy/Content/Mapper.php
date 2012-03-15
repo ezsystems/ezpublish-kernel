@@ -286,6 +286,54 @@ class Mapper
     }
 
     /**
+     * Extracts a VersionInfo object from $row
+     *
+     * @param array $rows
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
+     */
+    public function extractVersionInfoListFromRows( array $rows )
+    {
+        $versionInfoList = array();
+        foreach ( $rows as $row )
+        {
+            $versionId = (int)$row['ezcontentobject_version_id'];
+            if ( !isset( $versionInfoList[$versionId] ) )
+            {
+                $versionInfo = new VersionInfo;
+                $versionInfo->id = (int)$row["ezcontentobject_version_id"];
+                $versionInfo->contentId = (int)$row["ezcontentobject_version_contentobject_id"];
+                $versionInfo->versionNo = (int)$row["ezcontentobject_version_version"];
+                $versionInfo->creatorId = (int)$row["ezcontentobject_version_creator_id"];
+                $versionInfo->creationDate = (int)$row["ezcontentobject_version_created"];
+                $versionInfo->modificationDate = (int)$row["ezcontentobject_version_modified"];
+                $versionInfo->initialLanguageCode = $this->languageHandler->getById( $row["ezcontentobject_version_initial_language_id"] )->languageCode;
+                $versionInfo->languageIds = array();
+                $versionInfo->status = (int)$row["ezcontentobject_version_status"];
+                $versionInfo->names = array();
+                $versionInfoList[$versionId] = $versionInfo;
+            }
+
+            if ( !isset( $versionInfoList[$versionId]->names[$row['ezcontentobject_name_content_translation']] ) )
+            {
+                $versionInfoList[$versionId]->names[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
+            }
+
+            if (
+                !in_array(
+                    $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
+                    $versionInfoList[$versionId]->languageIds          // eng-US can be either 2 or 3, see fixture data
+                )
+            )
+            {
+                $versionInfoList[$versionId]->languageIds[] =
+                    $row['ezcontentobject_attribute_language_id'] & ~1;
+            }
+        }
+        return array_values( $versionInfoList );
+    }
+
+    /**
      * Extracts a Version from the given $row
      *
      * @param array $row
