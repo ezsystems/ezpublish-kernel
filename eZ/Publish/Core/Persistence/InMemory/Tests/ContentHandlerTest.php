@@ -141,7 +141,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->languageCode );
-        $this->assertEquals( 'Welcome', $field->value->data->text );
+        $this->assertEquals( 'Welcome', $field->value->data );
         $this->assertEquals( $content->versionInfo->versionNo, $field->versionNo );
     }
 
