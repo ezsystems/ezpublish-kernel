@@ -25,6 +25,8 @@ Example:
     <test attr1="attr1">
        <value attr2="attr2">value</value>
        <simpleValue>45</simpleValue>
+       <value>1</value>
+       <value>2</value>
     </test>
 
 transforms to:
@@ -32,13 +34,14 @@ transforms to:
 ::
 
     {
-      "test": {
-        "_attr1": "attr1",
-        "value": {
-          "_attr2": "attr2",
-          "#text": "value"
+      "test":{
+        "_attr1":"attr1",
+        "value":{
+          "_attr2":"attr2",
+          "#text":"value"
         },
-        "simpleValue": "45"
+        "simpleValue":"45",
+        "value":[ "1", "2" ]
       }
     }
 
@@ -68,7 +71,7 @@ It is possible to make a new schema for mobile devices for retieving e.g. an art
 
 so that
 
-::
+.. code:: http
 
    GET /content/objects/23 HTTP/1.1
    Accept: application/vnd.ez.api.MobileContent+xml
@@ -5399,11 +5402,6 @@ Binary field types
 Creating and Updating
 `````````````````````
 
-Creating or updating content which contains image/file/media fields has to be done with a multpart/related message according to http://tools.ietf.org/html/rfc2387
-
-The root content type equals to the defined content types for creating and updating content. The actual field of type image, file of media must contain
-a cid attribute referencing the body part of the actual binary content.
-
 Inputschema
 '''''''''''
 
@@ -5416,9 +5414,10 @@ Inputschema
 
       <xsd:complexType name="binaryBaseType">
         <xsd:sequence>
-          <xsd:element name="originalFileName" type="xsd:string" />
+          <xsd:element name="data" type="xsd:base64Binary" />
         </xsd:sequence>
-        <xsd:attribute name="cid" type="xsd:string" />
+        <xsd:attribute name="originalFileName" type="xsd:string" />
+        <xsd:attribute name="contentType" type="xsd:string" />
       </xsd:complexType>
 
       <xsd:complexType name="fileFieldInputType">
@@ -5463,7 +5462,6 @@ Inputschema
           </xsd:element>
         </xsd:all>
       </xsd:complexType>
-
     </xsd:schema>
 
 XML Example
@@ -5474,8 +5472,7 @@ XML Example
     POST /content/objects HTTP/1.1
     Host: www.example.net
     Accept: application/vnd.ez.api.Content+xml
-    Content-Type: Multipart/Related; boundary=ezboundary0001
-             type="application/vnd.ez.api.ContentCreate+xml"
+    Content-Type: application/vnd.ez.api.ContentCreate+xml
     Content-Length: xxx
 
     <ContentCreate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -5501,8 +5498,16 @@ XML Example
           <fieldDefinitionIdentifer>file</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
           <value xsi:type="fileFieldInputType">
-            <file cid="cid12345678">
-              <originalFileName>test.bin</file>
+            <file originalFileName="test.pdf" contentType="application/pdf">
+              <data>
+                T2xkIE1hY0RvbmFsZCBoYWQgYSBmYXJtCkUgSS
+                BFIEkgTwpBbmQgb24gaGlzIGZhcm0gaGUgaGFk
+                IHNvbWUgZHVja3MKRSBJIEUgSSBPCldpdGggYS
+                ...
+                BxdWFjayBxdWFjayBoZXJlLAphIHF1YWNrIHF1
+                YWNrIHRoZXJlLApldmVyeSB3aGVyZSBhIHF1YW
+                NrIHF1YWNrCkUgSSBFIEkgTwo=
+              </data>
             </file>  
           </value>
         </field>
@@ -5510,9 +5515,11 @@ XML Example
           <fieldDefinitionIdentifer>image</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
           <value xsi:type="imageFieldInputType">
-            <image cid="cid12345679">
-              <originalFileName>image.png</file>
+            <image originalFileName="image.png" contentType="image/png">
               <alternativeText>An image</alternativeText>
+              <data>
+              <!-- encoded png image -->
+              </data>
             </image>  
           </value>
         </field>
@@ -5520,8 +5527,10 @@ XML Example
           <fieldDefinitionIdentifer>swf</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
           <value xsi:type="mediaFieldInputType">
-            <media cid="cid12345680">
-              <originalFileName>test.swf</file>
+            <media originalFileName="test.swf" contentType="application/shockwave-flash">
+              <data>
+              <!-- encoded swf -->
+              </data>
               <width>2400</width>
               <height>180</height>
               <controller>true</controller>
@@ -5532,38 +5541,143 @@ XML Example
         </field>
       </fields>
     </ContentCreate>
-    --ezboundary0001
-    Content-Type: application/octetstream
-    Content-Transfer-Encoding: base64
-    Content-ID: cid12345678 
-
-    T2xkIE1hY0RvbmFsZCBoYWQgYSBmYXJtCkUgSS
-    BFIEkgTwpBbmQgb24gaGlzIGZhcm0gaGUgaGFk
-    IHNvbWUgZHVja3MKRSBJIEUgSSBPCldpdGggYS
-    ...
-    BxdWFjayBxdWFjayBoZXJlLAphIHF1YWNrIHF1
-    YWNrIHRoZXJlLApldmVyeSB3aGVyZSBhIHF1YW
-    NrIHF1YWNrCkUgSSBFIEkgTwo=
-    --ezboundary0001
-    Content-Type: image/png
-    Content-Transfer-Encoding: base64
-    Content-ID: cid12345679 
-    
-    [encoded png image]
-    --ezboundary0001
-    Content-Type: application/shockwave-flash
-    Content-Transfer-Encoding: base64
-    Content-ID: cid12345680
-    
-    [encoded swf]
-    --ezboundary0001--
  
 Retrieving Binary Types
 ```````````````````````
 
+Output Schema
+'''''''''''''
 
+.. code:: xml
 
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="fileFieldType">
+        <xsd:all>
+          <xsd:element name="file" type="ref" />
+        </xsd:all>
+      </xsd:complexType>
 
+      <xsd:complexType name="imageFieldType">
+        <xsd:all>
+          <xsd:element name="image">
+            <xsd:complexType>
+              <xsd:complexContent>
+                <xsd:extension base="ref">
+                  <xsd:sequence>
+                    <xsd:element name="variant">
+                      <xsd:complexType>
+                        <xsd:attribute name="identifer" type="xsd:string" />
+                        <xsd:attribute name="href" type="xsd:string" />
+                        <xsd:attribute name="contentTypes"
+                          type="xsd:string" />
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:extension>
+              </xsd:complexContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="mediaFieldType">
+        <xsd:all>
+          <xsd:element name="media">
+            <xsd:complexType>
+              <xsd:complexContent>
+                <xsd:extension base="ref">
+                  <xsd:sequence>
+                    <xsd:element name="width" type="xsd:int" />
+                    <xsd:element name="height" type="xsd:int" />
+                    <xsd:element name="controller" type="xsd:boolean" />
+                    <xsd:element name="autoplay" type="xsd:boolean" />
+                    <xsd:element name="loop" type="xsd:boolean" />
+                  </xsd:sequence>
+                </xsd:extension>
+              </xsd:complexContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+
+XML Example
+'''''''''''
+
+::
+
+    GET /content/objects/123/versions/4 HTTP/1.1
+    Host: api.example.com
+    If-None-Match: "1758f762"
+    Accept: application/vnd.ez.api.Version+xml
+       
+    HTTP/1.1 200 OK
+    Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
+    ETag: "a3f2e5b7"
+    Content-Type: application/vnd.ez.api.Version+xml
+    Content-Length: xxx
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Version href="/content/objects/123/versions/4" media-type="application/vnd.ez.api.Version+xml" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <VersionInfo>
+        <id>45</id>
+        <versionNo>4</versionNo>
+        <status>PUBLISHED</status>
+        <modificationDate>2012-02-20T12:00:00</modificationDate>
+        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <creationDate>22012-02-20T12:00:00</creationDate>
+        <initialLanguageCode>ger-DE</initialLanguageCode>
+        <names>
+          <value languageCode="ger-DE">Name</value>
+        </names>
+        <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+      </VersionInfo>
+      <Fields>
+        <field>
+          <id>1234</id>
+          <fieldDefinitionIdentifer>file</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value xsi:type="fileFieldType">
+            <file href="/binary/files/255757d0697869da6683a9fee9185b275b5a4492" media-type="application/pdf"/>
+          </value>
+        </field>
+        <field>
+          <id>1235</id>
+          <fieldDefinitionIdentifer>image</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value xsi:type="imageFieldType">
+            <image href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d" media-type="vnd.ez.api.ImageVariantList+xml">
+               <variant identifier="original" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/original" contentTypes="image/jpeg,image/png,image/tif"/>
+               <variant identifier="reference" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/reference" contentTypes="image/jpeg,image/png"/>
+               <variant identifier="small" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/small" contentTypes="image/jpeg,image/png"/>
+               <variant identifier="tiny" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/tiny" contentTypes="image/jpeg,image/png"/>
+               <variant identifier="medium" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/medium" contentTypes="image/jpeg,image/png"/>
+               <variant identifier="large" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/large" contentTypes="image/jpeg,image/png"/>
+               <variant identifier="rss" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/rss" contentTypes="image/jpeg,image/png"/>
+            </image>
+          </value>
+        </field>
+        <field>
+          <id>1236</id>
+          <fieldDefinitionIdentifer>media</fieldDefinitionIdentifer>
+          <languageCode>ger-DE</languageCode>
+          <value xsi:type="fileFieldType">
+            <media href="/binary/media/59cc3e1eccd2f963ce9e5efc364717aa4045d652" media-type="video/quicktime">
+              <width>2400</width>
+              <height>180</height>
+              <controller>true</controller>
+              <autoplay>false</autoplay>
+              <loop>false</loop>
+            </media>
+          </value>
+        </field>
+      </Fields>
+      <Relations/>
+    </Version>
 
 
 .. _View:
