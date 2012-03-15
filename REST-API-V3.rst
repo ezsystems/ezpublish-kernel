@@ -20,7 +20,7 @@ Each JSON schema is implicit derived from the xml schema by making a uniform tra
 
 Example:
 
-::
+.. code:: xml
 
     <test attr1="attr1">
        <value attr2="attr2">value</value>
@@ -31,7 +31,7 @@ Example:
 
 transforms to:
 
-::
+.. code:: javascript
 
     {
       "test":{
@@ -49,7 +49,7 @@ Different schemas which induce different media types one on resource can be used
 representations optimized for purposes of clients. 
 It is possible to make a new schema for mobile devices for retieving e.g. an article.
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -78,7 +78,7 @@ so that
 
 returns:
 
-::
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <MobileContent href="/content/objects/23" media-type="application/vnd.ez.api.MobileContent+xml">
@@ -224,25 +224,30 @@ List Root Resources
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Root_     
  
 XML Example
 ```````````
 
-::
+.. code:: http
 
     GET / HTTP/1.1
     Host: api.example.net
     Accept: application/vnd.ez.api.Root+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.Root+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Root>
@@ -261,15 +266,19 @@ XML Example
 JSON Example
 ````````````
 
-::
+.. code:: http
 
     GET / HTTP/1.1
     Host: api.example.net
     Accept: application/vnd.ez.api.Root+json
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.Root+json
     Content-Length: xxx
+
+.. code:: javascript
 
     {
       "Root": {
@@ -338,7 +347,8 @@ Creating Content
          :application/vnd.ez.api.ContentCreate+xml: the ContentCreate_ schema encoded in xml
 :Response: 
 
-     .. parsed-literal::
+
+.. code:: http
 
           HTTP/1.1 201 Created  
           Location: /content/objects/<newID>
@@ -346,6 +356,7 @@ Creating Content
           Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Content_      
           
 :Error codes: 
@@ -356,13 +367,15 @@ Creating Content
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/objects HTTP/1.1
     Host: www.example.net
     Accept: application/vnd.ez.api.Content+xml
     Content-Type: application/vnd.ez.api.ContentCreate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <ContentCreate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <ContentType href="/content/types/10"/>
@@ -401,12 +414,16 @@ XML Example
       </fields>
     </ContentCreate>
     
+.. code:: http
+
     HTTP/1.1 201 Created
     Location: /content/objects/23
     ETag: "12345678"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+xml;charset=utf8
     Content-Type: application/vnd.ez.api.Content+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Content href="/content/objects/23" id="23"
@@ -466,13 +483,15 @@ XML Example
 JSON Example
 ''''''''''''
 
-::
+.. code:: http
 
-    POST /content/objects
+    POST /content/objects HTTP/1.1
     Host: www.example.net
     Accept: application/vnd.ez.api.Content+json
     Content-Type: application/vnd.ez.api.ContentCreate+json
     Content-Length: xxx
+
+.. code:: javascript
 
     {
       "ContentCreate": {
@@ -529,12 +548,16 @@ JSON Example
       }
     }
 
+.. code:: http
+
     HTTP/1.1 201 Created
     Location: /content/objects/23
     ETag: "12345678"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+json;charset=utf8
     Content-Type: application/vnd.ez.api.Content+json
     Content-Length: xxx
+
+.. code:: javascript
 
     {
       "Content": {
@@ -664,13 +687,15 @@ Load Content
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Response: 
 
-    .. parsed-literal::
+
+.. code:: http
 
           HTTP/1.1 200 OK
           ETag: "<ETag>"
           Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Content_      
           
 :Error Codes:
@@ -680,17 +705,21 @@ Load Content
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/objects/23 HTTP/1.1
     Accept: application/vnd.ez.api.ContentInfo+xml
     If-None-Match: "12340577"
+
+.. code:: http
 
     HTTP/1.1 200 OK
     ETag: "12345678"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+xml;charset=utf8
     Content-Type: application/vnd.ez.api.ContentInfo+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Content href="/content/objects/23" id="23"
@@ -727,13 +756,14 @@ Update Content
          :application/vnd.ez.api.ContentUpdate+xml: the ContentUpdate_ schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           ETag: "<new etag>"
           Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Content_      
           
 
@@ -754,7 +784,7 @@ In this example
     - the remoteId is changed
     - the owner of the content object is changed
 
-::
+.. code:: http
  
     PATCH /content/objects/23 HTTP/1.1
     Host: www.example.net
@@ -762,6 +792,8 @@ In this example
     Accept: application/vnd.ez.api.ContentInfo+xml
     Content-Type: application/vnd.ez.api.ContentCreate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentUpdate>
@@ -773,12 +805,16 @@ In this example
       <remoteId>qwert4321</remoteId>
     </ContentUpdate>
     
+.. code:: http
+
     HTTP/1.1 200 OK
     ETag: "12345699"
     Accept-Patch: application/vnd.ez.api.ContentUpdate+xml;charset=utf8
     Content-Type: application/vnd.ez.api.ContentInfo+xml
     Content-Length: xxx
     
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <Content href="/content/objects/23" id="23"
       media-type="application/vnd.ez.api.Content+xml" remoteId="qwert4321">
@@ -818,7 +854,7 @@ Copy content
     :Destination: A location resource to which the content object should be copied.
 :Response: 
 
-::
+.. code:: http
 
       HTTP/1.1 201 Created
       Location: /content/objects/<newId>
@@ -830,7 +866,7 @@ Copy content
 Example
 '''''''
 
-::
+.. code:: http
 
     COPY /content/objects/23 HTTP/1.1
     Host: api.example.com
@@ -850,7 +886,7 @@ Get Current Version
 :Description: Redirects to the current version of the content object
 :Response: 
 
-::
+.. code:: http
 
     HTTP/1.1 307 Temporary Redirect
     Location: /content/objects/<ID>/version/<current_version_no>
@@ -870,11 +906,12 @@ List Versions
          :application/vnd.ez.api.VersionList+json:  if set the version list is returned in json format 
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
         HTTP/1.1 200 OK
         Content-Type: <depending on accept header>
         Content-Length: <length>
+.. parsed-literal::
         VersionList_
 
 :Error Codes:
@@ -883,15 +920,19 @@ List Versions
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/objects/23/versions HTTP/1.1
     Host: api.example.com
     Accept: application/vnd.ez.api.VersionList+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.VersionList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <VersionList href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
@@ -975,11 +1016,12 @@ Load Version
          :application/vnd.ez.api.Version+json:  if set the version list is returned in json format 
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
         HTTP/1.1 200 OK
         Content-Type: <depending on accept header>
         Content-Length: <length>
+.. parsed-literal::
         Version_
 
 :Error Codes:
@@ -990,18 +1032,22 @@ Load Version
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/objects/23/versions/4 HTTP/1.1
     Host: api.example.com
     If-None-Match: "1758f762"
     Accept: application/vnd.ez.api.Version+xml
        
+.. code:: http
+
     HTTP/1.1 200 OK
     Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
     ETag: "a3f2e5b7"
     Content-Type: application/vnd.ez.api.Version+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml" 
@@ -1070,13 +1116,14 @@ Update Version
          :application/vnd.ez.api.VersionUpdate+xml: the VersionUpdate_ schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: xml
 
         HTTP/1.1 200 OK
         ETag: "<new etag>"
         Accept-Patch: application/vnd.ez.api.VersionUpdate+(json|xml)
         Content-Type: <depending on accept header>
         Content-Length: <length>
+.. parsed-literal::
         Version_      
 
 :Error Codes:
@@ -1089,7 +1136,7 @@ Update Version
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     PATCH /content/objects/23/versions/4 HTTP/1.1
     Host: www.example.net
@@ -1097,6 +1144,8 @@ XML Example
     Accept: application/vnd.ez.api.Version+xml
     Content-Type: application/vnd.ez.api.VersionUpdate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <VersionUpdate xmlns:p="http://ez.no/API/Values"
@@ -1119,11 +1168,15 @@ XML Example
       </fields>
     </VersionUpdate>
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
     ETag: "a3f2e5b9"
     Content-Type: application/vnd.ez.api.Version+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
@@ -1183,10 +1236,11 @@ Create a Draft from a Version
 :Description: The system creates a new draft version as a copy from the given version
 :Response:
 
-    .. parsed-literal::
+.. code:: http
  
         HTTP/1.1 201 Created
         Location: /content/objects/<ID>/versions/<new-versionNo> 
+.. parsed-literal::
         Version_
 
 :Error Codes:
@@ -1200,7 +1254,7 @@ Delete Content Version
 :Description: The version is deleted
 :Response: 
 
-::
+.. code:: http
 
     HTTP/1.1 204 No Content
     
@@ -1216,7 +1270,7 @@ Publish a content version
 :Description: The content version is published
 :Response: 
 
-::
+.. code:: http
 
     HTTP/1.1 204 No Content
 
@@ -1235,7 +1289,7 @@ Load relations of content
 :Description: redirects to the relations of the current version
 :Response: 
 
-::
+.. code:: http
 
     HTTP/1.1 307 Temporary Redirect
     Location: /content/objects/<ID>/versions/<currentversion>/relations
@@ -1258,11 +1312,12 @@ Load relations of version
          :application/vnd.ez.api.RelationList+json:  if set the relation is returned in json format (see RelationList_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
         HTTP/1.1 200 OK
         Content-Type: <depending on Accept header>
         Content-Length: xxx
+.. parsed-literal::
         RelationList_ 
 
 :Error Codes:
@@ -1272,14 +1327,18 @@ Load relations of version
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/objects/23/versions/2/relations HTTP/1.1
     Accept: application/vnd.ez.api.RelationList+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.RelationList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Relations href="/content/object/32/versions/2/relations" media-type="application/vnd.ez.api.RelationList+xml">
@@ -1313,11 +1372,12 @@ Load a relation
          :application/vnd.ez.api.Relation+json:  if set the relation is returned in json format (see Relation_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
         HTTP/1.1 200 OK
         Content-Type: <depending on Accept header>
         Content-Length: xxx
+.. parsed-literal::
         Relation_ (relationValueType(
 
 :Error Codes:
@@ -1338,12 +1398,13 @@ Create a new Relation
          :application/vnd.ez.api.RelationCreate+json: the RelationCreate (see RelationCreate_) schema encoded in json
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
         HTTP/1.1 201 Created
         Location: /content/objects/<ID>/versions/<no>/relations/<newId>
         Content-Type: <depending on Accept header>
         Content-Length: xxx
+.. parsed-literal::
         Relation_ (relationValueType(
 
 :Error Codes:
@@ -1354,23 +1415,29 @@ Create a new Relation
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/objects/23/versions/4/relations HTTP/1.1
     Accept: application/vnd.ez.api.Relation+xml
     Content-Type: application/vnd.ez.api.RelationCreate+xml
     Content-Length: xxx
 
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <RelationCreate>
       <Destination href="/content/objects/66"/>
     </RelationCreate>
+
+.. code:: http
 
     HTTP/1.1 201 Created
     Location: /content/objects/23/versions/4/relations
     Content-Type: application/vnd.ez.api.RelationCreate+xml
     Content-Length: xxx
     
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <Relation href="/content/object/32/versions/2/relations/66" media-type="application/vnd.ez.api.Relation+xml">
       <SourceContent href="/content/objects/23"
@@ -1388,7 +1455,7 @@ Delete a relation
 :Description: Deletes a relation of the given draft.
 :Response: 
 
-    ::
+.. code:: http
 
         HTTP/1.1 204 No Content
 
@@ -1416,7 +1483,7 @@ Create a new location for a content object
          :application/vnd.ez.api.LocationCreate+xml: the LocationCreate_ schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: xml
 
           HTTP/1.1 201 Created  
           Location: /content/locations/<newPath>
@@ -1424,6 +1491,7 @@ Create a new location for a content object
           Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Location_      
 
 :Error Codes:
@@ -1434,12 +1502,14 @@ Create a new location for a content object
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/objects/23/locations HTTP/1.1
     Accept: application/vnd.ez.api.Location+xml
     Content-Type: application/vnd.ez.api.LocationCreate+xml
     Contnt-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <LocationCreate>
@@ -1450,6 +1520,7 @@ XML Example
       <sortOrder>ASC</sortOrder>
     </LocationCreate>
 
+.. code:: http
 
     HTTP/1.1 201 Created
     Location: /content/locations/1/5/73/133
@@ -1457,6 +1528,8 @@ XML Example
     Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
     Content-Type: application/vnd.ez.api.Location+xml
     Contnt-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Location href="/content/locations/1/5/73/133" media-type="application/vnd.ez.api.Location+xml">
@@ -1489,12 +1562,13 @@ Get locations for a content object
     :If-None-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Location_  (locationListType)     
 
 :Error Codes:
@@ -1504,15 +1578,19 @@ Get locations for a content object
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/objects/23/locations HTTP/1.1
     Accept: application/vnd.ez.api.LocationList+xml
+
+.. code:: http
 
     HTTP/1.1 200 OK
     ETag: "<etag>"
     Content-Type:  application/vnd.ez.api.LocationList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <LocationList href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml">
@@ -1533,7 +1611,7 @@ Load location
     :If-None-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Location: /content/locations/<path>
@@ -1541,6 +1619,7 @@ Load location
           Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Location_      
 
 :Error Codes:
@@ -1550,18 +1629,22 @@ Load location
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/locations/1/4/73/133 HTTP/1.1
     Host: api.example.net
     Accept: application/vnd.ez.api.Location+xml
     If-None-Match: "2345503255"
 
+.. code:: http
+
     HTTP/1.1 200 OK
     ETag: "2345563422"
     Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
     Content-Type: application/vnd.ez.api.Location+xml
     Contnt-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Location href="/content/locations/1/5/73/133" media-type="application/vnd.ez.api.Location+xml">
@@ -1596,7 +1679,7 @@ Update location
     :If-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Location: /content/locations/<path>
@@ -1604,6 +1687,7 @@ Update location
           Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Location_      
 
 :Error Codes:
@@ -1614,7 +1698,7 @@ Update location
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     PATCH /content/locations/1/5/73/133 HTTP/1.1
     Host: www.example.net
@@ -1622,6 +1706,8 @@ XML Example
     Accept: application/vnd.ez.api.Location+xml
     Content-Type: :application/vnd.ez.api.LocationUpdate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <LocationUpdate>
@@ -1632,6 +1718,7 @@ XML Example
       <sortOrder>DESC</sortOrder>
     </LocationUpdate>
 
+.. code:: http
 
     HTTP/1.1 200 OK
     ETag: "2345563444"
@@ -1639,6 +1726,8 @@ XML Example
     Content-Type: application/vnd.ez.api.Location+xml
     Content-Length: xxx
     
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <Location href="/content/locations/1/5/73/133" media-type="application/vnd.ez.api.Location+xml">
       <id>133</id>
@@ -1671,11 +1760,12 @@ Get child locations
          :application/vnd.ez.api.LocationList+json:  if set the new location list is returned in json format (see Location_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: xml
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Location_      
 
 :Error Codes:
@@ -1685,15 +1775,19 @@ Get child locations
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/locations/1/2/54/children HTTP/1.1
     Host: api.example.net
     Accept: application/vnd.ez.api.LocationList+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type:  application/vnd.ez.api.LocationList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <LocationList href="/content/locations/1/2/54" media-type="application/vnd.ez.api.LocationList+xml">
@@ -1710,11 +1804,17 @@ Move Subtree
     :Destination: A parent location resource to which the location is moved
 :Response: 
 
-    ::
+.. code:: http
     
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
-        or Location: /content/trash/<ID>
+
+or if destination is /content/trash
+
+.. code:: http
+
+        HTTP/1.1 201 Created
+        Location: /content/trash/<ID>
 
 :Error Codes:
     :404: If the  location with the given id does not exist
@@ -1729,7 +1829,7 @@ Copy Subtree
     :Destination: A parent location resource to which the location is moved
 :Response: 
 
-    ::
+.. code:: http
     
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
@@ -1747,7 +1847,7 @@ Swap Location
     :Destination: A location resource with which the content is swapped
 :Response: 
 
-    ::
+.. code:: http
     
         HTTP/1.1 204 No Content
 
@@ -1763,7 +1863,7 @@ Delete Subtree
 :Response: 204
 :Response: 
 
-    ::
+.. code:: http
     
         HTTP/1.1 204 No Content
 
@@ -1789,12 +1889,13 @@ Create View
         :application/vnd.ez.api.ViewInput+json: the view input in xml format (see View_)
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           ETag: "<new etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           View_
 
 :Error codes:
@@ -1805,12 +1906,14 @@ XML Example
 
 Perform a query on articles with a specific title.
 
-::
+.. code:: http
 
     POST /content/views HTTP/1.1
     Accept: application/vnd.ez.api.View+xml
     Content-Type: application/vnd.ez.api.ViewInput+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ViewInput>
@@ -1836,11 +1939,14 @@ Perform a query on articles with a specific title.
       </Query>
     </ViewInput>
 
+.. code:: http
     
     HTTP/1.1 201 Created
     Location: /content/views/view1234
     Content-Type: application/vnd.ez.api.View+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <View href="/content/views/ArticleTitleView" media-type="application/vnd.ez.api.View+xml">
@@ -1937,11 +2043,12 @@ List views
         :application/vnd.ez.api.RefList+json: the view link list in xml format (see View_)
 :Response:
  
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Common_  
 
 Get View
@@ -1955,11 +2062,12 @@ Get View
         :application/vnd.ez.api.View+json: the view excluding results in json format (see View_)
 :Response:
  
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           View_  
 
 :Error Codes:
@@ -1977,11 +2085,12 @@ Get Results of existing View
         :application/vnd.ez.api.ViewResult+json: the view excluding results in json format (see View_)
 :Response:
  
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           View_  
 
 :Error Codes:
@@ -1995,9 +2104,10 @@ Delete View
 :Parameters:
 :Response: 
 
-    ::
+.. code:: http
         
          HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this view
     :404: If the view does not exist
@@ -2021,7 +2131,7 @@ Create a new Section
          :application/vnd.ez.api.SectionInput+xml: the Section_ input schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /content/section/<ID>
@@ -2029,6 +2139,7 @@ Create a new Section
           Accept-Patch: application/vnd.ez.api.SectionInput+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Section_      
 
 :Error Codes:
@@ -2039,7 +2150,7 @@ Create a new Section
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/sections HTTP/1.1
     Host: api.example.net
@@ -2047,18 +2158,24 @@ XML Example
     Content-Type: application/vnd.ez.api.SectionInput+xml
     Content-Length: xxxx
 
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <SectionInput>
       <identifier>restricted</identifier>
       <name>Restricted</name>
     </SectionInput>
         
+.. code:: http
+
     HTTP/1.1 201 Created
     Location: /content/section/5
     ETag: "4567867894564356"
     Accept-Patch: application/vnd.ez.api.SectionInput+(json|xml)
     Content-Type:  application/vnd.ez.api.Section+xml
     Content-Length: xxxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Section href="/content/sections/5" media-type="application/vnd.ez.api.Section+xml">
@@ -2081,12 +2198,13 @@ Get Sections
     :If-None-Match: <etag>
 :Response:
  
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Section_  (sectionListType)    
 
 :Error Codes:
@@ -2095,17 +2213,21 @@ Get Sections
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/sections
     Host: api.example.net
     If-None-Match: "43450986749098765"
     Accept: application/vnd.ez.api.SectionList+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     ETag: "43450986743098576"
     Content-Type: application/vnd.ez.api.SectionList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <SectionList href="/content/sections" media-type="application/vnd.ez.api.SectionList+xml">
@@ -2144,14 +2266,16 @@ Get Section
     :If-None-match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           ETag: "<etag>"
           Accept-Patch: application/vnd.ez.api.SectionInput+(xml|json)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Section_  (sectionListType)    
+
 :ErrorCodes:
     :401: If the user is not authorized to read this section  
     :404: If the section does not exist
@@ -2159,18 +2283,22 @@ Get Section
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/sections/3 HTTP/1.1
     Host: api.example.net
     If-None-Match: "43450986749098765"
     Accept: application/vnd.ez.api.Section+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     ETag: "4567867894564356"
     Accept-Patch: application/vnd.ez.api.SectionInput+(json|xml)
     Content-Type:  application/vnd.ez.api.Section+xml
     Content-Length: xxxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml">
@@ -2195,13 +2323,14 @@ Update a Section
     :If-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           ETag: "<etag>"
           Accept-Patch: application/vnd.ez.api.SectionInput+(xml|json)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Section_  (sectionListType)    
 
 :Error Codes:
@@ -2218,9 +2347,10 @@ Delete Section
 :Parameters:
 :Response: 
 
-    ::
+.. code:: http
         
          HTTP/1.1 204 No Content
+
 :Error Codes:
     :401: If the user is not authorized to delete this section
     :404: If the section does not exist
@@ -2239,11 +2369,12 @@ List TrashItems
          :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Location_  (locationListType)     
 
 :ErrorCodes: 
@@ -2260,12 +2391,14 @@ Get TrashItem
          :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Location_      
+
 :Error Codes:
     :401: If the user has no permission to read the trash item
     :404: If the trash item with the given id does not exist
@@ -2279,7 +2412,7 @@ Untrash Item
         :Destination: if given the trash item is restored under this location otherwise under its orifinal parent location
 :Response: 
 
-    ::
+.. code:: http
     
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
@@ -2296,7 +2429,7 @@ Empty Trash
 :Description: Empties the trash
 :Response: 
 
-    ::
+.. code:: http
   
         HTTP/1.1 204 No Content
     
@@ -2310,7 +2443,7 @@ Delete TrashItem
 :Description: Deletes the given trash item
 :Response: 
 
-    ::
+.. code:: http
   
         HTTP/1.1 204 No Content
 
@@ -2359,7 +2492,7 @@ Create Content Type Group
          :application/vnd.ez.api.ContentTypeGroupInput+xml: the ContentTypeGroup_ input schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Loction: /content/typegroups/<newId>
@@ -2367,6 +2500,7 @@ Create Content Type Group
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentTypeGroup_      
 
 :Error Codes:
@@ -2378,7 +2512,7 @@ Create Content Type Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/typegroups HTTP/1.1
     Host: api.example.net
@@ -2386,10 +2520,14 @@ XML Example
     Content-Type: application/vnd.ez.api.ContentTypeGroupInput+xml
     Content-Length: xxx
 
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentTypeGroupInput>
       <identifier>newContentTypeGroup</identifier>
     </ContentTypeGroupInput>
+
+.. code:: http
 
     HTTP/1.1 201 Created
     Location: /content/typegroups/7
@@ -2397,6 +2535,8 @@ XML Example
     ETag: "9587649865938675"
     Content-Type: application/vnd.ez.api.ContentTypeGroup+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentTypeGroup href="/content/typesgroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
@@ -2421,11 +2561,12 @@ Get Content Type Groups
          :application/vnd.ez.api.ContentTypeGroupList+json:  if set the new section is returned in json format (see ContentTypeGroup_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentTypeGroup_  (contentTypeGroupListType)     
 
 :Error Codes:
@@ -2434,15 +2575,19 @@ Get Content Type Groups
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/typegroups HTTP/1.1
     Host: api.example.net
     Accept: application/vnd.ez.api.ContentTypeGroupList+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeGroupList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentTypeGroupList href="/content/typegroups" media-type="application/vnd.ez.api.ContentTypeGroupList+xml">
@@ -2479,13 +2624,14 @@ Get Content Type Group
     :If-None-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+(json|xml)
           ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentTypeGroup_      
 
 :ErrorCodes:
@@ -2507,13 +2653,14 @@ Update Content Type Group
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+(json|xml)
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentTypeGroup_      
 
 :Error Codes:
@@ -2526,7 +2673,7 @@ Update Content Type Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     PATCH /content/typegroups/7 HTTP/1.1
     Host: api.example.net
@@ -2535,10 +2682,14 @@ XML Example
     Content-Type: application/vnd.ez.api.ContentTypeGroupInput+xml
     Content-Length: xxx
 
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentTypeGroupInput>
       <identifier>updatedIdentifer</identifier>
     </ContentTypeGroupInput>
+
+.. code:: http
 
     HTTP/1.1 200 OK
     Location: /content/typegroups/7
@@ -2546,6 +2697,8 @@ XML Example
     ETag: "95876498659383245"
     Content-Type: application/vnd.ez.api.ContentTypeGroup+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentTypeGroup href="/content/typesgroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
@@ -2566,7 +2719,7 @@ Delete Content Type Group
 :Description: the given content type group is deleted
 :Response: 
 
-    ::
+.. code:: http
   
         HTTP/1.1 204 No Content
 
@@ -2593,9 +2746,9 @@ Create Content Type
          :application/vnd.ez.api.ContentTypeCreate+json: the ContentTypeCreate_  schema encoded in json
          :application/vnd.ez.api.ContentTypeCreate+xml: the ContentTypeCreate_  schema encoded in xml
 :Response: 
-    If publish = false:
+   If publish = false:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /content/types/<newId>/draft
@@ -2603,17 +2756,19 @@ Create Content Type
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentType_      
 
-    If publish = true:
+If publish = true:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /content/types/<newId>
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentType_      
 
 :Error Codes:
@@ -2625,13 +2780,15 @@ Create Content Type
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/typegroups/<ID> HTTP/1.1
     Accept: application/vnd.ez.api.ContentType
     Content-Type: application/vnd.ez.api.ContentTypeCreate
     Content-Length: xxx
     
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentTypeCreate>
       <identifier>newContentType</identifier>
@@ -2687,6 +2844,8 @@ XML Example
        </FieldDefinitions>
     </ContentTypeCreate>
 
+.. code:: http
+
     HTTP/1.1 201 Created
     Location: /content/types/32/draft
     Accept-Patch:  application/vnd.ez.api.ContentTypeUpdate+(json|xml)
@@ -2694,6 +2853,7 @@ XML Example
     Content-Type: application/vnd.ez.api.ContentType+xml
     Content-Length: xxx
 
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentType href="/content/types/32/draft" media-type="application/vnd.ez.api.ContentType+xml">
@@ -2767,7 +2927,7 @@ Copy Content Type
 :Description: copies a content type. The identifier of the copy is changed to copy_of_<identifier> anda new remoteIdis generated. 
 :Response:
 
-    ::
+.. code:: http
 
          HTTP/1.1 201 Created
          Location: /content/types/<newId>
@@ -2796,11 +2956,12 @@ List Content Types
          :application/vnd.ez.api.ContentTypeList+json:  if set the list content type objects (including field definitions) is returned in json format (see ContentType_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentType_      
 
 :Error Codes:
@@ -2819,12 +2980,13 @@ Get Content Type
 
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentType_
       
 :ErrorCodes:
@@ -2846,12 +3008,13 @@ Create Draft
          :application/vnd.ez.api.ContentTypeUpdate+xml: the ContentTypeUpdate_  schema encoded in xml
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /content/types/<ID>/draft
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentType_
 
 :Error Codes:
@@ -2876,11 +3039,12 @@ Update Draft
          :application/vnd.ez.api.ContentTypeUpdate+xml: the ContentTypeUpdate_  schema encoded in xml
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentType_
 
 :Error Codes:
@@ -2892,12 +3056,14 @@ Update Draft
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     PATCH /content/types/32/draft HTTO/1.1
     Accept: application/vnd.ez.api.ContentTypeInfo+xml 
     Content-Type: application/vnd.ez.api.ContentTypeUpdate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentTypeUpdate>
@@ -2909,9 +3075,13 @@ XML Example
       </descriptions>
     </ContentTypeUpdate>
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeInfo+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ContentType href="/content/types/32/draft" media-type="application/vnd.ez.api.ContentType+xml">
@@ -2954,13 +3124,14 @@ Add Field definition
          :application/vnd.ez.api.FieldDefinitionCreate+xml: the FieldDefinitionCreate_  schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /content/types/<ID>/draft/fielddefinitions/<newId>
           Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           FieldDefinition_      
 
 :Error Codes:
@@ -2979,12 +3150,13 @@ Get Fielddefinition
          :application/vnd.ez.api.FieldDefinition+json:  if set the new fielddefinition is returned in json format (see FieldDefinition_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           FieldDefinition_      
 
 :ErrorCodes: 
@@ -3005,12 +3177,13 @@ Update Fielddefinition
          :application/vnd.ez.api.FieldDefinitionUpdate+xml: the FieldDefinitionUpdate_  schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.FieldDefinitionUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           FieldDefinition_      
 
 :Error Codes:
@@ -3025,7 +3198,7 @@ Delete Fielddefinition
 :Description: the given field definition is deleted
 :Response: 
 
-    ::
+.. code:: http
 
         HTTP/1.1 204 No Content
 
@@ -3040,11 +3213,12 @@ Publish content type
 :Description: Publishes a content type draft
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentType_
 
 :Error Codes:
@@ -3059,7 +3233,7 @@ Delete Content Type
 :Description: the given content type is deleted
 :Response: 
 
-    ::
+.. code:: http
   
         HTTP/1.1 204 No Content
 
@@ -3080,11 +3254,12 @@ Get Groups of Content Type
          :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentType_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentTypeGroup_
       
 :ErrorCodes:
@@ -3094,14 +3269,18 @@ Get Groups of Content Type
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /content/types/32/groups
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
     
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
     Gontent-Length: xxx
+
+.. code:: xml
 
     <ContentTypeGroupRefList>
       <ContentTypeGroupRef href="/content/typegroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml"/>
@@ -3120,11 +3299,12 @@ Link Group to Content Type
          :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentTypeGroup_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentTypeGroup_
 
 :Error Codes:
@@ -3135,14 +3315,18 @@ Link Group to Content Type
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/types/32/groups?/content/typegroups/10
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
     
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
     Gontent-Length: xxx
+
+.. code:: xml
 
     <ContentTypeGroupRefList>
       <ContentTypeGroupRef href="/content/typegroups/7" media-type="application/vnd.ez.api.ContentTypeGroup+xml">
@@ -3165,11 +3349,12 @@ Unlink Group from Content Type
          :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentType_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           ContentTypeGroup_
 
 :Error Codes:
@@ -3180,14 +3365,18 @@ Unlink Group from Content Type
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /content/types/32/unlinkgroup?/content/typegroups/7
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
     
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
     Gontent-Length: xxx
+
+.. code:: xml
 
     <ContentTypeGroupRefList>
       <ContentTypeGroupRef href="/content/typegroups/10" media-type="application/vnd.ez.api.ContentTypeGroup+xml"/>
@@ -3234,7 +3423,7 @@ Get Root User Group
 :Description: Redirects to the root user group
 :Response: 
 
-::
+.. code:: http
 
     HTTP/1.1 301 Moved Permanently
     Location: /user/groups/<rootPath>
@@ -3253,13 +3442,14 @@ Load User Group
     :If-None-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
           ETag: "<Etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           UserGroup_      
 
 :Error Codes:
@@ -3282,7 +3472,7 @@ Create User Group
          :application/vnd.ez.api.UserGroupCreate+xml: the UserGroupCreate_  schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /user/groups/<newpath>
@@ -3290,6 +3480,7 @@ Create User Group
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           UserGroup_      
 
 :Error Codes:
@@ -3305,10 +3496,12 @@ XNL Example
 
 Creating a top level group
 
-::
+.. code:: http
 
     GET /user/groups/1/5 HTTP/1.1
     Accept: application/vnd.ez.api.UserGroup+xml
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroup href="/user/groups/1/5" id="5" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert001">
@@ -3355,11 +3548,14 @@ Creating a top level group
       <Roles href="/user/groups/1/5/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
     </UserGroup>
         
+.. code:: http
 
     POST /user/groups/1/5/subgroups HTTP/1.1
     Accept: application/vnd.ez.api.UserGroup+xml
     Content-Type: application/vnd.ez.api.UserGroupCreate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupCreate>
@@ -3379,12 +3575,16 @@ Creating a top level group
       </fields>
     </UserGroupCreate>
          
+.. code:: http
+
     HTTP/1.1 201 Created
     Location: /user/groups/1/5/65
     Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
     ETag: "348506873565465"
     Content-Type: application/vnd.ez.api.UserGroup+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroup href="/user/groups/1/5/65" id="65" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
@@ -3449,13 +3649,14 @@ Update User Group
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           UserGroup_      
 
 :Error Codes:
@@ -3467,13 +3668,15 @@ Update User Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     PATCH /user/groups/1/5/65 HTTP/1.1
     Accept: application/vnd.ez.api.UserGroup+xml
     If-Match: "348506873463455"
     Content-Type: application/vnd.ez.api.UserGroupUpdate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupUpdate>
@@ -3486,11 +3689,15 @@ XML Example
       </fields>
     </UserGroupUpdate>
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Accept-Patch:  application/vnd.ez.api.UserGroupUpdate+(json|xml)
     ETag: "348506873465777"
     Content-Type: application/vnd.ez.api.UserGroup+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroup href="/user/groups/1/5/65" id="65" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
@@ -3546,7 +3753,7 @@ Delete User Group
 :Description: the given user group is deleted
 :Response: 
 
-    ::
+.. code:: xml
 
         HTTP/1.1 204 No Content
 
@@ -3569,11 +3776,12 @@ Load Users of Group
              :offset: offset of the result set
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           User_      
 
 :Error Codes:
@@ -3590,7 +3798,7 @@ Move user Group
     :Destination: A parent group resource to which the location is moved
 :Response: 
 
-    ::
+.. code:: http
     
         HTTP/1.1 201 Created
         Location: /user/groups/<newPath>
@@ -3613,11 +3821,12 @@ Load Subgroups
          :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           UserGroup_      
 
 
@@ -3639,7 +3848,7 @@ Create User
          :application/vnd.ez.api.UserCreate+xml: the UserCreate_  schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /user/users/<ID>
@@ -3647,6 +3856,7 @@ Create User
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           User_      
 
 :Error Codes:
@@ -3658,12 +3868,14 @@ Create User
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /user/groups/1/5/65/users HTTP/1.1
     Accept: application/vnd.ez.api.User+xml
     Content-Type: application/vnd.ez.api.UserCreate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserCreate>
@@ -3686,12 +3898,16 @@ XML Example
       </fields>
     </UserCreate>
         
+.. code:: http
+
     HTTP/1.1 201 Created
     Location: /user/users/99
     Accept-Patch: application/vnd.ez.api.UserUpdate+xml
     ETag: "34567340896734095867"
     Content-Type: application/vnd.ez.api.User+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <User href="/user/users/99" id="99" media-type="application/vnd.ez.api.User+xml"
@@ -3759,11 +3975,12 @@ List Users
          :application/vnd.ez.api.UserRefList+json:  if set the link list of users is returned in json format (see User_)
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           User_      
  
 :Error Codes:
@@ -3781,7 +3998,7 @@ Load User
     :If-None-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Location: /user/users/<ID>
@@ -3789,6 +4006,7 @@ Load User
           ETag: "<Etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           User_      
 
 :Error Codes:
@@ -3810,14 +4028,16 @@ Update User
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.UserUpdate+(json|xml)
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           User_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the user 
@@ -3827,12 +4047,14 @@ Update User
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     PATCH /user/users/99HTTP/1.1
     Accept: application/vnd.ez.api.User+xml
     Content-Type: application/vnd.ez.api.UserUpdate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserUpdate>
@@ -3851,12 +4073,15 @@ XML Example
       </fields>
     </UserUpdate>
 
+.. code:: http
 
     HTTP/1.1 200 OK
     Accept-Patch:  application/vnd.ez.api.UserUpdate+(json|xml)
     ETag: "435908672409561"
     Content-Type: application/vnd.ez.api.User+xml 
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <User href="/user/users/99" id="99" media-type="application/vnd.ez.api.User+xml"
@@ -3922,7 +4147,7 @@ Delete User
 :Description: the given user is deleted
 :Response: 
 
-    ::
+.. code:: http
 
         HTTP/1.1 204 No Content
 
@@ -3942,12 +4167,14 @@ Load Groups Of User
          :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           UserGroup_      
+
 :Error Codes:
     :401: If the user has no permission to read user groups
     :404: If the user does not exist
@@ -3955,14 +4182,18 @@ Load Groups Of User
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /user/users/45/groups HTTP/1.1
     Accept: application/vnd.ez.api.UserGroupRefList+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.UserGroupRefList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupRefList href="/user/users/45/groups"
@@ -3988,12 +4219,14 @@ Assign User Group
          :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           UserGroup_ 
+
 :Error Codes:
     :401: If the user is not authorized to assign user groups
     :403: - If the new user group does not exist
@@ -4003,15 +4236,19 @@ Assign User Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /user/users/45/groups?/user/groups/1/5/88 HTTP/1.1
     Accept: application/vnd.ez.api.UserGroupRefList+xml
+
+.. code:: http
 
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.UserGroupRefList+xml
     Content-Length: xxx
     
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupRefList href="/user/users/45/groups"
       media-type="application/vnd.ez.api.UserGroupRefList">
@@ -4038,12 +4275,14 @@ Unassign User Group
          :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           UserGroup_      
+
 :Error Codes:
     :401: If the user is not authorized to unassign user groups
     :403: If the user is not in the given group
@@ -4052,15 +4291,19 @@ Unassign User Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     DELETE /user/users/45/groups/78 HTTP/1.1
     Accept: application/vnd.ez.api.UserGroupRefList+xml
+
+.. code:: http
 
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.UserGroupRefList+xml
     Content-Length: xxx
     
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <UserGroupRefList href="/user/users/45/groups"
       media-type="application/vnd.ez.api.UserGroupRefList">
@@ -4091,7 +4334,7 @@ Create Role
          :application/vnd.ez.api.RoleInput+xml: the RoleInput_  schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /user/roles/<ID>
@@ -4099,6 +4342,7 @@ Create Role
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Role_      
 
 :Error Codes:
@@ -4108,17 +4352,21 @@ Create Role
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /user/roles HTTP/1.1
     Accept: application/vnd.ez.api.Role+xml
     Content-Type: application/vnd.ez.api.RoleInput+xml
     Content-Length: xxx
 
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <RoleInput>
       <identifier>NewRole</identifier>
     </RoleInput>
+
+.. code:: http
 
     HTTP/1.1 201 Created
     Location: /user/roles/11
@@ -4126,6 +4374,8 @@ XML Example
     ETag: "465897639450694836"
     Content-Type: application/vnd.ez.api.Role+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml">
@@ -4149,11 +4399,12 @@ Load Roles
          :application/vnd.ez.api.RoleList+json:  if set the user list is returned in json format (see Role_)
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Role_      
 
 :Error Codes:
@@ -4171,11 +4422,12 @@ Load Role
     :If-None-Match: <etag>
 :Response:
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Role_      
 
 :Error Codes:
@@ -4197,14 +4449,16 @@ Update Role
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
-    .. parsed-literal::
+.. code:: xml
 
           HTTP/1.1 200 OK
           Accept-Patch:  application/vnd.ez.api.RoleInput+(json|xml)
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Role_      
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the role
@@ -4217,7 +4471,7 @@ Delete Role
 :Description: the given role is deleted
 :Response: 
 
-    ::
+.. code:: http
 
         HTTP/1.1 204 No Content
 
@@ -4237,11 +4491,12 @@ Load Roles for User or User Group
          :application/vnd.ez.api.RoleAssignmentList+json:  if set the role assignment list  is returned in json format (see Role_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Role_      
 
 :Error Codes:
@@ -4250,14 +4505,18 @@ Load Roles for User or User Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /user/groups/1/5/65/roles HTTP/1.1
     Accept: application/vnd.ez.api.RoleAssignmentList+xml
     
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.RoleAssignmentList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml">
@@ -4288,11 +4547,12 @@ Assign Role to User or User Group
          :application/vnd.ez.api.RoleAssignInput+xml: the RoleAssignInput_  schema encoded in xml
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Role_      
 
 :Error Codes:
@@ -4302,12 +4562,14 @@ Assign Role to User or User Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /user/groups/1/5/65/roles HTTP/1.1
     Accept: application/vnd.ez.api.RoleAssignmentList+xml
     Content-Type:  application/vnd.ez.api.RoleAssignInput+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <RoleAssignInput>
@@ -4317,9 +4579,13 @@ XML Example
       </limitation>
     </RoleAssignInput>
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.RoleAssignmentList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml">
@@ -4355,11 +4621,12 @@ Unassign Role from User or User Group
          :application/vnd.ez.api.RoleAssignmentList+json:  if set the updated role assignment list  is returned in json format (see Role_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Role_      
 
 :Error Codes:
@@ -4368,14 +4635,18 @@ Unassign Role from User or User Group
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     DELETE /user/groups/1/5/65/roles/7 HTTP/1.1
     Accept: application/vnd.ez.api.RoleAssignmentList+xml
     
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.RoleAssignmentList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <RoleAssignmentList href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml">
@@ -4403,11 +4674,12 @@ Load Policies
          :application/vnd.ez.api.PolicyList+json:  if set the policy list  is returned in json format (see Policy_)
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Policy_      
 
 
@@ -4419,14 +4691,18 @@ Load Policies
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /user/roles/7/policies HTTP/1.1
     Accept: application/vnd.ez.api.PolicyList+xml
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.PolicyList+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <PolicyList href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList">
@@ -4473,7 +4749,7 @@ Delete Policies
 :Description: all policies of the given role are deleted
 :Response: 
 
-    ::
+.. code:: http
 
         HTTP/1.1 204 No Content
 
@@ -4492,13 +4768,14 @@ Load Policy
     :If-None-Match: <etag>
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
           ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Policy_      
 
 :Error Codes:
@@ -4509,16 +4786,20 @@ Load Policy
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     GET /user/roles/7/policies/45 HTTP/1.1
     Accept: application/vnd.ez.api.Policy+xml
+
+.. code:: http
 
     HTTP/1.1 200 OK
     Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
     ETag: "697850469873045967"
     Content-Type: application/vnd.ez.api.Policy+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <Policy href="/user/roles/11/policies/45" media-type="application/vnd.ez.api.Policy+xml">
       <id>45</id>
@@ -4557,7 +4838,7 @@ Create Policy
 
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 201 Created
           Location: /user/roles/<ID>/policies/<newId>
@@ -4565,6 +4846,7 @@ Create Policy
           ETag: "<new_etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Policy_      
 
 :Error Codes:
@@ -4576,11 +4858,13 @@ Create Policy
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     POST /user/roles/7/policies HTTP/1.1
     Content-Type: application/vnd.ez.api.PolicyCreate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <PolicyCreate>
@@ -4600,12 +4884,16 @@ XML Example
       </limitations>
     </PolicyCreate>
      
+.. code:: http
+
     HTTP/1.1 201 Created
     Location: /user/roles/7/policies/55
     Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
     ETag: "697850469873043234234"
     Content-Type: application/vnd.ez.api.Policy+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <Policy href="/user/roles/11/policies/55" media-type="application/vnd.ez.api.Policy+xml">
       <id>55</id>
@@ -4641,13 +4929,14 @@ Update Policy
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
 :Response: 
 
-    .. parsed-literal::
+.. code:: http
 
           HTTP/1.1 200 OK
           Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
           ETag: "<new_etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+.. parsed-literal::
           Policy_      
 
 :Error Codes:
@@ -4659,13 +4948,15 @@ Update Policy
 XML Example
 '''''''''''
 
-::
+.. code:: http
 
     PATCH /user/roles/7/policies/55 HTTP/1.1
     Accept: application/vnd.ez.api.Policy+xml
     If-Match: "697850469873043236666"
     Content-Type: application/vnd.ez.api.PolicyUpdate+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <PolicyUpdate>
@@ -4683,11 +4974,15 @@ XML Example
       </limitations>
     </PolicyUpdate>
 
+.. code:: http
+
     HTTP/1.1 200 OK
     Accept-Patch: application/vnd.ez.api.PolicyUpdate+(xml|json)
     ETag: "697850469873043234234"
     Content-Type: application/vnd.ez.api.Policy+xml
     Content-Length: xxx
+
+.. code:: xml
 
     <Policy href="/user/roles/11/policies/55" media-type="application/vnd.ez.api.Policy+xml">
       <id>55</id>
@@ -4714,7 +5009,7 @@ Delete Policy
 :Method: DELETE
 :Response: 
 
-    ::
+.. code:: http
 
         HTTP/1.1 204 No Content
 
@@ -5607,13 +5902,17 @@ Output Schema
 XML Example
 '''''''''''
 
-::
+
+
+.. code:: http
 
     GET /content/objects/123/versions/4 HTTP/1.1
     Host: api.example.com
     If-None-Match: "1758f762"
     Accept: application/vnd.ez.api.Version+xml
        
+.. code:: http
+
     HTTP/1.1 200 OK
     Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
     ETag: "a3f2e5b7"

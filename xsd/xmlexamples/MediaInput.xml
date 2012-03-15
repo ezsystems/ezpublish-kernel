@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<p:mediaInput cid="" xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ez.no/API/Values ../FieldTypes.xsd ">
-  <originalFileName>originalFileName</originalFileName>
-  <width>0</width>
-  <height>0</height>
-  <controller>true</controller>
-  <autoplay>true</autoplay>
-  <loop>true</loop>
-</p:mediaInput>
