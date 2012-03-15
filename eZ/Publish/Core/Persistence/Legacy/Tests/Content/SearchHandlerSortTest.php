@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
@@ -22,7 +23,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 /**
  * Test case for ContentSearchHandler
  */
-class SearchHandlerSortTest extends TestCase
+class SearchHandlerSortTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
@@ -37,6 +38,11 @@ class SearchHandlerSortTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
      */
     protected $languageHandler;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
 
     /**
      * Returns the test suite with all tests declared in this class.
@@ -110,7 +116,9 @@ class SearchHandlerSortTest extends TestCase
                         new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
                     )
                 ),
-                new QueryBuilder( $this->getDatabaseHandler() )
+                new QueryBuilder( $this->getDatabaseHandler() ),
+                $this->getLanguageHandlerMock(),
+                $this->getLanguageMaskGenerator()
             ),
             $this->getContentMapperMock(),
             $this->getContentFieldHandlerMock()
@@ -205,6 +213,19 @@ class SearchHandlerSortTest extends TestCase
                     $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
                 )
             );
+            $this->languageHandler->expects( $this->any() )
+                ->method( 'getById' )
+                ->will(
+                    $this->returnValue(
+                        new Language(
+                            array(
+                                'id'            => 2,
+                                'languageCode'  => 'eng-GB',
+                                'name'          => 'British english'
+                            )
+                        )
+                    )
+                );
         }
         return $this->languageHandler;
     }
@@ -239,6 +260,22 @@ class SearchHandlerSortTest extends TestCase
             '',
             false
         );
+    }
+
+    /**
+     * Returns a language mask generator
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected function getLanguageMaskGenerator()
+    {
+        if ( !isset( $this->languageMaskGenerator ) )
+        {
+            $this->languageMaskGenerator = new LanguageMaskGenerator(
+                $this->getLanguageLookupMock()
+            );
+        }
+        return $this->languageMaskGenerator;
     }
 
     public function testNoSorting()
