@@ -191,7 +191,7 @@ class ContentHandler implements ContentHandlerInterface
                 "ownerId" => $contentInfo->ownerId,
                 "isPublished" => $contentInfo->isPublished,
                 "currentVersionNo" => $currentVersionNo,
-                "mainLanguageCode" => $content->mainLanguageCode,
+                "mainLanguageCode" => $contentInfo->mainLanguageCode,
                 "modificationDate" => $time,
                 "publicationDate" => $time
             ),
