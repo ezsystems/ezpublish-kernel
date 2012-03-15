@@ -77,7 +77,7 @@ class TrashHandlerTest extends TestCase
             ->method( 'trashSubtree' )
             ->with( '/1/2/69/' );
 
-        $handler->trashSubtree( 69 );
+        $handler->trash( 69 );
     }
 
     public function testUntrashTrash()
@@ -89,7 +89,7 @@ class TrashHandlerTest extends TestCase
             ->method( 'untrashLocation' )
             ->with( 69, 23 );
 
-        $handler->untrashLocation( 69, 23 );
+        $handler->recover( 69, 23 );
     }
 
     public function testLoad()
@@ -107,6 +107,6 @@ class TrashHandlerTest extends TestCase
             ->method( 'createLocationFromRow' )
             ->with( $array, null, new Trashed() );
 
-        $handler->load( 69 );
+        $handler->loadTrashItem( 69 );
     }
 }

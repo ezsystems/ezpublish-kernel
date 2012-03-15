@@ -27,7 +27,7 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function load( $id );
+    public function loadTrashItem( $id );
 
     /**
      * Sends a subtree to the trash
@@ -38,7 +38,7 @@ interface Handler
      * @param mixed $locationId
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
-    public function trashSubtree( $locationId );
+    public function trash( $locationId );
 
     /**
      * Returns a trashed location to normal state.
@@ -54,7 +54,7 @@ interface Handler
      * @return int Newly restored location id
      * @throws \ezp\Content\Location\Exception\ParentNotFound
      */
-    public function untrashLocation( $trashedId, $newParentId );
+    public function recover( $trashedId, $newParentId );
 
     /**
      * Returns an array of all trashed locations satisfying the $criterion (if provided),
@@ -67,7 +67,7 @@ interface Handler
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
-    public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );
+    public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );
 
     /**
      * Empties the trash
@@ -81,5 +81,5 @@ interface Handler
      *
      * @param int $trashedId
      */
-    public function emptyOne( $trashedId );
+    public function deleteTrashItem( $trashedId );
 }

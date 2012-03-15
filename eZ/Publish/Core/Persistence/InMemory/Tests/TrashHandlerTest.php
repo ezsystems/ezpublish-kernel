@@ -176,11 +176,11 @@ class TrashHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $trashed = $this->trashHandler->trashSubtree( $this->locations[0]->id );
+        $trashed = $this->trashHandler->trash( $this->locations[0]->id );
         $trashedId = $trashed->id;
         unset( $trashed );
 
-        $trashed = $this->trashHandler->load( $trashedId );
+        $trashed = $this->trashHandler->loadTrashItem( $trashedId );
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashed );
         foreach ( $this->locations[0] as $property => $value )
         {
@@ -195,7 +195,7 @@ class TrashHandlerTest extends HandlerTest
      */
     public function testLoadNonExistent()
     {
-        $this->trashHandler->load( 0 );
+        $this->trashHandler->loadTrashItem( 0 );
     }
 
     /**

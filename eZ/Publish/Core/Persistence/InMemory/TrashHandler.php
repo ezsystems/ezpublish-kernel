@@ -47,7 +47,7 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function load( $id )
+    public function loadTrashItem( $id )
     {
         return $this->backend->load( 'Content\\Location\\Trashed', $id );
     }
@@ -55,9 +55,9 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function trashSubtree( $locationId )
+    public function trash( $locationId )
     {
-        $trashedLocation = $this->trash( $locationId );
+        $trashedLocation = $this->trashLocation( $locationId );
 
         // Begin recursive call on children, if any
         $directChildren = $this->backend->find( 'Content\\Location', array( 'parentId' => $locationId ) );
@@ -65,7 +65,7 @@ class TrashHandler implements TrashHandlerInterface
         {
             foreach ( $directChildren as $child )
             {
-                $this->trashSubtree( $child->id );
+                $this->trash( $child->id );
             }
         }
 
@@ -75,7 +75,7 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    private function trash( $locationId )
+    private function trashLocation( $locationId )
     {
         $location = $this->handler->locationHandler()->load( $locationId );
 
@@ -102,9 +102,9 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function untrashLocation( $trashedId, $newParentId )
+    public function recover( $trashedId, $newParentId )
     {
-        $trashedLocation = $this->load( $trashedId );
+        $trashedLocation = $this->loadTrashItem( $trashedId );
         try
         {
             $newParent = $this->handler->locationHandler()->load( $newParentId );
@@ -135,7 +135,7 @@ class TrashHandler implements TrashHandlerInterface
      *
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
+    public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {
         return array_slice(
             $this->backend->find( 'Content\\Location\\Trashed' ),
@@ -173,9 +173,9 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function emptyOne( $trashedId )
+    public function deleteTrashItem( $trashedId )
     {
-        $vo = $this->load( $trashedId );
+        $vo = $this->loadTrashItem( $trashedId );
         $this->handler->contentHandler()->delete( $vo->contentId );
         $this->backend->delete( 'Content\\Location\\Trashed', $trashedId );
     }

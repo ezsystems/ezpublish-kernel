@@ -56,7 +56,7 @@ class Handler implements BaseTrashHandler
      * @param int $id
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
-    public function load( $id )
+    public function loadTrashItem( $id )
     {
         $data = $this->locationGateway->loadTrashByLocation( $id );
         return $this->locationMapper->createLocationFromRow( $data, null, new Trashed() );
@@ -71,7 +71,7 @@ class Handler implements BaseTrashHandler
      * @param mixed $locationId
      * @return boolean
      */
-    public function trashSubtree( $locationId )
+    public function trash( $locationId )
     {
         $sourceNodeData = $this->locationGateway->getBasicNodeData( $locationId );
 
@@ -92,7 +92,7 @@ class Handler implements BaseTrashHandler
      * @return int Newly restored location id
      * @throws \ezp\Content\Location\Exception\ParentNotFound
      */
-    public function untrashLocation( $trashedId, $newParentId )
+    public function recover( $trashedId, $newParentId )
     {
         $this->locationGateway->untrashLocation( $trashedId, $newParentId );
     }
@@ -108,7 +108,7 @@ class Handler implements BaseTrashHandler
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
-    public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
+    public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {
         // CBA: Ignore criterion for now.
         $rows = $this->locationGateway->listTrashed( $offset, $limit, $sort );
@@ -137,7 +137,7 @@ class Handler implements BaseTrashHandler
      *
      * @param int $trashedId
      */
-    public function emptyOne( $trashedId )
+    public function deleteTrashItem( $trashedId )
     {
         throw new \RuntimeException( '@TODO: Implement.' );
     }
