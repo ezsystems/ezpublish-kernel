@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\Location,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
@@ -783,6 +784,7 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         $nodeIds = array();
+        $objectIds = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
             unset( $row['contentobject_is_published'] );
@@ -796,6 +798,7 @@ class EzcDatabase extends Gateway
 
             $query->prepare()->execute();
             $nodeIds[] = $row['node_id'];
+            $objectIds[] = $row['contentobject_id'];
         }
 
         $query = $this->handler->createDeleteQuery();
@@ -808,6 +811,29 @@ class EzcDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+
+        // Now check if there is no more node for each content object.
+        // If so, set content object status to archived
+        foreach ( $objectIds as $contentId )
+        {
+            if ( $this->countLocationsByContentId( $contentId ) < 1 )
+            {
+                $q = $this->handler->createUpdateQuery();
+                $q
+                    ->update( 'ezcontentobject' )
+                    ->set(
+                        $this->handler->quoteColumn( 'status' ),
+                        $q->bindValue( ContentInfo::STATUS_ARCHIVED, null, \PDO::PARAM_INT )
+                    )
+                    ->where(
+                        $q->expr->eq(
+                            $this->handler->quoteColumn( 'id' ),
+                            $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                        )
+                    );
+                $q->prepare()->execute();
+            }
+        }
     }
 
     /**
@@ -1006,5 +1032,31 @@ class EzcDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+    }
+
+    /**
+     * Returns how many locations given content object identified by $contentId has
+     *
+     * @param int $contentId
+     * @return int
+     */
+    public function countLocationsByContentId( $contentId )
+    {
+        $q = $this->handler->createSelectQuery();
+        $q
+            ->select(
+                $q->alias( $q->expr->count( '*' ), 'count' )
+            )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where(
+                $q->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                )
+            );
+        $stmt = $q->prepare();
+        $stmt->execute();
+        $res = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        return (int)$res[0]['count'];
     }
 }
