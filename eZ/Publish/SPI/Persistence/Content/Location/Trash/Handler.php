@@ -53,7 +53,7 @@ interface Handler
      * @param mixed $locationId
      * @param mixed $newParentId
      * @return int Newly restored location id
-     * @throws \ezp\Content\Location\Exception\ParentNotFound
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
      */
     public function recover( $trashedId, $newParentId );
 
