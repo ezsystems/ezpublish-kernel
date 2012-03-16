@@ -93,7 +93,7 @@ interface Handler
      *
      * @param $userId
      *
-     * @return eZ\Publish\SPI\Persistence\Content\VersionInfo[]
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
     public function loadDraftsForUser( $userId );
 

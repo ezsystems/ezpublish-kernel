@@ -342,7 +342,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function loadDraftsForUser( $userId )
     {

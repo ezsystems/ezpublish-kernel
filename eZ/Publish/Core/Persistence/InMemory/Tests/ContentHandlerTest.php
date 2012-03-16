@@ -178,7 +178,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test loadDraftsForUser function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadDraftsForUser
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadDraftsForUser
      * @group contentHandler
      */
     public function testLoadDraftsForUser()
