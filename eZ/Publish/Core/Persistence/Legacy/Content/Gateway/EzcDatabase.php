@@ -868,6 +868,39 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns data for all versions with given status created by the given $userId
+     *
+     * @param $userId
+     * @param int $status
+     *
+     * @return string[][]
+     */
+    public function listVersionsForUser( $userId, $status = VersionInfo::STATUS_DRAFT )
+    {
+        $query = $this->queryBuilder->createVersionFindQuery();
+        $query->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'status', 'ezcontentobject_version' ),
+                    $query->bindValue( $status, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'creator_id', 'ezcontentobject_version' ),
+                    $query->bindValue( $userId, null, \PDO::PARAM_INT )
+                )
+            )
+        )->groupBy(
+            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' ),
+            $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
@@ -875,53 +908,8 @@ class EzcDatabase extends Gateway
      */
     public function listVersions( $contentId )
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
-            $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
-            $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject_version' ),
-            $this->dbHandler->aliasedColumn( $query, 'creator_id', 'ezcontentobject_version' ),
-            $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
-            $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
-            $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
-            $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
-            // Language IDs
-            $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
-            $this->dbHandler->aliasedColumn( $query, 'language_id', 'ezcontentobject_attribute' ),
-            // Content object names
-            $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject_name' ),
-            $this->dbHandler->aliasedColumn( $query, 'content_translation', 'ezcontentobject_name' )
-        )->from(
-            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
-        )->leftJoin(
-            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' )
-                )
-            )
-        // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
-        // since it creates an additional cartesian product with translations.
-        )->leftJoin(
-            $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
-            $query->expr->lAnd(
-                // ezcontentobject_name.content_translation is also part of the PK but can't be
-                // easily joined with something at this level
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_name' ),
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'content_version', 'ezcontentobject_name' ),
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
-                )
-            )
-        )->where(
+        $query = $this->queryBuilder->createVersionFindQuery();
+        $query->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
                 $query->bindValue( $contentId, null, \PDO::PARAM_INT )

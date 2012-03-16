@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
     eZ\Publish\API\Repository\Values\Content\Query\Criterion as AbstractCriterion,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
@@ -86,6 +87,15 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     public function loadVersionInfo( $contentId, $versionNo );
+
+    /**
+     * Returns all versions with draft status created by the given $userId
+     *
+     * @param $userId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
+     */
+    public function loadDraftsForUser( $userId );
 
     /**
      * Sets the state of object identified by $contentId and $version to $status.

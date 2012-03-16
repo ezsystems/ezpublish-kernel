@@ -20412,6 +20412,70 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
+    1244 => 
+    array (
+      'attribute_original_id' => '0',
+      'contentclassattribute_id' => '6',
+      'contentobject_id' => '225',
+      'data_float' => '0',
+      'data_int' => NULL,
+      'data_text' => 'Partners',
+      'data_type_string' => 'ezstring',
+      'id' => '4001',
+      'language_code' => 'eng-US',
+      'language_id' => '3',
+      'sort_key_int' => '0',
+      'sort_key_string' => 'partners',
+      'version' => '2',
+    ),
+    1245 => 
+    array (
+      'attribute_original_id' => '0',
+      'contentclassattribute_id' => '7',
+      'contentobject_id' => '225',
+      'data_float' => '0',
+      'data_int' => NULL,
+      'data_text' => '',
+      'data_type_string' => 'ezstring',
+      'id' => '4002',
+      'language_code' => 'eng-US',
+      'language_id' => '3',
+      'sort_key_int' => '0',
+      'sort_key_string' => '',
+      'version' => '2',
+    ),
+    1246 => 
+    array (
+      'attribute_original_id' => '0',
+      'contentclassattribute_id' => '302',
+      'contentobject_id' => '166',
+      'data_float' => '0',
+      'data_int' => NULL,
+      'data_text' => 'Forum',
+      'data_type_string' => 'ezstring',
+      'id' => '4003',
+      'language_code' => 'eng-US',
+      'language_id' => '2',
+      'sort_key_int' => '0',
+      'sort_key_string' => 'forum',
+      'version' => '2',
+    ),
+    1247 => 
+    array (
+      'attribute_original_id' => '0',
+      'contentclassattribute_id' => '303',
+      'contentobject_id' => '166',
+      'data_float' => '0',
+      'data_int' => '1045487555',
+      'data_text' => '<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>',
+      'data_type_string' => 'ezxmltext',
+      'id' => '4004',
+      'language_code' => 'eng-US',
+      'language_id' => '2',
+      'sort_key_int' => '0',
+      'sort_key_string' => '',
+      'version' => '2',
+    )
   ),
   'ezcontentobject_version' => 
   array (
@@ -23047,6 +23111,34 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
+    188 => 
+    array (
+      'contentobject_id' => '225',
+      'created' => '1311155215',
+      'creator_id' => '14',
+      'id' => '677',
+      'initial_language_id' => '2',
+      'language_mask' => '3',
+      'modified' => '1311155215',
+      'status' => '0',
+      'user_id' => '0',
+      'version' => '2',
+      'workflow_event_pos' => '0',
+    ),
+    124 => 
+    array (
+      'contentobject_id' => '166',
+      'created' => '1193916699',
+      'creator_id' => '14',
+      'id' => '678',
+      'initial_language_id' => '2',
+      'language_mask' => '3',
+      'modified' => '1193916707',
+      'status' => '0',
+      'user_id' => '0',
+      'version' => '2',
+      'workflow_event_pos' => '0',
+    )
   ),
   'ezcontentobject' => 
   array (
@@ -32194,6 +32286,15 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name'=>'Partners',
       'real_translation'=>'eng-US'
     ),
+
+    array(
+      'content_translation'=>'eng-US',
+      'content_version'=>2,
+      'contentobject_id'=>225,
+      'language_id'=>3,
+      'name'=>'Partners',
+      'real_translation'=>'eng-US'
+    ),
       
     array(
       'content_translation'=>'eng-US',
@@ -32201,6 +32302,15 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'contentobject_id'=>226,
       'language_id'=>3,
       'name'=>'Something',
+      'real_translation'=>'eng-US'
+    ),
+
+    array(
+      'content_translation'=>'eng-US',
+      'content_version'=>2,
+      'contentobject_id'=>166,
+      'language_id'=>2,
+      'name'=>'Forum',
       'real_translation'=>'eng-US'
     ),
   ),
