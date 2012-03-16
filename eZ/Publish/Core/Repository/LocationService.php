@@ -334,8 +334,8 @@ class LocationService implements LocationServiceInterface
 
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
-            $offset > 0 ? (int) $offset : 0,
-            $limit >= 1 ? (int) $limit : null,
+            $offset >= 0 ? (int) $offset : 0,
+            $limit  >= 0 ? (int) $limit  : null,
             $sortClause
         );
     }
@@ -653,9 +653,7 @@ class LocationService implements LocationServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
 
-        $childrenLocations = $this->searchChildrenLocations(
-            $spiLocation->id
-        );
+        $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, null, APILocation::SORT_ORDER_ASC, 0, 0 );
 
         return new Location(
             array(

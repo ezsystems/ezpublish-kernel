@@ -187,15 +187,17 @@ class UserService implements UserServiceInterface
      * @param int $locationId
      * @param int|null $sortField
      * @param int $sortOrder
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC )
+    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
         $searchQuery = new Query();
 
-        $searchQuery->offset = 0;
-        $searchQuery->limit = null;
+        $searchQuery->offset = $offset >= 0 ? (int) $offset : 0;
+        $searchQuery->limit  = $limit  >= 0 ? (int) $limit  : null;
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
@@ -855,7 +857,7 @@ class UserService implements UserServiceInterface
         $subGroupCount = 0;
         if ( $mainLocation !== null )
         {
-            $subGroups = $this->searchSubGroups( $mainLocation->id );
+            $subGroups = $this->searchSubGroups( $mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0 );
             $subGroupCount = $subGroups->count;
         }
 
