@@ -197,6 +197,25 @@ abstract class Gateway
     abstract public function loadTrashByLocation( $locationId );
 
     /**
+     * Removes every entries in the trash.
+     * Will NOT remove associated content objects nor attributes.
+     *
+     * Basically truncates ezcontentobject_trash table.
+     *
+     * @return void
+     */
+    abstract public function cleanupTrash();
+
+    /**
+     * Removes trashed element identified by $id from trash.
+     * Will NOT remove associated content object nor attributes.
+     *
+     * @param int $id The trashed location Id
+     * @return void
+     */
+    abstract public function removeElementFromTrash( $id );
+
+    /**
      * Set section on all content objects in the subtree
      *
      * @param mixed $pathString
@@ -204,4 +223,12 @@ abstract class Gateway
      * @return boolean
      */
     abstract public function setSectionForSubtree( $pathString, $sectionId );
+
+    /**
+     * Returns how many locations given content object identified by $contentId has
+     *
+     * @param int $contentId
+     * @return int
+     */
+    abstract public function countLocationsByContentId( $contentId );
 }

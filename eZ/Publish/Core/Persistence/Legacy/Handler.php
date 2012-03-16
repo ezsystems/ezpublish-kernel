@@ -18,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
@@ -145,6 +146,13 @@ class Handler implements HandlerInterface
      * @var mixed
      */
     protected $sectionHandler;
+
+    /**
+     * Trash handler
+     *
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler
+     */
+    protected $trashHandler;
 
     /**
      * Content gateway
@@ -681,7 +689,16 @@ class Handler implements HandlerInterface
      */
     public function trashHandler()
     {
-        throw new \RuntimeException( 'Not implemented yet' );
+        if ( !isset( $this->trashHandler ) )
+        {
+            $this->trashHandler = new TrashHandler(
+                $this->getLocationGateway(),
+                $this->getLocationMapper(),
+                $this->contentHandler()
+            );
+        }
+
+        return $this->trashHandler;
     }
 
     /**

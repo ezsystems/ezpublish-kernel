@@ -998,6 +998,42 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Removes every entries in the trash.
+     * Will NOT remove associated content objects nor attributes.
+     *
+     * Basically truncates ezcontentobject_trash table.
+     *
+     * @return void
+     */
+    public function cleanupTrash()
+    {
+        $query = $this->handler->createDeleteQuery();
+        $query->deleteFrom( 'ezcontentobject_trash' );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Removes trashed element identified by $id from trash.
+     * Will NOT remove associated content object nor attributes.
+     *
+     * @param int $id The trashed location Id
+     * @return void
+     */
+    public function removeElementFromTrash( $id )
+    {
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'ezcontentobject_trash' )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'node_id' ),
+                    $id
+                )
+            );
+        $query->prepare()->execute();
+    }
+
+    /**
      * Set section on all content objects in the subtree
      *
      * @param mixed $pathString

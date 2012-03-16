@@ -13,6 +13,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trash,
     eZ\Publish\SPI\Persistence\Content\Location\Trash\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\Trash\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
@@ -37,16 +38,28 @@ class Handler implements BaseTrashHandler
     protected $locationMapper;
 
     /**
+     * Content handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
+     */
+    protected $contentHandler;
+
+    /**
      * Construct from userGateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @return void
      */
-    public function __construct( LocationGateway $locationGateway, LocationMapper $locationMapper )
+    public function __construct(
+        LocationGateway $locationGateway,
+        LocationMapper $locationMapper,
+        ContentHandler $contentHandler
+    )
     {
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
+        $this->contentHandler = $contentHandler;
     }
 
     /**
@@ -132,7 +145,13 @@ class Handler implements BaseTrashHandler
      */
     public function emptyTrash()
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        $trashedItems = $this->findTrashItems();
+        foreach ( $trashedItems as $item )
+        {
+            $this->delete( $item );
+        }
+
+        $this->locationGateway->cleanupTrash();
     }
 
     /**
@@ -144,7 +163,22 @@ class Handler implements BaseTrashHandler
      */
     public function deleteTrashItem( $trashedId )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        $this->delete( $this->loadTrashItem( $trashedId ) );
+    }
+
+    /**
+     * Triggers delete operations for $trashItem.
+     * If there is no more locations for corresponding content, then it will be deleted as well.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $trashItem
+     * @return void
+     */
+    protected function delete( Trashed $trashItem )
+    {
+        $this->locationGateway->removeElementFromTrash( $item->id );
+
+        if ( $this->locationGateway->countLocationsByContentId( $item->contentId ) < 1 )
+            $this->contentHandler->delete( $item->contentId );
     }
 }
 
