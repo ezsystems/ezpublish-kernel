@@ -76,7 +76,7 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItemId ) )
             throw new InvalidArgumentValue( "trashItemId", $trashItemId );
 
-        $spiTrashItem = $this->persistenceHandler->trashHandler()->load( $trashItemId );
+        $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem( $trashItemId );
         return $this->buildDomainTrashItemObject( $spiTrashItem );
     }
 
@@ -96,7 +96,7 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
+        $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
         return $this->buildDomainTrashItemObject( $spiTrashItem );
     }
 
@@ -123,7 +123,7 @@ class TrashService implements TrashServiceInterface
         if ( $newParentLocation !== null && !is_numeric( $newParentLocation->parentLocationId ) )
             throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->parentLocationId, "LocationCreateStruct" );
 
-        $newLocationId = $this->persistenceHandler->trashHandler()->untrashLocation(
+        $newLocationId = $this->persistenceHandler->trashHandler()->recover(
             $trashItem->id,
             $newParentLocation ? $newParentLocation->parentLocationId : $trashItem->parentLocationId
         );
@@ -159,7 +159,7 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
 
-        $this->persistenceHandler->trashHandler()->emptyOne( $trashItem->id );
+        $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
     }
 
     /**
@@ -194,7 +194,7 @@ class TrashService implements TrashServiceInterface
         if ( $query->limit !== null && !is_numeric( $query->limit ) )
             throw new InvalidArgumentValue( "query->limit", $query->limit, "Query" );
 
-        $spiTrashItems = $this->persistenceHandler->trashHandler()->listTrashed(
+        $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
             $query->criterion !== null ? $query->criterion : null,
             $query->offset !== null && $query->offset >= 0 ? (int) $query->offset : 0,
             $query->limit !== null && $query->limit > 0 ? (int) $query->limit : null,
