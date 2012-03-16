@@ -81,13 +81,21 @@ class UserHandler implements UserHandlerInterface
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no users are found
+     *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function loadByLogin( $login, $alsoMatchEmail = false )
     {
         $users = $this->backend->find( 'User', array( 'login' => $login ) );
         if ( !$alsoMatchEmail )
+        {
+            if ( empty( $users ) )
+                throw new NotFound( 'User', $login );
+
             return $users;
+        }
 
         foreach ( $this->backend->find( 'User', array( 'email' => $login ) ) as $emailUser )
         {
@@ -98,6 +106,10 @@ class UserHandler implements UserHandlerInterface
             }
             $users[] = $emailUser;
         }
+
+        if ( empty( $users ) )
+            throw new NotFound( 'User', $login );
+
         return $users;
     }
 
