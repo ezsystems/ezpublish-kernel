@@ -697,6 +697,50 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::listVersionsForUser
+     */
+    public function testListVersionsForUser()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->listVersionsForUser( 14 );
+
+        $this->assertEquals(
+            2,
+            count( $res )
+        );
+
+        foreach ( $res as $row )
+        {
+            $this->assertEquals(
+                12,
+                count( $row )
+            );
+        }
+
+        $this->assertEquals(
+            677,
+            $res[0]['ezcontentobject_version_id']
+        );
+        $this->assertEquals(
+            0,
+            $res[0]['ezcontentobject_version_status']
+        );
+        $this->assertEquals(
+            678,
+            $res[1]['ezcontentobject_version_id']
+        );
+        $this->assertEquals(
+            0,
+            $res[1]['ezcontentobject_version_status']
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */

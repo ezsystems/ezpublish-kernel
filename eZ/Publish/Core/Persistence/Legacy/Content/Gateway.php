@@ -159,6 +159,16 @@ abstract class Gateway
     abstract public function loadVersionInfo( $contentId, $versionNo );
 
     /**
+     * Returns data for all versions with given status created by the given $userId
+     *
+     * @param $userId
+     * @param int $status
+     *
+     * @return string[][]
+     */
+    abstract public function listVersionsForUser( $userId, $status = VersionInfo::STATUS_DRAFT );
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
