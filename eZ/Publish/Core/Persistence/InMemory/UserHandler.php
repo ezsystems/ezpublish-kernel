@@ -91,7 +91,7 @@ class UserHandler implements UserHandlerInterface
         $users = $this->backend->find( 'User', array( 'login' => $login ) );
         if ( !$alsoMatchEmail )
         {
-            if ( empty ( $users ) )
+            if ( empty( $users ) )
                 throw new NotFound( 'User', $login );
 
             return $users;
@@ -107,7 +107,7 @@ class UserHandler implements UserHandlerInterface
             $users[] = $emailUser;
         }
 
-        if ( empty ( $users ) )
+        if ( empty( $users ) )
             throw new NotFound( 'User', $login );
 
         return $users;
