@@ -23,7 +23,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trash,
 class Handler implements BaseTrashHandler
 {
     /**
-     * Gaateway for handling location data
+     * Gateway for handling location data
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
