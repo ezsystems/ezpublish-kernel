@@ -105,14 +105,7 @@ class TrashHandler implements TrashHandlerInterface
     public function recover( $trashedId, $newParentId )
     {
         $trashedLocation = $this->loadTrashItem( $trashedId );
-        try
-        {
-            $newParent = $this->handler->locationHandler()->load( $newParentId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new ParentNotFound( $trashedLocation->id, $newParentId, $e );
-        }
+        $newParent = $this->handler->locationHandler()->load( $newParentId );
 
         // Restore location under $newParent
         $struct = new CreateStruct;
@@ -124,7 +117,7 @@ class TrashHandler implements TrashHandlerInterface
             }
         }
 
-        $struct->parentId = $newParentId;
+        $struct->parentId = $newParent->id;
         return $this->handler->locationHandler()->create( $struct )->id;
     }
 
