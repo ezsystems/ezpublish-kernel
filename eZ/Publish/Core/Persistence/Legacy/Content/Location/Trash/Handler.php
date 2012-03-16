@@ -55,6 +55,7 @@ class Handler implements BaseTrashHandler
      *
      * @param int $id
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function loadTrashItem( $id )
     {
@@ -63,19 +64,20 @@ class Handler implements BaseTrashHandler
     }
 
     /**
-     * Sends a subtree to the trash
+     * Sends a subtree starting to $locationId to the trash
+     * and returns a Trashed object corresponding to $locationId.
      *
      * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
      *
      * @param mixed $locationId
-     * @return boolean
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
     public function trash( $locationId )
     {
         $sourceNodeData = $this->locationGateway->getBasicNodeData( $locationId );
-
         $this->locationGateway->trashSubtree( $sourceNodeData['path_string'] );
+        return $this->loadTrashItem( $locationId );
     }
 
     /**
@@ -94,7 +96,7 @@ class Handler implements BaseTrashHandler
      */
     public function recover( $trashedId, $newParentId )
     {
-        $this->locationGateway->untrashLocation( $trashedId, $newParentId );
+        return $this->locationGateway->untrashLocation( $trashedId, $newParentId )->id;
     }
 
     /**
@@ -125,6 +127,8 @@ class Handler implements BaseTrashHandler
     /**
      * Empties the trash
      * Everything contained in the trash must be removed
+     *
+     * @return void
      */
     public function emptyTrash()
     {
@@ -136,6 +140,7 @@ class Handler implements BaseTrashHandler
      * Associated content has to be deleted
      *
      * @param int $trashedId
+     * @return void
      */
     public function deleteTrashItem( $trashedId )
     {

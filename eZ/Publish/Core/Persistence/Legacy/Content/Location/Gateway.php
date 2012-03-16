@@ -184,7 +184,7 @@ abstract class Gateway
      *
      * @param mixed $locationId
      * @param mixed $newParentId
-     * @return boolean
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     abstract public function untrashLocation( $locationId, $newParentId = null );
 

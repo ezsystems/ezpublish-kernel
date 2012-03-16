@@ -820,7 +820,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $locationId
      * @param mixed $newParentId
-     * @return boolean
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function untrashLocation( $locationId, $newParentId = null )
     {
@@ -851,7 +851,7 @@ class EzcDatabase extends Gateway
             $row['main_node_id'] = true;
         }
 
-        $this->create(
+        $newLocation = $this->create(
             new CreateStruct(
                 array(
                     'priority' => $row['priority'],
@@ -879,6 +879,8 @@ class EzcDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+
+        return $newLocation;
     }
 
     /**

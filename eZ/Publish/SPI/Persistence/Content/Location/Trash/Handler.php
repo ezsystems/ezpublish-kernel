@@ -30,7 +30,8 @@ interface Handler
     public function loadTrashItem( $id );
 
     /**
-     * Sends a subtree to the trash
+     * Sends a subtree starting to $locationId to the trash
+     * and returns a Trashed object corresponding to $locationId.
      *
      * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
@@ -72,6 +73,8 @@ interface Handler
     /**
      * Empties the trash
      * Everything contained in the trash must be removed
+     *
+     * @return void
      */
     public function emptyTrash();
 
@@ -80,6 +83,7 @@ interface Handler
      * Associated content has to be deleted
      *
      * @param int $trashedId
+     * @return void
      */
     public function deleteTrashItem( $trashedId );
 }

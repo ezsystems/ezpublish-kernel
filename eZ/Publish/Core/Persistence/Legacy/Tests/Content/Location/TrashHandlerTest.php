@@ -54,7 +54,10 @@ class TrashHandlerTest extends TestCase
         );
     }
 
-    public function testTrashSubtree()
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::trash
+     */
+    public function testTrash()
     {
         $handler = $this->getTrashHandler();
 
@@ -77,22 +80,47 @@ class TrashHandlerTest extends TestCase
             ->method( 'trashSubtree' )
             ->with( '/1/2/69/' );
 
-        $handler->trash( 69 );
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'loadTrashByLocation' )
+            ->with( 69 )
+            ->will( $this->returnValue( $array = array( 'data…' ) ) );
+
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationFromRow' )
+            ->with( $array, null, new Trashed() )
+            ->will( $this->returnValue( new Trashed( array( 'id' => 69 ) ) ) );
+
+        $trashedObject = $handler->trash( 69 );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedObject );
+        self::assertSame( 69, $trashedObject->id );
     }
 
-    public function testUntrashTrash()
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::recover
+     */
+    public function testRecover()
     {
         $handler = $this->getTrashHandler();
 
         $this->locationGateway
             ->expects( $this->at( 0 ) )
             ->method( 'untrashLocation' )
-            ->with( 69, 23 );
+            ->with( 69, 23 )
+            ->will(
+                $this->returnValue(
+                    new Trashed( array( 'id' => 70 ) )
+                )
+            );
 
-        $handler->recover( 69, 23 );
+        self::assertSame( 70, $handler->recover( 69, 23 ) );
     }
 
-    public function testLoad()
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::loadTrashItem
+     */
+    public function testLoadTrashItem()
     {
         $handler = $this->getTrashHandler();
 
