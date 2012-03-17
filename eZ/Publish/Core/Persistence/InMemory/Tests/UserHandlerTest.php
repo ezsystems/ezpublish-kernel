@@ -75,8 +75,14 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadByLoginWithEmail()
     {
-        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
-        $this->assertEquals( 0, count( $users ) );
+        try
+        {
+            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
+            $this->fail( 'Succeeded loading user by non existent email' );
+        }
+        catch ( NotFound $e )
+        {
+        }
 
         $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no', true );
         $this->assertEquals( 1, count( $users ) );
@@ -93,10 +99,23 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadByLoginUnExistingUser()
     {
-        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså' );
-        $this->assertEquals( array(), $users );
-        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
-        $this->assertEquals( array(), $users );
+        try
+        {
+            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså' );
+            $this->fail( 'Succeeded loading user by non existent login' );
+        }
+        catch ( NotFound $e )
+        {
+        }
+
+        try
+        {
+            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
+            $this->fail( 'Succeeded loading user by non existent email' );
+        }
+        catch ( NotFound $e )
+        {
+        }
     }
 
     /**
