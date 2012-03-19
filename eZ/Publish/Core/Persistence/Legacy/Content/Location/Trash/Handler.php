@@ -85,6 +85,7 @@ class Handler implements BaseTrashHandler
      *
      * @param mixed $locationId
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
+     * @todo Handle field types actions
      */
     public function trash( $locationId )
     {
@@ -106,6 +107,7 @@ class Handler implements BaseTrashHandler
      * @param mixed $newParentId
      * @return int Newly restored location id
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
+     * @todo Handle field types actions
      */
     public function recover( $trashedId, $newParentId )
     {

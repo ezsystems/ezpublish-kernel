@@ -53,6 +53,7 @@ class TrashHandler implements TrashHandlerInterface
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * @todo Handle field types actions
      */
     public function trash( $locationId )
     {
@@ -100,6 +101,7 @@ class TrashHandler implements TrashHandlerInterface
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * @todo Handle field types actions
      */
     public function recover( $trashedId, $newParentId )
     {
