@@ -217,6 +217,17 @@ abstract class Gateway
     abstract public function cleanupTrash();
 
     /**
+     * Lists trashed items.
+     * Returns entries from ezcontentobject_trash.
+     *
+     * @param int $offset
+     * @param int $limit
+     * @param array $sort
+     * @return array
+     */
+    abstract public function listTrashed( $offset, $limit, array $sort = null );
+
+    /**
      * Removes trashed element identified by $id from trash.
      * Will NOT remove associated content object nor attributes.
      *

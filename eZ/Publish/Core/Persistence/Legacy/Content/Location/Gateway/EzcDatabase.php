@@ -974,13 +974,14 @@ class EzcDatabase extends Gateway
      * @param array $sort
      * @return array
      */
-    public function listTrashed( $offset, $limit, array $sort )
+    public function listTrashed( $offset, $limit, array $sort = null )
     {
         $query = $this->handler->createSelectQuery();
         $query
             ->select( '*' )
             ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) );
 
+        $sort = $sort ?: array();
         foreach ( $sort as $condition )
         {
             $sortDirection = $condition->direction === Query::SORT_ASC ? \ezcQuerySelect::ASC : \ezcQuerySelect::DESC;
