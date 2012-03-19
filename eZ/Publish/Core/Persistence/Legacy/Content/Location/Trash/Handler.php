@@ -177,10 +177,10 @@ class Handler implements BaseTrashHandler
      */
     protected function delete( Trashed $trashItem )
     {
-        $this->locationGateway->removeElementFromTrash( $item->id );
+        $this->locationGateway->removeElementFromTrash( $trashItem->id );
 
-        if ( $this->locationGateway->countLocationsByContentId( $item->contentId ) < 1 )
-            $this->contentHandler->delete( $item->contentId );
+        if ( $this->locationGateway->countLocationsByContentId( $trashItem->contentId ) < 1 )
+            $this->contentHandler->delete( $trashItem->contentId );
     }
 }
 
