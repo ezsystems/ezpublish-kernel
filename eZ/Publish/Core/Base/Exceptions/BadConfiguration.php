@@ -17,8 +17,9 @@ use Exception,
  * Use:
  *   throw new BadConfiguration( "base\\[configuration]\\parsers", "could not parse configuration files" );
  *
+ * @todo Add a exception type in API that uses Logic exception and change this to extend it
  */
-class BadConfiguration extends LogicException implements \ezp\Base\Exception
+class BadConfiguration extends LogicException
 {
     /**
      * Generates: '$setting' setting is invalid[, $consequence]

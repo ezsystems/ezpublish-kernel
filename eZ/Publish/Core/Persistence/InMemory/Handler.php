@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
-    ezp\Base\Exception\MissingClass,
+    eZ\Publish\Core\Base\Exceptions\MissingClass,
     RuntimeException;
 
 /**

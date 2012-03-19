@@ -47,7 +47,10 @@ class CreateStruct extends ValueObject
     /**
      * Type bitmask
      *
-     * @see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE
+     * @see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD
      * @var int
      */
     public $type;

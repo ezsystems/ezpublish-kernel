@@ -357,7 +357,7 @@ class UserHandlerTest extends HandlerTest
      * Test loadRolesByGroupId function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
-     * @expectedException ezp\Base\Exception\NotFoundWithType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadRolesByGroupIdNotFoundWithCorrectType()
     {
@@ -502,7 +502,7 @@ class UserHandlerTest extends HandlerTest
      * Test assignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
-     * @expectedException ezp\Base\Exception\NotFoundWithType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testAssignRoleWrongGroupType()
     {
@@ -540,7 +540,7 @@ class UserHandlerTest extends HandlerTest
      * Test assignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
-     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAssignRoleAlreadyAssigned()
     {
@@ -575,7 +575,7 @@ class UserHandlerTest extends HandlerTest
      * Test unAssignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
-     * @expectedException ezp\Base\Exception\NotFoundWithType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUnAssignRoleWrongGroupType()
     {
@@ -613,7 +613,7 @@ class UserHandlerTest extends HandlerTest
      * Test unAssignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
-     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUnAssignRoleNotAssigned()
     {
@@ -715,7 +715,7 @@ class UserHandlerTest extends HandlerTest
      * Test loadPoliciesByUserId function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
-     * @expectedException ezp\Base\Exception\NotFoundWithType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadPoliciesByUserIdNotFoundWithType()
     {

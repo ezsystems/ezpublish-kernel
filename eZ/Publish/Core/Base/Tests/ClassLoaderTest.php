@@ -23,11 +23,11 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testReturnValuesOnFailure()
     {
-        $loader = new ClassLoader( array( 'ezp' => 'ezp',
+        $loader = new ClassLoader( array( 'eZ' => 'eZ',
                                           'xyz' => 'xyz/Pasta' ) );
 
-        self::assertFalse( $loader->load( "ezp\\Pizza\\Box" ) );
-        self::assertFalse( $loader->load( "\\ezp\\Pizza\\Box" ) );
+        self::assertFalse( $loader->load( "eZ\\Pizza\\Box" ) );
+        self::assertFalse( $loader->load( "\\eZ\\Pizza\\Box" ) );
         self::assertFalse( $loader->load( "xyz\\Pizza\\Box" ) );
         self::assertFalse( $loader->load( "\\xyz\\Pizza\\Box" ) );
         self::assertNull( $loader->load( "NotHere\\Pizza\\Box" ) );// void

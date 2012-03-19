@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for SearchHandler using in memory storage.
@@ -24,7 +24,7 @@ use eZ\Publish\SPI\Persistence\Content,
 class SearchHandlerTest extends HandlerTest
 {
     /**
-     * @var \ezp\Content
+     * @var \eZ\Publish\SPI\Persistence\Content
      */
     protected $content;
 
@@ -35,7 +35,7 @@ class SearchHandlerTest extends HandlerTest
     protected $contentId;
 
     /**
-     * @var \ezp\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contentToDelete = array();
 

@@ -15,8 +15,8 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content\Location,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for Location Handler using in memory storage.
@@ -57,14 +57,14 @@ class TrashHandlerTest extends HandlerTest
     /**
      * Locations which should be removed in tearDown
      *
-     * @var \ezp\Content\Location[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     protected $locationToDelete = array();
 
     /**
      * Contents which should be removed in tearDown
      *
-     * @var \ezp\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contentToDelete = array();
 

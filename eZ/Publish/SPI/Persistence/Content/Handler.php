@@ -215,7 +215,10 @@ interface Handler
      *
      * @param mixed $sourceContentId Source Content ID
      * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
-     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null );
@@ -226,7 +229,10 @@ interface Handler
      * Only loads relations against published versions.
      *
      * @param mixed $destinationContentId Destination Content ID
-     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null );

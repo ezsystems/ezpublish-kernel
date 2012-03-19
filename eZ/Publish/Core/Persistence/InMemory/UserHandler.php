@@ -14,10 +14,9 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\SPI\Persistence\Content,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\Logic,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Base\Exception\NotFoundWithType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\Core\Persistence\InMemory\Handler,
     eZ\Publish\Core\Persistence\InMemory\Backend;
 
@@ -57,7 +56,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      * @return \eZ\Publish\SPI\Persistence\User
-     * @throws \ezp\Base\Exception\Logic If no id was provided or if it already exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If no id was provided or if it already exists
      */
     public function create( User $user )
     {
@@ -237,7 +236,7 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $groupId
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user (it's content object atm) is not found
-     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
      */
     public function loadRolesByGroupId( $groupId )
     {
@@ -246,7 +245,7 @@ class UserHandler implements UserHandlerInterface
         if ( !$content )
             throw new NotFound( 'Group', $groupId );
         if ( $content->contentTypeId != 3 )
-            throw new NotFoundWithType( "Content with TypeId:3", $groupId );
+            throw new NotFound( "Content with TypeId:3", $groupId );
 
         return $this->backend->find(
             'User\\Role',
@@ -301,7 +300,7 @@ class UserHandler implements UserHandlerInterface
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function addPolicy( $roleId, Policy $policy )
     {
@@ -318,7 +317,7 @@ class UserHandler implements UserHandlerInterface
      * Replaces limitations values with new values.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy )
     {
@@ -348,7 +347,7 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $userId
      * @return \eZ\Publish\SPI\Persistence\User\Policy[]
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user (it's content object atm) is not found
-     * @throws \ezp\Base\Exception\NotFoundWithType If user is not of user Content Type
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not of user Content Type
      */
     public function loadPoliciesByUserId( $userId )
     {
@@ -409,15 +408,14 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * @throws \ezp\Base\Exception\NotFoundWithType
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param array $policies
-     * @throws \ezp\Base\Exception\NotFoundWithType If $content is not of user_group Content Type
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $content is not of user_group Content Type
      */
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {
         if ( $content->contentInfo->contentTypeId != $typeId )
-            throw new NotFoundWithType( "Content with TypeId:$typeId", $content->contentInfo->contentId );
+            throw new NotFound( "Content with TypeId:$typeId", $content->contentInfo->contentId );
 
         // fetch possible roles assigned to this object
         $list = $this->backend->find(
@@ -466,8 +464,8 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $roleId
      * @param array $limitation @todo Remove or implement
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
-     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If group is already assigned role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If group is already assigned role
      */
     public function assignRole( $groupId, $roleId, array $limitation = null )
     {
@@ -477,7 +475,7 @@ class UserHandler implements UserHandlerInterface
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 )
-            throw new NotFoundWithType( 3, $groupId );
+            throw new NotFound( 3, $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( in_array( $groupId, $role->groupIds ) )
@@ -493,8 +491,8 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $groupId The group / user Id to un-assign a role from
      * @param mixed $roleId
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
-     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user[_group] Content Type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user[_group] Content Type
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If group does not contain role
      */
     public function unAssignRole( $groupId, $roleId )
     {
@@ -504,7 +502,7 @@ class UserHandler implements UserHandlerInterface
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
-            throw new NotFoundWithType( "3 or 4", $groupId );
+            throw new NotFound( "3 or 4", $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( !in_array( $groupId, $role->groupIds ) )

@@ -290,7 +290,6 @@ class Handler implements BaseContentHandler
      * @param int $contentId
      * @param int $status
      * @param int $version
-     * @see ezp\Content
      * @return boolean
      */
     public function setStatus( $contentId, $status, $version )
@@ -307,7 +306,6 @@ class Handler implements BaseContentHandler
      * @param mixed $stateGroup
      * @param mixed $state
      * @return boolean
-     * @see ezp\Content
      */
     public function setObjectState( $contentId, $stateGroup, $state )
     {
@@ -322,7 +320,6 @@ class Handler implements BaseContentHandler
      * @param mixed $contentId
      * @param mixed $stateGroup
      * @return mixed
-     * @see ezp\Content
      */
     public function getObjectState( $contentId, $stateGroup )
     {
@@ -481,7 +478,10 @@ class Handler implements BaseContentHandler
      *
      * @param mixed $sourceContentId Source Content ID
      * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
-     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
@@ -495,7 +495,10 @@ class Handler implements BaseContentHandler
      * Only loads relations against published versions.
      *
      * @param mixed $destinationContentId Destination Content ID
-     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null )

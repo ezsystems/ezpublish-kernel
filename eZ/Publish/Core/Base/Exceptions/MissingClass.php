@@ -17,8 +17,9 @@ use Exception,
  * Use:
  *   throw new MissingClass( $className, 'field type' );
  *
+ * @todo Add a exception type in API that uses Logic exception and change this to extend it
  */
-class MissingClass extends LogicException implements \ezp\Base\Exception
+class MissingClass extends LogicException
 {
     /**
      * Generates: Could not find[ {$classType}] class '{$className}'

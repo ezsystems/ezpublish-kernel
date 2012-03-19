@@ -62,8 +62,8 @@ class Backend
      * @param string $idColumn By default, id column is 'id', but this can be customized here (e.g. for 'contentId')
      * @return object
      * @throws InvalidArgumentValue On invalid $type
-     * @throws Logic If $autoIncrement is false but $data does not include an id
-     * @throws Logic If provided id already exists (and if defined, data contain same status property value)
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If $autoIncrement is false but $data does not include an id
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If provided id already exists (and if defined, data contain same status property value)
      */
     public function create( $type, array $data, $autoIncrement = true, $idColumn = 'id' )
     {
@@ -100,10 +100,11 @@ class Backend
      *
      * @param string $type
      * @param int|string $id
+     * @param string $idColumn
      * @return object
-     * @throws InvalidArgumentValue On invalid $type
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid $type
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
-     * @throws \ezp\Base\Exception\Logic If several items exists with same id
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If several items exists with same id
      */
     public function load( $type, $id, $idColumn = 'id' )
     {

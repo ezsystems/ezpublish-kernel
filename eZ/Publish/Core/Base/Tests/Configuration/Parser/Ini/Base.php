@@ -161,8 +161,8 @@ empty-array[]';
     {
         $iniString = '
 [test]
-conditions[ezp\\system\\Filter_Get::dev]=uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php
-conditions[$user_object->check]=ezp/system/router\\ezp\\system\\Filter_Get::dev
+conditions[eZ\\Testing\\Filter_Get::dev]=uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php
+conditions[$user_object->check]=ezp/system/router\\eZ\\Testing\\Filter_Get::dev
 conditions[]=uri\\0:§£$content
 conditions[][]=subOne
 conditions[][]=subTwo
@@ -189,8 +189,8 @@ public=true
         $expects = array(
             'test' => array(
                 'conditions' => array(
-                    'ezp\\system\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php',
-                    '$user_object->check' => 'ezp/system/router\\ezp\\system\\Filter_Get::dev',
+                    'eZ\\Testing\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php',
+                    '$user_object->check' => 'ezp/system/router\\eZ\\Testing\\Filter_Get::dev',
                     'uri\\0:§£$content',
                     array( 'subOne' ),
                     array( 'subTwo' ),

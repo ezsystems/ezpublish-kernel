@@ -16,11 +16,10 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content as ContentDomainObject,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    ezp\Content\Relation,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\API\Repository\Values\Content\Relation,
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -29,7 +28,7 @@ use eZ\Publish\SPI\Persistence\Content,
 class ContentHandlerTest extends HandlerTest
 {
     /**
-     * @var \ezp\Content
+     * @var \eZ\Publish\SPI\Persistence\Content
      */
     protected $content;
 
@@ -40,7 +39,7 @@ class ContentHandlerTest extends HandlerTest
     protected $contentId;
 
     /**
-     * @var \ezp\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contentToDelete = array();
 
@@ -346,7 +345,7 @@ class ContentHandlerTest extends HandlerTest
         $content = $this->persistenceHandler->contentHandler()->update( $struct );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->contentInfo->contentId );
-        $this->assertEquals( ContentDomainObject::STATUS_DRAFT, $content->status );
+        $this->assertEquals( VersionInfo::STATUS_DRAFT, $content->status );
         $this->assertEquals( 10, $content->ownerId );
         $this->assertEquals( array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" ), $content->versionInfo->name );
 

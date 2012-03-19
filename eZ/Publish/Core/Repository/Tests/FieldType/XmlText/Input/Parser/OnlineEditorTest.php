@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType\XmlText;
+namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input\Parser;
 
 use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\OnlineEditor as Parser,
 

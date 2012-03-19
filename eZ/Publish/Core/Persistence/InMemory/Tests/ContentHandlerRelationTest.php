@@ -15,8 +15,8 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
+    eZ\Publish\API\Repository\Values\Content\Relation,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
@@ -26,12 +26,12 @@ use eZ\Publish\SPI\Persistence\Content,
 class ContentHandlerRelationTest extends HandlerTest
 {
     /**
-     * @var \ezp\Content
+     * @var \eZ\Publish\SPI\Persistence\Content
      */
     protected $content;
 
     /**
-     * @var \ezp\Content
+     * @var \eZ\Publish\SPI\Persistence\Content
      */
     protected $content2;
 
@@ -41,7 +41,7 @@ class ContentHandlerRelationTest extends HandlerTest
     protected $contentId;
 
     /**
-     * @var \ezp\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contentToDelete = array();
 
@@ -408,7 +408,7 @@ class ContentHandlerRelationTest extends HandlerTest
                 array(
                     'sourceContentId' => 1,
                     'destinationContentId' => $this->content2->contentInfo->contentId,
-                    'type' => Relation::ATTRIBUTE
+                    'type' => Relation::FIELD
                 )
             )
         );
@@ -416,9 +416,9 @@ class ContentHandlerRelationTest extends HandlerTest
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->contentInfo->contentId );
         self::assertEquals( 2, count( $reverseRelations ) );
 
-        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->contentInfo->contentId, Relation::ATTRIBUTE );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->contentInfo->contentId, Relation::FIELD );
         self::assertEquals( 1, count( $reverseRelations ) );
-        self::assertEquals( Relation::ATTRIBUTE, current( $reverseRelations )->type );
+        self::assertEquals( Relation::FIELD, current( $reverseRelations )->type );
 
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->contentInfo->contentId, Relation::COMMON );
         self::assertEquals( 1, count( $reverseRelations ) );

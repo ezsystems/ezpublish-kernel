@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Base\Exception\Logic;
+    eZ\Publish\Core\Base\Exceptions\Logic;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
