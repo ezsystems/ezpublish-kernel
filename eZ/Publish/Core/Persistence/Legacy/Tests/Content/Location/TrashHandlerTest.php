@@ -216,4 +216,113 @@ class TrashHandlerTest extends TestCase
 
         $handler->emptyTrash();
     }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::deleteTrashItem
+     */
+    public function testDeleteTrashItemNoMoreLocations()
+    {
+        $handler = $this->getTrashHandler();
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'loadTrashByLocation' )
+            ->with( 69 )
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id'           => 69,
+                        'contentobject_id'  => 67,
+                        'path_string'       => '/1/2/69'
+                    )
+                )
+            );
+
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationFromRow' )
+            ->will(
+                $this->returnValue(
+                    new Trashed(
+                        array(
+                            'id'            => 69,
+                            'contentId'     => 67,
+                            'pathString'    => '/1/2/69'
+                        )
+                    )
+                )
+            );
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'removeElementFromTrash' )
+            ->with( 69 );
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'countLocationsByContentId' )
+            ->with( 67 )
+            ->will( $this->returnValue( 0 ) );
+
+        $this->contentHandler
+            ->expects( $this->once() )
+            ->method( 'delete' )
+            ->with( 67 );
+
+        $handler->deleteTrashItem( 69 );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::deleteTrashItem
+     */
+    public function testDeleteTrashItemStillHaveLocations()
+    {
+        $handler = $this->getTrashHandler();
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'loadTrashByLocation' )
+            ->with( 69 )
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id'           => 69,
+                        'contentobject_id'  => 67,
+                        'path_string'       => '/1/2/69'
+                    )
+                )
+            );
+
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationFromRow' )
+            ->will(
+                $this->returnValue(
+                    new Trashed(
+                        array(
+                            'id'            => 69,
+                            'contentId'     => 67,
+                            'pathString'    => '/1/2/69'
+                        )
+                    )
+                )
+            );
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'removeElementFromTrash' )
+            ->with( 69 );
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'countLocationsByContentId' )
+            ->with( 67 )
+            ->will( $this->returnValue( 1 ) );
+
+        $this->contentHandler
+            ->expects( $this->never() )
+            ->method( 'delete' );
+
+        $handler->deleteTrashItem( 69 );
+    }
 }
