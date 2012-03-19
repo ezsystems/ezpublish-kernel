@@ -141,6 +141,16 @@ abstract class Gateway
     abstract public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP );
 
     /**
+     * Deletes node assignment for given $contentId and $versionNo
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     *
+     * @return void
+     */
+    abstract public function deleteNodeAssignment( $contentId, $versionNo );
+
+    /**
      * Updates an existing location.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location

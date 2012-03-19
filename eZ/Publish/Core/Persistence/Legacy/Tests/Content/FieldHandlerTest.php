@@ -203,15 +203,44 @@ class FieldHandlerTest extends TestCase
         $storageHandlerMock->expects( $this->once() )
             ->method( 'deleteFieldData' )
             ->with(
-                $this->equalTo( 'some-type' ),
-                $this->equalTo( array( 2, 3 ) )
-            );
+            $this->equalTo( 'some-type' ),
+            $this->equalTo( array( 2, 3 ) )
+        );
 
         $contentGatewayMock->expects( $this->once() )
             ->method( 'deleteFields' )
             ->with( $this->equalTo( 42 ) );
 
         $fieldHandler->deleteFields( 42 );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
+     */
+    public function testDeleteFieldsWithSecondArgument()
+    {
+        $fieldHandler = $this->getFieldHandler();
+
+        $contentGatewayMock = $this->getContentGatewayMock();
+        $contentGatewayMock->expects( $this->once() )
+            ->method( 'getFieldIdsByType' )
+            ->with( $this->equalTo( 42 ) )
+            ->will( $this->returnValue( array( 'some-type' => array( 2, 3 ) ) ) );
+
+        $storageHandlerMock = $this->getStorageHandlerMock();
+        $storageHandlerMock->expects( $this->once() )
+            ->method( 'deleteFieldData' )
+            ->with(
+            $this->equalTo( 'some-type' ),
+            $this->equalTo( array( 2, 3 ) )
+        );
+
+        $contentGatewayMock->expects( $this->once() )
+            ->method( 'deleteFields' )
+            ->with( $this->equalTo( 42 ) );
+
+        $fieldHandler->deleteFields( 42, 2 );
     }
 
     /**

@@ -555,6 +555,34 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Deletes node assignment for given $contentId and $versionNo
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     *
+     * @return void
+     */
+    public function deleteNodeAssignment( $contentId, $versionNo )
+    {
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'eznode_assignment' )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'contentobject_id' ),
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'contentobject_version' ),
+                        $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    )
+                )
+            );
+        $query->prepare()->execute();
+    }
+
+    /**
      * Update node assignement table
      *
      * @param int $contentObjectId

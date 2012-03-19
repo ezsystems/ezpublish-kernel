@@ -30607,6 +30607,33 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'op_code'=>0,
       'relation_type'=>2,
       'to_contentobject_id'=>213
+    ),
+    array(
+      'contentclassattribute_id'=>0,
+      'from_contentobject_id'=>225,
+      'from_contentobject_version'=>1,
+      'id'=>129,
+      'op_code'=>0,
+      'relation_type'=>2,
+      'to_contentobject_id'=>213
+    ),
+    array(
+      'contentclassattribute_id'=>0,
+      'from_contentobject_id'=>225,
+      'from_contentobject_version'=>2,
+      'id'=>130,
+      'op_code'=>0,
+      'relation_type'=>2,
+      'to_contentobject_id'=>213
+    ),
+    array(
+      'contentclassattribute_id'=>0,
+      'from_contentobject_id'=>211,
+      'from_contentobject_version'=>1,
+      'id'=>131,
+      'op_code'=>0,
+      'relation_type'=>2,
+      'to_contentobject_id'=>225
     )
   ),
   'ezcontentobject_name' => array(
