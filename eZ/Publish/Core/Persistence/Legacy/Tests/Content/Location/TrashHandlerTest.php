@@ -36,6 +36,13 @@ class TrashHandlerTest extends TestCase
     protected $locationMapper;
 
     /**
+     * Mocked content handler instance
+     *
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contentHandler;
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
@@ -50,7 +57,10 @@ class TrashHandlerTest extends TestCase
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
             $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway' ),
-            $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' )
+            $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' ),
+            $this->contentHandler = $this->getMockBuilder( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler' )
+                ->disableOriginalConstructor()
+                ->getMock()
         );
     }
 
@@ -136,5 +146,74 @@ class TrashHandlerTest extends TestCase
             ->with( $array, null, new Trashed() );
 
         $handler->loadTrashItem( 69 );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::emptyTrash
+     */
+    public function testEmptyTrash()
+    {
+        $handler = $this->getTrashHandler();
+
+        $expectedTrashed = array(
+            array(
+                'node_id' => 69,
+                'path_string' => '/1/2/69/',
+                'contentobject_id' => 67,
+            ),
+            array(
+                'node_id' => 70,
+                'path_string' => '/1/2/70/',
+                'contentobject_id' => 68,
+            )
+        );
+
+        // Index for locationGateway calls
+        $i = 0;
+        // Index for contentHandler calls
+        $iContent = 0;
+        // Index for locationMapper calls
+        $iLocation = 0;
+        $this->locationGateway
+            ->expects( $this->at( $i++ ) )
+            ->method( 'listTrashed' )
+            ->will(
+                $this->returnValue( $expectedTrashed )
+            );
+
+        foreach ( $expectedTrashed as $trashedElement )
+        {
+            $this->locationMapper
+                ->expects( $this->at( $iLocation++ ) )
+                ->method( 'createLocationFromRow' )
+                ->will(
+                    $this->returnValue(
+                        new Trashed(
+                            array(
+                                'id'            => $trashedElement['node_id'],
+                                'contentId'     => $trashedElement['contentobject_id'],
+                                'pathString'    => $trashedElement['path_string']
+                            )
+                        )
+                    )
+                );
+            $this->locationGateway
+                ->expects( $this->at( $i++ ) )
+                ->method( 'removeElementFromTrash' )
+                ->with( $trashedElement['node_id'] );
+
+            $this->locationGateway
+                ->expects( $this->at( $i++ ) )
+                ->method( 'countLocationsByContentId' )
+                ->with( $trashedElement['contentobject_id'] )
+                ->will( $this->returnValue( 0 ) );
+
+            $this->contentHandler
+                ->expects( $this->at( $iContent++ ) )
+                ->method( 'delete' )
+                ->with( $trashedElement['contentobject_id'] );
+        }
+
+        $handler->emptyTrash();
     }
 }
