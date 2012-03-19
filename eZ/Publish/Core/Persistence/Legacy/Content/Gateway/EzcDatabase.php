@@ -976,6 +976,12 @@ class EzcDatabase extends Gateway
     public function loadRelations( $contentId, $contentVersionNo = null, $relationType = null )
     {
         $query = $this->queryBuilder->createRelationFindQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
 
         // source version number
         if ( isset( $contentVersionNo ) )
@@ -991,7 +997,7 @@ class EzcDatabase extends Gateway
         else
         {
             $query->from(
-                'ezcontentobject'
+                $this->dbHandler->quoteTable( 'ezcontentobject' )
             )->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
@@ -1006,11 +1012,55 @@ class EzcDatabase extends Gateway
             );
         }
 
-        // Filters on from_contentobject_id
+        // relation type
+        if ( isset( $relationType ) )
+        {
+            $query->where(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                )
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+
+    /**
+     * Loads data that related to $toContentId
+     *
+     * @param int $toContentId
+     * @param int $relationType
+     *
+     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
+     */
+    public function loadReverseRelations( $toContentId, $relationType = null )
+    {
+        $query = $this->queryBuilder->createRelationFindQuery();
         $query->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' ),
-                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                $this->dbHandler->quoteColumn( 'to_contentobject_id', 'ezcontentobject_link' ),
+                $query->bindValue( $toContentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        // ezcontentobject join
+        $query->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                    $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' ),
+                    $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' )
+                )
             )
         );
 
@@ -1020,7 +1070,7 @@ class EzcDatabase extends Gateway
             $query->where(
                 $query->expr->bitAnd(
                     $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
-                    $query->bindValue( $relationType )
+                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
                 )
             );
         }
@@ -1028,23 +1078,6 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
 
         $statement->execute();
-
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
-    }
-
-
-    /**
-     * Loads data of related to/from $contentId
-     *
-     * @param int $contentId
-     * @param bool $reverse Reverse relation, default false
-     * @param int $contentVersionNo
-     * @param int $relationType
-     *
-     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
-     */
-    public function loadReverseRelations( $contentId, $relationType = null )
-    {
-        throw new Exception( "Not implemented yet" );
     }
 }

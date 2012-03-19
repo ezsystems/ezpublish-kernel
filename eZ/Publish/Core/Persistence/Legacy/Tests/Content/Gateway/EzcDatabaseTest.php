@@ -1186,8 +1186,45 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      */
     public function testLoadReverseRelations()
     {
-        self::markTestIncomplete( "@todo implement " . __METHOD__ );
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadReverseRelations( 58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+
+        self::assertEquals( 2, count( $relations ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_id',
+            array( 57, 61 ),
+            $relations
+        );
     }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadReverseRelations
+     */
+    public function testLoadReverseRelationsByType()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadReverseRelations( 58 ,\eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+
+        self::assertEquals( 1, count( $relations ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_id',
+            array( 57 ),
+            $relations
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_relation_type',
+            array( \eZ\Publish\API\Repository\Values\Content\Relation::COMMON ),
+            $relations
+        );    }
 
     /**
      * Inserts the relation database fixture from relation_data.php
