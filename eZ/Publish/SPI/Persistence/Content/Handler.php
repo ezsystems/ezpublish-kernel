@@ -156,18 +156,27 @@ interface Handler
     public function updateContent( $contentId, $versionNo, UpdateStruct $content );
 
     /**
-     * If $versionNo is not set, deletes all versions and fields, all locations (subtree), and all relations.
-     * When $versionNo is set, deletes given version, its fields, node assignment, relations and names.
+     * Deletes all versions and fields, all locations (subtree), and all relations.
      *
-     * Removes the relations, but not the related objects. When locations are being deleted,
-     * all subtrees of the assigned nodes of this content object are removed (recursively).
+     * Removes the relations, but not the related objects. All subtrees of the
+     * assigned nodes of this content objects are removed (recursively).
      *
      * @param int $contentId
-     * @param int|null $versionNo
+     * @return boolean
+     */
+    public function deleteContent( $contentId );
+
+    /**
+     * Deletes given version, its fields, node assignment, relations and names.
+     *
+     * Removes the relations, but not the related objects.
+     *
+     * @param int $contentId
+     * @param int $versionNo
      *
      * @return boolean
      */
-    public function delete( $contentId, $versionNo = null );
+    public function deleteVersion( $contentId, $versionNo );
 
     /**
      * Return the versions for $contentId

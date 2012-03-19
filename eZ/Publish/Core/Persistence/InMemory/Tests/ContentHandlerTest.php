@@ -85,14 +85,14 @@ class ContentHandlerTest extends HandlerTest
             // Removing default objects as well as those created by tests
             foreach ( $this->contentToDelete as $content )
             {
-                $contentHandler->delete( $content->contentInfo->contentId );
+                $contentHandler->deleteContent( $content->contentInfo->contentId );
             }
         }
         catch ( NotFound $e )
         {
         }
         unset( $this->contentId );
-        //$contentHandler->delete( 2 );
+        //$contentHandler->deleteContent( 2 );
         parent::tearDown();
     }
 
@@ -147,13 +147,13 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::deleteContent
      * @group contentHandler
      */
     public function testDelete()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
-        $contentHandler->delete( $this->content->contentInfo->contentId );
+        $contentHandler->deleteContent( $this->content->contentInfo->contentId );
 
         try
         {
@@ -180,10 +180,10 @@ class ContentHandlerTest extends HandlerTest
      * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::delete
      * @group contentHandler
      */
-    public function testDeleteWithSecondArgument()
+    public function testDeleteVersion()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
-        $contentHandler->delete( 1, 2 );
+        $contentHandler->deleteVersion( 1, 2 );
 
         $versionInfo = $contentHandler->loadVersionInfo( 1, 2 );
         if ( !empty( $versionInfo ) )

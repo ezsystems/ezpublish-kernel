@@ -156,7 +156,7 @@ class TrashHandler implements TrashHandlerInterface
             // Remove associated content for trashed locations
             foreach ( $contentIds as $contentId )
             {
-                $this->handler->contentHandler()->delete( $contentId );
+                $this->handler->contentHandler()->deleteContent( $contentId );
             }
 
             // Remove trashed locations
@@ -170,7 +170,7 @@ class TrashHandler implements TrashHandlerInterface
     public function deleteTrashItem( $trashedId )
     {
         $vo = $this->loadTrashItem( $trashedId );
-        $this->handler->contentHandler()->delete( $vo->contentId );
+        $this->handler->contentHandler()->deleteContent( $vo->contentId );
         $this->backend->delete( 'Content\\Location\\Trashed', $trashedId );
     }
 
