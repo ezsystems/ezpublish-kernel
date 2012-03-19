@@ -78,7 +78,7 @@ class SearchHandlerTest extends HandlerTest
             // Removing default objects as well as those created by tests
             foreach ( $this->contentToDelete as $content )
             {
-                $contentHandler->delete( $content->contentInfo->contentId );
+                $contentHandler->deleteContent( $content->contentInfo->contentId );
             }
         }
         catch ( NotFound $e )

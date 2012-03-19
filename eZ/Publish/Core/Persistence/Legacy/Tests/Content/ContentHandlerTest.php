@@ -557,9 +557,9 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::delete
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
      */
-    public function testDelete()
+    public function testDeleteContent()
     {
         $handler = $this->getContentHandler();
 
@@ -579,7 +579,6 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo( 24 )
             )
         );
-        $locationHandlerMock->expects( $this->never() )->method( 'deleteNodeAssignment' );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'deleteFields' )
@@ -597,14 +596,14 @@ class ContentHandlerTest extends TestCase
             ->method( 'deleteContent' )
             ->with( $this->equalTo( 23 ) );
 
-        $handler->delete( 23 );
+        $handler->deleteContent( 23 );
     }
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::delete
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteVersion
      */
-    public function testDeleteWithSecondArgument()
+    public function testDeleteVersion()
     {
         $handler = $this->getContentHandler();
 
@@ -612,8 +611,6 @@ class ContentHandlerTest extends TestCase
         $locationHandlerMock = $this->getLocationGatewayMock();
         $fieldHandlerMock  = $this->getFieldHandlerMock();
 
-        $gatewayMock->expects( $this->never() )->method( 'getAllLocationIds' );
-        $locationHandlerMock->expects( $this->never() )->method( 'removeSubtree' );
         $locationHandlerMock->expects( $this->once() )
             ->method( 'deleteNodeAssignment' )
             ->with(
@@ -645,9 +642,8 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo( 225 ),
                 $this->equalTo( 2 )
             );
-        $gatewayMock->expects( $this->never() )->method( 'deleteContent' );
 
-        $handler->delete( 225, 2 );
+        $handler->deleteVersion( 225, 2 );
     }
 
     /**

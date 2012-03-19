@@ -210,7 +210,7 @@ class TrashHandlerTest extends TestCase
 
             $this->contentHandler
                 ->expects( $this->at( $iContent++ ) )
-                ->method( 'delete' )
+                ->method( 'deleteContent' )
                 ->with( $trashedElement['contentobject_id'] );
         }
 
@@ -266,7 +266,7 @@ class TrashHandlerTest extends TestCase
 
         $this->contentHandler
             ->expects( $this->once() )
-            ->method( 'delete' )
+            ->method( 'deleteContent' )
             ->with( 67 );
 
         $handler->deleteTrashItem( 69 );
@@ -321,7 +321,7 @@ class TrashHandlerTest extends TestCase
 
         $this->contentHandler
             ->expects( $this->never() )
-            ->method( 'delete' );
+            ->method( 'deleteContent' );
 
         $handler->deleteTrashItem( 69 );
     }
