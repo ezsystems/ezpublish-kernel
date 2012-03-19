@@ -367,27 +367,37 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Deletes all versions and fields, all locations (subtree), and all relations.
+     * If $versionNo is not set, deletes all versions and fields, all locations (subtree), and all relations.
+     * When $versionNo is set, deletes given version, its fields, node assignment, relations and names.
      *
-     * Removes the relations, but not the related objects. Alle subtrees of the
-     * assigned nodes of this content objects are removed (recursivley).
+     * Removes the relations, but not the related objects. When $versionNo is not set,
+     * all subtrees of the assigned nodes of this content objects are removed (recursively).
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return boolean
      */
-    public function delete( $contentId )
+    public function delete( $contentId, $versionNo = null )
     {
-        $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
-        foreach ( $locationIds as $locationId )
+        if ( isset( $versionNo ) )
         {
-            $this->locationGateway->removeSubtree( $locationId );
+            $this->locationGateway->deleteNodeAssignment( $contentId, $versionNo );
         }
-        $this->fieldHandler->deleteFields( $contentId );
+        else
+        {
+            $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
+            foreach ( $locationIds as $locationId )
+            {
+                $this->locationGateway->removeSubtree( $locationId );
+            }
+            $this->contentGateway->deleteContent( $contentId );
+        }
 
-        $this->contentGateway->deleteRelations( $contentId );
-        $this->contentGateway->deleteVersions( $contentId );
-        $this->contentGateway->deleteNames( $contentId );
-        $this->contentGateway->deleteContent( $contentId );
+        $this->fieldHandler->deleteFields( $contentId, $versionNo );
+        $this->contentGateway->deleteRelations( $contentId, $versionNo );
+        $this->contentGateway->deleteVersions( $contentId, $versionNo );
+        $this->contentGateway->deleteNames( $contentId, $versionNo );
     }
 
     /**

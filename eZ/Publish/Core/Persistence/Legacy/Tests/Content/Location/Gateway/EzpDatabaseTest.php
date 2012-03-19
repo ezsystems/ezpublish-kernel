@@ -601,6 +601,44 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     */
+    public function testDeleteNodeAssignment()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( 'count(*)' )
+            ->from( 'eznode_assignment' )
+            ->where(
+            $query->expr->lAnd(
+                $query->expr->eq( 'contentobject_id', 11 )
+            )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
+        $nodeAssignmentsCount = (int) $statement->fetchColumn();
+
+        $handler->deleteNodeAssignment( 11, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( $nodeAssignmentsCount - 1 ) ),
+            $query
+                ->select( 'count(*)' )
+                ->from( 'eznode_assignment' )
+                ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 11 )
+                )
+            )
+        );
+    }
+
+    /**
      * @depends testCreateLocationNodeAssignmentCreation
      */
     public function testConvertNodeAssignments()

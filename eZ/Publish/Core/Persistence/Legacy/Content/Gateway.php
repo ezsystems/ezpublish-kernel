@@ -185,20 +185,26 @@ abstract class Gateway
     abstract public function getAllLocationIds( $contentId );
 
     /**
-     * Returns all field IDs of $contentId grouped by their type
+     * Returns all field IDs of $contentId grouped by their type.
+     * If $versionNo is set only field IDs for that version are returned.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return int[][]
      */
-    abstract public function getFieldIdsByType( $contentId );
+    abstract public function getFieldIdsByType( $contentId, $versionNo = null );
 
     /**
-     * Deletes relations to and from $contentId
+     * Deletes relations to and from $contentId.
+     * If $versionNo is set only relations for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteRelations( $contentId );
+    abstract public function deleteRelations( $contentId, $versionNo = null );
 
     /**
      * Deletes the field with the given $fieldId
@@ -210,28 +216,37 @@ abstract class Gateway
     abstract public function deleteField( $fieldId, $version );
 
     /**
-     * Deletes all fields of $contentId in all versions
+     * Deletes all fields of $contentId in all versions.
+     * If $versionNo is set only fields for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteFields( $contentId );
+    abstract public function deleteFields( $contentId, $versionNo = null );
 
     /**
-     * Deletes all versions of $contentId
+     * Deletes all versions of $contentId.
+     * If $versionNo is set only that version is deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteVersions( $contentId );
+    abstract public function deleteVersions( $contentId, $versionNo = null );
 
     /**
-     * Deletes all names of $contentId
+     * Deletes all names of $contentId.
+     * If $versionNo is set only names for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteNames( $contentId );
+    abstract public function deleteNames( $contentId, $versionNo = null );
 
     /**
      * Sets the content object name

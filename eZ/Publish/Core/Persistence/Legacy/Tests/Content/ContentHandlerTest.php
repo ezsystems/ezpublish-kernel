@@ -571,19 +571,19 @@ class ContentHandlerTest extends TestCase
             ->method( 'getAllLocationIds' )
             ->with( $this->equalTo( 23 ) )
             ->will( $this->returnValue( array( 42, 24 ) ) );
-
         $locationHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'removeSubtree' )
             ->with(
-                $this->logicalOr(
-                    $this->equalTo( 42 ),
-                    $this->equalTo( 24 )
-                )
-            );
+            $this->logicalOr(
+                $this->equalTo( 42 ),
+                $this->equalTo( 24 )
+            )
+        );
+        $locationHandlerMock->expects( $this->never() )->method( 'deleteNodeAssignment' );
+
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'deleteFields' )
             ->with( $this->equalTo( 23 ) );
-
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteRelations' )
             ->with( $this->equalTo( 23 ) );
@@ -598,6 +598,56 @@ class ContentHandlerTest extends TestCase
             ->with( $this->equalTo( 23 ) );
 
         $handler->delete( 23 );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::delete
+     */
+    public function testDeleteWithSecondArgument()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $locationHandlerMock = $this->getLocationGatewayMock();
+        $fieldHandlerMock  = $this->getFieldHandlerMock();
+
+        $gatewayMock->expects( $this->never() )->method( 'getAllLocationIds' );
+        $locationHandlerMock->expects( $this->never() )->method( 'removeSubtree' );
+        $locationHandlerMock->expects( $this->once() )
+            ->method( 'deleteNodeAssignment' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 2 )
+            );
+
+        $fieldHandlerMock->expects( $this->once() )
+            ->method( 'deleteFields' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 2 )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteRelations' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 2 )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteVersions' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 2 )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteNames' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 2 )
+            );
+        $gatewayMock->expects( $this->never() )->method( 'deleteContent' );
+
+        $handler->delete( 225, 2 );
     }
 
     /**

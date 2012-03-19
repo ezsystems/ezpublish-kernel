@@ -332,13 +332,15 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadVersionInfo( $contentId, $versionNo )
     {
-        return $this->backend->load(
+        $versionInfo = $this->backend->find(
             'Content\\VersionInfo',
             array(
                 'contentId' => $contentId,
                 'versionNo' => $versionNo
             )
         );
+
+        return reset( $versionInfo );
     }
 
     /**
@@ -446,13 +448,30 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
+     * @todo add deleting of relations
      */
-    public function delete( $contentId )
+    public function delete( $contentId, $versionNo = null )
     {
-        $this->backend->delete( 'Content\\ContentInfo', $contentId, 'contentId' );
+        $versionFindMatch = array( 'contentId' => $contentId );
+        if ( isset( $versionNo ) )
+        {
+            $versionFindMatch["versionNo"] = $versionNo;
+        }
+        else
+        {
+            $this->backend->delete( 'Content\\ContentInfo', $contentId, 'contentId' );
 
-        $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $contentId ) );
+            // @todo Deleting Locations by content object id should be possible using handler API?
+            $locationHandler = $this->handler->locationHandler();
+            $locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $contentId ) );
+            foreach ( $locations as $location )
+            {
+                $locationHandler->removeSubtree( $location->id );
+            }
+        }
+
+        $versions = $this->backend->find( 'Content\\VersionInfo', $versionFindMatch );
         foreach ( $versions as $version )
         {
             $fields = $this->backend->find(
@@ -466,14 +485,6 @@ class ContentHandler implements ContentHandlerInterface
                 $this->backend->delete( 'Content\\Field', $field->id );
 
             $this->backend->delete( 'Content\\VersionInfo', $version->id );
-        }
-
-        // @todo Deleting Locations by content object id should be possible using handler API?
-        $locationHandler = $this->handler->locationHandler();
-        $locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $contentId ) );
-        foreach ( $locations as $location )
-        {
-            $locationHandler->removeSubtree( $location->id );
         }
     }
 

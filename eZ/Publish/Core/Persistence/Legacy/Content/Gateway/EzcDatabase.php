@@ -952,12 +952,15 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Returns all field IDs of $contentId grouped by their type
+     * Returns all field IDs of $contentId grouped by their type.
+     * If $versionNo is set only field IDs for that version are returned.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return int[][]
      */
-    public function getFieldIdsByType( $contentId )
+    public function getFieldIdsByType( $contentId, $versionNo = null )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -971,6 +974,16 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $contentId, null, \PDO::PARAM_INT )
             )
         );
+
+        if ( isset( $versionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                )
+            );
+        }
 
         $statement = $query->prepare();
         $statement->execute();
@@ -988,28 +1001,51 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Deletes relations to and from $contentId
+     * Deletes relations to and from $contentId.
+     * If $versionNo is set only relations for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    public function deleteRelations( $contentId )
+    public function deleteRelations( $contentId, $versionNo = null )
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezcontentobject_link' )
-        )->where(
-            $query->expr->lOr(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
-                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'to_contentobject_id' ),
-                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
-                )
-            )
         );
+
+        if ( isset( $versionNo ) )
+        {
+            $query->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'from_contentobject_version' ),
+                        $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    )
+                )
+            );
+        }
+        else
+        {
+            $query->where(
+                $query->expr->lOr(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'to_contentobject_id' ),
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    )
+                )
+            );
+        }
 
         $statement = $query->prepare();
         $statement->execute();
@@ -1045,12 +1081,15 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Deletes all fields of $contentId in all versions
+     * Deletes all fields of $contentId in all versions.
+     * If $versionNo is set only fields for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    public function deleteFields( $contentId )
+    public function deleteFields( $contentId, $versionNo = null )
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom( 'ezcontentobject_attribute' )
@@ -1061,17 +1100,30 @@ class EzcDatabase extends Gateway
                 )
             );
 
+        if ( isset( $versionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                )
+            );
+        }
+
         $statement = $query->prepare();
         $statement->execute();
     }
 
     /**
-     * Deletes all versions of $contentId
+     * Deletes all versions of $contentId.
+     * If $versionNo is set only that version is deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    public function deleteVersions( $contentId )
+    public function deleteVersions( $contentId, $versionNo = null )
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom( 'ezcontentobject_version' )
@@ -1082,17 +1134,30 @@ class EzcDatabase extends Gateway
                 )
             );
 
+        if ( isset( $versionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                )
+            );
+        }
+
         $statement = $query->prepare();
         $statement->execute();
     }
 
     /**
-     * Deletes all names of $contentId
+     * Deletes all names of $contentId.
+     * If $versionNo is set only names for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    public function deleteNames( $contentId )
+    public function deleteNames( $contentId, $versionNo = null )
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom( 'ezcontentobject_name' )
@@ -1102,6 +1167,16 @@ class EzcDatabase extends Gateway
                     $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 )
             );
+
+        if ( isset( $versionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'content_version' ),
+                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                )
+            );
+        }
 
         $statement = $query->prepare();
         $statement->execute();

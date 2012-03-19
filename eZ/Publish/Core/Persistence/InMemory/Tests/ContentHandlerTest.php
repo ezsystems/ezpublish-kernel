@@ -176,6 +176,24 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
+     * Test delete function
+     *
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::delete
+     * @group contentHandler
+     */
+    public function testDeleteWithSecondArgument()
+    {
+        $contentHandler = $this->persistenceHandler->contentHandler();
+        $contentHandler->delete( 1, 2 );
+
+        $versionInfo = $contentHandler->loadVersionInfo( 1, 2 );
+        if ( !empty( $versionInfo ) )
+        {
+            $this->fail( "Version not removed correctly" );
+        }
+    }
+
+    /**
      * Test loadDraftsForUser function
      *
      * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadDraftsForUser
