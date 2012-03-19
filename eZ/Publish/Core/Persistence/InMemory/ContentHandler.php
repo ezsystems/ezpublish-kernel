@@ -482,7 +482,7 @@ class ContentHandler implements ContentHandlerInterface
                 )
             );
             foreach ( $fields as $field )
-            $this->backend->delete( 'Content\\Field', $field->id );
+                $this->backend->delete( 'Content\\Field', $field->id );
 
             $this->backend->delete( 'Content\\VersionInfo', $version->id );
         }
