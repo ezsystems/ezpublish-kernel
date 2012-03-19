@@ -164,18 +164,21 @@ class FieldHandler
     }
 
     /**
-     * Deletes the fields in $content from the database
+     * Deletes the fields in $content from the database.
+     * If $versionNo is set only field IDs for that version are returned.
      *
-     * @param Content $content
+     * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    public function deleteFields( $contentId )
+    public function deleteFields( $contentId, $versionNo = null )
     {
-        $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId );
+        $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId, $versionNo );
         foreach ( $fieldIds as $fieldType => $ids )
         {
             $this->storageHandler->deleteFieldData( $fieldType, $ids );
         }
-        $this->contentGateway->deleteFields( $contentId );
+        $this->contentGateway->deleteFields( $contentId, $versionNo );
     }
 }

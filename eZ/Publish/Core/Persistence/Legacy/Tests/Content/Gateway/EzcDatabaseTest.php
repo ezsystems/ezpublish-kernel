@@ -976,6 +976,26 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getFieldIdsByType
+     */
+    public function testGetFieldIdsByTypeWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $this->assertEquals(
+            array(
+                'ezstring' => array( 4001, 4002 )
+            ),
+            $gateway->getFieldIdsByType( 225, 2 )
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelations
      */
     public function testDeleteRelationsTo()
@@ -994,7 +1014,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteRelations( 149 );
 
         $this->assertEquals(
-            // yes, relates to itself!
+        // yes, relates to itself!
             array(
                 'all' => $beforeCount['all'] - 2,
                 'from' => $beforeCount['from'] - 1,
@@ -1037,6 +1057,39 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 'all' => $this->countContentRelations(),
                 'from' => $this->countContentRelations( 75 ),
                 'to' => $this->countContentRelations( null, 75 )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelations
+     */
+    public function testDeleteRelationsWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentRelations(),
+            'from' => $this->countContentRelations( 225 ),
+            'to' => $this->countContentRelations( null, 225 )
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteRelations( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 1,
+                'from' => $beforeCount['from'] - 1,
+                'to' => $beforeCount['to'],
+            ),
+            array(
+                'all' => $this->countContentRelations(),
+                'from' => $this->countContentRelations( 225 ),
+                'to' => $this->countContentRelations( null, 225 )
             )
         );
     }
@@ -1102,6 +1155,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteFields
+     */
+    public function testDeleteFieldsWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentFields(),
+            'this' => $this->countContentFields( 225 ),
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteFields( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 2,
+                'this' => $beforeCount['this'] - 2
+            ),
+            array(
+                'all' => $this->countContentFields(),
+                'this' => $this->countContentFields( 225 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteVersions
      */
     public function testDeleteVersions()
@@ -1126,6 +1209,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             array(
                 'all' => $this->countContentVersions(),
                 'this' => $this->countContentVersions( 14 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteVersions
+     */
+    public function testDeleteVersionsWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentVersions(),
+            'this' => $this->countContentVersions( 225 )
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteVersions( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 1,
+                'this' => $beforeCount['this'] - 1,
+            ),
+            array(
+                'all' => $this->countContentVersions(),
+                'this' => $this->countContentVersions( 225 ),
             )
         );
     }
@@ -1194,6 +1307,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             array(
                 'all' => $this->countContentNames(),
                 'this' => $this->countContentNames( 14 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteNames
+     */
+    public function testDeleteNamesWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentNames(),
+            'this' => $this->countContentNames( 225 )
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteNames( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 1,
+                'this' => $beforeCount['this'] - 1
+            ),
+            array(
+                'all' => $this->countContentNames(),
+                'this' => $this->countContentNames( 225 ),
             )
         );
     }
