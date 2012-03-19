@@ -180,7 +180,7 @@ class Handler implements BaseTrashHandler
         $this->locationGateway->removeElementFromTrash( $trashItem->id );
 
         if ( $this->locationGateway->countLocationsByContentId( $trashItem->contentId ) < 1 )
-            $this->contentHandler->delete( $trashItem->contentId );
+            $this->contentHandler->deleteContent( $trashItem->contentId );
     }
 }
 

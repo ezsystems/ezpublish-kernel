@@ -367,33 +367,42 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * If $versionNo is not set, deletes all versions and fields, all locations (subtree), and all relations.
-     * When $versionNo is set, deletes given version, its fields, node assignment, relations and names.
+     * Deletes all versions and fields, all locations (subtree), and all relations.
      *
-     * Removes the relations, but not the related objects. When $versionNo is not set,
-     * all subtrees of the assigned nodes of this content objects are removed (recursively).
+     * Removes the relations, but not the related objects. All subtrees of the
+     * assigned nodes of this content objects are removed (recursively).
      *
      * @param int $contentId
-     * @param int|null $versionNo
+     * @return boolean
+     */
+    public function deleteContent( $contentId )
+    {
+        $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
+        foreach ( $locationIds as $locationId )
+        {
+            $this->locationGateway->removeSubtree( $locationId );
+        }
+        $this->fieldHandler->deleteFields( $contentId );
+
+        $this->contentGateway->deleteRelations( $contentId );
+        $this->contentGateway->deleteVersions( $contentId );
+        $this->contentGateway->deleteNames( $contentId );
+        $this->contentGateway->deleteContent( $contentId );
+    }
+
+    /**
+     * Deletes given version, its fields, node assignment, relations and names.
+     *
+     * Removes the relations, but not the related objects.
+     *
+     * @param int $contentId
+     * @param int $versionNo
      *
      * @return boolean
      */
-    public function delete( $contentId, $versionNo = null )
+    public function deleteVersion( $contentId, $versionNo )
     {
-        if ( isset( $versionNo ) )
-        {
-            $this->locationGateway->deleteNodeAssignment( $contentId, $versionNo );
-        }
-        else
-        {
-            $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
-            foreach ( $locationIds as $locationId )
-            {
-                $this->locationGateway->removeSubtree( $locationId );
-            }
-            $this->contentGateway->deleteContent( $contentId );
-        }
-
+        $this->locationGateway->deleteNodeAssignment( $contentId, $versionNo );
         $this->fieldHandler->deleteFields( $contentId, $versionNo );
         $this->contentGateway->deleteRelations( $contentId, $versionNo );
         $this->contentGateway->deleteVersions( $contentId, $versionNo );

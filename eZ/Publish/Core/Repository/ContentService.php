@@ -671,7 +671,7 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( APIContentInfo $contentInfo )
     {
-        $this->persistenceHandler->contentHandler()->delete( $contentInfo->contentId );
+        $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->contentId );
     }
 
     /**

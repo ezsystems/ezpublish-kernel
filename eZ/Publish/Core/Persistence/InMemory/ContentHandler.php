@@ -451,27 +451,56 @@ class ContentHandler implements ContentHandlerInterface
      * @see \eZ\Publish\SPI\Persistence\Content\Handler
      * @todo add deleting of relations
      */
-    public function delete( $contentId, $versionNo = null )
+    public function deleteContent( $contentId )
     {
-        $versionFindMatch = array( 'contentId' => $contentId );
-        if ( isset( $versionNo ) )
-        {
-            $versionFindMatch["versionNo"] = $versionNo;
-        }
-        else
-        {
-            $this->backend->delete( 'Content\\ContentInfo', $contentId, 'contentId' );
+        $this->backend->delete( 'Content\\ContentInfo', $contentId, 'contentId' );
 
-            // @todo Deleting Locations by content object id should be possible using handler API?
-            $locationHandler = $this->handler->locationHandler();
-            $locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $contentId ) );
-            foreach ( $locations as $location )
-            {
-                $locationHandler->removeSubtree( $location->id );
-            }
+        $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $contentId ) );
+        foreach ( $versions as $version )
+        {
+            $fields = $this->backend->find(
+                'Content\\Field',
+                array(
+                    '_contentId' => $contentId,
+                    'versionNo' => $version->versionNo
+                )
+            );
+            foreach ( $fields as $field )
+                $this->backend->delete( 'Content\\Field', $field->id );
+
+            $this->backend->delete( 'Content\\VersionInfo', $version->id );
         }
 
-        $versions = $this->backend->find( 'Content\\VersionInfo', $versionFindMatch );
+        // @todo Deleting Locations by content object id should be possible using handler API?
+        $locationHandler = $this->handler->locationHandler();
+        $locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $contentId ) );
+        foreach ( $locations as $location )
+        {
+            $locationHandler->removeSubtree( $location->id );
+        }
+    }
+
+    /**
+     * Deletes given version, its fields, node assignment, relations and names.
+     *
+     * Removes the relations, but not the related objects.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     *
+     * @return boolean
+     *
+     * @todo add deleting of relations
+     */
+    public function deleteVersion( $contentId, $versionNo )
+    {
+        $versions = $this->backend->find(
+            'Content\\VersionInfo',
+            array(
+                "contentId" => $contentId,
+                "versionNo" => $versionNo
+            )
+        );
         foreach ( $versions as $version )
         {
             $fields = $this->backend->find(

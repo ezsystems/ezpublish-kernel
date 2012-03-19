@@ -157,7 +157,7 @@ class TrashHandlerTest extends HandlerTest
         {
             try
             {
-                $contentHandler->delete( $content->contentInfo->contentId );
+                $contentHandler->deleteContent( $content->contentInfo->contentId );
             }
             catch ( NotFound $e )
             {

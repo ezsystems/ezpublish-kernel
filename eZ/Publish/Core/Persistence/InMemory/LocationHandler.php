@@ -378,7 +378,7 @@ class LocationHandler implements LocationHandlerInterface
         {
             try
             {
-                $this->handler->contentHandler()->delete( $location->contentId );
+                $this->handler->contentHandler()->deleteContent( $location->contentId );
             }
             // Ignoring a NotFound exception since the content handler also takes care of removing itself and locations
             catch ( NotFound $e )
