@@ -53,7 +53,7 @@ class Value extends BaseValue
         'fieldId' => null,
         'contentId' => null,
         'versionNo' => null,
-        // Publication status (one of \ezp\Content\Version::STATUS_*)
+        // Publication status (one of \eZ\Publish\API\Repository\Values\Content\VersionInfo::STATUS_*)
         'status' => null,
         'languageCode' => null,
     );

@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\ValueObject,
 /**
  * Class representing an image alias
  *
- * @property-read \ezp\Io\ContentType $mimeType
+ * @property-read \eZ\Publish\API\Repository\Values\IO\ContentType $mimeType
  * @property-read string $filename The name of the file (for example "my_image.png").
  * @property-read string $suffix The file suffix, aka "extension" (for example "png").
  * @property-read string $dirpath The path to the image (for example "var/storage/images/test/199-2-eng-GB").

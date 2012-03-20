@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Fields\Storage,
     eZ\Publish\SPI\Persistence\Content\Field,
-    ezp\Base\Exception\Logic,
+    eZ\Publish\Core\Base\Exceptions\Logic,
     PDO;
 
 /**

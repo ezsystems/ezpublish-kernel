@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Author;
 use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\Logic;
+    eZ\Publish\Core\Base\Exceptions\Logic;
 
 /**
  * Value for Author field type

@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Image\Exception;
-use ezp\Base\Exception\Logic,
+use eZ\Publish\Core\Base\Exceptions\Logic,
     Exception as PHPException;
 
 class MissingAlias extends Logic

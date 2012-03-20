@@ -12,7 +12,7 @@ use eZ\Publish\SPI\Persistence\Fields\Storage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
-    ezp\Io\ContentType;
+    eZ\Publish\API\Repository\Values\IO\ContentType;
 
 /**
  * Converter for Media field type external storage
@@ -46,12 +46,11 @@ class MediaStorage implements Storage
     public function getFieldData( Field $field, array $context )
     {
         $media = $this->fetch( $field->id, $field->versionNo, $context['connection'] );
-        list( $type, $subType ) = explode( '/', $media['mime_type'] );
 
         $mediaValue = new MediaValue;
         $mediaValue->file = $mediaValue->getHandler()->loadFileFromContentType(
             $media['filename'],
-            new ContentType( $type, $subType )
+            new ContentType( $media['mime_type'] )
         );
         $mediaValue->file->originalFile = $mediaValue->originalFilename = $media['original_filename'];
         $mediaValue->controls = (bool)$media['controls'];

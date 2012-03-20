@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Fields\Storage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Repository\FieldType\Url\Value as UrlValue,
-    ezp\Io\ContentType;
+    eZ\Publish\Core\Repository\FieldType\Url\Value as UrlValue;
 
 /**
  * Converter for Url field type external storage

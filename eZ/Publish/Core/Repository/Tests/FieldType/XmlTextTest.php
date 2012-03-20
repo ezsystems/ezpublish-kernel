@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
-    ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
     ReflectionObject,
     ReflectionProperty,
