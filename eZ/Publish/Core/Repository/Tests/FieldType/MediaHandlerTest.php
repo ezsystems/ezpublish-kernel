@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
-    ezp\Io\FileInfo,
+    splFileInfo,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
@@ -29,7 +29,7 @@ class MediaHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * FileInfo object for test image
-     * @var \ezp\Io\FileInfo
+     * @var \splFileInfo
      */
     protected $mediaFileInfo;
 
@@ -44,7 +44,7 @@ class MediaHandlerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
-        $this->mediaFileInfo = new FileInfo( $this->mediaPath );
+        $this->mediaFileInfo = new splFileInfo( $this->mediaPath );
         $this->handler = new MediaHandler( $repository->getIOService() );
     }
 

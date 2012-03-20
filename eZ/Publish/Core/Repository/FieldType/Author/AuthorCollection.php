@@ -8,13 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Author;
-use ezp\Base\Collection\Type as TypeCollection;
+use ArrayObject;
 
 /**
  * Author collection.
  * This collection can only hold {@link \eZ\Publish\Core\Repository\FieldType\Author\Author} objects
  */
-class AuthorCollection extends TypeCollection
+class AuthorCollection extends ArrayObject
 {
     /**
      * @var \eZ\Publish\Core\Repository\FieldType\Author\Value
@@ -26,7 +26,7 @@ class AuthorCollection extends TypeCollection
         $this->authorValue = $authorValue;
         // Call parent constructor without $elements because all author elements
         // must be given an id by $this->offsetSet()
-        parent::__construct( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Author' );
+        parent::__construct();
         foreach ( $elements as $i => $author )
         {
             $this->offsetSet( $i, $author );

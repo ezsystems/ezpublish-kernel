@@ -12,7 +12,8 @@ use ezp\Base\Collection\Type as TypeCollection,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\InvalidAlias,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\MissingAlias,
     eZ\Publish\API\Repository\IOService,
-    eZ\Publish\API\Repository\Values\IO\BinaryFile;
+    eZ\Publish\API\Repository\Values\IO\BinaryFile,
+    splFileInfo;
 
 /**
  * Image alias collection.
@@ -97,7 +98,7 @@ class AliasCollection extends TypeCollection
         if ( !file_exists( $imagePath ) )
             throw new InvalidArgumentValue( 'imagePath', $imagePath, get_class() );
 
-        $originalImageInfo = new FileInfo( $imagePath );
+        $originalImageInfo = new splFileInfo( $imagePath );
         $this->imageSerialNumber++;
 
         $destinationDir = $this->getDestinationPath( true );
@@ -107,16 +108,16 @@ class AliasCollection extends TypeCollection
         $destinationImage = $destinationDir . '/' . $this->generateTempImageName( $originalImageInfo );
         FileHandler::copy( $imagePath, $destinationImage );
 
-        $this->createOriginalAlias( new FileInfo( $destinationImage ), $originalImageInfo );
+        $this->createOriginalAlias( new splFileInfo( $destinationImage ), $originalImageInfo );
     }
 
     /**
      * Creates original image alias and resets the collection with it
      *
-     * @param \ezp\Io\FileInfo $imageInfo File info object for image file stored at the right place
-     * @param \ezp\Io\FileInfo $originalImageInfo File info object for original image (e.g. that has been uploaded)
+     * @param \splFileInfo $imageInfo File info object for image file stored at the right place
+     * @param \splFileInfo $originalImageInfo File info object for original image (e.g. that has been uploaded)
      */
-    protected function createOriginalAlias( FileInfo $imageInfo, FileInfo $originalImageInfo )
+    protected function createOriginalAlias( splFileInfo $imageInfo, splFileInfo $originalImageInfo )
     {
         $alias = $this->imageManager->createOriginalAlias( $imageInfo, $originalImageInfo->getBasename() );
         $alias->alternativeText = $this->imageValue->alternativeText;
@@ -168,10 +169,10 @@ class AliasCollection extends TypeCollection
     /**
      * Generates temporary image file name from $originalImageInfo
      *
-     * @param \ezp\Io\FileInfo $originalImageInfo
+     * @param \splFileInfo $originalImageInfo
      * @return string
      */
-    private function generateTempImageName( FileInfo $originalImageInfo )
+    private function generateTempImageName( splFileInfo $originalImageInfo )
     {
         $fileSuffix = $originalImageInfo->getExtension();
         if ( $fileSuffix )

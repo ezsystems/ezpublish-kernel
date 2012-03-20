@@ -12,7 +12,7 @@ use ezp\Base\Legacy\Carpet,
     ezp\Base\Image\Data as ImageData,
     ezp\Base\BinaryRepository,
     eZ\Publish\Core\Repository\FieldType\Image\AliasCollection,
-    ezp\Io\FileInfo,
+    splFileInfo,
     DateTime;
 
 /**
@@ -81,11 +81,11 @@ class Manager extends Carpet
      * Creates original alias from $imageInfo.
      * $originalFilename will be stored in the alias object
      *
-     * @param \ezp\Io\FileInfo $imageInfo Object containing all information regarding physical image file
+     * @param \splFileInfo $imageInfo Object containing all information regarding physical image file
      * @param string $originalFilename The original file name to store in the alias ($imageInfo filename is a temporary unique hash)
      * @return \eZ\Publish\Core\Repository\FieldType\Image\Alias
      */
-    public function createOriginalAlias( FileInfo $imageInfo, $originalFilename )
+    public function createOriginalAlias( splFileInfo $imageInfo, $originalFilename )
     {
         // Store in the repository as operations will be done in the repository for concurrency protection.
         // @see eZImageManager::createImageAlias(), starting from line 864
@@ -128,7 +128,7 @@ class Manager extends Carpet
                 'name' => 'original',
                 'width' => $width,
                 'height' => $height,
-                'fileInfo' => new FileInfo( $aliasListForLegacy['original']['url'] ),
+                'fileInfo' => new splFileInfo( $aliasListForLegacy['original']['url'] ),
                 'originalFilename' => $originalFilename,
                 'aliasKey' => $aliasListForLegacy['original']['alias_key'],
                 'modified' => new DateTime,

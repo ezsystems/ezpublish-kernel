@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
-    ezp\Io\SysInfo,
-    ezp\Io\FileInfo,
+    splFileInfo,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
@@ -29,7 +28,7 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * FileInfo object for test image
-     * @var \ezp\Io\FileInfo
+     * @var \splFileInfo
      */
     protected $imageFileInfo;
 
@@ -44,7 +43,7 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $this->imagePath = __DIR__ . '/squirrel-developers.jpg';
-        $this->imageFileInfo = new FileInfo( $this->imagePath );
+        $this->imageFileInfo = new splFileInfo( $this->imagePath );
         $this->handler = new BinaryFileHandler( $repository->getIOService() );
     }
 

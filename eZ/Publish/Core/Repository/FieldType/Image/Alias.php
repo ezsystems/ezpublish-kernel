@@ -53,7 +53,7 @@ class Alias extends ValueObject
     /**
      * FileInfo object for image alias
      *
-     * @var \ezp\Io\FileInfo
+     * @var \splFileInfo
      */
     public $fileInfo;
 

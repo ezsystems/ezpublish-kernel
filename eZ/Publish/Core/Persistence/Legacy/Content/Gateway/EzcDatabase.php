@@ -23,9 +23,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\Base\Exceptions\NotFound,
-    ezp\Content as ContentDo,
-    ezp\Content\Version as VersionDo,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo,
     ezcQueryUpdate;
 
 /**
@@ -500,7 +499,7 @@ class EzcDatabase extends Gateway
         if ( (bool)$statement->rowCount() === false )
             return false;
 
-        if ( $status !== VersionDo::STATUS_PUBLISHED )
+        if ( $status !== APIVersionInfo::STATUS_PUBLISHED )
         {
             return true;
         }
@@ -511,7 +510,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
-            $q->bindValue( ContentDo::STATUS_PUBLISHED, null, \PDO::PARAM_INT )
+            $q->bindValue( APIVersionInfo::STATUS_PUBLISHED, null, \PDO::PARAM_INT )
         )->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
