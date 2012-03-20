@@ -10,7 +10,7 @@
 namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Repository,
+    eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue;
 
@@ -32,11 +32,11 @@ interface FieldType
      * This method is called on occuring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
-    public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field );
+    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field );
 
     /**
      * Returns a map of allowed setting including a default value used when not given in the field definition

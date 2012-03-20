@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Repository as BaseRepository,
+    eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
@@ -73,11 +73,11 @@ abstract class FieldType implements FieldTypeInterface
      * This method is called on occuring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
-    public function handleEvent( $event, BaseRepository $repository, FieldDefinition $fieldDef, Field $field )
+    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field )
     {
     }
 

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input;
 
-use eZ\Publish\API\Repository\Repository,
+use eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\API\Repository\Values\Content\Relation,
     eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParserInterface,
@@ -74,6 +74,7 @@ class Handler
 
     /**
      * Returns the last parsing messages (from the last parsing operation, {@see isXmlValid}, {@see process})
+     *
      * @return array
      */
     public function getParsingMessages()
@@ -83,12 +84,14 @@ class Handler
 
     /**
      * Processes $xmlString and indexes the external data it references
+     *
      * @param string $xmlString
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return bool
      */
-    public function process( $xmlString, Repository $repository, Content $content )
+    public function process( $xmlString, FieldTypeService $fieldTypeService, Content $content )
     {
         $this->parser->setOption( BaseInputParser::OPT_CHECK_EXTERNAL_DATA, true );
 
@@ -99,17 +102,14 @@ class Handler
             return false;
         }
         $this->document = $document;
-
-        $service = $repository->getContentService();
         $versionInfo = $content->getVersionInfo();
 
         // related content
         foreach ( $this->parser->getRelatedContentIdArray() as $embedRelatedContentId )
         {
-            $service->addRelation(
-                Relation::FIELD,
-                $content->contentId,
-                $versionInfo->versionNo,
+            $fieldTypeService->addRelation(
+                Relation::EMBED,
+                $versionInfo,
                 $embedRelatedContentId
             );
         }
@@ -117,10 +117,9 @@ class Handler
         // linked content
         foreach ( $this->parser->getLinkedContentIdArray() as $linkContentId )
         {
-            $service->addRelation(
+            $fieldTypeService->addRelation(
                 Relation::LINK,
-                $content->contentId,
-                $versionInfo->versionNo,
+                $versionInfo,
                 $linkContentId
             );
         }
@@ -130,6 +129,7 @@ class Handler
 
     /**
      * Callback that gets a location from its id
+     *
      * @param mixed $locationId
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      * @todo Implement & Document, or remove

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Repository,
+    eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\Core\Repository\FieldType\FieldType,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as XMLTextInputHandler,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as XMLTextInputParserInterface,
@@ -142,12 +142,12 @@ EOF;
      * Converts complex values to a Value\Raw object
      *
      * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      *
      * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
-    protected function convertValueToRawValue( Value $value, Repository $repository, Field $field )
+    protected function convertValueToRawValue( Value $value, FieldTypeService $fieldTypeService, Field $field )
     {
         // we don't convert Raw to Raw, right ?
         // if ( get_class( $value ) === 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' )
@@ -155,7 +155,7 @@ EOF;
 
         $handler = $value->getInputHandler( $value );
         throw new \RuntimeException( '@todo XMLText has a dependency on version id and version number, after refactoring that is not available' );
-        $handler->process( $value->text, $repository, $field->version );
+        $handler->process( $value->text, $fieldTypeService, $field->version );
 
         $value->setRawText( $handler->getDocumentAsXml() );
     }
@@ -164,15 +164,15 @@ EOF;
      * This method is called on occuring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
-    public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field )
+    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field )
     {
         if ( $event === "preCreate" )
         {
-            $this->convertValueToRawValue( $field->value, $repository, $field );
+            $this->convertValueToRawValue( $field->value, $fieldTypeService, $field );
         }
     }
 
