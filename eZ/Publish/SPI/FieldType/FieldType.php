@@ -65,7 +65,7 @@ interface FieldType
      * Build a FiledType\Value object with the provided $plainValue as value.
      *
      * @param mixed $plainValue
-     * @return \eZ\Publish\Core\Repository\FieldType\ValueInterface
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function buildValue( $plainValue );

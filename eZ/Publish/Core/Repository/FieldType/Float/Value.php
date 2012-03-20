@@ -8,13 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Float;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
 /**
  * Value for Float field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Float content
@@ -32,14 +31,6 @@ class Value extends BaseValue implements ValueInterface
     {
         if ( $value !== null )
             $this->value = $value;
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
     }
 
     /**

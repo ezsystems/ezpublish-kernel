@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\BinaryFile;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\API\Repository\IOService,
     ezp\Base\Exception\PropertyNotFound;
 
@@ -23,7 +22,7 @@ use eZ\Publish\Core\Repository\FieldType\ValueInterface,
  * @property-read int $filesize The size of the file (number of bytes).
  * @property-read string $filepath The path to the file (including the filename).
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * BinaryFile object
@@ -75,15 +74,6 @@ class Value extends BaseValue implements ValueInterface
 
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
-     * @return \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function __toString()
     {
@@ -115,7 +105,7 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

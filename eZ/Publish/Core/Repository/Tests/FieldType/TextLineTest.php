@@ -117,30 +117,18 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $string = "Most programmers don't wear strings. Most...";
-        $value = TextLineValue::fromString( $string );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value', $value );
-        self::assertSame( $string, $value->text );
-    }
-
-    /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::__toString
      */
     public function testFieldValueToString()
     {
         $string = "Believe it or not, but most geeks find strings very comfortable to work with";
-        $value = TextLineValue::fromString( $string );
+        $value = new TextLineValue( $string );
         self::assertSame( $string, (string)$value );
 
+        $value2 = new TextLineValue( (string)$value );
         self::assertSame(
             $string,
-            TextLineValue::fromString( (string)$value )->text,
+            $value2->text,
             'fromString() and __toString() must be compatible'
         );
     }

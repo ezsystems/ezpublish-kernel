@@ -8,13 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\TextLine;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
 /**
  * Value for TextLine field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Text content
@@ -31,14 +30,6 @@ class Value extends BaseValue implements ValueInterface
     public function __construct( $text = '' )
     {
         $this->text = $text;
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
     }
 
     /**

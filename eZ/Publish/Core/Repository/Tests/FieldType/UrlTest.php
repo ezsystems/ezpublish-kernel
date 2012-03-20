@@ -80,29 +80,18 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $link = "http://ez.no/";
-        $value = UrlValue::fromString( $link );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Url\\Value", $value );
-        self::assertSame( $link, $value->link );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType\Url\Value::__toString
      */
     public function testFieldValueToString()
     {
         $link = "http://ez.no/";
-        $value = UrlValue::fromString( $link );
+        $value = new UrlValue( $link );
         self::assertSame( $link, (string)$value );
 
+        $value2 = new UrlValue( (string)$value );
         self::assertSame(
             $link,
-            UrlValue::fromString( (string)$value )->link,
+            $value2->link,
             "fromString() and __toString() must be compatible"
         );
     }

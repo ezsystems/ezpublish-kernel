@@ -108,20 +108,6 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
-    /**
-     * @group fieldType
-     * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $ft = new BinaryFileType( $this->repository );
-        $value = $ft->buildValue( $this->imagePath );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\Value', $value );
-        self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFile', $value->file );
-        self::assertSame( $this->imageFileInfo->getBasename(), $value->originalFilename );
-        self::assertSame( $value->originalFilename, $value->file->originalFile );
-    }
 
     /**
      * @group fieldType

@@ -1150,9 +1150,11 @@ class ContentService implements ContentServiceInterface
      *
      * Instantiates a FieldType\Value object by using FieldType\Type->buildValue().
      *
+     * @todo Add to API or remove!
+     * @uses \eZ\Publish\Core\Repository\ContentTypeService::buildFieldType
      * @param string $type
      * @param mixed $plainValue
-     * @return \eZ\Publish\Core\Repository\FieldType\ValueInterface
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function newFieldTypeValue( $type, $plainValue )
     {

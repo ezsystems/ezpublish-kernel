@@ -147,32 +147,18 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $country = "Belgium";
-        $value = CountryValue::fromString( $country );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $value );
-        self::assertSame(
-            array( "Belgium" ),
-            $value->values
-        );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__toString
      */
     public function testFieldValueToString()
     {
         $country = "Belgium";
-        $value = CountryValue::fromString( $country );
+        $value = new CountryValue( (array)$country );
         self::assertSame( $country, (string)$value );
 
+        $value2 = new CountryValue( (array)((string)$value) );
         self::assertSame(
             array( "Belgium" ),
-            CountryValue::fromString( (string)$value )->values,
+            $value2->values,
             "fromString() and __toString() must be compatible"
         );
     }

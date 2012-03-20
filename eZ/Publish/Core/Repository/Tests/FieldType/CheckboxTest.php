@@ -131,25 +131,6 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $stringTrue = "1";
-        $stringTrue2 = "Any non-empty string means true";
-        $stringFalse = "0";
-        $stringFalse2 = "";
-        $value = CheckboxValue::fromString( $stringTrue );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Value', $value );
-        self::assertTrue( $value->bool );
-        self::assertTrue( CheckboxValue::fromString( $stringTrue2 )->bool );
-        self::assertFalse( CheckboxValue::fromString( $stringFalse )->bool );
-        self::assertFalse( CheckboxValue::fromString( $stringFalse2 )->bool );
-    }
-
-    /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::__toString
      */
     public function testFieldValueToString()

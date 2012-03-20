@@ -165,36 +165,12 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $timestamp = 1048633200;
-        $fv = DateAndTimeValue::fromString( "@$timestamp" );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fv );
-        self::assertSame( $timestamp, $fv->value->getTimestamp() );
-    }
-
-    /**
-     * @group fieldType
-     * @group dateTime
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::fromString
-     */
-    public function testBuildFieldValueFromInvalidString()
-    {
-        $fv = DateAndTimeValue::fromString( "This is not a valid date string" );
-    }
-
-    /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__toString
      */
     public function testFieldValueToString()
     {
         $timestamp = 1048633200;
-        $fv = DateAndTimeValue::fromString( "@$timestamp" );
+        $fv = new DateAndTimeValue( "@$timestamp" );
         $fv->stringFormat = 'U';
         self::assertEquals( $timestamp, (string)$fv );
     }

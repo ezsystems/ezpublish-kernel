@@ -8,13 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Selection;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
 /**
  * Value for Selection field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Selection content
@@ -36,14 +35,6 @@ class Value extends BaseValue implements ValueInterface
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
     public function __toString()
     {
         if ( !is_array( $this->selection ) )
@@ -53,7 +44,7 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

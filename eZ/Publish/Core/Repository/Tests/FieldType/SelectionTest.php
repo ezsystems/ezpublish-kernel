@@ -119,30 +119,18 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $string = "Choice2";
-        $value = SelectionValue::fromString( $string );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $value );
-        self::assertSame( (array)$string, $value->selection );
-    }
-
-    /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::__toString
      */
     public function testFieldValueToString()
     {
         $string = "Choice3";
-        $value = SelectionValue::fromString( $string );
+        $value = new SelectionValue( $string );
         self::assertSame( $string, (string)$value );
 
+        $value2 = new SelectionValue( (string)$value );
         self::assertSame(
             (array)$string,
-            SelectionValue::fromString( (string)$value )->selection,
+            $value2->selection,
             "fromString() and __toString() must be compatible"
         );
     }

@@ -108,15 +108,6 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::fromString
-     * @expectedException \ezp\Base\Exception\Logic
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $value = AuthorValue::fromString( 'This is not gonna work' );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::__toString
      */
     public function testFieldValueToString()

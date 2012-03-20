@@ -27,4 +27,13 @@ abstract class Value extends ValueObject
     {
         return $this->__toString();
     }
+
+    /**
+     * Returns a string representation of the field value.
+     * This string representation must be compatible with format accepted via
+     * {@link \eZ\Publish\SPI\FieldType\FieldType::buildValue}
+     *
+     * @return string
+     */
+    abstract public function __toString();
 }

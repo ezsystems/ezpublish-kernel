@@ -1166,6 +1166,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Instantiates a FieldType\Type object
      *
+     * @todo Add to API or remove!
      * @param string $type
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */

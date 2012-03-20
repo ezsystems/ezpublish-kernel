@@ -94,29 +94,18 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $integer = 4200;
-        $value = IntegerValue::fromString( $integer );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\Value", $value );
-        self::assertSame( $integer, $value->value );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::__toString
      */
     public function testFieldValueToString()
     {
         $integer = "4200";
-        $value = IntegerValue::fromString( $integer );
+        $value = new IntegerValue( $integer );
         self::assertSame( $integer, (string)$value );
 
+        $value2 = new IntegerValue( (string)$value );
         self::assertSame(
-            (int)$integer,
-            IntegerValue::fromString( (string)$value )->value,
+            $integer,
+            $value2->value,
             "fromString() and __toString() must be compatible"
         );
     }

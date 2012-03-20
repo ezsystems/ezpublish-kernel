@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Media;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\API\Repository\IOService,
     ezp\Base\Exception\PropertyNotFound;
 
@@ -20,7 +19,7 @@ use eZ\Publish\Core\Repository\FieldType\ValueInterface,
  *                            (for example "44b963c9e8d1ffa80cbb08e84d576735.avi").
  * @property string $mimeType
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * BinaryFile object
@@ -122,15 +121,6 @@ class Value extends BaseValue implements ValueInterface
 
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
-     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function __toString()
     {
@@ -167,7 +157,7 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

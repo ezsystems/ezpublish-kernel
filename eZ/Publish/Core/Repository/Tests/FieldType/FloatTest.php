@@ -93,29 +93,18 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::fromString
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $float = 4200.42;
-        $value = FloatValue::fromString( $float );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Float\\Value", $value );
-        self::assertSame( $float, $value->value );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::__toString
      */
     public function testFieldValueToString()
     {
         $float = "4200.42";
-        $value = FloatValue::fromString( $float );
+        $value = new FloatValue( $float );
         self::assertSame( $float, (string)$value );
 
+        $value2 = new FloatValue( (string)$value );
         self::assertSame(
             $float,
-            FloatValue::fromString( (string)$value )->value,
+            $value2->value,
             "fromString() and __toString() must be compatible"
         );
     }

@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\DateAndTime;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     Exception,
@@ -18,7 +17,7 @@ use eZ\Publish\Core\Repository\FieldType\ValueInterface,
 /**
  * Value for DateAndTime field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Date content
@@ -65,25 +64,6 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @param string $stringValue A valid date/time string.
-     *                            Valid formats are explained in {@link http://php.net/manual/en/datetime.formats.php Date and Time Formats}.
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $stringValue does not comply a valid date format
-     * @return \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        try
-        {
-            return new static( new DateTime( $stringValue ) );
-        }
-        catch ( Exception $e )
-        {
-            throw new InvalidArgumentValue( '$stringValue', $stringValue, __CLASS__, $e );
-        }
-    }
-
-    /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function __toString()
@@ -95,8 +75,8 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
-     * @todo Return format taken from locale configuration
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
+     * @todo Return format taken from locale settings (via ctor injection)
      */
     public function getTitle()
     {

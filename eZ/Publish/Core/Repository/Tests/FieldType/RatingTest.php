@@ -104,41 +104,18 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::fromString
-     */
-    public function testBuildFieldValueFromStringFalse()
-    {
-        $rating = "0";
-        $value = RatingValue::fromString( $rating );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $value );
-        self::assertSame( false, $value->isDisabled );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::fromString
-     */
-    public function testBuildFieldValueFromStringTrue()
-    {
-        $rating = "1";
-        $value = RatingValue::fromString( $rating );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $value );
-        self::assertSame( true, $value->isDisabled );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__toString
      */
     public function testFieldValueToStringFalse()
     {
         $rating = "0";
-        $value = RatingValue::fromString( $rating );
+        $value = new RatingValue( $rating );
         self::assertSame( $rating, (string)$value );
 
+        $value2 = new RatingValue( (string)$value );
         self::assertSame(
             (bool)$rating,
-            RatingValue::fromString( (string)$value )->isDisabled,
+            $value2->isDisabled,
             "fromString() and __toString() must be compatible"
         );
     }
@@ -150,12 +127,13 @@ class RatingTest extends PHPUnit_Framework_TestCase
     public function testFieldValueToStringTrue()
     {
         $rating = "1";
-        $value = RatingValue::fromString( $rating );
+        $value = new RatingValue( $rating );
         self::assertSame( $rating, (string)$value );
 
+        $value2 = new RatingValue( (string)$value );
         self::assertSame(
             (bool)$rating,
-            RatingValue::fromString( (string)$value )->isDisabled,
+            $value2->isDisabled,
             "fromString() and __toString() must be compatible"
         );
     }

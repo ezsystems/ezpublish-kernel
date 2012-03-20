@@ -8,13 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Keyword;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
 /**
  * Value for Keyword field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Content of the value
@@ -46,19 +45,6 @@ class Value extends BaseValue implements ValueInterface
 
             $this->values = array_unique( $values );
         }
-    }
-
-    /**
-     * Initializes the keyword value with a simple string.
-     *
-     * @param string $stringValue A comma separated list of tags, eg: "php, eZ Publish, html5"
-     *                            Space after comma is optional, each tag is trimmed to remove it.
-     * @return \eZ\Publish\Core\Repository\FieldType\Keyword\Value Instance of the keyword value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
     }
 
     /**

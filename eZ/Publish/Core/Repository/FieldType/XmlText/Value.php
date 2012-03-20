@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as InputHandler,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
@@ -19,7 +18,7 @@ use eZ\Publish\Core\Repository\FieldType\ValueInterface,
 /**
  * Basic, raw value for TextLine field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Text content
@@ -81,21 +80,13 @@ class Value extends BaseValue implements ValueInterface
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
     public function __toString()
     {
         return (string)$this->text;
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {
