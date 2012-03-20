@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\FieldType\Media;
 use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
     eZ\Publish\API\Repository\IOService,
-    ezp\Base\Exception\PropertyNotFound;
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**
  * Value for Media field type
@@ -152,7 +152,7 @@ class Value extends BaseValue
                 return $this->file->id;
 
             default:
-                throw new PropertyNotFound( $name, get_class( $this ) );
+                throw new PropertyNotFoundException( $name, get_class( $this ) );
         }
     }
 

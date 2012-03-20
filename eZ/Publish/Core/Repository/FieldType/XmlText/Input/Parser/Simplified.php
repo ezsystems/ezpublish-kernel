@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser;
 use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParser,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Base as BaseParser,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler,
-    ezp\Base\Configuration,
     DOMElement;
 
 /**

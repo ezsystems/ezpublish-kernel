@@ -98,7 +98,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @covers \eZ\Publish\Core\Repository\FieldType\Validator::initializeWithConstraints
-     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testInitializeBadConstraint()
     {
@@ -117,7 +117,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__set
-     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testSetBadConstraint()
     {
@@ -131,7 +131,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__get
-     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testGetBadConstraint()
     {

@@ -14,8 +14,8 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\User\User,
     eZ\Publish\Core\Repository\Values\User\UserGroup,
 
-    ezp\Base\Exception\PropertyNotFound,
-    ezp\Base\Exception\PropertyPermission,
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
+    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
     eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
@@ -98,7 +98,7 @@ abstract class UserBase extends BaseServiceTest
             $user->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyPermission $e ) {}
+        catch( PropertyReadOnlyException $e ) {}
 
         try
         {
@@ -106,7 +106,7 @@ abstract class UserBase extends BaseServiceTest
             $userGroup->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyPermission $e ) {}
+        catch( PropertyReadOnlyException $e ) {}
     }
 
     /**
@@ -144,7 +144,7 @@ abstract class UserBase extends BaseServiceTest
             unset( $user->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyPermission $e ) {}
+        catch ( PropertyReadOnlyException $e ) {}
 
         $userGroup = new UserGroup( array( "id" => 1 ) );
         try
@@ -152,7 +152,7 @@ abstract class UserBase extends BaseServiceTest
             unset( $userGroup->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyPermission $e ) {}
+        catch ( PropertyReadOnlyException $e ) {}
     }
 
     /**

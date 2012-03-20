@@ -15,8 +15,8 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\User\Policy,
     eZ\Publish\API\Repository\Values\User\Limitation,
 
-    ezp\Base\Exception\PropertyNotFound,
-    ezp\Base\Exception\PropertyPermission,
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
+    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
     eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
@@ -91,7 +91,7 @@ abstract class RoleBase extends BaseServiceTest
             $role->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyPermission $e ) {}
+        catch( PropertyReadOnlyException $e ) {}
 
         try
         {
@@ -99,7 +99,7 @@ abstract class RoleBase extends BaseServiceTest
             $policy->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyPermission $e ) {}
+        catch( PropertyReadOnlyException $e ) {}
     }
 
     /**
@@ -137,7 +137,7 @@ abstract class RoleBase extends BaseServiceTest
             unset( $role->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyPermission $e ) {}
+        catch ( PropertyReadOnlyException $e ) {}
 
         $policy = new Policy( array( "id" => 1 ) );
         try
@@ -145,7 +145,7 @@ abstract class RoleBase extends BaseServiceTest
             unset( $policy->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyPermission $e ) {}
+        catch ( PropertyReadOnlyException $e ) {}
     }
 
     /**

@@ -10,10 +10,8 @@
 namespace eZ\Publish\Core\Repository\FieldType\Media;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
     eZ\Publish\API\Repository\Repository,
-    ezp\Content\Field,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    ezp\Base\Observable,
     eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**

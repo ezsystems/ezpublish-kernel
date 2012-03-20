@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
 use eZ\Publish\SPI\Persistence\ValueObject,
-    ezp\Base\Exception\PropertyNotFound;
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 
 /**
  * Class representing an image alias

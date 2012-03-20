@@ -11,9 +11,8 @@ namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser;
 
 use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParser,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Base as BaseParser,
-    ezp\Base\Configuration,
-    ezp\Content\Location,
-    DOMElement, DOMDocument;
+    DOMElement,
+    DOMDocument;
 
 /**
  * Raw XmlText input parser.

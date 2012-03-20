@@ -106,7 +106,6 @@ interface Handler
      * @param mixed $contentId
      * @param int $status
      * @param int $version
-     * @see ezp\Content
      * @return boolean
      */
     public function setStatus( $contentId, $status, $version );
@@ -120,7 +119,6 @@ interface Handler
      * @param mixed $stateGroup
      * @param mixed $state
      * @return boolean
-     * @see ezp\Content
      */
     public function setObjectState( $contentId, $stateGroup, $state );
 
@@ -132,7 +130,6 @@ interface Handler
      * @param mixed $contentId
      * @param mixed $stateGroup
      * @return mixed
-     * @see ezp\Content
      */
     public function getObjectState( $contentId, $stateGroup );
 

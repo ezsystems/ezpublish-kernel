@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser;
 
 use eZ\Publish\Core\Repository\FieldType\XmlText\Schema as XmlSchema,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as InputHandler,
-    ezp\Base\Exception\BadConfiguration,
+    eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     DOMDocument,
     DOMElement,
     DOMNode,
@@ -236,7 +236,7 @@ abstract class Base
      *
      * @param string $option One of self::OPT_*
      * @param mixed $value
-     * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration If the option is unknown or the value incorrect
      */
     public function setOption( $option, $value )
     {
@@ -252,7 +252,7 @@ abstract class Base
      * Gets the parser option $option
      *
      * @param string $option One of self::OPT_*
-     * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration If the option is unknown or the value incorrect
      */
     public function getOption( $option )
     {
@@ -1256,7 +1256,7 @@ abstract class Base
      * @param \DOMNode $element
      * @param array $params
      * @return mixed|null
-     * @throws \ezp\Base\Exception\BadConfiguration
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
      */
     protected function callOutputHandler( $handlerName, DOMNode $element, &$params )
     {

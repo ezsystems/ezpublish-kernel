@@ -169,7 +169,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group ezmedia
      * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__get
-     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testInvalidVirtualProperty()
     {

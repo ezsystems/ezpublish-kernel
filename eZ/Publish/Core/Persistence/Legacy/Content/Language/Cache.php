@@ -19,14 +19,14 @@ class Cache
     /**
      * Maps IDs to Language objects
      *
-     * @var \ezp\Content\Language[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     protected $mapById = array();
 
     /**
      * Maps locales to Language objects
      *
-     * @var \ezp\Content\Language[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     protected $mapByLocale = array();
 

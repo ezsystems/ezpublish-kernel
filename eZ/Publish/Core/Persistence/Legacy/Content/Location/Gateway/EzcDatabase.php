@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    ezp\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**

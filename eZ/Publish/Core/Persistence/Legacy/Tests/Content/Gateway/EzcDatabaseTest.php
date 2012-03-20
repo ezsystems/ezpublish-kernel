@@ -300,7 +300,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( VersionInfo::STATUS_DRAFT ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            array( array( VersionInfo::STATUS_DRAFT ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -353,7 +353,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( '1' ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            array( array( '1' ) ), // 1 === Content::STATUS_PUBLISHED
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )

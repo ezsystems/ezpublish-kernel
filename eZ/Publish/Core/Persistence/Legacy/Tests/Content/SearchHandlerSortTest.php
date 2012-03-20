@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    ezp\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\SPI\Persistence;
 
 /**

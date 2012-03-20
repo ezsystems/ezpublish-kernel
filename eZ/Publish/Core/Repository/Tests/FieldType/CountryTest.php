@@ -203,7 +203,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @dataProvider providerForConstructorKO
      * @expectedException \eZ\Publish\Core\Repository\FieldType\Country\Exception\InvalidValue
-     * @expectedExceptionMessage is not a valid value country identifier.
+     * @expectedExceptionMessage is not a valid value country identifier
      * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::buildValue
      */
     public function testConstructorWrongValues( $value )

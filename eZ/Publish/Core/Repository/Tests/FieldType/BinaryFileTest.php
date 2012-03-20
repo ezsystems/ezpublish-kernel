@@ -142,7 +142,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group binaryFile
      * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::__get
-     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testInvalidVirtualProperty()
     {

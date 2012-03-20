@@ -12,8 +12,8 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
 
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    ezp\Base\Exception\PropertyPermission,
-    ezp\Base\Exception\PropertyNotFound;
+    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -66,7 +66,7 @@ abstract class SectionBase extends BaseServiceTest
             $section->id = 22;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyPermission $e ) {}
+        catch( PropertyReadOnlyException $e ) {}
     }
 
     /**
@@ -95,7 +95,7 @@ abstract class SectionBase extends BaseServiceTest
             unset( $section->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyPermission $e ) {}
+        catch ( PropertyReadOnlyException $e ) {}
     }
 
     /**

@@ -17,7 +17,7 @@ abstract class SortClause
 {
     /**
      * Sort direction
-     * One of \ezp\Content\Query::SORT_ASC or \ezp\Content\Query::SORT_DESC;
+     * One of Query::SORT_ASC or Query::SORT_DESC;
      * @var string
      */
     public $direction = Query::SORT_ASC;
@@ -30,23 +30,23 @@ abstract class SortClause
 
     /**
      * Extra target data, required by some sort clauses, field for instance
-     * @var SortClauseTarget
+     * @var SortClause\Target
      */
     public $targetData;
 
     /**
      * Constructs a new SortClause on $sortTarget in direction $sortDirection
      * @param string $sortTarget
-     * @param string $sortDirection one of ezp\Content\Query::SORT_ASC or ezp\Content\Query::SORT_DESC
+     * @param string $sortDirection one of Query::SORT_ASC or Query::SORT_DESC
      * @param string $targetData Extra target data, used by some clauses (field for instance)
      *
-     * @throws InvalidArgumentException if the given sort order isn't one of ezp\Content\Query::SORT_ASC or ezp\Content\Query::SORT_DESC
+     * @throws InvalidArgumentException if the given sort order isn't one of Query::SORT_ASC or Query::SORT_DESC
      */
     public function __construct( $sortTarget, $sortDirection, $targetData = null )
     {
         if ( $sortDirection !== Query::SORT_ASC && $sortDirection !== Query::SORT_DESC )
         {
-            throw new InvalidArgumentException( "Sort direction must be one of ezp\Content\Query::SORT_ASC or ezp\Content\Query::SORT_DESC" );
+            throw new InvalidArgumentException( "Sort direction must be one of Query::SORT_ASC or Query::SORT_DESC" );
         }
 
         $this->direction = $sortDirection;

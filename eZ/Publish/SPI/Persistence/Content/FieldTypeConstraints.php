@@ -24,10 +24,10 @@ class FieldTypeConstraints extends ValueObject
 
     /**
      * Collection of field settings as it is supported by dedicated field type,
-     * and set in {@link \ezp\Content\Type\FieldDefinition}.
+     * and set in {@link \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition}.
      * Collection is indexed by setting name.
      *
-     * @see \eZ\Publish\Core\Repository\FieldType::$fieldSettings
+     * @see \eZ\Publish\Core\Repository\FieldType\FieldType::$fieldSettings
      * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings
      */
     public $fieldSettings;

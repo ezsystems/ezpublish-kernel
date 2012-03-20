@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType;
-use ezp\Base\Exception\PropertyNotFound,
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\Core\Repository\FieldType\Value;
 
 /**
@@ -85,7 +85,7 @@ abstract class Validator
      * Initialized an instance of Validator, with earlier configured constraints.
      *
      * @internal
-     * @throws \ezp\Base\Exception\PropertyNotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      * @param array $constraints
      * @return void
      */
@@ -108,7 +108,7 @@ abstract class Validator
      *
      * @param string $name
      * @return mixed
-     * @throws \ezp\Base\Exception\PropertyNotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function __get( $name )
     {
@@ -124,7 +124,7 @@ abstract class Validator
      *
      * @param string $name
      * @param mixed $value
-     * @throws \ezp\Base\Exception\PropertyNotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function __set( $name, $value )
     {

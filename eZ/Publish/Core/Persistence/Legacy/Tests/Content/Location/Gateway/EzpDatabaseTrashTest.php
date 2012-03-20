@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\Location\Trashed,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    ezp\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\SPI\Persistence;
 
 /**
