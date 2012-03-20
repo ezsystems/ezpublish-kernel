@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Repository\FieldType\XmlText;
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\Core\Repository\FieldType\FieldType,
+    eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as XMLTextInputHandler,
+    eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as XMLTextInputParserInterface,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -34,6 +36,21 @@ class Type extends FieldType
     );
 
     /**
+     * @var \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler
+     */
+    protected $inputHandler;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser $inputParser
+     */
+    public function __construct( XMLTextInputParserInterface $inputParser )
+    {
+        $this->inputHandler = new XMLTextInputHandler( $inputParser );
+    }
+
+    /**
      * Build a Value object of current FieldType
      *
      * Build a FiledType\Value object with the provided $text as value.
@@ -44,7 +61,7 @@ class Type extends FieldType
      */
     public function buildValue( $text )
     {
-        return new Value( $text );
+        return new Value( $this->inputHandler, $text );
     }
 
     /**
@@ -71,7 +88,7 @@ class Type extends FieldType
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
 EOF;
-        return new Value( $value, Value::INPUT_FORMAT_RAW );
+        return new Value( $this->inputHandler, $value, Value::INPUT_FORMAT_RAW );
     }
 
     /**
@@ -168,7 +185,7 @@ EOF;
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        return new Value( $this->inputHandler, $hash );
     }
 
     /**

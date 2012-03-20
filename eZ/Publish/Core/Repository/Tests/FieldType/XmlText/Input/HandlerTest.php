@@ -10,8 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input;
 
 use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as InputHandler,
-    ezp\Content\Relation,
-
+    eZ\Publish\API\Repository\Values\Content\Relation,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
@@ -46,41 +45,47 @@ class HandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testProcessRelatedContent()
     {
-        $this->markTestIncomplete( "@todo: Needs to be reenabled when XMLText fieldtype has been refactoreed" );
+        $this->markTestIncomplete( "@todo: Renable when there is a field specifc addRelation api (Field Service)" );
         // List of ids returned by the parser
         $idArray = array( 1, 2, 3 );
 
         // Version DO
-        $version = $this->getMock( 'ezp\\Content\\Version' );
-        $version->id = 1;
-        $version->contentId = 1;
-        $version->versionNo = 1;
+        $version = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\VersionInfo' );
+        $version->id = 55;
+        $version->versionNo = 3;
 
-        $repository = $this->getMockBuilder( '\\ezp\\Base\\Repository' )
+        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $content->contentId = 1;
+        $content
+            ->expects( $this->once() )
+            ->method( 'getVersionInfo' )
+            ->will( $this->returnValue( $version ) );
+
+        $repository = $this->getMockBuilder( 'eZ\Publish\API\Repository\Repository' )
             ->disableOriginalConstructor()
             ->getMock();
 
         $persistenceHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Handler' );
 
-        $fieldTypeService = $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\FieldType\\Service' )
+        $contentService = $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\ContentService' )
             ->setConstructorArgs( array( $repository, $persistenceHandler ) )
             ->getMock();
 
-        // 6 calls to FieldType\Service::addRelation())
-        $fieldTypeService
+        // 6 calls to ContentService::addRelation())
+        $contentService
             ->expects( $this->exactly( 6 ) )
             ->method( 'addRelation' )
             ->with(
-                $this->logicalOr( $this->equalTo( Relation::ATTRIBUTE ), $this->equalTo( Relation::LINK ) ),
-                $version->contentId,
-                $version->id,
+                $this->logicalOr( $this->equalTo( Relation::FIELD ), $this->equalTo( Relation::LINK ) ),
+                $content->contentId,
+                $version->versionNo,
                 $this->logicalOr( $this->equalTo( 1 ), $this->equalTo( 2 ), $this->equalTo( 3 ) )
             );
 
         $repository
             ->expects( $this->once() )
-            ->method( 'getInternalFieldTypeService' )
-            ->will( $this->returnValue( $fieldTypeService ) );
+            ->method( 'getContentService' )
+            ->will( $this->returnValue( $contentService ) );
 
         $inputParser = $this->getInputParserMock();
 
@@ -103,7 +108,7 @@ class HandlerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $idArray ) );
 
         $handler = new InputHandler( $inputParser );
-        self::assertTrue( $handler->process( '', $repository, $version ) );
+        self::assertTrue( $handler->process( '', $repository, $content ) );
     }
 
     /**

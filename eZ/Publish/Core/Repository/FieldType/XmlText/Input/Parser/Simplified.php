@@ -453,7 +453,7 @@ class Simplified extends BaseParser implements InputParser
                 if ( $this->getOption( self::OPT_STRICT_HEADERS ) &&
                     $level - $sectionLevel > 1 )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_SCHEMA, "Incorrect headers nesting" );
+                    $this->handleError( BaseParser::ERROR_SCHEMA, "Incorrect headers nesting" );
                 }
 
                 $newParent = $parent;
@@ -882,7 +882,7 @@ class Simplified extends BaseParser implements InputParser
                 // protection from self-embedding
                 if ( $objectID == $this->contentObjectID )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
+                    $this->handleError( BaseParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
 
                     $element->removeAttribute( 'href' );
                     return $ret;
@@ -902,10 +902,10 @@ class Simplified extends BaseParser implements InputParser
                 if ( preg_match( "@^[0-9]+$@", $nodePath ) )
                 {
                     $nodeID = $nodePath;
-                    $node = eZContentObjectTreeNode::fetch( $nodeID, false, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationById( $nodeID );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Location '$nodeID' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA, "Location '$nodeID' does not exist." );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
@@ -913,15 +913,15 @@ class Simplified extends BaseParser implements InputParser
                 }
                 else
                 {
-                    $node = eZContentObjectTreeNode::fetchByURLPath( $nodePath, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationByPath( $nodePath );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Location '$nodePath' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA, "Location '$nodePath' does not exist." );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
                     }
-                    $nodeID = $node['node_id'];
+                    $nodeID = $location->id;
                     $element->setAttribute( 'show_path', 'true' );
                 }
 
@@ -931,7 +931,7 @@ class Simplified extends BaseParser implements InputParser
                 // protection from self-embedding
                 if ( $objectID == $this->contentObjectID )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
+                    $this->handleError( BaseParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
 
                     $element->removeAttribute( 'href' );
                     return $ret;

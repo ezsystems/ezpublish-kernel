@@ -520,7 +520,7 @@ class Raw extends BaseParser implements InputParser
                 if ( $this->getOption( self::OPT_STRICT_HEADERS ) &&
                     $level - $sectionLevel > 1 )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_SCHEMA, "Incorrect headers nesting" );
+                    $this->handleError( BaseParser::ERROR_SCHEMA, "Incorrect headers nesting" );
                 }
 
                 $newParent = $parent;
@@ -744,10 +744,13 @@ class Raw extends BaseParser implements InputParser
     }
 
     /**
-     * Publish handlers. (called at pass 2)
+     * Publish handler for 'paragraph' element.
+     *
+     * @param \DOMElement $element
+     * @param array $params
+     * @return null
      */
-    // Publish handler for 'paragraph' element.
-    protected function publishHandlerParagraph( $element, &$params )
+    protected function publishHandlerParagraph( DOMElement $element, &$params )
     {
         $ret = null;
         // Removes single line tag
@@ -771,8 +774,14 @@ class Raw extends BaseParser implements InputParser
         return $ret;
     }
 
-    // Publish handler for 'link' element.
-    protected function publishHandlerLink( $element, &$params )
+    /**
+     * Publish handler for 'link' element
+     *
+     * @param \DOMElement $element
+     * @param array $params
+     * @return null
+     */
+    protected function publishHandlerLink( DOMElement $element, &$params )
     {
         $ret = null;
 
@@ -801,27 +810,27 @@ class Raw extends BaseParser implements InputParser
                 if ( preg_match( "@^[0-9]+$@", $nodePath ) )
                 {
                     $nodeID = $nodePath;
-                    $node = eZContentObjectTreeNode::fetch( $nodeID, false, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationById( $nodeID );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA,"Node '$nodeID' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA,"Node '$nodeID' does not exist." );
                     }
                     else
                     {
-                        $objectID = $node['contentobject_id'];
+                        $objectID = $location->contentId;
                     }
                 }
                 else
                 {
-                    $node = eZContentObjectTreeNode::fetchByURLPath( $nodePath, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationByPath( $nodePath );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Node '$nodePath' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA, "Node '$nodePath' does not exist." );
                     }
                     else
                     {
-                        $nodeID = $node['node_id'];
-                        $objectID = $node['contentobject_id'];
+                        $nodeID = $location->id;
+                        $objectID = $location->contentId;
                     }
                     $element->setAttribute( 'show_path', 'true' );
                 }
@@ -853,7 +862,7 @@ class Raw extends BaseParser implements InputParser
                     // Protection from XSS attack
                     if ( preg_match( "/^(java|vb)script:.*/i" , $url ) )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Using scripts in links is not allowed, link '$url' has been removed" );
+                        $this->handleError( BaseParser::ERROR_DATA, "Using scripts in links is not allowed, link '$url' has been removed" );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
@@ -863,7 +872,7 @@ class Raw extends BaseParser implements InputParser
                     if ( preg_match( "/^mailto:(.*)/i" , $url, $mailAddr ) &&
                         !eZMail::validate( $mailAddr[1] ) )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Invalid e-mail address: '$mailAddr[1]'" );
+                        $this->handleError( BaseParser::ERROR_DATA, "Invalid e-mail address: '$mailAddr[1]'" );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
@@ -922,7 +931,7 @@ class Raw extends BaseParser implements InputParser
                 // protection from self-embedding
                 if ( $objectID == $this->contentObjectID )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
+                    $this->handleError( BaseParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
 
                     $element->removeAttribute( 'href' );
                     return $ret;
@@ -942,10 +951,10 @@ class Raw extends BaseParser implements InputParser
                 if ( preg_match( "@^[0-9]+$@", $nodePath ) )
                 {
                     $nodeID = $nodePath;
-                    $node = eZContentObjectTreeNode::fetch( $nodeID, false, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationById( $nodeID );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Location '$nodeID' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA, "Location '$nodeID' does not exist." );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
@@ -953,15 +962,15 @@ class Raw extends BaseParser implements InputParser
                 }
                 else
                 {
-                    $node = eZContentObjectTreeNode::fetchByURLPath( $nodePath, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationByPath( $nodePath );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Location '$nodePath' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA, "Location '$nodePath' does not exist." );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
                     }
-                    $nodeID = $node['node_id'];
+                    $nodeID = $location->id;
                     $element->setAttribute( 'show_path', 'true' );
                 }
 
@@ -971,7 +980,7 @@ class Raw extends BaseParser implements InputParser
                 // protection from self-embedding
                 if ( $objectID == $this->contentObjectID )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
+                    $this->handleError( BaseParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
 
                     $element->removeAttribute( 'href' );
                     return $ret;

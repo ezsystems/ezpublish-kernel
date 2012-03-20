@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input;
 
-use ezp\Base\Repository,
-    ezp\Content\Version,
+use eZ\Publish\API\Repository\Repository,
+    eZ\Publish\API\Repository\Values\Content\Relation,
+    eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParserInterface,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Base as BaseInputParser,
-    ezp\Content\Relation,
     DOMDocument;
 
 /**
@@ -84,11 +84,11 @@ class Handler
     /**
      * Processes $xmlString and indexes the external data it references
      * @param string $xmlString
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Version $version
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @return bool
      */
-    public function process( $xmlString, Repository $repository, Version $version )
+    public function process( $xmlString, Repository $repository, Content $content )
     {
         $this->parser->setOption( BaseInputParser::OPT_CHECK_EXTERNAL_DATA, true );
 
@@ -100,18 +100,29 @@ class Handler
         }
         $this->document = $document;
 
-        $service = $repository->getInternalFieldTypeService();
+        $service = $repository->getContentService();
+        $versionInfo = $content->getVersionInfo();
 
         // related content
-        foreach ( $this->parser->getRelatedContentIdArray() as $contentId )
+        foreach ( $this->parser->getRelatedContentIdArray() as $embedRelatedContentId )
         {
-            $service->addRelation( Relation::ATTRIBUTE, $version->contentId, $version->versionNo, $contentId );
+            $service->addRelation(
+                Relation::FIELD,
+                $content->contentId,
+                $versionInfo->versionNo,
+                $embedRelatedContentId
+            );
         }
 
         // linked content
-        foreach ( $this->parser->getLinkedContentIdArray() as $contentId )
+        foreach ( $this->parser->getLinkedContentIdArray() as $linkContentId )
         {
-            $service->addRelation( Relation::LINK, $version->contentId, $version->versionNo, $contentId );
+            $service->addRelation(
+                Relation::LINK,
+                $content->contentId,
+                $versionInfo->versionNo,
+                $linkContentId
+            );
         }
 
         return true;
@@ -120,7 +131,8 @@ class Handler
     /**
      * Callback that gets a location from its id
      * @param mixed $locationId
-     * @return \ezp\Content\Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @todo Implement & Document, or remove
      */
     public function getLocationById( $locationId )
     {
@@ -130,7 +142,8 @@ class Handler
     /**
      * Callback that gets a location from its path
      * @param string $locationPath
-     * @return \ezp\Content\Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @todo Implement & Document, or remove
      */
     public function getLocationByPath( $locationPath )
     {
@@ -140,7 +153,8 @@ class Handler
     /**
      * Callback that gets a content from its id
      * @param int $contentId
-     * @return \ezp\Content
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @todo Implement & Document, or remove
      */
     public function getContentById( $contentId )
     {
@@ -149,9 +163,10 @@ class Handler
 
     /**
      * Registers an external URL
+     *
      * @param string $url
      * @return Url
-     * @todo Implement & Document
+     * @todo Implement & Document, or remove
      */
     public function registerUrl( $url )
     {
@@ -162,6 +177,7 @@ class Handler
      * Checks if a Content exists using its id
      * @param int $contentId
      * @return bool true if the Content exists, false otherwise
+     * @todo Implement & Document, or remove
      */
     public function checkContentById( $contentId )
     {

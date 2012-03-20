@@ -47,12 +47,6 @@ class Value extends BaseValue implements ValueInterface
     private $inputHandler;
 
     /**
-     * Input parser
-     * \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
-     */
-    private $inputParser;
-
-    /**
      * HTML input format constant
      */
     // const INPUT_FORMAT_HTML = 'html';
@@ -69,26 +63,18 @@ class Value extends BaseValue implements ValueInterface
     const INPUT_FORMAT_RAW = 'raw';
 
     /**
-     * Input parsing classes mapping
-     * @var array(string=>string)
-     */
-    private $parserClasses = array(
-        'raw'   => 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Parser\\Raw',
-        'plain' => 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Parser\\Simplified',
-        // 'html'  => 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Parser\\OnlineEditor',
-    );
-
-    /**
      * Initializes a new XmlText Value object with $text in
      *
      * @param string $text
      * @param string $type Which format the input is provided as. Expects one of the FORMAT_* class constants
      */
-    public function __construct( $text = '', $inputFormat = self::INPUT_FORMAT_PLAIN )
+    public function __construct( InputHandler $handler, $text = '', $inputFormat = self::INPUT_FORMAT_PLAIN )
     {
+        $this->inputHandler = $handler;
         $this->text = $text;
         if ( $inputFormat === self::INPUT_FORMAT_RAW )
             $this->rawText = $text;
+
         $this->inputFormat = $inputFormat;
     }
 
@@ -122,32 +108,7 @@ class Value extends BaseValue implements ValueInterface
      */
     public function getInputHandler()
     {
-        if ( $this->inputHandler === null )
-        {
-            $this->inputHandler = new InputHandler( $this->getInputParser() );
-        }
         return $this->inputHandler;
-    }
-
-    /**
-     * Returns the XML Input Parser for an XmlText Value
-     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
-     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
-     */
-    protected function getInputParser()
-    {
-        if ( $this->inputParser === null )
-        {
-            // @todo Load from configuration
-            if ( !isset( $this->parserClasses[$this->inputFormat] ) )
-            {
-                // @todo Use dedicated exception
-                throw new \Exception( "No parser found for input format '{$this->inputFormat}'" );
-            }
-
-            $this->inputParser = new $this->parserClasses[$this->inputFormat];
-        }
-        return $this->inputParser;
     }
 
     /**

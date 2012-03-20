@@ -12,7 +12,9 @@ use eZ\Publish\Core\Repository\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
     ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
-    ReflectionObject, ReflectionProperty;
+    ReflectionObject,
+    ReflectionProperty,
+    DOMDocument;
 
 /**
  * @group fieldType
@@ -26,7 +28,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAllowedSettings()
     {
-        $ft = new XmlTextType();
+        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' ) );
         self::assertSame(
             array( 'numRows', 'tagPreset', 'defaultText' ),
             $ft->allowedSettings(),
@@ -40,7 +42,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidType()
     {
-        $ft = new XmlTextType;
+        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' ) );
         $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
@@ -51,8 +53,13 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidFormat( $text, $format )
     {
-        $ft = new XmlTextType;
-        $value = new XmlTextValue( $text, $format );
+        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' );
+        $parserMock->expects( $this->once() )
+                    ->method( 'process' )
+                    ->with( $text )
+                    ->will( $this->returnValue( $text ) );
+        $ft = new XmlTextType( $parserMock );
+        $value = $ft->buildValue( $text, $format );
         $ft->acceptValue( $value );
     }
 
@@ -62,8 +69,13 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormat( $text, $format )
     {
-        $ft = new XmlTextType;
-        $value = new XmlTextValue( $text, $format );
+        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' );
+        $parserMock->expects( $this->once() )
+                    ->method( 'process' )
+                    ->with( $text )
+                    ->will( $this->returnValue( new DOMDocument( '1.0', 'utf-8' ) ) );
+        $ft = new XmlTextType( $parserMock );
+        $value = $ft->buildValue( $text, $format );
         $ft->acceptValue( $value );
     }
 
@@ -73,9 +85,8 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     public function testToPersistenceValue()
     {
         // @todo Do one per value class
-        $value = new XmlTextValue( '', XmlTextValue::INPUT_FORMAT_PLAIN );
-
-        $ft = new XmlTextType();
+        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' ) );
+        $value = $ft->buildValue( '', XmlTextValue::INPUT_FORMAT_PLAIN );
 
         $fieldValue = $ft->toPersistenceValue( $value );
 

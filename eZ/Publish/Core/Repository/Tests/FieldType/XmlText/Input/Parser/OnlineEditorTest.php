@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input\Parser;
 
 use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\OnlineEditor as Parser,
-
+    eZ\Publish\Core\Repository\FieldType\XmlText\Schema,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
@@ -18,7 +18,7 @@ class OnlineEditorTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->parser = new Parser();
+        $this->parser = new Parser( new Schema );
         $handler = $this
             ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Handler' )
             ->setConstructorArgs( array( $this->parser ) )

@@ -9,11 +9,13 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser;
 
-use DOMDocument, DOMElement, DOMNode, DOMText,
-    ezp\Base\Configuration,
-    eZ\Publish\Core\Repository\FieldType\XmlText\Schema as XmlSchema,
+use eZ\Publish\Core\Repository\FieldType\XmlText\Schema as XmlSchema,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as InputHandler,
-    ezp\Base\Exception\BadConfiguration;
+    ezp\Base\Exception\BadConfiguration,
+    DOMDocument,
+    DOMElement,
+    DOMNode,
+    DOMText;
 
 /**
  * Base class for the input parser.
@@ -46,12 +48,10 @@ abstract class Base
     const OPT_DETECT_ERROR_LEVEL = 'DetectErrorLevel';
     const OPT_REMOVE_DEFAULT_ATTRS = 'RemoveDefaultAttrs';
     const OPT_PARSE_LINE_BREAKS = 'ParseLineBreaks';
-    const OPT_EZ_PUBLISH_VERSION = 'eZPublishVersion';
     const OPT_TRIM_SPACES = 'TrimSpaces';
     const OPT_ALLOW_MULTIPLE_SPACES = 'AllowMultipleSpaces';
     const OPT_ALLOW_NUMERIC_ENTITIES = 'AllowNumericEntities';
     const OPT_STRICT_HEADERS = 'StrictHeaders';
-    const OPT_DOM_DOCUMENT_CLASS = 'DOMDocumentClass';
     const OPT_CHECK_EXTERNAL_DATA = 'checkExternalData';
 
     /**
@@ -125,12 +125,10 @@ abstract class Base
         'DetectErrorLevel' => self::ERROR_NONE,
         'RemoveDefaultAttrs' => false,
         'ParseLineBreaks' => false,
-        'eZPublishVersion' => 4.6,
         'TrimSpaces' => false,
         'AllowMultipleSpaces' => false,
         'AllowNumericEntities' => false,
         'StrictHeaders' => false,
-        'DOMDocumentClass' => 'DOMDocument',
         'checkExternalData' => true,
     );
 
@@ -211,20 +209,16 @@ abstract class Base
 
     /**
      * Construct a new Parser
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Schema $scheme
+     * @param array $options
      */
-    public function __construct()
+    public function __construct( XmlSchema $scheme, array $options = array() )
     {
-        $this->XMLSchema = XmlSchema::getInstance();
+        $this->XMLSchema = $scheme;
 
-        // $this->setOption( self::OPT_EZ_PUBLISH_VERSION, eZPublishSDK::majorVersion() + eZPublishSDK::minorVersion() * 0.1 );
-
-        $xmlConfig = Configuration::getInstance( 'ezxml' );
-
-        $this->setOption( self::OPT_TRIM_SPACES, $xmlConfig->get( 'InputSettings', 'TrimSpaces', 'true' ) == 'true' ? true : false );
-        $this->setOption( self::OPT_ALLOW_MULTIPLE_SPACES, $xmlConfig->get( 'InputSettings', 'AllowMultipleSpaces', 'false' ) == 'true' ? true : false );
-        $this->setOption( self::OPT_ALLOW_NUMERIC_ENTITIES, $xmlConfig->get( 'InputSettings', 'AllowNumericEntities', 'false' ) == 'true' ? true : false );
-
-        self::setOption( self::OPT_STRICT_HEADERS, Configuration::getInstance( "content" )->get( 'header', 'UseStrictHeaderRule', 'false' ) == 'true' ? true : false );
+        // Set options
+        $this->options = $options + $this->options;
     }
 
     /**
@@ -346,8 +340,7 @@ abstract class Base
      */
     protected function createDomDocument( $createRootNode = true )
     {
-        $domDocumentClass = $this->getOption( self::OPT_DOM_DOCUMENT_CLASS );
-        $domDocument = new $domDocumentClass( '1.0', 'utf-8' );
+        $domDocument = new DOMDocument( '1.0', 'utf-8' );
 
         // Creating root section with namespaces definitions
         if ( $createRootNode )
@@ -724,7 +717,7 @@ abstract class Base
             // Filter classes
             if ( $qualifiedName == 'class' )
             {
-                $classesList = $this->XMLSchema->getClassesList( $element->nodeName );
+                $classesList = $this->XMLSchema->getClassesList( $element );
                 if ( !in_array( $value, $classesList ) )
                 {
                     $this->handleError( self::ERROR_DATA, "Class '$value' is not allowed for element &lt;$element->nodeName&gt; (check content.ini).");
@@ -777,7 +770,7 @@ abstract class Base
         }
     }
 
-    private function washText( $textContent )
+    protected function washText( $textContent )
     {
         $textContent = $this->entitiesDecode( $textContent );
 
@@ -794,7 +787,7 @@ abstract class Base
         return $textContent;
     }
 
-    private function entitiesDecode( $text )
+    protected function entitiesDecode( $text )
     {
         $text = str_replace( '&#039;', "'", $text );
 
@@ -806,7 +799,7 @@ abstract class Base
         return $text;
     }
 
-    private function convertNumericEntities( $text )
+    protected function convertNumericEntities( $text )
     {
         if ( strlen( $text ) < 4 )
         {
@@ -881,7 +874,12 @@ abstract class Base
         $this->processSubtree( $this->Document->documentElement, $tmp );
     }
 
-    private function processSubtree( DOMNode $element, &$lastHandlerResult )
+    /**
+     * @param \DOMElement $element
+     * @param $lastHandlerResult
+     * @return mixed|null
+     */
+    private function processSubtree( DOMElement $element, &$lastHandlerResult )
     {
         $ret = null;
         $tmp = null;
@@ -1023,7 +1021,7 @@ abstract class Base
         {
             if ( !$this->XMLSchema->hasAttributes( $element ) )
             {
-                eZXMLInputParser::removeAllAttributes( $element );
+                self::removeAllAttributes( $element );
             }
             else
             {
@@ -1133,8 +1131,11 @@ abstract class Base
 
     /**
      * Removes nodes that don't match schema (recursively)
+     *
+     * @param \DOMElement $element
+     * @param \DOMNode $mainChild
      */
-    private function fixSubtree( $element, $mainChild )
+    private function fixSubtree( DOMElement $element, DOMNode $mainChild )
     {
         $parent = $element->parentNode;
         $mainParent = $mainChild->parentNode;
@@ -1153,7 +1154,10 @@ abstract class Base
         $parent->removeChild( $element );
     }
 
-    private function processAttributesBySchema( $element )
+    /**
+     * @param \DOMElement $element
+     */
+    protected function processAttributesBySchema( DOMElement $element )
     {
         // Remove attributes that don't match schema
         $schemaAttributes = $this->XMLSchema->attributes( $element );
@@ -1203,8 +1207,12 @@ abstract class Base
             elseif ( $this->getOption( self::OPT_REMOVE_DEFAULT_ATTRS ) )
             {
                 // Remove attributes having default values
-                $default = $this->XMLSchema->attrDefaultValue( $element->nodeName, $fullName );
-                if ( $attr->value == $default )
+                $default = $this->XMLSchema->attributeDefaultValue( $element, $fullName );
+                if ( $attr->value === $default )
+                {
+                    $removeAttr = true;
+                }
+                else if ( ( $default === true || $default === false ) && $attr->value == $default )
                 {
                     $removeAttr = true;
                 }
@@ -1217,6 +1225,12 @@ abstract class Base
         }
     }
 
+    /**
+     * @param string $handlerName
+     * @param string $tagName
+     * @param array $attributes
+     * @return mixed|null
+     */
     protected function callInputHandler( $handlerName, $tagName, &$attributes )
     {
         $result = null;
@@ -1230,14 +1244,21 @@ abstract class Base
             }
             else
             {
-                // @todo -cBase Exception
-                // eZDebug::writeWarning( "'$handlerName' input handler for tag <$tagName> doesn't exist: '" . $thisInputTag[$handlerName] . "'.", 'eZXML input parser' );
+                // @todo throw Exception
+                throw new BadConfiguration( "inputHandler $handlerName ({$thisInputTag[$handlerName]}) for $tagName" );
             }
         }
         return $result;
     }
 
-    protected function callOutputHandler( $handlerName, $element, &$params )
+    /**
+     * @param string $handlerName
+     * @param \DOMNode $element
+     * @param array $params
+     * @return mixed|null
+     * @throws \ezp\Base\Exception\BadConfiguration
+     */
+    protected function callOutputHandler( $handlerName, DOMNode $element, &$params )
     {
         $result = null;
         $thisOutputTag = $this->OutputTags[$element->nodeName];
@@ -1263,7 +1284,9 @@ abstract class Base
      * Use this function if you need to process newly created element (check it by schema
      * and call 'structure' and 'publish' handlers)
      *
-     * @return DOMElement the created element
+     * @param string $elementName
+     * @param array $ret
+     * @return \DOMElement the created element
      */
     protected function createAndPublishElement( $elementName, &$ret )
     {
@@ -1279,9 +1302,13 @@ abstract class Base
         return $element;
     }
 
+    /**
+     * @param \DOMNode[] $createdElements
+     */
     private function processNewElements( $createdElements )
     {
-        $debug = false; // eZDebugSetting::isConditionTrue( 'kernel-datatype-ezxmltext', eZDebug::LEVEL_DEBUG );
+        // $debug = false;
+        // eZDebugSetting::isConditionTrue( 'kernel-datatype-ezxmltext', eZDebug::LEVEL_DEBUG );
         // Call handlers for newly created elements
         foreach ( $createdElements as $element )
         {
@@ -1378,6 +1405,10 @@ abstract class Base
         return $this->isInputValid;
     }
 
+    /**
+     * @param int $type
+     * @param string $message
+     */
     protected function handleError( $type, $message )
     {
         if ( $type & $this->getOption( self::OPT_DETECT_ERROR_LEVEL ) )
@@ -1396,16 +1427,25 @@ abstract class Base
         }
     }
 
+    /**
+     * @return array|\integer[]
+     */
     public function getRelatedContentIdArray()
     {
         return $this->relatedObjectIDArray;
     }
 
+    /**
+     * @return array|\integer[]
+     */
     public function getLinkedContentIdArray()
     {
         return $this->linkedObjectIDArray;
     }
 
+    /**
+     * @return array|\integer[]
+     */
     public function getUrlIdArray()
     {
         return $this->urlIDArray;

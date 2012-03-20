@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser;
 
 use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParser,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Base as BaseParser,
-    ezp\Base\Configuration,
+    eZ\Publish\Core\Repository\FieldType\XmlText\Schema as XmlSchema,
+    eZ\Publish\API\Repository\Values\Content\VersionInfo,
     DOMElement;
 
 /**
@@ -160,8 +161,6 @@ class OnlineEditor extends BaseParser implements InputParser
     protected $deletedEmbeddedObjectIDArray = array();
     protected $thrashedEmbeddedObjectIDArray = array();
 
-    protected $anchorAsAttribute = false;
-
     /**
      * @var array
      */
@@ -175,20 +174,17 @@ class OnlineEditor extends BaseParser implements InputParser
 
     /**
      * Constructor
-     * For more info see {@link eZXMLInputParser::eZXMLInputParser()}
+     * For more info see {@link BaseParser::__construct()}
      *
-     * @param int $validateErrorLevel
-     * @param int $detectErrorLevel
-     * @param bool $parseLineBreaks flag if line breaks should be given meaning or not
-     * @param bool $removeDefaultAttrs signal if attributes of default value should not be saved.
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Schema $scheme
+     * @param array $options
      */
-    public function __construct()
+    public function __construct( XmlSchema $scheme, array $options = array() )
     {
-        parent::__construct();
+        parent::__construct( $scheme, $options );
 
-        $configuration = Configuration::getInstance( 'content' );
-        if ( $configuration->has( 'header', 'AnchorAsAttribute' ) )
-            $this->anchorAsAttribute = $configuration->get( 'header', 'AnchorAsAttribute' ) !== 'disabled';
+        if ( !isset( $options['AnchorAsAttribute'] ) )
+            $this->options['AnchorAsAttribute'] = false;
     }
 
     /**
@@ -196,7 +192,7 @@ class OnlineEditor extends BaseParser implements InputParser
      *
      * @param string $text
      * @param bool $createRootNode
-     * @return false|DOMDocument
+     * @return bool|\DOMDocument
      */
     public function process( $text, $createRootNode = true )
     {
@@ -588,7 +584,7 @@ class OnlineEditor extends BaseParser implements InputParser
      */
     protected function initHandlerHeader( $element, &$params )
     {
-        if ( $this->anchorAsAttribute )
+        if ( $this->options['AnchorAsAttribute'] )
         {
             $anchorElement = $element->firstChild;
             if ( $anchorElement->nodeName === 'anchor' )
@@ -1285,10 +1281,11 @@ class OnlineEditor extends BaseParser implements InputParser
                         if ( !in_array( $objectID, $this->deletedEmbeddedObjectIDArray ) )
                             $this->deletedEmbeddedObjectIDArray[] = $objectID;
                     }
-                    elseif ( $object->attribute('status') == eZContentObject::STATUS_ARCHIVED )
+                    /* @todo New api is missing info on Content if it is trashed or not
+                    elseif ( $object->status == VersionInfo::STATUS_ARCHIVED )
                     {
                         $this->thrashedEmbeddedObjectIDArray[] = $objectID;
-                    }
+                    }*/
                 }
             }
             else if ( strpos( $ID, 'eZNode_' ) !== false )
@@ -1325,9 +1322,9 @@ class OnlineEditor extends BaseParser implements InputParser
      * custom: xml attributes, passes processing of normal attributes
      * to parent class.
      *
-     * @param DOMElement $element
+     * @param \DOMElement $element
      */
-    protected function processAttributesBySchema( $element )
+    protected function processAttributesBySchema( DOMElement $element )
     {
         // custom attributes conversion
         $attr = $element->getAttribute( 'customattributes' );
