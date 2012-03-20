@@ -439,6 +439,14 @@ class Backend
                         $value->$constraintName = $constraintValue;
                     }
                 }
+                else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "defaultValue" && !$data["defaultValue"] instanceof FieldValue )
+                {
+                    $value = new FieldValue;
+                    foreach ( $data["defaultValue"] as $propertyName => $propertyValue )
+                    {
+                        $value->$propertyName = $propertyValue;
+                    }
+                }
                 else
                 {
                     $value = $data[$prop];

@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -799,7 +800,11 @@ class ContentTypeHandlerTest extends HandlerTest
         $field->position = 0;
         $field->isTranslatable = $field->isRequired = true;
         $field->isInfoCollector = false;
-        $field->defaultValue = 'New Article';
+        $field->defaultValue = new FieldValue(
+            array(
+                "data" => "New Article"
+            )
+        );
         $field->name = array( 'eng-GB' => "Title" );
         $field->description = array( 'eng-GB' => "Title, used for headers, and url if short_title is empty" );
         return $field;
