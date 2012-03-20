@@ -45,8 +45,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  *     [inmemory_persistence_handler]
  *     class=eZ\Publish\Core\Persistence\InMemory\Handler
  *
- *     @todo Update service.ini reference bellow
- *     # @see \eZ\Publish\Core\Base\settings\service.ini For more options and examples.
+ *     # @see \eZ\Publish\Core\settings\service.ini For more options and examples.
  *
  * "arguments" values in service.ini can start with either @ in case of other services being dependency, $ if a
  * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer )
