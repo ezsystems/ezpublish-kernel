@@ -34,15 +34,4 @@ class BadStateException extends APIBadStateException
             $previous
         );
     }
-
-    /**
-     * Returns an additional error code which indicates why an action could not be performed
-     * @todo implement
-     *
-     * @return int An error code
-     */
-    public function getErrorCode()
-    {
-        return 0;
-    }
 }

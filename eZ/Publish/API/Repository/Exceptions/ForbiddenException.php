@@ -11,10 +11,4 @@ use RuntimeException;
  */
 abstract class ForbiddenException extends RuntimeException
 {
-    /**
-     * Returns an additional error code which indicates why an action could not be performed
-     *
-     * @return int An error code
-     */
-    abstract function getErrorCode();
 }

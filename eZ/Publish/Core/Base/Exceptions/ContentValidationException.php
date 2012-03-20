@@ -8,8 +8,4 @@ use eZ\Publish\API\Repository\Exceptions\ContentValidationException as APIConten
  */
 class ContentValidationException extends APIContentValidationException
 {
-    public function getErrorCode()
-    {
-        // @todo
-    }
 }

@@ -8,13 +8,12 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException as APIC
  */
 class ContentFieldValidationException extends APIContentFieldValidationException
 {
-    public function getErrorCode()
-    {
-        // @todo
-    }
-
+    /**
+     *
+     * @return array
+     */
     public function getFieldExceptions()
     {
-        // @todo
+        // @todo Implement or remove
     }
 }
