@@ -57,7 +57,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function create( CreateStruct $content )
     {
-        $contentObj = $this->backend->create( 'Content', array() );
+        $contentObj = $this->backend->create( 'Content', array( '_currentVersionNo' => 1 ) );
         $contentObj->contentInfo = $this->backend->create(
             'Content\\ContentInfo',
             array(
@@ -109,7 +109,7 @@ class ContentHandler implements ContentHandlerInterface
         foreach ( $content->locations as $locationStruct )
         {
             $locationStruct->contentId = $contentObj->id;
-            $locationStruct->contentVersion = $contentObj->currentVersionNo;
+            $locationStruct->contentVersion = $contentObj->contentInfo->currentVersionNo;
             $contentObj->locations[] = $locationHandler->create( $locationStruct );
         }
         return $contentObj;
@@ -183,7 +183,7 @@ class ContentHandler implements ContentHandlerInterface
         $time = time();
 
         $currentVersionNo = $versionNo === false ? $contentInfo->currentVersionNo : $versionNo;
-        $contentObj = $this->backend->create( 'Content', array() );
+        $contentObj = $this->backend->create( 'Content', array( '_currentVersionNo' => $currentVersionNo ) );
         $contentObj->contentInfo = $this->backend->create(
             'Content\\ContentInfo', array(
                 "contentTypeId" => $contentInfo->contentTypeId,
@@ -388,46 +388,11 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
-     */
-    public function update( UpdateStruct $content )
-    {
-        // @todo Assume the attached version to Content is the one that should be updated
-        $this->backend->update(
-            'Content\\ContentInfo',
-            $content->id,
-            array(
-                "ownerId" => $content->ownerId,
-            )
-        );
-
-        $this->backend->updateByMatch(
-            'Content\\VersionInfo',
-            array( 'contentId' => $content->id, 'versionNo' => $content->versionNo ),
-            array(
-                "name" => $content->name,
-                "creatorId" => $content->creatorId,
-                "modified" => $content->modified,
-            )
-        );
-        foreach ( $content->fields as $field )
-        {
-            $this->backend->update(
-                'Content\\Field',
-                $field->id,
-                (array)$field
-            );
-        }
-
-        return $this->load( $content->id, $content->versionNo );
-    }
-
-    /**
      * Updates a content object meta data, identified by $contentId
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\ContentInfo
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
@@ -705,10 +670,21 @@ class ContentHandler implements ContentHandlerInterface
     {
         // Change the currentVersionNo to the published version
         $this->backend->update(
-            'Content\\ContentInfo', $updateStruct->id,
+            'Content',
+            $updateStruct->id,
+            array(
+                '_currentVersionNo' => $updateStruct->versionNo,
+            )
+        );
+
+        $this->backend->update(
+            'Content\\ContentInfo',
+            $updateStruct->id,
             array(
                 'currentVersionNo' => $updateStruct->versionNo,
-            )
+            ),
+            true,
+            'contentId'
         );
 
         // Change the currentVersionNo to the published version

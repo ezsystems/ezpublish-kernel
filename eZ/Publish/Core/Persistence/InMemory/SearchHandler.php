@@ -101,7 +101,12 @@ class SearchHandler extends SearchHandlerInterface
                     'type' => 'Content\\ContentInfo',
                     'match' => array( 'contentId' => 'id' ),
                     'single' => true
-                )
+                ),
+                'versionInfo' => array(
+                    'type' => 'Content\\VersionInfo',
+                    'match' => array( 'contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                    'single' => true
+                ),
             )
         );
 
@@ -110,16 +115,6 @@ class SearchHandler extends SearchHandlerInterface
         {
             if ( $item->contentInfo instanceof ContentInfo )
             {
-                $aVersionInfo = $this->backend->find(
-                    'Content\\VersionInfo',
-                    array(
-                        'contentId' => $item->contentInfo->contentId,
-                        'versionNo' => $item->contentInfo->currentVersionNo
-                    )
-                );
-                if ( !empty( $aVersionInfo ) )
-                    $item->versionInfo = $aVersionInfo[0];
-
                 $item->fields = $this->backend->find(
                     'Content\\Field',
                     array(
@@ -135,7 +130,7 @@ class SearchHandler extends SearchHandlerInterface
         $result = new Result();
         $result->count = count( $resultList );
 
-        if ( $limit === null && $offset === 0 )
+        if ( empty( $resultList ) || ( $limit === null && $offset === 0 ) )
             $result->content = $resultList;
         else if ( $limit === null )
              $result->content = array_slice( $resultList, $offset );
@@ -184,38 +179,38 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $match['id'] = $criterion->value[0];
             }
-            else if ( $criterion instanceof ContentTypeId && !isset( $match['typeId'] ) )
+            else if ( $criterion instanceof ContentTypeId && !isset( $match['contentInfo']['typeId'] ) )
             {
-                $match['typeId'] = $criterion->value[0];
+                $match['contentInfo']['typeId'] = $criterion->value[0];
             }
             else if ( $criterion instanceof LocationId && !isset( $match['locations']['id'] ) )
             {
                 $match['locations']['id'] = $criterion->value[0];
             }
-            else if ( $criterion instanceof RemoteId && !isset( $match['remoteId'] ) )
+            else if ( $criterion instanceof RemoteId && !isset( $match['contentInfo']['remoteId'] ) )
             {
-                $match['remoteId'] = $criterion->value[0];
+                $match['contentInfo']['remoteId'] = $criterion->value[0];
             }
             else if ( $criterion instanceof LocationRemoteId && !isset( $match['locations']['remoteId'] ) )
             {
                 $match['locations']['remoteId'] = $criterion->value[0];
             }
-            else if ( $criterion instanceof SectionId && !isset( $match['sectionId'] ) )
+            else if ( $criterion instanceof SectionId && !isset( $match['contentInfo']['sectionId'] ) )
             {
-                $match['sectionId'] = $criterion->value[0];
+                $match['contentInfo']['sectionId'] = $criterion->value[0];
             }
-            else if ( $criterion instanceof Status && !isset( $match['status'] ) )
+            else if ( $criterion instanceof Status && !isset( $match['versionInfo']['status'] ) )
             {
                 switch ( $criterion->value[0] )
                 {
                     case Status::STATUS_ARCHIVED:
-                        $match['status'] = VersionInfo::STATUS_ARCHIVED;
+                        $match['versionInfo']['status'] = VersionInfo::STATUS_ARCHIVED;
                         break;
                     case Status::STATUS_DRAFT:
-                        $match['status'] = VersionInfo::STATUS_DRAFT;
+                        $match['versionInfo']['status'] = VersionInfo::STATUS_DRAFT;
                         break;
                     case Status::STATUS_PUBLISHED:
-                        $match['status'] = VersionInfo::STATUS_PUBLISHED;
+                        $match['versionInfo']['status'] = VersionInfo::STATUS_PUBLISHED;
                         break;
                     default:
                         throw new Exception( "Unsuported StatusCriterion->value[0]: " . $criterion->value[0] );
@@ -234,10 +229,10 @@ class SearchHandler extends SearchHandlerInterface
             {
                 if ( $criterion instanceof UserMetadata && $criterion->target !== $criterion::MODIFIER )
                 {
-                    if ( $criterion->target === $criterion::OWNER && !isset( $match['ownerId'] ) )
+                    if ( $criterion->target === $criterion::OWNER && !isset( $match['contentInfo']['ownerId'] ) )
                         $match['ownerId'] = $criterion->value[0];
-                    else if ( $criterion->target === $criterion::CREATOR && !isset( $match['version']['creatorId'] ) )
-                        $match['version']['creatorId'] = $criterion->value[0];
+                    else if ( $criterion->target === $criterion::CREATOR && !isset( $match['versionInfo']['creatorId'] ) )
+                        $match['versionInfo']['creatorId'] = $criterion->value[0];
                     //else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
                         //$match['version']['creatorId'] = $criterion->value[0];
                     continue;

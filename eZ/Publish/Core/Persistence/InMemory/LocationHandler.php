@@ -311,9 +311,11 @@ class LocationHandler implements LocationHandlerInterface
         }
 
         $this->backend->updateByMatch(
-            'Content',
-            array( 'id' => $aContentIds ),
-            array( 'sectionId' => $sectionId )
+            'Content\\ContentInfo',
+            array( 'contentId' => $aContentIds ),
+            array( 'sectionId' => $sectionId ),
+            true,
+            'contentId'
         );
     }
 

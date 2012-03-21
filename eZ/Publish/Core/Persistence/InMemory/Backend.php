@@ -175,7 +175,7 @@ class Backend
      */
     public function update( $type, $id, array $data, $union = true, $idColumn = 'id' )
     {
-        return $this->updateByMatch( $type, array( $idColumn => $id ), $data, $union );
+        return $this->updateByMatch( $type, array( $idColumn => $id ), $data, $union, $idColumn );
     }
 
     /**
