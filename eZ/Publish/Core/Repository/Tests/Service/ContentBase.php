@@ -28,7 +28,7 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 93 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -50,20 +50,20 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoValues( $contentInfo )
     {
-        // Legacy fixture content ID=93 values
+        // Legacy fixture content ID=4 values
         $expectedValues = array(
-            "contentId"        => 93,
-            "name"             => "Additional learning resources",
-            "sectionId"        => 1,
+            "contentId"        => 4,
+            "name"             => "Users",
+            "sectionId"        => 2,
             "currentVersionNo" => 1,
             "published"        => true,
             "ownerId"          => 14,
-            "modificationDate" => new \DateTime( "@1175069321" ),
-            "publishedDate"    => new \DateTime( "@1174389699" ),
+            "modificationDate" => new \DateTime( "@1033917596" ),
+            "publishedDate"    => new \DateTime( "@1033917596" ),
             "alwaysAvailable"  => true,
-            "remoteId"         => "34ceeed46f3ff3a5b29b8f96eb5d0d81",
+            "remoteId"         => "f5c88a2209584891056f987fd965b0ba",
             "mainLanguageCode" => "eng-US",
-            "mainLocationId"   => 95
+            "mainLocationId"   => 5
         );
 
         $this->assertPropertiesCorrect(
@@ -84,7 +84,7 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfoByRemoteId( "34ceeed46f3ff3a5b29b8f96eb5d0d81" );
+        $contentInfo = $contentService->loadContentInfoByRemoteId( "f5c88a2209584891056f987fd965b0ba" );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -106,20 +106,20 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoByRemoteIdValues( $contentInfo )
     {
-        // Legacy fixture content 93 values
+        // Legacy fixture content 4 values
         $expectedValues = array(
-            "contentId"        => 93,
-            "name"             => "Additional learning resources",
-            "sectionId"        => 1,
+            "contentId"        => 4,
+            "name"             => "Users",
+            "sectionId"        => 2,
             "currentVersionNo" => 1,
             "published"        => true,
             "ownerId"          => 14,
-            "modificationDate" => new \DateTime( "@1175069321" ),
-            "publishedDate"    => new \DateTime( "@1174389699" ),
+            "modificationDate" => new \DateTime( "@1033917596" ),
+            "publishedDate"    => new \DateTime( "@1033917596" ),
             "alwaysAvailable"  => true,
-            "remoteId"         => "34ceeed46f3ff3a5b29b8f96eb5d0d81",
+            "remoteId"         => "f5c88a2209584891056f987fd965b0ba",
             "mainLanguageCode" => "eng-US",
-            "mainLocationId"   => 95
+            "mainLocationId"   => 5
         );
 
         $this->assertPropertiesCorrect(
@@ -140,7 +140,7 @@ abstract class ContentBase extends BaseServiceTest
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 93 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
 
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
         /* END: Use Case */
@@ -164,13 +164,13 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadVersionInfoValues( $versionInfo )
     {
-        // Legacy fixture content 93 current version (1) values
+        // Legacy fixture content 4 current version (1) values
         $expectedValues = array(
-            "id"                  => 540,
+            "id"                  => 4,
             "versionNo"           => 1,
-            "modificationDate"    => new \DateTime( "@1175069321" ),
+            "modificationDate"    => new \DateTime( "@0" ),
             "creatorId"           => 14,
-            "creationDate"        => new \DateTime( "@1175069305" ),
+            "creationDate"        => new \DateTime( "@0" ),
             "status"              => 1,
             "initialLanguageCode" => "eng-US",
             "languageCodes"       => array( "eng-US" )
@@ -185,7 +185,6 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @depends testLoadContentInfo
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
@@ -195,7 +194,7 @@ abstract class ContentBase extends BaseServiceTest
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 56 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
 
         $versionInfo = $contentService->loadVersionInfo( $contentInfo, 1 );
         /* END: Use Case */
@@ -211,7 +210,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @depends testLoadVersionInfo
+     * @depends testLoadVersionInfoWithSecondParameter
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -219,13 +218,13 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadVersionInfoWithSecondParameterValues( $versionInfo )
     {
-        // Legacy fixture content 93 values
+        // Legacy fixture content 4 values
         $expectedValues = array(
-            "id"                  => 540,
+            "id"                  => 4,
             "versionNo"           => 1,
-            "modificationDate"    => new \DateTime( "@1175069321" ),
+            "modificationDate"    => new \DateTime( "@0" ),
             "creatorId"           => 14,
-            "creationDate"        => new \DateTime( "@1175069305" ),
+            "creationDate"        => new \DateTime( "@0" ),
             "status"              => 1,
             "initialLanguageCode" => "eng-US",
             "languageCodes"       => array( "eng-US" )
@@ -313,14 +312,12 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContent()
     {
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService = $this->repository->getContentTypeService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
 
-        $contentService = $repository->getContentService();
+        $contentService = $this->repository->getContentService();
 
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreate->setField( 'subject', 'Hello' );

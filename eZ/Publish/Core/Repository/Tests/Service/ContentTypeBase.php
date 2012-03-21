@@ -2238,12 +2238,10 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $contentTypeDraft = $this->createDraftContentType();
 
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
         // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
 
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService = $this->repository->getContentTypeService();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
         $typeUpdate->identifier = 'folder';
@@ -2266,12 +2264,10 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $contentTypeDraft = $this->createDraftContentType();
 
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
         // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
 
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService = $this->repository->getContentTypeService();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
         $typeUpdate->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
