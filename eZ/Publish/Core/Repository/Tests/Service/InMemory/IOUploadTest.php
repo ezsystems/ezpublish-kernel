@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
 
 use PHPUnit_Extensions_PhptTestCase,
     eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIoHandler,
+    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 
 /**
