@@ -15,29 +15,29 @@ class Language extends ValueObject
 {
     /**
      * The language id (auto generated)
-     * 
+     *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * the languageCode code
      *
      * @var string
      */
-    public $languageCode;
+    protected $languageCode;
 
     /**
      * Human readable name of the language
      *
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * indicates if the language is enabled or not.
      *
      * @var boolean
      */
-    public $enabled;
+    protected $enabled;
 }
