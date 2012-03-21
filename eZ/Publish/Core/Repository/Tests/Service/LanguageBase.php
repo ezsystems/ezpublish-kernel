@@ -9,6 +9,11 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
+
+    eZ\Publish\API\Repository\Values\Content\Language,
+
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
+    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
     eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
@@ -17,6 +22,84 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
  */
 abstract class LanguageBase extends BaseServiceTest
 {
+    /**
+     * Test a new class and default values on properties
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__construct
+     */
+    public function testNewClass()
+    {
+        $language = new Language();
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'           => null,
+                'languageCode' => null,
+                'name'         => null,
+                'enabled'      => null
+            ),
+            $language
+        );
+    }
+
+    /**
+     * Test retrieving missing property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__get
+     */
+    public function testMissingProperty()
+    {
+        try
+        {
+            $language = new Language();
+            $value = $language->notDefined;
+            self::fail( "Succeeded getting non existing property" );
+        }
+        catch( PropertyNotFound $e ) {}
+    }
+
+    /**
+     * Test setting read only property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__set
+     */
+    public function testReadOnlyProperty()
+    {
+        try
+        {
+            $language = new Language();
+            $language->id = 42;
+            self::fail( "Succeeded setting read only property" );
+        }
+        catch( PropertyReadOnlyException $e ) {}
+    }
+
+    /**
+     * Test if property exists
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__isset
+     */
+    public function testIsPropertySet()
+    {
+        $language = new Language();
+        $value = isset( $language->notDefined );
+        self::assertEquals( false, $value );
+
+        $value = isset( $language->id );
+        self::assertEquals( true, $value );
+    }
+
+    /**
+     * Test unsetting a property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__unset
+     */
+    public function testUnsetProperty()
+    {
+        $language = new Language( array( "id" => 2 ) );
+        try
+        {
+            unset( $language->id );
+            self::fail( 'Unsetting read-only property succeeded' );
+        }
+        catch ( PropertyReadOnlyException $e ) {}
+    }
+
     /**
      * Test service method for creating language
      * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
