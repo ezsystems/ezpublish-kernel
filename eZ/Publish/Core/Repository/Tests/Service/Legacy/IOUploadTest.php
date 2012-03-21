@@ -21,7 +21,9 @@ class IOUploadTest extends PHPUnit_Extensions_PhptTestCase
         parent::__construct( __DIR__ . '/upload.phpt' );
     }
 
-    protected function getRepository( array $serviceSettings )
+    // this method needs to be public static so upload.phpt test
+    // can get ahold of Repository object
+    public static function getRepository( array $serviceSettings )
     {
         return include 'common.php';
     }
