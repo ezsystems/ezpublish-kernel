@@ -19,8 +19,8 @@ use eZ\Publish\Core\Repository\Tests\Service\TrashBase as BaseTrashServiceTest,
  */
 class TrashTest extends BaseTrashServiceTest
 {
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIoHandler() );
+        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
     }
 }

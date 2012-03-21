@@ -19,8 +19,8 @@ use eZ\Publish\Core\Repository\Tests\Service\SectionBase as BaseSectionServiceTe
  */
 class SectionTest extends BaseSectionServiceTest
 {
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIoHandler() );
+        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
     }
 }

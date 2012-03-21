@@ -19,8 +19,8 @@ use eZ\Publish\Core\Repository\Tests\Service\ContentBase as BaseContentServiceTe
  */
 class ContentTest extends BaseContentServiceTest
 {
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
+        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
     }
 }

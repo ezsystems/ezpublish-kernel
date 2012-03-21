@@ -16,7 +16,7 @@ use eZ\Publish\Core\Repository\Tests\Service\LanguageBase as BaseLanguageService
  */
 class LanguageTest extends BaseLanguageServiceTest
 {
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
         return include 'common.php';
     }

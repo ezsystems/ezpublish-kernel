@@ -16,7 +16,7 @@ use eZ\Publish\Core\Repository\Tests\Service\UserBase as BaseUserServiceTest;
  */
 class UserTest extends BaseUserServiceTest
 {
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
         try
         {

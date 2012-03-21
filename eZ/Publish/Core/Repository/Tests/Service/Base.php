@@ -28,7 +28,21 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = static::getRepository();
+        $serviceSettings = array(
+            'contentType' => array(
+                'field_type' => array(
+                    'ezauthor' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Author\Type(); },
+                    'ezdatetime' => function(){ return new \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type(); },
+                    'ezfloat' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Float\Type(); },
+                    'ezinteger' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Integer\Type(); },
+                    'ezkeyword' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Keyword\Type(); },
+                    'eztext' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextBlock\Type(); },
+                    'ezstring' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextLine\Type(); },
+                    'ezurl' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Url\Type(); },
+                ),
+            ),
+        );
+        $this->repository = static::getRepository( $serviceSettings );
     }
 
     /**
@@ -45,9 +59,10 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * Makes it possible to inject different Io / Persistence handlers
      *
+     * @param array $serviceSettings Array with settings that are passed to Services
      * @return \eZ\Publish\Core\Repository\Repository
      */
-    abstract protected function getRepository();
+    abstract protected function getRepository( array $serviceSettings );
 
     /**
      * Asserts that properties given in $expectedValues are correctly set in

@@ -26,8 +26,8 @@ class IOTest extends BaseIOServiceTest
         $this->fileUploadTest = new IOUploadTest();
     }
 
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIoHandler() );
+        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
     }
 }

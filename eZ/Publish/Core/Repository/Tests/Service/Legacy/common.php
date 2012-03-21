@@ -169,4 +169,4 @@ $legacyHandler = new LegacyPersistenceHandler(
         }
     }
 
-return new Repository( $legacyHandler, new LegacyIoHandler() );
+return new Repository( $legacyHandler, new LegacyIoHandler(), ( isset( $serviceSettings ) ? $serviceSettings : array() ) );

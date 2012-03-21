@@ -16,7 +16,7 @@ use eZ\Publish\Core\Repository\Tests\Service\LocationBase as BaseLocationService
  */
 class LocationTest extends BaseLocationServiceTest
 {
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
         try
         {

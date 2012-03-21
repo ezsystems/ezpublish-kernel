@@ -23,7 +23,7 @@ class IOTest extends BaseIOServiceTest
         $this->fileUploadTest = new IOUploadTest();
     }
 
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
         if ( !class_exists( 'eZClusterFileHandler' ) )
             $this->markTestSkipped( 'Cluster files could not be loaded' );

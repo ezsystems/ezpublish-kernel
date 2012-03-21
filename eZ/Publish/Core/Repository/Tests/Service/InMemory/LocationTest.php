@@ -19,8 +19,8 @@ use eZ\Publish\Core\Repository\Tests\Service\LocationBase as BaseLocationService
  */
 class LocationTest extends BaseLocationServiceTest
 {
-    protected function getRepository()
+    protected function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIoHandler() );
+        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
     }
 }
