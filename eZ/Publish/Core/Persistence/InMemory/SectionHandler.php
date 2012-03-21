@@ -121,11 +121,12 @@ class SectionHandler implements SectionHandlerInterface
     public function assign( $sectionId, $contentId )
     {
         $this->backend->update(
-            'Content',
+            'Content\\ContentInfo',
             $contentId,
             array(
                 'sectionId' => $sectionId,
-            )
+            ),
+            'contentId'
         );
     }
 
@@ -137,6 +138,6 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function assignmentsCount( $sectionId )
     {
-        return $this->backend->count( 'Content', array( 'sectionId' => $sectionId ) );
+        return $this->backend->count( 'Content\\ContentInfo', array( 'sectionId' => $sectionId ) );
     }
 }
