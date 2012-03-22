@@ -126,6 +126,7 @@ class SectionHandler implements SectionHandlerInterface
             array(
                 'sectionId' => $sectionId,
             ),
+            true,
             'contentId'
         );
     }
