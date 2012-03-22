@@ -254,6 +254,50 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * 
+     */
+    public function testCreateLocationInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $repository->beginTransaction();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo( 108 );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 5 );
+        $locationCreate->remoteId = 'sindelfingen';
+
+        $createdLocationId = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        )->id;
+
+        $repository->rollback();
+
+        try
+        {
+            // Throws exception since creation of location was rolled back
+            $location = $locationService->loadLocation( $createdLocationId );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Objects still exists after rollback.' );
+    }
+
+    /**
      * Test for the loadLocation() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location

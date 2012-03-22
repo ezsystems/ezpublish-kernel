@@ -113,7 +113,7 @@ class LocationServiceStub implements LocationService
 
         $data['contentInfo'] = $contentInfo;
 
-        $data['id']          = $this->nextLocationId++;
+        $data['id']          = ++$this->nextLocationId;
         $data['pathString']  = $parentLocation->pathString . $data['id'] . '/';
         $data['depth']       = substr_count( $data['pathString'], '/' ) - 2;
         $data['childCount']  = 0;
@@ -870,15 +870,18 @@ class LocationServiceStub implements LocationService
      */
     private function initFromFixture()
     {
+        $this->locations      = array();
+        $this->nextLocationId = 0;
+
         list(
             $locations,
             $this->nextLocationId
         ) = $this->repository->loadFixture( 'Location' );
 
-        ++$this->nextGroupId;
         foreach ( $locations as $location )
         {
             $this->locations[$location->id] = $location;
+            $this->nextLocationId = max( $this->nextLocationId, $location->id );
         }
         $this->calculateChildCounts();
     }
