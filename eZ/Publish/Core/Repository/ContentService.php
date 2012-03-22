@@ -1409,8 +1409,8 @@ class ContentService implements ContentServiceInterface
         return new Content(
             array(
                 "repository"               => $this->repository,
-                "contentId"                => $spiContent->id,
-                "contentTypeId"            => $spiContent->typeId,
+                "contentId"                => $spiContent->contentInfo->contentId,
+                "contentTypeId"            => $spiContent->contentInfo->contentTypeId,
                 "internalFields"           => $fields,
                 // @TODO: implement loadRelations()
                 //"relations"                => $this->loadRelations( $versionInfo )
