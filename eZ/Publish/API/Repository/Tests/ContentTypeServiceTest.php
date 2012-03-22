@@ -30,7 +30,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testNewContentTypeGroupCreateStruct()
     {
@@ -136,7 +136,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testCreateContentTypeGroupThrowsInvalidArgumentException()
     {
@@ -159,7 +159,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroup()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testLoadContentTypeGroup()
     {
@@ -208,7 +208,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testLoadContentTypeGroupThrowsNotFoundException()
     {
@@ -223,7 +223,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testLoadContentTypeGroupByIdentifier()
     {
