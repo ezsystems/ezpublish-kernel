@@ -256,7 +256,7 @@ class ContentService implements ContentServiceInterface
             if ( $versionNo === null )
                 $versionNo = $this->persistenceHandler->searchHandler()->findSingle(
                     new CriterionContentId( $contentId )
-                )->currentVersionNo;
+                )->contentInfo->currentVersionNo;
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(
                 $contentId,
@@ -272,7 +272,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildVersionInfoDomainObject( $spiContent->version );
+        return $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
     }
 
     /**
@@ -345,7 +345,7 @@ class ContentService implements ContentServiceInterface
             {
                 $versionNo = $this->persistenceHandler->searchHandler()->findSingle(
                     new CriterionContentId( $contentId )
-                )->currentVersionNo;
+                )->contentInfo->currentVersionNo;
             }
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(
@@ -397,10 +397,10 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        $contentId = $spiContent->id;
+        $contentId = $spiContent->contentInfo->contentId;
         if ( $versionNo === null )
         {
-            $versionNo = $spiContent->currentVersionNo;
+            $versionNo = $spiContent->contentInfo->currentVersionNo;
         }
 
         $spiContent = $this->persistenceHandler->contentHandler()->load(
@@ -899,12 +899,12 @@ class ContentService implements ContentServiceInterface
                     $areFieldsFiltered = true;
                     foreach ( $spiSearchResult->content as $spiContent )
                     {
-                        if ( !isset( $filteredFields[$spiContent->id][$spiContent->version->id] ) )
-                            $filteredFields[$spiContent->id][$spiContent->version->id] = $spiContent->version->fields;
+                        if ( !isset( $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] ) )
+                            $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] = $spiContent->fields;
 
-                        $filteredFields[$spiContent->id][$spiContent->version->id] = $this->filterFieldsByLanguages(
-                            $spiContent->typeId,
-                            $filteredFields[$spiContent->id][$spiContent->version->id],
+                        $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] = $this->filterFieldsByLanguages(
+                            $spiContent->contentInfo->contentTypeId,
+                            $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id],
                             $filterSettings
                         );
                     }
@@ -917,7 +917,7 @@ class ContentService implements ContentServiceInterface
         {
             $contentItems[] = $this->buildContentDomainObject(
                 $spiContent,
-                $areFieldsFiltered ? $filteredFields[$spiContent->id][$spiContent->version->id] : null
+                $areFieldsFiltered ? $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] : null
             );
         }
 
@@ -1172,14 +1172,14 @@ class ContentService implements ContentServiceInterface
     protected function buildContentDomainObject( SPIContent $spiContent, array $spiFields = null )
     {
         $fields = $this->buildDomainFields(
-            null === $spiFields ? $spiContent->version->fields : $spiFields
+            null === $spiFields ? $spiContent->fields : $spiFields
         );
 
         return new Content(
             array(
                 "repository"               => $this->repository,
-                "contentId"                => $spiContent->id,
-                "contentTypeId"            => $spiContent->typeId,
+                "contentId"                => $spiContent->contentInfo->contentId,
+                "contentTypeId"            => $spiContent->contentInfo->contentTypeId,
                 "fields"                   => $fields,
                 // @TODO: implement loadRelations()
                 //"relations"                => $this->loadRelations( $versionInfo )
