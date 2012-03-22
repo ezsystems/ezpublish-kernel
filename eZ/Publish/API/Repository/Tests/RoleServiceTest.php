@@ -124,6 +124,43 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createRole() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::createRole()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
+     */
+    public function testCreateRoleInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+
+        $roleService = $repository->getRoleService();
+
+        $repository->beginTransaction();
+
+        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+
+        $createdRoleId = $roleService->createRole( $roleCreate )->id;
+
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $role = $roleService->loadRole( $createdRoleId );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Role object still exists after rollback.' );
+    }
+
+    /**
      * Test for the loadRole() method.
      *
      * @return void
