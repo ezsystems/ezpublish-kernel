@@ -328,6 +328,56 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createUserGroup() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateUserGroupInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // ID of the main "Users" group
+        $mainGroupId = 4;
+
+        $userService = $repository->getUserService();
+
+        $repository->beginTransaction();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
+
+        // Create the new user group
+        $createdUserGroupId = $userService->createUserGroup(
+            $userGroupCreate,
+            $parentUserGroup
+        )->id;
+
+        $repository->rollback();
+
+        try
+        {
+            // Throws exception since creation of user group was rolled back
+            $loadedGroup = $userService->loadUserGroup( $createdUserGroupId );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'User group object still exists after rollback.' );
+    }
+
+    /**
      * Test for the deleteUserGroup() method.
      *
      * @return void
@@ -808,6 +858,41 @@ class UserServiceTest extends BaseTest
         // mandatory fields "first_name" and "last_name" are not set.
         $userService->createUser( $userCreate, array( $group ) );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateUserInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $repository->beginTransaction();
+
+        $user = $this->createUserVersion1();
+
+        $repository->rollback();
+
+        try
+        {
+            // Throws exception since creation of user was rolled back
+            $loadedUser = $userService->loadUser( $user->id );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'User object still exists after rollback.' );
     }
 
     /**
