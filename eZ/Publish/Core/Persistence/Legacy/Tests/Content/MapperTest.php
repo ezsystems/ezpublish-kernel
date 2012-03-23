@@ -170,23 +170,6 @@ class MapperTest extends TestCase
         );
     }
 
-    public function testCreateLocationFromContent()
-    {
-        $mapper = $this->getMapper();
-        $location = $mapper->createLocationCreateStruct(
-            $content = $this->getFullContentFixture(),
-            $struct = $this->getCreateStructFixture()
-        );
-
-        $this->assertPropertiesCorrect(
-            array(
-                'contentId' => $content->contentInfo->contentId,
-                'contentVersion' => 1,
-            ),
-            $location
-        );
-    }
-
     /**
      * Returns a Content fixture
      *
