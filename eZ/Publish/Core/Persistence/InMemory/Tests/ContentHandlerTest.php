@@ -145,6 +145,17 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
+     * Test publish function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::publish
+     * @group contentHandler
+     */
+    public function testPublish()
+    {
+        $this->markTestIncomplete( "Test for ContentHandler::publish() is not implemented." );
+    }
+
+    /**
      * Test delete function
      *
      * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::deleteContent
