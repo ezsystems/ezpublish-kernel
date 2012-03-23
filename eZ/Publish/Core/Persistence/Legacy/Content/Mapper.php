@@ -87,23 +87,6 @@ class Mapper
     }
 
     /**
-     * Creates a Location\CreateStruct for the given $content
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @return Content\Location\CreateStruct
-     */
-    public function createLocationCreateStruct( Content $content )
-    {
-        $location = new Content\Location\CreateStruct();
-
-        $location->remoteId = md5( uniqid() );
-        $location->contentId = $content->contentInfo->contentId;
-        $location->contentVersion = $content->versionInfo->versionNo;
-
-        return $location;
-    }
-
-    /**
      * Creates a new version for the given $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
