@@ -248,6 +248,7 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testRecoverToDifferentLocation()
     {
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
@@ -343,6 +344,7 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testFindTrashItemsAndEmptyTrash()
     {
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 

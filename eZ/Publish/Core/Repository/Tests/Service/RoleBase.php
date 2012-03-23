@@ -590,6 +590,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testLoadPoliciesByUserId()
     {
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $roleService = $this->repository->getRoleService();
 
         $policies = $roleService->loadPoliciesByUserId( 10 );
@@ -716,6 +717,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnassignRoleFromUserThrowsInvalidArgumentException()
     {
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 2 );
