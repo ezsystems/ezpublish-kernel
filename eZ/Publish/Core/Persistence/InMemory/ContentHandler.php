@@ -662,43 +662,63 @@ class ContentHandler implements ContentHandlerInterface
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id and versionNo
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( UpdateStruct $updateStruct )
+    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
     {
-        // Change the currentVersionNo to the published version
+        // Change Content currentVersionNo to the published version
         $this->backend->update(
             'Content',
-            $updateStruct->id,
+            $contentId,
             array(
-                '_currentVersionNo' => $updateStruct->versionNo,
+                '_currentVersionNo' => $versionNo,
             )
         );
 
+        // Update ContentInfo published flag and change the currentVersionNo to the published version
+        $contentInfoUpdateData = array(
+            "currentVersionNo" => $versionNo,
+            "isPublished" => true,
+        );
+        // Update ContentInfo with set properties in $metaDataUpdateStruct
+        foreach ( $metaDataUpdateStruct as $propertyName => $propertyValue )
+        {
+            if ( isset( $propertyValue ) )
+            {
+                if ( $propertyName === "alwaysAvailable" )
+                {
+                    $contentInfoUpdateData["isAlwaysAvailable"] = $propertyValue;
+                }
+                elseif ( $propertyName === "mainLanguageId" )
+                {
+                    $contentInfoUpdateData["mainLanguageCode"] =
+                        $this->handler->contentLanguageHandler()->load( $propertyValue )->languageCode;
+                }
+                else $contentInfoUpdateData[$propertyName] = $propertyValue;
+            }
+        }
         $this->backend->update(
             'Content\\ContentInfo',
-            $updateStruct->id,
-            array(
-                'currentVersionNo' => $updateStruct->versionNo,
-            ),
+            $contentId,
+            $contentInfoUpdateData,
             true,
             'contentId'
         );
 
-        // Change the currentVersionNo to the published version
+        // Update VersionInfo with modified timestamp
         $this->backend->updateByMatch(
             'Content\\VersionInfo',
-            array( 'contentId' => $updateStruct->id, 'versionNo' => $updateStruct->versionNo ),
+            array( 'contentId' => $contentId, 'versionNo' => $versionNo ),
             array(
-                "name" => $updateStruct->name,
-                "creatorId" => $updateStruct->creatorId,
-                "modified" => $updateStruct->modified,
+                "modified" => $metaDataUpdateStruct->modificationDate,
             )
         );
 
-        return $this->load( $updateStruct->id, $updateStruct->versionNo );
+        return $this->load( $contentId, $versionNo );
     }
 
     /**

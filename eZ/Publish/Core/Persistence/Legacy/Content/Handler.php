@@ -131,36 +131,28 @@ class Handler implements BaseContentHandler
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * The UpdateStruct will also contain an array of Content name indexed by Locale.
-     *
      * The publish procedure will:
      * - Create location nodes based on the node assignments
-     * - Create the entry in the ezcontentobject_name table
-     * - Updates the content object using the provided update struct
-     * - Updates the node assignments
+     * - Update the content object using the provided metadata update struct
+     * - Update the node assignments
+     * - Set content and version status to published
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( UpdateStruct $updateStruct )
+    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
     {
-        $content = $this->update( $updateStruct );
-
-        // @todo : Is it necessary to do this here ? create()/update() should be sufficient I think...
-        foreach ( $updateStruct->name as $language => $name )
-        {
-            $this->contentGateway->setName(
-                $updateStruct->id,
-                $updateStruct->versionNo,
-                $name, $language
-            );
-        }
-
+        $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct );
         $this->locationGateway->createLocationsFromNodeAssignments(
-            $updateStruct->id,
-            $updateStruct->versionNo
+            $contentId,
+            $versionNo
         );
-        return $content;
+        $this->setStatus( $contentId, VersionInfo::STATUS_PUBLISHED, $versionNo );
+
+        return $this->load( $contentId, $versionNo );
     }
 
     /**
