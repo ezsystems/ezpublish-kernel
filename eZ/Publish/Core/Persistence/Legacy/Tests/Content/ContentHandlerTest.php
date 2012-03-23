@@ -140,15 +140,6 @@ class ContentHandlerTest extends TestCase
             )->will(
                 $this->returnValue( new VersionInfo )
             );
-        $mapperMock->expects( $this->once() )
-            ->method( 'createLocationCreateStruct' )
-            ->with(
-                $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content'
-                )
-            )->will(
-                $this->returnValue( new \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct() )
-            );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertContentObject' )
