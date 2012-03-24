@@ -313,13 +313,13 @@ abstract class LanguageBase extends BaseServiceTest
      */
     public function testLoadLanguageById()
     {
-        $language = $this->repository->getContentLanguageService()->loadLanguageById( 2 );
+        $language = $this->repository->getContentLanguageService()->loadLanguageById( 4 );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $language );
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => 2,
+                'id'           => 4,
                 'languageCode' => 'eng-GB',
                 'name'         => 'English (United Kingdom)',
                 'enabled'      => true
