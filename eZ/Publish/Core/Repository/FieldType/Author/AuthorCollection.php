@@ -49,7 +49,13 @@ class AuthorCollection extends ArrayObject
     public function offsetSet( $offset, $value )
     {
         if ( !$value instanceof Author )
-            throw new InvalidArgumentType( '$value', 'Author', $value );
+        {
+            throw new InvalidArgumentType(
+                '$value',
+                'eZ\Publish\Core\Repository\FieldType\Author\Author',
+                $value
+            );
+        }
 
         $aAuthors = $this->getArrayCopy();
         parent::offsetSet( $offset, $value );

@@ -57,7 +57,7 @@ class Value extends BaseValue
             }
 
             if ( ! $dateTime instanceof DateTime )
-                throw new InvalidArgumentType( "dateTime", "DateTime", $dateTime );
+                throw new InvalidArgumentType( '$dateTime', "DateTime", $dateTime );
 
             $this->value = $dateTime;
         }

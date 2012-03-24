@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Keyword;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -68,12 +67,20 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Keyword\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Keyword\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_array( $inputValue->values ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->values',
+                'array',
+                $inputValue->values
+            );
         }
 
         return $inputValue;

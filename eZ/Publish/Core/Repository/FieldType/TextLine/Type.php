@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\TextLine;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -72,12 +71,20 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_string( $inputValue->text ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->text',
+                'string',
+                $inputValue->text
+            );
         }
 
         return $inputValue;

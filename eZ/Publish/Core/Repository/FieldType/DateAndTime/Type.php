@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\DateAndTime;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     DateTime;
 
@@ -82,12 +81,20 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value',
+                $inputValue
+            );
         }
 
         if ( isset( $inputValue->value ) && !$inputValue->value instanceof DateTime )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->value',
+                'DateTime',
+                $inputValue->value
+            );
         }
 
         return $inputValue;

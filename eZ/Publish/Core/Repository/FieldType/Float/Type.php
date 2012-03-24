@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Float;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -72,12 +71,20 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Float\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Float\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_float( $inputValue->value ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->value',
+                'float',
+                $inputValue->value
+            );
         }
 
         return $inputValue;

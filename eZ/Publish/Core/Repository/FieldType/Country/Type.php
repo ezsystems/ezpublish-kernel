@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository\FieldType\Country;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
     eZ\Publish\Core\Repository\FieldType\Country\Exception\InvalidValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     RuntimeException;
 
@@ -100,7 +99,11 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value',
+                $inputValue
+            );
         }
 
         return $inputValue;

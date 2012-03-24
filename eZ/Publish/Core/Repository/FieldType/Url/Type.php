@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Url;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -74,12 +73,29 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Url\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Url\\Value',
+                $inputValue
+           );
         }
 
-        if ( !is_string( $inputValue->link ) || ( isset( $inputValue->text ) && !is_string( $inputValue->text ) ) )
+        if ( !is_string( $inputValue->link ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->link',
+                'string',
+                $inputValue->link
+           );
+        }
+
+        if ( isset( $inputValue->text ) && !is_string( $inputValue->text ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->text',
+                'string',
+                $inputValue->text
+           );
         }
 
         return $inputValue;
