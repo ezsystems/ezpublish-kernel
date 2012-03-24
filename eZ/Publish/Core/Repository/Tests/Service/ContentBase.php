@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\API\Repository\Exceptions;
+    eZ\Publish\API\Repository\Exceptions,
+    eZ\Publish\Core\Repository\FieldType\Author\Author;
 
 /**
  * Test case for Content service
@@ -321,7 +322,7 @@ abstract class ContentBase extends BaseServiceTest
 
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreate->setField( 'subject', 'Hello' );
-        $contentCreate->setField( 'author', array( 'Kenneth Kaunda' ) );
+        $contentCreate->setField( 'author', array( new Author( array( 'name' => 'Kenneth Kaunda' ) ) ) );
         $contentCreate->setField( 'message', 'Regards from Nigeria' );
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
