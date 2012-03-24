@@ -1260,9 +1260,15 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         foreach ( $expectedDefinitionCreate as $propertyName => $propertyValue )
         {
+            if ( is_object( $propertyValue ) )
+                $expectedType = get_class( $propertyValue );
+            else
+                $expectedType = gettype( $propertyValue );
+
             $this->assertEquals(
                 $propertyValue,
-                $actualDefinition->$propertyName
+                $actualDefinition->$propertyName,
+                "Property '{$propertyName}' should have been of type: " . $expectedType
             );
         }
     }
