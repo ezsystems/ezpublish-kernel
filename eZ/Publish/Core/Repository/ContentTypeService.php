@@ -522,7 +522,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isTranslatable"            => $spiFieldDefinition->isTranslatable,
                 "isRequired"                => $spiFieldDefinition->isRequired,
                 "isInfoCollector"           => $spiFieldDefinition->isInfoCollector,
-                "defaultValue"              => $spiFieldDefinition->defaultValue->data,
+                "defaultValue"              => $spiFieldDefinition->defaultValue,
                 "isSearchable"              => $spiFieldDefinition->isSearchable
             )
         );
