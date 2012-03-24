@@ -321,7 +321,7 @@ abstract class ContentBase extends BaseServiceTest
 
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreate->setField( 'subject', 'Hello' );
-        $contentCreate->setField( 'author', 'Kenneth Kaunda' );
+        $contentCreate->setField( 'author', array( 'Kenneth Kaunda' ) );
         $contentCreate->setField( 'message', 'Regards from Nigeria' );
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
