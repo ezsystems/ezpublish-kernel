@@ -20,18 +20,25 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 class InvalidArgumentType extends InvalidArgumentException
 {
     /**
-     * Generates: "Argument '{$argumentName}' is invalid: '{$expectedType}' is wrong type[ in class '{$className}']"
+     * Generates: "Argument '{$argumentName}' is invalid: expected value to be of type '{$expectedType}'[, got '{$value}']"
      *
      * @param string $argumentName
      * @param string $expectedType
-     * @param string|null $className Optionally to specify class in abstract/parent classes
+     * @param mixed|null $value Optionally to output the type that was recived
      * @param \Exception|null $previous
      */
-    public function __construct( $argumentName, $expectedType, $className = null, Exception $previous = null )
+    public function __construct( $argumentName, $expectedType, $value = null, Exception $previous = null )
     {
+        if ( $value === null )
+            $valueString = '';
+        else if ( is_object( $value ) )
+            $valueString = ", got '". get_class( $value ) . "'";
+        else
+            $valueString = ", got '". gettype( $value ) . "'";
+
         parent::__construct(
             $argumentName,
-            "'{$expectedType}' is wrong type" .( $className ? " in class '{$className}'" : "" ),
+            "expected value to be of type '{$expectedType}'" . $valueString,
             $previous
         );
     }
