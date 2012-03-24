@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Author;
-use ArrayObject;
+use eZ\Publish\Core\Repository\FieldType\Author\Author,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    ArrayObject;
 
 /**
  * Author collection.
@@ -21,6 +23,10 @@ class AuthorCollection extends ArrayObject
      */
     protected $authorValue;
 
+    /**
+     * @param Value $authorValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Author\Author[] $elements
+     */
     public function __construct( Value $authorValue, array $elements = array() )
     {
         $this->authorValue = $authorValue;
@@ -36,11 +42,15 @@ class AuthorCollection extends ArrayObject
     /**
      * Adds a new author to the collection
      *
+     * @throws InvalidArgumentType When $value is not of type Author
      * @param int $offset
      * @param \eZ\Publish\Core\Repository\FieldType\Author\Author $value
      */
     public function offsetSet( $offset, $value )
     {
+        if ( !$value instanceof Author )
+            throw new InvalidArgumentType( '$value', 'Author', $value );
+
         $aAuthors = $this->getArrayCopy();
         parent::offsetSet( $offset, $value );
         if ( !isset( $value->id ) || $value->id == -1 )
