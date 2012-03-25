@@ -91,7 +91,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'language_mask' => '1',
                     'modified' => '456',
                     'published' => '123',
-                    'status' => Content\VersionInfo::STATUS_DRAFT,
+                    'status' => ContentInfo::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -298,7 +298,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 ->from( 'ezcontentobject_version' )
         );
 
-        // check that content status has been set to published
+        // check that content status has not been set to published
         $this->assertQueryResult(
             array( array( VersionInfo::STATUS_DRAFT ) ),
             $this->getDatabaseHandler()
@@ -340,11 +340,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentId, $version->versionNo, 1 )
+            $gateway->setStatus( $version->contentId, $version->versionNo, VersionInfo::STATUS_PUBLISHED )
         );
 
         $this->assertQueryResult(
-            array( array( '1' ) ),
+            array( array( VersionInfo::STATUS_PUBLISHED ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -353,7 +353,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( '1' ) ), // 1 === Content::STATUS_PUBLISHED
+            array( array( ContentInfo::STATUS_PUBLISHED ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -1396,6 +1396,24 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertEquals(
             $gateway->loadLatestPublishedData( 10 ),
             $gateway->load( 10, 2 )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getLastVersionNumber
+     */
+    public function testGetLastVersionNumber()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $this->assertEquals(
+            1,
+            $gateway->getLastVersionNumber( 4 )
         );
     }
 

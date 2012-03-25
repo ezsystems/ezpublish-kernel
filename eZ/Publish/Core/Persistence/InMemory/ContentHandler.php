@@ -63,11 +63,17 @@ class ContentHandler implements ContentHandlerInterface
             array(
                 'contentTypeId' => $content->typeId,
                 'sectionId' => $content->sectionId,
+                'isPublished' => false,
                 'ownerId' => $content->ownerId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'currentVersionNo' => 1,
-                'modificationDate' => $content->modified,
-                'publicationDate' => $content->published,
+                // Published and modified timestamps for drafts is 0
+                'modificationDate' => 0,
+                'publicationDate' => 0,
+                'isAlwaysAvailable' => $content->alwaysAvailable,
+                'remoteId' => $content->remoteId,
+                'mainLanguageCode' => $content->initialLanguageId,
+
             ),
             true,
             'contentId'
@@ -83,9 +89,12 @@ class ContentHandler implements ContentHandlerInterface
                 'creationDate' => $time,
                 'contentId' => $contentObj->contentInfo->contentId,
                 'status' => VersionInfo::STATUS_DRAFT,
-                'versionNo' => 1
+                'versionNo' => 1,
+                'initialLanguageCode' => $this->handler->contentLanguageHandler()
+                    ->load( $content->initialLanguageId )->languageCode
             )
         );
+        $languageCodes = array();
         foreach ( $content->fields as $field )
         {
             $contentObj->fields[] = $this->backend->create(
@@ -102,6 +111,12 @@ class ContentHandler implements ContentHandlerInterface
                     )
                 ) + (array)$field
             );
+            $languageCodes[] = $field->languageCode;
+        }
+        foreach ( array_unique( $languageCodes ) as $languageCode )
+        {
+            $versionInfo->languageIds[] = $this->handler->contentLanguageHandler()
+                ->loadByLanguageCode( $languageCode )->id;
         }
         $contentObj->versionInfo = $versionInfo;
 
@@ -144,12 +159,13 @@ class ContentHandler implements ContentHandlerInterface
                 'creationDate' => $time,
                 'contentId' => $contentId,
                 'status' => VersionInfo::STATUS_DRAFT,
-                'versionNo' => $newVersionNo
+                'versionNo' => $newVersionNo,
+                'initialLanguageCode' => $content->versionInfo->initialLanguageCode,
+                'languageIds' => $content->versionInfo->languageIds
             )
         );
 
         // Duplicate fields
-        // @todo: language support
         $content->fields = array();
         foreach ( $fields as $field )
         {

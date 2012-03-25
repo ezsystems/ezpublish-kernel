@@ -85,6 +85,7 @@ class LocationHandlerTest extends HandlerTest
                         "ownerId" => 14,
                         "sectionId" => 1,
                         "typeId" => 2,
+                        "initialLanguageId" => 2,
                         "fields" => array(
                             new Field(
                                 array(
