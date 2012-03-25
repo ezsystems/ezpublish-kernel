@@ -95,7 +95,11 @@ class Handler implements BaseContentHandler
 
         $content->contentInfo->contentId = $this->contentGateway->insertContentObject( $struct );
 
-        $content->versionInfo = $this->mapper->createVersionInfoForContent( $content, 1 );
+        $content->versionInfo = $this->mapper->createVersionInfoForContent(
+            $content, 1,
+            $struct->fields,
+            $content->contentInfo->mainLanguageCode
+        );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo, $struct->fields, $content->contentInfo->isAlwaysAvailable
         );
@@ -168,20 +172,22 @@ class Handler implements BaseContentHandler
      * is ignored in this implementation.
      *
      * @param int $contentId
-     * @param int|bool $srcVersion
+     * @param int $srcVersion
      * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
         $content = $this->load( $contentId, $srcVersion );
+
         $fields = $content->fields;
 
         // Create new version
         $content->versionInfo = $this->mapper->createVersionInfoForContent(
             $content,
-            $content->versionInfo->versionNo + 1
+            $this->contentGateway->getLastVersionNumber( $contentId ) + 1,
+            $fields,
+            $content->versionInfo->initialLanguageCode
         );
-
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $content->fields,
@@ -189,7 +195,6 @@ class Handler implements BaseContentHandler
         );
 
         // Clone fields from previous version and append them to the new one
-        // @TODO Manage translations
         $content->fields = array();
         foreach ( $fields as $field )
         {
@@ -197,10 +202,9 @@ class Handler implements BaseContentHandler
             $newField->versionNo = $content->versionInfo->versionNo;
             $content->fields[] = $newField;
         }
-
         $this->fieldHandler->createNewFields( $content );
 
-        return $content->versionInfo;
+        return $content;
     }
 
     /**
@@ -276,10 +280,10 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Sets the state of object identified by $contentId and $version to $state.
+     * Sets the status of object identified by $contentId and $version to $status.
      *
-     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
-     * @todo Is this supposed to be constants from Content or Version? They differ..
+     * The $status can be one of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * When status is set to VersionInfo::STATUS_PUBLISHED content status is updated to ContentInfo::STATUS_PUBLISHED
      *
      * @param int $contentId
      * @param int $status
