@@ -655,7 +655,6 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         // convert all these assignments to nodes
-        $nodeMainLocationId = false;
 
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
