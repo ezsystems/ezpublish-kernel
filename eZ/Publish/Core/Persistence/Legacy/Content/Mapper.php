@@ -52,6 +52,7 @@ class Mapper
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      */
     public function __construct( LocationMapper $locationMapper, Registry $converterRegistry, LanguageHandler $languageHandler )
     {
@@ -77,9 +78,11 @@ class Mapper
         $contentInfo->isAlwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
         $contentInfo->mainLanguageCode = $this->languageHandler->getById( $struct->initialLanguageId )->languageCode;
-        $contentInfo->publicationDate = $struct->published;
-        $contentInfo->modificationDate = $struct->modified;
+        // For drafts published and modified timestamps should be 0
+        $contentInfo->publicationDate = 0;
+        $contentInfo->modificationDate = 0;
         $contentInfo->currentVersionNo = 1;
+        $contentInfo->isPublished = false;
 
         $content->contentInfo = $contentInfo;
 
@@ -91,23 +94,28 @@ class Mapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param int $versionNo
+     * @param array $fields
+     * @param string $initialLanguageCode
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      * @todo: created, modified, initial_language_id, status, user_id?
      */
-    public function createVersionInfoForContent( Content $content, $versionNo )
+    public function createVersionInfoForContent( Content $content, $versionNo, array $fields, $initialLanguageCode )
     {
         $versionInfo = new VersionInfo;
 
+        $versionInfo->contentId = $content->contentInfo->contentId;
         $versionInfo->versionNo = $versionNo;
+        $versionInfo->creatorId = $content->contentInfo->ownerId;
+        $versionInfo->status = VersionInfo::STATUS_DRAFT;
         $versionInfo->creationDate = time();
         $versionInfo->modificationDate = $versionInfo->creationDate;
-        $versionInfo->creatorId = $content->contentInfo->ownerId;
-        // @todo: Is draft version correct?
-        $versionInfo->status = VersionInfo::STATUS_DRAFT;
-        $versionInfo->contentId = $content->contentInfo->contentId;
-        // @todo Implement real language id for translation
-        $versionInfo->languageIds = array( 2 );
-        $versionInfo->initialLanguageCode = 'eng-GB';
+        $versionInfo->initialLanguageCode = $initialLanguageCode;
+        $languageCodes = array();
+        foreach ( $fields as $field ) $languageCodes[] = $field->languageCode;
+        foreach ( array_unique( $languageCodes ) as $languageCode )
+            $versionInfo->languageIds[] =
+                $this->languageHandler->loadByLanguageCode( $languageCode )->id;
 
         return $versionInfo;
     }
@@ -139,7 +147,7 @@ class Mapper
      *      "$tableName_$columnName"
      *
      * @param array $rows
-     * @return array(Content)
+     * @return \eZ\Publish\SPI\Persistence\Content[]
      */
     public function extractContentFromRows( array $rows )
     {
@@ -168,7 +176,6 @@ class Mapper
             if ( !isset( $versions[$contentId][$versionId] ) )
             {
                 $versions[$contentId][$versionId] = $this->extractVersionInfoFromRow( $row, 'ezcontentobject_version_' );
-                $contentObjs[$contentId]->isPublished = $versions[$contentId][$versionId]->status == VersionInfo::STATUS_PUBLISHED;
             }
             if ( !isset( $versions[$contentId][$versionId]->names[$row['ezcontentobject_name_content_translation']] ) )
             {
@@ -226,6 +233,7 @@ class Mapper
         $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
         $contentInfo->sectionId = (int)$row["{$prefix}section_id"];
         $contentInfo->currentVersionNo = (int)$row["{$prefix}current_version"];
+        $contentInfo->isPublished = (bool)( $row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED );
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];

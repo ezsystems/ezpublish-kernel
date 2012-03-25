@@ -51,6 +51,7 @@ class SearchHandlerTest extends HandlerTest
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
+        $struct->initialLanguageId = 2;
         $struct->fields[] = new Field(
             array(
                 "type" => "ezstring",

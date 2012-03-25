@@ -55,6 +55,7 @@ class ContentHandlerTest extends HandlerTest
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
+        $struct->initialLanguageId = 2;
         $struct->fields[] = new Field(
             array(
                 'type' => 'ezstring',
@@ -109,6 +110,7 @@ class ContentHandlerTest extends HandlerTest
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
+        $struct->initialLanguageId = 4;
         $struct->fields[] = new Field(
             array(
                 'type' => 'ezstring',
@@ -122,6 +124,7 @@ class ContentHandlerTest extends HandlerTest
             )
         );
 
+        $time = time();
         $content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $content;
         $this->assertTrue( $content instanceof Content );
@@ -133,6 +136,10 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 14, $content->versionInfo->creatorId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
         $this->assertEquals( VersionInfo::STATUS_DRAFT, $content->versionInfo->status );
+        $this->assertGreaterThanOrEqual( $time, $content->versionInfo->creationDate );
+        $this->assertGreaterThanOrEqual( $time, $content->versionInfo->modificationDate );
+        $this->assertEquals( "eng-GB", $content->versionInfo->initialLanguageCode );
+        $this->assertEquals( array( $struct->initialLanguageId ), $content->versionInfo->languageIds );
         $this->assertEquals( $content->contentInfo->contentId, $content->versionInfo->contentId );
         $this->assertEquals( 1, count( $content->fields ) );
 
@@ -364,7 +371,7 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * Tests creatDraftFromVersion()
+     * Tests createDraftFromVersion()
      *
      * @group contentHandler
      * @covers \eZ\Publish\SPI\Persistence\Content\Handler::createDraftFromVersion
@@ -377,13 +384,16 @@ class ContentHandlerTest extends HandlerTest
         $this->contentToDelete[] = $content;
 
         $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->contentId, 1 );
+
         self::assertSame( $content->contentInfo->currentVersionNo + 1, $draft->versionInfo->versionNo );
         self::assertGreaterThanOrEqual( $time, $draft->versionInfo->creationDate );
         self::assertGreaterThanOrEqual( $time, $draft->versionInfo->modificationDate );
         self::assertSame( VersionInfo::STATUS_DRAFT, $draft->versionInfo->status, 'Created version must be a draft' );
         self::assertSame( $content->contentInfo->contentId, $draft->versionInfo->contentId );
+        self::assertSame( $content->versionInfo->initialLanguageCode, $draft->versionInfo->initialLanguageCode );
+        self::assertSame( $content->versionInfo->languageIds, $draft->versionInfo->languageIds );
 
-        // Indexing fields by defition id to be able to compare them
+        // Indexing fields by definition id to be able to compare them
         $aOriginalIndexedFields = array();
         $aIndexedFields = array();
         foreach ( $content->fields as $field )
