@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
@@ -145,7 +146,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $struct->published, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
-            $q->bindValue( VersionInfo::STATUS_DRAFT, null, \PDO::PARAM_INT )
+            $q->bindValue( ContentInfo::STATUS_DRAFT, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
@@ -510,7 +511,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
-            $q->bindValue( APIVersionInfo::STATUS_PUBLISHED, null, \PDO::PARAM_INT )
+            $q->bindValue( ContentInfo::STATUS_PUBLISHED, null, \PDO::PARAM_INT )
         )->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
@@ -810,6 +811,8 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @param int $versionNo
+     *
+     * @return array
      */
     public function loadVersionInfo( $contentId, $versionNo )
     {
@@ -922,6 +925,32 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Returns last version number for content identified by $contentId
+     *
+     * @param int $contentId
+     *
+     * @return int
+     */
+    public function getLastVersionNumber( $contentId )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $query->expr->max( $this->dbHandler->quoteColumn( 'version' ) )
+        )->from( $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
     }
 
     /**
