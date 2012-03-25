@@ -101,9 +101,10 @@ class MapperTest extends TestCase
         self::assertSame( $struct->typeId, $content->contentInfo->contentTypeId );
         self::assertSame( 'eng-GB', $content->contentInfo->mainLanguageCode );
         self::assertSame( $struct->alwaysAvailable, $content->contentInfo->isAlwaysAvailable );
-        self::assertSame( $struct->published, $content->contentInfo->publicationDate );
-        self::assertSame( $struct->modified, $content->contentInfo->modificationDate );
+        self::assertSame( 0, $content->contentInfo->publicationDate );
+        self::assertSame( 0, $content->contentInfo->modificationDate );
         self::assertEquals( 1, $content->contentInfo->currentVersionNo );
+        self::assertFalse( $content->contentInfo->isPublished );
     }
 
     /**
@@ -142,10 +143,30 @@ class MapperTest extends TestCase
      */
     public function testCreateVersionFromContent()
     {
-        $content = $this->getContentFixture();
+        $content = $this->getFullContentFixture();
 
         $mapper = $this->getMapper();
-        $versionInfo = $mapper->createVersionInfoForContent( $content, 1 );
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'loadByLanguageCode' )
+            ->with( 'eng-GB' )
+            ->will(
+            $this->returnValue(
+                new Language(
+                    array(
+                        'id' => 2,
+                        'languageCode' => 'eng-GB',
+                    )
+                )
+            )
+        );
+        $time = time();
+        $versionInfo = $mapper->createVersionInfoForContent(
+            $content,
+            1,
+            $content->fields,
+            $content->versionInfo->initialLanguageCode
+        );
 
         $this->assertPropertiesCorrect(
             array(
@@ -154,20 +175,15 @@ class MapperTest extends TestCase
                 'creatorId' => 13,
                 'status' => 0,
                 'contentId' => 2342,
+                'initialLanguageCode' => 'eng-GB',
+                'languageIds' => array( 2 ),
+
             ),
             $versionInfo
         );
 
-        $this->assertAttributeGreaterThanOrEqual(
-            time() - 1000,
-            'creationDate',
-            $versionInfo
-        );
-        $this->assertAttributeGreaterThanOrEqual(
-            time() - 1000,
-            'modificationDate',
-            $versionInfo
-        );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->modificationDate );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->creationDate );
     }
 
     /**
@@ -183,6 +199,9 @@ class MapperTest extends TestCase
         $content->contentInfo->contentTypeId = 23;
         $content->contentInfo->sectionId = 42;
         $content->contentInfo->ownerId = 13;
+        $content->fields = array(
+            new Field( array( "languageCode" => "eng-GB" ) ),
+        );
         $content->locations = array();
 
         return $content;
@@ -195,6 +214,7 @@ class MapperTest extends TestCase
         $content->versionInfo = new VersionInfo(
             array(
                 'versionNo' => 1,
+                'initialLanguageCode' => 'eng-GB'
             )
         );
 
@@ -726,7 +746,7 @@ class MapperTest extends TestCase
                 );
             $this->languageHandler = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getByLocale', 'getById' ),
+                array( 'getByLocale', 'getById', 'loadByLanguageCode' ),
                 array(
                     $innerLanguageHandler,
                     $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
