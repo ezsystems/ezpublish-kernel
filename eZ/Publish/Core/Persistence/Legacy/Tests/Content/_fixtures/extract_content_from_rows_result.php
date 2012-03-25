@@ -18,6 +18,7 @@ $content->contentInfo->isAlwaysAvailable = true;
 $content->contentInfo->modificationDate = 1313061404;
 $content->contentInfo->publicationDate = 1313047907;
 $content->contentInfo->currentVersionNo = 2;
+$content->contentInfo->isPublished = true;
 $content->contentInfo->mainLanguageCode = 'eng-US';
 $content->contentInfo->name = 'Something';
 $content->locations = array( new Location() );
