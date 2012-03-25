@@ -271,13 +271,23 @@ class ContentHandlerTest extends TestCase
             ->method( 'createVersionInfoForContent' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
-                $this->equalTo( 3 )
+                $this->equalTo( 3 ),
+                $this->getContentFixtureForDraft()->fields,
+                $this->getContentFixtureForDraft()->versionInfo->initialLanguageCode
             )->will( $this->returnValue( new VersionInfo ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ) )
-            ->will( $this->returnValue( 42 ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->getContentFixtureForDraft()->fields,
+                $this->getContentFixtureForDraft()->contentInfo->isAlwaysAvailable
+            )->will( $this->returnValue( 42 ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'getLastVersionNumber' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( 2 ) );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'createNewFields' )
@@ -286,12 +296,12 @@ class ContentHandlerTest extends TestCase
         $result = $handler->createDraftFromVersion( 23, 2 );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo',
+            'eZ\\Publish\\SPI\\Persistence\\Content',
             $result
         );
         $this->assertEquals(
             42,
-            $result->id
+            $result->versionInfo->id
         );
     }
 
