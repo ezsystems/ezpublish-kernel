@@ -141,7 +141,7 @@ class MapperTest extends TestCase
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionInfoForContent
      */
-    public function testCreateVersionFromContent()
+    public function testCreateVersionInfoForContent()
     {
         $content = $this->getFullContentFixture();
 
