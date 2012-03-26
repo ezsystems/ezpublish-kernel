@@ -368,7 +368,7 @@ class LocationService implements LocationServiceInterface
         if ( $locationCreateStruct->priority !== null && !is_numeric( $locationCreateStruct->priority ) )
             throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
 
-        if ( $locationCreateStruct->hidden !== null && !is_bool( $locationCreateStruct->hidden ) )
+        if ( !is_bool( $locationCreateStruct->hidden ) )
             throw new InvalidArgumentValue( "hidden", $locationCreateStruct->hidden, "LocationCreateStruct" );
 
         if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
@@ -435,15 +435,9 @@ class LocationService implements LocationServiceInterface
             $createStruct->hidden = true;
             $createStruct->invisible = true;
         }
-        else
+        elseif ( $loadedParentLocation->hidden || $loadedParentLocation->invisible )
         {
-            try
-            {
-                $parentParentLocation = $this->loadLocation( $loadedParentLocation->parentLocationId );
-                if ( $parentParentLocation->hidden || $parentParentLocation->invisible )
-                    $createStruct->invisible = true;
-            }
-            catch ( APINotFoundException $e ) {}
+            $createStruct->invisible = true;
         }
 
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
