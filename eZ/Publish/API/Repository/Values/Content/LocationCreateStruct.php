@@ -49,13 +49,13 @@ class LocationCreateStruct extends ValueObject
      *
      * @var mixed
      */
-    public $sortOrder = Location::SORT_ORDER_ASC ;
+    public $sortOrder = Location::SORT_ORDER_ASC;
 
     /**
      * The id of the parent location under which the new location should be created.
-     * 
-     * @reuired
-     * 
+     *
+     * @required
+     *
      * @var mixed
      */
     public $parentLocationId;
