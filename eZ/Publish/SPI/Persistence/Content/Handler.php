@@ -98,12 +98,12 @@ interface Handler
     public function loadDraftsForUser( $userId );
 
     /**
-     * Sets the state of object identified by $contentId and $version to $status.
+     * Sets the status of object identified by $contentId and $version to $status.
      *
-     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
-     * @todo Is this supposed to be constants from Content or Version? They differ..
+     * The $status can be one of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * When status is set to VersionInfo::STATUS_PUBLISHED content status is updated to ContentInfo::STATUS_PUBLISHED
      *
-     * @param mixed $contentId
+     * @param int $contentId
      * @param int $status
      * @param int $version
      * @return boolean
