@@ -28,7 +28,12 @@ class VersionInfo extends APIVersionInfo
     /**
      * @var mixed
      */
-    protected $contentId;
+    private $contentId;
+
+    /**
+     * @var array
+     */
+    private $names;
 
     /**
      * Content of the content this version belongs to.
@@ -47,7 +52,7 @@ class VersionInfo extends APIVersionInfo
      */
     public function getNames()
     {
-        // TODO: Implement getNames() method.
+        return $this->names;
     }
 
     /**
@@ -60,7 +65,13 @@ class VersionInfo extends APIVersionInfo
      */
     public function getName( $languageCode = null )
     {
-        // TODO: Implement getName() method.
+        if ( !isset( $languageCode ) )
+            $languageCode = $this->initialLanguageCode;
+
+        if ( isset( $this->names[$languageCode] ) )
+            return $this->names[$languageCode];
+
+        return null;
     }
 
     public function __get( $property )
