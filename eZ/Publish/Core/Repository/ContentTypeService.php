@@ -541,7 +541,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isTranslatable"            => $spiFieldDefinition->isTranslatable,
                 "isRequired"                => $spiFieldDefinition->isRequired,
                 "isInfoCollector"           => $spiFieldDefinition->isInfoCollector,
-                "defaultValue"              => $spiFieldDefinition->defaultValue,
+                "defaultValue"              => $spiFieldDefinition->defaultValue->data,
                 "isSearchable"              => $spiFieldDefinition->isSearchable
             )
         );
@@ -1195,6 +1195,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ( !isset( $this->settings["field_type"][$type] ) )
             throw new InvalidArgumentException( '$type', "Provided \$type is unknown: '{$type}'" );
 
-        return new $this->settings["field_type"][$type]();
+        return $this->settings["field_type"][$type]();
     }
 }
