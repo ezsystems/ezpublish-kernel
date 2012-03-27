@@ -533,6 +533,34 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadDraftsForUser
+     */
+    public function testLoadDraftsForUser()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'listVersionsForUser' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractVersionInfoListFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will( $this->returnValue( array( new VersionInfo() ) ) );
+
+        $res = $handler->loadDraftsForUser( 23 );
+
+        $this->assertEquals(
+            array( new VersionInfo() ),
+            $res
+        );
+    }
+
+    /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::listVersions
      */

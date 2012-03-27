@@ -248,7 +248,7 @@ class ContentHandlerTest extends HandlerTest
             $versionInfos[0]->status
         );
         $this->assertEquals(
-            9,
+            $this->content->versionInfo->id,
             $versionInfos[1]->id
         );
         $this->assertEquals(
