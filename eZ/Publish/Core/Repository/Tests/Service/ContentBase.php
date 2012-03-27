@@ -309,10 +309,12 @@ abstract class ContentBase extends BaseServiceTest
      * @depends testNewContentCreateStruct
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return array
      */
     public function testCreateContent()
     {
+        $time = time();
+
         /* BEGIN: Use Case */
         $contentTypeService = $this->repository->getContentTypeService();
 
@@ -322,7 +324,7 @@ abstract class ContentBase extends BaseServiceTest
 
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreate->setField( 'subject', 'Hello' );
-        $contentCreate->setField( 'author', array( new Author( array( 'name' => 'Kenneth Kaunda' ) ) ) );
+        $contentCreate->setField( 'author', 'Kenneth Kaunda' );
         $contentCreate->setField( 'message', 'Regards from Nigeria' );
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
@@ -330,24 +332,38 @@ abstract class ContentBase extends BaseServiceTest
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
-        $content = $contentService->createContent( $contentCreate );
+        $contentDraft = $contentService->createContent( $contentCreate );
         /* END: Use Case */
 
-        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content );
+        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $contentDraft );
 
-        return $content;
+        return array(
+            "expected" => $contentCreate,
+            "actual"   => $contentDraft,
+            "time" => $time
+        );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @depends testCreateContent
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     *
+     * @param array $data
+     */
+    public function testCreateContentStructValues( array $data )
+    {
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
     }
 
     /**
      * Test for the newContentMetadataUpdateStruct() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::newContentMetadataUpdateStruct()
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct
      */
     public function testNewContentMetadataUpdateStruct()
     {
-        //$this->markTestIncomplete( "Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
@@ -358,20 +374,9 @@ abstract class ContentBase extends BaseServiceTest
             'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentMetadataUpdateStruct',
             $contentMetadataUpdateStruct
         );
-        return $contentMetadataUpdateStruct;
-    }
 
-    /**
-     * Test for the newContentMetadataUpdateStruct() method.
-     *
-     * @depends testNewContentMetadataUpdateStruct
-     *
-     * @param $contentMetadataUpdateStruct
-     * @return void
-     */
-    public function testNewContentMetadataUpdateStructValues( $contentMetadataUpdateStruct )
-    {
-        $this->markTestIncomplete( "Test for ContentService::newContentMetadataUpdateStruct() is not implemented." );
+        foreach ( $contentMetadataUpdateStruct as $propertyName => $propertyValue )
+            $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
     }
 
     /**
@@ -379,8 +384,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @depends testNewContentMetadataUpdateStruct
      * @covers \eZ\Publish\Core\Repository\ContentService::newContentUpdateStruct()
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public function testNewContentUpdateStruct()
     {
@@ -394,29 +397,20 @@ abstract class ContentBase extends BaseServiceTest
             'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
             $contentUpdateStruct
         );
-        return $contentUpdateStruct;
-    }
 
-    /**
-     * Test for the newContentUpdateStruct() method.
-     *
-     * @depends testNewContentUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentService::newContentUpdateStruct()
-     *
-     * @param $contentUpdateStruct
-     * @return void
-     */
-    public function testNewContentUpdateStructValues( $contentUpdateStruct )
-    {
-        $this->markTestIncomplete( "Test for ContentService::newContentUpdateStruct() is not implemented." );
+        $this->assertPropertiesCorrect(
+            array(
+                "initialLanguageCode" => null,
+                "fields" => array()
+            ),
+            $contentUpdateStruct
+        );
     }
 
     /**
      * Test for the newTranslationInfo() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo()
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
      */
     public function testNewTranslationInfo()
     {
@@ -430,29 +424,15 @@ abstract class ContentBase extends BaseServiceTest
             'eZ\\Publish\\API\\Repository\\Values\\Content\\TranslationInfo',
             $translationInfo
         );
-        return $translationInfo;
-    }
 
-    /**
-     * Test for the newTranslationInfo() method.
-     *
-     * @depends testNewTranslationInfo
-     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo()
-     *
-     * @param $translationInfo
-     * @return void
-     */
-    public function testNewTranslationInfoValues( $translationInfo )
-    {
-        $this->markTestIncomplete( "Test for ContentService::newTranslationInfo() is not implemented." );
+        foreach ( $translationInfo as $propertyName => $propertyValue )
+            $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
     }
 
     /**
      * Test for the newTranslationValues() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationValues()
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
      */
     public function testNewTranslationValues()
     {
@@ -466,20 +446,8 @@ abstract class ContentBase extends BaseServiceTest
             'eZ\\Publish\\API\\Repository\\Values\\Content\\TranslationValues',
             $translationValues
         );
-        return $translationValues;
-    }
 
-    /**
-     * Test for the newTranslationValues() method.
-     *
-     * @depends testNewTranslationValues
-     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationValues()
-     *
-     * @param $translationValues
-     * @return void
-     */
-    public function testNewTranslationValuesValues( $translationValues )
-    {
-        $this->markTestIncomplete( "Test for ContentService::newTranslationValues() is not implemented." );
+        foreach ( $translationValues as $propertyName => $propertyValue )
+            $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
     }
 }
