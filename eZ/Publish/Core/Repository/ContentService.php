@@ -43,10 +43,12 @@ use eZ\Publish\Core\Repository\FieldType\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Value;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Version as SPIVersion;
 use eZ\Publish\SPI\Persistence\Content\RestrictedVersion as SPIRestrictedVersion;
 use eZ\Publish\SPI\Persistence\ValueObject as SPIValueObject;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -54,10 +56,12 @@ use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as SPIFieldValue;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct;
 
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
@@ -118,9 +122,8 @@ class ContentService implements ContentServiceInterface
     {
         try
         {
-            $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
-                new CriterionContentId( $contentId )
-            );
+            $spiContentInfo = $this->persistenceHandler->contentHandler()
+                ->loadContentInfo( $contentId );
         }
         catch ( APINotFoundException $e )
         {
@@ -131,7 +134,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildContentInfoDomainObject( $spiContent );
+        return $this->buildContentInfoDomainObject( $spiContentInfo );
     }
 
     /**
@@ -145,6 +148,7 @@ class ContentService implements ContentServiceInterface
      * @param string $remoteId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @todo implement contentHandler::loadContentInfoByRemoteId?
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
@@ -163,38 +167,49 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildContentInfoDomainObject( $spiContent );
+        return $this->buildContentInfoDomainObject( $spiContent->contentInfo );
     }
 
     /**
      * Builds a ContentInfo domain object from value object returned from persistence
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $spiContent
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    protected function buildContentInfoDomainObject( SPIContent $spiContent )
+    protected function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
     {
-        $modificationDate = new \DateTime( "@{$spiContent->contentInfo->modificationDate}" );
-        $publishedDate = new \DateTime( "@{$spiContent->contentInfo->publicationDate}" );
-        $mainLocationId = count( $spiContent->locations ) ? reset( $spiContent->locations )->mainLocationId : null;
+        $modificationDate = new \DateTime( "@{$spiContentInfo->modificationDate}" );
+        $publishedDate = new \DateTime( "@{$spiContentInfo->publicationDate}" );
+
+        // @todo: temporary, this should be already available in $spiContentInfo
+        $spiContent = $this->persistenceHandler->contentHandler()->load( $spiContentInfo->contentId, $spiContentInfo->currentVersionNo );
+        $mainLocationId = null;
+        foreach ( $spiContent->locations as $spiLocation )
+        {
+            if ( $spiLocation->mainLocationId === $spiLocation->id )
+            {
+                $mainLocationId = $spiLocation->mainLocationId;
+                break;
+            }
+        }
 
         return new ContentInfo(
             array(
                 "repository"       => $this->repository,
-                "contentTypeId"    => $spiContent->contentInfo->contentTypeId,
+                "contentTypeId"    => $spiContentInfo->contentTypeId,
 
-                "contentId"        => $spiContent->contentInfo->contentId,
-                "name"             => $spiContent->versionInfo->names[$spiContent->contentInfo->mainLanguageCode],
-                "sectionId"        => $spiContent->contentInfo->sectionId,
-                "currentVersionNo" => $spiContent->contentInfo->currentVersionNo,
-                "published"        => $spiContent->contentInfo->isPublished,
-                "ownerId"          => $spiContent->contentInfo->ownerId,
+                "contentId"        => $spiContentInfo->contentId,
+                "name"             => $spiContentInfo->name,
+                "sectionId"        => $spiContentInfo->sectionId,
+                "currentVersionNo" => $spiContentInfo->currentVersionNo,
+                "published"        => $spiContentInfo->isPublished,
+                "ownerId"          => $spiContentInfo->ownerId,
                 "modificationDate" => $modificationDate,
                 "publishedDate"    => $publishedDate,
-                "alwaysAvailable"  => $spiContent->contentInfo->isAlwaysAvailable,
-                "remoteId"         => $spiContent->contentInfo->remoteId,
-                "mainLanguageCode" => $spiContent->contentInfo->mainLanguageCode,
+                "alwaysAvailable"  => $spiContentInfo->isAlwaysAvailable,
+                "remoteId"         => $spiContentInfo->remoteId,
+                "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
                 "mainLocationId"   => $mainLocationId
             )
         );
@@ -215,30 +230,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfo( APIContentInfo $contentInfo, $versionNo = null )
     {
-        try
-        {
-            if ( $versionNo === null )
-            {
-                $versionNo = $this->persistenceHandler->searchHandler()->findSingle(
-                    new CriterionContentId( $contentInfo->contentId )
-                )->contentInfo->currentVersionNo;
-            }
-
-            $spiContent = $this->persistenceHandler->contentHandler()->load(
-                $contentInfo->contentId,
-                $versionNo
-            );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "Content",
-                $contentInfo->contentId,
-                $e
-            );
-        }
-
-        return $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
+        return $this->loadVersionInfoById( $contentInfo->contentId, $versionNo );
     }
 
     /**
@@ -259,11 +251,10 @@ class ContentService implements ContentServiceInterface
         try
         {
             if ( $versionNo === null )
-                $versionNo = $this->persistenceHandler->searchHandler()->findSingle(
-                    new CriterionContentId( $contentId )
-                )->contentInfo->currentVersionNo;
+                $versionNo = $this->persistenceHandler->contentHandler()
+                    ->loadContentInfo( $contentId )->currentVersionNo;
 
-            $spiContent = $this->persistenceHandler->contentHandler()->load(
+            $spiVersionInfo = $this->persistenceHandler->contentHandler()->loadVersionInfo(
                 $contentId,
                 $versionNo
             );
@@ -277,7 +268,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
+        return $this->buildVersionInfoDomainObject( $spiVersionInfo );
     }
 
     /**
@@ -320,7 +311,7 @@ class ContentService implements ContentServiceInterface
     public function loadContentByVersionInfo( APIVersionInfo $versionInfo, array $languages = null )
     {
         $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $versionInfo->contentId,
+            $versionInfo->getContentInfo()->contentId,
             $versionInfo->versionNo,
             $languages
         );
@@ -347,11 +338,8 @@ class ContentService implements ContentServiceInterface
         try
         {
             if ( $versionNo === null )
-            {
-                $versionNo = $this->persistenceHandler->searchHandler()->findSingle(
-                    new CriterionContentId( $contentId )
-                )->contentInfo->currentVersionNo;
-            }
+                $versionNo = $this->persistenceHandler->contentHandler()
+                    ->loadContentInfo( $contentId )->currentVersionNo;
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(
                 $contentId,
@@ -389,9 +377,8 @@ class ContentService implements ContentServiceInterface
     {
         try
         {
-            $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
-                new CriterionRemoteId( $remoteId )
-            );
+            $spiContent = $this->persistenceHandler->searchHandler()
+                ->findSingle( new CriterionRemoteId( $remoteId ) );
         }
         catch ( APINotFoundException $e )
         {
@@ -402,14 +389,13 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        $contentId = $spiContent->contentInfo->contentId;
         if ( $versionNo === null )
         {
             $versionNo = $spiContent->contentInfo->currentVersionNo;
         }
 
         $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $contentId,
+            $spiContent->contentInfo->id,
             $versionNo,
             $languages
         );
@@ -484,6 +470,7 @@ class ContentService implements ContentServiceInterface
         foreach ( $contentCreateStruct->fields as $field )
         {
             $fieldDefinition = $contentCreateStruct->contentType->getFieldDefinition( $field->fieldDefIdentifier );
+
             if ( null === $fieldDefinition )
                 throw new ContentFieldValidationException(
                     "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
@@ -572,23 +559,94 @@ class ContentService implements ContentServiceInterface
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
             array(
-                "name"              => "Some name",
+                "name"              => array( "eng-US" => "Some name" ),
                 "typeId"            => $contentCreateStruct->contentType->id,
                 "sectionId"         => $contentCreateStruct->sectionId,
                 "ownerId"           => $contentCreateStruct->ownerId,
-                "locations"         => $locationCreateStructs,
+                "locations"         => $this->buildSPILocationCreateStructs( $locationCreateStructs ),
                 "fields"            => $spiFields,
                 "alwaysAvailable"   => $contentCreateStruct->alwaysAvailable,
                 "remoteId"          => $remoteId,
-                "initialLanguageId" => $contentCreateStruct->mainLanguageCode,
-                "published"         => time(),
+                "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $contentCreateStruct->mainLanguageCode )->id,
+                // Published timestamp for drafts is 0
+                "published"         => 0,
+                // @todo: modified timestamp for drafts is 0 in 4.x, verify that this is not extraneous
                 "modified"          => $modifiedTimestamp
             )
         );
 
-        $spiContent = $this->persistenceHandler->contentHandler()->create( $spiContentCreateStruct );
+        return $this->buildContentDomainObject(
+            $this->persistenceHandler->contentHandler()->create( $spiContentCreateStruct )
+        );
+    }
 
-        return $this->buildContentDomainObject( $spiContent );
+    /**
+     * Creates an array of SPI location create structs from given array of API location create structs
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct[]
+     */
+    protected function buildSPILocationCreateStructs( array $locationCreateStructs )
+    {
+        $spiLocationCreateStructs = array();
+
+        foreach ( $locationCreateStructs as $index => $locationCreateStruct )
+        {
+            $parentLocation = $this->repository->getLocationService()->loadLocation( $locationCreateStruct->parentLocationId );
+
+            if ( $locationCreateStruct->priority !== null && !is_numeric( $locationCreateStruct->priority ) )
+                throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
+
+            if ( !is_bool( $locationCreateStruct->hidden ) )
+                throw new InvalidArgumentValue( "hidden", $locationCreateStruct->hidden, "LocationCreateStruct" );
+
+            if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
+                throw new InvalidArgumentValue( "remoteId", $locationCreateStruct->remoteId, "LocationCreateStruct" );
+
+            if ( $locationCreateStruct->sortField !== null && !is_numeric( $locationCreateStruct->sortField ) )
+                throw new InvalidArgumentValue( "sortField", $locationCreateStruct->sortField, "LocationCreateStruct" );
+
+            if ( $locationCreateStruct->sortOrder !== null && !is_numeric( $locationCreateStruct->sortOrder ) )
+                throw new InvalidArgumentValue( "sortOrder", $locationCreateStruct->sortOrder, "LocationCreateStruct" );
+
+            if ( null === $locationCreateStruct->remoteId )
+            {
+                $locationCreateStruct->remoteId = md5( uniqid( get_class( $locationCreateStruct ), true ) );
+            }
+            else
+            {
+                try
+                {
+                    $this->repository->getLocationService()->loadLocationByRemoteId( $locationCreateStruct->remoteId );
+                    throw new InvalidArgumentException(
+                        "\$locationCreateStructs",
+                        "location with provided remote ID already exists"
+                    );
+                }
+                catch ( APINotFoundException $e ) {}
+            }
+
+            $spiLocationCreateStructs[] = new SPILocationCreateStruct(
+                array(
+                    "priority"                 => $locationCreateStruct->priority,
+                    "hidden"                   => $locationCreateStruct->hidden,
+                    "invisible"                => ( $locationCreateStruct->hidden === true || $parentLocation->hidden || $parentLocation->invisible ),
+                    "remoteId"                 => $locationCreateStruct->remoteId,
+                    // contentId and contentVersion are set in ContentHandler upon draft creation
+                    "contentId"                => null,
+                    "contentVersion"           => null,
+                    // @todo: set pathIdentificationString
+                    "pathIdentificationString" => null,
+                    "*mainLocationId"          => ( $index === 0 ),
+                    "sortField"                => $locationCreateStruct->sortField,
+                    "sortOrder"                => $locationCreateStruct->sortOrder,
+                    "parentId"                 => $locationCreateStruct->parentLocationId
+                )
+            );
+        }
+
+        return $spiLocationCreateStructs;
     }
 
     /**
@@ -602,11 +660,9 @@ class ContentService implements ContentServiceInterface
      * Validates a field against validators from FieldDefinition
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\Core\Repository\FieldType $fieldType
+     * @param \eZ\Publish\Core\Repository\FieldType\FieldType $fieldType
      * @param \eZ\Publish\Core\Repository\FieldType\Value $fieldValue
      * @param array $failedValidators
-     *
-     * @return \eZ\Publish\Core\Repository\FieldType\Validator[]
      */
     protected function validateField( FieldDefinition $fieldDefinition, FieldType $fieldType, Value $fieldValue, array &$failedValidators )
     {
@@ -667,21 +723,19 @@ class ContentService implements ContentServiceInterface
                 $this->persistenceHandler->searchHandler()->findSingle(
                     new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
                 );
-            }
-            catch ( APINotFoundException $e )
-            {
+
                 throw new InvalidArgumentException(
                     "\$contentMetadataUpdateStruct->remoteId",
-                    "remoteId already exists",
-                    $e
+                    "remoteId already exists"
                 );
             }
+            catch ( APINotFoundException $e ) {}
         }
 
         $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
             array(
                 "ownerId"          => $contentMetadataUpdateStruct->ownerId,
-                "name"             => $contentMetadataUpdateStruct->name,
+                "name"             => $contentMetadataUpdateStruct->name,//@todo name property is missing in API ContentMetaDataUpdateStruct
                 "publicationDate"  => isset( $contentMetadataUpdateStruct->publishedDate ) ?
                                         $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
                 "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
@@ -691,16 +745,16 @@ class ContentService implements ContentServiceInterface
                                             $contentMetadataUpdateStruct->mainLanguageCode
                                         )->id : null,
                 "alwaysAvailable"  => $contentMetadataUpdateStruct->alwaysAvailable,
-                "remoteId"         => $contentMetadataUpdateStruct->remoteId
+                "remoteId"         => $contentMetadataUpdateStruct->remoteId,
+                "mainLocationId"   => $contentMetadataUpdateStruct->mainLocationId,//@todo mainLocationId property is missing in SPI ContentMetaDataUpdateStruct
             )
+        );
+        $this->persistenceHandler->contentHandler()->updateMetadata(
+            $contentInfo->contentId,
+            $spiMetadataUpdateStruct
         );
 
-        return $this->buildContentDomainObject(
-            $this->persistenceHandler->contentHandler()->updateMetadata(
-                $contentInfo->contentId,
-                $spiMetadataUpdateStruct
-            )
-        );
+        return $this->loadContent( $contentInfo->contentId );
     }
 
     /**
@@ -737,6 +791,10 @@ class ContentService implements ContentServiceInterface
             if ( $versionInfo->status === VersionInfo::STATUS_DRAFT )
             {
                 // @TODO: throw an exception here, to be defined
+                throw new BadStateException(
+                    "\$versionInfo->status",
+                    "draft can not be created from a draft version"
+                );
             }
 
             $versionNo = $versionInfo->versionNo;
@@ -748,17 +806,18 @@ class ContentService implements ContentServiceInterface
         else
         {
             // @TODO: throw an exception here, to be defined
+            throw new BadStateException(
+                "\$contentInfo->published",
+                "content is not published, draft can be created only from published or archived version"
+            );
         }
 
-        $spiVersion = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
+        $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
             $contentInfo->contentId,
             $versionNo
         );
 
-        return $this->buildContentDomainObjectFromSPIVersion(
-            $spiVersion,
-            $contentInfo->getContentType()->id
-        );
+        return $this->buildContentDomainObject( $spiContent );
     }
 
     /**
@@ -774,9 +833,39 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentDrafts( User $user = null )
     {
-        // @TODO: no way to do this exists ATM
-    }
+        if ( !isset( $user ) )
+            $user = $this->repository->getCurrentUser();
 
+        /** @var $spiVersionInfoList \eZ\Publish\SPI\Persistence\Content\VersionInfo[] */
+        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser( $user->id );
+        $languageCodes = array();
+
+        $versionInfoList = array();
+        foreach ( $spiVersionInfoList as $spiVersionInfo )
+        {
+            foreach ( $spiVersionInfo->languageIds as $languageId )
+            {
+                $languageCodes[] = $this->persistenceHandler->contentLanguageHandler()->load( $languageId );
+            }
+
+            $versionInfoList[] = new VersionInfo(
+                array(
+                    "id"                  => $spiVersionInfo->id,
+                    "versionNo"           => $spiVersionInfo->versionNo,
+                    "modificationDate"    => new \DateTime( "@{$spiVersionInfo->modificationDate}" ),
+                    "creatorId"           => $spiVersionInfo->creatorId,
+                    "creationDate"        => new \DateTime( "@{$spiVersionInfo->creationDate}" ),
+                    "status"              => $spiVersionInfo->status,
+                    "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
+                    "languageCodes"       => $languageCodes,
+                    // implementation properties
+                    "contentId"           => $spiVersionInfo->contentId
+                )
+            );
+        }
+
+        return $versionInfoList;
+    }
 
     /**
      * Translate a version
@@ -924,7 +1013,11 @@ class ContentService implements ContentServiceInterface
             )
         );
 
-        $spiContent = $this->persistenceHandler->contentHandler()->updateContent( $spiContentUpdateStruct );
+        $spiContent = $this->persistenceHandler->contentHandler()->updateContent(
+            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->versionNo,
+            $spiContentUpdateStruct
+        );
 
         return $this->buildContentDomainObject( $spiContent );
     }
@@ -944,21 +1037,24 @@ class ContentService implements ContentServiceInterface
         if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
             throw new BadStateException( "versionInfo", "only versions in draft status can be published" );
 
-        $updateStruct = new SPIContentUpdateStruct();
+        $metadataUpdateStruct = new SPIMetadataUpdateStruct(
+            array(
+                // Null properties will be skipped during update
+                "ownerId"          => null,
+                "name"             => null,
+                "publicationDate"  => null,
+                "modificationDate" => time(),
+                "mainLanguageId"   => null,
+                "alwaysAvailable"  => null,
+                "remoteId"         => null
+            )
+        );
 
-        $updateStruct->name = $versionInfo->getNames();
-        $updateStruct->creatorId = $versionInfo->creatorId;
-        // we need not to update any fields if only publishing the version
-        $updateStruct->fields = array();
-        $updateStruct->modificationDate = time();
-
-        $updateStruct->initialLanguageId = $this->repository
-            ->getContentLanguageService()
-            ->loadLanguage(
-                $versionInfo->initialLanguageCode
-            )->id;
-
-        $publishedContent = $this->persistenceHandler->contentHandler()->publish( $updateStruct );
+        $publishedContent = $this->persistenceHandler->contentHandler()->publish(
+            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->versionNo,
+            $metadataUpdateStruct
+        );
 
         return $this->buildContentDomainObject( $publishedContent );
     }
@@ -973,7 +1069,18 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteVersion( APIVersionInfo $versionInfo )
     {
-        // TODO: no way to remove a single version ATM
+        if ( $versionInfo->status === APIVersionInfo::STATUS_PUBLISHED )
+        {
+            throw new BadStateException(
+                "\$versionInfo->status",
+                "given version is published and can not be removed"
+            );
+        }
+
+        $success = $this->persistenceHandler->contentHandler()->deleteVersion(
+            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->versionNo
+        );
     }
 
     /**
@@ -995,12 +1102,14 @@ class ContentService implements ContentServiceInterface
             $versions[] = $this->buildVersionInfoDomainObject( $spiRestrictedVersion );
         }
 
-        $sorter = function( $a, $b )
-        {
-            if ( $a->createdDate->getTimestamp() === $b->createdDate->getTimestamp() ) return 0;
-            return ( $a->createdDate->getTimestamp() < $b->createdDate->getTimestamp() ) ? -1 : 1;
-        };
-        usort( $versions, $sorter );
+        usort(
+            $versions,
+            function( $a, $b )
+            {
+                if ( $a->createdDate->getTimestamp() === $b->createdDate->getTimestamp() ) return 0;
+                return ( $a->createdDate->getTimestamp() < $b->createdDate->getTimestamp() ) ? -1 : 1;
+            }
+        );
 
         return $versions;
     }
@@ -1030,7 +1139,7 @@ class ContentService implements ContentServiceInterface
             $destinationLocationCreateStruct
         );
 
-        return $this->loadContent( $spiContent->id );
+        return $this->loadContent( $spiContent->contentInfo->contentId );
     }
 
     /**
@@ -1065,13 +1174,15 @@ class ContentService implements ContentServiceInterface
                     foreach ( $spiSearchResult->content as $spiContent )
                     {
                         if ( !isset( $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] ) )
-                            $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] = $spiContent->fields;
+                            $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] =
+                                $spiContent->fields;
 
-                        $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] = $this->filterFieldsByLanguages(
-                            $spiContent->contentInfo->contentTypeId,
-                            $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id],
-                            $filterSettings
-                        );
+                        $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] =
+                            $this->filterFieldsByLanguages(
+                                $spiContent->contentInfo->contentTypeId,
+                                $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id],
+                                $filterSettings
+                            );
                     }
                     break;
             }
@@ -1410,6 +1521,7 @@ class ContentService implements ContentServiceInterface
             array(
                 "repository"               => $this->repository,
                 "contentId"                => $spiContent->contentInfo->contentId,
+                "versionNo"                => $spiContent->versionInfo->versionNo,
                 "contentTypeId"            => $spiContent->contentInfo->contentTypeId,
                 "internalFields"           => $fields,
                 // @TODO: implement loadRelations()
@@ -1442,28 +1554,6 @@ class ContentService implements ContentServiceInterface
         }
 
         return $fields;
-    }
-
-    /**
-     * Builds a Content domain object from persistence Version object
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Version $spiVersion
-     * @param int $contentTypeId
-     *
-     * @return \eZ\Publish\Core\Repository\Values\Content\Content
-     */
-    protected function buildContentDomainObjectFromSPIVersion( SPIVersion $spiVersion, $contentTypeId )
-    {
-        return new Content(
-            array(
-                "repository"               => $this->repository,
-                "contentId"                => $spiVersion->contentId,
-                "contentTypeId"            => $contentTypeId,
-                "internalFields"           => $spiVersion->fields,
-                // @TODO: implement loadRelations()
-                //"relations"                => $this->loadRelations( $versionInfo )
-            )
-        );
     }
 
     /**
