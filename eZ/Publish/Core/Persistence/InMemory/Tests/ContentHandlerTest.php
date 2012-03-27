@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
@@ -159,7 +160,18 @@ class ContentHandlerTest extends HandlerTest
      */
     public function testPublish()
     {
-        $this->markTestIncomplete( "Test for ContentHandler::publish() is not implemented." );
+        $contentHandler = $this->persistenceHandler->contentHandler();
+        $time = time();
+        $metadataUpdateStruct = new MetadataUpdateStruct( array( "modificationDate" => $time ) );
+
+        $publishedContent = $contentHandler->publish( 1, 2, $metadataUpdateStruct );
+
+        $this->assertEquals( 2, $publishedContent->contentInfo->currentVersionNo );
+        $this->assertTrue( $publishedContent->contentInfo->isPublished );
+        $this->assertEquals( $time, $publishedContent->contentInfo->modificationDate );
+
+        $this->assertEquals( VersionInfo::STATUS_PUBLISHED, $publishedContent->versionInfo->status );
+        $this->assertEquals( $time, $publishedContent->versionInfo->modificationDate );
     }
 
     /**

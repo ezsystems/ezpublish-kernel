@@ -725,12 +725,13 @@ class ContentHandler implements ContentHandlerInterface
             'contentId'
         );
 
-        // Update VersionInfo with modified timestamp
+        // Update VersionInfo with modified timestamp and published status
         $this->backend->updateByMatch(
             'Content\\VersionInfo',
             array( 'contentId' => $contentId, 'versionNo' => $versionNo ),
             array(
-                "modified" => $metaDataUpdateStruct->modificationDate,
+                "modificationDate" => $metaDataUpdateStruct->modificationDate,
+                "status" => VersionInfo::STATUS_PUBLISHED,
             )
         );
 
