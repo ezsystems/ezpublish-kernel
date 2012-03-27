@@ -28,12 +28,12 @@ class VersionInfo extends APIVersionInfo
     /**
      * @var mixed
      */
-    private $contentId;
+    protected $contentId;
 
     /**
      * @var array
      */
-    private $names;
+    protected $names;
 
     /**
      * Content of the content this version belongs to.
