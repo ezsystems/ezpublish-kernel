@@ -72,35 +72,21 @@ class ContentHandler implements ContentHandlerInterface
                 'publicationDate' => 0,
                 'isAlwaysAvailable' => $content->alwaysAvailable,
                 'remoteId' => $content->remoteId,
-                'mainLanguageCode' => $content->initialLanguageId,
-
+                'mainLanguageCode' => $this->handler->contentLanguageHandler()
+                    ->load( $content->initialLanguageId )->languageCode
             ),
             true,
             'contentId'
         );
         $time = time();
-        $versionInfo = $this->backend->create(
-            'Content\\VersionInfo',
-            array(
-                // @todo: Name should be computed!
-                'names' => $content->name,
-                'modificationDate' => $time,
-                'creatorId' => $content->ownerId,
-                'creationDate' => $time,
-                'contentId' => $contentObj->contentInfo->contentId,
-                'status' => VersionInfo::STATUS_DRAFT,
-                'versionNo' => 1,
-                'initialLanguageCode' => $this->handler->contentLanguageHandler()
-                    ->load( $content->initialLanguageId )->languageCode
-            )
-        );
         $languageCodes = array();
+        $languageIds = array();
         foreach ( $content->fields as $field )
         {
             $contentObj->fields[] = $this->backend->create(
                 'Content\\Field',
                 array(
-                    'versionNo' => $versionInfo->versionNo,
+                    'versionNo' => 1,
                     // Using internal _contentId since it's not directly exposed by Persistence
                     '_contentId' => $contentObj->contentInfo->contentId,
                     'value' => new FieldValue(
@@ -115,15 +101,31 @@ class ContentHandler implements ContentHandlerInterface
         }
         foreach ( array_unique( $languageCodes ) as $languageCode )
         {
-            $versionInfo->languageIds[] = $this->handler->contentLanguageHandler()
+            $languageIds[] = $this->handler->contentLanguageHandler()
                 ->loadByLanguageCode( $languageCode )->id;
         }
+        $versionInfo = $this->backend->create(
+            'Content\\VersionInfo',
+            array(
+                // @todo: Name should be computed!
+                'names' => $content->name,
+                'modificationDate' => $time,
+                'creatorId' => $content->ownerId,
+                'creationDate' => $time,
+                'contentId' => $contentObj->contentInfo->contentId,
+                'status' => VersionInfo::STATUS_DRAFT,
+                'versionNo' => 1,
+                'languageIds' => $languageIds,
+                'initialLanguageCode' => $this->handler->contentLanguageHandler()
+                    ->load( $content->initialLanguageId )->languageCode
+            )
+        );
         $contentObj->versionInfo = $versionInfo;
 
         $locationHandler = $this->handler->locationHandler();
         foreach ( $content->locations as $locationStruct )
         {
-            $locationStruct->contentId = $contentObj->id;
+            $locationStruct->contentId = $contentObj->contentInfo->contentId;
             $locationStruct->contentVersion = $contentObj->contentInfo->currentVersionNo;
             $contentObj->locations[] = $locationHandler->create( $locationStruct );
         }
