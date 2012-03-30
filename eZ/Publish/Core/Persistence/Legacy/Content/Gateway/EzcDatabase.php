@@ -372,10 +372,10 @@ class EzcDatabase extends Gateway
             return;
 
         /*
-            * alwaysAvailable bit field value is 1 in language mask.
-            * Thanks to the XOR (^) operator, alwaysAvailable bit field will be the exact opposite
-            * of the previous one in $newLanguageMask.
-            */
+         * alwaysAvailable bit field value is 1 in language mask.
+         * Thanks to the XOR (^) operator, alwaysAvailable bit field will be the exact opposite
+         * of the previous one in $newLanguageMask.
+         */
         $newLanguageMask = $langMaskInfo['language_mask'] ^ 1;
         $q = $this->dbHandler->createUpdateQuery();
         $q
@@ -445,10 +445,11 @@ class EzcDatabase extends Gateway
      *  - language_mask (Current language mask)
      *  - initial_language_id
      *  - main_language_code
+     *  - always_available
      *
      * @param int $contentId
      * @return array
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound Thrown if content cannot be found
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException Thrown if content cannot be found
      */
     private function getLanguageMaskInfo( $contentId )
     {
@@ -457,7 +458,8 @@ class EzcDatabase extends Gateway
             'current_version'       => (int)$row['current_version'],
             'language_mask'         => $row['language_mask'],
             'initial_language_id'   => (int)$row['initial_language_id'],
-            'main_language_code'    => $row['main_language_code']
+            'main_language_code'    => $row['main_language_code'],
+            'always_available'      => $row['always_available']
         );
     }
 
@@ -776,7 +778,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @return array
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function loadContentInfo( $contentId )
     {
