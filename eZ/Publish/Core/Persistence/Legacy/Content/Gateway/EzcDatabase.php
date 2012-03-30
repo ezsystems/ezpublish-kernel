@@ -267,7 +267,7 @@ class EzcDatabase extends Gateway
         {
             $q->set(
                 $this->dbHandler->quoteColumn( 'name' ),
-                $q->bindValue( $struct->name, null, \PDO::PARAM_INT )
+                $q->bindValue( $struct->name, null, \PDO::PARAM_STR )
             );
         }
         if ( isset( $struct->mainLanguageId ) )
@@ -302,7 +302,7 @@ class EzcDatabase extends Gateway
         {
             $q->set(
                 $this->dbHandler->quoteColumn( 'remote_id' ),
-                $q->bindValue( $struct->remoteId, null, \PDO::PARAM_INT )
+                $q->bindValue( $struct->remoteId, null, \PDO::PARAM_STR )
             );
         }
 

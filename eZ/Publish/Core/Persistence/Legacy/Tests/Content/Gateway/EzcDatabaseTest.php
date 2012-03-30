@@ -396,7 +396,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id' => '3',
                     'modified' => '234567',
                     'owner_id' => '42',
-                    'published' => '123456'
+                    'published' => '123456',
+                    'remote_id' => 'ghjk1234567890ghjk1234567890',
+                    'name' => 'Thoth'
                 )
             ),
             $this->getDatabaseHandler()->createSelectQuery()
@@ -404,7 +406,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id',
                     'modified',
                     'owner_id',
-                    'published'
+                    'published',
+                    'remote_id',
+                    'name'
                 )->from( 'ezcontentobject' )
                 ->where( 'id = 10' )
         );
@@ -437,6 +441,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->publicationDate = 123456;
         $struct->mainLanguageId = 3;
         $struct->modificationDate = 234567;
+        $struct->remoteId = "ghjk1234567890ghjk1234567890";
+        $struct->name = "Thoth";
         return $struct;
     }
 
