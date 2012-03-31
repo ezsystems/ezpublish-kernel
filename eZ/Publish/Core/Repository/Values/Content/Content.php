@@ -204,8 +204,11 @@ class Content extends APIContent
     }
 
     /**
-     * @param $property
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo|\eZ\Publish\API\Repository\Values\Content\VersionInfo|\eZ\Publish\API\Repository\Values\ContentType\ContentType|mixed
+     * Magic getter for retrieving convenience properties
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
      */
     public function __get( $property )
     {
@@ -225,16 +228,21 @@ class Content extends APIContent
     }
 
     /**
-     * @param $property
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
      * @return bool
      */
     public function __isset( $property )
     {
         if ( $property === 'contentType' )
             return true;
-        else if ( $property === 'contentInfo' )
+
+        if ( $property === 'contentInfo' )
             return true;
-        else if ( $property === 'versionInfo' )
+
+        if ( $property === 'versionInfo' )
             return true;
 
         return parent::__isset( $property );

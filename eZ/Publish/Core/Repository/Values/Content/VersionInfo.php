@@ -74,6 +74,13 @@ class VersionInfo extends APIVersionInfo
         return null;
     }
 
+    /**
+     * Magic getter for retrieving convenience properties
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
     public function __get( $property )
     {
         switch ( $property )
@@ -82,5 +89,20 @@ class VersionInfo extends APIVersionInfo
                 return $this->getContentInfo();
         }
         return parent::__get( $property );
+    }
+
+    /**
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'contentInfo' )
+            return true;
+
+        return parent::__isset( $property );
     }
 }

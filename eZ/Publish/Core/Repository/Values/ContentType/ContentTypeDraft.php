@@ -10,19 +10,39 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
  */
 class ContentTypeDraft extends APIContentTypeDraft
 {
-    public function __get( $propertyName )
+    /**
+     * Magic getter for ruting get's to innerContentType
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
+    public function __get( $property )
     {
-        return $this->innerContentType->$propertyName;
+        return $this->innerContentType->$property;
     }
 
-    public function __set( $propertyName, $propertyValue )
+    /**
+     * Magic set for ruting set calls to innerContentType
+     *
+     * @param string $property
+     * @param mixed $propertyValue
+     */
+    public function __set( $property, $propertyValue )
     {
-        $this->innerContentType->$propertyName = $propertyValue;
+        $this->innerContentType->$property = $propertyValue;
     }
 
-    public function __isset( $propertyName )
+    /**
+     * Magic isset for ruting isset calls to innerContentType
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    public function __isset( $property )
     {
-        return isset( $this->innerContentType->$propertyName );
+        return isset( $this->innerContentType->$property );
     }
 
     /**

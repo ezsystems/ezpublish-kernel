@@ -42,6 +42,13 @@ class ContentInfo extends APIContentInfo
         return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
     }
 
+    /**
+     * Magic getter for retrieving convenience properties
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
     public function __get( $property )
     {
         switch ( $property )
@@ -50,5 +57,20 @@ class ContentInfo extends APIContentInfo
                 return $this->getContentType();
         }
         return parent::__get( $property );
+    }
+
+    /**
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'contentType' )
+            return true;
+
+        return parent::__isset( $property );
     }
 }
