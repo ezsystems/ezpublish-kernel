@@ -203,6 +203,10 @@ class Content extends APIContent
         return $this->repository->getContentService()->loadContentInfo( $this->contentId );
     }
 
+    /**
+     * @param $property
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo|\eZ\Publish\API\Repository\Values\Content\VersionInfo|\eZ\Publish\API\Repository\Values\ContentType\ContentType|mixed
+     */
     public function __get( $property )
     {
         switch ( $property )
@@ -218,5 +222,21 @@ class Content extends APIContent
         }
 
         return parent::__get( $property );
+    }
+
+    /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'contentType' )
+            return true;
+        else if ( $property === 'contentInfo' )
+            return true;
+        else if ( $property === 'versionInfo' )
+            return true;
+
+        return parent::__isset( $property );
     }
 }
