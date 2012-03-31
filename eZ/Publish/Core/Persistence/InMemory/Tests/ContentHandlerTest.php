@@ -52,7 +52,7 @@ class ContentHandlerTest extends HandlerTest
         parent::setUp();
 
         $struct = new CreateStruct();
-        $struct->name = "test";
+        $struct->name = array( "eng-GB" => "Welcome" );
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
@@ -172,6 +172,39 @@ class ContentHandlerTest extends HandlerTest
 
         $this->assertEquals( VersionInfo::STATUS_PUBLISHED, $publishedContent->versionInfo->status );
         $this->assertEquals( $time, $publishedContent->versionInfo->modificationDate );
+    }
+
+    /**
+     * Test for the updateMetadata() function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::updateMetadata()
+     * @group contentHandler
+     */
+    public function testUpdateMetadata()
+    {
+        $contentHandler = $this->persistenceHandler->contentHandler();
+        $updateStruct = new MetadataUpdateStruct(
+            array(
+                "ownerId"          => 10,
+                "name"             => "the all new name",
+                "publicationDate"  => time(),
+                "modificationDate" => time(),
+                "mainLanguageId"   => 4,
+                "alwaysAvailable"  => false,
+                "remoteId"         => "the-all-new-remoteid"
+            )
+        );
+
+        $contentInfo = $contentHandler->updateMetadata( 4, $updateStruct );
+
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo", $contentInfo );
+        $this->assertEquals( $updateStruct->ownerId, $contentInfo->ownerId );
+        $this->assertEquals( $updateStruct->name, $contentInfo->name );
+        $this->assertEquals( $updateStruct->publicationDate, $contentInfo->publicationDate );
+        $this->assertEquals( $updateStruct->modificationDate, $contentInfo->modificationDate );
+        $this->assertEquals( "eng-GB", $contentInfo->mainLanguageCode );
+        $this->assertFalse( $contentInfo->isAlwaysAvailable );
+        $this->assertEquals( $updateStruct->remoteId, $contentInfo->remoteId );
     }
 
     /**
@@ -346,40 +379,47 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * Test update function
+     * Test updateContent function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::update
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::updateContent
      * @group contentHandler
      */
-    public function testUpdate()
+    public function testUpdateContent()
     {
-        self::markTestSkipped();
+        $time = time();
         $struct = new UpdateStruct;
-        $struct->id = $this->contentId;
-        $struct->versionNo = 1;
-        $struct->name = array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" );
+        $struct->name = array( "eng-GB" => "All shiny new name" );
         $struct->creatorId = 10;
-        $struct->ownerId = 10;
+        $struct->modificationDate = $time;
+        $struct->initialLanguageId = 2;
         $struct->fields[] = new Field(
             array(
-                "type" => "ezstring",
+                "id" => $this->content->fields[0]->id,
                 "value" => new FieldValue(
                     array(
-                        "data" => "Welcome2"
+                        "data" => "Welcome back"
                     )
-                ),
-                "languageCode" => "eng-GB",
+                )
             )
         );
 
-        $content = $this->persistenceHandler->contentHandler()->update( $struct );
+        $content = $this->persistenceHandler->contentHandler()->updateContent( $this->contentId, 1, $struct );
+
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->contentInfo->contentId );
-        $this->assertEquals( VersionInfo::STATUS_DRAFT, $content->status );
-        $this->assertEquals( 10, $content->ownerId );
-        $this->assertEquals( array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" ), $content->versionInfo->name );
+        $this->assertEquals( VersionInfo::STATUS_DRAFT, $content->versionInfo->status );
+        $this->assertEquals( 10, $content->versionInfo->creatorId );
+        $this->assertEquals( $time, $content->versionInfo->modificationDate );
+        $this->assertEquals( array( "eng-GB" => "All shiny new name" ), $content->versionInfo->names );
+        $this->assertEquals(
+            $this->persistenceHandler->contentLanguageHandler()->load( $struct->initialLanguageId )->languageCode,
+            $content->versionInfo->initialLanguageCode
+        );
 
-        // @todo Test fields!
+        $this->assertEquals(
+            reset( $struct->fields )->value->data,
+            reset( $content->fields )->value->data
+        );
     }
 
     /**

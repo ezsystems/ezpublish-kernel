@@ -138,7 +138,7 @@ interface Handler
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\ContentInfo
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content );
 
