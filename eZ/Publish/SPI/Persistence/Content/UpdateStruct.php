@@ -21,7 +21,7 @@ class UpdateStruct extends ValueObject
     public $name = array();
 
     /**
-     * Creator's ID for the new version
+     * Creator user ID for the version
      *
      * @var int
      */
