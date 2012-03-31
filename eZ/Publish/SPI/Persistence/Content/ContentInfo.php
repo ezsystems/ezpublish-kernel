@@ -22,88 +22,87 @@ class ContentInfo extends ValueObject
     const STATUS_ARCHIVED = 2;
 
     /**
-   	 * Content's unique ID
+     * Content's unique ID
      *
- 	 * @var mixed
- 	 */
-	public $contentId;
+     * @var mixed
+     */
+    public $contentId;
 
-	/**
- 	 * Computed name (via name schema) in the main language
+    /**
+     * Computed name (via name schema) in the main language
      *
- 	 * @var string
- 	 */
-	public $name;
+     * @var string
+     */
+    public $name;
 
-	/**
- 	 * Content type Id
+    /**
+     * Content type Id
      *
- 	 * @var int
- 	 */
-	public $contentTypeId;
+     * @var int
+     */
+    public $contentTypeId;
 
-	/**
- 	 * Section id the content is assigned to
+    /**
+     * Section id the content is assigned to
      *
- 	 * @var int
- 	 */
-	public $sectionId;
+     * @var int
+     */
+    public $sectionId;
 
-	/**
- 	 * Version number of the current published version.
+    /**
+     * Version number of the current published version.
      * If the content is not published yet (newly created draft), will be 1
- 	 *
- 	 * @var int
- 	 */
-	public $currentVersionNo;
-
-
-	/**
- 	 * Flag indicating if content is currently published
- 	 *
- 	 * @var boolean
- 	 */
-	public $isPublished;
-
-	/**
- 	 * Content owner's id
- 	 *
- 	 * @var int
- 	 */
-	public $ownerId;
-
-	/**
- 	 * Content modification date, as a UNIX timestamp
      *
- 	 * @var int
- 	 */
-	public $modificationDate;
+     * @var int
+     */
+    public $currentVersionNo;
 
-	/**
- 	 * Content publication date, as a UNIX timestamp
+    /**
+     * Flag indicating if content is currently published
      *
- 	 * @var int
- 	 */
-	public $publicationDate;
+     * @var boolean
+     */
+    public $isPublished;
 
-	/**
- 	 * Indicates if the content is shown in the main language if its not present in an other requested language
+    /**
+     * Content owner's id
      *
- 	 * @var boolean
- 	 */
-	public $isAlwaysAvailable;
+     * @var int
+     */
+    public $ownerId;
 
-	/**
- 	 * Remote identifier used as a custom identifier for the object
+    /**
+     * Content modification date, as a UNIX timestamp
      *
- 	 * @var string
- 	 */
-	public $remoteId;
+     * @var int
+     */
+    public $modificationDate;
 
-	/**
- 	 * The main language code of the content.
+    /**
+     * Content publication date, as a UNIX timestamp
      *
- 	 * @var string
- 	 */
-	public $mainLanguageCode;
+     * @var int
+     */
+    public $publicationDate;
+
+    /**
+     * Indicates if the content is shown in the main language if its not present in an other requested language
+     *
+     * @var boolean
+     */
+    public $isAlwaysAvailable;
+
+    /**
+     * Remote identifier used as a custom identifier for the object
+     *
+     * @var string
+     */
+    public $remoteId;
+
+    /**
+     * The main language code of the content.
+     *
+     * @var string
+     */
+    public $mainLanguageCode;
 }
