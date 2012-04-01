@@ -406,28 +406,59 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * Updates a content object meta data, identified by $contentId
-     *
-     * @param int $contentId
-     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
-        throw new \Exception( 'Not implemented yet' );
+        $updateData = (array) $content;
+        $updateData["isAlwaysAvailable"] = $updateData["alwaysAvailable"];
+        $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
+            ->load( $content->mainLanguageId )->languageCode;
+
+        $this->backend->update(
+            "Content\\ContentInfo",
+            $contentId,
+            $updateData,
+            true,
+            "contentId"
+        );
+
+        return $this->loadContentInfo( $contentId );
     }
 
     /**
-     * Updates a content version, identified by $contentId and $versionNo
-     *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\Content
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function updateContent( $contentId, $versionNo, UpdateStruct $content )
     {
-        throw new \Exception( 'Not implemented yet' );
+        $versionUpdateData = array();
+        if ( isset( $content->creatorId ) ) $versionUpdateData["creatorId"] = $content->creatorId;
+        if ( isset( $content->modificationDate ) ) $versionUpdateData["modificationDate"] = $content->modificationDate;
+        if ( isset( $content->initialLanguageId ) ) $versionUpdateData["initialLanguageId"] = $content->initialLanguageId;
+        if ( !empty( $content->name ) )
+        {
+            $versionNames = $this->loadVersionInfo( $contentId, $versionNo )->names;
+            foreach ( $versionNames as $languageCode => &$versionName )
+                if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
+            $versionUpdateData["names"] = $versionNames;
+        }
+
+        $this->backend->updateByMatch(
+            "Content\\VersionInfo",
+            array( "contentId" => $contentId, "versionNo" => $versionNo ),
+            $versionUpdateData
+        );
+
+        foreach ( $content->fields as $field )
+        {
+            $this->backend->update(
+                "Content\\Field",
+                $field->id,
+                array( "value" => $field->value )
+            );
+        }
+
+        return $this->load( $contentId, $versionNo );
     }
 
     /**
