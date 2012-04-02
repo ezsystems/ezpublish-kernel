@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\REST\Client;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Values\Content\Language;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 

@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\REST\Client;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use \eZ\Publish\API\Repository\Values\User\Policy;
