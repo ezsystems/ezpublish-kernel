@@ -140,10 +140,10 @@ class EzcDatabase extends Gateway
             $q->bindValue( $struct->remoteId )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
-            $q->bindValue( $struct->modified, null, \PDO::PARAM_INT )
+            $q->bindValue( 0, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'published' ),
-            $q->bindValue( $struct->published, null, \PDO::PARAM_INT )
+            $q->bindValue( 0, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
             $q->bindValue( ContentInfo::STATUS_DRAFT, null, \PDO::PARAM_INT )
