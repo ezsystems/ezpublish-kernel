@@ -531,6 +531,21 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test getFieldDefinition function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::getFieldDefinition
+     */
+    public function testGetFieldDefinition()
+    {
+        $handler = $this->persistenceHandler->ContentTypeHandler();
+
+        $fieldDefinition = $handler->getFieldDefinition( 1, 0 );
+
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition", $fieldDefinition );
+        $this->assertEquals( "name", $fieldDefinition->identifier );
+    }
+
+    /**
      * Test addFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::addFieldDefinition

@@ -706,6 +706,39 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads an array with data about field definition referred $id and $status.
+     *
+     * @param mixed $id field definition id
+     * @param int $status field definition status
+     *
+     * @return array Data rows.
+     */
+    public function loadFieldDefinition( $id, $status )
+    {
+        $q = $this->dbHandler->createSelectQuery();
+        $this->selectColumns( $q, "ezcontentclass_attribute" );
+        $q->from(
+            $this->dbHandler->quoteTable( "ezcontentclass_attribute" )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( "id", "ezcontentclass_attribute" ),
+                    $q->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( "version", "ezcontentclass_attribute" ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetch( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Deletes a field definition.
      *
      * @param mixed $typeId
