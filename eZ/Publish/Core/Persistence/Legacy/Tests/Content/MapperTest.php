@@ -151,16 +151,15 @@ class MapperTest extends TestCase
             ->method( 'loadByLanguageCode' )
             ->with( 'eng-GB' )
             ->will(
-            $this->returnValue(
-                new Language(
-                    array(
-                        'id' => 2,
-                        'languageCode' => 'eng-GB',
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-GB',
+                        )
                     )
                 )
-            )
-        );
-        $time = time();
+            );
         $versionInfo = $mapper->createVersionInfoForContent(
             $content,
             1,
@@ -181,9 +180,6 @@ class MapperTest extends TestCase
             ),
             $versionInfo
         );
-
-        $this->assertGreaterThanOrEqual( $time, $versionInfo->modificationDate );
-        $this->assertGreaterThanOrEqual( $time, $versionInfo->creationDate );
     }
 
     /**
@@ -441,7 +437,6 @@ class MapperTest extends TestCase
         self::assertSame( $content->contentInfo->contentTypeId, $struct->typeId );
         self::assertSame( 2, $struct->initialLanguageId );
         self::assertSame( $content->contentInfo->isAlwaysAvailable, $struct->alwaysAvailable );
-        self::assertSame( $content->contentInfo->publicationDate, $struct->published );
         self::assertSame( $content->contentInfo->modificationDate, $struct->modified );
 
     }

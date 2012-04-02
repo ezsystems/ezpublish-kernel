@@ -81,17 +81,17 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'name' => 'Content name',
-                    'contentclass_id' => '23',
-                    'section_id' => '42',
-                    'owner_id' => '13',
-                    'current_version' => '1',
+                    'name'                => 'Content name',
+                    'contentclass_id'     => '23',
+                    'section_id'          => '42',
+                    'owner_id'            => '13',
+                    'current_version'     => '1',
                     'initial_language_id' => '1',
-                    'remote_id' => 'some_remote_id',
-                    'language_mask' => '1',
-                    'modified' => '456',
-                    'published' => '123',
-                    'status' => ContentInfo::STATUS_DRAFT,
+                    'remote_id'           => 'some_remote_id',
+                    'language_mask'       => '1',
+                    'modified'            => '0',
+                    'published'           => '0',
+                    'status'              => ContentInfo::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -129,7 +129,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->initialLanguageId = 1;
         $struct->remoteId = 'some_remote_id';
         $struct->alwaysAvailable = true;
-        $struct->published = 123;
         $struct->modified = 456;
         $struct->name = array(
             'always-available' => 'eng-US',
