@@ -112,6 +112,7 @@ class ContentHandlerTest extends HandlerTest
         $struct->sectionId = 1;
         $struct->typeId = 2;
         $struct->initialLanguageId = 4;
+        $struct->modified = time();
         $struct->fields[] = new Field(
             array(
                 'type' => 'ezstring',
@@ -125,7 +126,6 @@ class ContentHandlerTest extends HandlerTest
             )
         );
 
-        $time = time();
         $content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $content;
         $this->assertTrue( $content instanceof Content );
@@ -137,8 +137,8 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 14, $content->versionInfo->creatorId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
         $this->assertEquals( VersionInfo::STATUS_DRAFT, $content->versionInfo->status );
-        $this->assertGreaterThanOrEqual( $time, $content->versionInfo->creationDate );
-        $this->assertGreaterThanOrEqual( $time, $content->versionInfo->modificationDate );
+        $this->assertGreaterThanOrEqual( $struct->modified, $content->versionInfo->creationDate );
+        $this->assertGreaterThanOrEqual( $struct->modified, $content->versionInfo->modificationDate );
         $this->assertEquals( "eng-GB", $content->versionInfo->initialLanguageCode );
         $this->assertEquals( array( $struct->initialLanguageId ), $content->versionInfo->languageIds );
         $this->assertEquals( $content->contentInfo->contentId, $content->versionInfo->contentId );

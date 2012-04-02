@@ -109,9 +109,9 @@ class ContentHandler implements ContentHandlerInterface
             array(
                 // @todo: Name should be computed!
                 'names' => $content->name,
-                'modificationDate' => $time,
                 'creatorId' => $content->ownerId,
-                'creationDate' => $time,
+                'creationDate' => $content->modified,
+                'modificationDate' => $content->modified,
                 'contentId' => $contentObj->contentInfo->contentId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'versionNo' => 1,
