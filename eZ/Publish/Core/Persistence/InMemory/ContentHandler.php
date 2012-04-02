@@ -431,17 +431,15 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function updateContent( $contentId, $versionNo, UpdateStruct $content )
     {
-        $versionUpdateData = array();
-        if ( isset( $content->creatorId ) ) $versionUpdateData["creatorId"] = $content->creatorId;
-        if ( isset( $content->modificationDate ) ) $versionUpdateData["modificationDate"] = $content->modificationDate;
-        if ( isset( $content->initialLanguageId ) ) $versionUpdateData["initialLanguageId"] = $content->initialLanguageId;
-        if ( !empty( $content->name ) )
-        {
-            $versionNames = $this->loadVersionInfo( $contentId, $versionNo )->names;
-            foreach ( $versionNames as $languageCode => &$versionName )
-                if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
-            $versionUpdateData["names"] = $versionNames;
-        }
+        $versionNames = $this->loadVersionInfo( $contentId, $versionNo )->names;
+        foreach ( $versionNames as $languageCode => &$versionName )
+            if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
+        $versionUpdateData = array(
+            "creatorId"         => $content->creatorId,
+            "modificationDate"  => $content->modificationDate,
+            "initialLanguageId" => $content->initialLanguageId,
+            "names"             => $versionNames
+        );
 
         $this->backend->updateByMatch(
             "Content\\VersionInfo",
