@@ -182,8 +182,11 @@ class ContentService implements ContentServiceInterface
         $modificationDate = new \DateTime( "@{$spiContentInfo->modificationDate}" );
         $publishedDate = new \DateTime( "@{$spiContentInfo->publicationDate}" );
 
-        // @todo: temporary, this should be already available in $spiContentInfo
-        $spiContent = $this->persistenceHandler->contentHandler()->load( $spiContentInfo->contentId, $spiContentInfo->currentVersionNo );
+        // @todo: $mainLocationId should have been removed through SPI refactoring?
+        $spiContent = $this->persistenceHandler->contentHandler()->load(
+            $spiContentInfo->contentId,
+            $spiContentInfo->currentVersionNo
+        );
         $mainLocationId = null;
         foreach ( $spiContent->locations as $spiLocation )
         {
@@ -445,7 +448,7 @@ class ContentService implements ContentServiceInterface
                 );
 
                 throw new InvalidArgumentException(
-                    '$contentCreateStruct->remoteId',
+                    "\$contentCreateStruct->remoteId",
                     "content with given remoteId already exists"
                 );
             }
@@ -472,20 +475,15 @@ class ContentService implements ContentServiceInterface
             $fieldDefinition = $contentCreateStruct->contentType->getFieldDefinition( $field->fieldDefIdentifier );
 
             if ( null === $fieldDefinition )
-                throw new ContentFieldValidationException(
+                throw new ContentValidationException(
                     "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
                 );
 
             if ( $fieldDefinition->isTranslatable )
             {
-                if ( empty( $field->languageCode ) )
-                    throw new ContentFieldValidationException(
-                        "Language code is missing on a field for translatable field definition '{$field->fieldDefIdentifier}'"
-                    );
-
                 if ( isset( $fields[$field->fieldDefIdentifier][$field->languageCode] ) )
                     throw new ContentValidationException(
-                        "More than one field is given for translatable field definition '{$field->fieldDefIdentifier}' on language '{$field->languageCode}'"
+                        "More than one field is set for translatable field definition '{$field->fieldDefIdentifier}' on language '{$field->languageCode}'"
                     );
 
                 $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
@@ -494,7 +492,12 @@ class ContentService implements ContentServiceInterface
             {
                 if ( isset( $fields[$field->fieldDefIdentifier][$contentCreateStruct->mainLanguageCode] ) )
                     throw new ContentValidationException(
-                        "More than one field is given for untranslatable field definition '{$field->fieldDefIdentifier}'"
+                        "More than one field is set for untranslatable field definition '{$field->fieldDefIdentifier}'"
+                    );
+
+                if (  $field->languageCode != $contentCreateStruct->mainLanguageCode )
+                    throw new ContentValidationException(
+                        "A translation is set for untranslatable field definition '{$field->fieldDefIdentifier}'"
                     );
 
                 $fields[$field->fieldDefIdentifier][$contentCreateStruct->mainLanguageCode] = $field;
@@ -515,9 +518,10 @@ class ContentService implements ContentServiceInterface
 
             foreach ( $languageCodes as $languageCode )
             {
-                if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
+                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentCreateStruct->mainLanguageCode;
+                if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
-                    $field = $fields[$fieldDefinition->identifier][$languageCode];
+                    $field = $fields[$fieldDefinition->identifier][$valueLanguageCode];
                     $fieldValue = $field->value instanceof Value ?
                             $field->value :
                             $fieldType->buildValue( $field->value );
@@ -529,9 +533,9 @@ class ContentService implements ContentServiceInterface
 
                 $fieldValue = $fieldType->acceptValue( $fieldValue );
 
-                if ( $fieldDefinition->isRequired && empty( $fieldValue ) )
+                if ( $fieldDefinition->isRequired && (string) $fieldValue === "" )
                 {
-                    throw new ContentValidationException( '@TODO: What error code should be used?' );
+                    throw new ContentFieldValidationException( '@TODO: What error code should be used?' );
                 }
 
                 $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
@@ -540,7 +544,7 @@ class ContentService implements ContentServiceInterface
                 $spiFields[] = new SPIField(
                     array(
                         "id"                => null,
-                        "fieldDefinitionId" => $fieldDefinition->identifier,
+                        "fieldDefinitionId" => $fieldDefinition->id,
                         "type"              => $fieldDefinition->fieldTypeIdentifier,
                         "value"             => $fieldType->toPersistenceValue( $fieldValue ),
                         "languageCode"      => $languageCode,
@@ -555,10 +559,9 @@ class ContentService implements ContentServiceInterface
             throw new ContentFieldValidationException();
         }
 
-        $modifiedTimestamp = $contentCreateStruct->modificationDate ? $contentCreateStruct->modificationDate->getTimestamp() : time();
-
         $spiContentCreateStruct = new SPIContentCreateStruct(
             array(
+                // @todo calculate names
                 "name"              => array( "eng-US" => "Some name" ),
                 "typeId"            => $contentCreateStruct->contentType->id,
                 "sectionId"         => $contentCreateStruct->sectionId,
@@ -567,11 +570,10 @@ class ContentService implements ContentServiceInterface
                 "fields"            => $spiFields,
                 "alwaysAvailable"   => $contentCreateStruct->alwaysAvailable,
                 "remoteId"          => $remoteId,
-                "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $contentCreateStruct->mainLanguageCode )->id,
-                // Published timestamp for drafts is 0
-                "published"         => 0,
-                // @todo: modified timestamp for drafts is 0 in 4.x, verify that this is not extraneous
-                "modified"          => $modifiedTimestamp
+                "modified"          => isset( $contentCreateStruct->modificationDate ) ?
+                    $contentCreateStruct->modificationDate->getTimestamp() : time(),
+                "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()
+                    ->loadByLanguageCode( $contentCreateStruct->mainLanguageCode )->id
             )
         );
 
@@ -638,7 +640,7 @@ class ContentService implements ContentServiceInterface
                     "contentVersion"           => null,
                     // @todo: set pathIdentificationString
                     "pathIdentificationString" => null,
-                    "*mainLocationId"          => ( $index === 0 ),
+                    "mainLocationId"          => ( $index === 0 ),
                     "sortField"                => $locationCreateStruct->sortField,
                     "sortOrder"                => $locationCreateStruct->sortOrder,
                     "parentId"                 => $locationCreateStruct->parentLocationId
@@ -720,14 +722,15 @@ class ContentService implements ContentServiceInterface
         {
             try
             {
-                $this->persistenceHandler->searchHandler()->findSingle(
+                $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
                     new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
                 );
 
-                throw new InvalidArgumentException(
-                    "\$contentMetadataUpdateStruct->remoteId",
-                    "remoteId already exists"
-                );
+                if ( $spiContent->contentInfo->contentId !== $contentInfo->contentId )
+                    throw new InvalidArgumentException(
+                        "\$contentMetadataUpdateStruct->remoteId",
+                        "remoteId already exists"
+                    );
             }
             catch ( APINotFoundException $e ) {}
         }
@@ -735,7 +738,8 @@ class ContentService implements ContentServiceInterface
         $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
             array(
                 "ownerId"          => $contentMetadataUpdateStruct->ownerId,
-                "name"             => $contentMetadataUpdateStruct->name,//@todo name property is missing in API ContentMetaDataUpdateStruct
+                //@todo name property is missing in API ContentMetaDataUpdateStruct
+                //"name"             => $contentMetadataUpdateStruct->name,
                 "publicationDate"  => isset( $contentMetadataUpdateStruct->publishedDate ) ?
                                         $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
                 "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
@@ -746,7 +750,8 @@ class ContentService implements ContentServiceInterface
                                         )->id : null,
                 "alwaysAvailable"  => $contentMetadataUpdateStruct->alwaysAvailable,
                 "remoteId"         => $contentMetadataUpdateStruct->remoteId,
-                "mainLocationId"   => $contentMetadataUpdateStruct->mainLocationId,//@todo mainLocationId property is missing in SPI ContentMetaDataUpdateStruct
+                //@todo mainLocationId property is missing in SPI ContentMetaDataUpdateStruct
+                //"mainLocationId"   => $contentMetadataUpdateStruct->mainLocationId,
             )
         );
         $this->persistenceHandler->contentHandler()->updateMetadata(
@@ -985,7 +990,7 @@ class ContentService implements ContentServiceInterface
                 $spiFields[] = new SPIField(
                     array(
                         "id"                => $contentField->id,
-                        "fieldDefinitionId" => $field->fieldDefIdentifier,
+                        "fieldDefinitionId" => $fieldDefinition->id,
                         "type"              => $fieldDefinition->fieldTypeIdentifier,
                         "value"             => $fieldType->toPersistenceValue( $fieldValue ),
                         "languageCode"      => $languageCode,
@@ -1037,16 +1042,11 @@ class ContentService implements ContentServiceInterface
         if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
             throw new BadStateException( "versionInfo", "only versions in draft status can be published" );
 
+        $time = time();
         $metadataUpdateStruct = new SPIMetadataUpdateStruct(
             array(
-                // Null properties will be skipped during update
-                "ownerId"          => null,
-                "name"             => null,
-                "publicationDate"  => null,
-                "modificationDate" => time(),
-                "mainLanguageId"   => null,
-                "alwaysAvailable"  => null,
-                "remoteId"         => null
+                "publicationDate"  => $time,
+                "modificationDate" => $time
             )
         );
 
@@ -1546,9 +1546,13 @@ class ContentService implements ContentServiceInterface
             $fields[] = new Field(
                 array(
                     "id"                 => $spiField->id,
-                    "fieldDefIdentifier" => $spiField->fieldDefinitionId,
                     "value"              => $spiField->value->data,
-                    "languageCode"       => $spiField->languageCode
+                    "languageCode"       => $spiField->languageCode,
+                    "fieldDefIdentifier" => $this->persistenceHandler->contentTypeHandler()
+                        ->getFieldDefinition(
+                            $spiField->fieldDefinitionId,
+                            ContentType::STATUS_DEFINED
+                        )->identifier
                 )
             );
         }
