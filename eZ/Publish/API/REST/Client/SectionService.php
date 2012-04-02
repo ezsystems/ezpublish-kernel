@@ -16,7 +16,7 @@ use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
 
 /**
- * bed implementation of the {@link \eZ\Publish\API\Repository\SectionService}
+ * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}
  * interface.
  *
  * @see \eZ\Publish\API\Repository\SectionService

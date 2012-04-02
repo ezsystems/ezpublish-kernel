@@ -15,7 +15,7 @@ use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 
 /**
- * bed implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
+ * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
  * interface.
  *
  * @see \eZ\Publish\API\Repository\LanguageService

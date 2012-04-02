@@ -23,7 +23,7 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
 
 /**
- * bed implementation of the {@link \eZ\Publish\API\Repository\RoleService}
+ * Implementation of the {@link \eZ\Publish\API\Repository\RoleService}
  * interface.
  *
  * @see \eZ\Publish\API\Repository\RoleService

@@ -19,7 +19,7 @@ use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
 
 /**
- * bed implementation of the {@link \eZ\Publish\API\Repository\UserService}
+ * Implementation of the {@link \eZ\Publish\API\Repository\UserService}
  * interface.
  *
  * @see \eZ\Publish\API\Repository\UserService
