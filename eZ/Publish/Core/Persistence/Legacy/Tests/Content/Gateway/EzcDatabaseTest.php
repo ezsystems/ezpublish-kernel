@@ -464,6 +464,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertQueryResult(
             array(
                 array(
+                    'creator_id' => '23',
                     'initial_language_id' => '3',
                     'modified' => '234567',
                 )
@@ -471,6 +472,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select(
                     array(
+                        'creator_id',
                         'initial_language_id',
                         'modified',
                     )
