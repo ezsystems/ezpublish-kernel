@@ -35,9 +35,7 @@ class VersionInfoStub extends VersionInfo
         parent::__construct( $properties );
 
         if ( $properties['status'] > 2 ) {
-            echo "\nalert(", $properties['contentId'], ")\n";
             $trace = debug_backtrace();
-            echo $trace[0]['file'], ' +', $trace[0]['line'], PHP_EOL;
         }
     }
 
