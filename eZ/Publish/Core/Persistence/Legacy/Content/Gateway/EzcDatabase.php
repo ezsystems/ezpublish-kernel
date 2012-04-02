@@ -335,6 +335,9 @@ class EzcDatabase extends Gateway
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->set(
+            $this->dbHandler->quoteColumn( 'creator_id' ),
+            $q->bindValue( $struct->creatorId, null, \PDO::PARAM_INT )
+        )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
             $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
         )->set(
