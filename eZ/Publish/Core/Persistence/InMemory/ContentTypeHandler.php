@@ -397,6 +397,35 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
+     * Returns field definition for the given field definition id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field definition is not found
+     *
+     * @param mixed $id
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    public function getFieldDefinition( $id, $status )
+    {
+        $fieldDefinition = $this->backend->find(
+            "Content\\Type\\FieldDefinition",
+            array( "id" => $id, "_status" => $status )
+        );
+
+        if ( !isset( $fieldDefinition[0] ) )
+            throw new NotFound(
+                "Content\\Type\\FieldDefinition",
+                array(
+                    "id" => $id,
+                    "status" => $status
+                )
+            );
+
+        return $fieldDefinition[0];
+    }
+
+    /**
      * Adds a new field definition to an existing Type.
      *
      * This method creates a new version of the Type with the $fieldDefinition

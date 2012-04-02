@@ -171,7 +171,7 @@ class Mapper
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      * @todo Handle field definition conversion.
      */
-    protected function extractFieldFromRow( array $row )
+    public function extractFieldFromRow( array $row )
     {
         $storageFieldDef = $this->extractStorageFieldFromRow( $row );
 
