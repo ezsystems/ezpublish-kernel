@@ -108,8 +108,6 @@ class Mapper
         $versionInfo->versionNo = $versionNo;
         $versionInfo->creatorId = $content->contentInfo->ownerId;
         $versionInfo->status = VersionInfo::STATUS_DRAFT;
-        $versionInfo->creationDate = time();
-        $versionInfo->modificationDate = $versionInfo->creationDate;
         $versionInfo->initialLanguageCode = $initialLanguageCode;
         $languageCodes = array();
         foreach ( $fields as $field ) $languageCodes[] = $field->languageCode;
@@ -462,7 +460,6 @@ class Mapper
         $struct->alwaysAvailable = $content->contentInfo->isAlwaysAvailable;
         $struct->remoteId = $content->contentInfo->remoteId;
         $struct->initialLanguageId = $this->languageHandler->getByLocale( $content->versionInfo->initialLanguageCode )->id;
-        $struct->published = $content->contentInfo->publicationDate;
         $struct->modified = $content->contentInfo->modificationDate;
 
         foreach ( $content->fields as $field )

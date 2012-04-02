@@ -100,6 +100,8 @@ class Handler implements BaseContentHandler
             $struct->fields,
             $content->contentInfo->mainLanguageCode
         );
+        $content->versionInfo->creationDate = $struct->modified;
+        $content->versionInfo->modificationDate = $struct->modified;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo, $struct->fields, $content->contentInfo->isAlwaysAvailable
         );
@@ -188,6 +190,8 @@ class Handler implements BaseContentHandler
             $fields,
             $content->versionInfo->initialLanguageCode
         );
+        $content->versionInfo->creationDate = time();
+        $content->versionInfo->modificationDate = $content->versionInfo->creationDate;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $content->fields,
@@ -352,8 +356,8 @@ class Handler implements BaseContentHandler
         foreach ( $content->name as $language => $name )
         {
             $this->contentGateway->setName(
-                $content->id,
-                $content->versionNo,
+                $contentId,
+                $versionNo,
                 $name, $language
             );
         }
