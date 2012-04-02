@@ -709,7 +709,7 @@ class EzcDatabase extends Gateway
      * Loads an array with data about field definition referred $id and $status.
      *
      * @param mixed $id field definition id
-     * @param int $status field definition status
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      *
      * @return array Data rows.
      */
