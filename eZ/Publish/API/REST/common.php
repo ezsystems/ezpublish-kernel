@@ -10,7 +10,10 @@
 namespace eZ\Publish\API\REST;
 
 $repository = new Client\Repository(
-    'http://localhost:8042/'
+    new Client\HttpClient\Stream(
+        'http://localhost:8042/'
+    )
+    // Mapper…
 );
 
 $repository->setCurrentUser(
