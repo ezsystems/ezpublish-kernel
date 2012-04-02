@@ -56,5 +56,14 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue( isset( $response->headers['X-Powered-By'] ) );
         $this->assertTrue( is_string( $response->headers['X-Powered-By'] ) );
     }
+
+    /**
+     * @expectedException \eZ\Publish\API\REST\Client\HttpClient\ConnectionException
+     */
+    public function testConnectionException()
+    {
+        $client = new Stream( 'http://localhost:54321' );
+        $response = $client->request( 'GET', '/' );
+    }
 }
 
