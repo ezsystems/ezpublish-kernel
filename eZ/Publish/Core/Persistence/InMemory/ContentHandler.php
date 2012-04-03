@@ -13,7 +13,6 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
@@ -555,38 +554,6 @@ class ContentHandler implements ContentHandlerInterface
 
         if ( empty( $versions ) )
             throw new NotFound( "Content\\VersionInfo", "contentId: $contentId" );
-
-        // cast to RestrictedVersion
-        foreach ( $versions as $key => $vo )
-        {
-            $restricted = new RestrictedVersion();
-            foreach ( $restricted as $property => $value )
-            {
-                switch ( $property )
-                {
-                    case 'name':
-                        $restricted->name = $vo->names;
-                        break;
-
-                    case 'modified':
-                        $restricted->modified = $vo->modificationDate;
-                        break;
-
-                    case 'created':
-                        $restricted->created = $vo->creationDate;
-                        break;
-
-                    case 'initialLanguageId':
-                        $languages = $this->backend->find( 'Content\\Language', array( 'languageCode' => $vo->initialLanguageCode ) );
-                        $restricted->initialLanguageId = $languages[0]->id;
-                        break;
-
-                    default:
-                        $restricted->$property = $vo->$property;
-                }
-            }
-            $versions[$key] = $restricted;
-        }
 
         return $versions;
     }

@@ -15,7 +15,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
@@ -577,14 +576,14 @@ class ContentHandlerTest extends TestCase
             ->will( $this->returnValue( array() ) );
 
         $mapperMock->expects( $this->once() )
-            ->method( 'extractVersionListFromRows' )
+            ->method( 'extractVersionInfoListFromRows' )
             ->with( $this->equalTo( array() ) )
-            ->will( $this->returnValue( array( new RestrictedVersion() ) ) );
+            ->will( $this->returnValue( array( new VersionInfo() ) ) );
 
         $res = $handler->listVersions( 23 );
 
         $this->assertEquals(
-            array( new RestrictedVersion() ),
+            array( new VersionInfo() ),
             $res
         );
     }
