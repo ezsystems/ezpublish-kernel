@@ -37,7 +37,8 @@ $valueObjectVisitors = array(
 $dispatcher = new RMF\Dispatcher\Simple(
     new RMF\Router\Regexp( array(
         '(^/content/sections$)' => array(
-            'GET' => array( $sectionController, 'listSections' ),
+            'GET'  => array( $sectionController, 'listSections' ),
+            'POST' => array( $sectionController, 'createSection' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
@@ -59,7 +60,7 @@ $dispatcher = new RMF\Dispatcher\Simple(
 
 $request = new RMF\Request\HTTP();
 $request->addHandler(
-    'body', new RMF\Request\PropertyHandler\JsonBody()
+    'body', new RMF\Request\PropertyHandler\RawBody()
 );
 
 $dispatcher->dispatch( $request );
