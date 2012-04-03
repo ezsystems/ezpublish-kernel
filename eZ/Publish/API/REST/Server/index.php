@@ -27,6 +27,9 @@ $sectionController = new Controller\Section(
 );
 
 $valueObjectVisitors = array(
+    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException' => new ValueObjectVisitor\NotFoundException( $jsonGenerator ),
+    '\\Exception'                                              => new ValueObjectVisitor\Exception( $jsonGenerator ),
+
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new ValueObjectVisitor\SectionList( $jsonGenerator ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new ValueObjectVisitor\Section( $jsonGenerator ),
 );
