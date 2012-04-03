@@ -309,12 +309,12 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $copy->contentInfo->contentId );
         $this->assertEquals( 1, count( $versions ) );
-        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->name );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->names );
         $this->assertEquals( 1, $versions[0]->versionNo, "Version number does not match" );
         $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
         $this->assertEquals( $copy->contentInfo->contentId, $versions[0]->contentId );
-        $this->assertGreaterThanOrEqual( $time, $versions[0]->modified );
-        $this->assertGreaterThanOrEqual( $time, $versions[0]->created );
+        $this->assertGreaterThanOrEqual( $time, $versions[0]->modificationDate );
+        $this->assertGreaterThanOrEqual( $time, $versions[0]->creationDate );
     }
 
     /**
@@ -337,12 +337,12 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $copy->contentInfo->contentId );
         $this->assertEquals( 1, count( $versions ) );
-        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->name );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->names );
         $this->assertEquals( 2, $versions[0]->versionNo, "Version number does not match" );
         $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
         $this->assertEquals( $copy->contentInfo->contentId, $versions[0]->contentId );
-        $this->assertGreaterThanOrEqual( $time, $versions[0]->modified );
-        $this->assertGreaterThanOrEqual( $time, $versions[0]->created );
+        $this->assertGreaterThanOrEqual( $time, $versions[0]->modificationDate );
+        $this->assertGreaterThanOrEqual( $time, $versions[0]->creationDate );
     }
 
     /**
@@ -364,18 +364,18 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $copy->contentInfo->contentId );
         $this->assertEquals( 2, count( $versions ) );
-        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->name );
-        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[1]->name );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->names );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[1]->names );
         $this->assertEquals( 1, $versions[0]->versionNo );
         $this->assertEquals( 2, $versions[1]->versionNo );
         $this->assertEquals( 14, $versions[0]->creatorId );
         $this->assertEquals( 14, $versions[1]->creatorId );
         $this->assertEquals( $copy->contentInfo->contentId, $versions[0]->contentId );
         $this->assertEquals( $copy->contentInfo->contentId, $versions[1]->contentId );
-        $this->assertGreaterThanOrEqual( $time, $versions[0]->modified );
-        $this->assertGreaterThanOrEqual( $time, $versions[1]->modified );
-        $this->assertGreaterThanOrEqual( $time, $versions[0]->created );
-        $this->assertGreaterThanOrEqual( $time, $versions[1]->created );
+        $this->assertGreaterThanOrEqual( $time, $versions[0]->modificationDate );
+        $this->assertGreaterThanOrEqual( $time, $versions[1]->modificationDate );
+        $this->assertGreaterThanOrEqual( $time, $versions[0]->creationDate );
+        $this->assertGreaterThanOrEqual( $time, $versions[1]->creationDate );
     }
 
     /**

@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler,
@@ -121,8 +120,9 @@ class Mapper
     /**
      * Converts value of $field to storage value
      *
-     * @param Field $field
-     * @return StorageFieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function convertToStorageValue( Field $field )
     {
@@ -323,25 +323,11 @@ class Mapper
     }
 
     /**
-     * Extracts a Version from the given $row
-     *
-     * @param array $row
-     * @return Version
-     */
-    protected function extractVersionFromRow( array $row )
-    {
-        $version = new Version();
-        $this->mapCommonVersionFields( $row, $version );
-        $version->fields = array();
-
-        return $version;
-    }
-
-    /**
      * Maps fields from $row to $version
      *
      * @param array $row
-     * @param Version|RestrictedVersion $version
+     * @param \eZ\Publish\SPI\Persistence\Content\Version $version
+     *
      * @return void
      */
     protected function mapCommonVersionFields( array $row, $version )
@@ -381,8 +367,8 @@ class Mapper
      *
      * @param array $row
      * @param string $type
-     * @return FieldValue
-     * @throws eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      *         if the necessary converter for $type could not be found.
      */
     protected function extractFieldValueFromRow( array $row, $type )
@@ -404,50 +390,10 @@ class Mapper
     }
 
     /**
-     * Extracts a list of RestrictedVersion objects from $rows
-     *
-     * @param string[][] $rows
-     * @return RestrictedVersion[]
-     */
-    public function extractVersionListFromRows( array $rows )
-    {
-        $versionList = array();
-        foreach ( $rows as $row )
-        {
-            $versionId = (int)$row['ezcontentobject_version_id'];
-            if ( !isset( $versionList[$versionId] ) )
-            {
-                $version = new RestrictedVersion();
-                $this->mapCommonVersionFields( $row, $version );
-                $version->languageIds = array();
-
-                $versionList[$versionId] = $version;
-            }
-
-            if ( !isset( $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] ) )
-            {
-                $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
-            }
-
-            if (
-                !in_array(
-                    $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
-                    $versionList[$versionId]->languageIds              // eng-US can be either 2 or 3, see fixture data
-                )
-            )
-            {
-                $versionList[$versionId]->languageIds[] =
-                    $row['ezcontentobject_attribute_language_id'] & ~1;
-            }
-        }
-        return array_values( $versionList );
-    }
-
-    /**
      * Creates CreateStruct from $content
      *
-     * @param eZ\Publish\SPI\Persistence\Content $content
-     * @return eZ\Publish\SPI\Persistence\Content\CreateStruct
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     public function createCreateStructFromContent( Content $content )
     {

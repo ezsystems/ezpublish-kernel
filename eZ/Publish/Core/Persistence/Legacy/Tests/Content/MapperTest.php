@@ -18,7 +18,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
@@ -364,24 +363,6 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionListFromRows
-     */
-    public function testExtractVersionListFromRows()
-    {
-        $mapper = $this->getMapper();
-
-        $rows = $this->getRestrictedVersionExtractFixture();
-
-        $res = $mapper->extractVersionListFromRows( $rows );
-
-        $this->assertEquals(
-            $this->getRestrictedVersionExtractReference(),
-            $res
-        );
-    }
-
-    /**
      * @return CreateStruct
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      */
@@ -571,7 +552,6 @@ class MapperTest extends TestCase
         );
     }
 
-
     /**
      * Returns a fixture of database rows for content extraction
      *
@@ -597,16 +577,6 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns a fixture for mapping RestrictedVersion objects
-     *
-     * @return string[][]
-     */
-    protected function getRestrictedVersionExtractFixture()
-    {
-        return require __DIR__ . '/_fixtures/restricted_version_rows.php';
-    }
-
-    /**
      * Returns a fixture for mapping multiple versions of a content object
      *
      * @return string[][]
@@ -614,46 +584,6 @@ class MapperTest extends TestCase
     protected function getMultipleVersionsExtractFixture()
     {
         return require __DIR__ . '/_fixtures/extract_content_from_rows_multiple_versions.php';
-    }
-
-    /**
-     * Returns a reference result for mapping RestrictedVersion objects
-     *
-     * @return RestrictedVersion[]
-     */
-    protected function getRestrictedVersionExtractReference()
-    {
-        $versions = array();
-
-        $version = new RestrictedVersion();
-        $version->id = 675;
-        $version->name = array( "eng-US" => "Something" );
-        $version->versionNo = 1;
-        $version->modified = 1313047907;
-        $version->creatorId = 14;
-        $version->created = 1313047865;
-        $version->status = 3;
-        $version->contentId = 226;
-        $version->initialLanguageId = 2;
-        $version->languageIds = array( 2 );
-
-        $versions[] = $version;
-
-        $version = new RestrictedVersion();
-        $version->id = 676;
-        $version->name = array( "eng-US" => "Something" );
-        $version->versionNo = 2;
-        $version->modified = 1313061404;
-        $version->creatorId = 14;
-        $version->created = 1313061317;
-        $version->status = 1;
-        $version->contentId = 226;
-        $version->initialLanguageId = 2;
-        $version->languageIds = array( 2 );
-
-        $versions[] = $version;
-
-        return $versions;
     }
 
     /**
