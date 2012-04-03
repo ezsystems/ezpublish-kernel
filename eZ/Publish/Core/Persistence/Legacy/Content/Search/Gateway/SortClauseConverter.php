@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
 class SortClauseConverter
 {
     /**
-     * Sort cluase handlers
+     * Sort clause handlers
      *
      * @var array(SortClauseHandler)
      */
