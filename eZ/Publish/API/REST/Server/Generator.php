@@ -11,6 +11,89 @@ namespace eZ\Publish\API\REST\Server;
 
 abstract class Generator
 {
+    /**
+     * Start document
+     *
+     * @param mixed $data
+     * @return void
+     */
+    abstract public function startDocument( $data );
+
+    /**
+     * End document
+     *
+     * Returns the generated document as a string.
+     *
+     * @param mixed $data
+     * @return string
+     */
+    abstract public function endDocument( $data );
+
+    /**
+     * Start element
+     *
+     * @param string $name
+     * @return void
+     */
+    abstract public function startElement( $name );
+
+    /**
+     * End element
+     *
+     * @param string $name
+     * @return void
+     */
+    abstract public function endElement( $name );
+
+    /**
+     * Start value element
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    abstract public function startValueElement( $name, $value );
+
+    /**
+     * End value element
+     *
+     * @param string $name
+     * @return void
+     */
+    abstract public function endValueElement( $name );
+
+    /**
+     * Start list
+     *
+     * @param string $name
+     * @return void
+     */
+    abstract public function startList( $name );
+
+    /**
+     * End list
+     *
+     * @param string $name
+     * @return void
+     */
+    abstract public function endList( $name );
+
+    /**
+     * Start attribute
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    abstract public function startAttribute( $name, $value );
+
+    /**
+     * End attribute
+     *
+     * @param string $name
+     * @return void
+     */
+    abstract public function endAttribute( $name );
 
     /**
      * Get media type
