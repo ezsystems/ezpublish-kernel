@@ -18,7 +18,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
@@ -412,12 +411,13 @@ class Handler implements BaseContentHandler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return eZ\Publish\SPI\Persistence\Content\RestrictedVersion[]
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
     public function listVersions( $contentId )
     {
-        $rows = $this->contentGateway->listVersions( $contentId );
-        return $this->mapper->extractVersionListFromRows( $rows );
+        return $this->mapper->extractVersionInfoListFromRows(
+            $this->contentGateway->listVersions( $contentId )
+        );
     }
 
     /**
