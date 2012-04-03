@@ -44,8 +44,10 @@ $dispatcher = new RMF\Dispatcher\Simple(
         ),
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => new View\Visitor(
             new Visitor(
-                new Generator\Xml(),
+                $xmlGenerator = new Generator\Xml(),
                 array(
+                    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new ValueObjectVisitor\SectionList( $xmlGenerator ),
+                    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new ValueObjectVisitor\Section( $xmlGenerator ),
                 )
             )
         ),
