@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\REST\Server\ValueObjectVisitor;
 use eZ\Publish\API\REST\Server\ValueObjectVisitor;
+use eZ\Publish\API\REST\Server\Generator;
 use eZ\Publish\API\REST\Server\Visitor;
 
 /**
@@ -20,27 +21,28 @@ class Section extends ValueObjectVisitor
      * Visit struct returned by controllers
      *
      * @param Visitor $visitor
+     * @param Generator $generator
      * @param mixed $data
      * @return void
      */
-    public function visit( Visitor $visitor, $data )
+    public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $this->generator->startElement( 'Section' );
-        $visitor->setHeader( 'Content-Type', $this->generator->getMediaType( 'Section' ) );
+        $generator->startElement( 'Section' );
+        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Section' ) );
 
-        $this->generator->startAttribute( 'href', '/content/sections/' . $data->id );
-        $this->generator->endAttribute( 'href' );
+        $generator->startAttribute( 'href', '/content/sections/' . $data->id );
+        $generator->endAttribute( 'href' );
 
-        $this->generator->startValueElement( 'sectionId', $data->id );
-        $this->generator->endValueElement( 'sectionId' );
+        $generator->startValueElement( 'sectionId', $data->id );
+        $generator->endValueElement( 'sectionId' );
 
-        $this->generator->startValueElement( 'identifier', $data->identifier );
-        $this->generator->endValueElement( 'identifier' );
+        $generator->startValueElement( 'identifier', $data->identifier );
+        $generator->endValueElement( 'identifier' );
 
-        $this->generator->startValueElement( 'name', $data->name );
-        $this->generator->endValueElement( 'name' );
+        $generator->startValueElement( 'name', $data->name );
+        $generator->endValueElement( 'name' );
 
-        $this->generator->endElement( 'Section' );
+        $generator->endElement( 'Section' );
     }
 }
 

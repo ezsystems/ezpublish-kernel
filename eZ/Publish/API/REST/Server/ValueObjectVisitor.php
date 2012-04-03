@@ -15,30 +15,13 @@ namespace eZ\Publish\API\REST\Server;
 abstract class ValueObjectVisitor
 {
     /**
-     * Generator
-     *
-     * @var Generator
-     */
-    protected $generator;
-
-    /**
-     * Construct from generator
-     *
-     * @param Generator $generator
-     * @return void
-     */
-    public function __construct( Generator $generator )
-    {
-        $this->generator = $generator;
-    }
-
-    /**
      * Visit struct returned by controllers
      *
      * @param Visitor $visitor
+     * @param Generator $generator
      * @param mixed $data
      * @return void
      */
-    abstract public function visit( Visitor $visitor, $data );
+    abstract public function visit( Visitor $visitor, Generator $generator, $data );
 }
 

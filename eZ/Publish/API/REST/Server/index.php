@@ -26,6 +26,11 @@ $sectionController = new Controller\Section(
     $repository->getSectionService()
 );
 
+$valueObjectVisitors = array(
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new ValueObjectVisitor\SectionList( $jsonGenerator ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new ValueObjectVisitor\Section( $jsonGenerator ),
+);
+
 $dispatcher = new RMF\Dispatcher\Simple(
     new RMF\Router\Regexp( array(
         '(^/content/sections$)' => array(
@@ -35,20 +40,14 @@ $dispatcher = new RMF\Dispatcher\Simple(
     new RMF\View\AcceptHeaderViewDispatcher( array(
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => new View\Visitor(
             new Visitor(
-                $jsonGenerator = new Generator\Json(),
-                array(
-                    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new ValueObjectVisitor\SectionList( $jsonGenerator ),
-                    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new ValueObjectVisitor\Section( $jsonGenerator ),
-                )
+                new Generator\Json(),
+                $valueObjectVisitors
             )
         ),
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => new View\Visitor(
             new Visitor(
-                $xmlGenerator = new Generator\Xml(),
-                array(
-                    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new ValueObjectVisitor\SectionList( $xmlGenerator ),
-                    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new ValueObjectVisitor\Section( $xmlGenerator ),
-                )
+                new Generator\Xml(),
+                $valueObjectVisitors
             )
         ),
         '(^.*/.*$)'  => new View\InvalidApiUse(),

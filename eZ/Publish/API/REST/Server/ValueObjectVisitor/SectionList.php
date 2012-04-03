@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\REST\Server\ValueObjectVisitor;
 use eZ\Publish\API\REST\Server\ValueObjectVisitor;
+use eZ\Publish\API\REST\Server\Generator;
 use eZ\Publish\API\REST\Server\Visitor;
 
 /**
@@ -20,25 +21,26 @@ class SectionList extends ValueObjectVisitor
      * Visit struct returned by controllers
      *
      * @param Visitor $visitor
+     * @param Generator $generator
      * @param mixed $data
      * @return void
      */
-    public function visit( Visitor $visitor, $data )
+    public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $this->generator->startElement( 'SectionList' );
-        $visitor->setHeader( 'Content-Type', $this->generator->getMediaType( 'SectionList' ) );
+        $generator->startElement( 'SectionList' );
+        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'SectionList' ) );
 
-        $this->generator->startAttribute( 'href', '/content/sections' );
-        $this->generator->endAttribute( 'href' );
+        $generator->startAttribute( 'href', '/content/sections' );
+        $generator->endAttribute( 'href' );
 
-        $this->generator->startList( 'section' );
+        $generator->startList( 'section' );
         foreach ( $data->sections as $section )
         {
             $visitor->visitValueObject( $section );
         }
-        $this->generator->endList( 'section' );
+        $generator->endList( 'section' );
 
-        $this->generator->endElement( 'SectionList' );
+        $generator->endElement( 'SectionList' );
     }
 }
 

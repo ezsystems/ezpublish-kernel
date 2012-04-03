@@ -123,7 +123,7 @@ class Visitor
         do {
             if ( isset( $this->visitors[$classname] ) )
             {
-                return $this->visitors[$classname]->visit( $this, $data );
+                return $this->visitors[$classname]->visit( $this, $this->generator, $data );
             }
         } while ( $classname = get_parent_class( $classname ) );
 
