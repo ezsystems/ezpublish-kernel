@@ -23,7 +23,7 @@ class SortClauseConverter
      *
      * @var array(SortClauseHandler)
      */
-    protected $handler;
+    protected $handlers;
 
     /**
      * Sorting information for temporary sort columns
@@ -35,12 +35,12 @@ class SortClauseConverter
     /**
      * Construct from an optional array of sort clause handlers
      *
-     * @param array $handler
+     * @param array $handlers
      * @return void
      */
-    public function __construct( array $handler = array() )
+    public function __construct( array $handlers = array() )
     {
-        $this->handler = $handler;
+        $this->handlers = $handlers;
     }
 
     /**
@@ -55,7 +55,7 @@ class SortClauseConverter
         $sortColumn = array();
         foreach ( $sortClauses as $nr => $sortClause )
         {
-            foreach ( $this->handler as $handler )
+            foreach ( $this->handlers as $handler )
             {
                 if ( $handler->accept( $sortClause ) )
                 {
@@ -80,7 +80,7 @@ class SortClauseConverter
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
-            foreach ( $this->handler as $handler )
+            foreach ( $this->handlers as $handler )
             {
                 if ( $handler->accept( $sortClause ) )
                 {
