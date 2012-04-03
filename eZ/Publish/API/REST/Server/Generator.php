@@ -7,20 +7,21 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Visitor;
-use eZ\Publish\API\REST\Server\Visitor;
+namespace eZ\Publish\API\REST\Server;
 
-class Json extends Visitor
+abstract class Generator
 {
+
     /**
-     * Visit struct returned by controllers
+     * Get media type
      *
-     * @param mixed $data
+     * @param string $name
+     * @param string $type
      * @return string
      */
-    public function visit( $data )
+    protected function getMediaType( $name, $type )
     {
-        return "Hello World!";
+        return "application/vnd.ez.api.{$name}+{$type}";
     }
 }
 

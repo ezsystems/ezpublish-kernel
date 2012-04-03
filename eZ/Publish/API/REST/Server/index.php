@@ -34,10 +34,20 @@ $dispatcher = new RMF\Dispatcher\Simple(
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => new View\Visitor(
-            new Visitor\Json()
+            new Visitor(
+                $jsonGenerator = new Generator\Json(),
+                array(
+                    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new ValueObjectVisitor\SectionList( $jsonGenerator ),
+                    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new ValueObjectVisitor\Section( $jsonGenerator ),
+                )
+            )
         ),
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => new View\Visitor(
-            new Visitor\Xml()
+            new Visitor(
+                new Generator\Xml(),
+                array(
+                )
+            )
         ),
         '(^.*/.*$)'  => new View\InvalidApiUse(),
     ) )
