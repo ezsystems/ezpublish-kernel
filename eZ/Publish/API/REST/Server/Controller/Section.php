@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Controller;
+use eZ\Publish\API\REST\Server\InputDispatcher;
 use eZ\Publish\API\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\SectionService;
@@ -18,6 +19,13 @@ use Qafoo\RMF;
  */
 class Section
 {
+    /**
+     * Input dispatcher
+     *
+     * @var \eZ\Publish\API\REST\Server\InputDispatcher
+     */
+    protected $inputDispatcher;
+
     /**
      * Section service
      *
@@ -31,9 +39,10 @@ class Section
      * @param SectionService $sectionService
      * @return void
      */
-    public function __construct( SectionService $sectionService )
+    public function __construct( InputDispatcher $inputDispatcher, SectionService $sectionService )
     {
-        $this->sectionService = $sectionService;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->sectionService  = $sectionService;
     }
 
     /**
@@ -46,6 +55,19 @@ class Section
     {
         return new Values\SectionList(
             $this->sectionService->loadSections()
+        );
+    }
+
+    /**
+     * Create new section
+     *
+     * @param RMF\Request $request
+     * @return mixed
+     */
+    public function createSection( RMF\Request $request )
+    {
+        $this->sectionService->createSection(
+            $this->inputDispatcher->parse( $request->contentType, $request->body )
         );
     }
 }

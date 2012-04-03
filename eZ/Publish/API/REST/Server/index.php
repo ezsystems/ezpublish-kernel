@@ -23,6 +23,7 @@ spl_autoload_register( function( $class ) {
 $repository = require __DIR__ . '/../../Repository/Tests/common.php';
 
 $sectionController = new Controller\Section(
+    new InputDispatcher(),
     $repository->getSectionService()
 );
 
@@ -59,9 +60,8 @@ $dispatcher = new RMF\Dispatcher\Simple(
 );
 
 $request = new RMF\Request\HTTP();
-$request->addHandler(
-    'body', new RMF\Request\PropertyHandler\RawBody()
-);
+$request->addHandler( 'body', new RMF\Request\PropertyHandler\RawBody() );
+$request->addHandler( 'contentType', new RMF\Request\PropertyHandler\Server( 'HTTP_CONTENT_TYPE' ) );
 
 $dispatcher->dispatch( $request );
 
