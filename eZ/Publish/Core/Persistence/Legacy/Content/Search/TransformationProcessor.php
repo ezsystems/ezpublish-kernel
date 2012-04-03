@@ -9,7 +9,6 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
-use eZ\Publish\SPI\Persistence\Fields\Storage;
 
 /**
  * Class for processing a set of transformations on a string

@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * The Content Search Gateway provides the implementation for one database to

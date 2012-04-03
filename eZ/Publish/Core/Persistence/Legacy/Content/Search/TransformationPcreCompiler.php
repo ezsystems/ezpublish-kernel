@@ -9,7 +9,6 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
-use eZ\Publish\SPI\Persistence\Fields\Storage;
 
 /**
  * Compiles the AST of parsed transformation rules into a set of PCRE replace
