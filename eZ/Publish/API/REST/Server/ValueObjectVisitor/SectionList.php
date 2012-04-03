@@ -23,6 +23,7 @@ class SectionList extends ValueObjectVisitor
     public function visit( Visitor $visitor, $data )
     {
         $this->generator->startElement( 'SectionList' );
+        $visitor->setHeader( 'Content-Type', $this->generator->getMediaType( 'SectionList' ) );
 
         $this->generator->startAttribute( 'href', '/content/sections' );
         $this->generator->endAttribute( 'href' );

@@ -41,7 +41,13 @@ class Visitor extends RMF\View
      */
     public function display( RMF\Request $request, $result )
     {
-        echo $this->visitor->visit( $result );
+        $response = $this->visitor->visit( $result );
+
+        foreach ( $response->headers as $name => $value )
+        {
+            header( "{$name}: {$value}" );
+        }
+        echo $response->body;
     }
 }
 

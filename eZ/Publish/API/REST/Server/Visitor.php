@@ -32,6 +32,13 @@ class Visitor
      */
     protected $generator;
 
+    /**
+     * HTTP Response Headers
+     *
+     * @var array
+     */
+    protected $headers = array();
+
     public function __construct( Generator $generator, array $visitors )
     {
         $this->generator = $generator;
@@ -52,6 +59,24 @@ class Visitor
     }
 
     /**
+     * Set HTTP response header
+     *
+     * Does not allow overwriting of response headers. The first definition of 
+     * a header will be used.
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    public function setHeader( $name, $value )
+    {
+        if ( !isset( $this->headers[$name] ) )
+        {
+            $this->headers[$name] = $value;
+        }
+    }
+
+    /**
      * Visit struct returned by controllers
      *
      * @param mixed $data
@@ -61,7 +86,10 @@ class Visitor
     {
         $this->generator->startDocument( $data );
         $this->visitValueObject( $data );
-        return $this->generator->endDocument( $data );
+        return new Response(
+            $this->headers,
+            $this->generator->endDocument( $data )
+        );
     }
 
     /**

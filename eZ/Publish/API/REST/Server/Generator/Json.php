@@ -97,7 +97,7 @@ class Json extends Generator
             $this->json = $object;
         }
 
-        $this->startAttribute( "media-type", $this->getMediaType( $name, 'json' ) );
+        $this->startAttribute( "media-type", $this->getMediaType( $name ) );
         $this->endAttribute( "media-type" );
     }
 
@@ -179,6 +179,18 @@ class Json extends Generator
      */
     public function endAttribute( $name )
     {
+    }
+
+    /**
+     * Get media type
+     *
+     * @param string $name
+     * @param string $type
+     * @return string
+     */
+    public function getMediaType( $name, $type = 'json' )
+    {
+        return parent::getMediaType( $name, $type );
     }
 }
 

@@ -56,7 +56,7 @@ class Xml extends Generator
     {
         $this->xmlWriter->startElement( $name );
 
-        $this->startAttribute( "media-type", $this->getMediaType( $name, 'xml' ) );
+        $this->startAttribute( "media-type", $this->getMediaType( $name ) );
         $this->endAttribute( "media-type" );
     }
 
@@ -137,6 +137,18 @@ class Xml extends Generator
     public function endAttribute( $name )
     {
         $this->xmlWriter->endAttribute();
+    }
+
+    /**
+     * Get media type
+     *
+     * @param string $name
+     * @param string $type
+     * @return string
+     */
+    public function getMediaType( $name, $type = 'xml' )
+    {
+        return parent::getMediaType( $name, $type );
     }
 }
 

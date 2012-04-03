@@ -102,7 +102,7 @@ abstract class Generator
      * @param string $type
      * @return string
      */
-    protected function getMediaType( $name, $type )
+    public function getMediaType( $name, $type )
     {
         return "application/vnd.ez.api.{$name}+{$type}";
     }
