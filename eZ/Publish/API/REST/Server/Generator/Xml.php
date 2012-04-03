@@ -13,6 +13,13 @@ use eZ\Publish\API\REST\Server\Generator;
 class Xml extends Generator
 {
     /**
+     * XMLWriter
+     *
+     * @var \XMLWriter
+     */
+    protected $xmlWriter;
+
+    /**
      * Start document
      *
      * @param mixed $data
@@ -20,6 +27,9 @@ class Xml extends Generator
      */
     public function startDocument( $data )
     {
+        $this->xmlWriter = new \XMLWriter();
+        $this->xmlWriter->openMemory();
+        $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
     }
 
     /**
@@ -32,46 +42,101 @@ class Xml extends Generator
      */
     public function endDocument( $data )
     {
+        $this->xmlWriter->endDocument();
+        return $this->xmlWriter->outputMemory();
     }
 
     /**
      * Start element
      *
-     * @param mixed $data
+     * @param string $name
      * @return void
      */
-    public function startElement( $data )
+    public function startElement( $name )
     {
+        $this->xmlWriter->startElement( $name );
+
+        $this->startAttribute( "media-type", $this->getMediaType( $name, 'xml' ) );
+        $this->endAttribute( "media-type" );
     }
 
     /**
      * End element
      *
-     * @param mixed $data
+     * @param string $name
      * @return void
      */
-    public function endElement( $data )
+    public function endElement( $name )
+    {
+        $this->xmlWriter->endElement();
+    }
+
+    /**
+     * Start value element
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    public function startValueElement( $name, $value )
+    {
+        $this->xmlWriter->startElement( $name );
+        $this->xmlWriter->text( $value );
+    }
+
+    /**
+     * End value element
+     *
+     * @param string $name
+     * @return void
+     */
+    public function endValueElement( $name )
+    {
+        $this->xmlWriter->endElement();
+    }
+
+    /**
+     * Start list
+     *
+     * @param string $name
+     * @return void
+     */
+    public function startList( $name )
+    {
+    }
+
+    /**
+     * End list
+     *
+     * @param string $name
+     * @return void
+     */
+    public function endList( $name )
     {
     }
 
     /**
      * Start attribute
      *
-     * @param mixed $data
+     * @param string $name
+     * @param string $value
      * @return void
      */
-    public function startAttribute( $data )
+    public function startAttribute( $name, $value )
     {
+        $this->xmlWriter->startAttribute( $name );
+        $this->xmlWriter->text( $value );
     }
 
     /**
      * End attribute
      *
-     * @param mixed $data
+     * @param string $name
      * @return void
      */
-    public function endAttribute( $data )
+    public function endAttribute( $name )
     {
+        $this->xmlWriter->endAttribute();
     }
 }
 
