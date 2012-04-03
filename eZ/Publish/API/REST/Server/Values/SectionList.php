@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\API\REST\Server\Values;
 
+/**
+ * Section list view model
+ */
 class SectionList
 {
     /**

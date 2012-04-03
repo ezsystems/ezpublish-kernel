@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the BaseTest class
+ * File containing the Visitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\API\REST\Server;
 
+/**
+ * Visitor for view models
+ */
 class Visitor
 {
     /**
@@ -39,6 +42,13 @@ class Visitor
      */
     protected $headers = array();
 
+    /**
+     * Construct from Generator and an array of concrete view model visitors
+     *
+     * @param Generator $generator
+     * @param array $visitors
+     * @return void
+     */
     public function __construct( Generator $generator, array $visitors )
     {
         $this->generator = $generator;
@@ -48,6 +58,13 @@ class Visitor
         }
     }
 
+    /**
+     * Add a new visitor for the given class
+     *
+     * @param string $class
+     * @param ValueObjectVisitor $visitor
+     * @return void
+     */
     public function addVisitor( $class, ValueObjectVisitor $visitor )
     {
         if ( $class[0] === '\\' )
@@ -61,7 +78,7 @@ class Visitor
     /**
      * Set HTTP response header
      *
-     * Does not allow overwriting of response headers. The first definition of 
+     * Does not allow overwriting of response headers. The first definition of
      * a header will be used.
      *
      * @param string $name
@@ -95,8 +112,10 @@ class Visitor
     /**
      * Visit struct returned by controllers
      *
+     * Should be called from sub-vistors to visit nested objects.
+     *
      * @param mixed $data
-     * @return string
+     * @return void
      */
     public function visitValueObject( $data )
     {
