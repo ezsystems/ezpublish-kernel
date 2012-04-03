@@ -257,9 +257,6 @@ class MapperTest extends TestCase
      * @return void
      * @todo Load referencing locations!
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::mapCommonVersionFields
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue

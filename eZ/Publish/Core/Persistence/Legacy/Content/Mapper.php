@@ -323,26 +323,6 @@ class Mapper
     }
 
     /**
-     * Maps fields from $row to $version
-     *
-     * @param array $row
-     * @param \eZ\Publish\SPI\Persistence\Content\Version $version
-     *
-     * @return void
-     */
-    protected function mapCommonVersionFields( array $row, $version )
-    {
-        $version->id = (int)$row['ezcontentobject_version_id'];
-        $version->versionNo = (int)$row['ezcontentobject_version_version'];
-        $version->modified = (int)$row['ezcontentobject_version_modified'];
-        $version->creatorId = (int)$row['ezcontentobject_version_creator_id'];
-        $version->created = (int)$row['ezcontentobject_version_created'];
-        $version->status = (int)$row['ezcontentobject_version_status'];
-        $version->contentId = (int)$row['ezcontentobject_version_contentobject_id'];
-        $version->initialLanguageId = (int)$row['ezcontentobject_version_initial_language_id'];
-    }
-
-    /**
      * Extracts a Field from $row
      *
      * @param array $row
