@@ -10,6 +10,9 @@
         <env name="backendVersion" value="5" />
     </php>
     <testsuites>
+        <testsuite name="eZ\Publish\API\REST\Client">
+            <file>../../REST/Client/Tests/HttpClient/StreamTest.php</file>
+        </testsuite>
         <testsuite name="eZ\Publish\API\Repository">
             <file>RepositoryTest.php</file>
             <file>SectionServiceTest.php</file>
