@@ -23,7 +23,9 @@ spl_autoload_register( function( $class ) {
 $repository = require __DIR__ . '/../../Repository/Tests/common.php';
 
 $sectionController = new Controller\Section(
-    new InputDispatcher(),
+    new InputDispatcher( array(
+        'application/vnd.ez.api.SectionInput+json' => new Parser\Json\SectionInput( $repository ),
+    ) ),
     $repository->getSectionService()
 );
 
