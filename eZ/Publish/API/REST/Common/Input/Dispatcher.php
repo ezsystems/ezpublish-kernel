@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Common\Input;
+use eZ\Publish\API\REST\Common\Message;
 
 /**
  * Input parsing dispatcher
@@ -91,13 +92,17 @@ class Dispatcher
     /**
      * Parse provided request
      *
-     * @param string $contentType
-     * @param string $body
+     * @param Message $message
      * @return mixed
      */
-    public function parse( $contentType, $body )
+    public function parse( Message $message )
     {
-        $contentTypeParts = explode( '+', $contentType );
+        if ( !isset( $message->headers['Content-Type'] ) )
+        {
+            throw new \RuntimeException( 'Missing Content-Type header in message.' );
+        }
+
+        $contentTypeParts = explode( '+', $message->headers['Content-Type'] );
         if ( count( $contentTypeParts ) !== 2 )
         {
             throw new \RuntimeException( "No format specification in content type. Missing '+(json|xml|…)' in '{$contentType}'." );
@@ -116,7 +121,7 @@ class Dispatcher
         }
 
         return $this->parsers[$media]->parse(
-            $this->handlers[$format]->convert( $body )
+            $this->handlers[$format]->convert( $message->body )
         );
     }
 }

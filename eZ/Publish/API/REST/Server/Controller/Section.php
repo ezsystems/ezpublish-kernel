@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Controller;
+use eZ\Publish\API\REST\Common\Message;
 use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
 
@@ -68,7 +69,10 @@ class Section
     public function createSection( RMF\Request $request )
     {
         return $this->sectionService->createSection(
-            $this->inputDispatcher->parse( $request->contentType, $request->body )
+            $this->inputDispatcher->parse( new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            ) )
         );
     }
 }
