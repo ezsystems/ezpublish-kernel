@@ -16,6 +16,22 @@ use eZ\Publish\API\REST\Server\Values;
 class InputDispatcher
 {
     /**
+     * Array of handlers
+     *
+     * Structure:
+     *
+     * <code>
+     *  array(
+     *      <type> => <handler>,
+     *      …
+     *  )
+     * </code>
+     *
+     * @var array
+     */
+    protected $handlers = array();
+
+    /**
      * Array of parsers
      *
      * Structure:
@@ -37,8 +53,12 @@ class InputDispatcher
      * @param array $parsers
      * @return void
      */
-    public function __construct( array $parsers = array() )
+    public function __construct( array $handlers = array(), array $parsers = array() )
     {
+        foreach ( $handlers as $type => $handler )
+        {
+            $this->addHandler( $type, $handler );
+        }
         foreach ( $parsers as $contentType => $parser )
         {
             $this->addParser( $contentType, $parser );
@@ -58,6 +78,18 @@ class InputDispatcher
     }
 
     /**
+     * Add another handler for the given Content Type
+     *
+     * @param string $type
+     * @param Handler $handler
+     * @return void
+     */
+    public function addHandler( $type, Handler $handler )
+    {
+        $this->handlers[$type] = $handler;
+    }
+
+    /**
      * Parse provided request
      *
      * @param string $contentType
@@ -66,12 +98,27 @@ class InputDispatcher
      */
     public function parse( $contentType, $body )
     {
-        if ( !isset( $this->parsers[$contentType] ) )
+        $contentTypeParts = explode( '+', $contentType );
+        if ( count( $contentTypeParts ) !== 2 )
         {
-            throw new \RuntimeException( "Received bullshitty content type." );
+            throw new \RuntimeException( "No format specification in content type. Missing '+(json|xml|…)' in '{$contentType}'." );
         }
 
-        return $this->parsers[$contentType]->parse( $body );
+        $media  = $contentTypeParts[0];
+        $format = $contentTypeParts[1];
+
+        if ( !isset( $this->handlers[$format] ) )
+        {
+            throw new \RuntimeException( "Unknown format specification: '{$format}'." );
+        }
+        if ( !isset( $this->parsers[$media] ) )
+        {
+            throw new \RuntimeException( "Unknown content type specification: '{$media}'." );
+        }
+
+        return $this->parsers[$media]->parse(
+            $this->handlers[$format]->convert( $body )
+        );
     }
 }
 

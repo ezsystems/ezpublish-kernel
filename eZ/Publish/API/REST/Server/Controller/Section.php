@@ -66,7 +66,7 @@ class Section
      */
     public function createSection( RMF\Request $request )
     {
-        $this->sectionService->createSection(
+        return $this->sectionService->createSection(
             $this->inputDispatcher->parse( $request->contentType, $request->body )
         );
     }

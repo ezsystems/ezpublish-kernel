@@ -119,15 +119,24 @@ class Visitor
      */
     public function visitValueObject( $data )
     {
+        if ( !is_object( $data ) )
+        {
+            throw new \RuntimeException( 'You must provide a ValueObject for visiting. Cannot visit value of type "' . gettype( $data ) . '".' );
+        }
+        $checkedClassNames = array();
+
         $classname = get_class( $data );
         do {
+            $checkedClassNames[] = $classname;
             if ( isset( $this->visitors[$classname] ) )
             {
                 return $this->visitors[$classname]->visit( $this, $this->generator, $data );
             }
         } while ( $classname = get_parent_class( $classname ) );
 
-        throw new \RuntimeException( '"No freaking visitor found!"' );
+        throw new \RuntimeException(
+            sprintf( "No freaking visitor found for %s!", implode( ', ', $checkedClassNames ) )
+        );
     }
 }
 

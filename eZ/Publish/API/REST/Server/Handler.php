@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Parser class
+ * File containing the Handler base class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,19 +8,17 @@
  */
 
 namespace eZ\Publish\API\REST\Server;
-use eZ\Publish\API\REST\Server\Values;
 
 /**
- * Base class for input parser
+ * Input format handler base class
  */
-abstract class Parser
+abstract class Handler
 {
     /**
-     * Parse input structure
+     * Converts the given string to an array structure
      *
-     * @param array $data
-     * @return ValueObject
+     * @param string $string
+     * @return array
      */
-    abstract public function parse( array $data );
+    abstract public function convert( $string );
 }
-

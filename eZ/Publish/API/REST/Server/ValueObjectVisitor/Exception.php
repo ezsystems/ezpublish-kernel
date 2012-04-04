@@ -45,6 +45,9 @@ class Exception extends ValueObjectVisitor
         $generator->startValueElement( 'message', $data->getMessage() );
         $generator->endValueElement( 'message' );
 
+        $generator->startValueElement( 'trace', $data->getTraceAsString() );
+        $generator->endValueElement( 'trace' );
+
         $generator->endElement( 'Exception' );
     }
 }
