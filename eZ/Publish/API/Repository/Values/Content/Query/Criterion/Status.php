@@ -34,19 +34,17 @@ class Status extends Criterion implements CriterionInterface
      */
     public function __construct( $value )
     {
-        if ( !is_array( $value ) )
+        foreach ( (array)$value as $statusValue )
         {
-            $testValue = array( $value );
-        }
-        else
-        {
-            $testValue = $value;
-        }
-        foreach ( $testValue as $statusValue )
-        {
-            if ( !in_array( $statusValue, array( self::STATUS_ARCHIVED, self::STATUS_DRAFT, self::STATUS_PUBLISHED ) ) )
+            switch ( $statusValue )
             {
-                throw new InvalidArgumentException( "Invalid status $statusValue" );
+                case self::STATUS_ARCHIVED:
+                case self::STATUS_DRAFT:
+                case self::STATUS_PUBLISHED:
+                    continue;
+
+                default:
+                    throw new InvalidArgumentException( "Invalid status $statusValue" );
             }
         }
         parent::__construct( null, null, $value );
