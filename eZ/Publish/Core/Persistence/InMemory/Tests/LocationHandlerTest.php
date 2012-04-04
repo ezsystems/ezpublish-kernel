@@ -415,4 +415,26 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->persistenceHandler->locationHandler()->loadByParentId( 123456 );
     }
+
+    /**
+     * Test for the changeMainLocation() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::changeMainLocation()
+     * @group locationHandler
+     */
+    public function testChangeMainLocation()
+    {
+        $this->persistenceHandler->locationHandler()->changeMainLocation(
+            $this->lastContentId,
+            42
+        );
+
+        $content = $this->persistenceHandler->contentHandler()->load( $this->lastContentId, 1 );
+
+        $this->assertEquals(
+            42,
+            $content->locations[0]->mainLocationId,
+            "Main location has not been changed"
+        );
+    }
 }

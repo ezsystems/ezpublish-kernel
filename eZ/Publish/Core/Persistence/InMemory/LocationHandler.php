@@ -422,6 +422,26 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     * @todo changing sections is not handled at all ATM as self::setSectionForSubtree() is not exactly
+     *       replicating current 4.x behaviour
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return void
+     */
+    public function changeMainLocation( $contentId, $locationId )
+    {
+        $this->backend->updateByMatch(
+            "Content\\Location",
+            array( "contentId" => $contentId ),
+            array( "mainLocationId" => $locationId )
+        );
+    }
+
+    /**
      * Updates subtree modification time for all locations starting from $startPathString
      * @param string $startPathString
      */
@@ -446,7 +466,7 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * Returns pathIdentificationString for provided location value object
-     * @param eZ\Publish\SPI\Persistence\Content\Location $vo
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $vo
      * @return string
      */
     private function getPathIdentificationString( LocationValue $vo )

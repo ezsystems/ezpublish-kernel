@@ -138,4 +138,17 @@ interface Handler
      * @return boolean
      */
     public function setSectionForSubtree( $locationId, $sectionId );
+
+    /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     * @todo changing sections is not handled at all ATM as self::setSectionForSubtree() is not exactly
+     *       replicating current 4.x behaviour
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return void
+     */
+    public function changeMainLocation( $contentId, $locationId );
 }

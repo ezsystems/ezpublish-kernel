@@ -731,5 +731,88 @@ class EzpDatabaseTest extends TestCase
                 ->where( $query->expr->eq( 'section_id', 23 ) )
         );
     }
+
+    /**
+     * Test for the changeMainLocation() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::changeMainLocation()
+     */
+    public function testChangeMainLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        // Create additional location and assignment for test purpose
+        $query = $this->handler->createInsertQuery();
+        $query->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set( $this->handler->quoteColumn( 'contentobject_id' ), $query->bindValue( 10, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'contentobject_version' ), $query->bindValue( 2, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'main_node_id' ), $query->bindValue( 15, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'node_id' ), $query->bindValue( 228, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'parent_node_id' ), $query->bindValue( 227, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'path_string' ), $query->bindValue( '/1/5/13/15/', null, \PDO::PARAM_STR ) )
+            ->set( $this->handler->quoteColumn( 'remote_id' ), $query->bindValue( 'asdfg123437', null, \PDO::PARAM_STR ) );
+        $query->prepare()->execute();
+        $query = $this->handler->createInsertQuery();
+        $query->insertInto( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->set( $this->handler->quoteColumn( 'contentobject_id' ), $query->bindValue( 10, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'contentobject_version' ), $query->bindValue( 2, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'id' ), $query->bindValue( 0, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'is_main' ), $query->bindValue( 0, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'parent_node' ), $query->bindValue( 227, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'parent_remote_id' ), $query->bindValue( '5238a276bf8231fbcf8a986cdc82a6a5', null, \PDO::PARAM_STR ) );
+        $query->prepare()->execute();
+
+        $gateway = $this->getLocationGateway();
+
+        $gateway->changeMainLocation(
+            10,// content id
+            228,// new main location id
+            2,// content version number
+            227// new main location parent id
+        );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 228 ), array( 228 ) ),
+            $query->select(
+                'main_node_id'
+            )->from(
+                'ezcontentobject_tree'
+            )->where(
+                $query->expr->eq( 'contentobject_id', 10 )
+            )
+        );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $query->select(
+                'is_main'
+            )->from(
+                'eznode_assignment'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 10 ),
+                    $query->expr->eq( 'contentobject_version', 2 ),
+                    $query->expr->eq( 'parent_node', 227 )
+                )
+            )
+        );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 0 ) ),
+            $query->select(
+                'is_main'
+            )->from(
+                'eznode_assignment'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 10 ),
+                    $query->expr->eq( 'contentobject_version', 2 ),
+                    $query->expr->eq( 'parent_node', 44 )
+                )
+            )
+        );
+    }
 }
 
