@@ -348,18 +348,6 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        // Create some sections
-        $sectionCreateOne             = $sectionService->newSectionCreateStruct();
-        $sectionCreateOne->name       = 'Test section one';
-        $sectionCreateOne->identifier = 'uniqueKeyOne';
-
-        $sectionCreateTwo             = $sectionService->newSectionCreateStruct();
-        $sectionCreateTwo->name       = 'Test section two';
-        $sectionCreateTwo->identifier = 'uniqueKeyTwo';
-
-        $sectionService->createSection( $sectionCreateOne );
-        $sectionService->createSection( $sectionCreateTwo );
-
         $sections = $sectionService->loadSections();
         foreach ( $sections as $section )
         {
@@ -367,7 +355,7 @@ class SectionServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        $this->assertEquals( 8, count( $sections ) );
+        $this->assertEquals( 6, count( $sections ) );
     }
 
     /**
