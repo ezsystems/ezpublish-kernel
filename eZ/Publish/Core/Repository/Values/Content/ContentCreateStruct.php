@@ -33,16 +33,14 @@ class ContentCreateStruct extends APIContentCreateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        if ( null === $language && $this->contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable )
-        {
+        if ( !isset( $language ) )
             $language = $this->mainLanguageCode;
-        }
 
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $language
+                'fieldDefIdentifier' => $fieldDefIdentifier,
+                'value'              => $value,
+                'languageCode'       => $language
             )
         );
     }

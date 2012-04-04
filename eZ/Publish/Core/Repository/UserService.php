@@ -32,6 +32,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
 
     ezcMailTools;
 
@@ -186,12 +187,17 @@ class UserService implements UserServiceInterface
      * @param int $locationId
      * @param int|null $sortField
      * @param int $sortOrder
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC )
+    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
         $searchQuery = new Query();
+
+        $searchQuery->offset = $offset >= 0 ? (int) $offset : 0;
+        $searchQuery->limit  = $limit  >= 0 ? (int) $limit  : null;
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
@@ -203,9 +209,9 @@ class UserService implements UserServiceInterface
 
         $sortClause = null;
         if ( $sortField !== null )
-            $sortClause = $this->getSortClauseBySortField( $sortField, $sortOrder );
+            $sortClause = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
 
-        $searchQuery->sortClauses = array( $sortClause );
+        $searchQuery->sortClauses = $sortClause;
 
         return $this->repository->getContentService()->findContent( $searchQuery, array() );
     }
@@ -444,6 +450,10 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "password", $password );
 
         $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
+
+        if ( empty( $spiUsers ) )
+            throw new NotFoundException( "user", $login );
+
         if ( count( $spiUsers ) > 1 )
         {
             // something went wrong, we should not have more than one
@@ -459,7 +469,7 @@ class UserService implements UserServiceInterface
         );
 
         if ( $spiUsers[0]->passwordHash !== $passwordHash )
-            throw new InvalidArgumentValue( "password", $password );
+            throw new NotFoundException( "user", $login );
 
         return $this->buildDomainUserObject( $spiUsers[0] );
     }
@@ -680,10 +690,13 @@ class UserService implements UserServiceInterface
 
         $searchQuery = new Query();
 
+        $searchQuery->offset = 0;
+        $searchQuery->limit = null;
+
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionLocationId( array( $parentLocationIds ) ),
+                new CriterionLocationId( $parentLocationIds ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
             )
         );
@@ -729,8 +742,8 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchQuery->offset = $offset;
-        $searchQuery->limit = $limit;
+        $searchQuery->offset = $offset > 0 ? (int) $offset : 0;
+        $searchQuery->limit = $limit >= 1 ? (int) $limit : null;
 
         $searchQuery->sortClauses = array(
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )
@@ -741,7 +754,10 @@ class UserService implements UserServiceInterface
         $users = array();
         foreach ( $searchResult->items as $resultItem )
         {
-            $users = $this->buildDomainUserObject( $resultItem );
+            /** @var $resultItem \eZ\Publish\API\Repository\Values\Content\Content */
+            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->contentId );
+
+            $users[] = $this->buildDomainUserObject( $spiUser, $resultItem );
         }
 
         return $users;
@@ -813,16 +829,7 @@ class UserService implements UserServiceInterface
      */
     public function newUserUpdateStruct()
     {
-        $contentService = $this->repository->getContentService();
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentMetaDataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
-
-        return new UserUpdateStruct(
-            array(
-                'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
-                'contentUpdateStruct'         => $contentUpdateStruct
-            )
-        );
+        return new UserUpdateStruct();
     }
 
     /**
@@ -832,16 +839,7 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupUpdateStruct()
     {
-        $contentService = $this->repository->getContentService();
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentMetaDataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
-
-        return new UserGroupUpdateStruct(
-            array(
-                'contentMetaDataUpdateStruct' => $contentMetaDataUpdateStruct,
-                'contentUpdateStruct'         => $contentUpdateStruct
-            )
-        );
+        return new UserGroupUpdateStruct();
     }
 
     /**
@@ -859,7 +857,7 @@ class UserService implements UserServiceInterface
         $subGroupCount = 0;
         if ( $mainLocation !== null )
         {
-            $subGroups = $this->searchSubGroups( $mainLocation->id );
+            $subGroups = $this->searchSubGroups( $mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0 );
             $subGroupCount = $subGroups->count;
         }
 

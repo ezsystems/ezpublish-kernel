@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler,
@@ -52,6 +51,7 @@ class Mapper
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      */
     public function __construct( LocationMapper $locationMapper, Registry $converterRegistry, LanguageHandler $languageHandler )
     {
@@ -77,9 +77,11 @@ class Mapper
         $contentInfo->isAlwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
         $contentInfo->mainLanguageCode = $this->languageHandler->getById( $struct->initialLanguageId )->languageCode;
-        $contentInfo->publicationDate = $struct->published;
-        $contentInfo->modificationDate = $struct->modified;
+        // For drafts published and modified timestamps should be 0
+        $contentInfo->publicationDate = 0;
+        $contentInfo->modificationDate = 0;
         $contentInfo->currentVersionNo = 1;
+        $contentInfo->isPublished = false;
 
         $content->contentInfo = $contentInfo;
 
@@ -87,44 +89,30 @@ class Mapper
     }
 
     /**
-     * Creates a Location\CreateStruct for the given $content
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @return Content\Location\CreateStruct
-     */
-    public function createLocationCreateStruct( Content $content )
-    {
-        $location = new Content\Location\CreateStruct();
-
-        $location->remoteId = md5( uniqid() );
-        $location->contentId = $content->contentInfo->contentId;
-        $location->contentVersion = $content->versionInfo->versionNo;
-
-        return $location;
-    }
-
-    /**
      * Creates a new version for the given $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param int $versionNo
+     * @param array $fields
+     * @param string $initialLanguageCode
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      * @todo: created, modified, initial_language_id, status, user_id?
      */
-    public function createVersionInfoForContent( Content $content, $versionNo )
+    public function createVersionInfoForContent( Content $content, $versionNo, array $fields, $initialLanguageCode )
     {
         $versionInfo = new VersionInfo;
 
-        $versionInfo->versionNo = $versionNo;
-        $versionInfo->creationDate = time();
-        $versionInfo->modificationDate = $versionInfo->creationDate;
-        $versionInfo->creatorId = $content->contentInfo->ownerId;
-        // @todo: Is draft version correct?
-        $versionInfo->status = VersionInfo::STATUS_DRAFT;
         $versionInfo->contentId = $content->contentInfo->contentId;
-        // @todo Implement real language id for translation
-        $versionInfo->languageIds = array( 2 );
-        $versionInfo->initialLanguageCode = 'eng-GB';
+        $versionInfo->versionNo = $versionNo;
+        $versionInfo->creatorId = $content->contentInfo->ownerId;
+        $versionInfo->status = VersionInfo::STATUS_DRAFT;
+        $versionInfo->initialLanguageCode = $initialLanguageCode;
+        $languageCodes = array();
+        foreach ( $fields as $field ) $languageCodes[] = $field->languageCode;
+        foreach ( array_unique( $languageCodes ) as $languageCode )
+            $versionInfo->languageIds[] =
+                $this->languageHandler->loadByLanguageCode( $languageCode )->id;
 
         return $versionInfo;
     }
@@ -132,8 +120,9 @@ class Mapper
     /**
      * Converts value of $field to storage value
      *
-     * @param Field $field
-     * @return StorageFieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function convertToStorageValue( Field $field )
     {
@@ -156,7 +145,7 @@ class Mapper
      *      "$tableName_$columnName"
      *
      * @param array $rows
-     * @return array(Content)
+     * @return \eZ\Publish\SPI\Persistence\Content[]
      */
     public function extractContentFromRows( array $rows )
     {
@@ -185,7 +174,6 @@ class Mapper
             if ( !isset( $versions[$contentId][$versionId] ) )
             {
                 $versions[$contentId][$versionId] = $this->extractVersionInfoFromRow( $row, 'ezcontentobject_version_' );
-                $contentObjs[$contentId]->isPublished = $versions[$contentId][$versionId]->status == VersionInfo::STATUS_PUBLISHED;
             }
             if ( !isset( $versions[$contentId][$versionId]->names[$row['ezcontentobject_name_content_translation']] ) )
             {
@@ -243,6 +231,7 @@ class Mapper
         $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
         $contentInfo->sectionId = (int)$row["{$prefix}section_id"];
         $contentInfo->currentVersionNo = (int)$row["{$prefix}current_version"];
+        $contentInfo->isPublished = (bool)( $row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED );
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];
@@ -334,40 +323,6 @@ class Mapper
     }
 
     /**
-     * Extracts a Version from the given $row
-     *
-     * @param array $row
-     * @return Version
-     */
-    protected function extractVersionFromRow( array $row )
-    {
-        $version = new Version();
-        $this->mapCommonVersionFields( $row, $version );
-        $version->fields = array();
-
-        return $version;
-    }
-
-    /**
-     * Maps fields from $row to $version
-     *
-     * @param array $row
-     * @param Version|RestrictedVersion $version
-     * @return void
-     */
-    protected function mapCommonVersionFields( array $row, $version )
-    {
-        $version->id = (int)$row['ezcontentobject_version_id'];
-        $version->versionNo = (int)$row['ezcontentobject_version_version'];
-        $version->modified = (int)$row['ezcontentobject_version_modified'];
-        $version->creatorId = (int)$row['ezcontentobject_version_creator_id'];
-        $version->created = (int)$row['ezcontentobject_version_created'];
-        $version->status = (int)$row['ezcontentobject_version_status'];
-        $version->contentId = (int)$row['ezcontentobject_version_contentobject_id'];
-        $version->initialLanguageId = (int)$row['ezcontentobject_version_initial_language_id'];
-    }
-
-    /**
      * Extracts a Field from $row
      *
      * @param array $row
@@ -392,8 +347,8 @@ class Mapper
      *
      * @param array $row
      * @param string $type
-     * @return FieldValue
-     * @throws eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      *         if the necessary converter for $type could not be found.
      */
     protected function extractFieldValueFromRow( array $row, $type )
@@ -415,50 +370,10 @@ class Mapper
     }
 
     /**
-     * Extracts a list of RestrictedVersion objects from $rows
-     *
-     * @param string[][] $rows
-     * @return RestrictedVersion[]
-     */
-    public function extractVersionListFromRows( array $rows )
-    {
-        $versionList = array();
-        foreach ( $rows as $row )
-        {
-            $versionId = (int)$row['ezcontentobject_version_id'];
-            if ( !isset( $versionList[$versionId] ) )
-            {
-                $version = new RestrictedVersion();
-                $this->mapCommonVersionFields( $row, $version );
-                $version->languageIds = array();
-
-                $versionList[$versionId] = $version;
-            }
-
-            if ( !isset( $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] ) )
-            {
-                $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
-            }
-
-            if (
-                !in_array(
-                    $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
-                    $versionList[$versionId]->languageIds              // eng-US can be either 2 or 3, see fixture data
-                )
-            )
-            {
-                $versionList[$versionId]->languageIds[] =
-                    $row['ezcontentobject_attribute_language_id'] & ~1;
-            }
-        }
-        return array_values( $versionList );
-    }
-
-    /**
      * Creates CreateStruct from $content
      *
-     * @param eZ\Publish\SPI\Persistence\Content $content
-     * @return eZ\Publish\SPI\Persistence\Content\CreateStruct
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     public function createCreateStructFromContent( Content $content )
     {
@@ -471,7 +386,6 @@ class Mapper
         $struct->alwaysAvailable = $content->contentInfo->isAlwaysAvailable;
         $struct->remoteId = $content->contentInfo->remoteId;
         $struct->initialLanguageId = $this->languageHandler->getByLocale( $content->versionInfo->initialLanguageCode )->id;
-        $struct->published = $content->contentInfo->publicationDate;
         $struct->modified = $content->contentInfo->modificationDate;
 
         foreach ( $content->fields as $field )

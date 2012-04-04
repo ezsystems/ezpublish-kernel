@@ -590,7 +590,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testLoadPoliciesByUserId()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $roleService = $this->repository->getRoleService();
 
         $policies = $roleService->loadPoliciesByUserId( 10 );
@@ -612,7 +612,6 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testLoadPoliciesByNonExistingUserId()
     {
-        self::markTestSkipped( "@todo: enable when content service is implemented" );
         $roleService = $this->repository->getRoleService();
 
         $roleService->loadPoliciesByUserId( PHP_INT_MAX );
@@ -624,25 +623,49 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testAssignRoleToUserGroup()
     {
-        self::markTestIncomplete( "@todo: dependency on user service" );
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRole( 1 );
+        $userGroup = $this->repository->getUserService()->loadUserGroup( 12 );
+
+        $originalAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $userGroup ) );
+
+        $roleService->assignRoleToUserGroup( $role, $userGroup );
+        $newAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $userGroup ) );
+        self::assertEquals( $originalAssignmentCount + 1, $newAssignmentCount );
     }
 
     /**
-     * Test assigning role to user group which is not already assigned to the group
-     * @covers \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup
-     */
-    public function testUnassignNotAssignedRoleFromUserGroup()
-    {
-        self::markTestIncomplete( "@todo: dependency on user service" );
-    }
-
-    /**
-     * Test assigning role to user group
+     * Test unassigning role from user group
      * @covers \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup
      */
     public function testUnassignRoleFromUserGroup()
     {
-        self::markTestIncomplete( "@todo: dependency on user service" );
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRole( 2 );
+        $userGroup = $this->repository->getUserService()->loadUserGroup( 12 );
+
+        $originalAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $userGroup ) );
+
+        $roleService->unassignRoleFromUserGroup( $role, $userGroup );
+        $newAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $userGroup ) );
+        self::assertEquals( $originalAssignmentCount - 1, $newAssignmentCount );
+    }
+
+    /**
+     * Test unassigning role from user group which is not already assigned to the group
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup
+     */
+    public function testUnassignRoleFromUserGroupThrowsInvalidArgumentException()
+    {
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRole( 1 );
+        $userGroup = $this->repository->getUserService()->loadUserGroup( 12 );
+
+        $roleService->unassignRoleFromUserGroup( $role, $userGroup );
     }
 
     /**
@@ -651,25 +674,56 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testAssignRoleToUser()
     {
-        self::markTestIncomplete( "@todo: dependency on user service" );
+        self::markTestSkipped( "@todo: enable" );
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRole( 2 );
+        $user = $this->repository->getUserService()->loadUser( 14 );
+
+        $originalAssignmentCount = count( $roleService->getRoleAssignmentsForUser( $user ) );
+
+        $roleService->assignRoleToUser( $role, $user );
+        $newAssignmentCount = count( $roleService->getRoleAssignmentsForUser( $user ) );
+        self::assertEquals( $originalAssignmentCount + 1, $newAssignmentCount );
     }
 
     /**
-     * Test assigning role to user which is not already assigned to the user
-     * @covers \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser
-     */
-    public function testUnassignNotAssignedRoleFromUser()
-    {
-        self::markTestIncomplete( "@todo: dependency on user service" );
-    }
-
-    /**
-     * Test assigning role to user
+     * Test unassigning role from user
      * @covers \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser
      */
     public function testUnassignRoleFromUser()
     {
-        self::markTestIncomplete( "@todo: dependency on user service" );
+        self::markTestSkipped( "@todo: enable" );
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRole( 2 );
+        $user = $this->repository->getUserService()->loadUser( 14 );
+
+        $originalAssignmentCount = count( $roleService->getRoleAssignmentsForUser( $user ) );
+
+        $roleService->assignRoleToUser( $role, $user );
+        $newAssignmentCount = count( $roleService->getRoleAssignmentsForUser( $user ) );
+        self::assertEquals( $originalAssignmentCount + 1, $newAssignmentCount );
+
+        $roleService->unassignRoleFromUser( $role, $user );
+        $finalAssignmentCount = count( $roleService->getRoleAssignmentsForUser( $user ) );
+        self::assertEquals( $newAssignmentCount - 1, $finalAssignmentCount );
+    }
+
+    /**
+     * Test unassigning role from user which is not already assigned to the user
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser
+     */
+    public function testUnassignRoleFromUserThrowsInvalidArgumentException()
+    {
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRole( 2 );
+        $user = $this->repository->getUserService()->loadUser( 14 );
+
+        $roleService->unassignRoleFromUser( $role, $user );
     }
 
     /**
@@ -678,7 +732,19 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testGetRoleAssignments()
     {
-        self::markTestIncomplete( "@todo: dependency on user service" );
+        $roleService = $this->repository->getRoleService();
+
+        $role = $roleService->loadRole( 2 );
+
+        $roleAssignments = $roleService->getRoleAssignments( $role );
+
+        self::assertInternalType( "array", $roleAssignments );
+        self::assertNotEmpty( $roleAssignments );
+
+        foreach ( $roleAssignments as $assignment )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleAssignment', $assignment );
+        }
     }
 
     /**
@@ -687,7 +753,22 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testGetRoleAssignmentsForUser()
     {
-        self::markTestIncomplete( "@todo: dependency on user service" );
+        self::markTestSkipped( "@todo: enable" );
+        $roleService = $this->repository->getRoleService();
+
+        $user = $this->repository->getUserService()->loadUser( 14 );
+        $role = $roleService->loadRole( 2 );
+        $roleService->assignRoleToUser( $role, $user );
+
+        $userAssignments = $roleService->getRoleAssignmentsForUser( $user );
+
+        self::assertInternalType( "array", $userAssignments );
+        self::assertNotEmpty( $userAssignments );
+
+        foreach ( $userAssignments as $assignment )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserRoleAssignment', $assignment );
+        }
     }
 
     /**
@@ -696,7 +777,17 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testGetRoleAssignmentsForUserGroup()
     {
-        self::markTestIncomplete( "@todo: dependency on user service" );
+        $userGroup = $this->repository->getUserService()->loadUserGroup( 12 );
+
+        $userGroupAssignments = $this->repository->getRoleService()->getRoleAssignmentsForUserGroup( $userGroup );
+
+        self::assertInternalType( "array", $userGroupAssignments );
+        self::assertNotEmpty( $userGroupAssignments );
+
+        foreach ( $userGroupAssignments as $assignment )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment', $assignment );
+        }
     }
 
     /**

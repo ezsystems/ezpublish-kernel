@@ -971,11 +971,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isRequired      = true;
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable    = true;
-        $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => 'New text line'
-            )
-        );
+        $titleFieldCreate->defaultValue = "New text line";
         //$titleFieldCreate->validators
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
@@ -998,11 +994,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isRequired      = false;
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->isSearchable    = true;
-        $bodyFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => ''
-            )
-        );
+        $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validators
         $bodyFieldCreate->fieldSettings = array(
             "textColumns" => 80
@@ -1093,11 +1085,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isRequired      = true;
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable    = true;
-        $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => 'New text line'
-            )
-        );
+        $titleFieldCreate->defaultValue = "New text line";
         //$titleFieldCreate->validators
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
@@ -1120,11 +1108,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isRequired      = false;
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->isSearchable    = true;
-        $bodyFieldCreate->defaultValue   = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => ''
-            )
-        );
+        $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validators
         //$bodyFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $bodyFieldCreate );
@@ -1260,9 +1244,15 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         foreach ( $expectedDefinitionCreate as $propertyName => $propertyValue )
         {
+            if ( is_object( $propertyValue ) )
+                $expectedType = get_class( $propertyValue );
+            else
+                $expectedType = gettype( $propertyValue );
+
             $this->assertEquals(
                 $propertyValue,
-                $actualDefinition->$propertyName
+                $actualDefinition->$propertyName,
+                "Property '{$propertyName}' should have been of type: " . $expectedType
             );
         }
     }
@@ -1374,9 +1364,9 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         /* BEGIN: Use Case */
         $contentTypeService = $this->repository->getContentTypeService();
-
         // Creates published content type with remoteId "new-remoteid"
         $this->createPublishedContentType();
+
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'other-type'
         );
@@ -1890,9 +1880,9 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId        = 23;
         $groupCreate->creationDate     = new \DateTime();
-        $groupCreate->mainLanguageCode = 'de_DE';
-        $groupCreate->names            = array( 'en_US' => 'A name.' );
-        $groupCreate->descriptions     = array( 'en_US' => 'A description.' );
+        $groupCreate->mainLanguageCode = 'ger-DE';
+        $groupCreate->names            = array( 'eng-US' => 'A name.' );
+        $groupCreate->descriptions     = array( 'eng-US' => 'A description.' );
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
@@ -1931,11 +1921,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isRequired      = true;
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable    = true;
-        $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => 'New text line'
-            )
-        );
+        $titleFieldCreate->defaultValue = "New text line";
         //$titleFieldCreate->validators
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
@@ -2606,11 +2592,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isTranslatable  = true;
         $fieldDefCreate->isRequired      = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => 'New text line'
-            )
-        );
+        $fieldDefCreate->defaultValue = "New text line";
         //$fieldDefCreate->validators
         //$fieldDefCreate->fieldSettings
         $fieldDefCreate->isSearchable = true;
@@ -2849,11 +2831,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyUpdateStruct->isTranslatable  = false;
         $bodyUpdateStruct->isRequired      = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                 "data" => ""
-            )
-        );
+        $bodyUpdateStruct->defaultValue = "";
         //$bodyUpdateStruct->validators
         $bodyUpdateStruct->fieldSettings   = array(
             "textColumns" => 80

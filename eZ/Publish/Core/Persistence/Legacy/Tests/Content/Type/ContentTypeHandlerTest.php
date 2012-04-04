@@ -872,6 +872,42 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getFieldDefinition
+     */
+    public function testGetFieldDefinition()
+    {
+        $mapperMock = $this->getMapperMock(
+            array( 'extractFieldFromRow' )
+        );
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractFieldFromRow' )
+            ->with(
+                $this->equalTo( array() )
+            )->will(
+                $this->returnValue( new FieldDefinition() )
+            );
+
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadFieldDefinition' )
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( Type::STATUS_DEFINED )
+            )->will(
+                $this->returnValue( array() )
+            );
+
+        $handler = $this->getHandler();
+        $fieldDefinition = $handler->getFieldDefinition( 42, Type::STATUS_DEFINED );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition',
+            $fieldDefinition
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::addFieldDefinition
      */
     public function testAddFieldDefinition()

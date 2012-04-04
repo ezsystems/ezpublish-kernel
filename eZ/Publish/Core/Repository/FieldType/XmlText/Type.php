@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as XMLTextInputHandler,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as XMLTextInputParserInterface,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -105,20 +106,27 @@ EOF;
     {
         if ( !$inputValue instanceof Value )
         {
-            // @todo Consider adding a InvalidArgumentType exception
-            throw new InvalidArgumentException( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_string( $inputValue->text ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->text',
+                'string',
+                $inputValue->text
+            );
         }
 
         $handler = $inputValue->getInputHandler();
         if ( !$handler->isXmlValid( $inputValue->text, false ) )
         {
             // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentValue( '$inputValue->text', $inputValue->text, __CLASS__ );
         }
 
         return $inputValue;

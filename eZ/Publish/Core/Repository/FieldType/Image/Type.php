@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Repository\FieldType\Image;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
     eZ\Publish\API\Repository\Repository,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
  * The Image field type
@@ -86,12 +86,20 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Value',
+                $inputValue
+            );
         }
 
         if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->file',
+                'eZ\Publish\API\Repository\Values\IO\BinaryFile',
+                $inputValue->file
+            );
         }
 
         return $inputValue;

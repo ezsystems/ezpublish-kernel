@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Checkbox;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -72,12 +71,20 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_bool( $inputValue->bool ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->bool',
+                'boolean',
+                $inputValue->bool
+            );
         }
 
         return $inputValue;

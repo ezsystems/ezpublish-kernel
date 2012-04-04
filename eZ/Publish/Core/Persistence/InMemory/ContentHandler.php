@@ -13,7 +13,6 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
@@ -63,35 +62,30 @@ class ContentHandler implements ContentHandlerInterface
             array(
                 'contentTypeId' => $content->typeId,
                 'sectionId' => $content->sectionId,
+                'isPublished' => false,
                 'ownerId' => $content->ownerId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'currentVersionNo' => 1,
-                'modificationDate' => $content->modified,
-                'publicationDate' => $content->published,
+                // Published and modified timestamps for drafts is 0
+                'modificationDate' => 0,
+                'publicationDate' => 0,
+                'isAlwaysAvailable' => $content->alwaysAvailable,
+                'remoteId' => $content->remoteId,
+                'mainLanguageCode' => $this->handler->contentLanguageHandler()
+                    ->load( $content->initialLanguageId )->languageCode
             ),
             true,
             'contentId'
         );
         $time = time();
-        $versionInfo = $this->backend->create(
-            'Content\\VersionInfo',
-            array(
-                // @todo: Name should be computed!
-                'names' => $content->name,
-                'modificationDate' => $time,
-                'creatorId' => $content->ownerId,
-                'creationDate' => $time,
-                'contentId' => $contentObj->contentInfo->contentId,
-                'status' => VersionInfo::STATUS_DRAFT,
-                'versionNo' => 1
-            )
-        );
+        $languageCodes = array();
+        $languageIds = array();
         foreach ( $content->fields as $field )
         {
             $contentObj->fields[] = $this->backend->create(
                 'Content\\Field',
                 array(
-                    'versionNo' => $versionInfo->versionNo,
+                    'versionNo' => 1,
                     // Using internal _contentId since it's not directly exposed by Persistence
                     '_contentId' => $contentObj->contentInfo->contentId,
                     'value' => new FieldValue(
@@ -102,13 +96,35 @@ class ContentHandler implements ContentHandlerInterface
                     )
                 ) + (array)$field
             );
+            $languageCodes[] = $field->languageCode;
         }
+        foreach ( array_unique( $languageCodes ) as $languageCode )
+        {
+            $languageIds[] = $this->handler->contentLanguageHandler()
+                ->loadByLanguageCode( $languageCode )->id;
+        }
+        $versionInfo = $this->backend->create(
+            'Content\\VersionInfo',
+            array(
+                // @todo: Name should be computed!
+                'names' => $content->name,
+                'creatorId' => $content->ownerId,
+                'creationDate' => $content->modified,
+                'modificationDate' => $content->modified,
+                'contentId' => $contentObj->contentInfo->contentId,
+                'status' => VersionInfo::STATUS_DRAFT,
+                'versionNo' => 1,
+                'languageIds' => $languageIds,
+                'initialLanguageCode' => $this->handler->contentLanguageHandler()
+                    ->load( $content->initialLanguageId )->languageCode
+            )
+        );
         $contentObj->versionInfo = $versionInfo;
 
         $locationHandler = $this->handler->locationHandler();
         foreach ( $content->locations as $locationStruct )
         {
-            $locationStruct->contentId = $contentObj->id;
+            $locationStruct->contentId = $contentObj->contentInfo->contentId;
             $locationStruct->contentVersion = $contentObj->contentInfo->currentVersionNo;
             $contentObj->locations[] = $locationHandler->create( $locationStruct );
         }
@@ -144,12 +160,13 @@ class ContentHandler implements ContentHandlerInterface
                 'creationDate' => $time,
                 'contentId' => $contentId,
                 'status' => VersionInfo::STATUS_DRAFT,
-                'versionNo' => $newVersionNo
+                'versionNo' => $newVersionNo,
+                'initialLanguageCode' => $content->versionInfo->initialLanguageCode,
+                'languageIds' => $content->versionInfo->languageIds
             )
         );
 
         // Duplicate fields
-        // @todo: language support
         $content->fields = array();
         foreach ( $fields as $field )
         {
@@ -388,28 +405,57 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * Updates a content object meta data, identified by $contentId
-     *
-     * @param int $contentId
-     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
-        throw new \Exception( 'Not implemented yet' );
+        $updateData = (array) $content;
+        $updateData["isAlwaysAvailable"] = $updateData["alwaysAvailable"];
+        $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
+            ->load( $content->mainLanguageId )->languageCode;
+
+        $this->backend->update(
+            "Content\\ContentInfo",
+            $contentId,
+            $updateData,
+            true,
+            "contentId"
+        );
+
+        return $this->loadContentInfo( $contentId );
     }
 
     /**
-     * Updates a content version, identified by $contentId and $versionNo
-     *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\Content
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function updateContent( $contentId, $versionNo, UpdateStruct $content )
     {
-        throw new \Exception( 'Not implemented yet' );
+        $versionNames = $this->loadVersionInfo( $contentId, $versionNo )->names;
+        foreach ( $versionNames as $languageCode => &$versionName )
+            if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
+        $versionUpdateData = array(
+            "creatorId"         => $content->creatorId,
+            "modificationDate"  => $content->modificationDate,
+            "initialLanguageId" => $content->initialLanguageId,
+            "names"             => $versionNames
+        );
+
+        $this->backend->updateByMatch(
+            "Content\\VersionInfo",
+            array( "contentId" => $contentId, "versionNo" => $versionNo ),
+            $versionUpdateData
+        );
+
+        foreach ( $content->fields as $field )
+        {
+            $this->backend->update(
+                "Content\\Field",
+                $field->id,
+                array( "value" => $field->value )
+            );
+        }
+
+        return $this->load( $contentId, $versionNo );
     }
 
     /**
@@ -508,38 +554,6 @@ class ContentHandler implements ContentHandlerInterface
 
         if ( empty( $versions ) )
             throw new NotFound( "Content\\VersionInfo", "contentId: $contentId" );
-
-        // cast to RestrictedVersion
-        foreach ( $versions as $key => $vo )
-        {
-            $restricted = new RestrictedVersion();
-            foreach ( $restricted as $property => $value )
-            {
-                switch ( $property )
-                {
-                    case 'name':
-                        $restricted->name = $vo->names;
-                        break;
-
-                    case 'modified':
-                        $restricted->modified = $vo->modificationDate;
-                        break;
-
-                    case 'created':
-                        $restricted->created = $vo->creationDate;
-                        break;
-
-                    case 'initialLanguageId':
-                        $languages = $this->backend->find( 'Content\\Language', array( 'languageCode' => $vo->initialLanguageCode ) );
-                        $restricted->initialLanguageId = $languages[0]->id;
-                        break;
-
-                    default:
-                        $restricted->$property = $vo->$property;
-                }
-            }
-            $versions[$key] = $restricted;
-        }
 
         return $versions;
     }
@@ -662,43 +676,64 @@ class ContentHandler implements ContentHandlerInterface
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id and versionNo
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( UpdateStruct $updateStruct )
+    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
     {
-        // Change the currentVersionNo to the published version
+        // Change Content currentVersionNo to the published version
         $this->backend->update(
             'Content',
-            $updateStruct->id,
+            $contentId,
             array(
-                '_currentVersionNo' => $updateStruct->versionNo,
+                '_currentVersionNo' => $versionNo,
             )
         );
 
+        // Update ContentInfo published flag and change the currentVersionNo to the published version
+        $contentInfoUpdateData = array(
+            "currentVersionNo" => $versionNo,
+            "isPublished" => true,
+        );
+        // Update ContentInfo with set properties in $metaDataUpdateStruct
+        foreach ( $metaDataUpdateStruct as $propertyName => $propertyValue )
+        {
+            if ( isset( $propertyValue ) )
+            {
+                if ( $propertyName === "alwaysAvailable" )
+                {
+                    $contentInfoUpdateData["isAlwaysAvailable"] = $propertyValue;
+                }
+                elseif ( $propertyName === "mainLanguageId" )
+                {
+                    $contentInfoUpdateData["mainLanguageCode"] =
+                        $this->handler->contentLanguageHandler()->load( $propertyValue )->languageCode;
+                }
+                else $contentInfoUpdateData[$propertyName] = $propertyValue;
+            }
+        }
         $this->backend->update(
             'Content\\ContentInfo',
-            $updateStruct->id,
-            array(
-                'currentVersionNo' => $updateStruct->versionNo,
-            ),
+            $contentId,
+            $contentInfoUpdateData,
             true,
             'contentId'
         );
 
-        // Change the currentVersionNo to the published version
+        // Update VersionInfo with modified timestamp and published status
         $this->backend->updateByMatch(
             'Content\\VersionInfo',
-            array( 'contentId' => $updateStruct->id, 'versionNo' => $updateStruct->versionNo ),
+            array( 'contentId' => $contentId, 'versionNo' => $versionNo ),
             array(
-                "name" => $updateStruct->name,
-                "creatorId" => $updateStruct->creatorId,
-                "modified" => $updateStruct->modified,
+                "modificationDate" => $metaDataUpdateStruct->modificationDate,
+                "status" => VersionInfo::STATUS_PUBLISHED,
             )
         );
 
-        return $this->load( $updateStruct->id, $updateStruct->versionNo );
+        return $this->load( $contentId, $versionNo );
     }
 
     /**

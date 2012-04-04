@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository\FieldType\Image;
 use ezp\Base\Collection\Type as TypeCollection,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\InvalidAlias,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\MissingAlias,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\IOService,
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
     splFileInfo;

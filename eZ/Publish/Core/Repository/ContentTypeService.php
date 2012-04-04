@@ -395,6 +395,13 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
     }
 
+    /**
+     * Builds SPI FieldDefinition object using API FieldDefinitionCreateStruct
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
     protected function buildSPIFieldDefinitionCreate( FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
         $spiFieldDefinition = new SPIFieldDefinition(
@@ -409,17 +416,28 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isTranslatable"       => $fieldDefinitionCreateStruct->isTranslatable,
                 "isRequired"           => $fieldDefinitionCreateStruct->isRequired,
                 "isInfoCollector"      => $fieldDefinitionCreateStruct->isInfoCollector,
+                // These are precreated in constructor, need to be filled with data
                 //"fieldTypeConstraints"
-                "defaultValue"         => $fieldDefinitionCreateStruct->defaultValue,
+                //"defaultValue"
                 "isSearchable"         => $fieldDefinitionCreateStruct->isSearchable
             )
         );
         $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validators;
         $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionCreateStruct->fieldSettings;
+        $spiFieldDefinition->defaultValue->data = $fieldDefinitionCreateStruct->defaultValue;
 
         return $spiFieldDefinition;
     }
 
+    /**
+     * Builds SPI FieldDefinition object using API FieldDefinitionUpdateStruct
+     * and API FieldDefinition
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
     protected function buildSPIFieldDefinitionUpdate( FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct, APIFieldDefinition $fieldDefinition )
     {
         $spiFieldDefinition = new SPIFieldDefinition(
@@ -435,12 +453,13 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isRequired"      => $fieldDefinitionUpdateStruct->isRequired,
                 "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector,
                 //"fieldTypeConstraints"
-                "defaultValue"    => $fieldDefinitionUpdateStruct->defaultValue,
+                //"defaultValue"
                 "isSearchable"    => $fieldDefinitionUpdateStruct->isSearchable
             )
         );
         $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionUpdateStruct->validators;
         $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionUpdateStruct->fieldSettings;
+        $spiFieldDefinition->defaultValue->data = $fieldDefinitionUpdateStruct->defaultValue;
 
         return $spiFieldDefinition;
     }
@@ -527,7 +546,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             )
         );
     }
-
     /**
      * Builds a ContentTypeDraft domain object from value object returned by persistence
      * Decorates ContentType

@@ -42,4 +42,19 @@ class Location extends APILocation
 
         return parent::__get( $property );
     }
+
+    /**
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'contentId' )
+            return true;
+
+        return parent::__isset( $property );
+    }
 }

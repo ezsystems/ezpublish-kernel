@@ -73,13 +73,6 @@ class CreateStruct extends ValueObject
     public $initialLanguageId;
 
     /**
-     * Creation date
-     *
-     * @var int
-     */
-    public $published;
-
-    /**
      * Modification date
      *
      * @var int

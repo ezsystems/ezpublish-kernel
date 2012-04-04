@@ -81,17 +81,17 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'name' => 'Content name',
-                    'contentclass_id' => '23',
-                    'section_id' => '42',
-                    'owner_id' => '13',
-                    'current_version' => '1',
+                    'name'                => 'Content name',
+                    'contentclass_id'     => '23',
+                    'section_id'          => '42',
+                    'owner_id'            => '13',
+                    'current_version'     => '1',
                     'initial_language_id' => '1',
-                    'remote_id' => 'some_remote_id',
-                    'language_mask' => '1',
-                    'modified' => '456',
-                    'published' => '123',
-                    'status' => Content\VersionInfo::STATUS_DRAFT,
+                    'remote_id'           => 'some_remote_id',
+                    'language_mask'       => '1',
+                    'modified'            => '0',
+                    'published'           => '0',
+                    'status'              => ContentInfo::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -129,7 +129,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->initialLanguageId = 1;
         $struct->remoteId = 'some_remote_id';
         $struct->alwaysAvailable = true;
-        $struct->published = 123;
         $struct->modified = 456;
         $struct->name = array(
             'always-available' => 'eng-US',
@@ -298,7 +297,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 ->from( 'ezcontentobject_version' )
         );
 
-        // check that content status has been set to published
+        // check that content status has not been set to published
         $this->assertQueryResult(
             array( array( VersionInfo::STATUS_DRAFT ) ),
             $this->getDatabaseHandler()
@@ -340,11 +339,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentId, $version->versionNo, 1 )
+            $gateway->setStatus( $version->contentId, $version->versionNo, VersionInfo::STATUS_PUBLISHED )
         );
 
         $this->assertQueryResult(
-            array( array( '1' ) ),
+            array( array( VersionInfo::STATUS_PUBLISHED ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -353,7 +352,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( '1' ) ), // 1 === Content::STATUS_PUBLISHED
+            array( array( ContentInfo::STATUS_PUBLISHED ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -396,7 +395,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id' => '3',
                     'modified' => '234567',
                     'owner_id' => '42',
-                    'published' => '123456'
+                    'published' => '123456',
+                    'remote_id' => 'ghjk1234567890ghjk1234567890',
+                    'name' => 'Thoth'
                 )
             ),
             $this->getDatabaseHandler()->createSelectQuery()
@@ -404,7 +405,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id',
                     'modified',
                     'owner_id',
-                    'published'
+                    'published',
+                    'remote_id',
+                    'name'
                 )->from( 'ezcontentobject' )
                 ->where( 'id = 10' )
         );
@@ -437,6 +440,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->publicationDate = 123456;
         $struct->mainLanguageId = 3;
         $struct->modificationDate = 234567;
+        $struct->remoteId = "ghjk1234567890ghjk1234567890";
+        $struct->name = "Thoth";
         return $struct;
     }
 
@@ -458,6 +463,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertQueryResult(
             array(
                 array(
+                    'creator_id' => '23',
                     'initial_language_id' => '3',
                     'modified' => '234567',
                 )
@@ -465,6 +471,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select(
                     array(
+                        'creator_id',
                         'initial_language_id',
                         'modified',
                     )
@@ -1396,6 +1403,24 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertEquals(
             $gateway->loadLatestPublishedData( 10 ),
             $gateway->load( 10, 2 )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getLastVersionNumber
+     */
+    public function testGetLastVersionNumber()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $this->assertEquals(
+            1,
+            $gateway->getLastVersionNumber( 4 )
         );
     }
 

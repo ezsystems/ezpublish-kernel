@@ -1,7 +1,8 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
+    eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used to create a new user group in the repository
@@ -31,9 +32,12 @@ class UserGroupCreateStruct extends APIUserGroupCreateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        if ( $language === null )
-            $this->fields[$fieldDefIdentifier][$this->mainLanguageCode] = $value;
-        else
-            $this->fields[$fieldDefIdentifier][$language] = $value;
+        $this->fields[] = new Field(
+            array(
+                'fieldDefIdentifier' => $fieldDefIdentifier,
+                'value'              => $value,
+                'languageCode'       => $language
+            )
+        );
     }
 }

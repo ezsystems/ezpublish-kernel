@@ -115,7 +115,6 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testLoadTrashItem()
     {
-        self::markTestSkipped( "enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
@@ -161,7 +160,6 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testTrash()
     {
-        self::markTestSkipped( "enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
@@ -197,7 +195,6 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testRecover()
     {
-        self::markTestSkipped( "enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
@@ -210,22 +207,26 @@ abstract class TrashBase extends BaseServiceTest
 
         self::assertSameClassPropertiesCorrect(
             array(
-                'id',
                 'priority',
                 'hidden',
                 'invisible',
                 'remoteId',
                 'parentLocationId',
-                'pathString',
-                'modifiedSubLocationDate',
                 'depth',
                 'sortField',
-                'sortOrder',
-                'childCount'
+                'sortOrder'
             ),
             $location,
-            $recoveredLocation
+            $recoveredLocation,
+            //@todo: assert child count
+            array( 'childCount' )
         );
+
+        $parentLocation = $locationService->loadLocation( $location->parentLocationId );
+        $newPathString = $parentLocation->pathString . $recoveredLocation->id . '/';
+
+        self::assertEquals( $newPathString, $recoveredLocation->pathString );
+        self::assertGreaterThan( 0, $recoveredLocation->id );
     }
 
     /**
@@ -247,7 +248,7 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testRecoverToDifferentLocation()
     {
-        self::markTestSkipped( "enable when content service is implemented" );
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
@@ -262,22 +263,25 @@ abstract class TrashBase extends BaseServiceTest
 
         self::assertSameClassPropertiesCorrect(
             array(
-                'id',
                 'priority',
                 'hidden',
                 'invisible',
                 'remoteId',
-                'pathString',
-                'modifiedSubLocationDate',
                 'depth',
                 'sortField',
-                'sortOrder',
-                'childCount'
+                'sortOrder'
             ),
             $location,
-            $recoveredLocation
+            $recoveredLocation,
+            //@todo: assert child count
+            array( 'childCount' )
         );
 
+        $parentLocation = $locationService->loadLocation( $recoveredLocation->parentLocationId );
+        $newPathString = $parentLocation->pathString . $recoveredLocation->id . '/';
+
+        self::assertEquals( $newPathString, $recoveredLocation->pathString );
+        self::assertGreaterThan( 0, $recoveredLocation->id );
         self::assertEquals( $locationCreateStruct->parentLocationId, $recoveredLocation->parentLocationId );
     }
 
@@ -288,7 +292,6 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testRecoverToNonExistingLocation()
     {
-        self::markTestSkipped( "enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
@@ -305,7 +308,6 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testDeleteTrashItem()
     {
-        self::markTestSkipped( "enable when content service is implemented" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
@@ -342,7 +344,7 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testFindTrashItemsAndEmptyTrash()
     {
-        self::markTestSkipped( "enable when content service is implemented" );
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 

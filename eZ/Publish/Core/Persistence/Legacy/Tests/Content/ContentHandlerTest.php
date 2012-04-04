@@ -15,7 +15,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
@@ -140,15 +139,6 @@ class ContentHandlerTest extends TestCase
             )->will(
                 $this->returnValue( new VersionInfo )
             );
-        $mapperMock->expects( $this->once() )
-            ->method( 'createLocationCreateStruct' )
-            ->with(
-                $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content'
-                )
-            )->will(
-                $this->returnValue( new \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct() )
-            );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertContentObject' )
@@ -214,44 +204,49 @@ class ContentHandlerTest extends TestCase
      */
     public function testPublish()
     {
-        self::markTestIncomplete( 'Reimplement this test with new updateMetadata() and updateContent(). See #EZPNEXT-215' );
-        $handler = $this->getPartlyMockedHandler( array( 'update' ) );
+        $handler = $this->getPartlyMockedHandler( array( 'setStatus' ) );
 
         $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
         $locationMock = $this->getLocationGatewayMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+        $metadataUpdateStruct = new MetadataUpdateStruct();
 
-        $updateStruct = new UpdateStruct(
-            array(
-                'id' => 42,
-                'versionNo' => 1,
-                'name' => array(
-                    'eng-US' => "Hello",
-                    'eng-GB' => "Hello (GB)",
-                ),
-            )
+        $gatewayMock->expects( $this->once() )
+            ->method( 'load' )
+            ->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 2 ),
+            $this->equalTo( null )
+        )->will(
+            $this->returnValue( array( 42 ) )
         );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
+
+        $fieldHandlerMock->expects( $this->once() )
+            ->method( 'loadExternalFieldData' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+
+        $gatewayMock
+            ->expects( $this->once() )
+            ->method( 'updateContent' )
+            ->with( 23, $metadataUpdateStruct );
+
+        $locationMock
+            ->expects( $this->once() )
+            ->method( 'createLocationsFromNodeAssignments' )
+            ->with( 23, 2 );
 
         $handler
             ->expects( $this->once() )
-            ->method( 'update' )
-            ->with( $updateStruct );
+            ->method( 'setStatus' )
+            ->with( 23, VersionInfo::STATUS_PUBLISHED, 2 );
 
-        $gatewayMock
-            ->expects( $this->at( 0 ) )
-            ->method( 'setName' )
-            ->with( 42, 1, 'Hello', 'eng-US' );
-
-        $gatewayMock
-            ->expects( $this->at( 1 ) )
-            ->method( 'setName' )
-            ->with( 42, 1, 'Hello (GB)', 'eng-GB' );
-
-        $locationMock
-            ->expects( $this->at( 0 ) )
-            ->method( 'createLocationsFromNodeAssignments' )
-            ->with( 42, 1 );
-
-        $handler->publish( $updateStruct );
+        $handler->publish( 23, 2, $metadataUpdateStruct );
     }
 
     /**
@@ -275,13 +270,23 @@ class ContentHandlerTest extends TestCase
             ->method( 'createVersionInfoForContent' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
-                $this->equalTo( 3 )
+                $this->equalTo( 3 ),
+                $this->getContentFixtureForDraft()->fields,
+                $this->getContentFixtureForDraft()->versionInfo->initialLanguageCode
             )->will( $this->returnValue( new VersionInfo ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ) )
-            ->will( $this->returnValue( 42 ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->getContentFixtureForDraft()->fields,
+                $this->getContentFixtureForDraft()->contentInfo->isAlwaysAvailable
+            )->will( $this->returnValue( 42 ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'getLastVersionNumber' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( 2 ) );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'createNewFields' )
@@ -290,12 +295,12 @@ class ContentHandlerTest extends TestCase
         $result = $handler->createDraftFromVersion( 23, 2 );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo',
+            'eZ\\Publish\\SPI\\Persistence\\Content',
             $result
         );
         $this->assertEquals(
             42,
-            $result->id
+            $result->versionInfo->id
         );
     }
 
@@ -527,6 +532,34 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadDraftsForUser
+     */
+    public function testLoadDraftsForUser()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'listVersionsForUser' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractVersionInfoListFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will( $this->returnValue( array( new VersionInfo() ) ) );
+
+        $res = $handler->loadDraftsForUser( 23 );
+
+        $this->assertEquals(
+            array( new VersionInfo() ),
+            $res
+        );
+    }
+
+    /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::listVersions
      */
@@ -543,14 +576,14 @@ class ContentHandlerTest extends TestCase
             ->will( $this->returnValue( array() ) );
 
         $mapperMock->expects( $this->once() )
-            ->method( 'extractVersionListFromRows' )
+            ->method( 'extractVersionInfoListFromRows' )
             ->with( $this->equalTo( array() ) )
-            ->will( $this->returnValue( array( new RestrictedVersion() ) ) );
+            ->will( $this->returnValue( array( new VersionInfo() ) ) );
 
         $res = $handler->listVersions( 23 );
 
         $this->assertEquals(
-            array( new RestrictedVersion() ),
+            array( new VersionInfo() ),
             $res
         );
     }

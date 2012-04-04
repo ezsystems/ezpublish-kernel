@@ -334,8 +334,8 @@ class LocationService implements LocationServiceInterface
 
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
-            $offset,
-            $limit > 0 ? $limit : null,
+            $offset >= 0 ? (int) $offset : 0,
+            $limit  >= 0 ? (int) $limit  : null,
             $sortClause
         );
     }
@@ -368,7 +368,7 @@ class LocationService implements LocationServiceInterface
         if ( $locationCreateStruct->priority !== null && !is_numeric( $locationCreateStruct->priority ) )
             throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
 
-        if ( $locationCreateStruct->hidden !== null && !is_bool( $locationCreateStruct->hidden ) )
+        if ( !is_bool( $locationCreateStruct->hidden ) )
             throw new InvalidArgumentValue( "hidden", $locationCreateStruct->hidden, "LocationCreateStruct" );
 
         if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
@@ -435,15 +435,9 @@ class LocationService implements LocationServiceInterface
             $createStruct->hidden = true;
             $createStruct->invisible = true;
         }
-        else
+        elseif ( $loadedParentLocation->hidden || $loadedParentLocation->invisible )
         {
-            try
-            {
-                $parentParentLocation = $this->loadLocation( $loadedParentLocation->parentLocationId );
-                if ( $parentParentLocation->hidden || $parentParentLocation->invisible )
-                    $createStruct->invisible = true;
-            }
-            catch ( APINotFoundException $e ) {}
+            $createStruct->invisible = true;
         }
 
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
@@ -653,26 +647,22 @@ class LocationService implements LocationServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
 
-        $childrenLocations = $this->searchChildrenLocations(
-            $spiLocation->id
-        );
-
-        $modifiedSubLocationDate = (int) $spiLocation->modifiedSubLocation;
+        $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, null, APILocation::SORT_ORDER_ASC, 0, 0 );
 
         return new Location(
             array(
                 'contentInfo'             => $contentInfo,
-                'id'                      => $spiLocation->id,
-                'priority'                => $spiLocation->priority,
-                'hidden'                  => $spiLocation->hidden,
-                'invisible'               => $spiLocation->invisible,
+                'id'                      => (int) $spiLocation->id,
+                'priority'                => (int) $spiLocation->priority,
+                'hidden'                  => (bool) $spiLocation->hidden,
+                'invisible'               => (bool) $spiLocation->invisible,
                 'remoteId'                => $spiLocation->remoteId,
-                'parentLocationId'        => $spiLocation->parentId,
+                'parentLocationId'        => (int) $spiLocation->parentId,
                 'pathString'              => $spiLocation->pathString,
-                'modifiedSubLocationDate' => new \DateTime( "@{$modifiedSubLocationDate}" ),
-                'depth'                   => $spiLocation->depth,
-                'sortField'               => $spiLocation->sortField,
-                'sortOrder'               => $spiLocation->sortOrder,
+                'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiLocation->modifiedSubLocation ),
+                'depth'                   => (int) $spiLocation->depth,
+                'sortField'               => (int) $spiLocation->sortField,
+                'sortOrder'               => (int) $spiLocation->sortOrder,
                 'childCount'              => $childrenLocations->count
             )
         );

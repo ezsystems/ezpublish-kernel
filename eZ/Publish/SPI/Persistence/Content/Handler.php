@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\CreateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
     eZ\Publish\API\Repository\Values\Content\Query\Criterion as AbstractCriterion,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
@@ -98,12 +97,12 @@ interface Handler
     public function loadDraftsForUser( $userId );
 
     /**
-     * Sets the state of object identified by $contentId and $version to $status.
+     * Sets the status of object identified by $contentId and $version to $status.
      *
-     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
-     * @todo Is this supposed to be constants from Content or Version? They differ..
+     * The $status can be one of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * When status is set to VersionInfo::STATUS_PUBLISHED content status is updated to ContentInfo::STATUS_PUBLISHED
      *
-     * @param mixed $contentId
+     * @param int $contentId
      * @param int $status
      * @param int $version
      * @return boolean
@@ -138,7 +137,7 @@ interface Handler
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\ContentInfo
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content );
 
@@ -179,7 +178,7 @@ interface Handler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return \eZ\Publish\SPI\Persistence\Content\RestrictedVersion[]
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
     public function listVersions( $contentId );
 
@@ -247,11 +246,11 @@ interface Handler
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * The UpdateStruct will also contain an array of Content name indexed by Locale.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( UpdateStruct $updateStruct );
+    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct );
 }

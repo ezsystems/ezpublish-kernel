@@ -28,7 +28,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetLocationService
      */
     public function testNewLocationCreateStruct()
     {
@@ -80,7 +80,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      */
     public function testCreateLocation()
     {
@@ -172,6 +172,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionContentAlreadyBelowParent()
@@ -200,8 +201,8 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @todo This test case is not well-defined, yet. Re-check.
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionParentIsSubLocationOfContent()
     {
@@ -229,6 +230,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionRemoteIdExists()
@@ -258,7 +260,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testCreateLocationInTransactionWithRollback()
     {
@@ -302,7 +304,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testLoadLocation()
     {
@@ -364,6 +366,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadLocationThrowsNotFoundException()
@@ -383,7 +386,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
-     * @depth eZ\Publish\API\Repository\Tests\LocationServiceTest::loadLocation
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadLocationByRemoteId()
     {
@@ -408,6 +411,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadLocationByRemoteIdThrowsNotFoundException()
@@ -457,6 +461,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadMainLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testLoadMainLocationThrowsBadStateException()
@@ -488,7 +493,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testLoadLocations()
     {
@@ -555,7 +560,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
      */
     public function testLoadLocationsLimitedSubtree()
     {
@@ -612,6 +617,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testLoadLocationsThrowsBadStateException()
@@ -643,6 +649,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testLoadLocationsThrowsBadStateExceptionLimitedSubtree()
@@ -677,7 +684,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadLocationChildren()
     {
@@ -733,7 +740,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
      */
     public function testLoadLocationChildrenWithOffset()
     {
@@ -792,7 +799,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
      */
     public function testLoadLocationChildrenWithOffsetAndLimit()
     {
@@ -818,7 +825,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocationChildren() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffsetAndLimit
@@ -852,7 +859,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetLocationService
      */
     public function testNewLocationUpdateStruct()
     {
@@ -875,7 +882,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testUpdateLocation()
     {
@@ -947,6 +954,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateLocationThrowsInvalidArgumentException()
@@ -974,7 +982,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testSwapLocation()
     {
@@ -1107,7 +1115,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testHideLocation()
     {
@@ -1178,7 +1186,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testHideLocation
      */
     public function testUnhideLocation()
     {
@@ -1219,7 +1227,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUnhideLocation
      */
     public function testUnhideLocationNotUnhidesHiddenSubtree()
     {
@@ -1280,7 +1288,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testDeleteLocation()
     {
@@ -1370,7 +1378,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testCopySubtree()
     {
@@ -1563,7 +1571,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testMoveSubtree()
     {

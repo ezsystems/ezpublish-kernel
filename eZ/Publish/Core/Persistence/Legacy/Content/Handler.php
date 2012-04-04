@@ -18,7 +18,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
@@ -95,7 +94,13 @@ class Handler implements BaseContentHandler
 
         $content->contentInfo->contentId = $this->contentGateway->insertContentObject( $struct );
 
-        $content->versionInfo = $this->mapper->createVersionInfoForContent( $content, 1 );
+        $content->versionInfo = $this->mapper->createVersionInfoForContent(
+            $content, 1,
+            $struct->fields,
+            $content->contentInfo->mainLanguageCode
+        );
+        $content->versionInfo->creationDate = $struct->modified;
+        $content->versionInfo->modificationDate = $struct->modified;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo, $struct->fields, $content->contentInfo->isAlwaysAvailable
         );
@@ -104,13 +109,15 @@ class Handler implements BaseContentHandler
 
         $this->fieldHandler->createNewFields( $content );
 
-        foreach ( $struct->locations as $index => $location )
+        // Create node assignments
+        foreach ( $struct->locations as $location )
         {
-            $isMain = ( $index === 0 );
+            $location->contentId = $content->contentInfo->contentId;
+            $location->contentVersion = $content->versionInfo->versionNo;
             $this->locationGateway->createNodeAssignment(
-                $this->mapper->createLocationCreateStruct( $content ),
+                $location,
                 $location->parentId,
-                Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE
+                LocationGateway::NODE_ASSIGNMENT_OP_CODE_CREATE
             );
         }
 
@@ -131,36 +138,28 @@ class Handler implements BaseContentHandler
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * The UpdateStruct will also contain an array of Content name indexed by Locale.
-     *
      * The publish procedure will:
      * - Create location nodes based on the node assignments
-     * - Create the entry in the ezcontentobject_name table
-     * - Updates the content object using the provided update struct
-     * - Updates the node assignments
+     * - Update the content object using the provided metadata update struct
+     * - Update the node assignments
+     * - Set content and version status to published
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( UpdateStruct $updateStruct )
+    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
     {
-        $content = $this->update( $updateStruct );
-
-        // @todo : Is it necessary to do this here ? create()/update() should be sufficient I think...
-        foreach ( $updateStruct->name as $language => $name )
-        {
-            $this->contentGateway->setName(
-                $updateStruct->id,
-                $updateStruct->versionNo,
-                $name, $language
-            );
-        }
-
+        $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct );
         $this->locationGateway->createLocationsFromNodeAssignments(
-            $updateStruct->id,
-            $updateStruct->versionNo
+            $contentId,
+            $versionNo
         );
-        return $content;
+        $this->setStatus( $contentId, VersionInfo::STATUS_PUBLISHED, $versionNo );
+
+        return $this->load( $contentId, $versionNo );
     }
 
     /**
@@ -174,20 +173,24 @@ class Handler implements BaseContentHandler
      * is ignored in this implementation.
      *
      * @param int $contentId
-     * @param int|bool $srcVersion
+     * @param int $srcVersion
      * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
         $content = $this->load( $contentId, $srcVersion );
+
         $fields = $content->fields;
 
         // Create new version
         $content->versionInfo = $this->mapper->createVersionInfoForContent(
             $content,
-            $content->versionInfo->versionNo + 1
+            $this->contentGateway->getLastVersionNumber( $contentId ) + 1,
+            $fields,
+            $content->versionInfo->initialLanguageCode
         );
-
+        $content->versionInfo->creationDate = time();
+        $content->versionInfo->modificationDate = $content->versionInfo->creationDate;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $content->fields,
@@ -195,7 +198,6 @@ class Handler implements BaseContentHandler
         );
 
         // Clone fields from previous version and append them to the new one
-        // @TODO Manage translations
         $content->fields = array();
         foreach ( $fields as $field )
         {
@@ -203,10 +205,9 @@ class Handler implements BaseContentHandler
             $newField->versionNo = $content->versionInfo->versionNo;
             $content->fields[] = $newField;
         }
-
         $this->fieldHandler->createNewFields( $content );
 
-        return $content->versionInfo;
+        return $content;
     }
 
     /**
@@ -282,10 +283,10 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Sets the state of object identified by $contentId and $version to $state.
+     * Sets the status of object identified by $contentId and $version to $status.
      *
-     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
-     * @todo Is this supposed to be constants from Content or Version? They differ..
+     * The $status can be one of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * When status is set to VersionInfo::STATUS_PUBLISHED content status is updated to ContentInfo::STATUS_PUBLISHED
      *
      * @param int $contentId
      * @param int $status
@@ -331,7 +332,7 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
-     * @return \eZ\Publish\SPI\Persistence\ContentInfo
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
@@ -354,8 +355,8 @@ class Handler implements BaseContentHandler
         foreach ( $content->name as $language => $name )
         {
             $this->contentGateway->setName(
-                $content->id,
-                $content->versionNo,
+                $contentId,
+                $versionNo,
                 $name, $language
             );
         }
@@ -410,12 +411,13 @@ class Handler implements BaseContentHandler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return eZ\Publish\SPI\Persistence\Content\RestrictedVersion[]
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
     public function listVersions( $contentId )
     {
-        $rows = $this->contentGateway->listVersions( $contentId );
-        return $this->mapper->extractVersionListFromRows( $rows );
+        return $this->mapper->extractVersionInfoListFromRows(
+            $this->contentGateway->listVersions( $contentId )
+        );
     }
 
     /**

@@ -689,7 +689,7 @@ class RoleService implements RoleServiceInterface
 
         return new Role(
             array(
-                'id'               => $role->id,
+                'id'               => (int) $role->id,
                 'identifier'       => $role->identifier,
                 //@todo: add main language code
                 'mainLanguageCode' => null,
@@ -723,8 +723,8 @@ class RoleService implements RoleServiceInterface
 
         return new Policy(
             array(
-                'id'          => $policy->id,
-                'roleId'      => $role ? $role->id : $policy->roleId,
+                'id'          => (int) $policy->id,
+                'roleId'      => $role ? (int) $role->id : (int) $policy->roleId,
                 'module'      => $policy->module,
                 'function'    => $policy->function,
                 'limitations' => $policyLimitations

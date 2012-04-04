@@ -155,6 +155,8 @@ abstract class Gateway
      *
      * @param int $contentId
      * @param int $versionNo
+     *
+     * @return array
      */
     abstract public function loadVersionInfo( $contentId, $versionNo );
 
@@ -175,6 +177,15 @@ abstract class Gateway
      * @return string[][]
      */
     abstract public function listVersions( $contentId );
+
+    /**
+     * Returns last version number for content identified by $contentId
+     *
+     * @param int $contentId
+     *
+     * @return int
+     */
+    abstract public function getLastVersionNumber( $contentId );
 
     /**
      * Returns all IDs for locations that refer to $contentId

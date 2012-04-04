@@ -163,4 +163,22 @@ class User extends APIUser
 
         return parent::__get( $property );
     }
+
+    /**
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'contentType' )
+            return true;
+
+        if ( $property === 'contentInfo' )
+            return true;
+
+        return parent::__isset( $property );
+    }
 }

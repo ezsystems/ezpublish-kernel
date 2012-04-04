@@ -45,7 +45,7 @@ class Content extends ValueObject
     /**
      * Field objects for this content.
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\Field
+     * @var \eZ\Publish\SPI\Persistence\Content\Field[]
      */
     public $fields;
 

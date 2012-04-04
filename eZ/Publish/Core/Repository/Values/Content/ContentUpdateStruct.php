@@ -30,12 +30,6 @@ class ContentUpdateStruct extends APIContentUpdateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        // @TODO: $this->contentType is missing
-        if ( null === $language && $this->contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable )
-        {
-            $language = $this->initialLanguageCode;
-        }
-
         $this->fields[] = new Field(
             array(
                 'fieldDefIdentifier'  =>  $fieldDefIdentifier,

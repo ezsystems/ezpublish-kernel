@@ -122,6 +122,16 @@ abstract class Gateway
     abstract public function deleteGroupAssignement( $groupId, $typeId, $status );
 
     /**
+     * Loads an array with data about field definition referred $id and $status.
+     *
+     * @param mixed $id field definition id
+     * @param int $status field definition status
+     *
+     * @return array Data rows.
+     */
+    abstract public function loadFieldDefinition( $id, $status );
+
+    /**
      * Inserts a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId

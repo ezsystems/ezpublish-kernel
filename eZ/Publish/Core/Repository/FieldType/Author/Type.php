@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Author;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Author field type.
@@ -69,12 +68,20 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value',
+                $inputValue
+            );
         }
 
         if ( !$inputValue->authors instanceof AuthorCollection )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->authors',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection',
+                $inputValue->authors
+            );
         }
 
         return $inputValue;

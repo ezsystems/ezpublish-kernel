@@ -1,17 +1,15 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ValueObject,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 /**
  * this class represents a content type value
  *
- * @property-read array $contentTypeGroups calls getContentTypeGroups
- * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups calls getContentTypeGroups
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
  * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
@@ -22,9 +20,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer Determines if the type is allowd to have children
+ * @property-read boolean $isContainer Determines if the type is allowed to have children
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
- * @property-read boolean $defaultAlwaysAvailable if an instance of acontent type is created the always available flag is set by default this this value.
+ * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */

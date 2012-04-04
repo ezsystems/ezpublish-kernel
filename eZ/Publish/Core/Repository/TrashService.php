@@ -196,8 +196,8 @@ class TrashService implements TrashServiceInterface
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
             $query->criterion !== null ? $query->criterion : null,
-            $query->offset !== null && $query->offset >= 0 ? (int) $query->offset : 0,
-            $query->limit !== null && $query->limit > 0 ? (int) $query->limit : null,
+            $query->offset !== null && $query->offset > 0 ? (int) $query->offset : 0,
+            $query->limit !== null && $query->limit >= 1 ? (int) $query->limit : null,
             $query->sortClauses !== null ? $query->sortClauses : null
         );
 
@@ -226,22 +226,20 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
-        $modifiedSubLocationDate = (int) $spiTrashItem->modifiedSubLocation;
-
         return new TrashItem(
             array(
                 'contentInfo'             => $contentInfo,
-                'id'                      => $spiTrashItem->id,
-                'priority'                => $spiTrashItem->priority,
-                'hidden'                  => $spiTrashItem->hidden,
-                'invisible'               => $spiTrashItem->invisible,
+                'id'                      => (int) $spiTrashItem->id,
+                'priority'                => (int) $spiTrashItem->priority,
+                'hidden'                  => (bool) $spiTrashItem->hidden,
+                'invisible'               => (bool) $spiTrashItem->invisible,
                 'remoteId'                => $spiTrashItem->remoteId,
-                'parentLocationId'        => $spiTrashItem->parentId,
+                'parentLocationId'        => (int) $spiTrashItem->parentId,
                 'pathString'              => $spiTrashItem->pathString,
-                'modifiedSubLocationDate' => new \DateTime( "@{$modifiedSubLocationDate}" ),
-                'depth'                   => $spiTrashItem->depth,
-                'sortField'               => $spiTrashItem->sortField,
-                'sortOrder'               => $spiTrashItem->sortOrder,
+                'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiTrashItem->modifiedSubLocation ),
+                'depth'                   => (int) $spiTrashItem->depth,
+                'sortField'               => (int) $spiTrashItem->sortField,
+                'sortOrder'               => (int) $spiTrashItem->sortOrder,
                 //@todo: this has to be 0?
                 'childCount'              => 0
             )
