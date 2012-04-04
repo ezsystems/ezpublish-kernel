@@ -7,7 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server;
+namespace eZ\Publish\API\REST\Common\Output;
+use eZ\Publish\API\REST\Common\Message;
 
 /**
  * Visitor for view models
@@ -103,7 +104,7 @@ class Visitor
     {
         $this->generator->startDocument( $data );
         $this->visitValueObject( $data );
-        return new Response(
+        return new Message(
             $this->headers,
             $this->generator->endDocument( $data )
         );

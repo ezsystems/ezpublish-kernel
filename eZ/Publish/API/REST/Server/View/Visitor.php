@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Server\View;
-use eZ\Publish\API\REST\Server;
+use eZ\Publish\API\REST\Common;
 
 use Qafoo\RMF;
 
@@ -30,7 +30,7 @@ class Visitor extends RMF\View
      * @param Visitor $visitor
      * @return void
      */
-    public function __construct( Server\Visitor $visitor )
+    public function __construct( Common\Output\Visitor $visitor )
     {
         $this->visitor = $visitor;
     }
@@ -44,13 +44,13 @@ class Visitor extends RMF\View
      */
     public function display( RMF\Request $request, $result )
     {
-        $response = $this->visitor->visit( $result );
+        $message = $this->visitor->visit( $result );
 
-        foreach ( $response->headers as $name => $value )
+        foreach ( $message->headers as $name => $value )
         {
             header( "{$name}: {$value}" );
         }
-        echo $response->body;
+        echo $message->body;
     }
 }
 

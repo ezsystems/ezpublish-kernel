@@ -1,26 +1,26 @@
 <?php
 /**
- * File containing the XML generator class
+ * File containing the Json generator class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Generator;
-use eZ\Publish\API\REST\Server\Generator;
+namespace eZ\Publish\API\REST\Common\Output\Generator;
+use eZ\Publish\API\REST\Common\Output\Generator;
 
 /**
- * Xml generator
+ * Json generator
  */
-class Xml extends Generator
+class Json extends Generator
 {
     /**
-     * XMLWriter
+     * Data structure which is build during visiting;
      *
-     * @var \XMLWriter
+     * @var array
      */
-    protected $xmlWriter;
+    protected $json;
 
     /**
      * Start document
@@ -30,9 +30,7 @@ class Xml extends Generator
      */
     public function startDocument( $data )
     {
-        $this->xmlWriter = new \XMLWriter();
-        $this->xmlWriter->openMemory();
-        $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
+        $this->json = new Json\Object();
     }
 
     /**
@@ -45,8 +43,40 @@ class Xml extends Generator
      */
     public function endDocument( $data )
     {
-        $this->xmlWriter->endDocument();
-        return $this->xmlWriter->outputMemory();
+        $this->json = $this->convertArrayObjects( $this->json );
+        return json_encode( $this->json );
+    }
+
+    /**
+     * Convert ArrayObjects to arrays
+     *
+     * Recursively convert all ArrayObjects into arrays in the full data
+     * structure.
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    protected function convertArrayObjects( $data )
+    {
+        if ( $data instanceof Json\ArrayObject )
+        {
+            // @TODO: Check if we need to convert arrays with only one single
+            // element into non-arrays /cc cba
+            $data = $data->getArrayCopy();
+            foreach ( $data as $key => $value )
+            {
+                $data[$key] = $this->convertArrayObjects( $value );
+            }
+        }
+        elseif ( $data instanceof Json\Object )
+        {
+            foreach ( $data as $key => $value )
+            {
+                $data->$key = $this->convertArrayObjects( $value );
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -57,7 +87,18 @@ class Xml extends Generator
      */
     public function startElement( $name )
     {
-        $this->xmlWriter->startElement( $name );
+        $object = new Json\Object( $this->json );
+
+        if ( $this->json instanceof Json\ArrayObject )
+        {
+            $this->json[] = $object;
+            $this->json = $object;
+        }
+        else
+        {
+            $this->json->$name = $object;
+            $this->json = $object;
+        }
 
         $this->startAttribute( "media-type", $this->getMediaType( $name ) );
         $this->endAttribute( "media-type" );
@@ -71,7 +112,7 @@ class Xml extends Generator
      */
     public function endElement( $name )
     {
-        $this->xmlWriter->endElement();
+        $this->json = $this->json->getParent();
     }
 
     /**
@@ -83,8 +124,7 @@ class Xml extends Generator
      */
     public function startValueElement( $name, $value )
     {
-        $this->xmlWriter->startElement( $name );
-        $this->xmlWriter->text( $value );
+        $this->json->$name = $value;
     }
 
     /**
@@ -95,7 +135,6 @@ class Xml extends Generator
      */
     public function endValueElement( $name )
     {
-        $this->xmlWriter->endElement();
     }
 
     /**
@@ -106,6 +145,10 @@ class Xml extends Generator
      */
     public function startList( $name )
     {
+        $array = new Json\ArrayObject( $this->json );
+
+        $this->json->$name = $array;
+        $this->json = $array;
     }
 
     /**
@@ -116,6 +159,7 @@ class Xml extends Generator
      */
     public function endList( $name )
     {
+        $this->json = $this->json->getParent();
     }
 
     /**
@@ -127,8 +171,7 @@ class Xml extends Generator
      */
     public function startAttribute( $name, $value )
     {
-        $this->xmlWriter->startAttribute( $name );
-        $this->xmlWriter->text( $value );
+        $this->json->{'_' . $name} = $value;
     }
 
     /**
@@ -139,7 +182,6 @@ class Xml extends Generator
      */
     public function endAttribute( $name )
     {
-        $this->xmlWriter->endAttribute();
     }
 
     /**
@@ -149,7 +191,7 @@ class Xml extends Generator
      * @param string $type
      * @return string
      */
-    public function getMediaType( $name, $type = 'xml' )
+    public function getMediaType( $name, $type = 'json' )
     {
         return parent::getMediaType( $name, $type );
     }

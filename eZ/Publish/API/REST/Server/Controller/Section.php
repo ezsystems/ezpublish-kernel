@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Controller;
-use eZ\Publish\API\REST\Server\InputDispatcher;
+use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\SectionService;
@@ -36,10 +36,11 @@ class Section
     /**
      * Construct controller
      *
+     * @param Input\Dispatcher $inputDispatcher
      * @param SectionService $sectionService
      * @return void
      */
-    public function __construct( InputDispatcher $inputDispatcher, SectionService $sectionService )
+    public function __construct( Input\Dispatcher $inputDispatcher, SectionService $sectionService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->sectionService  = $sectionService;

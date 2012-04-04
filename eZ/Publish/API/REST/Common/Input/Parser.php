@@ -7,8 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server;
-use eZ\Publish\API\REST\Server\Values;
+namespace eZ\Publish\API\REST\Common\Input;
 
 /**
  * Base class for input parser

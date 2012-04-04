@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server;
+namespace eZ\Publish\API\REST\Common\Input;
 
 /**
  * Input format handler base class

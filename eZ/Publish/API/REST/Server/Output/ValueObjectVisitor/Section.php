@@ -7,10 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\ValueObjectVisitor;
-use eZ\Publish\API\REST\Server\ValueObjectVisitor;
-use eZ\Publish\API\REST\Server\Generator;
-use eZ\Publish\API\REST\Server\Visitor;
+namespace eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
+
+use eZ\Publish\API\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\API\REST\Common\Output\Generator;
+use eZ\Publish\API\REST\Common\Output\Visitor;
 
 /**
  * Section value object visitor

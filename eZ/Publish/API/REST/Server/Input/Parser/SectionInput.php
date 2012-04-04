@@ -7,8 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Parser;
-use eZ\Publish\API\REST\Server\Parser;
+namespace eZ\Publish\API\REST\Server\Input\Parser;
+use eZ\Publish\API\REST\Common\Input\Parser;
+
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
 /**
