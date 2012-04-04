@@ -96,15 +96,22 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $inputDispatcher;
 
     /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
      * Instantiates the REST Client repository.
      *
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
      */
-    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher )
+    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**
@@ -261,7 +268,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         {
             $this->sectionService = new SectionService(
                 $this->client,
-                $this->inputDispatcher
+                $this->inputDispatcher,
+                $this->outputVisitor
             );
         }
         return $this->sectionService;

@@ -24,6 +24,12 @@ $repository = new Client\Repository(
             'json' => new Common\Input\Handler\Json(),
             'xml'  => new Common\Input\Handler\Xml(),
         )
+    ),
+    new Common\Output\Visitor(
+        new Common\Output\Generator\Json(),
+        array(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct' => new Client\Output\ValueObjectVisitor\SectionCreateStruct(),
+        )
     )
 );
 

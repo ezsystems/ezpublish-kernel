@@ -28,6 +28,7 @@ class InvalidApiUse extends RMF\View
     {
         header( "Status: 415 Unsupported Media Type" );
         echo "<h1>Unsupported Media Type</h1>";
+        var_dump( $request->contentType );
     }
 }
 

@@ -15,6 +15,7 @@ use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
 use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
 
 
@@ -37,14 +38,20 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
     private $inputDispatcher;
 
     /**
-     * @param \eZ\Publish\API\REST\Client\Repository $repository
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**
@@ -59,7 +66,17 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $sectionCreateStruct );
+        // TODO: Make encoding configurable
+        $inputMessage->headers['Accept'] = 'application/vnd.ez.api.Section+json';
+
+        $result = $this->client->request(
+            'POST',
+            '/content/sections',
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**
@@ -174,7 +191,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
      */
     public function newSectionCreateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new SectionCreateStruct();
     }
 
     /**
