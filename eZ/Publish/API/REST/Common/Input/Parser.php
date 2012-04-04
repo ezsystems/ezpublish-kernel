@@ -18,8 +18,9 @@ abstract class Parser
      * Parse input structure
      *
      * @param array $data
+     * @param ParsingDispatcher $parsingDispatcher
      * @return ValueObject
      */
-    abstract public function parse( array $data );
+    abstract public function parse( array $data, ParsingDispatcher $parsingDispatcher );
 }
 

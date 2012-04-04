@@ -26,12 +26,14 @@ $repository = require __DIR__ . '/../../Repository/Tests/common.php';
 
 $sectionController = new Controller\Section(
     new Common\Input\Dispatcher(
+        new Common\Input\ParsingDispatcher(
+            array(
+                'application/vnd.ez.api.SectionInput' => new Input\Parser\SectionInput( $repository ),
+            )
+        ),
         array(
             'json' => new Common\Input\Handler\Json(),
             'xml'  => new Common\Input\Handler\Xml(),
-        ),
-        array(
-            'application/vnd.ez.api.SectionInput' => new Input\Parser\SectionInput( $repository ),
         )
     ),
     $repository->getSectionService()

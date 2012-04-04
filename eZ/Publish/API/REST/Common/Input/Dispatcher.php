@@ -11,7 +11,7 @@ namespace eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Common\Message;
 
 /**
- * Input parsing dispatcher
+ * Input dispatcher
  */
 class Dispatcher
 {
@@ -32,49 +32,24 @@ class Dispatcher
     protected $handlers = array();
 
     /**
-     * Array of parsers
-     *
-     * Structure:
-     *
-     * <code>
-     *  array(
-     *      <contentType> => <parser>,
-     *      …
-     *  )
-     * </code>
-     *
-     * @var array
+     * @var ParsingDispatcher
      */
-    protected $parsers = array();
+    protected $parsingDispatcher;
 
     /**
      * Construct from optional parsers array
      *
+     * @param ParsingDispatcher $parsingDispatcher
      * @param array $parsers
      * @return void
      */
-    public function __construct( array $handlers = array(), array $parsers = array() )
+    public function __construct( ParsingDispatcher $parsingDispatcher, array $handlers = array() )
     {
+        $this->parsingDispatcher = $parsingDispatcher;
         foreach ( $handlers as $type => $handler )
         {
             $this->addHandler( $type, $handler );
         }
-        foreach ( $parsers as $contentType => $parser )
-        {
-            $this->addParser( $contentType, $parser );
-        }
-    }
-
-    /**
-     * Add another parser for the given Content Type
-     *
-     * @param string $contentType
-     * @param Parser $parser
-     * @return void
-     */
-    public function addParser( $contentType, Parser $parser )
-    {
-        $this->parsers[$contentType] = $parser;
     }
 
     /**
@@ -115,13 +90,11 @@ class Dispatcher
         {
             throw new \RuntimeException( "Unknown format specification: '{$format}'." );
         }
-        if ( !isset( $this->parsers[$media] ) )
-        {
-            throw new \RuntimeException( "Unknown content type specification: '{$media}'." );
-        }
 
-        return $this->parsers[$media]->parse(
-            $this->handlers[$format]->convert( $message->body )
+        $rawArray = $this->handlers[$format]->convert( $message->body );
+        return $this->parsingDispatcher->parse(
+            // Only 1 XML root node
+            reset( $rawArray ), $media
         );
     }
 }

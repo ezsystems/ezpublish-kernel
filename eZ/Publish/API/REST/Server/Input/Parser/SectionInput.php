@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\REST\Server\Input\Parser;
 use eZ\Publish\API\REST\Common\Input\Parser;
+use eZ\Publish\API\REST\Common\Input\ParsingDispatcher;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
@@ -23,11 +24,11 @@ class SectionInput extends Parser
      * @param array $data
      * @return SectionCreateStruct
      */
-    public function parse( array $data )
+    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
         return new SectionCreateStruct( array(
-            'name'       => $data["SectionInput"]["name"],
-            'identifier' => $data["SectionInput"]["identifier"],
+            'name'       => $data["name"],
+            'identifier' => $data["identifier"],
         ) );
     }
 }
