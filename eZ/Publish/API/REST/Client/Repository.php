@@ -17,6 +17,8 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\Limitation;
 
+use \eZ\Publish\API\REST\Common;
+
 /**
  * REST Client Repository
  *
@@ -80,20 +82,29 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $ioService;
 
     /**
-     * Server URL
+     * Client
      *
-     * @var string
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    private $serverUrl;
+    private $client;
+
+    /**
+     * Input parsing dispatcher
+     *
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     */
+    private $inputDispatcher;
 
     /**
      * Instantiates the REST Client repository.
      *
-     * @param string $serverUrl
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      */
-    public function __construct( $serverUrl )
+    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher )
     {
-        $this->serverUrl = $serverUrl;
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
     }
 
     /**
@@ -248,7 +259,10 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     {
         if ( null === $this->sectionService )
         {
-            $this->sectionService = new SectionService( $this );
+            $this->sectionService = new SectionService(
+                $this->client,
+                $this->inputDispatcher
+            );
         }
         return $this->sectionService;
     }

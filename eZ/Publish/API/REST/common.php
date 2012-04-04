@@ -12,8 +12,19 @@ namespace eZ\Publish\API\REST;
 $repository = new Client\Repository(
     new Client\HttpClient\Stream(
         'http://localhost:8042/'
+    ),
+    new Common\Input\Dispatcher(
+        new Common\Input\ParsingDispatcher(
+            array(
+                'application/vnd.ez.api.SectionList' => new Client\Input\Parser\SectionList(),
+                'application/vnd.ez.api.Section'     => new Client\Input\Parser\Section(),
+            )
+        ),
+        array(
+            'json' => new Common\Input\Handler\Json(),
+            'xml'  => new Common\Input\Handler\Xml(),
+        )
     )
-    // Mapper…
 );
 
 $repository->setCurrentUser(

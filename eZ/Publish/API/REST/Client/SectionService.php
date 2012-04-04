@@ -14,6 +14,9 @@ use \eZ\Publish\API\Repository\Values\Content\Section;
 use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Message;
+
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}
@@ -24,16 +27,24 @@ use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 class SectionService implements \eZ\Publish\API\Repository\SectionService
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\Repository
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    private $repository;
+    private $client;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     */
+    private $inputDispatcher;
 
     /**
      * @param \eZ\Publish\API\REST\Client\Repository $repository
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      */
-    public function __construct( Repository $repository )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
     }
 
     /**
@@ -91,7 +102,13 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
      */
     public function loadSections()
     {
-        throw new \Exception( "@TODO: Implement." );
+        return $this->inputDispatcher->parse(
+            $this->client->request(
+                'GET', '/content/sections', new Message(
+                    array( 'Accept' => 'application/vnd.ez.api.SectionList+json' )
+                )
+            )
+        );
     }
 
     /**
