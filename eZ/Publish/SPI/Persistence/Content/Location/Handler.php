@@ -142,9 +142,6 @@ interface Handler
     /**
      * Changes main location of content identified by given $contentId to location identified by given $locationId
      *
-     * @todo changing sections is not handled at all ATM as self::setSectionForSubtree() is not exactly
-     *       replicating current 4.x behaviour
-     *
      * @param mixed $contentId
      * @param mixed $locationId
      *

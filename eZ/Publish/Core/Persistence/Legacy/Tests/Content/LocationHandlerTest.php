@@ -306,7 +306,7 @@ class LocationHandlerTest extends TestCase
         $locationGatewayMock = $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway" );
         $handler = $this->getMock(
             "\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler",
-            array( "load" ),
+            array( "load", "setSectionForSubtree" ),
             array(
                 $locationGatewayMock,
                 $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper" ),
@@ -316,21 +316,38 @@ class LocationHandlerTest extends TestCase
         );
 
         $handler
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( "load" )
             ->with( 34 )
             ->will( $this->returnValue( new Location( array( "parentId" => 42 ) ) ) );
 
+        $handler
+            ->expects( $this->at( 1 ) )
+            ->method( "load" )
+            ->with( 42 )
+            ->will( $this->returnValue( new Location( array( "contentId" => 84 ) ) ) );
+
         $contentHandlerMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( "loadContentInfo" )
             ->with( "12" )
             ->will( $this->returnValue( new ContentInfo( array( "currentVersionNo" => 1 ) ) ) );
+
+        $contentHandlerMock
+            ->expects( $this->at( 1 ) )
+            ->method( "loadContentInfo" )
+            ->with( "84" )
+            ->will( $this->returnValue( new ContentInfo( array( "sectionId" => 4 ) ) ) );
 
         $locationGatewayMock
             ->expects( $this->once() )
             ->method( "changeMainLocation" )
             ->with( 12, 34, 1, 42 );
+
+        $handler
+            ->expects( $this->once() )
+            ->method( "setSectionForSubtree" )
+            ->with( 34, 4 );
 
         $handler->changeMainLocation( 12, 34 );
     }

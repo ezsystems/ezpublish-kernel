@@ -424,8 +424,6 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * Changes main location of content identified by given $contentId to location identified by given $locationId
      *
-     * @todo changing sections is not handled at all ATM as self::setSectionForSubtree() is not exactly
-     *       replicating current 4.x behaviour
      *
      * @param mixed $contentId
      * @param mixed $locationId
@@ -439,6 +437,18 @@ class LocationHandler implements LocationHandlerInterface
             array( "contentId" => $contentId ),
             array( "mainLocationId" => $locationId )
         );
+
+        $parentLocation = $this->backend->load(
+            "Content\\Location",
+            $this->backend->load( "Content\\Location", $locationId )->parentId
+        );
+        $parentContent = $this->backend->load(
+            "Content\\ContentInfo",
+            $parentLocation->contentId,
+            "contentId"
+        );
+
+        $this->setSectionForSubtree( $locationId, $parentContent->sectionId );
     }
 
     /**

@@ -748,7 +748,7 @@ class EzpDatabaseTest extends TestCase
             ->set( $this->handler->quoteColumn( 'main_node_id' ), $query->bindValue( 15, null, \PDO::PARAM_INT ) )
             ->set( $this->handler->quoteColumn( 'node_id' ), $query->bindValue( 228, null, \PDO::PARAM_INT ) )
             ->set( $this->handler->quoteColumn( 'parent_node_id' ), $query->bindValue( 227, null, \PDO::PARAM_INT ) )
-            ->set( $this->handler->quoteColumn( 'path_string' ), $query->bindValue( '/1/5/13/15/', null, \PDO::PARAM_STR ) )
+            ->set( $this->handler->quoteColumn( 'path_string' ), $query->bindValue( '/1/5/13/228/', null, \PDO::PARAM_STR ) )
             ->set( $this->handler->quoteColumn( 'remote_id' ), $query->bindValue( 'asdfg123437', null, \PDO::PARAM_STR ) );
         $query->prepare()->execute();
         $query = $this->handler->createInsertQuery();

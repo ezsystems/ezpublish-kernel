@@ -424,17 +424,37 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testChangeMainLocation()
     {
+        // Create additional location to perform this test
+        $location = $this->persistenceHandler->locationHandler()->create(
+            new CreateStruct(
+                array(
+                    "contentId" => 1,
+                    "contentVersion" => 1,
+                    "pathIdentificationString" => "",
+                    "mainLocationId" => 2,
+                    "sortField" => Location::SORT_FIELD_NAME,
+                    "sortOrder" => Location::SORT_ORDER_ASC,
+                    "parentId" => 44,
+                )
+            )
+        );
         $this->persistenceHandler->locationHandler()->changeMainLocation(
-            $this->lastContentId,
-            42
+            1,
+            $location->id
         );
 
-        $content = $this->persistenceHandler->contentHandler()->load( $this->lastContentId, 1 );
+        $content = $this->persistenceHandler->contentHandler()->load( 1, 1 );
 
         $this->assertEquals(
-            42,
+            $location->id,
             $content->locations[0]->mainLocationId,
             "Main location has not been changed"
+        );
+
+        $this->assertEquals(
+            2,
+            $content->contentInfo->sectionId,
+            "Subtree section has not been changed"
         );
     }
 }
