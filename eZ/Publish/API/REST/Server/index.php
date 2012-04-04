@@ -40,11 +40,11 @@ $sectionController = new Controller\Section(
 );
 
 $valueObjectVisitors = array(
-    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException' => new Output\ValueObjectVisitor\NotFoundException( $jsonGenerator ),
-    '\\Exception'                                              => new Output\ValueObjectVisitor\Exception( $jsonGenerator ),
+    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException' => new Output\ValueObjectVisitor\NotFoundException(),
+    '\\Exception'                                              => new Output\ValueObjectVisitor\Exception(),
 
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new Output\ValueObjectVisitor\SectionList( $jsonGenerator ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new Output\ValueObjectVisitor\Section( $jsonGenerator ),
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new Output\ValueObjectVisitor\SectionList(),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new Output\ValueObjectVisitor\Section(),
 );
 
 $dispatcher = new RMF\Dispatcher\Simple(
