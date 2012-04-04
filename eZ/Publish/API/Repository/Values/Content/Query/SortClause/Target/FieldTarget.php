@@ -6,13 +6,13 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target as SortClauseTarget;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 
 /**
  * Struct that stores extra target informations for a SortClause object
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class FieldSortClauseTarget extends SortClauseTarget
+class FieldTarget extends Target
 {
     public $typeIdentifier;
     public $fieldIdentifier;

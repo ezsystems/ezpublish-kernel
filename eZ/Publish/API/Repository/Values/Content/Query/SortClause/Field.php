@@ -1,7 +1,7 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldSortClauseTarget;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget;
 
 use eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -9,7 +9,7 @@ use eZ\Publish\API\Repository\Values\Content\Query,
 /**
  * Sets sort direction on a field value for a content query
  */
-class FieldSortClause extends SortClause
+class Field extends SortClause
 {
     /**
      * Constructs a new Field SortClause on Type $typeIdentifier and Field $fieldIdentifier
@@ -19,6 +19,6 @@ class FieldSortClause extends SortClause
      */
     public function __construct( $typeIdentifier, $fieldIdentifier, $sortDirection = Query::SORT_ASC )
     {
-        parent::__construct( 'field', $sortDirection, new FieldSortClauseTarget( $typeIdentifier, $fieldIdentifier ) );
+        parent::__construct( 'field', $sortDirection, new FieldTarget( $typeIdentifier, $fieldIdentifier ) );
     }
 }
