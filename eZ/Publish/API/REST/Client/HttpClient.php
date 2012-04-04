@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Client;
+use eZ\Publish\API\REST\Common\Message;
 
 /**
  * Interface for Http Client implementations
@@ -21,9 +22,8 @@ interface HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param string $body
-     * @param array $headers
-     * @return mixed
+     * @param Message $message
+     * @return Message
      */
-    public function request( $method, $path, $body = null, array $headers = array() );
+    public function request( $method, $path, Message $message = null );
 }

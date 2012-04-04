@@ -35,7 +35,7 @@ class Message
      * @param string $body
      * @return void
      */
-    public function __construct( array $headers, $body )
+    public function __construct( array $headers = array(), $body = '' )
     {
         $this->headers = $headers;
         $this->body    = $body;

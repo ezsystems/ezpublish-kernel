@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\REST\Client\HttpClient;
 use eZ\Publish\API\REST\Client\HttpClient;
+use eZ\Publish\API\REST\Common\Message;
 
 /**
  * Simple PHP stream based HTTP client.
@@ -66,13 +67,14 @@ class Stream implements HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param string $body
-     * @param array $headers
-     * @return mixed
+     * @param Message $message
+     * @return Message
      */
-    public function request( $method, $path, $body = null, array $headers = array() )
+    public function request( $method, $path, Message $message = null )
     {
-        $requestHeaders = $this->getRequestHeaders( $headers );
+        $message = $message ?: new Message();
+
+        $requestHeaders = $this->getRequestHeaders( $message->headers );
 
         $httpFilePointer = @fopen(
             $this->server . $path,
@@ -82,7 +84,7 @@ class Stream implements HttpClient
                 array(
                     'http' => array(
                         'method'        => $method,
-                        'content'       => $body,
+                        'content'       => $message->body,
                         'ignore_errors' => true,
                         'header'        => $requestHeaders,
                     ),
@@ -116,7 +118,7 @@ class Stream implements HttpClient
             if ( preg_match( '(^HTTP/(?P<version>\d+\.\d+)\s+(?P<status>\d+))S', $lineContent, $match ) )
             {
                 $headers['version'] = $match['version'];
-                $status             = (int) $match['status'];
+                $headers['status']  = (int) $match['status'];
             }
             else
             {
@@ -125,8 +127,7 @@ class Stream implements HttpClient
             }
         }
 
-        return new Response(
-            $status,
+        return new Message(
             $headers,
             $body
         );

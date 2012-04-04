@@ -26,7 +26,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
         $response = $client->request( 'GET', '/' );
 
-        $this->assertSame( 200, $response->status );
+        $this->assertSame( 200, $response->headers['status'] );
     }
 
     public function testResponseNonEmptyBody()
