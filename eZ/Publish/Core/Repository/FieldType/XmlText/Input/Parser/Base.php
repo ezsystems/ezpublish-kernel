@@ -121,15 +121,15 @@ abstract class Base
      * @var mixed[string]
      */
     protected $options = array(
-        'ValidateErrorLevel' => self::ERROR_NONE,
-        'DetectErrorLevel' => self::ERROR_NONE,
-        'RemoveDefaultAttrs' => false,
-        'ParseLineBreaks' => false,
-        'TrimSpaces' => false,
-        'AllowMultipleSpaces' => false,
-        'AllowNumericEntities' => false,
-        'StrictHeaders' => false,
-        'checkExternalData' => true,
+        self::OPT_VALIDATE_ERROR_LEVEL => self::ERROR_NONE,
+        self::OPT_DETECT_ERROR_LEVEL => self::ERROR_NONE,
+        self::OPT_REMOVE_DEFAULT_ATTRS => false,
+        self::OPT_PARSE_LINE_BREAKS => false,
+        self::OPT_TRIM_SPACES => false,
+        self::OPT_ALLOW_MULTIPLE_SPACES => false,
+        self::OPT_ALLOW_NUMERIC_ENTITIES => false,
+        self::OPT_STRICT_HEADERS => false,
+        self::OPT_CHECK_EXTERNAL_DATA => true,
     );
 
     /**
