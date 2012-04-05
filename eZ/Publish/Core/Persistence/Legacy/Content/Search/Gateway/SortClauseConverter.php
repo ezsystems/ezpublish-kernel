@@ -59,8 +59,10 @@ class SortClauseConverter
             {
                 if ( $handler->accept( $sortClause ) )
                 {
-                    $column = $handler->applySelect( $query, $sortClause, $nr );
-                    $this->sortColumns[$column] = $sortClause->direction;
+                    foreach ( (array)$handler->applySelect( $query, $sortClause, $nr ) as $column )
+                    {
+                        $this->sortColumns[$column] = $sortClause->direction;
+                    }
                     continue 2;
                 }
             }
