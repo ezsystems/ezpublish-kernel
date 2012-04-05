@@ -12,6 +12,13 @@ namespace eZ\Publish\API\REST\Common\Tests\Output;
 use eZ\Publish\API\REST\Common;
 
 /**
+ * Test dummy class
+ */
+class ValueObject extends \stdClass
+{
+}
+
+/**
  * Test case for operations in the ContentTypeService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentTypeService
@@ -128,6 +135,25 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     public function testVisitValueObjectDirectMatch()
     {
         $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
+
+        $visitor = new Common\Output\Visitor( $generator, array(
+            '\\stdClass' => $valueObjectVisior,
+        ) );
+
+        $valueObjectVisior
+            ->expects( $this->at( 0 ) )
+            ->method( 'visit' )
+            ->with( $visitor, $generator, $data );
+
+        $visitor->visitValueObject( $data );
+    }
+
+    public function testVisitValueObjectParentMatch()
+    {
+        $data = new ValueObject();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
         $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
