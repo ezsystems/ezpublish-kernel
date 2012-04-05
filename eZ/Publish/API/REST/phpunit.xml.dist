@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="../../../../bootstrap.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true">
+    <testsuites>
+        <testsuite name="eZ\Publish\API\REST\Common">
+			<directory>Common/Tests/</directory>
+        </testsuite>
+        <testsuite name="eZ\Publish\API\REST\Server">
+			<directory>Server/Tests/</directory>
+        </testsuite>
+        <testsuite name="eZ\Publish\API\REST\Client">
+			<directory>Client/Tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./</directory>
+            <exclude>
+                <directory>Common/Tests</directory>
+                <directory>Server/Tests</directory>
+                <directory>Client/Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
