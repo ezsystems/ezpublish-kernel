@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql as EzcDbHandlerPgsql,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite as EzcDbHandlerSqlite,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    ezcQuerySelect;
 
 /**
  * Base test case for database related tests
@@ -266,7 +267,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * @param string $message
      * @return void
      */
-    public static function assertQueryResult( array $expectation, \ezcQuerySelect $query, $message = null )
+    public static function assertQueryResult( array $expectation, ezcQuerySelect $query, $message = null )
     {
         $statement = $query->prepare();
         $statement->execute();

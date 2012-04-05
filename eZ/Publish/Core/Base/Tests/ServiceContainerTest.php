@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\Base\Tests;
 use eZ\Publish\Core\Base\ServiceContainer,
-    PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase,
+    Closure;
 
 /**
  * Test class
@@ -419,7 +420,7 @@ class F
 class G
 {
     public $hIntValue = null;
-    public function __construct( \Closure $lazyHServiceCall, $hIntValue, \Closure $lazyHService )
+    public function __construct( Closure $lazyHServiceCall, $hIntValue, Closure $lazyHService )
     {
         $this->hIntValue = $lazyHServiceCall( $hIntValue );
         $service = $lazyHService();
