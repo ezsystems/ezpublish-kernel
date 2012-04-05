@@ -115,6 +115,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
                         new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
                         new Content\Search\Gateway\SortClauseHandler\DateModified( $db ),
+                        new Content\Search\Gateway\SortClauseHandler\DatePublished( $db ),
                         new Content\Search\Gateway\SortClauseHandler\SectionIdentifier( $db ),
                         new Content\Search\Gateway\SortClauseHandler\SectionName( $db ),
                         new Content\Search\Gateway\SortClauseHandler\ContentName( $db ),
@@ -427,6 +428,32 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array( 4, 12, 13, 42, 10, 14, 11 ),
+            array_map(
+                function ( $content )
+                {
+                    return $content->contentInfo->contentId;
+                },
+                $result->content
+            )
+        );
+    }
+
+    public function testSortDatePublished()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\SectionId(
+                array( 2 )
+            ),
+            0, 10,
+            array(
+                new SortClause\DatePublished(),
+            )
+        );
+
+        $this->assertEquals(
+            array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
                 function ( $content )
                 {

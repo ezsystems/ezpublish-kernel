@@ -502,6 +502,7 @@ class Handler implements HandlerInterface
                             new SortClauseHandler\LocationDepth( $db ),
                             new SortClauseHandler\LocationPriority( $db ),
                             new SortClauseHandler\DateModified( $db ),
+                            new SortClauseHandler\DatePublished( $db ),
                             new SortClauseHandler\SectionIdentifier( $db ),
                             new SortClauseHandler\SectionName( $db ),
                             new SortClauseHandler\ContentName( $db ),
