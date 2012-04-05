@@ -17,7 +17,7 @@ namespace eZ\Publish\API\REST\Client\Values\Content;
  * @see \eZ\Publish\API\Repository\Values\Content\VersionInfo
  * @property-read mixed $contentId The id of the corresponding content object.
  */
-class VersionInfo extends \eZ\Publish\API\Repository\VersionInfo
+class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository

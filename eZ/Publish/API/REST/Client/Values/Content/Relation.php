@@ -16,7 +16,7 @@ namespace eZ\Publish\API\REST\Client\Values\Content;
  *
  * @see \eZ\Publish\API\Repository\Values\Content\Relation
  */
-class Relation extends \eZ\Publish\API\Repository\Relation
+class Relation extends \eZ\Publish\API\Repository\Values\Content\Relation
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo

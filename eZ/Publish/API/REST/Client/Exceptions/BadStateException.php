@@ -16,6 +16,6 @@ namespace eZ\Publish\API\REST\Client\Exceptions;
  *
  * @see \eZ\Publish\API\Repository\Exceptions\BadStateException
  */
-class BadStateException extends \eZ\Publish\API\Repository\BadStateException
+class BadStateException extends \eZ\Publish\API\Repository\Exceptions\BadStateException
 {
 }

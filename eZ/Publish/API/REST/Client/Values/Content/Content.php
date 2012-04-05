@@ -19,7 +19,7 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
  * @property-read integer $contentTypeId
  * @property-read integer $versionNo
  */
-class Content extends \eZ\Publish\API\Repository\Content
+class Content extends \eZ\Publish\API\Repository\Values\Content\Content
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository

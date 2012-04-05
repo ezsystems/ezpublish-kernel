@@ -16,6 +16,6 @@ namespace eZ\Publish\API\REST\Client\Exceptions;
  *
  * @see \eZ\Publish\API\Repository\Exceptions\NotFoundException
  */
-class NotFoundException extends \eZ\Publish\API\Repository\NotFoundException
+class NotFoundException extends \eZ\Publish\API\Repository\Exceptions\NotFoundException
 {
 }

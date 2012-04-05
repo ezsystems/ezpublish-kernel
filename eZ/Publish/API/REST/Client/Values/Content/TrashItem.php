@@ -16,7 +16,7 @@ namespace eZ\Publish\API\REST\Client\Values\Content;
  *
  * @see \eZ\Publish\API\Repository\Values\Content\TrashItem
  */
-class TrashItem extends \eZ\Publish\API\Repository\TrashItem
+class TrashItem extends \eZ\Publish\API\Repository\Values\Content\TrashItem
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location

@@ -16,7 +16,7 @@ namespace eZ\Publish\API\REST\Client\Values\User;
  *
  * @see \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
  */
-class UserRoleAssignment extends \eZ\Publish\API\Repository\UserRoleAssignment
+class UserRoleAssignment extends \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role

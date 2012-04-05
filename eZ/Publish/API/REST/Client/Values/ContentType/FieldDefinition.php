@@ -20,7 +20,7 @@ namespace eZ\Publish\API\REST\Client\Values\ContentType;
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
  */
-class FieldDefinition extends \eZ\Publish\API\Repository\FieldDefinition
+class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
 {
     /**
      * Contains the human readable name of this field in all provided languages

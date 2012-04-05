@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\REST\Client\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\Policy;
+use \eZ\Publish\API\Repository\Values;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\Role}
@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
  *
  * @see \eZ\Publish\API\Repository\Values\User\Role
  */
-class Role extends \eZ\Publish\API\Repository\Role
+class Role extends \eZ\Publish\API\Repository\Values\User\Role
 {
     /**
      * @var string[]

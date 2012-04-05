@@ -16,7 +16,7 @@ namespace eZ\Publish\API\REST\Client\Values\User;
  *
  * @see \eZ\Publish\API\Repository\Values\User\UserGroup
  */
-class UserGroup extends \eZ\Publish\API\Repository\UserGroup
+class UserGroup extends \eZ\Publish\API\Repository\Values\User\UserGroup
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content

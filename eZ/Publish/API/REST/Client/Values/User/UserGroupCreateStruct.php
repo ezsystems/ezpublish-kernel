@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\Field;
  *
  * @see \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
  */
-class UserGroupCreateStruct extends \eZ\Publish\API\Repository\UserGroupCreateStruct
+class UserGroupCreateStruct extends \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]

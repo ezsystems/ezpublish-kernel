@@ -15,6 +15,6 @@ namespace eZ\Publish\API\REST\Client\Exceptions;
  * This exception is throen if a service method is called with an illegal or non appriprite value
  *
  */
-class InvalidArgumentException extends \eZ\Publish\API\Repository\InvalidArgumentException
+class InvalidArgumentException extends \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
 {
 }

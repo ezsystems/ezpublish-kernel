@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\User\Limitation;
  *
  * @see \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
  */
-class PolicyUpdateStruct extends \eZ\Publish\API\Repository\PolicyUpdateStruct
+class PolicyUpdateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Limitation[]

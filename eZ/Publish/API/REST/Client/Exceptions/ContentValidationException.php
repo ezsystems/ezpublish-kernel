@@ -16,6 +16,6 @@ namespace eZ\Publish\API\REST\Client\Exceptions;
  *
  * @see \eZ\Publish\API\Repository\Exceptions\ContentValidationException
  */
-class ContentValidationException extends \eZ\Publish\API\Repository\ContentValidationException
+class ContentValidationException extends \eZ\Publish\API\Repository\Exceptions\ContentValidationException
 {
 }

@@ -16,6 +16,6 @@ namespace eZ\Publish\API\REST\Client\Exceptions;
  *
  * @see \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
  */
-class UnauthorizedException extends \eZ\Publish\API\Repository\UnauthorizedException
+class UnauthorizedException extends \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
 {
 }

@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\User\Limitation;
  *
  * @see \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
  */
-class PolicyCreateStruct extends \eZ\Publish\API\Repository\PolicyCreateStruct
+class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
 {
     /**
      * Instantiates a policy create struct.

@@ -16,7 +16,7 @@ namespace eZ\Publish\API\REST\Client\Values\User;
  *
  * @see \eZ\Publish\API\Repository\Values\User\Policy
  */
-class Policy extends \eZ\Publish\API\Repository\Policy
+class Policy extends \eZ\Publish\API\Repository\Values\User\Policy
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Limitation[]

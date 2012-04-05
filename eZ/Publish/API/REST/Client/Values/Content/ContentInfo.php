@@ -18,7 +18,7 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
  * @property-read integer $contentTypeId
  * @see \eZ\Publish\API\Repository\Values\Content\ContentInfo
  */
-class ContentInfo extends \eZ\Publish\API\Repository\ContentInfo
+class ContentInfo extends \eZ\Publish\API\Repository\Values\Content\ContentInfo
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository

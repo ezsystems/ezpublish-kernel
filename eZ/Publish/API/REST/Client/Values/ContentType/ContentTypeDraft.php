@@ -2,14 +2,14 @@
 
 namespace eZ\Publish\API\REST\Client\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values;
 
 /**
  *
  * This class represents a draft of a content type
  *
  */
-class ContentTypeDraft extends \eZ\Publish\API\Repository\ContentTypeDraft
+class ContentTypeDraft extends \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
 {
     /**
      * ContentType encapsulated in the draft
@@ -23,7 +23,7 @@ class ContentTypeDraft extends \eZ\Publish\API\Repository\ContentTypeDraft
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $innerContentType
      */
-    public function __construct( ContentType $innerContentType )
+    public function __construct( Values\ContentType\ContentType $innerContentType )
     {
         $this->innerContentType = $innerContentType;
     }

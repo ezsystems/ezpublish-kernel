@@ -6,6 +6,6 @@ namespace eZ\Publish\API\REST\Client\Values\ContentType;
  * It consists of a name and a set of paraameters. This field type implementations
  * are providing a set of concrete validators.
  */
-class Validator extends \eZ\Publish\API\Repository\Validator
+class Validator extends \eZ\Publish\API\Repository\Values\ContentType\Validator
 {
 }

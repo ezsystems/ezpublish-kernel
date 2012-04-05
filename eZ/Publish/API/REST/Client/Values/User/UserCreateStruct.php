@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\Field;
  *
  * @see \eZ\Publish\API\Repository\Values\User\UserCreateStruct
  */
-class UserCreateStruct extends \eZ\Publish\API\Repository\UserCreateStruct
+class UserCreateStruct extends \eZ\Publish\API\Repository\Values\User\UserCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]

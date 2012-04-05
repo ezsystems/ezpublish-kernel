@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\Field;
  *
  * @see \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
  */
-class ContentCreateStruct extends \eZ\Publish\API\Repository\ContentCreateStruct
+class ContentCreateStruct extends \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]

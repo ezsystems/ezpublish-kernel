@@ -16,7 +16,7 @@ namespace eZ\Publish\API\REST\Client\Values\User;
  *
  * @see \eZ\Publish\API\Repository\Values\User\User
  */
-class User extends \eZ\Publish\API\Repository\User
+class User extends \eZ\Publish\API\Repository\Values\User\User
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content

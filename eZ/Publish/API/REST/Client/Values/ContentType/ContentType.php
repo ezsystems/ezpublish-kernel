@@ -29,7 +29,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
-class ContentType extends \eZ\Publish\API\Repository\ContentType
+class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentType
 {
     /**
      * Contains the human readable name in all provided languages of the

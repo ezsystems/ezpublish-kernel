@@ -7,7 +7,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 
 use eZ\Publish\API\REST\Client\Exceptions;
 
-class ContentTypeCreateStruct extends \eZ\Publish\API\Repository\ContentTypeCreateStruct
+class ContentTypeCreateStruct extends \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
 {
     protected $fieldDefinitions = array();
 

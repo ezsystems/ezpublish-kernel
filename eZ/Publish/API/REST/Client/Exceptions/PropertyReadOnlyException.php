@@ -8,7 +8,7 @@ namespace eZ\Publish\API\REST\Client\Exceptions;
  * @package eZ\Publish\API\Repository\Exceptions
  *
  */
-class PropertyReadOnlyException extends \eZ\Publish\API\Repository\PropertyReadOnlyException
+class PropertyReadOnlyException extends \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
 {
     public function __construct( $propertyName )
     {

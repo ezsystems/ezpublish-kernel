@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\REST\Client\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use \eZ\Publish\API\Repository\Values;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleCreateStruct}
@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
  *
  * @see \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
  */
-class RoleCreateStruct extends \eZ\Publish\API\Repository\RoleCreateStruct
+class RoleCreateStruct extends \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
@@ -49,7 +49,7 @@ class RoleCreateStruct extends \eZ\Publish\API\Repository\RoleCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
      */
-    public function addPolicy( PolicyCreateStruct $policyCreateStruct )
+    public function addPolicy( Values\User\PolicyCreateStruct $policyCreateStruct )
     {
         $this->policies[] = $policyCreateStruct;
     }
