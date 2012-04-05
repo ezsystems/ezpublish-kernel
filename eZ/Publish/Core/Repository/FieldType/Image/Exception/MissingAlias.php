@@ -15,7 +15,7 @@ class MissingAlias extends Logic
 {
     public $aliasName;
 
-    public function __construct( $aliasName, PHPExcetion $previous )
+    public function __construct( $aliasName, PHPException $previous = null )
     {
         $this->aliasName = $aliasName;
         parent::__construct( 'Image\\Manager', "Mandatory alias '$aliasName' cannot be used", $previous );
