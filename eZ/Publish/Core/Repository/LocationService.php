@@ -685,7 +685,7 @@ class LocationService implements LocationServiceInterface
                 return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
 
             case APILocation::SORT_FIELD_PUBLISHED:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateCreated( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished( $sortOrder );
 
             case APILocation::SORT_FIELD_MODIFIED:
                 return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified( $sortOrder );

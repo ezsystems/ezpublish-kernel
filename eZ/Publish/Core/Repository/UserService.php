@@ -950,7 +950,7 @@ class UserService implements UserServiceInterface
                 return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
 
             case Location::SORT_FIELD_PUBLISHED:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateCreated( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished( $sortOrder );
 
             case Location::SORT_FIELD_MODIFIED:
                 return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified( $sortOrder );

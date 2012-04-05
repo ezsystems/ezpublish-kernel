@@ -7,14 +7,14 @@ use eZ\Publish\API\Repository\Values\Content\Query,
 /**
  * Sets sort direction on the content creation date for a content query
  */
-class DateCreated extends SortClause
+class DatePublished extends SortClause
 {
     /**
-     * Constructs a new DateCreated SortClause
+     * Constructs a new DatePublished SortClause
      * @param string $sortDirection
      */
     public function __construct( $sortDirection = Query::SORT_ASC )
     {
-        parent::__construct( 'date_created', $sortDirection );
+        parent::__construct( 'date_published', $sortDirection );
     }
 }
