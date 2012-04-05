@@ -82,7 +82,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value( "" );
+        return new Value();
     }
 
     /**
