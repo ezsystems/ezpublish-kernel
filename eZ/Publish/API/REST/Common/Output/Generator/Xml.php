@@ -30,6 +30,8 @@ class Xml extends Generator
      */
     public function startDocument( $data )
     {
+        $this->checkStartDocument( $data );
+
         $this->xmlWriter = new \XMLWriter();
         $this->xmlWriter->openMemory();
         $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
@@ -45,6 +47,8 @@ class Xml extends Generator
      */
     public function endDocument( $data )
     {
+        $this->checkEndDocument( $data );
+
         $this->xmlWriter->endDocument();
         return $this->xmlWriter->outputMemory();
     }
@@ -57,6 +61,8 @@ class Xml extends Generator
      */
     public function startElement( $name )
     {
+        $this->checkStartElement( $name );
+
         $this->xmlWriter->startElement( $name );
 
         $this->startAttribute( "media-type", $this->getMediaType( $name ) );
@@ -71,6 +77,8 @@ class Xml extends Generator
      */
     public function endElement( $name )
     {
+        $this->checkEndElement( $name );
+
         $this->xmlWriter->endElement();
     }
 
@@ -83,6 +91,8 @@ class Xml extends Generator
      */
     public function startValueElement( $name, $value )
     {
+        $this->checkStartValueElement( $name );
+
         $this->xmlWriter->startElement( $name );
         $this->xmlWriter->text( $value );
     }
@@ -95,6 +105,8 @@ class Xml extends Generator
      */
     public function endValueElement( $name )
     {
+        $this->checkEndValueElement( $name );
+
         $this->xmlWriter->endElement();
     }
 
@@ -106,6 +118,7 @@ class Xml extends Generator
      */
     public function startList( $name )
     {
+        $this->checkStartList( $name );
     }
 
     /**
@@ -116,6 +129,7 @@ class Xml extends Generator
      */
     public function endList( $name )
     {
+        $this->checkEndList( $name );
     }
 
     /**
@@ -127,6 +141,8 @@ class Xml extends Generator
      */
     public function startAttribute( $name, $value )
     {
+        $this->checkStartAttribute( $name );
+
         $this->xmlWriter->startAttribute( $name );
         $this->xmlWriter->text( $value );
     }
@@ -139,6 +155,8 @@ class Xml extends Generator
      */
     public function endAttribute( $name )
     {
+        $this->checkEndAttribute( $name );
+
         $this->xmlWriter->endAttribute();
     }
 

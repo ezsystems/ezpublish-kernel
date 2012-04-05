@@ -30,6 +30,8 @@ class Json extends Generator
      */
     public function startDocument( $data )
     {
+        $this->checkStartDocument( $data );
+
         $this->json = new Json\Object();
     }
 
@@ -43,6 +45,8 @@ class Json extends Generator
      */
     public function endDocument( $data )
     {
+        $this->checkEndDocument( $data );
+
         $this->json = $this->convertArrayObjects( $this->json );
         return json_encode( $this->json );
     }
@@ -87,6 +91,8 @@ class Json extends Generator
      */
     public function startElement( $name )
     {
+        $this->checkStartElement( $name );
+
         $object = new Json\Object( $this->json );
 
         if ( $this->json instanceof Json\ArrayObject )
@@ -112,6 +118,8 @@ class Json extends Generator
      */
     public function endElement( $name )
     {
+        $this->checkEndElement( $name );
+
         $this->json = $this->json->getParent();
     }
 
@@ -124,6 +132,8 @@ class Json extends Generator
      */
     public function startValueElement( $name, $value )
     {
+        $this->checkStartValueElement( $name );
+
         $this->json->$name = $value;
     }
 
@@ -135,6 +145,7 @@ class Json extends Generator
      */
     public function endValueElement( $name )
     {
+        $this->checkEndValueElement( $name );
     }
 
     /**
@@ -145,6 +156,8 @@ class Json extends Generator
      */
     public function startList( $name )
     {
+        $this->checkStartList( $name );
+
         $array = new Json\ArrayObject( $this->json );
 
         $this->json->$name = $array;
@@ -159,6 +172,8 @@ class Json extends Generator
      */
     public function endList( $name )
     {
+        $this->checkEndList( $name );
+
         $this->json = $this->json->getParent();
     }
 
@@ -171,6 +186,8 @@ class Json extends Generator
      */
     public function startAttribute( $name, $value )
     {
+        $this->checkStartAttribute( $name );
+
         $this->json->{'_' . $name} = $value;
     }
 
@@ -182,6 +199,7 @@ class Json extends Generator
      */
     public function endAttribute( $name )
     {
+        $this->checkEndAttribute( $name );
     }
 
     /**

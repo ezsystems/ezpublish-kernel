@@ -8,8 +8,11 @@
  */
 
 namespace eZ\Publish\API\REST\Common\Tests\Output\Generator;
+use eZ\Publish\API\REST\Common\Tests\Output\GeneratorTest;
 
 use eZ\Publish\API\REST\Common;
+
+require_once __DIR__ . '/../GeneratorTest.php';
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -17,7 +20,7 @@ use eZ\Publish\API\REST\Common;
  * @see eZ\Publish\API\Repository\ContentTypeService
  * @group integration
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends GeneratorTest
 {
     public function testGeneratorDocument()
     {
