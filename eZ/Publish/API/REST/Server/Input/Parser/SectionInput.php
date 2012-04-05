@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\REST\Server\Input\Parser;
 use eZ\Publish\API\REST\Common\Input\Parser;
 use eZ\Publish\API\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\API\REST\Common\Exceptions;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
@@ -26,6 +27,15 @@ class SectionInput extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
+        if ( !isset( $data["name"] ) )
+        {
+            throw new Exceptions\Parser( "Missing 'name' attribute for SectionInput." );
+        }
+        if ( !isset( $data["identifier"] ) )
+        {
+            throw new Exceptions\Parser( "Missing 'identifier' attribute for SectionInput." );
+        }
+
         return new SectionCreateStruct( array(
             'name'       => $data["name"],
             'identifier' => $data["identifier"],
