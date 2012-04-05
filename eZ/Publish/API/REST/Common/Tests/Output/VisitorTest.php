@@ -19,7 +19,7 @@ use eZ\Publish\API\REST\Common;
  */
 class VisitorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testVisit()
+    public function testVisitDocument()
     {
         $data = new \StdClass();
 
@@ -40,13 +40,31 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             array( 'visitValueObject' ),
             array( $generator, array() )
         );
+
+        $this->assertEquals(
+            new Common\Message( array(), 'Hello world!' ),
+            $visitor->visit( $data )
+        );
+    }
+
+    public function testVisitValueObject()
+    {
+        $data = new \StdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\API\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
         $visitor
             ->expects( $this->at( 0 ) )
             ->method( 'visitValueObject' )
             ->with( $data );
 
         $this->assertEquals(
-            new Common\Message( array(), 'Hello world!' ),
+            new Common\Message( array(), null ),
             $visitor->visit( $data )
         );
     }
@@ -61,10 +79,6 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             array( 'visitValueObject' ),
             array( $generator, array() )
         );
-        $visitor
-            ->expects( $this->at( 0 ) )
-            ->method( 'visitValueObject' )
-            ->with( $data );
 
         $visitor->setHeader( 'Content-Type', 'text/xml' );
         $this->assertEquals(
@@ -87,10 +101,6 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             array( 'visitValueObject' ),
             array( $generator, array() )
         );
-        $visitor
-            ->expects( $this->at( 0 ) )
-            ->method( 'visitValueObject' )
-            ->with( $data );
 
         $visitor->setHeader( 'Content-Type', 'text/xml' );
         $visitor->setHeader( 'Content-Type', 'text/html' );
