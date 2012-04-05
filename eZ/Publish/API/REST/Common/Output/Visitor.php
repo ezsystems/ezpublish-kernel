@@ -135,9 +135,7 @@ class Visitor
             }
         } while ( $classname = get_parent_class( $classname ) );
 
-        throw new \RuntimeException(
-            sprintf( "No freaking visitor found for %s!", implode( ', ', $checkedClassNames ) )
-        );
+        throw new Exceptions\NoVisitorFoundException( $checkedClassNames );
     }
 }
 

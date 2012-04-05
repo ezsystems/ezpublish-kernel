@@ -132,6 +132,18 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $visitor->visitValueObject( 42 );
     }
 
+    /**
+     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\NoVisitorFoundException
+     */
+    public function testVisitValueObjectNoMatch()
+    {
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $visitor = new Common\Output\Visitor( $generator, array() );
+
+        $data = new \stdClass();
+        $visitor->visitValueObject( $data );
+    }
+
     public function testVisitValueObjectDirectMatch()
     {
         $data = new \stdClass();
@@ -163,6 +175,31 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         ) );
 
         $valueObjectVisior
+            ->expects( $this->at( 0 ) )
+            ->method( 'visit' )
+            ->with( $visitor, $generator, $data );
+
+        $visitor->visitValueObject( $data );
+    }
+
+    public function testVisitValueObjectSecondRuleParentMatch()
+    {
+        $data = new ValueObject();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $valueObjectVisior1 = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
+        $valueObjectVisior2 = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
+
+        $visitor = new Common\Output\Visitor( $generator, array(
+            '\\WontMatch' => $valueObjectVisior1,
+            '\\stdClass'  => $valueObjectVisior2,
+        ) );
+
+        $valueObjectVisior1
+            ->expects( $this->never() )
+            ->method( 'visit' );
+
+        $valueObjectVisior2
             ->expects( $this->at( 0 ) )
             ->method( 'visit' )
             ->with( $visitor, $generator, $data );
