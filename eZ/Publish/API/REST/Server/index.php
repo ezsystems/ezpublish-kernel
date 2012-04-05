@@ -12,15 +12,7 @@ use eZ\Publish\API\REST\Common;
 
 use Qafoo\RMF;
 
-require __DIR__ . '/../../../../../bootstrap.php';
-
-spl_autoload_register( function( $class ) {
-    if ( strpos( $class, 'Qafoo' ) === 0 )
-    {
-        require __DIR__ . '/../../../../../library/Qafoo/RMF/src/main/' . str_replace( '\\', '/', $class ) . '.php';
-    }
-} );
-
+require __DIR__ . '/../bootstrap.php';
 
 $repository = require __DIR__ . '/../../Repository/Tests/common.php';
 
