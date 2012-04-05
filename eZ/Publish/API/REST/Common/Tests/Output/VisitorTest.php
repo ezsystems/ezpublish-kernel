@@ -76,5 +76,32 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             $visitor->visit( $data )
         );
     }
+
+    public function testSetHeadersNoOverwrite()
+    {
+        $data = new \StdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\API\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
+        $visitor
+            ->expects( $this->at( 0 ) )
+            ->method( 'visitValueObject' )
+            ->with( $data );
+
+        $visitor->setHeader( 'Content-Type', 'text/xml' );
+        $visitor->setHeader( 'Content-Type', 'text/html' );
+        $this->assertEquals(
+            new Common\Message( array(
+                    'Content-Type' => 'text/xml',
+                ),
+                null
+            ),
+            $visitor->visit( $data )
+        );
+    }
 }
 
