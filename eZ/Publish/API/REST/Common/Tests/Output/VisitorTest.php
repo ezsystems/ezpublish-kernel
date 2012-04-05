@@ -21,7 +21,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 {
     public function testVisitDocument()
     {
-        $data = new \StdClass();
+        $data = new \stdClass();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
         $generator
@@ -49,7 +49,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testVisitValueObject()
     {
-        $data = new \StdClass();
+        $data = new \stdClass();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
 
@@ -71,7 +71,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testSetHeaders()
     {
-        $data = new \StdClass();
+        $data = new \stdClass();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
         $visitor = $this->getMock(
@@ -93,7 +93,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testSetHeadersNoOverwrite()
     {
-        $data = new \StdClass();
+        $data = new \stdClass();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
         $visitor = $this->getMock(
@@ -119,12 +119,29 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
      */
     public function testVisitValueObjectInvalidType()
     {
-        $data = new \StdClass();
-
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
         $visitor = new Common\Output\Visitor( $generator, array() );
 
         $visitor->visitValueObject( 42 );
+    }
+
+    public function testVisitValueObjectDirectMatch()
+    {
+        $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
+
+        $visitor = new Common\Output\Visitor( $generator, array(
+            '\\stdClass' => $valueObjectVisior,
+        ) );
+
+        $valueObjectVisior
+            ->expects( $this->at( 0 ) )
+            ->method( 'visit' )
+            ->with( $visitor, $generator, $data );
+
+        $visitor->visitValueObject( $data );
     }
 }
 
