@@ -102,7 +102,7 @@ class Configuration
      * @param array $paths Paths to look for settings in.
      * @param array $globalConfiguration Global settings for module
      */
-    public function __construct( $moduleName = 'base', array $paths, array $globalConfiguration )
+    public function __construct( $moduleName, array $paths, array $globalConfiguration )
     {
         $this->moduleName = $moduleName;
         $this->paths = $paths;
