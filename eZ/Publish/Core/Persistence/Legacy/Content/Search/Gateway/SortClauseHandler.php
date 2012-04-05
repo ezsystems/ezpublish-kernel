@@ -65,7 +65,9 @@ abstract class SortClauseHandler
      * @param int $number
      * @return void
      */
-    abstract public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number );
+    public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )
+    {
+    }
 
     /**
      * Returns the quoted sort column name
