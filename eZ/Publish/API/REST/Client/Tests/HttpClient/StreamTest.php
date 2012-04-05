@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\REST\Client\Tests\HttpClient;
 
 use eZ\Publish\API\REST\Client\HttpClient\Stream;
+use eZ\Publish\API\REST\Client\HttpClient\ConnectionException;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
@@ -20,38 +21,49 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
  */
 class StreamTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \eZ\Publish\API\REST\Client\HttpClient\Stream
+     */
+    protected $client;
+
+    public function setUp()
+    {
+        $this->client = new Stream( 'http://localhost:8042' );
+
+        try
+        {
+            $this->client->request( 'GET', '/' );
+        }
+        catch ( ConnectionException $e )
+        {
+            $this->markTestSkipped( 'No HTTP server at http://localhost:8042 found.' );
+        }
+    }
+
     public function testResponseStatus()
     {
-        $client = new Stream( 'http://localhost:8042' );
-
-        $response = $client->request( 'GET', '/' );
+        $response = $this->client->request( 'GET', '/' );
 
         $this->assertSame( 200, $response->headers['status'] );
     }
 
     public function testResponseNonEmptyBody()
     {
-        $client = new Stream( 'http://localhost:8042' );
-
-        $response = $client->request( 'GET', '/' );
+        $response = $this->client->request( 'GET', '/' );
 
         $this->assertFalse( empty( $response->body ) );
     }
 
     public function testResponseHeadersArray()
     {
-        $client = new Stream( 'http://localhost:8042' );
-
-        $response = $client->request( 'GET', '/' );
+        $response = $this->client->request( 'GET', '/' );
 
         $this->assertTrue( is_array( $response->headers ) );
     }
 
     public function testResponseXPoweredByHeader()
     {
-        $client = new Stream( 'http://localhost:8042' );
-
-        $response = $client->request( 'GET', '/' );
+        $response = $this->client->request( 'GET', '/' );
 
         $this->assertTrue( isset( $response->headers['X-Powered-By'] ) );
         $this->assertTrue( is_string( $response->headers['X-Powered-By'] ) );
