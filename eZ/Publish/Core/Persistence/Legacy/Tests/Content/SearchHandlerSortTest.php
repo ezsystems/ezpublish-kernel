@@ -114,6 +114,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\SortClauseHandler\LocationPathString( $db ),
                         new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
                         new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
+                        new Content\Search\Gateway\SortClauseHandler\SectionName( $db ),
                         new Content\Search\Gateway\SortClauseHandler\ContentName( $db ),
                     )
                 ),
@@ -406,6 +407,52 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                 $result->content
             )
         );
+    }
+
+    public function testSortSectionName()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\SectionId(
+                array( 4, 2, 6, 3 )
+            ),
+            0, null,
+            array(
+                new SortClause\SectionName(),
+            )
+        );
+
+        // First, results of section "Media" should appear, then the ones of "Protected",
+        // "Setup" and "Users"
+        // From inside a specific section, no particular order should be defined
+        // the logic is then to have a set of sorted id's to compare with
+        // the comparison being done slice by slice.
+        $idMapSet = array(
+            "media" => array( 41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201 ),
+            "protected" => array( 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164 ),
+            "setup" => array( 45, 52 ),
+            "users" => array( 4, 10, 11, 12, 13, 14, 42 ),
+        );
+        $contentIds = array_map(
+            function ( $content )
+            {
+                return $content->contentInfo->contentId;
+            },
+            $result->content
+        );
+        $index = 0;
+
+        foreach ( $idMapSet as $idSet )
+        {
+            $contentIdsSubset = array_slice( $contentIds, $index, $count = count( $idSet ) );
+            $index += $count;
+            sort( $contentIdsSubset );
+            $this->assertEquals(
+                $idSet,
+                $contentIdsSubset
+            );
+        }
     }
 
     public function testSortContentName()
