@@ -119,6 +119,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\SortClauseHandler\SectionIdentifier( $db ),
                         new Content\Search\Gateway\SortClauseHandler\SectionName( $db ),
                         new Content\Search\Gateway\SortClauseHandler\ContentName( $db ),
+                        new Content\Search\Gateway\SortClauseHandler\Field( $db ),
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() ),
@@ -571,6 +572,96 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array( 14, 12, 10, 42, 57, 13, 50, 49, 41, 11, 51, 62, 4, 58, 59, 61, 60, 64, 63, 200, 66, 201 ),
+            array_map(
+                function ( $content )
+                {
+                    return $content->contentInfo->contentId;
+                },
+                $result->content
+            )
+        );
+    }
+
+    public function testSortFieldText()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\SectionId(
+                array( 1 )
+            ),
+            0, null,
+            array(
+                new SortClause\Field( "article", "title" ),
+            )
+        );
+
+        // There are several identical titles, need to take care about this
+        $idMapSet = array(
+            "aenean malesuada ligula" => array( 83 ),
+            "aliquam pulvinar suscipit tellus" => array( 102 ),
+            "asynchronous publishing" => array( 148, 215 ),
+            "canonical links" => array( 147, 216 ),
+            "class aptent taciti" => array( 88 ),
+            "class aptent taciti sociosqu" => array( 82 ),
+            "duis auctor vehicula erat" => array( 89 ),
+            "etiam posuere sodales arcu" => array( 78 ),
+            "etiam sodales mauris" => array( 87 ),
+            "ez publish enterprise" => array( 151 ),
+            "fastcgi" => array( 144, 218 ),
+            "fusce sagittis sagittis" => array( 77 ),
+            "fusce sagittis sagittis urna" => array( 81 ),
+            "get involved" => array( 107 ),
+            "how to develop with ez publish" => array( 127, 211 ),
+            "how to manage ez publish" => array( 118, 202 ),
+            "how to use ez publish" => array( 108, 193 ),
+            "improved block editing" => array( 136 ),
+            "improved front-end editing" => array( 139 ),
+            "improved user registration workflow" => array( 132 ),
+            "in hac habitasse platea" => array( 79 ),
+            "lots of websites, one ez publish installation" => array( 130 ),
+            "rest api interface" => array( 150, 214 ),
+            "separate content & design in ez publish" => array( 191 ),
+            "support for red hat enterprise" => array( 145, 217 ),
+            "tutorials for" => array( 106 ),
+        );
+        $contentIds = array_map(
+            function ( $content )
+            {
+                return $content->contentInfo->contentId;
+            },
+            $result->content
+        );
+        $index = 0;
+
+        foreach ( $idMapSet as $idSet )
+        {
+            $contentIdsSubset = array_slice( $contentIds, $index, $count = count( $idSet ) );
+            $index += $count;
+            sort( $contentIdsSubset );
+            $this->assertEquals(
+                $idSet,
+                $contentIdsSubset
+            );
+        }
+    }
+
+    public function testSortFieldNumeric()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\SectionId(
+                array( 1 )
+            ),
+            0, null,
+            array(
+                new SortClause\Field( "product", "price" ),
+            )
+        );
+
+        $this->assertEquals(
+            array( 73, 71, 72, 69 ),
             array_map(
                 function ( $content )
                 {

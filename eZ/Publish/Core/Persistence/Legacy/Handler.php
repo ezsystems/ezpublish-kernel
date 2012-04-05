@@ -506,6 +506,7 @@ class Handler implements HandlerInterface
                             new SortClauseHandler\SectionIdentifier( $db ),
                             new SortClauseHandler\SectionName( $db ),
                             new SortClauseHandler\ContentName( $db ),
+                            new SortClauseHandler\Field( $db ),
                         )
                     ),
                     new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
