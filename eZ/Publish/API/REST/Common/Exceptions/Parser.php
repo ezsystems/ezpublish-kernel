@@ -12,6 +12,6 @@ namespace eZ\Publish\API\REST\Common\Exceptions;
 /**
  * Exception thrown if a parser discovers an error.
  */
-class ParserException extends \InvalidArgumentException
+class Parser extends \InvalidArgumentException
 {
 }
