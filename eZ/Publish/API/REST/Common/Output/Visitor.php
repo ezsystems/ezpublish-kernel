@@ -122,7 +122,7 @@ class Visitor
     {
         if ( !is_object( $data ) )
         {
-            throw new \RuntimeException( 'You must provide a ValueObject for visiting. Cannot visit value of type "' . gettype( $data ) . '".' );
+            throw new Exceptions\InvalidTypeException( $data );
         }
         $checkedClassNames = array();
 

@@ -113,5 +113,18 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             $visitor->visit( $data )
         );
     }
+
+    /**
+     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\InvalidTypeException
+     */
+    public function testVisitValueObjectInvalidType()
+    {
+        $data = new \StdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $visitor = new Common\Output\Visitor( $generator, array() );
+
+        $visitor->visitValueObject( 42 );
+    }
 }
 
