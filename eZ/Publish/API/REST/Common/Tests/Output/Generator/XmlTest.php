@@ -17,23 +17,23 @@ use eZ\Publish\API\REST\Common;
  * @see eZ\Publish\API\Repository\ContentTypeService
  * @group integration
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit_Framework_TestCase
 {
     public function testGeneratorDocument()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
 
         $this->assertSame(
-            '{}',
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
             $generator->endDocument( 'test' )
         );
     }
 
     public function testGeneratorElement()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
 
@@ -41,14 +41,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $generator->endElement( 'element' );
 
         $this->assertSame(
-            '{"element":{"_media-type":"application\/vnd.ez.api.element+json"}}',
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
             $generator->endDocument( 'test' )
         );
     }
 
     public function testGeneratorMultipleElements()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
 
@@ -59,14 +59,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $generator->endElement( 'element' );
 
         $this->assertSame(
-            '{"element":{"_media-type":"application\/vnd.ez.api.element+json"}}',
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
             $generator->endDocument( 'test' )
         );
     }
 
     public function testGeneratorAttribute()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
 
@@ -78,14 +78,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $generator->endElement( 'element' );
 
         $this->assertSame(
-            '{"element":{"_media-type":"application\/vnd.ez.api.element+json","_attribute":"value"}}',
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
             $generator->endDocument( 'test' )
         );
     }
 
     public function testGeneratorMultipleAttributes()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
 
@@ -100,14 +100,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $generator->endElement( 'element' );
 
         $this->assertSame(
-            '{"element":{"_media-type":"application\/vnd.ez.api.element+json","_attribute1":"value","_attribute2":"value"}}',
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
             $generator->endDocument( 'test' )
         );
     }
 
     public function testGeneratorValueElement()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
 
@@ -119,14 +119,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $generator->endElement( 'element' );
 
         $this->assertSame(
-            '{"element":{"_media-type":"application\/vnd.ez.api.element+json","value":"42"}}',
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
             $generator->endDocument( 'test' )
         );
     }
 
     public function testGeneratorElementList()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
 
@@ -145,7 +145,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $generator->endElement( 'elementList' );
 
         $this->assertSame(
-            '{"elementList":{"_media-type":"application\/vnd.ez.api.elementList+json","elements":[{"_media-type":"application\/vnd.ez.api.element+json"},{"_media-type":"application\/vnd.ez.api.element+json"}]}}',
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
             $generator->endDocument( 'test' )
         );
     }

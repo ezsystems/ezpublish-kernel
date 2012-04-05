@@ -17,6 +17,7 @@
             <file>Common/Tests/MessageTest.php</file>
             <file>Common/Tests/Output/VisitorTest.php</file>
             <file>Common/Tests/Output/Generator/JsonTest.php</file>
+            <file>Common/Tests/Output/Generator/XmlTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
