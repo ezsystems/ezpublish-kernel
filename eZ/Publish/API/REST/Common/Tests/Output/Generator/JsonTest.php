@@ -49,20 +49,21 @@ class JsonTest extends GeneratorTest
         );
     }
 
-    public function testGeneratorMultipleElements()
+    public function testGeneratorStackedElement()
     {
         $generator = new Common\Output\Generator\Json();
 
         $generator->startDocument( 'test' );
 
         $generator->startElement( 'element' );
-        $generator->endElement( 'element' );
 
-        $generator->startElement( 'element' );
+        $generator->startElement( 'stacked' );
+        $generator->endElement( 'stacked' );
+
         $generator->endElement( 'element' );
 
         $this->assertSame(
-            '{"element":{"_media-type":"application\/vnd.ez.api.element+json"}}',
+            '{"element":{"_media-type":"application\/vnd.ez.api.element+json","stacked":{"_media-type":"application\/vnd.ez.api.stacked+json"}}}',
             $generator->endDocument( 'test' )
         );
     }

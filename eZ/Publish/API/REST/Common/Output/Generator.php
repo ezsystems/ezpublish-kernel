@@ -47,7 +47,7 @@ abstract class Generator
             );
         }
 
-        $this->stack[] = array( 'document', $data );
+        $this->stack[] = array( 'document', $data, array() );
     }
 
     /**
@@ -87,7 +87,20 @@ abstract class Generator
      */
     protected function checkStartElement( $data )
     {
-        $this->checkStart( 'element', $data, array( 'document', 'list' ) );
+        $this->checkStart( 'element', $data, array( 'document', 'element', 'list' ) );
+
+        $last = count( $this->stack ) - 2;
+        if ( $this->stack[$last][0] !== 'list' )
+        {
+            // Ensure element type only occurs once outside of lists
+            if ( isset( $this->stack[$last][2][$data] ) )
+            {
+                throw new Exceptions\OutputGeneratorException(
+                    "Element {$data} may only occur once inside of {$this->stack[$last][0]}."
+                );
+            }
+        }
+        $this->stack[$last][2][$data] = true;
     }
 
     /**
@@ -270,7 +283,7 @@ abstract class Generator
             );
         }
 
-        $this->stack[] = array( $type, $data );
+        $this->stack[] = array( $type, $data, array() );
     }
 
     /**
@@ -293,7 +306,7 @@ abstract class Generator
             );
         }
 
-        if ( $lastTag !== array( $type, $data ) )
+        if ( array( $lastTag[0], $lastTag[1] ) !== array( $type, $data ) )
         {
             throw new Exceptions\OutputGeneratorException(
                 sprintf(

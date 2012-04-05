@@ -49,16 +49,17 @@ class XmlTest extends GeneratorTest
         );
     }
 
-    public function testGeneratorMultipleElements()
+    public function testGeneratorStackedElement()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = new Common\Output\Generator\XML();
 
         $generator->startDocument( 'test' );
 
         $generator->startElement( 'element' );
-        $generator->endElement( 'element' );
 
-        $generator->startElement( 'element' );
+        $generator->startElement( 'stacked' );
+        $generator->endElement( 'stacked' );
+
         $generator->endElement( 'element' );
 
         $this->assertSame(

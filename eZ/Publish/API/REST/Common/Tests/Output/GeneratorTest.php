@@ -66,6 +66,38 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
      */
+    public function testGeneratorMultipleElements()
+    {
+        $generator = new Common\Output\Generator\Json();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startElement( 'element' );
+        $generator->endElement( 'element' );
+
+        $generator->startElement( 'element' );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     */
+    public function testGeneratorMultipleStackedElements()
+    {
+        $generator = new Common\Output\Generator\Json();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startElement( 'element' );
+
+        $generator->startElement( 'stacked' );
+        $generator->endElement( 'stacked' );
+
+        $generator->startElement( 'stacked' );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     */
     public function testInvalidDocumentEnd()
     {
         $generator = new Common\Output\Generator\Xml();
