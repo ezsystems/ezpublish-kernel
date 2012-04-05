@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Common\Message;
+use eZ\Publish\API\REST\Common\Exceptions;
 
 /**
  * Input dispatcher
@@ -74,13 +75,13 @@ class Dispatcher
     {
         if ( !isset( $message->headers['Content-Type'] ) )
         {
-            throw new \RuntimeException( 'Missing Content-Type header in message.' );
+            throw new Exceptions\Parser( 'Missing Content-Type header in message.' );
         }
 
         $contentTypeParts = explode( '+', $message->headers['Content-Type'] );
         if ( count( $contentTypeParts ) !== 2 )
         {
-            throw new \RuntimeException( "No format specification in content type. Missing '+(json|xml|…)' in '{$contentType}'." );
+            throw new Exceptions\Parser( "No format specification in content type. Missing '+(json|xml|…)' in '{$message->headers['Content-Type']}'." );
         }
 
         $media  = $contentTypeParts[0];
@@ -88,7 +89,7 @@ class Dispatcher
 
         if ( !isset( $this->handlers[$format] ) )
         {
-            throw new \RuntimeException( "Unknown format specification: '{$format}'." );
+            throw new Exceptions\Parser( "Unknown format specification: '{$format}'." );
         }
 
         $rawArray = $this->handlers[$format]->convert( $message->body );
