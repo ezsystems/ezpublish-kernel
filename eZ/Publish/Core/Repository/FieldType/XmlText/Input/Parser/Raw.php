@@ -974,7 +974,7 @@ class Raw extends BaseParser implements InputParser
                 }
 
                 $element->setAttribute( 'node_id', $nodeID );
-                $objectID = $node['contentobject_id'];
+                $objectID = $location->contentId;
 
                 // protection from self-embedding
                 if ( $objectID == $this->contentObjectID )
