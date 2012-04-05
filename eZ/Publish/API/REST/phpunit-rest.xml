@@ -21,6 +21,7 @@
             <file>Common/Tests/Input/DispatcherTest.php</file>
             <file>Common/Tests/Input/ParsingDispatcherTest.php</file>
             <file>Common/Tests/Input/Handler/JsonTest.php</file>
+            <file>Common/Tests/Input/Handler/XmlTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

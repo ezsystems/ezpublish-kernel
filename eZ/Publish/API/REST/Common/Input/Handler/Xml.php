@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\REST\Common\Input\Handler;
 use eZ\Publish\API\REST\Common\Input\Handler;
+use eZ\Publish\API\REST\Common\Exceptions;
 
 /**
  * Input format handler base class
@@ -20,13 +21,35 @@ class Xml extends Handler
      *
      * @param string $string
      * @return array
-     * @todo Error handling
      * @todo Semantical exceptions for lists
      */
     public function convert( $string )
     {
-        $dom = new DOMDocument();
+        $oldXmlErrorHandling = libxml_use_internal_errors( true );
+        libxml_clear_errors();
+
+        $dom = new \DOMDocument();
         $dom->loadXml( $string );
+
+        $errors = libxml_get_errors();
+
+        libxml_clear_errors();
+        libxml_use_internal_errors( $oldXmlErrorHandling );
+
+        if ( $errors )
+        {
+            $message = "Detected errors in input XML:\n";
+            foreach ( $errors as $error )
+            {
+                $message .= sprintf(
+                    " - In line %d character %d: %s\n",
+                    $error->line,
+                    $error->column,
+                    $error->message
+                );
+            }
+            throw new Exceptions\Parser( $message );
+        }
 
         return $this->convertDom( $dom );
     }
@@ -34,40 +57,47 @@ class Xml extends Handler
     /**
      * Converts DOM nodes to array structures
      *
-     * @param \DOMNode $domElement
+     * @param \DOMNode $node
      * @return array
      */
-    protected function convertDom( \DOMNode $domElement )
+    protected function convertDom( \DOMNode $node )
     {
+        $isArray = false;
         $current = array();
         $text    = '';
 
-        foreach ( $domElement->childNodes as $childNode )
+        if ( $node instanceof \DOMElement )
+        {
+            foreach ( $node->attributes as $name => $attribute )
+            {
+                $current["_{$name}"] = $attribute->value;
+            }
+        }
+
+        foreach ( $node->childNodes as $childNode )
         {
             switch ( $childNode->nodeType )
             {
                 case XML_ELEMENT_NODE:
                     $tagName = $childNode->tagName;
 
-                    if ( isset( $current[$tagName] ) && !is_array( $current[$tagName] ) )
+                    if ( !isset( $current[$tagName]  ) )
+                    {
+                        $current[$tagName] = $this->convertDom( $childNode );
+                    }
+                    elseif ( !$isArray )
                     {
                         $current[$tagName] = array(
                             $current[$tagName],
                             $this->convertDom( $childNode )
                         );
-                    }
-                    elseif ( !isset( $current[$tagName]  ) )
-                    {
-                        $current[$tagName] = $this->convertDom( $childNode );
+                        $isArray = true;
                     }
                     else
                     {
                         $current[$tagName][] = $this->convertDom( $childNode );
                     }
-                    break;
 
-                case XML_ATTRIBUTE_NODE:
-                    $current["_{$childNode->name}"] = $childNode->value;
                     break;
 
                 case XML_TEXT_NODE:
