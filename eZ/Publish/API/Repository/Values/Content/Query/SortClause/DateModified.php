@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Values\Content\Query,
 class DateModified extends SortClause
 {
     /**
-     * Constructs a new DateCreated SortClause
+     * Constructs a new DateModified SortClause
      * @param string $sortDirection
      */
     public function __construct( $sortDirection = Query::SORT_ASC )
