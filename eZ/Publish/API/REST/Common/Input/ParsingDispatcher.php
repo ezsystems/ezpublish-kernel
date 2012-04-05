@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Common\Message;
+use eZ\Publish\API\REST\Common\Exceptions;
 
 /**
  * Parsing dispatcher
@@ -74,8 +75,9 @@ class ParsingDispatcher
 
         if ( !isset( $this->parsers[$mediaType] ) )
         {
-            throw new \RuntimeException( "Unknown content type specification: '{$mediaType}'." );
+            throw new Exceptions\Parser( "Unknown content type specification: '{$mediaType}'." );
         }
         return $this->parsers[$mediaType]->parse( $data, $this );
     }
 }
+
