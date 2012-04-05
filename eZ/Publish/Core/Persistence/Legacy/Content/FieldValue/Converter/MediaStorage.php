@@ -47,6 +47,7 @@ class MediaStorage implements Storage
     {
         $media = $this->fetch( $field->id, $field->versionNo, $context['connection'] );
 
+        // @todo @fixme: a MediaValue requires an \eZ\Publish\API\Repository\IOService to be created
         $mediaValue = new MediaValue;
         $mediaValue->file = $mediaValue->getHandler()->loadFileFromContentType(
             $media['filename'],
