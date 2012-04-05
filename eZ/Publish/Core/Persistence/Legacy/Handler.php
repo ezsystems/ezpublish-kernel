@@ -501,6 +501,7 @@ class Handler implements HandlerInterface
                             new SortClauseHandler\LocationPathString( $db ),
                             new SortClauseHandler\LocationDepth( $db ),
                             new SortClauseHandler\LocationPriority( $db ),
+                            new SortClauseHandler\ContentName( $db ),
                         )
                     ),
                     new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
