@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="../../../../../bootstrap.php"
+         bootstrap="../../../../bootstrap.php"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
@@ -11,28 +11,10 @@
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\REST\Client">
-            <file>../../REST/Client/Tests/HttpClient/StreamTest.php</file>
+            <file>Client/Tests/HttpClient/StreamTest.php</file>
         </testsuite>
-        <testsuite name="eZ\Publish\API\Repository">
-            <file>RepositoryTest.php</file>
-            <file>SectionServiceTest.php</file>
-            <file>LanguageServiceTest.php</file>
-            <file>ContentTypeServiceTest.php</file>
-            <file>ContentServiceTest.php</file>
-            <file>LocationServiceTest.php</file>
-            <file>UserServiceTest.php</file>
-            <file>RoleServiceTest.php</file>
-            <file>TrashServiceTest.php</file>
-            <file>IOServiceTest.php</file>
-            <file>IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
-            <file>SectionServiceAuthorizationTest.php</file>
-            <file>LanguageServiceAuthorizationTest.php</file>
-            <file>ContentTypeServiceAuthorizationTest.php</file>
-            <file>ContentServiceAuthorizationTest.php</file>
-            <file>LocationServiceAuthorizationTest.php</file>
-            <file>UserServiceAuthorizationTest.php</file>
-            <file>RoleServiceAuthorizationTest.php</file>
-            <file>TrashServiceAuthorizationTest.php</file>
+        <testsuite name="eZ\Publish\API\REST\Common">
+            <file>Common/Tests/MessageTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
