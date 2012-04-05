@@ -13,6 +13,9 @@ In order to get the REST client and server working, do the following:
 #) Link the directory ``eZ/Publish/API/Repository`` from ezp-next to
    ``restapiv2/eZ/Publish/API/`` in the research directory.
 
+#) Link the file ``restapiv2/eZ/Publish/API/REST/phpunit-rest.xml`` from
+   research to ``eZ/Publish/API/Repository/Tests`` in the ezp-next directory.
+
 
 ..
    Local Variables:
