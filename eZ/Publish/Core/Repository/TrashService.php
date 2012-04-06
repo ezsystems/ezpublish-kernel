@@ -7,6 +7,7 @@
  * @version //autogentag//
  * @package eZ\Publish\Core\Repository
  */
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,

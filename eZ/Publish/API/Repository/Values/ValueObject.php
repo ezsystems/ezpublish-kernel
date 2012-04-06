@@ -7,6 +7,7 @@
  * @version //autogentag//
  * @package eZ\Publish\API\Repository\Values
  */
+
 namespace eZ\Publish\API\Repository\Values;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;

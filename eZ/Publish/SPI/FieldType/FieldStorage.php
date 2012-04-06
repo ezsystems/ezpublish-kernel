@@ -7,6 +7,7 @@
  * @version //autogentag//
  * @package FieldTypeProviderInterface
  */
+
 namespace eZ\Publish\SPI\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
