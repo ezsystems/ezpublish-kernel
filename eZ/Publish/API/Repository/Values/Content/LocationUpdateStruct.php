@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  *
  * This class is used for updating location meta data.
- *
  */
 class LocationUpdateStruct extends ValueObject
 {

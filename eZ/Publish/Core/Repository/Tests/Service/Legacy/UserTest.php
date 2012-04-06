@@ -12,7 +12,6 @@ use eZ\Publish\Core\Repository\Tests\Service\UserBase as BaseUserServiceTest;
 
 /**
  * Test case for User Service using Legacy storage class
- *
  */
 class UserTest extends BaseUserServiceTest
 {

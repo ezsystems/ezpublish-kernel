@@ -17,7 +17,6 @@ use eZ\Publish\SPI\Persistence\User,
 
 /**
  * Test case for SectionHandler using in memory storage.
- *
  */
 class UserHandlerTest extends HandlerTest
 {

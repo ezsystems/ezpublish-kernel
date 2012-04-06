@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
 
 /**
  * The main handler for in memory Storage Engine
- *
  */
 class Handler implements HandlerInterface
 {

@@ -21,7 +21,6 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
 /**
  * Test case for Role Service
- *
  */
 abstract class RoleBase extends BaseServiceTest
 {

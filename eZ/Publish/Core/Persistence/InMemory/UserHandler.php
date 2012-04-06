@@ -22,7 +22,6 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
 
 /**
  * Storage Engine handler for user module
- *
  */
 class UserHandler implements UserHandlerInterface
 {

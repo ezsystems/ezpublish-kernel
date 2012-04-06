@@ -23,7 +23,6 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields
  * @property-read array $relations calls getRelations()
- *
  */
 abstract class Content extends ValueObject
 {

@@ -11,7 +11,6 @@ namespace eZ\Publish\SPI\Persistence;
 
 /**
  * The main handler for Storage Engine
- *
  */
 interface Handler
 {

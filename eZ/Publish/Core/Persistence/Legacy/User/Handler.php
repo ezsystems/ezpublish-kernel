@@ -19,7 +19,6 @@ use eZ\Publish\SPI\Persistence\User,
 
 /**
  * Storage Engine handler for user module
- *
  */
 class Handler implements BaseUserHandler
 {

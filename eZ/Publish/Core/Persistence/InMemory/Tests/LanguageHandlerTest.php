@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Language,
 
 /**
  * Test case for SectionHandler using in memory storage.
- *
  */
 class LanguageHandlerTest extends HandlerTest
 {

@@ -20,7 +20,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $creatorId the user id of the creator of this content type group
  * @property-read mixed $modifierId the user id of the user which has last modified this content type group
  * @property-read string $mainLanguageCode 5.0, the main language of the content type group names and description used for fallback.
- *
  */
 abstract class ContentTypeGroup extends ValueObject
 {

@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used for updating a content type group
- *
  */
 class ContentTypeGroupUpdateStruct extends ValueObject
 {

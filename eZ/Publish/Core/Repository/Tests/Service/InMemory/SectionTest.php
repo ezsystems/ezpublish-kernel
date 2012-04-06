@@ -15,7 +15,6 @@ use eZ\Publish\Core\Repository\Tests\Service\SectionBase as BaseSectionServiceTe
 
 /**
  * Test case for Section Service using InMemory storage class
- *
  */
 class SectionTest extends BaseSectionServiceTest
 {

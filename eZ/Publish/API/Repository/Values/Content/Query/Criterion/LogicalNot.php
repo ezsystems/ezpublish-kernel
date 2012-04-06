@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * A NOT logical criterion
- *
  */
 class LogicalNot extends LogicalOperator
 {

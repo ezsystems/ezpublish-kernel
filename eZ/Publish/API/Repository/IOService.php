@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
  * The io service for managing binary files
  *
  * @package eZ\Publish\API\Repository
- *
  */
 interface IOService
 {

@@ -15,7 +15,6 @@ use eZ\Publish\Core\Repository\Tests\Service\ContentBase as BaseContentServiceTe
 
 /**
  * Test case for Content Service using InMemory storage class
- *
  */
 class ContentTest extends BaseContentServiceTest
 {

@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Content\Location,
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
- *
  */
 interface Handler
 {

@@ -24,7 +24,6 @@ use eZ\Publish\SPI\Persistence\Content,
 
 /**
  * Test case for ContentHandler using in memory storage.
- *
  */
 class ContentHandlerTest extends HandlerTest
 {

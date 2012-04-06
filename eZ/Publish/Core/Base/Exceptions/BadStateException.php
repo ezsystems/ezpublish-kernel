@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateExcepti
  * BadState Exception implementation
  *
  * @use: throw new BadState( 'nodes', 'array' );
- *
  */
 class BadStateException extends APIBadStateException
 {

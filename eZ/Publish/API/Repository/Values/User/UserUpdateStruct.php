@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to update a user in the repository
- *
  */
 class UserUpdateStruct extends ValueObject
 {

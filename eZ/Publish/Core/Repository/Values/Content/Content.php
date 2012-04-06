@@ -23,7 +23,6 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields
  * @property-read array $relations calls getRelations()
- *
  */
 class Content extends APIContent
 {

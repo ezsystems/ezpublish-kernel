@@ -15,7 +15,6 @@ use eZ\Publish\Core\Repository\Tests\Service\ContentTypeBase as BaseContentTypeS
 
 /**
  * Test case for ContentType Service using InMemory storage class
- *
  */
 class ContentTypeTest extends BaseContentTypeServiceTest
 {

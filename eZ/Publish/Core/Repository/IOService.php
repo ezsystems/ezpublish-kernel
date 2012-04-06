@@ -29,7 +29,6 @@ use eZ\Publish\API\Repository\IOService as IOServiceInterface,
  * The io service for managing binary files
  *
  * @package eZ\Publish\Core\Repository
- *
  */
 class IOService implements IOServiceInterface
 {

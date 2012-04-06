@@ -12,7 +12,6 @@ use eZ\Publish\SPI\Persistence\ValueObject,
     eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
- *
  */
 class CreateStruct extends ValueObject
 {

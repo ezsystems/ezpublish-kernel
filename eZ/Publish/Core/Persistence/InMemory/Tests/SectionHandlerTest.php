@@ -13,7 +13,6 @@ use eZ\Publish\SPI\Persistence\Content\Section,
 
 /**
  * Test case for SectionHandler using in memory storage.
- *
  */
 class SectionHandlerTest extends HandlerTest
 {

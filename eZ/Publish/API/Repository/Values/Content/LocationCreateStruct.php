@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to create a new Location for a content object
- *
  */
 class LocationCreateStruct extends ValueObject
 {

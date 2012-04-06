@@ -16,7 +16,6 @@ use eZ\Publish\SPI\Persistence\User,
 
 /**
  * mapper for User realted objects
- *
  */
 class Mapper
 {

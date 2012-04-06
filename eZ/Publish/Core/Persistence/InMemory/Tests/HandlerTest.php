@@ -13,7 +13,6 @@ use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryHandler,
 
 /**
  * Test case for Handler using in memory storage.
- *
  */
 abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {

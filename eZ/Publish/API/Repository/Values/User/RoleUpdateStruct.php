@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to update a role
- *
  */
 class RoleUpdateStruct extends ValueObject
 {

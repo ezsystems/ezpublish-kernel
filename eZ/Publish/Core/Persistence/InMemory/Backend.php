@@ -24,7 +24,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
  * The in memory db store and also json representation have a one to one mapping to defined value objects.
  * But only their plain properties, associations are not handled and all data is stored in separate "buckets" similar
  * to how it would be in a RDBMS servers.
- *
  */
 class Backend
 {

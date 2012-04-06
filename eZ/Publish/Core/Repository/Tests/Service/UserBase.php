@@ -20,7 +20,6 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
 /**
  * Test case for User Service
- *
  */
 abstract class UserBase extends BaseServiceTest
 {

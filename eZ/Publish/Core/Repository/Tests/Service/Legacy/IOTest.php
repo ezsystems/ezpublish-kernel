@@ -14,7 +14,6 @@ use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
 
 /**
  * Test case for IO Service using Legacy storage class
- *
  */
 class IOTest extends BaseIOServiceTest
 {

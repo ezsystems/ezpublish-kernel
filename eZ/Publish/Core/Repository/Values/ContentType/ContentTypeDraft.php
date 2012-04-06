@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
 /**
  *
  * This class represents a draft of a content type
- *
  */
 class ContentTypeDraft extends APIContentTypeDraft
 {

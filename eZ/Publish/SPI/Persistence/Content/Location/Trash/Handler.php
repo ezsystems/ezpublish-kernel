@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Location,
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.
- *
  */
 interface Handler
 {

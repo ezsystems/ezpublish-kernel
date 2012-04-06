@@ -15,7 +15,6 @@ use eZ\Publish\Core\Repository\Tests\Service\TrashBase as BaseTrashServiceTest,
 
 /**
  * Test case for Trash Service using InMemory storage class
- *
  */
 class TrashTest extends BaseTrashServiceTest
 {

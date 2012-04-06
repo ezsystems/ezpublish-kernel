@@ -15,7 +15,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
  * Invalid Argument Type Exception implementation
  *
  * @use: throw new InvalidArgument( 'nodes', 'array' );
- *
  */
 class InvalidArgumentValue extends InvalidArgumentException
 {

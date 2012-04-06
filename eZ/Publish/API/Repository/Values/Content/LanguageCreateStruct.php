@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a value for creating a language
- *
  */
 class LanguageCreateStruct extends ValueObject
 {

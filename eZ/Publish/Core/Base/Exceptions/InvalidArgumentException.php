@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidA
  * Invalid Argument Type Exception implementation
  *
  * @use: throw new InvalidArgumentException( 'nodes', 'array' );
- *
  */
 class InvalidArgumentException extends APIInvalidArgumentException
 {

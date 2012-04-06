@@ -19,7 +19,6 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
 /**
  * Test case for IO Service
- *
  */
 abstract class IOBase extends BaseServiceTest
 {

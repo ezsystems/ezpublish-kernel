@@ -14,7 +14,6 @@ use PHPUnit_Framework_TestCase,
 
 /**
  * Test case for Handler using in memory storage.
- *
  */
 class BackendTest extends PHPUnit_Framework_TestCase
 {

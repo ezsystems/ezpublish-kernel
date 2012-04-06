@@ -12,7 +12,6 @@ use eZ\Publish\Core\Repository\Tests\Service\RoleBase as BaseRoleServiceTest;
 
 /**
  * Test case for Role Service using Legacy storage class
- *
  */
 class RoleTest extends BaseRoleServiceTest
 {

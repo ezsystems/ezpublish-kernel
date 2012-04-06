@@ -20,7 +20,6 @@ use eZ\Publish\SPI\Persistence\Content\Type,
 
 /**
  * Test case for SectionHandler using in memory storage.
- *
  */
 class ContentTypeHandlerTest extends HandlerTest
 {

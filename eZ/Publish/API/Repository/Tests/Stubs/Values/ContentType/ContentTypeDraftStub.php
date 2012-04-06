@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 /**
  *
  * This class represents a draft of a content type
- *
  */
 class ContentTypeDraftStub extends ContentTypeDraft
 {

@@ -12,7 +12,6 @@ use eZ\Publish\Core\Repository\Tests\Service\LocationBase as BaseLocationService
 
 /**
  * Test case for Location Service using Legacy storage class
- *
  */
 class LocationTest extends BaseLocationServiceTest
 {

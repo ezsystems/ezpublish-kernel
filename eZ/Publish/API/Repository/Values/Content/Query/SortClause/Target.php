@@ -7,7 +7,6 @@
  * @version //autogentag//
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
- *
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;

@@ -19,7 +19,6 @@ use eZ\Publish\SPI\Persistence\Content,
 
 /**
  * Test case for SearchHandler using in memory storage.
- *
  */
 class SearchHandlerTest extends HandlerTest
 {

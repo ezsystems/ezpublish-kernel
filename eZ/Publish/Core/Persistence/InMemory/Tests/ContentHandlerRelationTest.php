@@ -21,7 +21,6 @@ use eZ\Publish\SPI\Persistence\Content,
 
 /**
  * Test case for relations operation in ContentHandler using in memory storage.
- *
  */
 class ContentHandlerRelationTest extends HandlerTest
 {

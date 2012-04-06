@@ -15,7 +15,6 @@ use eZ\Publish\Core\Repository\Tests\Service\LanguageBase as BaseLanguageService
 
 /**
  * Test case for Language Service using InMemory storage class
- *
  */
 class LanguageTest extends BaseLanguageServiceTest
 {
