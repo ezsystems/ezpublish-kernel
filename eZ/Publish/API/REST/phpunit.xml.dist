@@ -23,6 +23,8 @@
                 <directory>Common/Tests</directory>
                 <directory>Server/Tests</directory>
                 <directory>Client/Tests</directory>
+				<file>common.php</file>
+				<file>Server/index.php</file>
             </exclude>
         </whitelist>
     </filter>
