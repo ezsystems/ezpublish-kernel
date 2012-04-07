@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
+use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content;
 
-class SectionTest extends BaseTest
+class SectionTest extends ValueObjectVisitorBaseTest
 {
     /**
      * testVisit

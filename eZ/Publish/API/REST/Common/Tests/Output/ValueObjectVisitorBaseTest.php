@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
+namespace eZ\Publish\API\REST\Common\Tests\Output;
 use eZ\Publish\API\REST\Server\Tests;
 
 use eZ\Publish\API\REST\Common\Output\Generator;
 
-abstract class BaseTest extends Tests\BaseTest
+abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

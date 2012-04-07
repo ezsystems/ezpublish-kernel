@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
+use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 
-class ExceptionTest extends BaseTest
+class ExceptionTest extends ValueObjectVisitorBaseTest
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -85,7 +86,7 @@ class ExceptionTest extends BaseTest
                     'media-type' => 'application/vnd.ez.api.Exception+xml',
                     'code'       => '0',
                     'file'       => __FILE__,
-                    'line'       => '36',
+                    'line'       => '37',
                 )
             ),
             $result,

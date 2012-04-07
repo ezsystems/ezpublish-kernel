@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
+use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
-class NotFoundExceptionExceptionTest extends BaseTest
+class NotFoundExceptionExceptionTest extends ValueObjectVisitorBaseTest
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -86,7 +87,7 @@ class NotFoundExceptionExceptionTest extends BaseTest
                     'media-type' => 'application/vnd.ez.api.NotFoundException+xml',
                     'code'       => '0',
                     'file'       => __FILE__,
-                    'line'       => '37',
+                    'line'       => '38',
                 )
             ),
             $result,
