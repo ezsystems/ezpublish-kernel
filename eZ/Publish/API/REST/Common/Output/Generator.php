@@ -242,10 +242,18 @@ abstract class Generator
      * Get media type
      *
      * @param string $name
+     * @return string
+     */
+    abstract public function getMediaType( $name );
+
+    /**
+     * Generates a media type from $name and $type
+     *
+     * @param string $name
      * @param string $type
      * @return string
      */
-    public function getMediaType( $name, $type )
+    protected function generateMediaType( $name, $type )
     {
         return "application/vnd.ez.api.{$name}+{$type}";
     }

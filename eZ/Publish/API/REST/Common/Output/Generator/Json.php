@@ -209,9 +209,9 @@ class Json extends Generator
      * @param string $type
      * @return string
      */
-    public function getMediaType( $name, $type = 'json' )
+    public function getMediaType( $name )
     {
-        return parent::getMediaType( $name, $type );
+        return $this->generateMediaType( $name, 'json' );
     }
 }
 

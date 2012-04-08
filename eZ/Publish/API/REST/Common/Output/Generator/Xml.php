@@ -164,12 +164,11 @@ class Xml extends Generator
      * Get media type
      *
      * @param string $name
-     * @param string $type
      * @return string
      */
-    public function getMediaType( $name, $type = 'xml' )
+    public function getMediaType( $name )
     {
-        return parent::getMediaType( $name, $type );
+        return $this->generateMediaType( $name, 'xml' );
     }
 }
 

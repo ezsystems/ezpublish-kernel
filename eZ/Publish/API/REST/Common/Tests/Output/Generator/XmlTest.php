@@ -153,5 +153,15 @@ class XmlTest extends GeneratorTest
             $generator->endDocument( 'test' )
         );
     }
+
+    public function testGetMediaType()
+    {
+        $generator = new Common\Output\Generator\Xml();
+
+        $this->assertEquals(
+            'application/vnd.ez.api.Section+xml',
+            $generator->getMediaType( 'Section' )
+        );
+    }
 }
 

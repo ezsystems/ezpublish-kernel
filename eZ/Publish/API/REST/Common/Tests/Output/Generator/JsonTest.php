@@ -153,5 +153,15 @@ class JsonTest extends GeneratorTest
             $generator->endDocument( 'test' )
         );
     }
+
+    public function testGetMediaType()
+    {
+        $generator = new Common\Output\Generator\Json();
+
+        $this->assertEquals(
+            'application/vnd.ez.api.Section+json',
+            $generator->getMediaType( 'Section' )
+        );
+    }
 }
 
