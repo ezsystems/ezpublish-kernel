@@ -154,16 +154,11 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
-
-        $sectionId = $sectionService->createSection( $sectionCreate )->id;
-
-        $section = $sectionService->loadSection( $sectionId );
+        // Loads user section
+        $section = $sectionService->loadSection( 2 );
         /* END: Use Case */
 
-        $this->assertEquals( 'uniqueKey', $section->identifier );
+        $this->assertEquals( 'users', $section->identifier );
     }
 
     /**
