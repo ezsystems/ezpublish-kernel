@@ -68,7 +68,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
     {
         $inputMessage = $this->outputVisitor->visit( $sectionCreateStruct );
         // TODO: Make encoding configurable
-        $inputMessage->headers['Accept'] = 'application/vnd.ez.api.Section+json';
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
 
         $result = $this->client->request(
             'POST',

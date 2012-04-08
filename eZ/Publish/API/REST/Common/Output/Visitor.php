@@ -137,5 +137,17 @@ class Visitor
 
         throw new Exceptions\NoVisitorFoundException( $checkedClassNames );
     }
+
+    /**
+     * Generates a media type for $type based on the used generator.
+     *
+     * @param string $type
+     * @return string
+     * @see \eZ\Publish\API\REST\Common\Generator::getMediaType()
+     */
+    public function getMediaType( $type )
+    {
+        return $this->generator->getMediaType( $type );
+    }
 }
 
