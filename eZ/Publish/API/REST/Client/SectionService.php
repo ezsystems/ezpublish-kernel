@@ -107,7 +107,14 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
      */
     public function loadSection( $sectionId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            sprintf( '/content/sections/%s', $sectionId ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Section' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -119,13 +126,12 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
      */
     public function loadSections()
     {
-        return $this->inputDispatcher->parse(
-            $this->client->request(
-                'GET', '/content/sections', new Message(
-                    array( 'Accept' => 'application/vnd.ez.api.SectionList+json' )
-                )
+        $response = $this->client->request(
+            'GET', '/content/sections', new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'SectionList' ) )
             )
         );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

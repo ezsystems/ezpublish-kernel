@@ -45,6 +45,9 @@ $dispatcher = new RMF\Dispatcher\Simple(
             'GET'  => array( $sectionController, 'listSections' ),
             'POST' => array( $sectionController, 'createSection' ),
         ),
+    '(^/content/sections/(?P<id>[0-9]+)$)' => array(
+            'GET'  => array( $sectionController, 'loadSection' ),
+        ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => new View\Visitor(

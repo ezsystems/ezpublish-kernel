@@ -75,4 +75,17 @@ class Section
             ) )
         );
     }
+
+    /**
+     * Loads a section
+     *
+     * @param RMF\Request $request
+     * @return Section
+     */
+    public function loadSection( RMF\Request $request )
+    {
+        return $this->sectionService->loadSection(
+            $request->variables['id']
+        );
+    }
 }
