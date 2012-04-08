@@ -32,7 +32,7 @@ class NotFoundException extends ValueObjectVisitor
         $visitor->setHeader( 'Status', '404 Not Found' );
 
         // @TODO: What do we want here?
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Exception' ) );
+        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'NotFoundException' ) );
 
         $generator->startAttribute( 'code', $data->getCode() );
         $generator->endAttribute( 'code' );
