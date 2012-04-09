@@ -88,4 +88,42 @@ class Section
             $request->variables['id']
         );
     }
+
+    /**
+     * Updates a section
+     *
+     * @param RMF\Request $request
+     * @return Section
+     */
+    public function updateSection( RMF\Request $request )
+    {
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+        return $this->sectionService->updateSection(
+            $this->loadSection( $request->variables['id'] ),
+            $this->mapToUpdateStruct( $createStruct )
+        );
+    }
+
+    /**
+     * Maps a SectionCreateStruct to a SectionUpdateStruct.
+     *
+     * Needed since both structs are encoded into the same media type on input.
+     *
+     * @param SectionCreateStruct $createStruct
+     * @return SectionUpdateStruct
+     */
+    protected function mapToUpdateStruct( SectionCreateStruct $createStruct )
+    {
+        return new SectionUpdateStruct(
+            array(
+                'name'       => $createStruct->name,
+                'identifier' => $createStruct->identifier,
+            )
+        );
+    }
 }

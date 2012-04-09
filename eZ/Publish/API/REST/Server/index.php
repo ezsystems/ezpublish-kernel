@@ -45,8 +45,10 @@ $dispatcher = new RMF\Dispatcher\Simple(
             'GET'  => array( $sectionController, 'listSections' ),
             'POST' => array( $sectionController, 'createSection' ),
         ),
-    '(^/content/sections/(?P<id>[0-9]+)$)' => array(
-            'GET'  => array( $sectionController, 'loadSection' ),
+        '(^/content/sections/(?P<id>[0-9]+)$)' => array(
+            'GET'   => array( $sectionController, 'loadSection' ),
+            'POST'  => array( $sectionController, 'updateSection' ),
+            'PATCH' => array( $sectionController, 'updateSection' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

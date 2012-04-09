@@ -67,7 +67,6 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
         $inputMessage = $this->outputVisitor->visit( $sectionCreateStruct );
-        // TODO: Make encoding configurable
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
 
         $result = $this->client->request(
@@ -92,7 +91,16 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $sectionUpdateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
+
+        $result = $this->client->request(
+            'PATCH',
+            sprintf( '/content/sections/%s', $section->id ),
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**
