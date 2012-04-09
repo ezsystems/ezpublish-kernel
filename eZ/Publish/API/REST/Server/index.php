@@ -47,7 +47,6 @@ $dispatcher = new RMF\Dispatcher\Simple(
         ),
         '(^/content/sections/(?P<id>[0-9]+)$)' => array(
             'GET'   => array( $sectionController, 'loadSection' ),
-            'POST'  => array( $sectionController, 'updateSection' ),
             'PATCH' => array( $sectionController, 'updateSection' ),
         ),
     ) ),
