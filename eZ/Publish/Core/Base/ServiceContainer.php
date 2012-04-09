@@ -268,12 +268,12 @@ class ServiceContainer
                 {
                     if ( $function !== '' )
                         $builtArguments[$key] = function() use ( $serviceContainer, $argument, $function ){
-                            $service = $serviceContainer->get( ltrim( $argument, '%' ), true );
+                            $service = $serviceContainer->get( ltrim( $argument, '%' ) );
                             return call_user_func_array( array( $service, $function ), func_get_args() );
                         };
                     else
                         $builtArguments[$key] = function() use ( $serviceContainer, $argument ){
-                            return $serviceContainer->get( ltrim( $argument, '%' ), true );
+                            return $serviceContainer->get( ltrim( $argument, '%' ) );
                         };
                 }
                 else if ( isset( $this->dependencies[ $argument ] ) )// Existing dependencies (@Service / $Variable)
