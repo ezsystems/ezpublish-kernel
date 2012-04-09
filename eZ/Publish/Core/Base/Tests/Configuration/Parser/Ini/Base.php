@@ -185,6 +185,14 @@ class=eZ\\Publish\\Core\\ContentItemController
 
 [-controller]
 public=true
+regex[]=?<name>\w+
+regex[]=?P<name>\w+
+regex[]=?\'name\'\w+
+regex[]=(?<name>\w+)
+regex[]=(?P<name>\w+)
+regex[]=(?\'name\'\w+)
+regex[]=content/location/?<name>\w+
+regex[]=content/location/{?<name>\w+}
 ';
         $expects = array(
             'test' => array(
@@ -207,7 +215,19 @@ public=true
                 )
             ),
             'contentItem-controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
-            '-controller' => array( 'public' => true ),
+            '-controller' => array(
+                'public' => true,
+                'regex' => array(
+                    '?<name>\w+',
+                    '?P<name>\w+',
+                    '?name\w+',
+                    '?<name>\w+',
+                    '?P<name>\w+',
+                    '?name\w+',
+                    'content/location/?<name>\w+',
+                    'content/location/{?<name>\w+}',
+                ),
+            ),
         );
 
         $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
