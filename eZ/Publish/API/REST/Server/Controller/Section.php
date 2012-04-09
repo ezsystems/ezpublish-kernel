@@ -13,6 +13,9 @@ use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\SectionService;
+use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+
 use Qafoo\RMF;
 
 /**
@@ -104,7 +107,7 @@ class Section
             )
         );
         return $this->sectionService->updateSection(
-            $this->loadSection( $request->variables['id'] ),
+            $this->sectionService->loadSection( $request->variables['id'] ),
             $this->mapToUpdateStruct( $createStruct )
         );
     }
