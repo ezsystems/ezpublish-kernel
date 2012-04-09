@@ -31,6 +31,7 @@ $repository = new Client\Repository(
         new Common\Output\Generator\Json(),
         array(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct' => new Client\Output\ValueObjectVisitor\SectionCreateStruct(),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionUpdateStruct(),
         )
     )
 );
