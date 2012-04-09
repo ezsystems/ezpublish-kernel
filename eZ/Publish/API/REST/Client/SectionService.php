@@ -93,9 +93,12 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
     {
         $inputMessage = $this->outputVisitor->visit( $sectionUpdateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
+        // Should originally be PATCH, but PHP's shiny new internal web server
+        // dies with it. m(
         $result = $this->client->request(
-            'PATCH',
+            'POST',
             sprintf( '/content/sections/%s', $section->id ),
             $inputMessage
         );
@@ -215,6 +218,6 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
      */
     public function newSectionUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new SectionUpdateStruct();
     }
 }
