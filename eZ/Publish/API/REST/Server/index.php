@@ -71,6 +71,10 @@ $dispatcher = new RMF\Dispatcher\Simple(
 $request = new RMF\Request\HTTP();
 $request->addHandler( 'body', new RMF\Request\PropertyHandler\RawBody() );
 $request->addHandler( 'contentType', new RMF\Request\PropertyHandler\Server( 'HTTP_CONTENT_TYPE' ) );
+$request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
+    new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
+    new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),
+) ) );
 
 $dispatcher->dispatch( $request );
 
