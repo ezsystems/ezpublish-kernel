@@ -30,6 +30,8 @@ class NotFoundException extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        throw new Exceptions\NotFoundException();
+        throw new Exceptions\NotFoundException(
+            $data['message'], $data['code']
+        );
     }
 }
