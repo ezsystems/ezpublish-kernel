@@ -27,11 +27,11 @@ class SectionInput extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        if ( !isset( $data["name"] ) )
+        if ( !array_key_exists( 'name', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'name' attribute for SectionInput." );
         }
-        if ( !isset( $data["identifier"] ) )
+        if ( !array_key_exists( 'identifier', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'identifier' attribute for SectionInput." );
         }
