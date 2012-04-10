@@ -14,7 +14,24 @@ use Qafoo\RMF;
 
 require __DIR__ . '/../bootstrap.php';
 
-$repository = require __DIR__ . '/../../Repository/Tests/common.php';
+$stateDir    = __DIR__ . '/_state/';
+$sessionFile = null;
+$repository  = null;
+if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
+{
+    // Check if we are in a test session and if, for this session, a repository
+    // state file already exists.
+    $sessionFile = $stateDir . $_SERVER['HTTP_X_TEST_SESSION'] . '.php';
+    if ( is_file( $sessionFile ) )
+    {
+        $repository = unserialize( file_get_contents( $sessionFile ) );
+    }
+}
+
+if ( !$repository )
+{
+    $repository = require __DIR__ . '/../../Repository/Tests/common.php';
+}
 
 $sectionController = new Controller\Section(
     new Common\Input\Dispatcher(
@@ -76,4 +93,10 @@ $request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
 ) ) );
 
 $dispatcher->dispatch( $request );
+
+// If we are in a test session store the repository state
+if ( $sessionFile )
+{
+    file_put_contents( $sessionFile, serialize( $repository ) );
+}
 
