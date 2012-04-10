@@ -25,7 +25,7 @@ use \eZ\Publish\API\REST\Common\Message;
  *
  * @see \eZ\Publish\API\Repository\SectionService
  */
-class SectionService implements \eZ\Publish\API\Repository\SectionService
+class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessionable
 {
     /**
      * @var \eZ\Publish\API\REST\Client\HttpClient

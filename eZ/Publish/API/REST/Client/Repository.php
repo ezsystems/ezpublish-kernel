@@ -24,7 +24,7 @@ use \eZ\Publish\API\REST\Common;
  *
  * @see \eZ\Publish\API\Repository\Repository
  */
-class Repository implements \eZ\Publish\API\Repository\Repository
+class Repository implements \eZ\Publish\API\Repository\Repository, Sessionable
 {
     /**
      * @var integer
@@ -101,6 +101,13 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $outputVisitor;
 
     /**
+     * Optional session identifier
+     *
+     * @var string
+     */
+    private $session;
+
+    /**
      * Instantiates the REST Client repository.
      *
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
@@ -112,6 +119,20 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        $this->session = $id;
     }
 
     /**
@@ -175,6 +196,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         if ( null === $this->contentService )
         {
             $this->contentService = new ContentService( $this );
+            $this->contentService->setSession( $this->session );
         }
         return $this->contentService;
     }
@@ -195,6 +217,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this->getContentService(),
                 'eng-US'
             );
+            $this->languageService->setSession( $this->session );
         }
         return $this->languageService;
     }
@@ -215,6 +238,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this,
                 $this->getContentService()
             );
+            $this->contentTypeService->setSession( $this->session );
         }
         return $this->contentTypeService;
     }
@@ -231,6 +255,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         if ( null === $this->locationService )
         {
             $this->locationService = new LocationService( $this );
+            $this->locationService->setSession( $this->session );
         }
         return $this->locationService;
     }
@@ -251,6 +276,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this,
                 $this->getLocationService()
             );
+            $this->trashService->setSession( $this->session );
         }
         return $this->trashService;
     }
@@ -271,6 +297,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this->inputDispatcher,
                 $this->outputVisitor
             );
+            $this->sectionService->setSession( $this->session );
         }
         return $this->sectionService;
     }
@@ -287,6 +314,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         if ( null === $this->userService )
         {
             $this->userService = new UserService( $this );
+            $this->userService->setSession( $this->session );
         }
         return $this->userService;
     }
@@ -303,6 +331,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         if ( null === $this->ioService )
         {
             $this->ioService = new IOService( $this );
+            $this->ioService->setSession( $this->session );
         }
         return $this->ioService;
     }
@@ -317,6 +346,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         if ( null === $this->roleService )
         {
             $this->roleService = new RoleService( $this, $this->getUserService() );
+            $this->roleService->setSession( $this->session );
         }
         return $this->roleService;
     }
