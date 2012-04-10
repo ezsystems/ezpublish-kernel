@@ -43,13 +43,6 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     private $outputVisitor;
 
     /**
-     * Optional session identifier
-     *
-     * @var string
-     */
-    private $session;
-
-    /**
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
@@ -72,7 +65,10 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      */
     public function setSession( $id )
     {
-        $this->session = $id;
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**
@@ -89,7 +85,6 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     {
         $inputMessage = $this->outputVisitor->visit( $sectionCreateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
-        $inputMessage->headers['X-Test-Session'] = $this->session;
 
         $result = $this->client->request(
             'POST',
