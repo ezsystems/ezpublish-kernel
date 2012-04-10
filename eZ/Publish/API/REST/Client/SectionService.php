@@ -17,7 +17,8 @@ use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
-use \eZ\Publish\API\REST\Common\Sessionable;
+
+use \eZ\Publish\API\REST\Client\Sessionable;
 
 
 /**
@@ -66,9 +67,9 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      */
     public function setSession( $id )
     {
-        if ( $this->outputVisitor instanceof Sessionable )
+        if ( $this->client instanceof Sessionable )
         {
-            $this->outputVisitor->setSession( $id );
+            $this->client->setSession( $id );
         }
     }
 

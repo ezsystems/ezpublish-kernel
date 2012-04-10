@@ -24,7 +24,7 @@ use \eZ\Publish\API\REST\Common;
  *
  * @see \eZ\Publish\API\Repository\Repository
  */
-class Repository implements \eZ\Publish\API\Repository\Repository, Common\Sessionable
+class Repository implements \eZ\Publish\API\Repository\Repository, Sessionable
 {
     /**
      * @var integer

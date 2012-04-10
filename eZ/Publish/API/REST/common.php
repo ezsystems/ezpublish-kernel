@@ -10,8 +10,10 @@
 namespace eZ\Publish\API\REST;
 
 $repository = new Client\Repository(
-    new Client\HttpClient\Stream(
-        'http://localhost:8042/'
+    new Client\HttpClient\TestSession(
+        new Client\HttpClient\Stream(
+            'http://localhost:8042/'
+        )
     ),
     new Common\Input\Dispatcher(
         new Common\Input\ParsingDispatcher(
@@ -30,7 +32,7 @@ $repository = new Client\Repository(
             'xml'  => new Common\Input\Handler\Xml(),
         )
     ),
-    new Common\Output\Visitor\TestSession(
+    new Common\Output\Visitor(
         new Common\Output\Generator\Json(),
         array(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct' => new Client\Output\ValueObjectVisitor\SectionCreateStruct(),

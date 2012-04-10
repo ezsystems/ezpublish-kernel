@@ -15,7 +15,7 @@ use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
-use \eZ\Publish\API\REST\Common\Sessionable;
+use \eZ\Publish\API\REST\Client\Sessionable;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
