@@ -17,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 
 /**

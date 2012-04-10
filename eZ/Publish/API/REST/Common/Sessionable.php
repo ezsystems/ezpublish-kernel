@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client;
+namespace eZ\Publish\API\REST\Common;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}

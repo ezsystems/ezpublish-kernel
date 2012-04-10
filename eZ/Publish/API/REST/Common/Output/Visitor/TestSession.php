@@ -10,7 +10,7 @@
 namespace eZ\Publish\API\REST\Common\Output\Visitor;
 use eZ\Publish\API\REST\Common\Output\Visitor;
 use eZ\Publish\API\REST\Common\Message;
-use eZ\Publish\API\REST\Client\Sessionable;
+use eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * Visitor for view models
