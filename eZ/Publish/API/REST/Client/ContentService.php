@@ -26,6 +26,9 @@ use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use \eZ\Publish\API\Repository\Values\User\User;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 
@@ -35,18 +38,30 @@ use \eZ\Publish\API\REST\Common\Sessionable;
 class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\Repository
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    private $repository;
+    private $client;
 
     /**
-     * Instantiates a new content service stub.
-     *
-     * @param \eZ\Publish\API\REST\Client\Repository $repository
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
      */
-    public function __construct( Repository $repository )
+    private $inputDispatcher;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     */
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**
@@ -97,7 +112,15 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            sprintf( '/content/objects?remoteId=%s', $remoteId ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentList' ) )
+            )
+        );
+        $contentList = $this->inputDispatcher->parse( $response );
+        return reset( $contentList );
     }
 
     /**

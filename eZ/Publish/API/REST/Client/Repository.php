@@ -195,7 +195,11 @@ class Repository implements \eZ\Publish\API\Repository\Repository, Common\Sessio
     {
         if ( null === $this->contentService )
         {
-            $this->contentService = new ContentService( $this );
+            $this->contentService = new ContentService(
+                $this->client,
+                $this->inputDispatcher,
+                $this->outputVisitor
+            );
             $this->contentService->setSession( $this->session );
         }
         return $this->contentService;

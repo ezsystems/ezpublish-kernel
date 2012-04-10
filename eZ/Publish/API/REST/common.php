@@ -16,6 +16,8 @@ $repository = new Client\Repository(
     new Common\Input\Dispatcher(
         new Common\Input\ParsingDispatcher(
             array(
+                'application/vnd.ez.api.ContentList'              => new Client\Input\Parser\ContentList(),
+                'application/vnd.ez.api.ContentInfo'              => new Client\Input\Parser\ContentInfo(),
                 'application/vnd.ez.api.SectionList'              => new Client\Input\Parser\SectionList(),
                 'application/vnd.ez.api.Section'                  => new Client\Input\Parser\Section(),
                 'application/vnd.ez.api.InvalidArgumentException' => new Client\Input\Parser\InvalidArgumentException(),
