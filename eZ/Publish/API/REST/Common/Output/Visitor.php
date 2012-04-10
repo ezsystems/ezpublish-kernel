@@ -102,6 +102,7 @@ class Visitor
      */
     public function visit( $data )
     {
+        $this->generator->reset();
         $this->generator->startDocument( $data );
         $this->visitValueObject( $data );
         return new Message(

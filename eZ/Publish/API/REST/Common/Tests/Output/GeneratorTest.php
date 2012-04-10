@@ -30,6 +30,17 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->startDocument( 'test' );
     }
 
+    public function testValidDocumentStartAfterReset()
+    {
+        $generator = new Common\Output\Generator\Xml();
+
+        $generator->startDocument( 'test' );
+        $generator->reset();
+        $generator->startDocument( 'test' );
+
+        $this->assertNotNull( $generator->endDocument( 'test' ) );
+    }
+
     /**
      * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
      */

@@ -25,6 +25,16 @@ abstract class Generator
     protected $stack = array();
 
     /**
+     * Reset output visitor to a virgin state
+     *
+     * @return void
+     */
+    public function reset()
+    {
+        $this->stack = array();
+    }
+
+    /**
      * Start document
      *
      * @param mixed $data
