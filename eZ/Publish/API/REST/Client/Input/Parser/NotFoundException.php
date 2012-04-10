@@ -26,7 +26,6 @@ class NotFoundException extends Parser
      * @param array $data
      * @param ParsingDispatcher $parsingDispatcher
      * @return ValueObject
-     * @todo Handle exception message
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
