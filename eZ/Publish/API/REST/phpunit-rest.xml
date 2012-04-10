@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="../../../../bootstrap.php"
+         bootstrap="bootstrap.php"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
@@ -14,7 +14,6 @@
             <file>Client/Tests/HttpClient/StreamTest.php</file>
             <file>Client/Tests/Input/Parser/SectionTest.php</file>
             <file>Client/Tests/Input/Parser/SectionListTest.php</file>
-            <file>Client/Tests/Input/Parser/BaseTest.php</file>
             <file>Client/Tests/Output/ValueObjectVisitor/SectionCreateStruct.php</file>
         </testsuite>
         <testsuite name="eZ\Publish\API\REST\Common">
@@ -26,6 +25,14 @@
             <file>Common/Tests/Input/ParsingDispatcherTest.php</file>
             <file>Common/Tests/Input/Handler/JsonTest.php</file>
             <file>Common/Tests/Input/Handler/XmlTest.php</file>
+        </testsuite>
+        <testsuite name="eZ\Publish\API\REST\Server">
+            <file>Server/Tests/Input/Parser/SectionInputTest.php</file>
+            <file>Server/Tests/View/VisitorTest.php</file>
+            <file>Server/Tests/Output/ValueObjectVisitor/SectionTest.php</file>
+            <file>Server/Tests/Output/ValueObjectVisitor/NotFoundExceptionTest.php</file>
+            <file>Server/Tests/Output/ValueObjectVisitor/ExceptionTest.php</file>
+            <file>Server/Tests/Output/ValueObjectVisitor/SectionListTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
