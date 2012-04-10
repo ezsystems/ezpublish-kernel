@@ -32,12 +32,12 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
         $generator
-            ->expects( $this->at( 0 ) )
+            ->expects( $this->at( 1 ) )
             ->method( 'startDocument' )
             ->with( $data );
 
         $generator
-            ->expects( $this->at( 1 ) )
+            ->expects( $this->at( 2 ) )
             ->method( 'endDocument' )
             ->with( $data )
             ->will( $this->returnValue( 'Hello world!' ) );
