@@ -31,6 +31,15 @@ class SectionServiceTest extends BaseTest
     {
         parent::setUp();
 
+        // Set session if we are testing the REST backend to make it
+        // possible to persist data in the memory backend during multiple
+        // requests.
+        $sectionService = $this->getRepository()->getSectionService();
+        if ( $sectionService instanceof \eZ\Publish\API\REST\Client\SectionService )
+        {
+            $sectionService->setSession( md5( microtime() ) );
+        }
+
         try
         {
             // RemoteId of the "Support" page of an eZ Publish demo installation
