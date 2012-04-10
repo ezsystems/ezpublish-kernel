@@ -58,9 +58,23 @@ class Section
      */
     public function listSections( RMF\Request $request )
     {
-        return new Values\SectionList(
-            $this->sectionService->loadSections()
-        );
+        $sections = array();
+
+        if ( isset( $request->variables['identifier'] ) )
+        {
+            $sections = array(
+                $this->sectionService->loadSectionByIdentifier(
+                    $request->variables['identifier']
+                )
+            );
+        }
+        // elseif …
+        else
+        {
+            $sections = $this->sectionService->loadSections();
+        }
+
+        return new Values\SectionList( $sections );
     }
 
     /**

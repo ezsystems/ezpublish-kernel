@@ -71,7 +71,7 @@ $valueObjectVisitors = array(
 
 $dispatcher = new RMF\Dispatcher\Simple(
     new RMF\Router\Regexp( array(
-        '(^/content/sections$)' => array(
+        '(^/content/sections(\?.*)?$)' => array(
             'GET'  => array( $sectionController, 'listSections' ),
             'POST' => array( $sectionController, 'createSection' ),
         ),

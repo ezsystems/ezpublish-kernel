@@ -176,7 +176,16 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            sprintf( '/content/sections?identifier=%s', $sectionIdentifier ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'SectionList' ) )
+            )
+        );
+        $result = $this->inputDispatcher->parse( $response );
+
+        return reset( $result );
     }
 
     /**
