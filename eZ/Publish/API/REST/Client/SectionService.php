@@ -226,7 +226,24 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      */
     public function deleteSection( Section $section )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'DELETE',
+            sprintf( '/content/sections/%s', $section->id ),
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Section' ) )
+            )
+        );
+
+        $result = null;
+        if ( !empty( $response->body ) )
+        {
+            $result = $this->inputDispatcher->parse( $response );
+        }
+        return $result;
     }
 
     /**

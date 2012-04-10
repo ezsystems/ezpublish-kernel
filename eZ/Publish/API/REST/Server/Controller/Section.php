@@ -127,6 +127,21 @@ class Section
     }
 
     /**
+     * Delete a section by ID
+     *
+     * @param RMF\Request $request
+     * @return void
+     */
+    public function deleteSection( RMF\Request $request )
+    {
+        return $this->sectionService->deleteSection(
+            $this->sectionService->loadSection(
+                $request->variables['id']
+            )
+        );
+    }
+
+    /**
      * Maps a SectionCreateStruct to a SectionUpdateStruct.
      *
      * Needed since both structs are encoded into the same media type on input.

@@ -76,8 +76,9 @@ $dispatcher = new RMF\Dispatcher\Simple(
             'POST' => array( $sectionController, 'createSection' ),
         ),
         '(^/content/sections/(?P<id>[0-9]+)$)' => array(
-            'GET'   => array( $sectionController, 'loadSection' ),
-            'PATCH' => array( $sectionController, 'updateSection' ),
+            'GET'    => array( $sectionController, 'loadSection' ),
+            'PATCH'  => array( $sectionController, 'updateSection' ),
+            'DELETE' => array( $sectionController, 'deleteSection' ),
         ),
         '(^/content/objects\?remoteId=(?P<id>[0-9a-f]+)$)' => array(
             'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
