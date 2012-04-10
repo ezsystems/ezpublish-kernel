@@ -17,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\UserService}
@@ -24,7 +25,7 @@ use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
  *
  * @see \eZ\Publish\API\Repository\UserService
  */
-class UserService implements \eZ\Publish\API\Repository\UserService
+class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
 {
     /**
      * @var \eZ\Publish\API\REST\Client\Repository
@@ -39,6 +40,23 @@ class UserService implements \eZ\Publish\API\Repository\UserService
     public function __construct( Repository $repository )
     {
         throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**

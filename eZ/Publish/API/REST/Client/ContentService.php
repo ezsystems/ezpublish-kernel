@@ -26,11 +26,13 @@ use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use \eZ\Publish\API\Repository\Values\User\User;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
+
 
 /**
  * @example Examples/contenttype.php
  */
-class ContentService implements \eZ\Publish\API\Repository\ContentService
+class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessionable
 {
     /**
      * @var \eZ\Publish\API\REST\Client\Repository
@@ -45,6 +47,23 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService
     public function __construct( Repository $repository )
     {
         throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**

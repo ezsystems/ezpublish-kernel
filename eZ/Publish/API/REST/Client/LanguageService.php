@@ -12,6 +12,7 @@ namespace eZ\Publish\API\REST\Client;
 use \eZ\Publish\API\Repository\Values\Content\Language;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
@@ -19,7 +20,7 @@ use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
  *
  * @see \eZ\Publish\API\Repository\LanguageService
  */
-class LanguageService implements \eZ\Publish\API\Repository\LanguageService
+class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Sessionable
 {
     /**
      * @var \eZ\Publish\API\REST\Client\Repository
@@ -50,6 +51,23 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService
     )
     {
         throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**
