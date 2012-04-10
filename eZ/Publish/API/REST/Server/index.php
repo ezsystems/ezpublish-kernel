@@ -49,11 +49,12 @@ $sectionController = new Controller\Section(
 );
 
 $valueObjectVisitors = array(
-    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException' => new Output\ValueObjectVisitor\NotFoundException(),
-    '\\Exception'                                              => new Output\ValueObjectVisitor\Exception(),
+    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException' => new Output\ValueObjectVisitor\InvalidArgumentException(),
+    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'        => new Output\ValueObjectVisitor\NotFoundException(),
+    '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception(),
 
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'    => new Output\ValueObjectVisitor\SectionList(),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section' => new Output\ValueObjectVisitor\Section(),
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList(),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section(),
 );
 
 $dispatcher = new RMF\Dispatcher\Simple(
