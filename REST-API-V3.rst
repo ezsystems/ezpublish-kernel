@@ -25,8 +25,10 @@ Example:
     <test attr1="attr1">
        <value attr2="attr2">value</value>
        <simpleValue>45</simpleValue>
-       <value>1</value>
-       <value>2</value>
+       <fields>
+         <field>1</field>
+         <field>2</field>
+       </fields>
     </test>
 
 transforms to:
@@ -41,9 +43,12 @@ transforms to:
           "#text":"value"
         },
         "simpleValue":"45",
-        "value":[ "1", "2" ]
+        "fields": { 
+           "field": [ 1, 2 ]
+        }
       }
     }
+
 
 Different schemas which induce different media types one on resource can be used to allow to make specific 
 representations optimized for purposes of clients. 

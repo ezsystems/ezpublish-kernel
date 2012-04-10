@@ -755,8 +755,10 @@ Each JSON schema is implicit derived from the xml schema by making a uniform tra
 <span class="nt">&lt;test</span> <span class="na">attr1=</span><span class="s">&quot;attr1&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;value</span> <span class="na">attr2=</span><span class="s">&quot;attr2&quot;</span><span class="nt">&gt;</span>value<span class="nt">&lt;/value&gt;</span>
    <span class="nt">&lt;simpleValue&gt;</span>45<span class="nt">&lt;/simpleValue&gt;</span>
-   <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
-   <span class="nt">&lt;value&gt;</span>2<span class="nt">&lt;/value&gt;</span>
+   <span class="nt">&lt;fields&gt;</span>
+     <span class="nt">&lt;field&gt;</span>1<span class="nt">&lt;/field&gt;</span>
+     <span class="nt">&lt;field&gt;</span>2<span class="nt">&lt;/field&gt;</span>
+   <span class="nt">&lt;/fields&gt;</span>
 <span class="nt">&lt;/test&gt;</span>
 </pre>
 <p>transforms to:</p>
@@ -769,7 +771,9 @@ Each JSON schema is implicit derived from the xml schema by making a uniform tra
       <span class="s2">&quot;#text&quot;</span><span class="o">:</span><span class="s2">&quot;value&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;simpleValue&quot;</span><span class="o">:</span><span class="s2">&quot;45&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="p">[</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span> <span class="p">]</span>
+    <span class="s2">&quot;fields&quot;</span><span class="o">:</span> <span class="p">{</span>
+       <span class="s2">&quot;field&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">]</span>
+    <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre>
