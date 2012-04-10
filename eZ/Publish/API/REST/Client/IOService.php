@@ -13,6 +13,9 @@ use \eZ\Publish\API\Repository\Values\IO\BinaryFile;
 use \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
 use \eZ\Publish\API\Repository\Values\IO\ContentType;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
@@ -22,6 +25,33 @@ use \eZ\Publish\API\REST\Common\Sessionable;
  */
 class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
 {
+    /**
+     * @var \eZ\Publish\API\REST\Client\HttpClient
+     */
+    private $client;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     */
+    private $inputDispatcher;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     */
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
+    {
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
+    }
+
     /**
      * Set session ID
      *

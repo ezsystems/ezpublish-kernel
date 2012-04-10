@@ -21,6 +21,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
@@ -31,24 +34,36 @@ use \eZ\Publish\API\REST\Common\Sessionable;
 class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\Repository
-     */
-    private $repository;
-
-    /**
      * @var \eZ\Publish\API\REST\Client\ContentService
      */
     private $contentService;
 
     /**
-     * Instantiates a new content type service stub.
-     *
-     * @param \eZ\Publish\API\REST\Client\Repository $repository
-     * @param \eZ\Publish\API\REST\Client\ContentService $contentService
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    public function __construct( Repository $repository, ContentService $contentService )
+    private $client;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     */
+    private $inputDispatcher;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     */
+    public function __construct( ContentService $contentService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->contentService  = $contentService;
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**

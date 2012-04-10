@@ -14,6 +14,9 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
@@ -26,30 +29,30 @@ use \eZ\Publish\API\REST\Common\Sessionable;
 class LocationService implements \eZ\Publish\API\Repository\LocationService, Sessionable
 {
     /**
-     * Repository stub
-     *
-     * @var \eZ\Publish\API\REST\Client\Repository
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    protected $repository;
+    private $client;
 
     /**
-     * @var int
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
      */
-    protected $nextLocationId = 0;
+    private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\Values\Content\Location[]
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
      */
-    protected $locations = array();
+    private $outputVisitor;
 
     /**
-     * Creates a new LocationService
-     *
-     * @param Repository $repository
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
      */
-    public function __construct( Repository $repository )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**

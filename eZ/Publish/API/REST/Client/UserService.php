@@ -17,6 +17,9 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
@@ -28,18 +31,30 @@ use \eZ\Publish\API\REST\Common\Sessionable;
 class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\Repository
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    private $repository;
+    private $client;
 
     /**
-     * Instantiates a new user service instance.
-     *
-     * @param \eZ\Publish\API\REST\Client\Repository $repository
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
      */
-    public function __construct( Repository $repository )
+    private $inputDispatcher;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     */
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**

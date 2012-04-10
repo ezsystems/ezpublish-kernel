@@ -12,6 +12,9 @@ namespace eZ\Publish\API\REST\Client;
 use \eZ\Publish\API\Repository\Values\Content\Language;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
@@ -23,11 +26,6 @@ use \eZ\Publish\API\REST\Common\Sessionable;
 class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\Repository
-     */
-    private $repository;
-
-    /**
      * @var \eZ\Publish\API\REST\Client\ContentService
      */
     private $contentService;
@@ -38,19 +36,32 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
     private $defaultLanguageCode;
 
     /**
-     * Instantiates the language service.
-     *
-     * @param \eZ\Publish\API\REST\Client\Repository $repository
-     * @param \eZ\Publish\API\REST\Client\ContentService $contentService
-     * @param string $defaultLanguageCode
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    public function __construct(
-        Repository $repository,
-        ContentService $contentService,
-        $defaultLanguageCode
-    )
+    private $client;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     */
+    private $inputDispatcher;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     */
+    public function __construct( ContentService $contentService, $defaultLanguageCode, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->contentService      = $contentService;
+        $this->defaultLanguageCode = $defaultLanguageCode;
+        $this->client              = $client;
+        $this->inputDispatcher     = $inputDispatcher;
+        $this->outputVisitor       = $outputVisitor;
     }
 
     /**

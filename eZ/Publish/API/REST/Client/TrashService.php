@@ -15,6 +15,9 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TrashItem;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
@@ -25,22 +28,36 @@ use \eZ\Publish\API\REST\Common\Sessionable;
 class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\Repository
-     */
-    private $repository;
-
-    /**
      * @var \eZ\Publish\API\REST\Client\LocationService
      */
     private $locationService;
 
     /**
-     * @param \eZ\Publish\API\REST\Client\Repository $repository
-     * @param \eZ\Publish\API\REST\Client\LocationService $locationService
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    public function __construct( Repository $repository, LocationService $locationService )
+    private $client;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     */
+    private $inputDispatcher;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     */
+    public function __construct( LocationService $locationService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->locationService = $locationService;
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**

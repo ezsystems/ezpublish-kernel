@@ -20,6 +20,9 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\API\REST\Common\Input;
+use \eZ\Publish\API\REST\Common\Output;
+use \eZ\Publish\API\REST\Common\Message;
 use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
@@ -31,22 +34,36 @@ use \eZ\Publish\API\REST\Common\Sessionable;
 class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\Repository
-     */
-    private $repository;
-
-    /**
      * @var \eZ\Publish\API\REST\Client\UserService
      */
     private $userService;
 
     /**
-     * @param \eZ\Publish\API\REST\Client\Repository $repository
-     * @param \eZ\Publish\API\REST\Client\UserService $userService
+     * @var \eZ\Publish\API\REST\Client\HttpClient
      */
-    public function __construct( Repository $repository, UserService $userService )
+    private $client;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     */
+    private $inputDispatcher;
+
+    /**
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     */
+    private $outputVisitor;
+
+    /**
+     * @param \eZ\Publish\API\REST\Client\HttpClient $client
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     */
+    public function __construct( UserService $userService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $this->userService     = $userService;
+        $this->client          = $client;
+        $this->inputDispatcher = $inputDispatcher;
+        $this->outputVisitor   = $outputVisitor;
     }
 
     /**
