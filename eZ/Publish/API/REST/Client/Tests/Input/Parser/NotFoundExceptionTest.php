@@ -25,7 +25,7 @@ class NotFoundExceptionTest extends BaseTest
 
         $inputArray = array(
             'message' => 'Section with ID "23" not found.',
-            'code'    => '42',
+            '_code'    => '42',
         );
 
         $result = $sectionParser->parse( $inputArray, $this->getParsingDispatcherMock() );
