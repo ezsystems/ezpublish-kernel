@@ -44,7 +44,16 @@ class Visitor extends RMF\View
      */
     public function display( RMF\Request $request, $result )
     {
-        $message = $this->visitor->visit( $result );
+        if ( $result === null )
+        {
+            $message = new Common\Message(
+                array( 'Status' => '200 No content', )
+            );
+        }
+        else
+        {
+            $message = $this->visitor->visit( $result );
+        }
 
         foreach ( $message->headers as $name => $value )
         {
