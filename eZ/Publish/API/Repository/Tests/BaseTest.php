@@ -44,9 +44,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             // Set session if we are testing the REST backend to make it
             // possible to persist data in the memory backend during multiple
             // requests.
-            if ( $repository instanceof \eZ\Publish\API\REST\Client\Sessionable )
+            if ( $repository instanceof \eZ\Publish\API\REST\Common\Sessionable )
             {
-                $repository->setSession( md5( microtime() ) );
+                $repository->setSession( $id = md5( microtime() ) );
             }
         }
         catch ( \Exception $e )
