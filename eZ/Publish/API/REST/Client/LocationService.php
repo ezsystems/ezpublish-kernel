@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * Location service, used for complex subtree operations
@@ -22,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  *
  * @package eZ\Publish\API\Repository
  */
-class LocationService implements \eZ\Publish\API\Repository\LocationService
+class LocationService implements \eZ\Publish\API\Repository\LocationService, Sessionable
 {
     /**
      * Repository stub
@@ -49,6 +50,23 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService
     public function __construct( Repository $repository )
     {
         throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**

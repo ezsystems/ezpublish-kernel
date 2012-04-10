@@ -20,6 +20,7 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\RoleService}
@@ -27,7 +28,7 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
  *
  * @see \eZ\Publish\API\Repository\RoleService
  */
-class RoleService implements \eZ\Publish\API\Repository\RoleService
+class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
 {
     /**
      * @var \eZ\Publish\API\REST\Client\Repository
@@ -46,6 +47,23 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService
     public function __construct( Repository $repository, UserService $userService )
     {
         throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**

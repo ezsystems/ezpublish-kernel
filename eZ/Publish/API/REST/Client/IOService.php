@@ -13,14 +13,32 @@ use \eZ\Publish\API\Repository\Values\IO\BinaryFile;
 use \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
 use \eZ\Publish\API\Repository\Values\IO\ContentType;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * Service used to handle io operations.
  *
  * @package eZ\Publish\API\Repository
  */
-class IOService implements \eZ\Publish\API\Repository\IOService
+class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
 {
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
+    }
+
     /**
      * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
      *

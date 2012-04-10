@@ -15,13 +15,14 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TrashItem;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * Trash service used for content/location trash handling.
  *
  * @package eZ\Publish\API\Repository
  */
-class TrashService implements \eZ\Publish\API\Repository\TrashService
+class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionable
 {
     /**
      * @var \eZ\Publish\API\REST\Client\Repository
@@ -40,6 +41,23 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService
     public function __construct( Repository $repository, LocationService $locationService )
     {
         throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**

@@ -21,13 +21,14 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
+use \eZ\Publish\API\REST\Common\Sessionable;
 
 /**
  * @example Examples/contenttype.php
  *
  * @package eZ\Publish\API\Repository
  */
-class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeService
+class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeService, Sessionable
 {
     /**
      * @var \eZ\Publish\API\REST\Client\Repository
@@ -48,6 +49,23 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     public function __construct( Repository $repository, ContentService $contentService )
     {
         throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        if ( $this->outputVisitor instanceof Sessionable )
+        {
+            $this->outputVisitor->setSession( $id );
+        }
     }
 
     /**
