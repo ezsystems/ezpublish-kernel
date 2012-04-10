@@ -43,6 +43,13 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
     private $outputVisitor;
 
     /**
+     * Optional session identifier
+     *
+     * @var string
+     */
+    private $session;
+
+    /**
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
@@ -52,6 +59,20 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
+    }
+
+    /**
+     * Set session ID
+     *
+     * Only for testing
+     *
+     * @param mixed tringid
+     * @return void
+     * @private
+     */
+    public function setSession( $id )
+    {
+        $this->session = $id;
     }
 
     /**
@@ -68,6 +89,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService
     {
         $inputMessage = $this->outputVisitor->visit( $sectionCreateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
+        $inputMessage->headers['X-Test-Session'] = $this->session;
 
         $result = $this->client->request(
             'POST',
