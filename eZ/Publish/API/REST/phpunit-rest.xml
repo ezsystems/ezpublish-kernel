@@ -12,6 +12,10 @@
     <testsuites>
         <testsuite name="eZ\Publish\API\REST\Client">
             <file>Client/Tests/HttpClient/StreamTest.php</file>
+            <file>Client/Tests/Input/Parser/SectionTest.php</file>
+            <file>Client/Tests/Input/Parser/SectionListTest.php</file>
+            <file>Client/Tests/Input/Parser/BaseTest.php</file>
+            <file>Client/Tests/Output/ValueObjectVisitor/SectionCreateStruct.php</file>
         </testsuite>
         <testsuite name="eZ\Publish\API\REST\Common">
             <file>Common/Tests/MessageTest.php</file>
