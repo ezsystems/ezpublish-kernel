@@ -102,13 +102,19 @@ class Visitor
      */
     public function visit( $data )
     {
+
         $this->generator->reset();
         $this->generator->startDocument( $data );
         $this->visitValueObject( $data );
-        return new Message(
+
+        $result = new Message(
             $this->headers,
             $this->generator->endDocument( $data )
         );
+
+        $this->headers = array();
+
+        return $result;
     }
 
     /**

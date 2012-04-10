@@ -121,6 +121,31 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetHeaderResetAfterVisit()
+    {
+        $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\API\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
+
+        $visitor->setHeader( 'Content-Type', 'text/xml' );
+
+        $visitor->visit( $data );
+        $result = $visitor->visit( $data );
+
+        $this->assertEquals(
+            new Common\Message(
+                array(),
+                null
+            ),
+            $result
+        );
+    }
+
     /**
      * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\InvalidTypeException
      */

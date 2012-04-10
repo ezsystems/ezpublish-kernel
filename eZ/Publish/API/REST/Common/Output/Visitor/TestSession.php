@@ -18,17 +18,40 @@ use eZ\Publish\API\REST\Common\Sessionable;
 class TestSession extends Visitor implements Sessionable
 {
     /**
+     * Session ID
+     *
+     * @var string
+     */
+    protected $sessionId;
+
+    /**
      * Set session ID
      *
      * Only for testing
      *
-     * @param mixed tringid
+     * @param string $id
      * @return void
      * @private
      */
     public function setSession( $id )
     {
-        $this->setHeader( 'X-Test-Session', $id );
+        $this->sessionId = $id;
+    }
+
+    /**
+     * Visit struct returned by controllers
+     *
+     * @param mixed $data
+     * @return string
+     */
+    public function visit( $data )
+    {
+        $message = parent::visit( $data );
+        if ( $this->sessionId !== null )
+        {
+            $message->headers['X-Test-Session'] = $this->sessionId;
+        }
+        return $message;
     }
 }
 
