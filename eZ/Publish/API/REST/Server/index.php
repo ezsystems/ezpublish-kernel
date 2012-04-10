@@ -33,19 +33,28 @@ if ( !$repository )
     $repository = require __DIR__ . '/../../Repository/Tests/common.php';
 }
 
+$handler = array(
+    'json' => new Common\Input\Handler\Json(),
+    'xml'  => new Common\Input\Handler\Xml(),
+);
+
 $sectionController = new Controller\Section(
     new Common\Input\Dispatcher(
-        new Common\Input\ParsingDispatcher(
-            array(
-                'application/vnd.ez.api.SectionInput' => new Input\Parser\SectionInput( $repository ),
-            )
-        ),
-        array(
-            'json' => new Common\Input\Handler\Json(),
-            'xml'  => new Common\Input\Handler\Xml(),
-        )
+        new Common\Input\ParsingDispatcher( array(
+            'application/vnd.ez.api.SectionInput' => new Input\Parser\SectionInput( $repository ),
+        ) ),
+        $handler
     ),
     $repository->getSectionService()
+);
+
+$contentController = new Controller\Content(
+    new Common\Input\Dispatcher(
+        new Common\Input\ParsingDispatcher( array(
+        ) ),
+        $handler
+    ),
+    $repository->getContentService()
 );
 
 $valueObjectVisitors = array(
@@ -55,6 +64,9 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList(),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section(),
+
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList(),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo(),
 );
 
 $dispatcher = new RMF\Dispatcher\Simple(
@@ -66,6 +78,9 @@ $dispatcher = new RMF\Dispatcher\Simple(
         '(^/content/sections/(?P<id>[0-9]+)$)' => array(
             'GET'   => array( $sectionController, 'loadSection' ),
             'PATCH' => array( $sectionController, 'updateSection' ),
+        ),
+        '(^/content/objects\?remoteId=(?P<id>[0-9a-f]+)$)' => array(
+            'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
