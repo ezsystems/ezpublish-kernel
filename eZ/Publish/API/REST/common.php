@@ -16,10 +16,11 @@ $repository = new Client\Repository(
     new Common\Input\Dispatcher(
         new Common\Input\ParsingDispatcher(
             array(
-                'application/vnd.ez.api.SectionList'       => new Client\Input\Parser\SectionList(),
-                'application/vnd.ez.api.Section'           => new Client\Input\Parser\Section(),
-                'application/vnd.ez.api.NotFoundException' => new Client\Input\Parser\NotFoundException(),
-                'application/vnd.ez.api.Exception'         => new Client\Input\Parser\Exception(),
+                'application/vnd.ez.api.SectionList'              => new Client\Input\Parser\SectionList(),
+                'application/vnd.ez.api.Section'                  => new Client\Input\Parser\Section(),
+                'application/vnd.ez.api.InvalidArgumentException' => new Client\Input\Parser\InvalidArgumentException(),
+                'application/vnd.ez.api.NotFoundException'        => new Client\Input\Parser\NotFoundException(),
+                'application/vnd.ez.api.Exception'                => new Client\Input\Parser\Exception(),
             )
         ),
         array(
