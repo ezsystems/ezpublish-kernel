@@ -9,6 +9,12 @@
 
 namespace eZ\Publish\API\REST;
 
+// Set communication encoding depending on environment defined in the
+// phpuni.xml files.
+$generator = getenv( 'backendEncoding' ) === 'xml' ?
+    new Common\Output\Generator\Xml() :
+    new Common\Output\Generator\Json();
+
 $repository = new Client\Repository(
     new Client\HttpClient\TestSession(
         new Client\HttpClient\Stream(
@@ -33,7 +39,7 @@ $repository = new Client\Repository(
         )
     ),
     new Common\Output\Visitor(
-        new Common\Output\Generator\Json(),
+        $generator,
         array(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct' => new Client\Output\ValueObjectVisitor\SectionCreateStruct(),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionUpdateStruct(),
