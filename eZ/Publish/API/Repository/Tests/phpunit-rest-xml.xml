@@ -8,6 +8,7 @@
     <php>
         <env name="repositoryInit" value="../../REST/common.php" />
         <env name="backendVersion" value="5" />
+        <env name="backendEncoding" value="xml" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
