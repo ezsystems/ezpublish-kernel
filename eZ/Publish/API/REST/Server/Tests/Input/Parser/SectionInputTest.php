@@ -8,21 +8,12 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Tests\Input\Parser;
-use eZ\Publish\API\REST\Server\Tests\BaseTest;
 
 use eZ\Publish\API\REST\Server\Input\Parser\SectionInput;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
 class SectionInputTest extends BaseTest
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     *
-     * @todo: This and its creation could be moved to common base test class
-     *        for input parsers.
-     */
-    protected $parsingDispatcherMock;
-
     /**
      * testParse
      *
@@ -85,23 +76,5 @@ class SectionInputTest extends BaseTest
     protected function getSectionInput()
     {
         return new SectionInput();
-    }
-
-    /**
-     * @var \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
-     */
-    protected function getParsingDispatcherMock()
-    {
-        if ( !isset( $this->parsingDispatcherMock ) )
-        {
-            $this->parsingDispatcherMock = $this->getMock(
-                '\\eZ\\Publish\\API\\REST\\Common\\Input\\ParsingDispatcher',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->parsingDispatcherMock;
     }
 }
