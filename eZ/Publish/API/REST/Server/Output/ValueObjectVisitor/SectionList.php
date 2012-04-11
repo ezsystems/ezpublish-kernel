@@ -34,12 +34,12 @@ class SectionList extends ValueObjectVisitor
         $generator->startAttribute( 'href', '/content/sections' );
         $generator->endAttribute( 'href' );
 
-        $generator->startList( 'section' );
+        $generator->startList( 'Section' );
         foreach ( $data->sections as $section )
         {
             $visitor->visitValueObject( $section );
         }
-        $generator->endList( 'section' );
+        $generator->endList( 'Section' );
 
         $generator->endElement( 'SectionList' );
     }

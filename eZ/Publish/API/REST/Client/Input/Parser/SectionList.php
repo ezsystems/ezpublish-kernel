@@ -28,7 +28,7 @@ class SectionList extends Parser
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
         $sections = array();
-        foreach ( $data['section'] as $rawSectionData )
+        foreach ( $data['Section'] as $rawSectionData )
         {
             $sections[] = $parsingDispatcher->parse(
                 $rawSectionData,
