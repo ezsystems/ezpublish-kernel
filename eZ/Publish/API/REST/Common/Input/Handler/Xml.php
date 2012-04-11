@@ -105,6 +105,7 @@ class Xml extends Handler
                         if ( isset( $this->forceList[$parentTagName] ) &&
                              in_array( $tagName, $this->forceList[$parentTagName], true ) )
                         {
+                            $isArray = true;
                             $current[$tagName] = array(
                                 $this->convertDom( $childNode )
                             );
