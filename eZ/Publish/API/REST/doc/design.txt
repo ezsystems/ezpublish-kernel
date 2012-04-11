@@ -163,7 +163,7 @@ elements which usually occur multiple times, but may also only occur once, we
 force this array conversion for certain elements. See the ``$forceList``
 property in ``Common/Input/Handler/Xml.php``.
 
-Calling a parser
+Calling A Parser
 ----------------
 
 Calling the correct parser (/handler) for an array structure depends on the
@@ -177,6 +177,19 @@ handles the data and converts it into the corresponding ``Value`` object.
 
 For aggregated data it may call again the ``Common\Input\ParsingDispatcher`` to
 dispatch the data handling to a specialized parser.
+
+Extending Server And Client
+===========================
+
+The input and output processing for the server and the client are configured in
+two different files. Both are, in their current state, for testing only.
+
+The test server is configured in
+``restapiv2/eZ/Publish/API/REST/Server/index.php``.  Details of the
+configuration can be found in the inline documentation.
+
+The test client is configured in ``restapiv2/eZ/Publish/API/REST/common.php``.
+Details can also be found in the inline documentation.
 
 Running The Tests
 =================
