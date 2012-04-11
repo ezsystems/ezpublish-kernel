@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\ValueObject,
 class FieldValue extends ValueObject
 {
     /**
-     * FieldType Value object
+     * Mixed field data
      *
      * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
@@ -53,8 +53,6 @@ class FieldValue extends ValueObject
     public function __clone()
     {
         // Force object cloning to avoid them to point to the same object (same reference)
-        if ( isset( $this->data ) )
-            $this->data = clone $this->data;
         if ( isset( $this->fieldSettings ) )
             $this->fieldSettings = clone $this->fieldSettings;
     }
