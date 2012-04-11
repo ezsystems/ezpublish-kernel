@@ -60,6 +60,7 @@ $contentController = new Controller\Content(
 $valueObjectVisitors = array(
     '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException' => new Output\ValueObjectVisitor\InvalidArgumentException(),
     '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'        => new Output\ValueObjectVisitor\NotFoundException(),
+    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException(),
     '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception(),
 
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList(),
