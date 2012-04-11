@@ -44,7 +44,7 @@ class SectionIncludingContentMetadataUpdateStruct extends ValueObjectVisitor
         $generator->endElement( 'Section' );
 
         $generator->startElement( 'Owner', 'User' );
-        if ( $data->sectionId !== null )
+        if ( $data->ownerId !== null )
         {
             $generator->startAttribute(
                 'href',
