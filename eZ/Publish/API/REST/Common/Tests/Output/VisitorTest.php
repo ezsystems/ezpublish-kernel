@@ -146,6 +146,74 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetStatusCode()
+    {
+        $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\API\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
+
+        $visitor->setStatus( 201 );
+        $this->assertEquals(
+            new Common\Message( array(
+                    'Status' => '201 Created',
+                ),
+                null
+            ),
+            $visitor->visit( $data )
+        );
+    }
+
+    public function testSetUnknownStatusCode()
+    {
+        $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\API\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
+
+        $visitor->setStatus( 2342 );
+        $this->assertEquals(
+            new Common\Message( array(
+                    'Status' => '2342 Unknown',
+                ),
+                null
+            ),
+            $visitor->visit( $data )
+        );
+    }
+
+    public function testSetStatusCodeNoOverride()
+    {
+        $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\API\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
+
+        $visitor->setStatus( 201 );
+        $visitor->setStatus( 404 );
+
+        $this->assertEquals(
+            new Common\Message( array(
+                    'Status' => '201 Created',
+                ),
+                null
+            ),
+            $visitor->visit( $data )
+        );
+    }
+
     /**
      * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\InvalidTypeException
      */

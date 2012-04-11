@@ -44,6 +44,19 @@ class Visitor
     protected $headers = array();
 
     /**
+     * Mapping of status codes.
+     *
+     * @var array(int=>string)
+     * @todo Complete as needed.
+     */
+    public static $statusMap = array(
+        200 => 'OK',
+        201 => 'Created',
+        204 => 'No Content',
+        307 => 'Temporary Redirect',
+    );
+
+    /**
      * Construct from Generator and an array of concrete view model visitors
      *
      * @param Generator $generator
@@ -92,6 +105,28 @@ class Visitor
         {
             $this->headers[$name] = $value;
         }
+    }
+
+    /**
+     * Sets the given status code in the corresponding header.
+     *
+     * Note that headers are generally not overwritten!
+     *
+     * @param int $statusCode
+     * @return void
+     */
+    public function setStatus( $statusCode )
+    {
+        $this->setHeader(
+            'Status',
+            sprintf(
+                '%s %s',
+                $statusCode,
+                ( isset( self::$statusMap[$statusCode] )
+                    ? self::$statusMap[$statusCode]
+                    : 'Unknown' )
+            )
+        );
     }
 
     /**
