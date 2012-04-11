@@ -201,6 +201,14 @@ The unit tests are currently originated in the
 The Integration Tests
 ---------------------
 
+The integration tests require a web server for REST server to run. You can
+either configure your webserver accordingly or use the PHP build-in webserver
+(available since 5.4). To use the build-in webserver go to
+``restapiv2/eZ/Publish/API/REST/Server`` in the
+``https://github.com/ezsystems/research`` repository and execute::
+
+    php -S localhost:8042 index.php
+
 To verify that the code works using XML and JSON as transport mechanism this
 transport mechanism can be configured using an environment variable. We
 prepared two PHPUnit XML configuration files for each variation. To execute the
