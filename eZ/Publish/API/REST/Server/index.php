@@ -64,6 +64,7 @@ $valueObjectVisitors = array(
     '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception(),
 
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList(),
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedSection'        => new Output\ValueObjectVisitor\CreatedSection(),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section(),
 
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList(),
