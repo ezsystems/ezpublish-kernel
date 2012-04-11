@@ -83,6 +83,8 @@ $repository = new Client\Repository(
     )
 );
 
+// Force sets the used user. This will be refactored most likely, since this is 
+// not really valid for a REST client.
 $repository->setCurrentUser(
     new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
         array(
