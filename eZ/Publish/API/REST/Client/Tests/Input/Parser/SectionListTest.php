@@ -21,7 +21,7 @@ class SectionListTest extends BaseTest
         $sectionParser = $this->getParser();
 
         $inputArray = array(
-            'section'  => array(
+            'Section'  => array(
                 array( '_media-type' => 'application/vnd.ez.api.Section+xml' ),
                 array( '_media-type' => 'application/vnd.ez.api.Section+xml' ),
             ),
