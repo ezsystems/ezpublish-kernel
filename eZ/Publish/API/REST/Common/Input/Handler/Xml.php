@@ -146,6 +146,10 @@ class Xml extends Handler
         {
             $current = $text;
         }
+        elseif ( !count( $current ) )
+        {
+            return null;
+        }
 
         return $current;
     }
