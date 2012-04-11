@@ -17,11 +17,24 @@ use eZ\Publish\API\REST\Common\Exceptions;
 class Xml extends Handler
 {
     /**
+     * Force list for those items
+     *
+     * The key defines the item in which a list is formed. A list is then
+     * formed for every value in the value array.
+     *
+     * @var array
+     */
+    protected $forceList = array(
+        'ContentList' => array(
+            'ContentInfo',
+        ),
+    );
+
+    /**
      * Converts the given string to an array structure
      *
      * @param string $string
      * @return array
-     * @todo Semantical exceptions for lists
      */
     public function convert( $string )
     {
@@ -74,6 +87,7 @@ class Xml extends Handler
             }
         }
 
+        $parentTagName = $node instanceof \DOMElement ? $node->tagName : false;
         foreach ( $node->childNodes as $childNode )
         {
             switch ( $childNode->nodeType )
@@ -83,7 +97,17 @@ class Xml extends Handler
 
                     if ( !isset( $current[$tagName]  ) )
                     {
-                        $current[$tagName] = $this->convertDom( $childNode );
+                        if ( isset( $this->forceList[$parentTagName] ) &&
+                             in_array( $tagName, $this->forceList[$parentTagName], true ) )
+                        {
+                            $current[$tagName] = array(
+                                $this->convertDom( $childNode )
+                            );
+                        }
+                        else
+                        {
+                            $current[$tagName] = $this->convertDom( $childNode );
+                        }
                     }
                     elseif ( !$isArray )
                     {
