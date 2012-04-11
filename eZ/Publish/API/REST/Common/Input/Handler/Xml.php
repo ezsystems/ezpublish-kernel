@@ -61,6 +61,8 @@ class Xml extends Handler
                     $error->message
                 );
             }
+            $message .= "\nIn XML: \n\n" . $string;
+
             throw new Exceptions\Parser( $message );
         }
 
