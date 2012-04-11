@@ -85,9 +85,10 @@ abstract class Generator
      * Start element
      *
      * @param string $name
+     * @param string $mediaTypeName
      * @return void
      */
-    abstract public function startElement( $name );
+    abstract public function startElement( $name, $mediaTypeName = null );
 
     /**
      * Check start element

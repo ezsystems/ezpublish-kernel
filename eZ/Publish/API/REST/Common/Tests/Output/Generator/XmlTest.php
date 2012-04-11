@@ -49,6 +49,21 @@ class XmlTest extends GeneratorTest
         );
     }
 
+    public function testGeneratorElementMediaTypeOverwrite()
+    {
+        $generator = new Common\Output\Generator\Xml();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startElement( 'element', 'User' );
+        $generator->endElement( 'element' );
+
+        $this->assertSame(
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
+            $generator->endDocument( 'test' )
+        );
+    }
+
     public function testGeneratorStackedElement()
     {
         $generator = new Common\Output\Generator\XML();

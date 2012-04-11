@@ -49,6 +49,21 @@ class JsonTest extends GeneratorTest
         );
     }
 
+    public function testGeneratorElementMediaTypeOverwrite()
+    {
+        $generator = new Common\Output\Generator\Json();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startElement( 'element', 'User' );
+        $generator->endElement( 'element' );
+
+        $this->assertSame(
+            '{"element":{"_media-type":"application\/vnd.ez.api.User+json"}}',
+            $generator->endDocument( 'test' )
+        );
+    }
+
     public function testGeneratorStackedElement()
     {
         $generator = new Common\Output\Generator\Json();

@@ -57,15 +57,18 @@ class Xml extends Generator
      * Start element
      *
      * @param string $name
+     * @param string $mediaTypeName
      * @return void
      */
-    public function startElement( $name )
+    public function startElement( $name, $mediaTypeName = null )
     {
         $this->checkStartElement( $name );
 
+        $mediaTypeName = $mediaTypeName ?: $name;
+
         $this->xmlWriter->startElement( $name );
 
-        $this->startAttribute( "media-type", $this->getMediaType( $name ) );
+        $this->startAttribute( "media-type", $this->getMediaType( $mediaTypeName ) );
         $this->endAttribute( "media-type" );
     }
 
