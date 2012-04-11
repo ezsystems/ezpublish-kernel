@@ -42,8 +42,9 @@ $repository = new Client\Repository(
     new Common\Output\Visitor(
         $generator,
         array(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct' => new Client\Output\ValueObjectVisitor\SectionCreateStruct(),
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionUpdateStruct(),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct'                  => new Client\Output\ValueObjectVisitor\SectionCreateStruct(),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct(),
+            '\\eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct(),
         )
     )
 );

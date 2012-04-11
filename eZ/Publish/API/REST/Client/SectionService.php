@@ -17,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
+use \eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
 
 use \eZ\Publish\API\REST\Client\Sessionable;
 
@@ -208,10 +209,30 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     * @todo In order to make the integration test for this method running, the
+     *       countAssignedContents() method must be implemented. Otherwise this
+     *       should work fine.
      */
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit(
+            new SectionIncludingContentMetadataUpdateStruct(
+                array( 'sectionId' => $section->id )
+            )
+        );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Content' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        $response = $this->client->request(
+            'POST',
+            sprintf( '/content/objects/%s', $contentInfo->contentId ),
+            $inputMessage
+        );
+
+        // Will throw exception on error, no return value for method
+        // TODO: Deactivated due to missing implementation of visitor for
+        // content on the server side.
+        // $result = $this->inputDispatcher->parse( $response );
     }
 
     /**

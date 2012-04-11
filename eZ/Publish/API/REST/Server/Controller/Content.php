@@ -13,6 +13,7 @@ use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\ContentService;
+use \eZ\Publish\API\Repository\SectionService;
 use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 
@@ -42,12 +43,14 @@ class Content
      *
      * @param Input\Dispatcher $inputDispatcher
      * @param ContentService $contentService
+     * @param SectionService $sectionService
      * @return void
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, ContentService $contentService )
+    public function __construct( Input\Dispatcher $inputDispatcher, ContentService $contentService, SectionService $sectionService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->contentService  = $contentService;
+        $this->sectionService  = $sectionService;
     }
 
     /**
@@ -63,5 +66,41 @@ class Content
                 $request->variables['id']
             )
         ) );
+    }
+
+    /**
+     * Performs an update on the content meta data.
+     *
+     * @param RMF\Request $request
+     * @return void
+     */
+    public function updateContentMetadata( RMF\Request $request )
+    {
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $contentInfo = $this->contentService->loadContentInfo(
+            $request->variables['id']
+        );
+
+        if ( $updateStruct->sectionId !== null )
+        {
+            $section = $this->sectionService->loadSection( $updateStruct->sectionId );
+            $this->sectionService->assignSection( $contentInfo, $section );
+        }
+
+        /*
+         * TODO: Implement visitor.
+        return $this->contentService->updateContentMetadata(
+            $contentInfo,
+            $updateStruct
+        );
+        */
+        // Since by now only used for section assign, we return null
+        return null;
     }
 }

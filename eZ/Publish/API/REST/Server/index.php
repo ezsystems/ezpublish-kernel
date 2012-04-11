@@ -38,23 +38,23 @@ $handler = array(
     'xml'  => new Common\Input\Handler\Xml(),
 );
 
+$inputDispatcher = new Common\Input\Dispatcher(
+    new Common\Input\ParsingDispatcher( array(
+        'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $repository ),
+        'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $repository ),
+    ) ),
+    $handler
+);
+
 $sectionController = new Controller\Section(
-    new Common\Input\Dispatcher(
-        new Common\Input\ParsingDispatcher( array(
-            'application/vnd.ez.api.SectionInput' => new Input\Parser\SectionInput( $repository ),
-        ) ),
-        $handler
-    ),
+    $inputDispatcher,
     $repository->getSectionService()
 );
 
 $contentController = new Controller\Content(
-    new Common\Input\Dispatcher(
-        new Common\Input\ParsingDispatcher( array(
-        ) ),
-        $handler
-    ),
-    $repository->getContentService()
+    $inputDispatcher,
+    $repository->getContentService(),
+    $repository->getSectionService()
 );
 
 $valueObjectVisitors = array(
@@ -83,6 +83,9 @@ $dispatcher = new RMF\Dispatcher\Simple(
         ),
         '(^/content/objects\?remoteId=(?P<id>[0-9a-f]+)$)' => array(
             'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
+        ),
+        '(^/content/objects/(?<id>[0-9]+)$)' => array(
+            'PATCH' => array( $contentController, 'updateContentMetadata' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
