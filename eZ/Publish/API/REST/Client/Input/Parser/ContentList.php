@@ -28,7 +28,7 @@ class ContentList extends Parser
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
         $contents = array();
-        foreach ( $data['content'] as $rawContentData )
+        foreach ( $data['ContentInfo'] as $rawContentData )
         {
             $contents[] = $parsingDispatcher->parse(
                 $rawContentData,

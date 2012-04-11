@@ -34,12 +34,12 @@ class ContentList extends ValueObjectVisitor
         $generator->startAttribute( 'href', '/content/objects' );
         $generator->endAttribute( 'href' );
 
-        $generator->startList( 'content' );
+        $generator->startList( 'ContentInfo' );
         foreach ( $data->contents as $content )
         {
             $visitor->visitValueObject( $content );
         }
-        $generator->endList( 'content' );
+        $generator->endList( 'ContentInfo' );
 
         $generator->endElement( 'ContentList' );
     }
