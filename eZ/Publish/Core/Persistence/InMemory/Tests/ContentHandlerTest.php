@@ -237,9 +237,29 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * Test delete function
+     * Test loadVersionInfo function
      *
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadVersionInfo
+     * @group contentHandler
+     */
+    public function testLoadVersionInfo()
+    {
+        $contentHandler = $this->persistenceHandler->contentHandler();
+
+        $versionInfo = $contentHandler->loadVersionInfo( 1, 2 );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $versionInfo );
+
+        $this->assertEquals( 2, $versionInfo->id );
+        $this->assertEquals( 2, $versionInfo->versionNo );
+        $this->assertEquals( 1, $versionInfo->contentId );
+    }
+
+    /**
+     * Test deleteVersion function
+     *
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::deleteVersion
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadVersionInfo
      * @group contentHandler
      */
     public function testDeleteVersion()
@@ -247,10 +267,13 @@ class ContentHandlerTest extends HandlerTest
         $contentHandler = $this->persistenceHandler->contentHandler();
         $contentHandler->deleteVersion( 1, 2 );
 
-        $versionInfo = $contentHandler->loadVersionInfo( 1, 2 );
-        if ( !empty( $versionInfo ) )
+        try
         {
+            $versionInfo = $contentHandler->loadVersionInfo( 1, 2 );
             $this->fail( "Version not removed correctly" );
+        }
+        catch ( NotFound $e )
+        {
         }
     }
 

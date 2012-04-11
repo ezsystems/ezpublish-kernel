@@ -80,8 +80,11 @@ interface Handler
     /**
      * Returns the version object for a content/version identified by $contentId and $versionNo
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found
+     *
      * @param int|string $contentId
      * @param int $versionNo Version number to load
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     public function loadVersionInfo( $contentId, $versionNo );
