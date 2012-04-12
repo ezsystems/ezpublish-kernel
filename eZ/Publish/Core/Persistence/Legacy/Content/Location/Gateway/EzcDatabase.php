@@ -1123,4 +1123,86 @@ class EzcDatabase extends Gateway
         $res = $stmt->fetchAll( \PDO::FETCH_ASSOC );
         return (int)$res[0]['count'];
     }
+
+    /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     * Updates ezcontentobject_tree table for the given $contentId and eznode_assignment table for the given
+     * $contentId, $parentLocationId and $versionNo
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     * @param mixed $versionNo version number, needed to update eznode_assignment table
+     * @param mixed $parentLocationId parent location of location identified by $locationId, needed to update
+     *        eznode_assignment table
+     *
+     * @return void
+     */
+    public function changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId )
+    {
+        // Update ezcontentobject_tree table
+        $q = $this->handler->createUpdateQuery();
+        $q->update(
+            $this->handler->quoteTable( "ezcontentobject_tree" )
+        )->set(
+            $this->handler->quoteColumn( "main_node_id" ),
+            $q->bindValue( $locationId, null, \PDO::PARAM_INT )
+        )->where(
+            $q->expr->eq(
+                $this->handler->quoteColumn( "contentobject_id" ),
+                $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+        $q->prepare()->execute();
+
+        // Erase is_main in eznode_assignment table
+        $q = $this->handler->createUpdateQuery();
+        $q->update(
+            $this->handler->quoteTable( "eznode_assignment" )
+        )->set(
+            $this->handler->quoteColumn( "is_main" ),
+            $q->bindValue( 0, null, \PDO::PARAM_INT )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->handler->quoteColumn( "contentobject_id" ),
+                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->handler->quoteColumn( "contentobject_version" ),
+                    $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->neq(
+                    $this->handler->quoteColumn( "parent_node" ),
+                    $q->bindValue( $parentLocationId, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+        $q->prepare()->execute();
+
+        // Set new is_main in eznode_assignment table
+        $q = $this->handler->createUpdateQuery();
+        $q->update(
+            $this->handler->quoteTable( "eznode_assignment" )
+        )->set(
+            $this->handler->quoteColumn( "is_main" ),
+            $q->bindValue( 1, null, \PDO::PARAM_INT )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->handler->quoteColumn( "contentobject_id" ),
+                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->handler->quoteColumn( "contentobject_version" ),
+                    $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->handler->quoteColumn( "parent_node" ),
+                    $q->bindValue( $parentLocationId, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+        $q->prepare()->execute();
+    }
 }

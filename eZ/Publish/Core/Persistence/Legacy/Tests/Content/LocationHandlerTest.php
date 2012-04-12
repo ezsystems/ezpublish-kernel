@@ -13,7 +13,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler,
     eZ\Publish\SPI\Persistence,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo;
 
 /**
  * Test case for LocationHandlerTest
@@ -293,5 +295,60 @@ class LocationHandlerTest extends TestCase
             ->with( '/1/2/69/' );
 
         $handler->markSubtreeModified( 69 );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::changeMainLocation()
+     */
+    public function testChangeMainLocation()
+    {
+        $contentHandlerMock = $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler", array(), array(), "", false );
+        $locationGatewayMock = $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway" );
+        $handler = $this->getMock(
+            "\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler",
+            array( "load", "setSectionForSubtree" ),
+            array(
+                $locationGatewayMock,
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper" ),
+                $contentHandlerMock,
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper", array(), array(), "", false )
+            )
+        );
+
+        $handler
+            ->expects( $this->at( 0 ) )
+            ->method( "load" )
+            ->with( 34 )
+            ->will( $this->returnValue( new Location( array( "parentId" => 42 ) ) ) );
+
+        $handler
+            ->expects( $this->at( 1 ) )
+            ->method( "load" )
+            ->with( 42 )
+            ->will( $this->returnValue( new Location( array( "contentId" => 84 ) ) ) );
+
+        $contentHandlerMock
+            ->expects( $this->at( 0 ) )
+            ->method( "loadContentInfo" )
+            ->with( "12" )
+            ->will( $this->returnValue( new ContentInfo( array( "currentVersionNo" => 1 ) ) ) );
+
+        $contentHandlerMock
+            ->expects( $this->at( 1 ) )
+            ->method( "loadContentInfo" )
+            ->with( "84" )
+            ->will( $this->returnValue( new ContentInfo( array( "sectionId" => 4 ) ) ) );
+
+        $locationGatewayMock
+            ->expects( $this->once() )
+            ->method( "changeMainLocation" )
+            ->with( 12, 34, 1, 42 );
+
+        $handler
+            ->expects( $this->once() )
+            ->method( "setSectionForSubtree" )
+            ->with( 34, 4 );
+
+        $handler->changeMainLocation( 12, 34 );
     }
 }
