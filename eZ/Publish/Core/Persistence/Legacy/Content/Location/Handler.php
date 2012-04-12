@@ -311,4 +311,34 @@ class Handler implements BaseLocationHandler
 
         $this->locationGateway->setSectionForSubtree( $nodeData['path_string'], $sectionId );
     }
+
+    /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     * Updates ezcontentobject_tree and eznode_assignment tables (eznode_assignment for content current version number).
+     *
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return void
+     */
+    public function changeMainLocation( $contentId, $locationId )
+    {
+        $parentLocationId = $this->load( $locationId )->parentId;
+
+        // Update ezcontentobject_tree and eznode_assignment tables
+        $this->locationGateway->changeMainLocation(
+            $contentId,
+            $locationId,
+            $this->contentHandler->loadContentInfo( $contentId )->currentVersionNo,
+            $parentLocationId
+        );
+
+        // Update subtree section to the one of the new main location parent location content
+        $this->setSectionForSubtree(
+            $locationId,
+            $this->contentHandler->loadContentInfo( $this->load( $parentLocationId )->contentId )->sectionId
+        );
+    }
 }

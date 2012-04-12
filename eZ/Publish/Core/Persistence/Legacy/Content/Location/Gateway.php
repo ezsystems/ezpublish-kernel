@@ -252,4 +252,20 @@ abstract class Gateway
      * @return int
      */
     abstract public function countLocationsByContentId( $contentId );
+
+    /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     * Updates ezcontentobject_tree table for the given $contentId and eznode_assignment table for the given
+     * $contentId, $parentLocationId and $versionNo
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     * @param mixed $versionNo version number, needed to update eznode_assignment table
+     * @param mixed $parentLocationId parent location of location identified by $locationId, needed to update
+     *        eznode_assignment table
+     *
+     * @return void
+     */
+    abstract public function changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId );
 }

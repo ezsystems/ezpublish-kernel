@@ -421,6 +421,36 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return void
+     */
+    public function changeMainLocation( $contentId, $locationId )
+    {
+        $this->backend->updateByMatch(
+            "Content\\Location",
+            array( "contentId" => $contentId ),
+            array( "mainLocationId" => $locationId )
+        );
+
+        $parentLocation = $this->backend->load(
+            "Content\\Location",
+            $this->backend->load( "Content\\Location", $locationId )->parentId
+        );
+        $parentContent = $this->backend->load(
+            "Content\\ContentInfo",
+            $parentLocation->contentId,
+            "contentId"
+        );
+
+        $this->setSectionForSubtree( $locationId, $parentContent->sectionId );
+    }
+
+    /**
      * Updates subtree modification time for all locations starting from $startPathString
      * @param string $startPathString
      */
@@ -445,7 +475,7 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * Returns pathIdentificationString for provided location value object
-     * @param eZ\Publish\SPI\Persistence\Content\Location $vo
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $vo
      * @return string
      */
     private function getPathIdentificationString( LocationValue $vo )
