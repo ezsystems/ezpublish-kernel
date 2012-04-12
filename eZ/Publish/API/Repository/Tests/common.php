@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
 
 $repository = new RepositoryStub(
-    __DIR__ . '/Fixtures',
+    __DIR__ . '/_fixtures',
     ( isset( $_ENV['backendVersion'] ) ? (int) $_ENV['backendVersion'] : 5 )
 );
 

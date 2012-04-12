@@ -37,7 +37,7 @@
             <directory suffix=".php">../</directory>
             <exclude>
                 <directory suffix="Test.php">../Tests</directory>
-                <directory>../Tests/Fixtures</directory>
+                <directory>../Tests/_fixtures</directory>
                 <file>../Tests/common.php</file>
 
                 <directory>../Examples</directory>
