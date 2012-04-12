@@ -119,11 +119,11 @@ class Exception extends ValueObjectVisitor
             $generator->startValueElement( 'trace', $data->getTraceAsString() );
             $generator->endValueElement( 'trace' );
 
-            $generator->startAttribute( 'file', $data->getFile() );
-            $generator->endAttribute( 'file' );
+            $generator->startValueElement( 'file', $data->getFile() );
+            $generator->endValueElement( 'file' );
 
-            $generator->startAttribute( 'line', $data->getLine() );
-            $generator->endAttribute( 'line' );
+            $generator->startValueElement( 'line', $data->getLine() );
+            $generator->endValueElement( 'line' );
         }
 
         $generator->endElement( 'ErrorMessage' );
