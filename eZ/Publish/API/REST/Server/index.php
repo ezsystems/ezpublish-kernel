@@ -103,10 +103,10 @@ $contentController = new Controller\Content(
  */
 
 $valueObjectVisitors = array(
-    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException' => new Output\ValueObjectVisitor\InvalidArgumentException(),
-    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'        => new Output\ValueObjectVisitor\NotFoundException(),
-    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException(),
-    '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception(),
+    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException' => new Output\ValueObjectVisitor\InvalidArgumentException( true ),
+    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'        => new Output\ValueObjectVisitor\NotFoundException( true ),
+    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException( true ),
+    '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception( true ),
 
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList(),
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedSection'        => new Output\ValueObjectVisitor\CreatedSection(),
