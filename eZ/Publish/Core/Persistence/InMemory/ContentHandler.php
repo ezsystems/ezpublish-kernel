@@ -315,13 +315,13 @@ class ContentHandler implements ContentHandlerInterface
         if ( !isset( $versions[0] ) )
             throw new NotFound( "Version", "contentId:{$id}, versionNo:{$version}" );
 
-        $content->fields = $this->backend->find(
-            'Content\\Field',
-            array(
-                "_contentId" => $content->contentInfo->contentId,
-                "versionNo" => $version
-            )
+        $fieldMatch = array(
+            "_contentId" => $content->contentInfo->contentId,
+            "versionNo" => $version
         );
+        if ( isset( $translations ) )
+            $fieldMatch["languageCode"] = $translations;
+        $content->fields = $this->backend->find( 'Content\\Field', $fieldMatch );
 
         $content->versionInfo = $versions[0];
         $content->locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $content->contentInfo->contentId  ) );
@@ -439,10 +439,11 @@ class ContentHandler implements ContentHandlerInterface
         foreach ( $versionNames as $languageCode => &$versionName )
             if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
         $versionUpdateData = array(
-            "creatorId"         => $content->creatorId,
-            "modificationDate"  => $content->modificationDate,
-            "initialLanguageId" => $content->initialLanguageId,
-            "names"             => $versionNames
+            "creatorId"           => $content->creatorId,
+            "modificationDate"    => $content->modificationDate,
+            "names"               => $versionNames,
+            "initialLanguageCode" => $this->handler->contentLanguageHandler()
+                ->load( $content->initialLanguageId )->languageCode
         );
 
         $this->backend->updateByMatch(
@@ -453,11 +454,26 @@ class ContentHandler implements ContentHandlerInterface
 
         foreach ( $content->fields as $field )
         {
-            $this->backend->update(
-                "Content\\Field",
-                $field->id,
-                array( "value" => $field->value )
-            );
+            $fieldType = $this->backend->load( "Content\\Type\\FieldDefinition", $field->fieldDefinitionId );
+            if ( $fieldType->isTranslatable )
+                $this->backend->updateByMatch(
+                    "Content\\Field",
+                    array(
+                        "id" => $field->id,
+                        "versionNo" => $versionNo
+                    ),
+                    array( "value" => $field->value )
+                );
+            else
+                $this->backend->updateByMatch(
+                    "Content\\Field",
+                    array(
+                        "fieldDefinitionId" => $field->fieldDefinitionId,
+                        "versionNo" => $versionNo,
+                        "_contentId" => $contentId
+                    ),
+                    array( "value" => $field->value )
+                );
         }
 
         return $this->load( $contentId, $versionNo );
