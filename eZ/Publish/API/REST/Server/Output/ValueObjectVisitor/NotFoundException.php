@@ -9,44 +9,19 @@
 
 namespace eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\API\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common\Output\Generator;
-use eZ\Publish\API\REST\Common\Output\Visitor;
-
 /**
  * NotFoundException value object visitor
  */
-class NotFoundException extends ValueObjectVisitor
+class NotFoundException extends Exception
 {
     /**
-     * Visit struct returned by controllers
+     * Return HTTP status code
      *
-     * @param Visitor $visitor
-     * @param Generator $generator
-     * @param mixed $data
-     * @return void
+     * @return int
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    protected function getStatus()
     {
-        $generator->startElement( 'NotFoundException' );
-        $visitor->setHeader( 'Status', '404 Not Found' );
-
-        // @TODO: What do we want here?
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'NotFoundException' ) );
-
-        $generator->startAttribute( 'code', $data->getCode() );
-        $generator->endAttribute( 'code' );
-
-        $generator->startAttribute( 'file', $data->getFile() );
-        $generator->endAttribute( 'file' );
-
-        $generator->startAttribute( 'line', $data->getLine() );
-        $generator->endAttribute( 'line' );
-
-        $generator->startValueElement( 'message', $data->getMessage() );
-        $generator->endValueElement( 'message' );
-
-        $generator->endElement( 'NotFoundException' );
+        return 404;
     }
 }
 

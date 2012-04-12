@@ -43,14 +43,11 @@ $repository = new Client\Repository(
         // should be used to process the given mime type.
         new Common\Input\ParsingDispatcher(
             array(
-                'application/vnd.ez.api.ContentList'              => new Client\Input\Parser\ContentList(),
-                'application/vnd.ez.api.ContentInfo'              => new Client\Input\Parser\ContentInfo(),
-                'application/vnd.ez.api.SectionList'              => new Client\Input\Parser\SectionList(),
-                'application/vnd.ez.api.Section'                  => new Client\Input\Parser\Section(),
-                'application/vnd.ez.api.InvalidArgumentException' => new Client\Input\Parser\InvalidArgumentException(),
-                'application/vnd.ez.api.BadStateException'        => new Client\Input\Parser\BadStateException(),
-                'application/vnd.ez.api.NotFoundException'        => new Client\Input\Parser\NotFoundException(),
-                'application/vnd.ez.api.Exception'                => new Client\Input\Parser\Exception(),
+                'application/vnd.ez.api.ContentList'  => new Client\Input\Parser\ContentList(),
+                'application/vnd.ez.api.ContentInfo'  => new Client\Input\Parser\ContentInfo(),
+                'application/vnd.ez.api.SectionList'  => new Client\Input\Parser\SectionList(),
+                'application/vnd.ez.api.Section'      => new Client\Input\Parser\Section(),
+                'application/vnd.ez.api.ErrorMessage' => new Client\Input\Parser\ErrorMessage(),
             )
         ),
         array(
