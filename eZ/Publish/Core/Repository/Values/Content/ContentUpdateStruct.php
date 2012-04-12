@@ -38,6 +38,9 @@ class ContentUpdateStruct extends APIContentUpdateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
+        if ( !isset( $language ) )
+            $language = $this->initialLanguageCode;
+
         $this->fields[] = new Field(
             array(
                 'fieldDefIdentifier'  =>  $fieldDefIdentifier,
