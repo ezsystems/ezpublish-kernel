@@ -35,15 +35,15 @@ $indexFile = __FILE__;
 
 /**
  * Get ServiceContainer
- * @var \eZ\Publish\Core\Base\ServiceContainer $serviceContainer
+ * @var \eZ\Publish\API\Container $container
  */
-$serviceContainer = require 'bootstrap.php';
+$container = require 'bootstrap.php';
 
 // Ignore user abort now that we are about to run controller
 ignore_user_abort( true );
 
 // do some simple stuff that relies on service container being setup correctly
-$sectionService = $serviceContainer->getRepository()->getSectionService();
+$sectionService = $container->getRepository()->getSectionService();
 
 $sectionCreateStruct = new eZ\Publish\API\Repository\Values\Content\SectionCreateStruct();
 $sectionCreateStruct->name = 'Hello';

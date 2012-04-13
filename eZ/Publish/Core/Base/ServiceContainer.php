@@ -12,6 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\MissingClass,
+    eZ\Publish\API\Container,
     ReflectionClass;
 
 /**
@@ -51,7 +52,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer )
  * or plain scalar if that is to be given directly as argument value.
  */
-class ServiceContainer
+class ServiceContainer implements Container
 {
     /**
      * Holds service objects and variables
