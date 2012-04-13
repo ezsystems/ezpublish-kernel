@@ -107,17 +107,17 @@ $contentController = new Controller\Content(
  */
 
 $valueObjectVisitors = array(
-    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException' => new Output\ValueObjectVisitor\InvalidArgumentException( true ),
-    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'        => new Output\ValueObjectVisitor\NotFoundException( true ),
-    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException( true ),
-    '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception( true ),
+    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException' => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
+    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'        => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
+    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+    '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
 
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList(),
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedSection'        => new Output\ValueObjectVisitor\CreatedSection(),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section(),
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedSection'        => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section( $urlHandler ),
 
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList(),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo(),
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
 );
 
 /*
