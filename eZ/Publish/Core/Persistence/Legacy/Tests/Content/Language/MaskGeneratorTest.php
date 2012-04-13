@@ -192,7 +192,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::removeAlwaysAlwaysAvailableFlag
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::removeAlwaysAvailableFlag
      * @dataProvider removeAlwaysAvailableFlagProvider
      */
     public function testRemoveAlwaysAvailableFlag( $langMask, $expectedResult )
@@ -220,21 +220,21 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      * @param int $langMask
      * @param array $expectedResult
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::extractLanguageIdFromMask
-     * @dataProvider languageIdFromMaskProvider
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::extractLanguageIdsFromMask
+     * @dataProvider languageIdsFromMaskProvider
      */
-    public function testExtractLanguageIdFromMask( $langMask, array $expectedResult )
+    public function testExtractLanguageIdsFromMask( $langMask, array $expectedResult )
     {
         $generator = $this->getMaskGenerator();
         self::assertSame( $expectedResult, $generator->extractLanguageIdsFromMask( $langMask ) );
     }
 
     /**
-     * Returns test data for {@link testExtractLanguageIdFromMask}
+     * Returns test data for {@link testExtractLanguageIdsFromMask}
      *
      * @return array
      */
-    public function languageIdFromMaskProvider()
+    public function languageIdsFromMaskProvider()
     {
         return array(
             array(
