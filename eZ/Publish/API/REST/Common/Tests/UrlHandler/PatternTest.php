@@ -43,7 +43,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage URL '/bar' did not match (^/foo/(?P<foo>[^/]+))S.
+     * @expectedExceptionMessage URL '/bar' did not match (^/foo/(?P<foo>[^/]+)$)S.
      */
     public function testPatternDoesNotMatch()
     {
@@ -51,6 +51,18 @@ class PatternTest extends \PHPUnit_Framework_TestCase
             'pattern' => '/foo/{foo}',
         ) );
         $urlHandler->parse( 'pattern', '/bar' );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage URL '/foo/23/bar' did not match (^/foo/(?P<foo>[^/]+)$)S.
+     */
+    public function testPatternDoesNotMatchTrailing()
+    {
+        $urlHandler = new Common\UrlHandler\Pattern( array(
+            'pattern' => '/foo/{foo}',
+        ) );
+        $urlHandler->parse( 'pattern', '/foo/23/bar' );
     }
 
     public static function getParseValues()

@@ -127,7 +127,7 @@ class Pattern implements UrlHandler
             }
         } while ( $pattern );
 
-        $pcre .= ')S';
+        $pcre .= '$)S';
 
         $this->compileCache[$pattern] = $pcre;
         return $pcre;
