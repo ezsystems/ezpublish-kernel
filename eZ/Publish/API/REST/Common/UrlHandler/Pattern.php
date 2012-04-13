@@ -32,6 +32,11 @@ class Pattern implements UrlHandler
     protected $compileCache = array();
 
     /**
+     * Pattern regular sub-expression
+     */
+    const PATTERN_REGEXP ='\{([A-Za-z-_]+)\}';
+
+    /**
      * COnstruct from optional initial map
      *
      * @param array $map
@@ -112,7 +117,7 @@ class Pattern implements UrlHandler
                     $pcre   .= preg_quote( $match[0] );
                     break;
 
-                case preg_match( '(^\{([A-Za-z-_]+)\})', $pattern, $match ):
+                case preg_match( '(^' . self::PATTERN_REGEXP . ')', $pattern, $match ):
                     $pattern = substr( $pattern, strlen( $match[0] ) );
                     $pcre   .= "(?P<" . $match[1] . ">[^/]+)";
                     break;
@@ -137,7 +142,30 @@ class Pattern implements UrlHandler
      */
     public function generate( $type, array $values )
     {
+        if ( !isset( $this->map[$type] ) )
+        {
+            throw new Exceptions\InvalidArgumentException( "No URL for type '$type' available." );
+        }
 
+        $url = $this->map[$type];
+        preg_match_all( '(' . self::PATTERN_REGEXP . ')', $url, $matches, PREG_SET_ORDER );
+        foreach ( $matches as $matchSet )
+        {
+            if ( !isset( $values[$matchSet[1]] ) )
+            {
+                throw new Exceptions\InvalidArgumentException( "No value provided for '{$matchSet[1]}'." );
+            }
+
+            $url = str_replace( $matchSet[0], $values[$matchSet[1]], $url );
+            unset( $values[$matchSet[1]] );
+        }
+
+        if ( count( $values ) )
+        {
+            throw new Exceptions\InvalidArgumentException( "Unused values in values array: '" . implode( "', '", array_keys( $values ) ) . "'." );
+        }
+
+        return $url;
     }
 }
 

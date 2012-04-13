@@ -87,6 +87,77 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage No URL for type 'unknown' available.
+     */
+    public function testGenerateUnknownUrlType()
+    {
+        $urlHandler = new Common\UrlHandler\Pattern();
+        $urlHandler->generate( 'unknown', array() );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage No value provided for 'unkown'.
+     */
+    public function testGenerateMissingValue()
+    {
+        $urlHandler = new Common\UrlHandler\Pattern( array(
+            'pattern' => '/foo/{unkown}',
+        ) );
+        $urlHandler->generate( 'pattern', array() );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Unused values in values array: 'bar'.
+     */
+    public function testGenerateSuperflousValue()
+    {
+        $urlHandler = new Common\UrlHandler\Pattern( array(
+            'pattern' => '/foo/{foo}',
+        ) );
+        $urlHandler->generate( 'pattern', array(
+            'foo' => 23,
+            'bar' => 42,
+        ) );
+    }
+
+    public static function getGenerateValues()
+    {
+        return array(
+            array(
+                'section',
+                array(
+                    'section' => '42',
+                ),
+                '/content/section/42',
+            ),
+            array(
+                'objectversion',
+                array(
+                    'object'  => '42',
+                    'version' => '23',
+                ),
+                '/content/object/42/23',
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider getGenerateValues
+     */
+    public function testGenerateUrl( $type, $values, $expectedUrl )
+    {
+        $urlHandler = $this->getWorkingUrlHandler();
+
+        $this->assertSame(
+            $expectedUrl,
+            $urlHandler->generate( $type, $values )
+        );
+    }
+
     protected function getWorkingUrlHandler()
     {
         return new Common\UrlHandler\Pattern( array(
