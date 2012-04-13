@@ -22,6 +22,10 @@ $generator = getenv( 'backendEncoding' ) === 'xml' ?
     new Common\Output\Generator\Xml() :
     new Common\Output\Generator\Json();
 
+// The URL Handler is responsible for URL parsing and generation. It will be
+// used in the output generators and in some parsing handlers.
+$urlHandler = new Common\UrlHandler\eZPublish();
+
 $repository = new Client\Repository(
     // The HTTP Client. Needs to implement the Client\HttpClient interface.
     //
@@ -73,9 +77,9 @@ $repository = new Client\Repository(
         // value object (or its parent class(es)) to the respective visitor
         // implementation instance.
         array(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct'                  => new Client\Output\ValueObjectVisitor\SectionCreateStruct(),
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct(),
-            '\\eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct(),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct'                  => new Client\Output\ValueObjectVisitor\SectionCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct( $urlHandler ),
         )
     )
 );
