@@ -108,7 +108,7 @@ class TrashHandlerTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::recover
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::recover
      */
     public function testRecover()
     {
@@ -128,7 +128,7 @@ class TrashHandlerTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::loadTrashItem
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::loadTrashItem
      */
     public function testLoadTrashItem()
     {
@@ -149,7 +149,7 @@ class TrashHandlerTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::emptyTrash
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::emptyTrash
      */
     public function testEmptyTrash()
     {
@@ -218,7 +218,7 @@ class TrashHandlerTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::deleteTrashItem
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::deleteTrashItem
      */
     public function testDeleteTrashItemNoMoreLocations()
     {
@@ -273,7 +273,7 @@ class TrashHandlerTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash::deleteTrashItem
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::deleteTrashItem
      */
     public function testDeleteTrashItemStillHaveLocations()
     {
