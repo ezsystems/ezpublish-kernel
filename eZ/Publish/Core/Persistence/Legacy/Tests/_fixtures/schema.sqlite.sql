@@ -17,7 +17,7 @@ CREATE TABLE 'ezcontentclass' (
 	'contentobject_name' text(255),
 	'created' integer NOT NULL DEFAULT 0,
 	'creator_id' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'id' integer NOT NULL DEFAULT 0,
 	'identifier' text(50) NOT NULL,
 	'initial_language_id' integer NOT NULL DEFAULT 0,
 	'is_container' integer NOT NULL DEFAULT 0,
@@ -30,7 +30,8 @@ CREATE TABLE 'ezcontentclass' (
 	'sort_field' integer NOT NULL DEFAULT 1,
 	'sort_order' integer NOT NULL DEFAULT 1,
 	'url_alias_name' text(255),
-	'version' integer NOT NULL DEFAULT 0
+	'version' integer NOT NULL DEFAULT 0,
+	PRIMARY KEY ( id, version )
 );
 CREATE TABLE 'ezcontentclass_attribute' (
 	'can_translate' integer DEFAULT 1,

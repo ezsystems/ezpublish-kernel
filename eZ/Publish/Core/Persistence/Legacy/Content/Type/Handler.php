@@ -225,10 +225,15 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
+     * @todo $contentTypeId is used to create draft from existing content type (called by self::createDraft()).
+     *       This is a temporary solution until self::createDraft is fixed not to reuse this method.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     * @param mixed|null $contentTypeId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function create( CreateStruct $createStruct )
+    public function create( CreateStruct $createStruct, $contentTypeId = null )
     {
         $createStruct = clone $createStruct;
         $contentType = $this->mapper->createTypeFromCreateStruct(
@@ -236,7 +241,8 @@ class Handler implements BaseContentTypeHandler
         );
 
         $contentType->id = $this->contentTypeGateway->insertType(
-            $contentType
+            $contentType,
+            $contentTypeId
         );
         foreach ( $contentType->groupIds as $groupId )
         {
@@ -314,6 +320,8 @@ class Handler implements BaseContentTypeHandler
      *
      * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
      *
+     * @todo fix not to use self::create()
+     *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
@@ -328,7 +336,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $modifierId;
         $createStruct->modified = time();
 
-        return $this->create( $createStruct );
+        return $this->create( $createStruct, $contentTypeId );
     }
 
     /**
