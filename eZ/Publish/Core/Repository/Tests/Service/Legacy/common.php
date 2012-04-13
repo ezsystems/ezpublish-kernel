@@ -145,21 +145,7 @@ $legacyHandler = new LegacyPersistenceHandler(
         }
     }
 
-
-
-    if ( $db === 'sqlite' )
-    {
-        // We need trigger for SQLite, as it does not support a multicolumn key with one of them being set to auto-increment.
-        $handler->exec(
-            'CREATE TRIGGER my_ezcontentobject_attribute_increment
-            AFTER INSERT
-            ON ezcontentobject_attribute
-            BEGIN
-                UPDATE ezcontentobject_attribute SET id = (SELECT MAX(id) FROM ezcontentobject_attribute) + 1  WHERE rowid = new.rowid AND id = 0;
-            END;'
-        );
-    }
-    else if ( $db === 'pgsql' )
+    if ( $db === 'pgsql' )
     {
         // Update PostgreSQL sequences
         $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $legacyHandlerDir . '/Legacy/Tests/_fixtures/setval.pgsql.sql' ) ) );

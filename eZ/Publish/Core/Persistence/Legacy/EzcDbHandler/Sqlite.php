@@ -18,6 +18,8 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
  */
 class Sqlite extends EzcDbHandler
 {
+    protected $lastInsertedIds = array();
+
     /**
      * Get auto increment value
      *
@@ -31,16 +33,64 @@ class Sqlite extends EzcDbHandler
      */
     public function getAutoIncrementValue( $table, $column )
     {
-        if ( ( $table === 'ezcontentobject_attribute' ) &&
-             (  $column === 'id' ) )
+        if ( ( $table === 'ezcontentobject_attribute' ) && (  $column === 'id' ) )
         {
             // This is a @HACK -- since this table has a multi-column key with
             // auto-increment, which is not easy to simulate in SQLite. This
             // solves it for now.
-            return "0";
+            $q = $this->ezcDbHandler->createSelectQuery();
+            $q->select( $q->expr->max( "id" ) )->from( "ezcontentobject_attribute" );
+            $statement = $q->prepare();
+            $statement->execute();
+
+            $this->lastInsertedIds["ezcontentobject_attribute.id"] = (int)$statement->fetchColumn() + 1;
+            return $this->lastInsertedIds["ezcontentobject_attribute.id"];
+        }
+
+        if ( ( $table === 'ezcontentclass' ) && (  $column === 'id' ) )
+        {
+            // This is a @HACK -- since this table has a multi-column key with
+            // auto-increment, which is not easy to simulate in SQLite. This
+            // solves it for now.
+            $q = $this->ezcDbHandler->createSelectQuery();
+            $q->select( $q->expr->max( "id" ) )->from( "ezcontentclass" );
+            $statement = $q->prepare();
+            $statement->execute();
+
+            $this->lastInsertedIds["ezcontentclass.id"] = (int)$statement->fetchColumn() + 1;
+            return $this->lastInsertedIds["ezcontentclass.id"];
         }
 
         return parent::getAutoIncrementValue( $table, $column );
+    }
+
+    public function lastInsertId( $sequenceName )
+    {
+        if ( isset( $this->lastInsertedIds[$sequenceName] ) )
+        {
+            $lastInsertId = $this->lastInsertedIds[$sequenceName];
+            unset( $this->lastInsertedIds[$sequenceName] );
+            return $lastInsertId;
+        }
+        else
+        {
+            return $this->ezcDbHandler->lastInsertId( $sequenceName );
+        }
+    }
+
+    public function getSequenceName( $table, $column )
+    {
+        if ( ( $table === 'ezcontentclass' ) && (  $column === 'id' ) )
+        {
+            return "{$table}.{$column}";
+        }
+
+        if ( ( $table === 'ezcontentobject_attribute' ) && (  $column === 'id' ) )
+        {
+            return "{$table}.{$column}";
+        }
+
+        return parent::getSequenceName( $table, $column );
     }
 }
 
