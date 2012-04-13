@@ -72,14 +72,16 @@ $inputDispatcher = new Common\Input\Dispatcher(
     $handler
 );
 
+// The URL Handler is responsible for URL parsing and generation. It will be
+// used in the output generators and in some parsing handlers.
+$urlHandler = new Common\UrlHandler\eZPublish();
+
 /*
  * Controllers are simple classes with public methods. They are the only ones
  * working directly with the Request object provided by RMF. Their
  * responsibility is to extract the request data and dispatch the corresponding
  * call to methods of the Public API.
  */
-
-$urlHandler = new Common\UrlHandler\eZPublish();
 
 $sectionController = new Controller\Section(
     $inputDispatcher,
