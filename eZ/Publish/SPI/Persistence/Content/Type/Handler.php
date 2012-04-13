@@ -97,15 +97,11 @@ interface Handler
     public function loadByRemoteId( $remoteId );
 
     /**
-     * @todo $contentTypeId is used to create draft from existing content type (called by self::createDraft()).
-     *       This is a temporary solution until self::createDraft is fixed not to reuse this method.
-     *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
-     * @param mixed|null $contentTypeId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function create( CreateStruct $contentType, $contentTypeId = null );
+    public function create( CreateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId

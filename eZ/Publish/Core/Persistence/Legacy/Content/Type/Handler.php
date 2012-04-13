@@ -225,6 +225,16 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    public function create( CreateStruct $createStruct )
+    {
+        return $this->internalCreate( $createStruct );
+    }
+
+    /**
      * @todo $contentTypeId is used to create draft from existing content type (called by self::createDraft()).
      *       This is a temporary solution until self::createDraft is fixed not to reuse this method.
      *
@@ -233,7 +243,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function create( CreateStruct $createStruct, $contentTypeId = null )
+    protected function internalCreate( CreateStruct $createStruct, $contentTypeId = null )
     {
         $createStruct = clone $createStruct;
         $contentType = $this->mapper->createTypeFromCreateStruct(
@@ -244,6 +254,7 @@ class Handler implements BaseContentTypeHandler
             $contentType,
             $contentTypeId
         );
+
         foreach ( $contentType->groupIds as $groupId )
         {
             $this->contentTypeGateway->insertGroupAssignment(
@@ -252,6 +263,7 @@ class Handler implements BaseContentTypeHandler
                 $contentType->status
             );
         }
+
         foreach ( $contentType->fieldDefinitions as $fieldDef )
         {
             $storageFieldDef = new StorageFieldDefinition();
@@ -263,6 +275,7 @@ class Handler implements BaseContentTypeHandler
                 $storageFieldDef
             );
         }
+
         return $contentType;
     }
 
@@ -320,8 +333,6 @@ class Handler implements BaseContentTypeHandler
      *
      * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
      *
-     * @todo fix not to use self::create()
-     *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
@@ -336,7 +347,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $modifierId;
         $createStruct->modified = time();
 
-        return $this->create( $createStruct, $contentTypeId );
+        return $this->internalCreate( $createStruct, $contentTypeId );
     }
 
     /**
