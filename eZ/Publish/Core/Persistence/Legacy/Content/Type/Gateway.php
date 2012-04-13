@@ -102,24 +102,24 @@ abstract class Gateway
     abstract public function insertType( Type $type );
 
     /**
-     * Insert assignement of $typeId to $groupId.
+     * Insert assignment of $typeId to $groupId.
      *
      * @param mixed $typeId
      * @param int $status
      * @param mixed $groupId
      * @return void
      */
-    abstract public function insertGroupAssignement( $typeId, $status, $groupId );
+    abstract public function insertGroupAssignment( $typeId, $status, $groupId );
 
     /**
-     * Deletes a group assignements for a Type.
+     * Deletes a group assignments for a Type.
      *
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    abstract public function deleteGroupAssignement( $groupId, $typeId, $status );
+    abstract public function deleteGroupAssignment( $groupId, $typeId, $status );
 
     /**
      * Loads an array with data about field definition referred $id and $status.
@@ -238,13 +238,13 @@ abstract class Gateway
     abstract public function deleteType( $typeId, $status );
 
     /**
-     * Deletes all group assignements for a Type.
+     * Deletes all group assignments for a Type.
      *
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    abstract public function deleteGroupAssignementsForType( $typeId, $status );
+    abstract public function deleteGroupAssignmentsForType( $typeId, $status );
 
     /**
      * Publishes the Type with $typeId from $sourceVersion to $targetVersion,

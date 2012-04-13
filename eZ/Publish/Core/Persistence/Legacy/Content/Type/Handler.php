@@ -240,7 +240,7 @@ class Handler implements BaseContentTypeHandler
         );
         foreach ( $contentType->groupIds as $groupId )
         {
-            $this->contentTypeGateway->insertGroupAssignement(
+            $this->contentTypeGateway->insertGroupAssignment(
                 $groupId,
                 $contentType->id,
                 $contentType->status
@@ -295,7 +295,7 @@ class Handler implements BaseContentTypeHandler
             throw new Exception\TypeStillHasContent( $contentTypeId, $status );
         }
 
-        $this->contentTypeGateway->deleteGroupAssignementsForType(
+        $this->contentTypeGateway->deleteGroupAssignmentsForType(
             $contentTypeId, $status
         );
         $this->contentTypeGateway->deleteFieldDefinitionsForType(
@@ -373,7 +373,7 @@ class Handler implements BaseContentTypeHandler
             );
         }
 
-        $this->contentTypeGateway->deleteGroupAssignement(
+        $this->contentTypeGateway->deleteGroupAssignment(
             $groupId, $contentTypeId, $status
         );
         // FIXME: What is to be returned?
@@ -391,7 +391,7 @@ class Handler implements BaseContentTypeHandler
      */
     public function link( $groupId, $contentTypeId, $status )
     {
-        $this->contentTypeGateway->insertGroupAssignement(
+        $this->contentTypeGateway->insertGroupAssignment(
             $groupId, $contentTypeId, $status
         );
         // FIXME: What is to be returned?

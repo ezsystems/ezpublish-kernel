@@ -508,7 +508,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             )
             ->will( $this->returnValue( 23 ) );
         $gatewayMock->expects( $this->once() )
-            ->method( 'insertGroupAssignement' )
+            ->method( 'insertGroupAssignment' )
             ->with(
                 $this->equalTo( 42 ),
                 $this->equalTo( 23 ),
@@ -615,7 +615,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
             ->will( $this->returnValue( 0 ) );
         $gatewayMock->expects( $this->once() )
-            ->method( 'deleteGroupAssignementsForType' )
+            ->method( 'deleteGroupAssignmentsForType' )
             ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteFieldDefinitionsForType' )
@@ -648,7 +648,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             // An instance of this type exists
             ->will( $this->returnValue( 1 ) );
         $gatewayMock->expects( $this->never() )
-            ->method( 'deleteGroupAssignementsForType' );
+            ->method( 'deleteGroupAssignmentsForType' );
         $gatewayMock->expects( $this->never() )
             ->method( 'deleteFieldDefinitionsForType' );
         $gatewayMock->expects( $this->never() )
@@ -800,7 +800,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
-            ->method( 'insertGroupAssignement' )
+            ->method( 'insertGroupAssignment' )
             ->with(
                 $this->equalTo( 3 ),
                 $this->equalTo( 23 ),
@@ -830,7 +830,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             )->will( $this->returnValue( 2 ) );
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'deleteGroupAssignement' )
+            ->method( 'deleteGroupAssignment' )
             ->with(
                 $this->equalTo( 3 ),
                 $this->equalTo( 23 ),

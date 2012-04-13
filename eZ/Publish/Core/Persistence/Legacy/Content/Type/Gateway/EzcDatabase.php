@@ -402,14 +402,14 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Insert assignement of $typeId to $groupId.
+     * Insert assignment of $typeId to $groupId.
      *
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    public function insertGroupAssignement( $groupId, $typeId, $status )
+    public function insertGroupAssignment( $groupId, $typeId, $status )
     {
         $groups = $this->loadGroupData( $groupId );
         $group = $groups[0];
@@ -436,14 +436,14 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Deletes a group assignements for a Type.
+     * Deletes a group assignments for a Type.
      *
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    public function deleteGroupAssignement( $groupId, $typeId, $status )
+    public function deleteGroupAssignment( $groupId, $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom(
@@ -1122,12 +1122,12 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Deletes all group assignements for a Type.
+     * Deletes all group assignments for a Type.
      *
      * @param mixed $typeId
      * @return void
      */
-    public function deleteGroupAssignementsForType( $typeId, $status )
+    public function deleteGroupAssignmentsForType( $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom(
