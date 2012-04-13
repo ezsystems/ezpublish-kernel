@@ -242,7 +242,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $data = new \stdClass();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
+        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
 
         $visitor = new Common\Output\Visitor( $generator, array(
             '\\stdClass' => $valueObjectVisior,
@@ -261,7 +261,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $data = new ValueObject();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
+        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
 
         $visitor = new Common\Output\Visitor( $generator, array(
             '\\stdClass' => $valueObjectVisior,
@@ -280,8 +280,8 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $data = new ValueObject();
 
         $generator = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisior1 = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
-        $valueObjectVisior2 = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor' );
+        $valueObjectVisior1 = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
+        $valueObjectVisior2 = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
 
         $visitor = new Common\Output\Visitor( $generator, array(
             '\\WontMatch' => $valueObjectVisior1,
