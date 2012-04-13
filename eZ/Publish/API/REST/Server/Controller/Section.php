@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Controller;
+use eZ\Publish\API\REST\Common\UrlHandler;
 use eZ\Publish\API\REST\Common\Message;
 use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
@@ -31,6 +32,13 @@ class Section
     protected $inputDispatcher;
 
     /**
+     * URL handler
+     *
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    protected $urlHandler;
+
+    /**
      * Section service
      *
      * @var \eZ\Publish\API\Repository\SectionService
@@ -41,12 +49,14 @@ class Section
      * Construct controller
      *
      * @param Input\Dispatcher $inputDispatcher
+     * @param UrlHandler $urlHandler
      * @param SectionService $sectionService
      * @return void
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, SectionService $sectionService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, SectionService $sectionService )
     {
         $this->inputDispatcher = $inputDispatcher;
+        $this->urlHandler      = $urlHandler;
         $this->sectionService  = $sectionService;
     }
 
@@ -58,23 +68,25 @@ class Section
      */
     public function listSections( RMF\Request $request )
     {
-        $sections = array();
+        return new Values\SectionList(
+            $this->sectionService->loadSections()
+        );
+    }
 
-        if ( isset( $request->variables['identifier'] ) )
-        {
-            $sections = array(
-                $this->sectionService->loadSectionByIdentifier(
-                    $request->variables['identifier']
-                )
-            );
-        }
-        // elseif …
-        else
-        {
-            $sections = $this->sectionService->loadSections();
-        }
-
-        return new Values\SectionList( $sections );
+    /**
+     * Load section by indentifier
+     *
+     * @param RMF\Request $request
+     * @return mixed
+     */
+    public function loadSectionByIdentifier( RMF\Request $request )
+    {
+        return new Values\SectionList( array(
+            $this->sectionService->loadSectionByIdentifier(
+                // GET variable
+                $request->variables['identifier']
+            )
+        ) );
     }
 
     /**
@@ -103,9 +115,8 @@ class Section
      */
     public function loadSection( RMF\Request $request )
     {
-        return $this->sectionService->loadSection(
-            $request->variables['id']
-        );
+        $values = $this->urlHandler->parse( 'section', $request->path );
+        return $this->sectionService->loadSection( $values['section'] );
     }
 
     /**
@@ -116,6 +127,7 @@ class Section
      */
     public function updateSection( RMF\Request $request )
     {
+        $values = $this->urlHandler->parse( 'section', $request->path );
         $createStruct = $this->inputDispatcher->parse(
             new Message(
                 array( 'Content-Type' => $request->contentType ),
@@ -123,7 +135,7 @@ class Section
             )
         );
         return $this->sectionService->updateSection(
-            $this->sectionService->loadSection( $request->variables['id'] ),
+            $this->sectionService->loadSection( $values['section'] ),
             $this->mapToUpdateStruct( $createStruct )
         );
     }
@@ -136,10 +148,9 @@ class Section
      */
     public function deleteSection( RMF\Request $request )
     {
+        $values = $this->urlHandler->parse( 'section', $request->path );
         return $this->sectionService->deleteSection(
-            $this->sectionService->loadSection(
-                $request->variables['id']
-            )
+            $this->sectionService->loadSection( $values['section'] )
         );
     }
 

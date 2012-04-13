@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Controller;
+use eZ\Publish\API\REST\Common\UrlHandler;
 use eZ\Publish\API\REST\Common\Message;
 use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
@@ -32,6 +33,13 @@ class Content
     protected $inputDispatcher;
 
     /**
+     * URL handler
+     *
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    protected $urlHandler;
+
+    /**
      * Content service
      *
      * @var \eZ\Publish\API\Repository\ContentService
@@ -42,13 +50,15 @@ class Content
      * Construct controller
      *
      * @param Input\Dispatcher $inputDispatcher
+     * @param UrlHandler $urlHandler
      * @param ContentService $contentService
      * @param SectionService $sectionService
      * @return void
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, ContentService $contentService, SectionService $sectionService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, SectionService $sectionService )
     {
         $this->inputDispatcher = $inputDispatcher;
+        $this->urlHandler      = $urlHandler;
         $this->contentService  = $contentService;
         $this->sectionService  = $sectionService;
     }
@@ -63,7 +73,8 @@ class Content
     {
         return new Values\ContentList( array(
             $this->contentService->loadContentInfoByRemoteId(
-                $request->variables['id']
+                // GET variable
+                $request->variables['remoteId']
             )
         ) );
     }
@@ -76,6 +87,7 @@ class Content
      */
     public function updateContentMetadata( RMF\Request $request )
     {
+        $values = $this->urlHandler->parse( 'content', $request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array( 'Content-Type' => $request->contentType ),
@@ -83,9 +95,7 @@ class Content
             )
         );
 
-        $contentInfo = $this->contentService->loadContentInfo(
-            $request->variables['id']
-        );
+        $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
 
         if ( $updateStruct->sectionId !== null )
         {

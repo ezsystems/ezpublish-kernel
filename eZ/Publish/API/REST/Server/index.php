@@ -79,13 +79,17 @@ $inputDispatcher = new Common\Input\Dispatcher(
  * call to methods of the Public API.
  */
 
+$urlHandler = new Common\UrlHandler\eZPublish();
+
 $sectionController = new Controller\Section(
     $inputDispatcher,
+    $urlHandler,
     $repository->getSectionService()
 );
 
 $contentController = new Controller\Content(
     $inputDispatcher,
+    $urlHandler,
     $repository->getContentService(),
     $repository->getSectionService()
 );
@@ -130,19 +134,22 @@ $valueObjectVisitors = array(
 
 $dispatcher = new RMF\Dispatcher\Simple(
     new RMF\Router\Regexp( array(
-        '(^/content/sections(\?.*)?$)' => array(
+        '(^/content/sections$)' => array(
             'GET'  => array( $sectionController, 'listSections' ),
             'POST' => array( $sectionController, 'createSection' ),
         ),
-        '(^/content/sections/(?P<id>[0-9]+)$)' => array(
+        '(^/content/sections\?identifier=.*$)' => array(
+            'GET'  => array( $sectionController, 'loadSectionByIdentifier' ),
+        ),
+        '(^/content/sections/[0-9]+$)' => array(
             'GET'    => array( $sectionController, 'loadSection' ),
             'PATCH'  => array( $sectionController, 'updateSection' ),
             'DELETE' => array( $sectionController, 'deleteSection' ),
         ),
-        '(^/content/objects\?remoteId=(?P<id>[0-9a-f]+)$)' => array(
+        '(^/content/objects\?remoteId=[0-9a-f]+$)' => array(
             'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
         ),
-        '(^/content/objects/(?<id>[0-9]+)$)' => array(
+        '(^/content/objects/[0-9]+$)' => array(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
         ),
     ) ),
