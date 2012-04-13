@@ -32,6 +32,7 @@
           <directory suffix=".php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
           <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests</directory>
           <directory suffix=".php">eZ/Publish/Core/Io/Tests</directory>
+          <directory suffix=".php">eZ/Publish/API/Repository/Examples/</directory>
           <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>
