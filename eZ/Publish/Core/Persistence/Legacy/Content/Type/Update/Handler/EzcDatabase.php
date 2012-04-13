@@ -65,7 +65,7 @@ class EzcDatabase extends Handler
     public function deleteOldType( $fromType )
     {
         $this->contentTypeGateway->deleteType( $fromType->id, $fromType->status );
-        $this->contentTypeGateway->deleteGroupAssignementsForType(
+        $this->contentTypeGateway->deleteGroupAssignmentsForType(
             $fromType->id, $fromType->status );
         $this->contentTypeGateway->deleteFieldDefinitionsForType(
             $fromType->id, $fromType->status

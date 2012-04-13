@@ -862,10 +862,10 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertGroupAssignement
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertGroupAssignment
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
      */
-    public function testInsertGroupAssignement()
+    public function testInsertGroupAssignment()
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/_fixtures/existing_groups.php'
@@ -873,7 +873,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->insertGroupAssignement( 3, 42, 1 );
+        $gateway->insertGroupAssignment( 3, 42, 1 );
 
         $this->assertQueryResult(
             array(
@@ -897,9 +897,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignement
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignment
      */
-    public function testDeleteGroupAssignement()
+    public function testDeleteGroupAssignment()
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/_fixtures/existing_types.php'
@@ -907,7 +907,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteGroupAssignement( 1, 1, 0 );
+        $gateway->deleteGroupAssignment( 1, 1, 0 );
 
         $this->assertQueryResult(
             array( array( '1' ) ),
@@ -1165,9 +1165,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignmentsForType
      */
-    public function testDeleteGroupAssignementsForTypeExisting()
+    public function testDeleteGroupAssignmentsForTypeExisting()
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/_fixtures/existing_types.php'
@@ -1175,7 +1175,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteGroupAssignementsForType( 1, 0 );
+        $gateway->deleteGroupAssignmentsForType( 1, 0 );
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
@@ -1190,9 +1190,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignmentsForType
      */
-    public function testDeleteGroupAssignementsForTypeNotExisting()
+    public function testDeleteGroupAssignmentsForTypeNotExisting()
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/_fixtures/existing_types.php'

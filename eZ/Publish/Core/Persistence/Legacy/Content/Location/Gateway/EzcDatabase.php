@@ -583,7 +583,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Update node assignement table
+     * Update node assignment table
      *
      * @param int $contentObjectId
      * @param int $oldParent
