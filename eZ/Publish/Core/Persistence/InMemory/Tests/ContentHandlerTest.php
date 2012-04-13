@@ -59,6 +59,7 @@ class ContentHandlerTest extends HandlerTest
         $struct->fields[] = new Field(
             array(
                 'type' => 'ezstring',
+                'fieldDefinitionId' => 6,
                 // FieldValue object compatible with ezstring
                 'value' => new FieldValue(
                     array(
@@ -417,6 +418,7 @@ class ContentHandlerTest extends HandlerTest
         $struct->fields[] = new Field(
             array(
                 "id" => $this->content->fields[0]->id,
+                "fieldDefinitionId" => $this->content->fields[0]->fieldDefinitionId,
                 "value" => new FieldValue(
                     array(
                         "data" => "Welcome back"
