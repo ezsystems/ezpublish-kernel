@@ -110,7 +110,7 @@ abstract class TrashBase extends BaseServiceTest
 
     /**
      * Test loading a trash item
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::loadTrashItem
+     * @covers \eZ\Publish\API\Repository\TrashService::loadTrashItem
      */
     public function testLoadTrashItem()
     {
@@ -145,7 +145,7 @@ abstract class TrashBase extends BaseServiceTest
     /**
      * Test loading a trash item throwing NotFoundException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::loadTrashItem
+     * @covers \eZ\Publish\API\Repository\TrashService::loadTrashItem
      */
     public function testLoadTrashItemThrowsNotFoundException()
     {
@@ -155,7 +155,7 @@ abstract class TrashBase extends BaseServiceTest
 
     /**
      * Test sending a location to trash
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::trash
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
      */
     public function testTrash()
     {
@@ -190,7 +190,7 @@ abstract class TrashBase extends BaseServiceTest
 
     /**
      * Test recovering a location from trash to original location
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::recover
+     * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
     public function testRecover()
     {
@@ -231,7 +231,7 @@ abstract class TrashBase extends BaseServiceTest
     /**
      * Test recovering a non existing trash item
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::recover
+     * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
     public function testRecoverNonExistingTrashItem()
     {
@@ -243,7 +243,7 @@ abstract class TrashBase extends BaseServiceTest
 
     /**
      * Test recovering a location from trash to different location
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::recover
+     * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
     public function testRecoverToDifferentLocation()
     {
@@ -287,7 +287,7 @@ abstract class TrashBase extends BaseServiceTest
     /**
      * Test recovering a location from trash to non existing location
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::recover
+     * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
     public function testRecoverToNonExistingLocation()
     {
@@ -303,7 +303,7 @@ abstract class TrashBase extends BaseServiceTest
 
     /**
      * Test deleting a trash item
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::deleteTrashItem
+     * @covers \eZ\Publish\API\Repository\TrashService::deleteTrashItem
      */
     public function testDeleteTrashItem()
     {
@@ -326,7 +326,7 @@ abstract class TrashBase extends BaseServiceTest
     /**
      * Test deleting a non existing trash item
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::deleteTrashItem
+     * @covers \eZ\Publish\API\Repository\TrashService::deleteTrashItem
      */
     public function testDeleteNonExistingTrashItem()
     {
