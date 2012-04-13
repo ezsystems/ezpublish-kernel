@@ -25,6 +25,13 @@ class Pattern implements UrlHandler
     protected $map = array();
 
     /**
+     * Cache for compiled expressions
+     *
+     * @var array
+     */
+    protected $compileCache = array();
+
+    /**
      * COnstruct from optional initial map
      *
      * @param array $map
@@ -48,6 +55,7 @@ class Pattern implements UrlHandler
     public function addPattern( $type, $pattern )
     {
         $this->map[$type] = $pattern;
+        unset( $this->compileCache[$type] );
     }
 
     /**
@@ -89,6 +97,11 @@ class Pattern implements UrlHandler
      */
     protected function compile( $pattern )
     {
+        if ( isset( $this->compileCache[$pattern] ) )
+        {
+            return $this->compileCache[$pattern];
+        }
+
         $pcre = '(^';
 
         do {
@@ -109,7 +122,10 @@ class Pattern implements UrlHandler
             }
         } while ( $pattern );
 
-        return $pcre . ')S';
+        $pcre .= ')S';
+
+        $this->compileCache[$pattern] = $pcre;
+        return $pcre;
     }
 
     /**
