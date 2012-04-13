@@ -172,7 +172,7 @@ class TrashHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::load
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::loadTrashItem
      * @group trashHandler
      */
     public function testLoad()
@@ -191,7 +191,7 @@ class TrashHandlerTest extends HandlerTest
 
     /**
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::load
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::loadTrashItem
      * @group trashHandler
      */
     public function testLoadNonExistent()
