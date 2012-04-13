@@ -12,6 +12,7 @@ namespace eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\API\REST\Common\Output\Generator;
 use eZ\Publish\API\REST\Common\Output\Visitor;
+use eZ\Publish\API\REST\Common\UrlHandler;
 
 /**
  * Exception value object visitor
@@ -71,11 +72,13 @@ class Exception extends ValueObjectVisitor
     /**
      * COnstruct from debug flag
      *
+     * @param UrlHandler $urlHandler
      * @param mixed $debug
      * @return void
      */
-    public function __construct( $debug = false )
+    public function __construct( UrlHandler $urlHandler, $debug = false )
     {
+        parent::__construct( $urlHandler );
         $this->debug = (bool) $debug;
     }
 
