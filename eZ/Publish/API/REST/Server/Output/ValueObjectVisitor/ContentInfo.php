@@ -31,14 +31,20 @@ class ContentInfo extends ValueObjectVisitor
         $generator->startElement( 'ContentInfo' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentInfo' ) );
 
-        $generator->startAttribute( 'href', '/content/contents/' . $data->contentId );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'object', array( 'object' => $data->contentId ) )
+        );
         $generator->endAttribute( 'href' );
 
         $generator->startAttribute( 'id', $data->contentId );
         $generator->endAttribute( 'id' );
 
         $generator->startElement( 'ContentType' );
-        $generator->startAttribute( 'href', '/content/types/' . $data->getContentType()->id );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'type', array( 'type' => $data->getContentType()->id ) )
+        );
         $generator->endAttribute( 'href' );
         $generator->endElement( 'ContentType' );
 

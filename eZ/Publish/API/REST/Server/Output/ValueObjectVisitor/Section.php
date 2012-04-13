@@ -31,7 +31,10 @@ class Section extends ValueObjectVisitor
         $generator->startElement( 'Section' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Section' ) );
 
-        $generator->startAttribute( 'href', '/content/sections/' . $data->id );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'section', array( 'section' => $data->id ) )
+        );
         $generator->endAttribute( 'href' );
 
         $generator->startValueElement( 'sectionId', $data->id );

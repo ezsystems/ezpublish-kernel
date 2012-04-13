@@ -140,7 +140,7 @@ class Pattern implements UrlHandler
      * @param array $values
      * @return string
      */
-    public function generate( $type, array $values )
+    public function generate( $type, array $values = array() )
     {
         if ( !isset( $this->map[$type] ) )
         {

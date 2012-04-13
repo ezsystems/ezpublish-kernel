@@ -31,7 +31,10 @@ class SectionList extends ValueObjectVisitor
         $generator->startElement( 'SectionList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'SectionList' ) );
 
-        $generator->startAttribute( 'href', '/content/sections' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'sections' )
+        );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'Section' );

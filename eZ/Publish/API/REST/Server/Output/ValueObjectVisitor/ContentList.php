@@ -31,7 +31,10 @@ class ContentList extends ValueObjectVisitor
         $generator->startElement( 'ContentList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentList' ) );
 
-        $generator->startAttribute( 'href', '/content/objects' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'objects' )
+        );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'ContentInfo' );
