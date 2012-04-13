@@ -2516,7 +2516,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUnassignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Covers\Repository\ContentTypeService::unassignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
