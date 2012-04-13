@@ -28,6 +28,7 @@ class ErrorMessage extends Parser
     protected $errorCodeMapping = array(
         404 => '\\eZ\\Publish\\API\\REST\\Client\\Exceptions\\NotFoundException',
         406 => '\\eZ\\Publish\\API\\REST\\Client\\Exceptions\\InvalidArgumentException',
+        409 => '\\eZ\\Publish\\API\\REST\\Client\\Exceptions\\BadStateException',
     );
 
     /**

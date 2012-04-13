@@ -17,18 +17,17 @@ class BadStateExceptionTest extends BaseTest
      * @return void
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @expectedExceptionMessage Section with ID "23" not found.
-     * @expectedExceptionCode 42
      */
     public function testParse()
     {
-        $sectionParser = $this->getParser();
+        $parser = $this->getParser();
 
         $inputArray = array(
-            'message' => 'Section with ID "23" not found.',
-            '_code'    => '42',
+            'errorDescription' => 'Section with ID "23" not found.',
+            'errorCode'        => '409',
         );
 
-        $result = $sectionParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
@@ -36,6 +35,6 @@ class BadStateExceptionTest extends BaseTest
      */
     protected function getParser()
     {
-        return new Parser\BadStateException();
+        return new Parser\ErrorMessage();
     }
 }

@@ -11,11 +11,11 @@ namespace eZ\Publish\API\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\API\REST\Client\Input\Parser;
 
-class NotFoundExceptionTest extends BaseTest
+class InvalidArgumentExceptionTest extends BaseTest
 {
     /**
      * @return void
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Section with ID "23" not found.
      */
     public function testParse()
@@ -24,7 +24,7 @@ class NotFoundExceptionTest extends BaseTest
 
         $inputArray = array(
             'errorDescription' => 'Section with ID "23" not found.',
-            'errorCode'        => '404',
+            'errorCode'        => '406',
         );
 
         $result = $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
