@@ -176,7 +176,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test for the updateMetadata() function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::updateMetadata()
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::updateMetadata
      * @group contentHandler
      */
     public function testUpdateMetadata()

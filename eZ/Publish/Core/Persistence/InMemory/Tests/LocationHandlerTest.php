@@ -419,7 +419,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test for the changeMainLocation() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::changeMainLocation()
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::changeMainLocation
      * @group locationHandler
      */
     public function testChangeMainLocation()

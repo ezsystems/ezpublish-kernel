@@ -298,7 +298,7 @@ class LocationHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::changeMainLocation()
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::changeMainLocation
      */
     public function testChangeMainLocation()
     {

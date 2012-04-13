@@ -131,7 +131,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContentInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -155,7 +155,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the loadContentInfo() method.
      *
      * @depends testLoadContentInfo
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      *
      * @param $contentInfo
      * @return void
@@ -171,7 +171,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContentInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return void
@@ -189,7 +189,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContentInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
      * @return void
@@ -202,7 +202,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContentInfoByRemoteId() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -226,7 +226,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the loadContentInfoByRemoteId() method.
      *
      * @depends testLoadContentInfoByRemoteId
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      *
      * @param $contentInfo
      * @return void
@@ -242,7 +242,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContentInfoByRemoteId() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return void
@@ -260,7 +260,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContentInfoByRemoteId() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
      * @return void
@@ -274,7 +274,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the loadVersionInfo() method.
      *
      * @depends testLoadContentInfo
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -299,7 +299,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the loadVersionInfo() method.
      *
      * @depends testLoadVersionInfo
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @return void
@@ -315,7 +315,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      * @todo test for different version
@@ -341,7 +341,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the loadVersionInfo() method.
      *
      * @depends testLoadVersionInfoWithSecondParameter
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @return void
@@ -357,7 +357,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return void
@@ -376,7 +376,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
      * @return void
@@ -404,7 +404,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
      * @dataProvider testLoadContentArgumentsProvider
      *
      * @param int $contentId
@@ -467,7 +467,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testLoadContentThrowsUnauthorizedException()
@@ -478,7 +478,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentThrowsNotFoundExceptionContentNotFound()
@@ -494,7 +494,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentThrowsNotFoundExceptionVersionNotFound()
@@ -510,7 +510,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentThrowsNotFoundExceptionLanguageNotFound()
@@ -526,7 +526,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the loadContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentThrowsNotFoundExceptionLanguageNotFoundVariation()
@@ -542,7 +542,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the newContentCreateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::newContentCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentService::newContentCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
      */
@@ -575,7 +575,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the newContentCreateStruct() method.
      *
      * @depends testNewContentCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentService::newContentCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentService::newContentCreateStruct
      *
      * @param array $data
      * @return void
@@ -606,7 +606,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContent() method.
      *
      * @depends testNewContentCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      *
      * @return array
      */
@@ -666,7 +666,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContent() method.
      *
      * @depends testCreateContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      *
      * @param array $data
      */
@@ -683,7 +683,7 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @depends testCreateContent
      * @depends testLoadContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      *
      * @param array $data
      */
@@ -697,7 +697,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      *
      * @param array $data
      */
@@ -889,7 +889,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateContentThrowsUnauthorizedException()
@@ -900,7 +900,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateContentThrowsInvalidArgumentException()
@@ -925,7 +925,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      *
@@ -954,7 +954,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      *
@@ -984,7 +984,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      *
@@ -1015,7 +1015,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      *
@@ -1046,7 +1046,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @todo expectedExceptionCode
      *
@@ -1074,7 +1074,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
@@ -1084,7 +1084,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      */
     public function testCreateContentThrowsContentValidationException()
     {
@@ -1094,7 +1094,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the newContentMetadataUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::newContentMetadataUpdateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentService::newContentMetadataUpdateStruct
      */
     public function testNewContentMetadataUpdateStruct()
     {
@@ -1116,7 +1116,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContentMetadata() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
      * @depends testNewContentMetadataUpdateStruct
      *
      * @return array
@@ -1173,7 +1173,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContentMetadata() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
      * @depends testUpdateContentMetadata
      *
      * @param array $data
@@ -1205,7 +1205,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContentMetadata() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
@@ -1216,7 +1216,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContentMetadata() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends testNewContentMetadataUpdateStruct
      */
@@ -1236,7 +1236,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContentMetadata() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends testNewContentMetadataUpdateStruct
      */
@@ -1255,7 +1255,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the newContentUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::newContentUpdateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentService::newContentUpdateStruct
      */
     public function testNewContentUpdateStruct()
     {
@@ -1284,7 +1284,7 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @depends testCreateContent
      * @depends testNewContentUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      *
      * @return array
      */
@@ -1327,7 +1327,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the updateContent() method.
      *
      * @depends testUpdateContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      *
      * @param array $data
      */
@@ -1400,7 +1400,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateContentThrowsUnauthorizedException()
@@ -1411,7 +1411,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testUpdateContentThrowsBadStateException()
@@ -1430,7 +1430,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateContentThrowsContentFieldValidationException()
@@ -1441,7 +1441,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      */
@@ -1469,7 +1469,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      */
@@ -1498,7 +1498,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      */
@@ -1527,7 +1527,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      */
@@ -1557,7 +1557,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      */
@@ -1587,7 +1587,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent()
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      *
@@ -1619,7 +1619,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the publishVersion() method.
      *
      * @depends testCreateContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::publishVersion()
+     * @covers \eZ\Publish\Core\Repository\ContentService::publishVersion
      */
     public function testPublishVersion()
     {
@@ -1647,7 +1647,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the publishVersion() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::publishVersion()
+     * @covers \eZ\Publish\Core\Repository\ContentService::publishVersion
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testPublishVersionThrowsBadStateException()
@@ -1665,7 +1665,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the publishVersion() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::publishVersion()
+     * @covers \eZ\Publish\Core\Repository\ContentService::publishVersion
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testPublishVersionThrowsUnauthorizedException()
@@ -1676,7 +1676,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContentDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -1706,7 +1706,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContentDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      */
     public function testCreateContentDraftWithSecondArgument()
     {
@@ -1734,7 +1734,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContentDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -1752,7 +1752,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContentDraft() method.
      *
      * @depends testCreateContentDraft
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $internalDraftContent
@@ -1774,7 +1774,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContentDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateContentDraftThrowsUnauthorizedException()
@@ -1813,7 +1813,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the newTranslationInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo()
+     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo
      */
     public function testNewTranslationInfo()
     {
@@ -1835,7 +1835,7 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the newTranslationValues() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationValues()
+     * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationValues
      */
     public function testNewTranslationValues()
     {

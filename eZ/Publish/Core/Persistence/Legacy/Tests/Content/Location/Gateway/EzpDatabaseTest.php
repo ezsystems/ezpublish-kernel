@@ -735,7 +735,7 @@ class EzpDatabaseTest extends TestCase
     /**
      * Test for the changeMainLocation() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::changeMainLocation()
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::changeMainLocation
      */
     public function testChangeMainLocation()
     {
