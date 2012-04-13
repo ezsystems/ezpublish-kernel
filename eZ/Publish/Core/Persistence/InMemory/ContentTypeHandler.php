@@ -216,9 +216,10 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
+     * @param mixed|null $contentTypeId
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function create( CreateStruct $contentType )
+    public function create( CreateStruct $contentType, $contentTypeId = null )
     {
         $contentTypeArr = (array)$contentType;
         unset( $contentTypeArr['fieldDefinitions'] );

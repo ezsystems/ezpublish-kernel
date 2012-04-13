@@ -226,9 +226,11 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     * @param mixed|null $contentTypeId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function create( CreateStruct $createStruct )
+    public function create( CreateStruct $createStruct, $contentTypeId = null )
     {
         $createStruct = clone $createStruct;
         $contentType = $this->mapper->createTypeFromCreateStruct(
@@ -236,7 +238,8 @@ class Handler implements BaseContentTypeHandler
         );
 
         $contentType->id = $this->contentTypeGateway->insertType(
-            $contentType
+            $contentType,
+            $contentTypeId
         );
         foreach ( $contentType->groupIds as $groupId )
         {
@@ -328,7 +331,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $modifierId;
         $createStruct->modified = time();
 
-        return $this->create( $createStruct );
+        return $this->create( $createStruct, $contentTypeId );
     }
 
     /**

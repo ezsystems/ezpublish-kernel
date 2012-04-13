@@ -94,12 +94,14 @@ abstract class Gateway
     abstract public function loadTypesDataForGroup( $groupId, $status );
 
     /**
-     * Inserts a new conten type.
+     * Inserts a new content type.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     * @param mixed|null $typeId
+     *
      * @return mixed Type ID
      */
-    abstract public function insertType( Type $type );
+    abstract public function insertType( Type $type, $typeId = null );
 
     /**
      * Insert assignement of $typeId to $groupId.

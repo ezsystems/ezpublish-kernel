@@ -310,18 +310,22 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Inserts a new conten type.
+     * Inserts a new content type.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     * @param mixed|null $typeId
+     *
      * @return mixed Type ID
      */
-    public function insertType( Type $type )
+    public function insertType( Type $type, $typeId = null )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass' ) );
         $q->set(
             $this->dbHandler->quoteColumn( 'id' ),
-            $this->dbHandler->getAutoIncrementValue( 'ezcontentclass', 'id' )
+            isset( $typeId ) ?
+                $q->bindValue( $typeId, null, \PDO::PARAM_INT ) :
+                $this->dbHandler->getAutoIncrementValue( 'ezcontentclass', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $type->status, null, \PDO::PARAM_INT )
@@ -335,9 +339,12 @@ class EzcDatabase extends Gateway
         $this->setCommonTypeColumns( $q, $type );
         $q->prepare()->execute();
 
-        $type->id = $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' )
-        );
+        if ( isset( $typeId ) )
+            $type->id = $typeId;
+        else
+            $type->id = $this->dbHandler->lastInsertId(
+                $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' )
+            );
         $this->insertTypeNameData( $type->id, $type->status, $type->name );
 
         return $type->id;
