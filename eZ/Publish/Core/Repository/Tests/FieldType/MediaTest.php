@@ -126,7 +126,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__constructor
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__construct
      */
     public function testBuildFieldValueFromString()
     {
