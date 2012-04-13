@@ -74,7 +74,7 @@ class BinaryFileStorage implements Storage
             $q->bindValue( basename( $file->path ) )
         )->set(
             $dbHandler->quoteColumn( 'mime_type' ),
-            $q->bindValue( (string)$file->contentType )
+            $q->bindValue( $file->mimeType )
         )->set(
             $dbHandler->quoteColumn( 'original_filename' ),
             $q->bindValue( $field->value->data->originalFilename )

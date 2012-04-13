@@ -133,7 +133,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
         $ft = new BinaryFileType( $this->repository );
         $value = $ft->buildValue( $this->imagePath );
         self::assertSame( basename( $value->file->id ), $value->filename );
-        self::assertSame( $value->file->contentType, $value->mimeType );
+        self::assertSame( $value->file->mimeType, $value->mimeType );
         self::assertSame( $value->file->id, $value->filepath );
         self::assertSame( $value->file->size, $value->filesize );
     }

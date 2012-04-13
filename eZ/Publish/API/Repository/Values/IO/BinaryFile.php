@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read int $size File size, in bytes
  * @property-read int $mtime File modification time
  * @property-read int $ctime File creation time
- * @property-read string $contentType File contentType (image/jpeg, audio/mp3, etc)
+ * @property-read string $mimeType File mimeType (image/jpeg, audio/mp3, etc)
  * @property-read string $uri HTTP URI to the binary file
  * @property-read string $originalFile Original file name
  */
@@ -52,10 +52,10 @@ class BinaryFile extends ValueObject
     protected $ctime;
 
     /**
-     * File contentType (image/jpeg, audio/mp3, etc)
+     * File mimeType (image/jpeg, audio/mp3, etc) aka contentType
      * @var string
      */
-    protected $contentType;
+    protected $mimeType;
 
     /**
      * HTTP URI to the binary file

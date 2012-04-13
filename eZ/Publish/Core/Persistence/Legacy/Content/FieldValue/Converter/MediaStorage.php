@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Fields\Storage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
-    eZ\Publish\API\Repository\Values\IO\ContentType;
+    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue;
 
 /**
  * Converter for Media field type external storage
@@ -51,7 +50,7 @@ class MediaStorage implements Storage
         $mediaValue = new MediaValue;
         $mediaValue->file = $mediaValue->getHandler()->loadFileFromContentType(
             $media['filename'],
-            new ContentType( $media['mime_type'] )
+            $media['mime_type']
         );
         $mediaValue->file->originalFile = $mediaValue->originalFilename = $media['original_filename'];
         $mediaValue->controls = (bool)$media['controls'];
@@ -157,7 +156,7 @@ class MediaStorage implements Storage
             $q->bindValue( basename( $data->file->path ) )
         )->set(
             $dbHandler->quoteColumn( 'mime_type' ),
-            $q->bindValue( (string)$data->file->contentType )
+            $q->bindValue( $data->file->mimeType )
         )->set(
             $dbHandler->quoteColumn( 'original_filename' ),
             $q->bindValue( $data->originalFilename )
@@ -210,7 +209,7 @@ class MediaStorage implements Storage
             $q->bindValue( basename( $data->file->path ) )
         )->set(
             $dbHandler->quoteColumn( 'mime_type' ),
-            $q->bindValue( (string)$data->file->contentType )
+            $q->bindValue( $data->file->mimeType )
         )->set(
             $dbHandler->quoteColumn( 'original_filename' ),
             $q->bindValue( $data->originalFilename )

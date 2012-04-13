@@ -12,7 +12,6 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 use \eZ\Publish\API\Repository\IOService;
 use \eZ\Publish\API\Repository\Values\IO\BinaryFile;
 use \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
-use \eZ\Publish\API\Repository\Values\IO\ContentType;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
@@ -77,7 +76,7 @@ class IOServiceStub implements IOService
 
         return new BinaryFileCreateStruct(
             array(
-                'contentType'       =>  new ContentType( $uploadedFile['type'] ),
+                'mimeType'          =>  $uploadedFile['type'],
                 'uri'               =>  'file://' . realpath( $uploadedFile['tmp_name'] ),
                 'originalFileName'  =>  $uploadedFile['name'],
                 'size'              =>  filesize( $uploadedFile['tmp_name'] ),
@@ -108,7 +107,7 @@ class IOServiceStub implements IOService
 
         return new BinaryFileCreateStruct(
             array(
-                'contentType'       =>  new ContentType( mime_content_type( $localFile ) ),
+                'mimeType'          =>  mime_content_type( $localFile ),
                 'uri'               =>  'file://' . realpath( $localFile ),
                 'originalFileName'  =>  basename( $localFile ),
                 'size'              =>  filesize( $localFile ),
@@ -134,7 +133,7 @@ class IOServiceStub implements IOService
                 'mtime'         =>  time(),
                 'uri'           =>  $binaryFileCreateStruct->uri,
                 'originalFile'  =>  $binaryFileCreateStruct->originalFileName,
-                'contentType'   =>  (string) $binaryFileCreateStruct->contentType
+                'mimeType'      =>  $binaryFileCreateStruct->mimeType
             )
         );
 

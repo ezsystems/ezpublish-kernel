@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\IO\ContentType;
-
 /**
  * Test case for operations in the IOService using in memory storage.
  *
@@ -89,7 +87,7 @@ class IOServiceTest extends BaseTest
             array(
                 'originalFileName'  =>  basename( __FILE__ ),
                 'uri'               =>  'file://' . __FILE__,
-                'contentType'       =>  new ContentType( mime_content_type( __FILE__ ) ),
+                'mimeType'          =>  mime_content_type( __FILE__ ),
                 'size'              =>  filesize( __FILE__ ),
             ),
             $binaryCreate
@@ -167,7 +165,7 @@ class IOServiceTest extends BaseTest
             array(
                 'originalFile'  =>  basename( __FILE__ ),
                 'size'          =>  filesize( __FILE__ ),
-                'contentType'   =>  mime_content_type( __FILE__ )
+                'mimeType'   =>  mime_content_type( __FILE__ )
                 // TODO What is the uri?
                 //'uri'  =>  'file://' . __FILE__,
             ),
@@ -223,7 +221,7 @@ class IOServiceTest extends BaseTest
             array(
                 'originalFile'  =>  basename( __FILE__ ),
                 'size'          =>  filesize( __FILE__ ),
-                'contentType'   =>  mime_content_type( __FILE__ )
+                'mimeType'   =>  mime_content_type( __FILE__ )
                 // TODO What is the uri?
                 //'uri'  =>  'file://' . __FILE__,
             ),

@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
-    eZ\Publish\API\Repository\Values\IO\ContentType,
 
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
@@ -41,7 +40,7 @@ abstract class IOBase extends BaseServiceTest
                 'size'         => null,
                 'mtime'        => null,
                 'ctime'        => null,
-                'contentType'  => null,
+                'mimeType'     => null,
                 'uri'          => null,
                 'originalFile' => null
             ),
@@ -161,7 +160,7 @@ abstract class IOBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'contentType'      => new ContentType( 'image/png' ),
+                'mimeType'         => 'image/png',
                 'uri'              => $filePath,
                 'originalFileName' => 'ezplogo.png',
                 'size'             => 7329
@@ -211,7 +210,7 @@ abstract class IOBase extends BaseServiceTest
                 //@todo: is binary file ID equal to path?
                 'id'           => $filePath,
                 'size'         => $binaryCreateStruct->size,
-                'contentType'  => $binaryCreateStruct->contentType->type . '/' . $binaryCreateStruct->contentType->subType,
+                'mimeType'     => $binaryCreateStruct->mimeType,
                 'uri'          => null,
                 'originalFile' => $binaryCreateStruct->originalFileName
             ),
@@ -271,7 +270,7 @@ abstract class IOBase extends BaseServiceTest
                 'size',
                 'mtime',
                 'ctime',
-                'contentType',
+                'mimeType',
                 'uri',
                 'originalFile'
             ),

@@ -162,7 +162,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
         $ft = new MediaType( $this->repository );
         $value = $ft->buildValue( $this->mediaPath );
         self::assertSame( basename( $value->file->id ), $value->filename );
-        self::assertSame( $value->file->contentType, $value->mimeType );
+        self::assertSame( $value->file->mimeType, $value->mimeType );
     }
 
     /**

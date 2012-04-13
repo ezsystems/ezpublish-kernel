@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\IOService as IOServiceInterface,
     eZ\Publish\SPI\IO\Handler,
 
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
-    eZ\Publish\API\Repository\Values\IO\ContentType,
     eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct,
 
     eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile,
@@ -83,7 +82,7 @@ class IOService implements IOServiceInterface
             throw new InvalidArgumentException( "uploadedFile", "failed to get file resource" );
 
         $binaryCreateStruct = new BinaryFileCreateStruct();
-        $binaryCreateStruct->contentType = new ContentType( $uploadedFile['type'] );
+        $binaryCreateStruct->mimeType = $uploadedFile['type'];
         $binaryCreateStruct->uri = $uploadedFile['tmp_name'];
         $binaryCreateStruct->originalFileName = $uploadedFile['name'];
         $binaryCreateStruct->size = $uploadedFile['size'];
@@ -114,7 +113,7 @@ class IOService implements IOServiceInterface
             throw new InvalidArgumentException( "localFile", "failed to get file resource" );
 
         $binaryCreateStruct = new BinaryFileCreateStruct();
-        $binaryCreateStruct->contentType = new ContentType( mime_content_type( $localFile ) );
+        $binaryCreateStruct->mimeType = mime_content_type( $localFile );
         $binaryCreateStruct->uri = $localFile;
         $binaryCreateStruct->originalFileName = basename( $localFile );
         $binaryCreateStruct->size = filesize( $localFile );
@@ -132,8 +131,8 @@ class IOService implements IOServiceInterface
      */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
-        if ( !$binaryFileCreateStruct->contentType instanceof ContentType )
-            throw new InvalidArgumentValue( "contentType", "invalid content type", "BinaryFileCreateStruct" );
+        if ( empty( $binaryFileCreateStruct->mimeType ) || !is_string( $binaryFileCreateStruct->mimeType ) )
+            throw new InvalidArgumentValue( "mimeType", "invalid mimeType value", "BinaryFileCreateStruct" );
 
         if ( empty( $binaryFileCreateStruct->uri ) || !is_string( $binaryFileCreateStruct->uri ) )
             throw new InvalidArgumentValue( "uri", $binaryFileCreateStruct->uri, "BinaryFileCreateStruct" );
@@ -233,12 +232,7 @@ class IOService implements IOServiceInterface
 
         $spiBinaryCreateStruct->path = $binaryFileCreateStruct->uri;
         $spiBinaryCreateStruct->size = $binaryFileCreateStruct->size;
-
-        $mimeType = $binaryFileCreateStruct->contentType->type .
-                    '/' .
-                    $binaryFileCreateStruct->contentType->subType;
-
-        $spiBinaryCreateStruct->mimeType = $mimeType;
+        $spiBinaryCreateStruct->mimeType = $binaryFileCreateStruct->mimeType;
         $spiBinaryCreateStruct->originalFile = $binaryFileCreateStruct->originalFileName;
         $spiBinaryCreateStruct->setInputStream( $binaryFileCreateStruct->inputStream );
 
@@ -261,7 +255,7 @@ class IOService implements IOServiceInterface
                 'size'         => (int) $spiBinaryFile->size,
                 'mtime'        => $spiBinaryFile->mtime,
                 'ctime'        => $spiBinaryFile->ctime,
-                'contentType'  => $spiBinaryFile->mimeType,
+                'mimeType'     => $spiBinaryFile->mimeType,
                 'uri'          => $spiBinaryFile->uri,
                 'originalFile' => $spiBinaryFile->originalFile
             )

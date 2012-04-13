@@ -91,7 +91,7 @@ class Value extends BaseValue
                 return basename( $this->file->id );
 
             case 'mimeType':
-                return $this->file->contentType;
+                return $this->file->mimeType;
 
             case 'filesize':
                 return $this->file->size;

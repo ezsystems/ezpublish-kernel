@@ -31,7 +31,7 @@ $binary = $ioService->createBinaryFile(
 );
 
 var_dump( $binary->originalFile );
-var_dump( $binary->contentType );
+var_dump( $binary->mimeType );
 var_dump( $ioService->getFileContents( $binary ) );
 ?>
 --EXPECTF--
