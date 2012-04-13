@@ -34,7 +34,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $exception = new \Exception( 'Foo' );
+        $exception = $this->getException();
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -55,18 +55,61 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsExceptionElement( $result )
+    public function testResultContainsErrorCode( $result )
     {
         $this->assertTag(
             array(
-                'tag'      => 'Exception',
-                'children' => array(
-                    'less_than'    => 3,
-                    'greater_than' => 1,
+                'tag'      => 'ErrorMessage',
+                'descendant' => array(
+                    'tag'     => 'errorCode',
+                    'content' => (string) $this->getExpectedStatusCode(),
                 )
             ),
             $result,
-            'Invalid <Exception> element.',
+            'Invalid <ErrorMessage> element.',
+            false
+        );
+    }
+
+    /**
+     * testResultContainsExceptionElement
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsErrorMessage( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'ErrorMessage',
+                'descendant' => array(
+                    'tag'     => 'errorMessage',
+                    'content' => $this->getExpectedMessage(),
+                )
+            ),
+            $result,
+            'Invalid <ErrorMessage> element.',
+            false
+        );
+    }
+
+    /**
+     * testResultContainsExceptionElement
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsErrorDescription( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'ErrorMessage',
+                'descendant' => array(
+                    'tag' => 'errorDescription',
+                )
+            ),
+            $result,
+            'Invalid <ErrorMessage> element.',
             false
         );
     }
@@ -81,37 +124,43 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'Exception',
+                'tag'      => 'ErrorMessage',
                 'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.Exception+xml',
-                    'code'       => '0',
-                    'file'       => __FILE__,
-                    'line'       => '37',
+                    'media-type' => 'application/vnd.ez.api.ErrorMessage+xml',
                 )
             ),
             $result,
-            'Invalid <Exception> attributes.',
+            'Invalid <ErrorMessage> attributes.',
             false
         );
     }
 
     /**
-     * testResultContainsExceptionAttributes
+     * Get expected status code
      *
-     * @param string $result
-     * @depends testVisit
+     * @return int
      */
-    public function testResultContainsExceptionTrace( $result )
+    protected function getExpectedStatusCode()
     {
-        $this->assertTag(
-            array(
-                'tag'      => 'trace',
-                'content'  => 'regexp:(^#0 \\[internal function\\])',
-            ),
-            $result,
-            'Invalid <Exception> attributes.',
-            false
-        );
+        return 500;
+    }
+
+    /**
+     * Get expected message
+     *
+     * @return string
+     */
+    protected function getExpectedMessage()
+    {
+        return "Internal Server Error";
+    }
+
+    /**
+     * @return \Exception
+     */
+    protected function getException()
+    {
+        return new \Exception( "Test" );
     }
 
     /**

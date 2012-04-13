@@ -54,3 +54,4 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
         return $this->generator;
     }
 }
+

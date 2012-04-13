@@ -13,93 +13,40 @@ use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
-class NotFoundExceptionExceptionTest extends ValueObjectVisitorBaseTest
+class NotFoundExceptionExceptionTest extends ExceptionTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Get expected status code
      *
-     * @todo: This and its creation could be moved to common base test class
-     *        for input parsers.
+     * @return int
      */
-    protected $visitor;
-
-    /**
-     * testVisit
-     *
-     * @return void
-     */
-    public function testVisit()
+    protected function getExpectedStatusCode()
     {
-        $visitor   = $this->getNotFoundExceptionVisitor();
-        $generator = $this->getGenerator();
-
-        $generator->startDocument( null );
-
-        $exception = new Exceptions\NotFoundExceptionStub( 'Foo not found' );
-
-        $visitor->visit(
-            $this->getVisitorMock(),
-            $generator,
-            $exception
-        );
-
-        $result = $generator->endDocument( null );
-
-        $this->assertNotNull( $result );
-
-        return $result;
+        return 404;
     }
 
     /**
-     * testResultContainsExceptionElement
+     * Get expected message
      *
-     * @param string $result
-     * @depends testVisit
+     * @return string
      */
-    public function testResultContainsExceptionElement( $result )
+    protected function getExpectedMessage()
     {
-        $this->assertTag(
-            array(
-                'tag'      => 'NotFoundException',
-                'children' => array(
-                    'less_than'    => 2,
-                    'greater_than' => 0,
-                )
-            ),
-            $result,
-            'Invalid <NotFoundException> element.',
-            false
-        );
+        return "Not Found";
     }
 
     /**
-     * testResultContainsExceptionAttributes
-     *
-     * @param string $result
-     * @depends testVisit
+     * @return \Exception
      */
-    public function testResultContainsExceptionAttributes( $result )
+    protected function getException()
     {
-        $this->assertTag(
-            array(
-                'tag'      => 'NotFoundException',
-                'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.NotFoundException+xml',
-                    'code'       => '0',
-                    'file'       => __FILE__,
-                    'line'       => '38',
-                )
-            ),
-            $result,
-            'Invalid <NotFoundException> attributes.',
-            false
-        );
+        return new Exceptions\NotFoundExceptionStub( "Test" );
     }
 
     /**
      * @return \eZ\Publish\API\REST\Server\Output\ValueObjectVisitor\Exception
      */
-    protected function getNotFoundExceptionVisitor()
+    protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\NotFoundException();
     }

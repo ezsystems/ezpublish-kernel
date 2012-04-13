@@ -13,93 +13,40 @@ use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
-class BadStateExceptionExceptionTest extends ValueObjectVisitorBaseTest
+class BadStateExceptionExceptionTest extends ExceptionTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Get expected status code
      *
-     * @todo: This and its creation could be moved to common base test class
-     *        for input parsers.
+     * @return int
      */
-    protected $visitor;
-
-    /**
-     * testVisit
-     *
-     * @return void
-     */
-    public function testVisit()
+    protected function getExpectedStatusCode()
     {
-        $visitor   = $this->getBadStateExceptionVisitor();
-        $generator = $this->getGenerator();
-
-        $generator->startDocument( null );
-
-        $exception = new Exceptions\BadStateExceptionStub( 'Foo not found' );
-
-        $visitor->visit(
-            $this->getVisitorMock(),
-            $generator,
-            $exception
-        );
-
-        $result = $generator->endDocument( null );
-
-        $this->assertNotNull( $result );
-
-        return $result;
+        return 409;
     }
 
     /**
-     * testResultContainsExceptionElement
+     * Get expected message
      *
-     * @param string $result
-     * @depends testVisit
+     * @return string
      */
-    public function testResultContainsExceptionElement( $result )
+    protected function getExpectedMessage()
     {
-        $this->assertTag(
-            array(
-                'tag'      => 'BadStateException',
-                'children' => array(
-                    'less_than'    => 2,
-                    'greater_than' => 0,
-                )
-            ),
-            $result,
-            'Invalid <BadStateException> element.',
-            false
-        );
+        return "Conflict";
     }
 
     /**
-     * testResultContainsExceptionAttributes
-     *
-     * @param string $result
-     * @depends testVisit
+     * @return \Exception
      */
-    public function testResultContainsExceptionAttributes( $result )
+    protected function getException()
     {
-        $this->assertTag(
-            array(
-                'tag'      => 'BadStateException',
-                'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.BadStateException+xml',
-                    'code'       => '0',
-                    'file'       => __FILE__,
-                    'line'       => '38',
-                )
-            ),
-            $result,
-            'Invalid <BadStateException> attributes.',
-            false
-        );
+        return new Exceptions\BadStateExceptionStub( "Test" );
     }
 
     /**
      * @return \eZ\Publish\API\REST\Server\Output\ValueObjectVisitor\Exception
      */
-    protected function getBadStateExceptionVisitor()
+    protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\BadStateException();
     }
