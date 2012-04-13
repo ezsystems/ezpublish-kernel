@@ -225,6 +225,9 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
+     * @todo $contentTypeId is used to create draft from existing content type (called by self::createDraft()).
+     *       This is a temporary solution until self::createDraft is fixed not to reuse this method.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
      * @param mixed|null $contentTypeId
      *
@@ -316,6 +319,8 @@ class Handler implements BaseContentTypeHandler
      * Creates a draft of existing defined content type
      *
      * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
+     *
+     * @todo fix not to use self::create()
      *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
