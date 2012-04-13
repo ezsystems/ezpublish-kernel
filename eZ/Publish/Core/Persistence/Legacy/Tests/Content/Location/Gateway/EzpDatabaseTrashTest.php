@@ -363,9 +363,9 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::removeItemFromTrash
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::removeElementFromTrash
      */
-    public function testRemoveItemFromTrash()
+    public function testRemoveElementFromTrash()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
