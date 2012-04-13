@@ -77,12 +77,12 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getParseValues
      */
-    public function testParseUrl( $type, $url, $expectedValues )
+    public function testParseUrl( $type, $url, $values )
     {
         $urlHandler = $this->getWorkingUrlHandler();
 
         $this->assertSame(
-            $expectedValues,
+            $values,
             $urlHandler->parse( $type, $url )
         );
     }
@@ -124,36 +124,15 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         ) );
     }
 
-    public static function getGenerateValues()
-    {
-        return array(
-            array(
-                'section',
-                array(
-                    'section' => '42',
-                ),
-                '/content/section/42',
-            ),
-            array(
-                'objectversion',
-                array(
-                    'object'  => '42',
-                    'version' => '23',
-                ),
-                '/content/object/42/23',
-            ),
-        );
-    }
-
     /**
-     * @dataProvider getGenerateValues
+     * @dataProvider getParseValues
      */
-    public function testGenerateUrl( $type, $values, $expectedUrl )
+    public function testGenerateUrl( $type, $url, $values )
     {
         $urlHandler = $this->getWorkingUrlHandler();
 
         $this->assertSame(
-            $expectedUrl,
+            $url,
             $urlHandler->generate( $type, $values )
         );
     }
