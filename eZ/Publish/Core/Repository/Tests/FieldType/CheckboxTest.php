@@ -18,7 +18,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
      */
     public function testCheckboxSupportedValidators()
     {
@@ -33,7 +33,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedSettings
      */
     public function testCheckboxAllowedSettings()
     {

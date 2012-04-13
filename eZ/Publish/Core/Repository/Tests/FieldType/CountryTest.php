@@ -66,7 +66,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
      */
     public function testCountrySupportedValidators()
     {

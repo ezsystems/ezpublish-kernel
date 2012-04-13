@@ -43,7 +43,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
      */
     public function testAuthorSupportedValidators()
     {

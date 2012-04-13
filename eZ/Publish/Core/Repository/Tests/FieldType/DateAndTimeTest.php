@@ -19,7 +19,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
      */
     public function testDateAndTimeSupportedValidators()
     {
@@ -34,7 +34,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedSettings
      */
     public function testDateAndTimeAllowedSettings()
     {

@@ -18,7 +18,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
      */
     public function testSelectionSupportedValidators()
     {
