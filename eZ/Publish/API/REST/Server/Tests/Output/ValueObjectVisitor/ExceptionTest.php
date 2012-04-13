@@ -11,6 +11,7 @@ namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\API\REST\Common;
 
 class ExceptionTest extends ValueObjectVisitorBaseTest
 {
@@ -168,6 +169,8 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      */
     protected function getExceptionVisitor()
     {
-        return new ValueObjectVisitor\Exception();
+        return new ValueObjectVisitor\Exception(
+            new Common\UrlHandler\eZPublish()
+        );
     }
 }

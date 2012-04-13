@@ -12,6 +12,7 @@ use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use eZ\Publish\API\REST\Common;
 
 class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
 {
@@ -197,6 +198,8 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
      */
     protected function getSectionIncludingContentMetadataUpdateStructVisitor()
     {
-        return new ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct();
+        return new ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct(
+            new Common\UrlHandler\eZPublish()
+        );
     }
 }

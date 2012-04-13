@@ -12,6 +12,7 @@ use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content;
+use eZ\Publish\API\REST\Common;
 
 class SectionCreateStructTest extends ValueObjectVisitorBaseTest
 {
@@ -135,6 +136,8 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
      */
     protected function getSectionCreateStructVisitor()
     {
-        return new ValueObjectVisitor\SectionCreateStruct();
+        return new ValueObjectVisitor\SectionCreateStruct(
+            new Common\UrlHandler\eZPublish()
+        );
     }
 }

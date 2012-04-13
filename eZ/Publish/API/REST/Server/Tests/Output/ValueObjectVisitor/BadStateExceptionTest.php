@@ -12,6 +12,7 @@ use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+use eZ\Publish\API\REST\Common;
 
 class BadStateExceptionExceptionTest extends ExceptionTest
 {
@@ -48,6 +49,8 @@ class BadStateExceptionExceptionTest extends ExceptionTest
      */
     protected function getExceptionVisitor()
     {
-        return new ValueObjectVisitor\BadStateException();
+        return new ValueObjectVisitor\BadStateException(
+            new Common\UrlHandler\eZPublish()
+        );
     }
 }

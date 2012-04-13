@@ -12,6 +12,7 @@ use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+use eZ\Publish\API\REST\Common;
 
 class NotFoundExceptionExceptionTest extends ExceptionTest
 {
@@ -48,6 +49,8 @@ class NotFoundExceptionExceptionTest extends ExceptionTest
      */
     protected function getExceptionVisitor()
     {
-        return new ValueObjectVisitor\NotFoundException();
+        return new ValueObjectVisitor\NotFoundException(
+            new Common\UrlHandler\eZPublish()
+        );
     }
 }

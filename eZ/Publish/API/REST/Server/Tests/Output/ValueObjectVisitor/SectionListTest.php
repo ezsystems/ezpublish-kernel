@@ -13,6 +13,7 @@ use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\REST\Server\Values\SectionList;
 use eZ\Publish\API\Repository\Values\Content;
+use eZ\Publish\API\REST\Common;
 
 class SectionListTest extends ValueObjectVisitorBaseTest
 {
@@ -117,6 +118,8 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      */
     protected function getSectionListVisitor()
     {
-        return new ValueObjectVisitor\SectionList();
+        return new ValueObjectVisitor\SectionList(
+            new Common\UrlHandler\eZPublish()
+        );
     }
 }

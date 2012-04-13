@@ -8,12 +8,31 @@
  */
 
 namespace eZ\Publish\API\REST\Common\Output;
+use eZ\Publish\API\REST\Common\UrlHandler;
 
 /**
  * Basic ValueObjectVisitor
  */
 abstract class ValueObjectVisitor
 {
+    /**
+     * URL handler for URL generation
+     *
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    protected $urlHandler;
+
+    /**
+     * COnstruct from used URL handler
+     *
+     * @param UrlHandler $urlHandler
+     * @return void
+     */
+    public function __construct( UrlHandler $urlHandler )
+    {
+        $this->urlHandler = $urlHandler;
+    }
+
     /**
      * Visit struct returned by controllers
      *
