@@ -180,10 +180,10 @@ conditions[routes][content][item][uri]=content/some/
 conditions[routes][content][item][params][id]=\d+
 conditions[routes][content][item][controller]=%contentItem-controller::doList
 
-[contentItem-controller]
+[contentItem:controller]
 class=eZ\\Publish\\Core\\ContentItemController
 
-[-controller]
+[controller]
 public=true
 regex[]=?<name>\w+
 regex[]=?P<name>\w+
@@ -214,8 +214,8 @@ regex[]=content/location/{?<name>\w+}
                     ) ) ),
                 )
             ),
-            'contentItem-controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
-            '-controller' => array(
+            'contentItem:controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
+            'controller' => array(
                 'public' => true,
                 'regex' => array(
                     '?<name>\w+',
