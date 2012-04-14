@@ -26,29 +26,12 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'BService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
-                    'public' => true,
                 )
             )
         );
         $b = $sc->get('BService');
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $b );
         self::assertFalse( $b->factoryExecuted );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testSimplePrivateService()
-    {
-        $sc = new ServiceContainer(
-            array(
-                'BService' => array(
-                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
-                )
-            )
-        );
-        $sc->get('BService');
     }
 
     /**
@@ -64,7 +47,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                  ),
                 'CService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\C',
-                    'public' => true,
                     'arguments' => array( '@BService' ),
                 )
             )
@@ -84,7 +66,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'AService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
-                    'public' => true,
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'BService' => array(
@@ -113,7 +94,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'AService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
-                    'public' => true,
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'CService' => array(
@@ -142,7 +122,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'DService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\D',
-                    'public' => true,
                     'arguments' => array( '$_SERVER', '$B' ),
                 ),
             ),
@@ -162,7 +141,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'EService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\E',
-                    'public' => true,
                     'arguments' => array(
                         array(
                             'bool' => true,
@@ -188,7 +166,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'F' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\F',
-                    'public' => true,
                     'arguments' => array(
                         array(
                             'b' => '@B',
@@ -217,7 +194,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'G' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\G',
-                    'public' => true,
                     'arguments' => array(
                             'lazyHServiceCall' => '%H-parent::timesTwo',
                             'hIntValue' => 42,
@@ -230,7 +206,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                     'arguments' => array(),
                 ),
                 '-parent' => array(
-                    'public' => true,
                     'arguments' => array( 'test' => 33 ),
                 ),
             )
@@ -250,7 +225,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'ExtendedTestCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestCheck',
-                    'public' => true,
                     'arguments' => array(
                             'extendedTests' => '@-ExtendedTest',
                     ),
@@ -286,7 +260,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'ExtendedTestLacyCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestLacyCheck',
-                    'public' => true,
                     'arguments' => array(
                             'extendedTests' => '%-ExtendedTest',
                     ),
@@ -301,7 +274,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
                 ),
                 '-ExtendedTest' => array(
-                    'public' => true,
                     'arguments' => array( 'h' => '$H'),
                 ),
             ),
@@ -323,7 +295,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'ExtendedTestLacyCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestLacyCheck',
-                    'public' => true,
                     'arguments' => array(
                             'extendedTests' => '%-ExtendedTest::setTest',
                             'test' => 'newValue',
@@ -339,7 +310,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
                 ),
                 '-ExtendedTest' => array(
-                    'public' => true,
                     'arguments' => array( 'h' => '$H' ),
                 ),
             ),
