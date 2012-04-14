@@ -49,8 +49,9 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  *     # @see \eZ\Publish\Core\settings\service.ini For more options and examples.
  *
  * "arguments" values in service.ini can start with either @ in case of other services being dependency, $ if a
- * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer )
+ * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES )
  * or plain scalar if that is to be given directly as argument value.
+ * If the argument value starts with %, then it is a lazy loaded service provided as a callback (closure).
  */
 class ServiceContainer implements Container
 {
@@ -105,8 +106,8 @@ class ServiceContainer implements Container
     /**
      * Get a variable dependency
      *
-     * @param $variable
-     * @return object
+     * @param string $variable
+     * @return mixed
      * @throws InvalidArgumentException
      */
     public function getVariable( $variable )
