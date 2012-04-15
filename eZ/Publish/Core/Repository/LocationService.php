@@ -12,8 +12,9 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
+    eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
     eZ\Publish\Core\Repository\Values\Content\Location,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Location as APILocation,
 
     eZ\Publish\SPI\Persistence\Content\Location as SPILocation,
@@ -185,7 +186,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null if no location exists
      */
-    public function loadMainLocation( ContentInfo $contentInfo )
+    public function loadMainLocation( APIContentInfo $contentInfo )
     {
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
@@ -227,7 +228,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
-    public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null )
+    public function loadLocations( APIContentInfo $contentInfo, APILocation $rootLocation = null )
     {
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
@@ -360,7 +361,7 @@ class LocationService implements LocationServiceInterface
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
-    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
+    public function createLocation( APIContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
@@ -651,7 +652,18 @@ class LocationService implements LocationServiceInterface
      */
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
+        if ( $spiLocation->id === 1 )// Workaround for missing ContentInfo on root location
+            $contentInfo = new ContentInfo(
+                array(
+                    'id' => 0,
+                    'name' => 'Top Level Nodes',
+                    'sectionId' => 1,
+                    'mainLocationId' => 1,
+                    'contentTypeId' => 1
+                )
+            );
+        else
+            $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
 
         $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, null, APILocation::SORT_ORDER_ASC, 0, 0 );
 
