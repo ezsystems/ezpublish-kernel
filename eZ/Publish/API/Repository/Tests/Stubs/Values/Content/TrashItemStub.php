@@ -39,7 +39,7 @@ class TrashItemStub extends TrashItem
         switch ( $property )
         {
             case 'contentId':
-                return $this->getContentInfo()->contentId;
+                return $this->getContentInfo()->id;
         }
         return parent::__get( $property );
     }

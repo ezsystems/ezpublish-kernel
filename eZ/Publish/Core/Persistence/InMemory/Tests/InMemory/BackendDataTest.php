@@ -260,7 +260,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 ),
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
-                    'match' => array( 'contentId' => 'id' ),
+                    'match' => array( 'id' => 'id' ),
                     'single' => true
                 )
             )
@@ -270,7 +270,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $key => $content )
         {
             $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
-            $this->assertEquals( 1, $content->contentInfo->contentId );
+            $this->assertEquals( 1, $content->contentInfo->id );
             $this->assertEquals( 1, $content->contentInfo->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
@@ -303,7 +303,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 ),
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
-                    'match' => array( 'contentId' => 'id' ),
+                    'match' => array( 'id' => 'id' ),
                     'single' => true
                 )
             )
@@ -313,7 +313,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $content )
         {
             $this->assertTrue( $content instanceof Content );
-            $this->assertEquals( 1, $content->contentInfo->contentId );
+            $this->assertEquals( 1, $content->contentInfo->id );
             $this->assertEquals( 1, $content->contentInfo->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
@@ -357,7 +357,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 ),
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
-                    'match' => array( 'contentId' => 'id' ),
+                    'match' => array( 'id' => 'id' ),
                     'single' => true
                 )
             )
@@ -366,7 +366,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $content )
         {
             $this->assertTrue( $content instanceof Content );
-            $this->assertEquals( 1, $content->contentInfo->contentId );
+            $this->assertEquals( 1, $content->contentInfo->id );
             $this->assertEquals( 1, $content->contentInfo->sectionId );
             $this->assertEquals( 2, count( $content->locations ) );
             foreach ( $content->locations as $location )
@@ -521,7 +521,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                     ),
                     'contentInfo' => array(
                         'type' => 'Content\\ContentInfo',
-                        'match' => array( 'contentId' => 'id' )
+                        'match' => array( 'id' => 'id' )
                     )
                 )
             )
@@ -640,10 +640,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testUpdateNewAttribute()
     {
         $this->assertTrue(
-            $this->backend->update( 'Content\\ContentInfo', 1, array( "ownerId" => 5 ), true, 'contentId' )
+            $this->backend->update( 'Content\\ContentInfo', 1, array( "ownerId" => 5 ), true )
         );
-        $content = $this->backend->load( 'Content\\ContentInfo', 1, 'contentId' );
-        $this->assertEquals( 1, $content->contentId );
+        $content = $this->backend->load( 'Content\\ContentInfo', 1 );
+        $this->assertEquals( 1, $content->id );
         $this->assertEquals( 1, $content->sectionId );
         $this->assertEquals( 5, $content->ownerId );
     }

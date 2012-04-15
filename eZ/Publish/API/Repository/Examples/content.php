@@ -56,7 +56,7 @@ $repository->beginTransaction();
 try {
     $content = $contentService->createContent( $contentCreateStruct, array( $locationService->newLocationCreateStruct( $parentLocationId ) ) );
     // print the new created info data
-    $contentId = $content->contentId;
+    $contentId = $content->id;
     echo $contentId;
 
     // 4.x. the location array is empty because the location are created on publish for the first time
@@ -104,7 +104,7 @@ catch(RuntimeException $e) {
 
 // translating the content object (4.x)
 // load the content info object (note this info object differes from the one in the draft after publishing)
-$contentInfo = $contentService->loadContentInfo( $content->contentId );
+$contentInfo = $contentService->loadContentInfo( $content->id );
 
 // create a draft from the before published content
 $content = $contentService->createDraftFromContent( $contentInfo );

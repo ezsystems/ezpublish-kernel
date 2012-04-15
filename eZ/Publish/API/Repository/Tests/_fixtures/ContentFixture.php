@@ -3,7 +3,7 @@ return array(
     array(
         4  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  4,
+                "id"  =>  4,
                 "name"  =>  "Users",
                 "contentTypeId"  =>  3,
                 "sectionId"  =>  2,
@@ -21,7 +21,7 @@ return array(
         ),
         10  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  10,
+                "id"  =>  10,
                 "name"  =>  "Anonymous User",
                 "contentTypeId"  =>  4,
                 "sectionId"  =>  2,
@@ -39,7 +39,7 @@ return array(
         ),
         11  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  11,
+                "id"  =>  11,
                 "name"  =>  "Members",
                 "contentTypeId"  =>  3,
                 "sectionId"  =>  2,
@@ -57,7 +57,7 @@ return array(
         ),
         12  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  12,
+                "id"  =>  12,
                 "name"  =>  "Administrator users",
                 "contentTypeId"  =>  3,
                 "sectionId"  =>  2,
@@ -75,7 +75,7 @@ return array(
         ),
         13  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  13,
+                "id"  =>  13,
                 "name"  =>  "Editors",
                 "contentTypeId"  =>  3,
                 "sectionId"  =>  2,
@@ -93,7 +93,7 @@ return array(
         ),
         14  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  14,
+                "id"  =>  14,
                 "name"  =>  "Administrator User",
                 "contentTypeId"  =>  4,
                 "sectionId"  =>  2,
@@ -111,7 +111,7 @@ return array(
         ),
         41  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  41,
+                "id"  =>  41,
                 "name"  =>  "Media",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  3,
@@ -129,7 +129,7 @@ return array(
         ),
         42  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  42,
+                "id"  =>  42,
                 "name"  =>  "Anonymous Users",
                 "contentTypeId"  =>  3,
                 "sectionId"  =>  2,
@@ -147,7 +147,7 @@ return array(
         ),
         45  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  45,
+                "id"  =>  45,
                 "name"  =>  "Setup",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  4,
@@ -165,7 +165,7 @@ return array(
         ),
         49  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  49,
+                "id"  =>  49,
                 "name"  =>  "Images",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  3,
@@ -183,7 +183,7 @@ return array(
         ),
         50  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  50,
+                "id"  =>  50,
                 "name"  =>  "Files",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  3,
@@ -201,7 +201,7 @@ return array(
         ),
         51  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  51,
+                "id"  =>  51,
                 "name"  =>  "Multimedia",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  3,
@@ -219,7 +219,7 @@ return array(
         ),
         52  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  52,
+                "id"  =>  52,
                 "name"  =>  "Common INI settings",
                 "contentTypeId"  =>  14,
                 "sectionId"  =>  4,
@@ -237,7 +237,7 @@ return array(
         ),
         54  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  54,
+                "id"  =>  54,
                 "name"  =>  "Website Interface",
                 "contentTypeId"  =>  15,
                 "sectionId"  =>  5,
@@ -255,7 +255,7 @@ return array(
         ),
         56  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  56,
+                "id"  =>  56,
                 "name"  =>  "Design",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  5,
@@ -273,7 +273,7 @@ return array(
         ),
         57  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  57,
+                "id"  =>  57,
                 "name"  =>  "Banners",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  3,
@@ -291,7 +291,7 @@ return array(
         ),
         58  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  58,
+                "id"  =>  58,
                 "name"  =>  "Woman (Communities)",
                 "contentTypeId"  =>  42,
                 "sectionId"  =>  3,
@@ -309,7 +309,7 @@ return array(
         ),
         59  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  59,
+                "id"  =>  59,
                 "name"  =>  "Woman (Frontpage)",
                 "contentTypeId"  =>  42,
                 "sectionId"  =>  3,
@@ -327,7 +327,7 @@ return array(
         ),
         60  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  60,
+                "id"  =>  60,
                 "name"  =>  "Woman (Products)",
                 "contentTypeId"  =>  42,
                 "sectionId"  =>  3,
@@ -345,7 +345,7 @@ return array(
         ),
         61  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  61,
+                "id"  =>  61,
                 "name"  =>  "Woman (Partners)",
                 "contentTypeId"  =>  42,
                 "sectionId"  =>  3,
@@ -363,7 +363,7 @@ return array(
         ),
         62  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  62,
+                "id"  =>  62,
                 "name"  =>  "Pencils (Support)",
                 "contentTypeId"  =>  42,
                 "sectionId"  =>  3,
@@ -381,7 +381,7 @@ return array(
         ),
         63  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  63,
+                "id"  =>  63,
                 "name"  =>  "Woman (Training)",
                 "contentTypeId"  =>  42,
                 "sectionId"  =>  3,
@@ -399,7 +399,7 @@ return array(
         ),
         64  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  64,
+                "id"  =>  64,
                 "name"  =>  "Woman (Solutions)",
                 "contentTypeId"  =>  42,
                 "sectionId"  =>  3,
@@ -417,7 +417,7 @@ return array(
         ),
         65  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  65,
+                "id"  =>  65,
                 "name"  =>  "Home",
                 "contentTypeId"  =>  23,
                 "sectionId"  =>  1,
@@ -435,7 +435,7 @@ return array(
         ),
         66  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  66,
+                "id"  =>  66,
                 "name"  =>  "rest_api",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  3,
@@ -453,7 +453,7 @@ return array(
         ),
         67  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  67,
+                "id"  =>  67,
                 "name"  =>  "Products",
                 "contentTypeId"  =>  23,
                 "sectionId"  =>  1,
@@ -471,7 +471,7 @@ return array(
         ),
         68  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  68,
+                "id"  =>  68,
                 "name"  =>  "Software",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -489,7 +489,7 @@ return array(
         ),
         69  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  69,
+                "id"  =>  69,
                 "name"  =>  "OS Type I",
                 "contentTypeId"  =>  21,
                 "sectionId"  =>  1,
@@ -507,7 +507,7 @@ return array(
         ),
         70  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  70,
+                "id"  =>  70,
                 "name"  =>  "Boxes",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -525,7 +525,7 @@ return array(
         ),
         71  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  71,
+                "id"  =>  71,
                 "name"  =>  "CD/DVD Box I",
                 "contentTypeId"  =>  21,
                 "sectionId"  =>  1,
@@ -543,7 +543,7 @@ return array(
         ),
         72  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  72,
+                "id"  =>  72,
                 "name"  =>  "CD/DVD Box II",
                 "contentTypeId"  =>  21,
                 "sectionId"  =>  1,
@@ -561,7 +561,7 @@ return array(
         ),
         73  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  73,
+                "id"  =>  73,
                 "name"  =>  "CD/DVD Box III",
                 "contentTypeId"  =>  21,
                 "sectionId"  =>  1,
@@ -579,7 +579,7 @@ return array(
         ),
         74  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  74,
+                "id"  =>  74,
                 "name"  =>  "Products sheets",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -597,7 +597,7 @@ return array(
         ),
         75  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  75,
+                "id"  =>  75,
                 "name"  =>  "Solutions",
                 "contentTypeId"  =>  23,
                 "sectionId"  =>  1,
@@ -615,7 +615,7 @@ return array(
         ),
         76  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  76,
+                "id"  =>  76,
                 "name"  =>  "Web publishing",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -633,7 +633,7 @@ return array(
         ),
         77  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  77,
+                "id"  =>  77,
                 "name"  =>  "Fusce sagittis sagittis",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -651,7 +651,7 @@ return array(
         ),
         78  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  78,
+                "id"  =>  78,
                 "name"  =>  "Etiam posuere sodales arcu",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -669,7 +669,7 @@ return array(
         ),
         79  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  79,
+                "id"  =>  79,
                 "name"  =>  "In hac habitasse platea",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -687,7 +687,7 @@ return array(
         ),
         80  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  80,
+                "id"  =>  80,
                 "name"  =>  "Content management",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -705,7 +705,7 @@ return array(
         ),
         81  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  81,
+                "id"  =>  81,
                 "name"  =>  "Fusce sagittis sagittis urna",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -723,7 +723,7 @@ return array(
         ),
         82  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  82,
+                "id"  =>  82,
                 "name"  =>  "Class aptent taciti sociosqu",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -741,7 +741,7 @@ return array(
         ),
         83  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  83,
+                "id"  =>  83,
                 "name"  =>  "Aenean malesuada ligula",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -759,7 +759,7 @@ return array(
         ),
         84  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  84,
+                "id"  =>  84,
                 "name"  =>  "Training",
                 "contentTypeId"  =>  23,
                 "sectionId"  =>  1,
@@ -777,7 +777,7 @@ return array(
         ),
         85  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  85,
+                "id"  =>  85,
                 "name"  =>  "Certification",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -795,7 +795,7 @@ return array(
         ),
         86  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  86,
+                "id"  =>  86,
                 "name"  =>  "Professional workshops",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -813,7 +813,7 @@ return array(
         ),
         87  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  87,
+                "id"  =>  87,
                 "name"  =>  "Etiam sodales mauris",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -831,7 +831,7 @@ return array(
         ),
         88  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  88,
+                "id"  =>  88,
                 "name"  =>  "Class aptent taciti",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -849,7 +849,7 @@ return array(
         ),
         89  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  89,
+                "id"  =>  89,
                 "name"  =>  "Duis auctor vehicula erat",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -867,7 +867,7 @@ return array(
         ),
         90  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  90,
+                "id"  =>  90,
                 "name"  =>  "Events and seminars",
                 "contentTypeId"  =>  41,
                 "sectionId"  =>  1,
@@ -885,7 +885,7 @@ return array(
         ),
         91  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  91,
+                "id"  =>  91,
                 "name"  =>  "Self-paced courses",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -903,7 +903,7 @@ return array(
         ),
         92  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  92,
+                "id"  =>  92,
                 "name"  =>  "Instructor-led courses",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -921,7 +921,7 @@ return array(
         ),
         93  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  93,
+                "id"  =>  93,
                 "name"  =>  "Additional learning resources",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -939,7 +939,7 @@ return array(
         ),
         94  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  94,
+                "id"  =>  94,
                 "name"  =>  "Support",
                 "contentTypeId"  =>  23,
                 "sectionId"  =>  1,
@@ -957,7 +957,7 @@ return array(
         ),
         95  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  95,
+                "id"  =>  95,
                 "name"  =>  "Knowledgebase",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -975,7 +975,7 @@ return array(
         ),
         96  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  96,
+                "id"  =>  96,
                 "name"  =>  "Sed suscipit",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -993,7 +993,7 @@ return array(
         ),
         97  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  97,
+                "id"  =>  97,
                 "name"  =>  "Ut interdum",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -1011,7 +1011,7 @@ return array(
         ),
         98  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  98,
+                "id"  =>  98,
                 "name"  =>  "Documentation",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -1029,7 +1029,7 @@ return array(
         ),
         99  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  99,
+                "id"  =>  99,
                 "name"  =>  "Mauris pretium",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -1047,7 +1047,7 @@ return array(
         ),
         100  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  100,
+                "id"  =>  100,
                 "name"  =>  "Aliquam posuere",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -1065,7 +1065,7 @@ return array(
         ),
         101  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  101,
+                "id"  =>  101,
                 "name"  =>  "Books",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -1083,7 +1083,7 @@ return array(
         ),
         102  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  102,
+                "id"  =>  102,
                 "name"  =>  "Aliquam pulvinar suscipit tellus",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1101,7 +1101,7 @@ return array(
         ),
         103  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  103,
+                "id"  =>  103,
                 "name"  =>  "Customer Service",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -1119,7 +1119,7 @@ return array(
         ),
         104  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  104,
+                "id"  =>  104,
                 "name"  =>  "Support Programs",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -1137,7 +1137,7 @@ return array(
         ),
         105  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  105,
+                "id"  =>  105,
                 "name"  =>  "Getting started",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -1155,7 +1155,7 @@ return array(
         ),
         106  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  106,
+                "id"  =>  106,
                 "name"  =>  "Tutorials for",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1173,7 +1173,7 @@ return array(
         ),
         107  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  107,
+                "id"  =>  107,
                 "name"  =>  "Get involved",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1191,7 +1191,7 @@ return array(
         ),
         108  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  108,
+                "id"  =>  108,
                 "name"  =>  "How to use eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1209,7 +1209,7 @@ return array(
         ),
         109  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  109,
+                "id"  =>  109,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1227,7 +1227,7 @@ return array(
         ),
         110  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  110,
+                "id"  =>  110,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1245,7 +1245,7 @@ return array(
         ),
         111  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  111,
+                "id"  =>  111,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1263,7 +1263,7 @@ return array(
         ),
         112  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  112,
+                "id"  =>  112,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1281,7 +1281,7 @@ return array(
         ),
         113  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  113,
+                "id"  =>  113,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1299,7 +1299,7 @@ return array(
         ),
         114  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  114,
+                "id"  =>  114,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1317,7 +1317,7 @@ return array(
         ),
         115  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  115,
+                "id"  =>  115,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1335,7 +1335,7 @@ return array(
         ),
         116  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  116,
+                "id"  =>  116,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1353,7 +1353,7 @@ return array(
         ),
         117  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  117,
+                "id"  =>  117,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1371,7 +1371,7 @@ return array(
         ),
         118  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  118,
+                "id"  =>  118,
                 "name"  =>  "How to manage eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1389,7 +1389,7 @@ return array(
         ),
         119  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  119,
+                "id"  =>  119,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1407,7 +1407,7 @@ return array(
         ),
         120  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  120,
+                "id"  =>  120,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1425,7 +1425,7 @@ return array(
         ),
         121  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  121,
+                "id"  =>  121,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1443,7 +1443,7 @@ return array(
         ),
         122  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  122,
+                "id"  =>  122,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1461,7 +1461,7 @@ return array(
         ),
         123  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  123,
+                "id"  =>  123,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1479,7 +1479,7 @@ return array(
         ),
         124  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  124,
+                "id"  =>  124,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1497,7 +1497,7 @@ return array(
         ),
         125  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  125,
+                "id"  =>  125,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1515,7 +1515,7 @@ return array(
         ),
         126  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  126,
+                "id"  =>  126,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1533,7 +1533,7 @@ return array(
         ),
         127  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  127,
+                "id"  =>  127,
                 "name"  =>  "How to develop with eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1551,7 +1551,7 @@ return array(
         ),
         128  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  128,
+                "id"  =>  128,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1569,7 +1569,7 @@ return array(
         ),
         129  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  129,
+                "id"  =>  129,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1587,7 +1587,7 @@ return array(
         ),
         130  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  130,
+                "id"  =>  130,
                 "name"  =>  "Adding Siteaccesses in eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1605,7 +1605,7 @@ return array(
         ),
         131  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  131,
+                "id"  =>  131,
                 "name"  =>  "New features",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -1623,7 +1623,7 @@ return array(
         ),
         132  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  132,
+                "id"  =>  132,
                 "name"  =>  "Improved user registration workflow",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1641,7 +1641,7 @@ return array(
         ),
         133  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  133,
+                "id"  =>  133,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1659,7 +1659,7 @@ return array(
         ),
         134  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  134,
+                "id"  =>  134,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1677,7 +1677,7 @@ return array(
         ),
         135  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  135,
+                "id"  =>  135,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1695,7 +1695,7 @@ return array(
         ),
         136  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  136,
+                "id"  =>  136,
                 "name"  =>  "Improved block editing",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1713,7 +1713,7 @@ return array(
         ),
         137  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  137,
+                "id"  =>  137,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1731,7 +1731,7 @@ return array(
         ),
         138  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  138,
+                "id"  =>  138,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1749,7 +1749,7 @@ return array(
         ),
         139  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  139,
+                "id"  =>  139,
                 "name"  =>  "Improved front-end editing",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1767,7 +1767,7 @@ return array(
         ),
         140  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  140,
+                "id"  =>  140,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1785,7 +1785,7 @@ return array(
         ),
         141  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  141,
+                "id"  =>  141,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1803,7 +1803,7 @@ return array(
         ),
         142  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  142,
+                "id"  =>  142,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1821,7 +1821,7 @@ return array(
         ),
         143  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  143,
+                "id"  =>  143,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1839,7 +1839,7 @@ return array(
         ),
         144  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  144,
+                "id"  =>  144,
                 "name"  =>  "FastCGI",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1857,7 +1857,7 @@ return array(
         ),
         145  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  145,
+                "id"  =>  145,
                 "name"  =>  "Support for Red Hat Enterprise",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1875,7 +1875,7 @@ return array(
         ),
         146  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  146,
+                "id"  =>  146,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1893,7 +1893,7 @@ return array(
         ),
         147  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  147,
+                "id"  =>  147,
                 "name"  =>  "Canonical links",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1911,7 +1911,7 @@ return array(
         ),
         148  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  148,
+                "id"  =>  148,
                 "name"  =>  "Asynchronous publishing",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1929,7 +1929,7 @@ return array(
         ),
         149  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  149,
+                "id"  =>  149,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -1947,7 +1947,7 @@ return array(
         ),
         150  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  150,
+                "id"  =>  150,
                 "name"  =>  "REST API interface",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1965,7 +1965,7 @@ return array(
         ),
         151  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  151,
+                "id"  =>  151,
                 "name"  =>  "eZ Publish Enterprise",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -1983,7 +1983,7 @@ return array(
         ),
         152  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  152,
+                "id"  =>  152,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2001,7 +2001,7 @@ return array(
         ),
         153  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  153,
+                "id"  =>  153,
                 "name"  =>  "graphics1",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2019,7 +2019,7 @@ return array(
         ),
         154  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  154,
+                "id"  =>  154,
                 "name"  =>  "Partners",
                 "contentTypeId"  =>  23,
                 "sectionId"  =>  6,
@@ -2037,7 +2037,7 @@ return array(
         ),
         155  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  155,
+                "id"  =>  155,
                 "name"  =>  "Partner News",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  6,
@@ -2055,7 +2055,7 @@ return array(
         ),
         156  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  156,
+                "id"  =>  156,
                 "name"  =>  "Pellentesque quam mauris",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  6,
@@ -2073,7 +2073,7 @@ return array(
         ),
         157  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  157,
+                "id"  =>  157,
                 "name"  =>  "Penatibus et magnis dis",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  6,
@@ -2091,7 +2091,7 @@ return array(
         ),
         158  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  158,
+                "id"  =>  158,
                 "name"  =>  "News",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  6,
@@ -2109,7 +2109,7 @@ return array(
         ),
         159  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  159,
+                "id"  =>  159,
                 "name"  =>  "Curabitur hendrerit dignissim",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  6,
@@ -2127,7 +2127,7 @@ return array(
         ),
         160  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  160,
+                "id"  =>  160,
                 "name"  =>  "Proin condimentum risus",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  6,
@@ -2145,7 +2145,7 @@ return array(
         ),
         161  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  161,
+                "id"  =>  161,
                 "name"  =>  "Morbi tristique senectus",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  6,
@@ -2163,7 +2163,7 @@ return array(
         ),
         162  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  162,
+                "id"  =>  162,
                 "name"  =>  "Partner Products",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  6,
@@ -2181,7 +2181,7 @@ return array(
         ),
         163  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  163,
+                "id"  =>  163,
                 "name"  =>  "Partners",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  6,
@@ -2199,7 +2199,7 @@ return array(
         ),
         164  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  164,
+                "id"  =>  164,
                 "name"  =>  "Neque orci malesuada felis",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  6,
@@ -2217,7 +2217,7 @@ return array(
         ),
         165  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  165,
+                "id"  =>  165,
                 "name"  =>  "Community",
                 "contentTypeId"  =>  23,
                 "sectionId"  =>  1,
@@ -2235,7 +2235,7 @@ return array(
         ),
         166  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  166,
+                "id"  =>  166,
                 "name"  =>  "Forum",
                 "contentTypeId"  =>  37,
                 "sectionId"  =>  1,
@@ -2253,7 +2253,7 @@ return array(
         ),
         167  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  167,
+                "id"  =>  167,
                 "name"  =>  "Nulla vitae tellus sit amet",
                 "contentTypeId"  =>  38,
                 "sectionId"  =>  1,
@@ -2271,7 +2271,7 @@ return array(
         ),
         168  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  168,
+                "id"  =>  168,
                 "name"  =>  "Ut mollis sodales nibh",
                 "contentTypeId"  =>  38,
                 "sectionId"  =>  1,
@@ -2289,7 +2289,7 @@ return array(
         ),
         169  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  169,
+                "id"  =>  169,
                 "name"  =>  "Nam risus leo",
                 "contentTypeId"  =>  38,
                 "sectionId"  =>  1,
@@ -2307,7 +2307,7 @@ return array(
         ),
         170  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  170,
+                "id"  =>  170,
                 "name"  =>  "Wiki",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -2325,7 +2325,7 @@ return array(
         ),
         171  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  171,
+                "id"  =>  171,
                 "name"  =>  "Sed suscipit",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -2343,7 +2343,7 @@ return array(
         ),
         172  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  172,
+                "id"  =>  172,
                 "name"  =>  "Ut interdum",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -2361,7 +2361,7 @@ return array(
         ),
         173  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  173,
+                "id"  =>  173,
                 "name"  =>  "Fusce pulvinar",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -2379,7 +2379,7 @@ return array(
         ),
         174  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  174,
+                "id"  =>  174,
                 "name"  =>  "Duis id tortor",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -2397,7 +2397,7 @@ return array(
         ),
         175  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  175,
+                "id"  =>  175,
                 "name"  =>  "Curabitur lacinia",
                 "contentTypeId"  =>  24,
                 "sectionId"  =>  1,
@@ -2415,7 +2415,7 @@ return array(
         ),
         176  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  176,
+                "id"  =>  176,
                 "name"  =>  "Pictures",
                 "contentTypeId"  =>  35,
                 "sectionId"  =>  1,
@@ -2433,7 +2433,7 @@ return array(
         ),
         177  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  177,
+                "id"  =>  177,
                 "name"  =>  "Ivo on eZ Tags",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2451,7 +2451,7 @@ return array(
         ),
         178  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  178,
+                "id"  =>  178,
                 "name"  =>  "Are you ready for the Community day?",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2469,7 +2469,7 @@ return array(
         ),
         179  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  179,
+                "id"  =>  179,
                 "name"  =>  "Let's work together!",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2487,7 +2487,7 @@ return array(
         ),
         180  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  180,
+                "id"  =>  180,
                 "name"  =>  "The Mediterranean seen from Nice!",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2505,7 +2505,7 @@ return array(
         ),
         181  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  181,
+                "id"  =>  181,
                 "name"  =>  "Hotel lobby at Isola2000",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2523,7 +2523,7 @@ return array(
         ),
         182  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  182,
+                "id"  =>  182,
                 "name"  =>  "Alexander on the past, Gaby on today and tomorrow",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2541,7 +2541,7 @@ return array(
         ),
         183  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  183,
+                "id"  =>  183,
                 "name"  =>  "Isola2000 in white - beautiful skiing!",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2559,7 +2559,7 @@ return array(
         ),
         184  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  184,
+                "id"  =>  184,
                 "name"  =>  "CEO future pitch - Adaptable, open, reliable!",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2577,7 +2577,7 @@ return array(
         ),
         185  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  185,
+                "id"  =>  185,
                 "name"  =>  "Blog",
                 "contentTypeId"  =>  19,
                 "sectionId"  =>  1,
@@ -2595,7 +2595,7 @@ return array(
         ),
         186  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  186,
+                "id"  =>  186,
                 "name"  =>  "Visit Paris",
                 "contentTypeId"  =>  20,
                 "sectionId"  =>  1,
@@ -2613,7 +2613,7 @@ return array(
         ),
         187  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  187,
+                "id"  =>  187,
                 "name"  =>  "Paris in France",
                 "contentTypeId"  =>  20,
                 "sectionId"  =>  1,
@@ -2631,7 +2631,7 @@ return array(
         ),
         188  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  188,
+                "id"  =>  188,
                 "name"  =>  "Company",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -2649,7 +2649,7 @@ return array(
         ),
         189  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  189,
+                "id"  =>  189,
                 "name"  =>  "About company",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -2667,7 +2667,7 @@ return array(
         ),
         190  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  190,
+                "id"  =>  190,
                 "name"  =>  "New features",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -2685,7 +2685,7 @@ return array(
         ),
         191  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  191,
+                "id"  =>  191,
                 "name"  =>  "Separate content & design in eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -2703,7 +2703,7 @@ return array(
         ),
         192  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  192,
+                "id"  =>  192,
                 "name"  =>  "separation_of_content_and_design",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2721,7 +2721,7 @@ return array(
         ),
         193  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  193,
+                "id"  =>  193,
                 "name"  =>  "How to use eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -2739,7 +2739,7 @@ return array(
         ),
         194  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  194,
+                "id"  =>  194,
                 "name"  =>  "openoffice_import_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2757,7 +2757,7 @@ return array(
         ),
         195  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  195,
+                "id"  =>  195,
                 "name"  =>  "translation_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2775,7 +2775,7 @@ return array(
         ),
         196  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  196,
+                "id"  =>  196,
                 "name"  =>  "multiupload_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2793,7 +2793,7 @@ return array(
         ),
         197  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  197,
+                "id"  =>  197,
                 "name"  =>  "gallery_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2811,7 +2811,7 @@ return array(
         ),
         198  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  198,
+                "id"  =>  198,
                 "name"  =>  "search_result_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2829,7 +2829,7 @@ return array(
         ),
         199  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  199,
+                "id"  =>  199,
                 "name"  =>  "ez_tool_bar_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2847,7 +2847,7 @@ return array(
         ),
         200  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  200,
+                "id"  =>  200,
                 "name"  =>  "quicktime_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  3,
@@ -2865,7 +2865,7 @@ return array(
         ),
         201  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  201,
+                "id"  =>  201,
                 "name"  =>  "web_2_0_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  3,
@@ -2883,7 +2883,7 @@ return array(
         ),
         202  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  202,
+                "id"  =>  202,
                 "name"  =>  "How to manage eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -2901,7 +2901,7 @@ return array(
         ),
         203  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  203,
+                "id"  =>  203,
                 "name"  =>  "usermanagement_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2919,7 +2919,7 @@ return array(
         ),
         204  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  204,
+                "id"  =>  204,
                 "name"  =>  "workflow_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2937,7 +2937,7 @@ return array(
         ),
         205  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  205,
+                "id"  =>  205,
                 "name"  =>  "versioning_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2955,7 +2955,7 @@ return array(
         ),
         206  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  206,
+                "id"  =>  206,
                 "name"  =>  "datatypes_attributes_content_class_and_objects_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2973,7 +2973,7 @@ return array(
         ),
         207  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  207,
+                "id"  =>  207,
                 "name"  =>  "multiple_location_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -2991,7 +2991,7 @@ return array(
         ),
         208  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  208,
+                "id"  =>  208,
                 "name"  =>  "multisite_deployment_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -3009,7 +3009,7 @@ return array(
         ),
         209  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  209,
+                "id"  =>  209,
                 "name"  =>  "seo_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -3027,7 +3027,7 @@ return array(
         ),
         210  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  210,
+                "id"  =>  210,
                 "name"  =>  "admin_site_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -3045,7 +3045,7 @@ return array(
         ),
         211  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  211,
+                "id"  =>  211,
                 "name"  =>  "How to develop with eZ Publish",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -3063,7 +3063,7 @@ return array(
         ),
         212  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  212,
+                "id"  =>  212,
                 "name"  =>  "datatypes_attributes_content_class_and_objects_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -3081,7 +3081,7 @@ return array(
         ),
         213  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  213,
+                "id"  =>  213,
                 "name"  =>  "site_style_large",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -3099,7 +3099,7 @@ return array(
         ),
         214  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  214,
+                "id"  =>  214,
                 "name"  =>  "REST API interface",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -3117,7 +3117,7 @@ return array(
         ),
         215  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  215,
+                "id"  =>  215,
                 "name"  =>  "Asynchronous Publishing",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -3135,7 +3135,7 @@ return array(
         ),
         216  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  216,
+                "id"  =>  216,
                 "name"  =>  "Canonical links",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -3153,7 +3153,7 @@ return array(
         ),
         217  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  217,
+                "id"  =>  217,
                 "name"  =>  "Support for Red Hat Enterprise",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -3171,7 +3171,7 @@ return array(
         ),
         218  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  218,
+                "id"  =>  218,
                 "name"  =>  "FastCGI",
                 "contentTypeId"  =>  16,
                 "sectionId"  =>  1,
@@ -3189,7 +3189,7 @@ return array(
         ),
         219  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  219,
+                "id"  =>  219,
                 "name"  =>  "Events",
                 "contentTypeId"  =>  26,
                 "sectionId"  =>  1,
@@ -3207,7 +3207,7 @@ return array(
         ),
         220  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  220,
+                "id"  =>  220,
                 "name"  =>  "Career",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -3225,7 +3225,7 @@ return array(
         ),
         221  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  221,
+                "id"  =>  221,
                 "name"  =>  "Investors Relation",
                 "contentTypeId"  =>  1,
                 "sectionId"  =>  1,
@@ -3243,7 +3243,7 @@ return array(
         ),
         222  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  222,
+                "id"  =>  222,
                 "name"  =>  "Contact",
                 "contentTypeId"  =>  22,
                 "sectionId"  =>  1,
@@ -3261,7 +3261,7 @@ return array(
         ),
         223  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  223,
+                "id"  =>  223,
                 "name"  =>  "Morbi neque",
                 "contentTypeId"  =>  25,
                 "sectionId"  =>  1,
@@ -3279,7 +3279,7 @@ return array(
         ),
         224  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  224,
+                "id"  =>  224,
                 "name"  =>  "Company banner",
                 "contentTypeId"  =>  30,
                 "sectionId"  =>  1,
@@ -3297,7 +3297,7 @@ return array(
         ),
         225  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub(
             array(
-                "contentId"  =>  225,
+                "id"  =>  225,
                 "name"  =>  "Partners",
                 "contentTypeId"  =>  3,
                 "sectionId"  =>  1,
@@ -6111,7 +6111,7 @@ return array(
         array(
         4  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  4,
+                "id"  =>  4,
                 "contentTypeId"  =>  3,
                 "fields"  =>  array(
         7  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6139,7 +6139,7 @@ return array(
         ),
         10  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  10,
+                "id"  =>  10,
                 "contentTypeId"  =>  4,
                 "fields"  =>  array(
         19  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6191,7 +6191,7 @@ return array(
         ),
         11  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  11,
+                "id"  =>  11,
                 "contentTypeId"  =>  3,
                 "fields"  =>  array(
         22  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6219,7 +6219,7 @@ return array(
         ),
         11  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  11,
+                "id"  =>  11,
                 "contentTypeId"  =>  3,
                 "fields"  =>  array(
     ),
@@ -6231,7 +6231,7 @@ return array(
         ),
         12  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  12,
+                "id"  =>  12,
                 "contentTypeId"  =>  3,
                 "fields"  =>  array(
         24  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6259,7 +6259,7 @@ return array(
         ),
         13  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  13,
+                "id"  =>  13,
                 "contentTypeId"  =>  3,
                 "fields"  =>  array(
         26  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6287,7 +6287,7 @@ return array(
         ),
         14  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  14,
+                "id"  =>  14,
                 "contentTypeId"  =>  4,
                 "fields"  =>  array(
         28  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6341,7 +6341,7 @@ return array(
         ),
         14  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  14,
+                "id"  =>  14,
                 "contentTypeId"  =>  4,
                 "fields"  =>  array(
     ),
@@ -6353,7 +6353,7 @@ return array(
         ),
         41  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  41,
+                "id"  =>  41,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         98  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6424,7 +6424,7 @@ return array(
         ),
         42  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  42,
+                "id"  =>  42,
                 "contentTypeId"  =>  3,
                 "fields"  =>  array(
         100  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6452,7 +6452,7 @@ return array(
         ),
         45  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  45,
+                "id"  =>  45,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         123  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6526,7 +6526,7 @@ return array(
         ),
         49  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  49,
+                "id"  =>  49,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         142  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6600,7 +6600,7 @@ return array(
         ),
         50  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  50,
+                "id"  =>  50,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         147  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6674,7 +6674,7 @@ return array(
         ),
         51  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  51,
+                "id"  =>  51,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         152  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6748,7 +6748,7 @@ return array(
         ),
         52  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  52,
+                "id"  =>  52,
                 "contentTypeId"  =>  14,
                 "fields"  =>  array(
         157  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -6864,7 +6864,7 @@ return array(
         ),
         54  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  54,
+                "id"  =>  54,
                 "contentTypeId"  =>  15,
                 "fields"  =>  array(
         170  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7025,7 +7025,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         56  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  56,
+                "id"  =>  56,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         181  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7099,7 +7099,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         57  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  57,
+                "id"  =>  57,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         200  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7171,7 +7171,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         58  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  58,
+                "id"  =>  58,
                 "contentTypeId"  =>  42,
                 "fields"  =>  array(
         207  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7225,7 +7225,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         59  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  59,
+                "id"  =>  59,
                 "contentTypeId"  =>  42,
                 "fields"  =>  array(
         212  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7279,7 +7279,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         60  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  60,
+                "id"  =>  60,
                 "contentTypeId"  =>  42,
                 "fields"  =>  array(
         217  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7333,7 +7333,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         61  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  61,
+                "id"  =>  61,
                 "contentTypeId"  =>  42,
                 "fields"  =>  array(
         222  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7387,7 +7387,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         62  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  62,
+                "id"  =>  62,
                 "contentTypeId"  =>  42,
                 "fields"  =>  array(
         227  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7441,7 +7441,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         63  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  63,
+                "id"  =>  63,
                 "contentTypeId"  =>  42,
                 "fields"  =>  array(
         232  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7495,7 +7495,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         64  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  64,
+                "id"  =>  64,
                 "contentTypeId"  =>  42,
                 "fields"  =>  array(
         237  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7549,7 +7549,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         65  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  65,
+                "id"  =>  65,
                 "contentTypeId"  =>  23,
                 "fields"  =>  array(
         242  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7621,7 +7621,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         66  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  66,
+                "id"  =>  66,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         249  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7667,7 +7667,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         67  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  67,
+                "id"  =>  67,
                 "contentTypeId"  =>  23,
                 "fields"  =>  array(
         253  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7751,7 +7751,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         68  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  68,
+                "id"  =>  68,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         260  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7819,7 +7819,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         69  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  69,
+                "id"  =>  69,
                 "contentTypeId"  =>  21,
                 "fields"  =>  array(
         267  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7907,7 +7907,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         70  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  70,
+                "id"  =>  70,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         276  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -7975,7 +7975,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         71  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  71,
+                "id"  =>  71,
                 "contentTypeId"  =>  21,
                 "fields"  =>  array(
         283  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8063,7 +8063,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         72  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  72,
+                "id"  =>  72,
                 "contentTypeId"  =>  21,
                 "fields"  =>  array(
         292  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8151,7 +8151,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         73  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  73,
+                "id"  =>  73,
                 "contentTypeId"  =>  21,
                 "fields"  =>  array(
         301  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8239,7 +8239,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         74  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  74,
+                "id"  =>  74,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         310  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8307,7 +8307,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         75  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  75,
+                "id"  =>  75,
                 "contentTypeId"  =>  23,
                 "fields"  =>  array(
         317  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8385,7 +8385,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         76  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  76,
+                "id"  =>  76,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         324  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8453,7 +8453,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         77  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  77,
+                "id"  =>  77,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         331  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8565,7 +8565,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         78  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  78,
+                "id"  =>  78,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         343  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8677,7 +8677,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         79  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  79,
+                "id"  =>  79,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         355  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8789,7 +8789,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         80  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  80,
+                "id"  =>  80,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         367  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8857,7 +8857,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         81  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  81,
+                "id"  =>  81,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         374  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -8969,7 +8969,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         82  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  82,
+                "id"  =>  82,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         386  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9081,7 +9081,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         83  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  83,
+                "id"  =>  83,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         398  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9193,7 +9193,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         84  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  84,
+                "id"  =>  84,
                 "contentTypeId"  =>  23,
                 "fields"  =>  array(
         410  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9270,7 +9270,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         85  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  85,
+                "id"  =>  85,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         417  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9338,7 +9338,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         86  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  86,
+                "id"  =>  86,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         424  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9406,7 +9406,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         87  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  87,
+                "id"  =>  87,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         431  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9518,7 +9518,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         88  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  88,
+                "id"  =>  88,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         443  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9630,7 +9630,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         89  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  89,
+                "id"  =>  89,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         455  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9742,7 +9742,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         90  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  90,
+                "id"  =>  90,
                 "contentTypeId"  =>  41,
                 "fields"  =>  array(
         467  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9778,7 +9778,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         91  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  91,
+                "id"  =>  91,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         470  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9846,7 +9846,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         92  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  92,
+                "id"  =>  92,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         477  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9914,7 +9914,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         93  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  93,
+                "id"  =>  93,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         484  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -9982,7 +9982,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         94  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  94,
+                "id"  =>  94,
                 "contentTypeId"  =>  23,
                 "fields"  =>  array(
         491  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10054,7 +10054,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         95  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  95,
+                "id"  =>  95,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         498  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10098,7 +10098,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         96  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  96,
+                "id"  =>  96,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         502  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10142,7 +10142,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         97  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  97,
+                "id"  =>  97,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         506  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10186,7 +10186,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         98  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  98,
+                "id"  =>  98,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         510  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10230,7 +10230,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         99  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  99,
+                "id"  =>  99,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         514  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10274,7 +10274,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         100  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  100,
+                "id"  =>  100,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         518  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10318,7 +10318,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         101  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  101,
+                "id"  =>  101,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         522  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10386,7 +10386,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         102  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  102,
+                "id"  =>  102,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         529  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10498,7 +10498,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         103  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  103,
+                "id"  =>  103,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         541  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10566,7 +10566,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         104  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  104,
+                "id"  =>  104,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         548  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10634,7 +10634,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         105  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  105,
+                "id"  =>  105,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         555  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10702,7 +10702,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         106  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  106,
+                "id"  =>  106,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         562  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10816,7 +10816,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         107  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  107,
+                "id"  =>  107,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         574  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -10928,7 +10928,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         108  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  108,
+                "id"  =>  108,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         586  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11042,7 +11042,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         109  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  109,
+                "id"  =>  109,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         598  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11088,7 +11088,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         110  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  110,
+                "id"  =>  110,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         602  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11134,7 +11134,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         111  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  111,
+                "id"  =>  111,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         606  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11180,7 +11180,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         112  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  112,
+                "id"  =>  112,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         610  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11226,7 +11226,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         113  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  113,
+                "id"  =>  113,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         614  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11272,7 +11272,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         114  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  114,
+                "id"  =>  114,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         618  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11318,7 +11318,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         115  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  115,
+                "id"  =>  115,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         622  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11364,7 +11364,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         116  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  116,
+                "id"  =>  116,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         626  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11410,7 +11410,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         117  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  117,
+                "id"  =>  117,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         630  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11456,7 +11456,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         118  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  118,
+                "id"  =>  118,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         634  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11570,7 +11570,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         119  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  119,
+                "id"  =>  119,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         646  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11616,7 +11616,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         120  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  120,
+                "id"  =>  120,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         650  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11662,7 +11662,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         121  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  121,
+                "id"  =>  121,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         654  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11708,7 +11708,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         122  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  122,
+                "id"  =>  122,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         658  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11754,7 +11754,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         123  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  123,
+                "id"  =>  123,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         662  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11800,7 +11800,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         124  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  124,
+                "id"  =>  124,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         666  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11846,7 +11846,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         125  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  125,
+                "id"  =>  125,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         670  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11892,7 +11892,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         126  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  126,
+                "id"  =>  126,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         674  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -11938,7 +11938,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         127  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  127,
+                "id"  =>  127,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         678  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12052,7 +12052,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         128  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  128,
+                "id"  =>  128,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         690  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12098,7 +12098,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         129  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  129,
+                "id"  =>  129,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         694  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12144,7 +12144,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         130  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  130,
+                "id"  =>  130,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         698  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12256,7 +12256,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         131  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  131,
+                "id"  =>  131,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         710  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12324,7 +12324,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         132  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  132,
+                "id"  =>  132,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         717  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12438,7 +12438,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         133  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  133,
+                "id"  =>  133,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         729  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12484,7 +12484,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         134  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  134,
+                "id"  =>  134,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         733  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12530,7 +12530,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         135  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  135,
+                "id"  =>  135,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         737  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12576,7 +12576,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         136  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  136,
+                "id"  =>  136,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         741  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12690,7 +12690,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         137  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  137,
+                "id"  =>  137,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         753  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12736,7 +12736,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         138  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  138,
+                "id"  =>  138,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         757  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12782,7 +12782,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         139  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  139,
+                "id"  =>  139,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         761  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12898,7 +12898,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         140  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  140,
+                "id"  =>  140,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         773  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12944,7 +12944,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         141  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  141,
+                "id"  =>  141,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         777  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -12990,7 +12990,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         142  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  142,
+                "id"  =>  142,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         781  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13036,7 +13036,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         143  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  143,
+                "id"  =>  143,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         785  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13082,7 +13082,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         144  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  144,
+                "id"  =>  144,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         789  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13194,7 +13194,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         145  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  145,
+                "id"  =>  145,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         801  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13308,7 +13308,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         146  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  146,
+                "id"  =>  146,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         813  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13354,7 +13354,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         147  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  147,
+                "id"  =>  147,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         817  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13466,7 +13466,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         148  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  148,
+                "id"  =>  148,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         829  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13595,7 +13595,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         149  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  149,
+                "id"  =>  149,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         841  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13641,7 +13641,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         150  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  150,
+                "id"  =>  150,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         845  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13755,7 +13755,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         151  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  151,
+                "id"  =>  151,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         857  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13869,7 +13869,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         152  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  152,
+                "id"  =>  152,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         869  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13915,7 +13915,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         153  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  153,
+                "id"  =>  153,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         873  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -13961,7 +13961,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         154  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  154,
+                "id"  =>  154,
                 "contentTypeId"  =>  23,
                 "fields"  =>  array(
         877  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14035,7 +14035,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         155  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  155,
+                "id"  =>  155,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         884  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14103,7 +14103,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         156  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  156,
+                "id"  =>  156,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         891  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14215,7 +14215,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         157  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  157,
+                "id"  =>  157,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         903  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14327,7 +14327,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         158  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  158,
+                "id"  =>  158,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         915  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14395,7 +14395,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         159  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  159,
+                "id"  =>  159,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         922  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14507,7 +14507,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         160  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  160,
+                "id"  =>  160,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         934  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14619,7 +14619,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         161  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  161,
+                "id"  =>  161,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         946  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14731,7 +14731,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         162  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  162,
+                "id"  =>  162,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         958  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14799,7 +14799,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         163  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  163,
+                "id"  =>  163,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         965  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14867,7 +14867,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         164  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  164,
+                "id"  =>  164,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         972  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -14979,7 +14979,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         165  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  165,
+                "id"  =>  165,
                 "contentTypeId"  =>  23,
                 "fields"  =>  array(
         984  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15055,7 +15055,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         166  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  166,
+                "id"  =>  166,
                 "contentTypeId"  =>  37,
                 "fields"  =>  array(
         991  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15083,7 +15083,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         167  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  167,
+                "id"  =>  167,
                 "contentTypeId"  =>  38,
                 "fields"  =>  array(
         993  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15127,7 +15127,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         168  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  168,
+                "id"  =>  168,
                 "contentTypeId"  =>  38,
                 "fields"  =>  array(
         997  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15171,7 +15171,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         169  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  169,
+                "id"  =>  169,
                 "contentTypeId"  =>  38,
                 "fields"  =>  array(
         1001  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15215,7 +15215,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         170  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  170,
+                "id"  =>  170,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         1005  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15259,7 +15259,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         171  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  171,
+                "id"  =>  171,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         1009  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15303,7 +15303,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         172  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  172,
+                "id"  =>  172,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         1013  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15347,7 +15347,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         173  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  173,
+                "id"  =>  173,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         1017  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15391,7 +15391,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         174  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  174,
+                "id"  =>  174,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         1021  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15435,7 +15435,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         175  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  175,
+                "id"  =>  175,
                 "contentTypeId"  =>  24,
                 "fields"  =>  array(
         1025  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15479,7 +15479,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         176  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  176,
+                "id"  =>  176,
                 "contentTypeId"  =>  35,
                 "fields"  =>  array(
         1029  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15523,7 +15523,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         177  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  177,
+                "id"  =>  177,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1033  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15569,7 +15569,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         178  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  178,
+                "id"  =>  178,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1037  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15615,7 +15615,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         179  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  179,
+                "id"  =>  179,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1041  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15661,7 +15661,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         180  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  180,
+                "id"  =>  180,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1045  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15707,7 +15707,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         181  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  181,
+                "id"  =>  181,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1049  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15753,7 +15753,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         182  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  182,
+                "id"  =>  182,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1053  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15799,7 +15799,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         183  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  183,
+                "id"  =>  183,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1057  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15845,7 +15845,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         184  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  184,
+                "id"  =>  184,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1061  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15891,7 +15891,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         185  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  185,
+                "id"  =>  185,
                 "contentTypeId"  =>  19,
                 "fields"  =>  array(
         1065  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15927,7 +15927,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         186  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  186,
+                "id"  =>  186,
                 "contentTypeId"  =>  20,
                 "fields"  =>  array(
         1068  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -15987,7 +15987,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         187  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  187,
+                "id"  =>  187,
                 "contentTypeId"  =>  20,
                 "fields"  =>  array(
         1074  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16047,7 +16047,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         188  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  188,
+                "id"  =>  188,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         1080  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16118,7 +16118,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         189  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  189,
+                "id"  =>  189,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         1087  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16186,7 +16186,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         190  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  190,
+                "id"  =>  190,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         1094  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16254,7 +16254,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         191  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  191,
+                "id"  =>  191,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1101  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16368,7 +16368,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         192  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  192,
+                "id"  =>  192,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1113  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16414,7 +16414,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         193  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  193,
+                "id"  =>  193,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1117  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16528,7 +16528,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         194  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  194,
+                "id"  =>  194,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1129  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16574,7 +16574,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         195  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  195,
+                "id"  =>  195,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1133  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16620,7 +16620,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         196  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  196,
+                "id"  =>  196,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1137  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16666,7 +16666,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         197  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  197,
+                "id"  =>  197,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1141  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16712,7 +16712,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         198  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  198,
+                "id"  =>  198,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1145  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16758,7 +16758,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         199  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  199,
+                "id"  =>  199,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1149  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16804,7 +16804,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         200  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  200,
+                "id"  =>  200,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1153  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16850,7 +16850,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         201  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  201,
+                "id"  =>  201,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1157  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -16896,7 +16896,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         202  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  202,
+                "id"  =>  202,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1161  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17010,7 +17010,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         203  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  203,
+                "id"  =>  203,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1173  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17056,7 +17056,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         204  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  204,
+                "id"  =>  204,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1177  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17102,7 +17102,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         205  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  205,
+                "id"  =>  205,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1181  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17148,7 +17148,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         206  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  206,
+                "id"  =>  206,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1185  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17194,7 +17194,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         207  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  207,
+                "id"  =>  207,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1189  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17240,7 +17240,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         208  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  208,
+                "id"  =>  208,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1193  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17286,7 +17286,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         209  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  209,
+                "id"  =>  209,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1197  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17332,7 +17332,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         210  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  210,
+                "id"  =>  210,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1201  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17378,7 +17378,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         211  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  211,
+                "id"  =>  211,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1205  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17492,7 +17492,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         212  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  212,
+                "id"  =>  212,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1217  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17538,7 +17538,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         213  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  213,
+                "id"  =>  213,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1221  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17584,7 +17584,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         214  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  214,
+                "id"  =>  214,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1225  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17696,7 +17696,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         215  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  215,
+                "id"  =>  215,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1237  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17808,7 +17808,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         216  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  216,
+                "id"  =>  216,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1249  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -17920,7 +17920,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         217  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  217,
+                "id"  =>  217,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1261  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18032,7 +18032,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         218  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  218,
+                "id"  =>  218,
                 "contentTypeId"  =>  16,
                 "fields"  =>  array(
         1273  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18144,7 +18144,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         219  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  219,
+                "id"  =>  219,
                 "contentTypeId"  =>  26,
                 "fields"  =>  array(
         1285  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18182,7 +18182,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         220  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  220,
+                "id"  =>  220,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         1288  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18250,7 +18250,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         221  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  221,
+                "id"  =>  221,
                 "contentTypeId"  =>  1,
                 "fields"  =>  array(
         1295  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18318,7 +18318,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         222  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  222,
+                "id"  =>  222,
                 "contentTypeId"  =>  22,
                 "fields"  =>  array(
         1302  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18386,7 +18386,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         223  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  223,
+                "id"  =>  223,
                 "contentTypeId"  =>  25,
                 "fields"  =>  array(
         1309  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18440,7 +18440,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         224  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  224,
+                "id"  =>  224,
                 "contentTypeId"  =>  30,
                 "fields"  =>  array(
         1314  =>  new \eZ\Publish\API\Repository\Values\Content\Field(
@@ -18486,7 +18486,7 @@ keywords=cms, publish, e-commerce, content management, development framework",
         ),
         225  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
             array(
-                "contentId"  =>  225,
+                "id"  =>  225,
                 "contentTypeId"  =>  3,
                 "fields"  =>  array(
         1330  =>  new \eZ\Publish\API\Repository\Values\Content\Field(

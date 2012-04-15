@@ -701,17 +701,17 @@ class RoleServiceStub implements RoleService
      */
     private function getRoleAssignmentsForContent( Content $content )
     {
-        if ( false === isset( $this->content2roles[$content->contentId] ) )
+        if ( false === isset( $this->content2roles[$content->id] ) )
         {
             return array();
         }
 
         $roleAssignments = array();
-        foreach ( $this->content2roles[$content->contentId] as $limitationId => $roleId )
+        foreach ( $this->content2roles[$content->id] as $limitationId => $roleId )
         {
             $roleAssignments[] = $this->getRoleAssignment(
                 $this->loadRole( $roleId ),
-                $content->contentId,
+                $content->id,
                 $limitationId
             );
         }
@@ -730,11 +730,11 @@ class RoleServiceStub implements RoleService
      */
     private function assignRoleToContent(Role $role, Content $content, RoleLimitation $roleLimitation = null )
     {
-        if ( false === isset( $this->content2roles[$content->contentId] ) )
+        if ( false === isset( $this->content2roles[$content->id] ) )
         {
-            $this->content2roles[$content->contentId] = array();
+            $this->content2roles[$content->id] = array();
         }
-        $this->content2roles[$content->contentId][++$this->limitationId] = $role->id;
+        $this->content2roles[$content->id][++$this->limitationId] = $role->id;
 
         if ( $roleLimitation )
         {
@@ -758,15 +758,15 @@ class RoleServiceStub implements RoleService
      */
     private function unassignRoleFromContent( Role $role, Content $content )
     {
-        if ( false === isset( $this->content2roles[$content->contentId] )
-            || false === in_array( $role->id, $this->content2roles[$content->contentId] ) )
+        if ( false === isset( $this->content2roles[$content->id] )
+            || false === in_array( $role->id, $this->content2roles[$content->id] ) )
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
-        $index = array_search( $role->id, $this->content2roles[$content->contentId] );
+        $index = array_search( $role->id, $this->content2roles[$content->id] );
         unset(
-            $this->content2roles[$content->contentId][$index],
+            $this->content2roles[$content->id][$index],
             $this->roleLimitations[$index]
         );
     }

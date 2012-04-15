@@ -259,7 +259,7 @@ abstract class LocationBase extends BaseServiceTest
         foreach ( $locations as $location )
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
-            self::assertEquals( $contentInfo->contentId, $location->getContentInfo()->contentId );
+            self::assertEquals( $contentInfo->id, $location->getContentInfo()->contentId );
         }
 
         $locationsCount = count( $locations );
@@ -275,7 +275,7 @@ abstract class LocationBase extends BaseServiceTest
         foreach ( $locations as $location )
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
-            self::assertEquals( $contentInfo->contentId, $location->getContentInfo()->contentId );
+            self::assertEquals( $contentInfo->id, $location->getContentInfo()->contentId );
         }
 
         $newLocationsCount = count( $locations );
@@ -394,7 +394,7 @@ abstract class LocationBase extends BaseServiceTest
             $createdLocation
         );
 
-        self::assertEquals( $contentInfo->contentId, $createdLocation->getContentInfo()->contentId );
+        self::assertEquals( $contentInfo->id, $createdLocation->getContentInfo()->contentId );
     }
 
     /**

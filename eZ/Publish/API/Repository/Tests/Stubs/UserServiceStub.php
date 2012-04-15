@@ -106,7 +106,7 @@ class UserServiceStub implements UserService
 
         $userGroup = new UserGroupStub(
             array(
-                'id'             =>  $content->contentId,
+                'id'             =>  $content->id,
                 'parentId'       =>  $parentGroup->id,
                 'subGroupCount'  =>  0,
                 'content'        =>  $content
@@ -219,33 +219,30 @@ class UserServiceStub implements UserService
 
         $this->userGroups[$oldParent->id] = new UserGroupStub(
             array(
-                'id'             =>  $oldParent->id,
                 'parentId'       =>  $oldParent->parentId,
                 'subGroupCount'  =>  $oldParent->subGroupCount - 1,
                 'content'        =>  $contentService->loadContent(
-                    $oldParent->contentId
+                    $oldParent->id
                 )
             )
         );
 
         $this->userGroups[$userGroup->id] = new UserGroupStub(
             array(
-                'id'             =>  $userGroup->id,
                 'parentId'       =>  $newParent->id,
                 'subGroupCount'  =>  $userGroup->subGroupCount,
                 'content'        =>  $contentService->loadContent(
-                    $userGroup->contentId
+                    $userGroup->id
                 )
             )
         );
 
         $this->userGroups[$newParent->id] = new UserGroupStub(
             array(
-                'id'             =>  $newParent->id,
                 'parentId'       =>  $newParent->parentId,
                 'subGroupCount'  =>  $newParent->subGroupCount + 1,
                 'content'        =>  $contentService->loadContent(
-                    $newParent->contentId
+                    $newParent->id
                 )
             )
         );
@@ -357,7 +354,7 @@ class UserServiceStub implements UserService
 
         $user = new UserStub(
             array(
-                'id'             =>  $content->contentId,
+                'id'             =>  $content->id,
                 'login'          =>  $userCreateStruct->login,
                 'email'          =>  $userCreateStruct->email,
                 'passwordHash'   =>  $this->createHash(

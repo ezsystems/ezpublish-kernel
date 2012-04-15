@@ -99,7 +99,7 @@ class SearchHandler extends SearchHandlerInterface
                 ),
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
-                    'match' => array( 'contentId' => 'id' ),
+                    'match' => array( 'id' => 'id' ),
                     'single' => true
                 ),
                 'versionInfo' => array(
@@ -118,7 +118,7 @@ class SearchHandler extends SearchHandlerInterface
                 $item->fields = $this->backend->find(
                     'Content\\Field',
                     array(
-                        '_contentId' => $item->contentInfo->contentId,
+                        '_contentId' => $item->contentInfo->id,
                         'versionNo' => $item->contentInfo->currentVersionNo
                     )
                 );

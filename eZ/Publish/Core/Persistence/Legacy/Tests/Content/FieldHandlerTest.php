@@ -252,7 +252,7 @@ class FieldHandlerTest extends TestCase
     {
         $content = new Content;
         $content->contentInfo = new ContentInfo;
-        $content->contentInfo->contentId = 42;
+        $content->contentInfo->id = 42;
         $content->versionInfo = new VersionInfo;
         $content->versionInfo->versionNo = 2;
 
