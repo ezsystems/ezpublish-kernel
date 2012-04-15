@@ -131,8 +131,8 @@ class BackendTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true, 'contentId' );
-        $this->assertEquals( 1, $content->contentId );
+        $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true );
+        $this->assertEquals( 1, $content->id );
         $this->assertEquals( 2, $content->sectionId );
         $this->assertEquals( null, $content->ownerId );
     }
@@ -146,8 +146,8 @@ class BackendTest extends PHPUnit_Framework_TestCase
     {
         for ( $i = 1; $i <= 10; ++$i)
         {
-            $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true, 'contentId' );
-            $this->assertEquals( $i, $content->contentId );
+            $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true );
+            $this->assertEquals( $i, $content->id );
         }
     }
 

@@ -236,7 +236,7 @@ class SectionServiceStub implements SectionService
         {
             $this->assignedContents[$section->id] = array();
         }
-        $this->assignedContents[$section->id][] = $contentInfo->contentId;
+        $this->assignedContents[$section->id][] = $contentInfo->id;
     }
 
     /**

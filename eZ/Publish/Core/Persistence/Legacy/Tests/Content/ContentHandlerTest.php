@@ -178,7 +178,7 @@ class ContentHandlerTest extends TestCase
         );
         $this->assertEquals(
             23,
-            $res->contentInfo->contentId,
+            $res->contentInfo->id,
             'Content ID not set correctly'
         );
         $this->assertInstanceOf(

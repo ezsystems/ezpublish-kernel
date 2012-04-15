@@ -190,7 +190,7 @@ class MapperTest extends TestCase
     {
         $content = new Content;
         $content->contentInfo = new ContentInfo;
-        $content->contentInfo->contentId = 2342;
+        $content->contentInfo->id = 2342;
         $content->contentInfo->contentTypeId = 23;
         $content->contentInfo->sectionId = 42;
         $content->contentInfo->ownerId = 13;
@@ -342,11 +342,11 @@ class MapperTest extends TestCase
 
         $this->assertEquals(
             11,
-            $result[0]->contentInfo->contentId
+            $result[0]->contentInfo->id
         );
         $this->assertEquals(
             11,
-            $result[1]->contentInfo->contentId
+            $result[1]->contentInfo->id
         );
 
         $this->assertEquals(

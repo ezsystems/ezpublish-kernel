@@ -165,8 +165,10 @@ class User extends APIUser
             case 'contentType':
                 return $this->versionInfo->getContentInfo()->getContentType();
 
-            case 'contentId':
-                return $this->versionInfo->getContentInfo()->contentId;
+            case 'id':
+                if ( empty( $this->versionInfo ) )
+                    return null;
+                return $this->versionInfo->contentId;// @todo Make part of API or change to use getContentInfo()->id
         }
 
         return parent::__get( $property );
@@ -185,6 +187,9 @@ class User extends APIUser
             return true;
 
         if ( $property === 'contentInfo' )
+            return true;
+
+        if ( $property === 'id' )
             return true;
 
         return parent::__isset( $property );

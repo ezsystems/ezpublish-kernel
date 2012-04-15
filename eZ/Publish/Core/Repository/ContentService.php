@@ -189,7 +189,7 @@ class ContentService implements ContentServiceInterface
 
         // @todo: $mainLocationId should have been removed through SPI refactoring?
         $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $spiContentInfo->contentId,
+            $spiContentInfo->id,
             $spiContentInfo->currentVersionNo
         );
         $mainLocationId = null;
@@ -207,7 +207,7 @@ class ContentService implements ContentServiceInterface
                 "repository"       => $this->repository,
                 "contentTypeId"    => $spiContentInfo->contentTypeId,
 
-                "contentId"        => $spiContentInfo->contentId,
+                "id"               => $spiContentInfo->id,
                 "name"             => $spiContentInfo->name,
                 "sectionId"        => $spiContentInfo->sectionId,
                 "currentVersionNo" => $spiContentInfo->currentVersionNo,
@@ -238,7 +238,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfo( APIContentInfo $contentInfo, $versionNo = null )
     {
-        return $this->loadVersionInfoById( $contentInfo->contentId, $versionNo );
+        return $this->loadVersionInfoById( $contentInfo->id, $versionNo );
     }
 
     /**
@@ -298,7 +298,7 @@ class ContentService implements ContentServiceInterface
         if ( $versionNo === null ) $versionNo = $contentInfo->currentVersionNo;
 
         $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $contentInfo->contentId,
+            $contentInfo->id,
             $versionNo,
             $languages
         );
@@ -358,7 +358,7 @@ class ContentService implements ContentServiceInterface
             throw new NotFoundException(
                 "Content",
                 array(
-                    "contentId" => $contentId,
+                    "id"        => $contentId,
                     "languages" => $languages,
                     "versionNo" => $versionNo
                 ),
@@ -378,7 +378,7 @@ class ContentService implements ContentServiceInterface
                     throw new NotFoundException(
                         "Content",
                         array(
-                            "contentId" => $contentId,
+                            "id"        => $contentId,
                             "languages" => $languages,
                             "versionNo" => $versionNo
                         )
@@ -754,7 +754,7 @@ class ContentService implements ContentServiceInterface
                     new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
                 );
 
-                if ( $spiContent->contentInfo->contentId !== $contentInfo->contentId )
+                if ( $spiContent->contentInfo->id !== $contentInfo->id )
                     throw new InvalidArgumentException(
                         "\$contentMetadataUpdateStruct->remoteId",
                         "remoteId already exists"
@@ -783,16 +783,16 @@ class ContentService implements ContentServiceInterface
         if ( isset( $contentMetadataUpdateStruct->mainLocationId ) )
         {
             $this->persistenceHandler->locationHandler()->changeMainLocation(
-                $contentInfo->contentId,
+                $contentInfo->id,
                 $contentMetadataUpdateStruct->mainLocationId
             );
         }
         $this->persistenceHandler->contentHandler()->updateMetadata(
-            $contentInfo->contentId,
+            $contentInfo->id,
             $spiMetadataUpdateStruct
         );
 
-        return $this->loadContent( $contentInfo->contentId );
+        return $this->loadContent( $contentInfo->id );
     }
 
     /**
@@ -804,7 +804,7 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( APIContentInfo $contentInfo )
     {
-        $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->contentId );
+        $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->id );
     }
 
     /**
@@ -851,7 +851,7 @@ class ContentService implements ContentServiceInterface
         }
 
         $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
-            $contentInfo->contentId,
+            $contentInfo->id,
             $versionNo
         );
 
@@ -949,7 +949,7 @@ class ContentService implements ContentServiceInterface
             throw new BadStateException( "\$versionInfo", "version is not a draft" );
 
         $content = $this->loadContent(
-            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->getContentInfo()->id,
             null,
             $versionInfo->versionNo
         );
@@ -1051,7 +1051,7 @@ class ContentService implements ContentServiceInterface
         );
 
         $spiContent = $this->persistenceHandler->contentHandler()->updateContent(
-            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->getContentInfo()->id,
             $versionInfo->versionNo,
             $spiContentUpdateStruct
         );
@@ -1079,7 +1079,7 @@ class ContentService implements ContentServiceInterface
         $metadataUpdateStruct->modificationDate = $metadataUpdateStruct->publicationDate;
 
         $spiContent = $this->persistenceHandler->contentHandler()->publish(
-            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->getContentInfo()->id,
             $versionInfo->versionNo,
             $metadataUpdateStruct
         );
@@ -1122,7 +1122,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersions( APIContentInfo $contentInfo )
     {
-        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->listVersions( $contentInfo->contentId );
+        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->listVersions( $contentInfo->id );
 
         $versions = array();
         foreach ( $spiVersionInfoList as $spiVersionInfo )
@@ -1158,7 +1158,7 @@ class ContentService implements ContentServiceInterface
     public function copyContent( APIContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, APIVersionInfo $versionInfo = null)
     {
         $spiContent = $this->persistenceHandler->contentHandler()->copy(
-            $contentInfo->contentId,
+            $contentInfo->id,
             $versionInfo ? $versionInfo->versionNo : false
         );
 
@@ -1167,7 +1167,7 @@ class ContentService implements ContentServiceInterface
             $destinationLocationCreateStruct
         );
 
-        return $this->loadContent( $spiContent->contentInfo->contentId );
+        return $this->loadContent( $spiContent->contentInfo->id );
     }
 
     /**
@@ -1201,14 +1201,14 @@ class ContentService implements ContentServiceInterface
                     $areFieldsFiltered = true;
                     foreach ( $spiSearchResult->content as $spiContent )
                     {
-                        if ( !isset( $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] ) )
-                            $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] =
+                        if ( !isset( $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] ) )
+                            $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] =
                                 $spiContent->fields;
 
-                        $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] =
+                        $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] =
                             $this->filterFieldsByLanguages(
                                 $spiContent->contentInfo->contentTypeId,
-                                $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id],
+                                $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id],
                                 $filterSettings
                             );
                     }
@@ -1221,7 +1221,7 @@ class ContentService implements ContentServiceInterface
         {
             $contentItems[] = $this->buildContentDomainObject(
                 $spiContent,
-                $areFieldsFiltered ? $filteredFields[$spiContent->contentInfo->contentId][$spiContent->versionInfo->id] : null
+                $areFieldsFiltered ? $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] : null
             );
         }
 
@@ -1309,7 +1309,7 @@ class ContentService implements ContentServiceInterface
         $contentInfo = $versionInfo->getContentInfo();
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
-            $contentInfo->contentId,
+            $contentInfo->id,
             $versionInfo->versionNo
         );
 
@@ -1340,7 +1340,7 @@ class ContentService implements ContentServiceInterface
     public function loadReverseRelations( APIContentInfo $contentInfo )
     {
         $spiRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
-            $contentInfo->contentId
+            $contentInfo->id
         );
 
         $returnArray = array();
@@ -1548,7 +1548,7 @@ class ContentService implements ContentServiceInterface
         return new Content(
             array(
                 "repository"               => $this->repository,
-                "contentId"                => $spiContent->contentInfo->contentId,
+                "id"                => $spiContent->contentInfo->id,
                 "versionNo"                => $spiContent->versionInfo->versionNo,
                 "contentTypeId"            => $spiContent->contentInfo->contentTypeId,
                 "internalFields"           => $fields,

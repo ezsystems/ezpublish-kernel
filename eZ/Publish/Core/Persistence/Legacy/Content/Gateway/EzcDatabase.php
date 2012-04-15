@@ -549,7 +549,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_attribute', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
-            $q->bindValue( $content->contentInfo->contentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $content->contentInfo->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
             $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )

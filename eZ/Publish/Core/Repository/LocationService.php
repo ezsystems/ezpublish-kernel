@@ -187,12 +187,12 @@ class LocationService implements LocationServiceInterface
      */
     public function loadMainLocation( ContentInfo $contentInfo )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         $searchCriterion = new CriterionLogicalAnd(
             array(
-                new CriterionContentId( $contentInfo->contentId ),
+                new CriterionContentId( $contentInfo->id ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
             )
         );
@@ -229,15 +229,15 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         if ( $rootLocation !== null && !is_string( $rootLocation->pathString ) )
             throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
 
         $searchCriterion = new CriterionLogicalAnd(
             array(
-                new CriterionContentId( $contentInfo->contentId ),
+                new CriterionContentId( $contentInfo->id ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
             )
         );
@@ -362,8 +362,8 @@ class LocationService implements LocationServiceInterface
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         if ( !is_numeric( $contentInfo->currentVersionNo ) )
             throw new InvalidArgumentValue( "currentVersionNo", $contentInfo->currentVersionNo, "ContentInfo" );
@@ -408,7 +408,7 @@ class LocationService implements LocationServiceInterface
         $searchResult = $this->persistenceHandler->searchHandler()->find(
             new CriterionLogicalAnd(
                 array(
-                    new CriterionContentId( $contentInfo->contentId ),
+                    new CriterionContentId( $contentInfo->id ),
                     new CriterionParentLocationId( $loadedParentLocation->id ),
                 )
             )
@@ -447,7 +447,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
-        $createStruct->contentId = (int) $contentInfo->contentId;
+        $createStruct->contentId = (int) $contentInfo->id;
         $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
 
         // @todo: set pathIdentificationString

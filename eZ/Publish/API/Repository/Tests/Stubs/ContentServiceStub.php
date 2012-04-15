@@ -159,7 +159,7 @@ class ContentServiceStub implements ContentService
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
-        return $this->loadVersionInfoById( $contentInfo->contentId, $versionNo );
+        return $this->loadVersionInfoById( $contentInfo->id, $versionNo );
     }
 
     /**
@@ -225,7 +225,7 @@ class ContentServiceStub implements ContentService
      */
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
-        return $this->loadContent( $contentInfo->contentId, $languages, $versionNo );
+        return $this->loadContent( $contentInfo->id, $languages, $versionNo );
     }
 
     /**
@@ -241,7 +241,7 @@ class ContentServiceStub implements ContentService
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
     {
         return $this->loadContent(
-            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->getContentInfo()->id,
             $languages,
             $versionInfo->versionNo
         );
@@ -267,7 +267,7 @@ class ContentServiceStub implements ContentService
 
         foreach ( $this->content as $content )
         {
-            if ( $content->contentId !== $contentId )
+            if ( $content->id !== $contentId )
             {
                 continue;
             }
@@ -352,7 +352,7 @@ class ContentServiceStub implements ContentService
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
         return $this->loadContent(
-            $this->loadContentInfoByRemoteId( $remoteId )->contentId,
+            $this->loadContentInfoByRemoteId( $remoteId )->id,
             $languages,
             $versionNo
         );
@@ -451,7 +451,7 @@ class ContentServiceStub implements ContentService
 
         $content = new ContentStub(
             array(
-                'contentId'      =>  ++$this->contentNextId,
+                'id'      =>  ++$this->contentNextId,
                 'contentTypeId'  =>  $contentCreateStruct->contentType->id,
                 'fields'         =>  $allFields,
                 'relations'      =>  array(),
@@ -463,7 +463,7 @@ class ContentServiceStub implements ContentService
 
         $contentInfo = new ContentInfoStub(
             array(
-                'contentId'         =>  $this->contentNextId,
+                'id'         =>  $this->contentNextId,
                 'contentTypeId'     =>  $contentCreateStruct->contentType->id,
                 'remoteId'          =>  $contentCreateStruct->remoteId,
                 'sectionId'         =>  $contentCreateStruct->sectionId,
@@ -497,11 +497,11 @@ class ContentServiceStub implements ContentService
         );
 
         $this->content[]                            = $content;
-        $this->contentInfo[$contentInfo->contentId] = $contentInfo;
+        $this->contentInfo[$contentInfo->id]        = $contentInfo;
         $this->versionInfo[$versionInfo->id]        = $versionInfo;
 
-        $this->index[$contentInfo->contentId]['versionId'][$versionInfo->id] = $versionInfo->id;
-        $this->index[$contentInfo->contentId]['contentId'][count( $this->content ) - 1] = count( $this->content ) - 1;
+        $this->index[$contentInfo->id]['versionId'][$versionInfo->id] = $versionInfo->id;
+        $this->index[$contentInfo->id]['contentId'][count( $this->content ) - 1] = count( $this->content ) - 1;
 
         $locationService = $this->repository->getLocationService();
         foreach ( $locationCreateStructs as $locationCreateStruct )
@@ -539,10 +539,10 @@ class ContentServiceStub implements ContentService
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
-        $this->contentInfo[$contentInfo->contentId] = new ContentInfoStub(
+        $this->contentInfo[$contentInfo->id] = new ContentInfoStub(
             array(
-                'contentId'         =>  $contentInfo->contentId,
-                'contentTypeId'     =>  $this->contentInfo[$contentInfo->contentId]->contentTypeId,
+                'id'                =>  $contentInfo->id,
+                'contentTypeId'     =>  $this->contentInfo[$contentInfo->id]->contentTypeId,
                 'remoteId'          =>  $contentMetadataUpdateStruct->remoteId ?: $contentInfo->remoteId,
                 'sectionId'         =>  $contentInfo->sectionId,
                 'alwaysAvailable'   =>  is_null( $contentMetadataUpdateStruct->alwaysAvailable ) ? $contentInfo->alwaysAvailable : $contentMetadataUpdateStruct->alwaysAvailable,
@@ -558,7 +558,7 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        return $this->loadContent( $contentInfo->contentId );
+        return $this->loadContent( $contentInfo->id );
     }
 
     /**
@@ -576,7 +576,7 @@ class ContentServiceStub implements ContentService
         }
 
         // Avoid cycles between ContentService and LocationService
-        if ( false === isset( $this->contentInfo[$contentInfo->contentId] ) )
+        if ( false === isset( $this->contentInfo[$contentInfo->id] ) )
         {
             return;
         }
@@ -586,7 +586,7 @@ class ContentServiceStub implements ContentService
 
         foreach ( $this->versionInfo as $key => $versionInfo )
         {
-            if ( $versionInfo->contentInfo->contentId === $contentInfo->contentId )
+            if ( $versionInfo->contentInfo->id === $contentInfo->id )
             {
                 unset( $this->versionInfo[$key] );
             }
@@ -594,13 +594,13 @@ class ContentServiceStub implements ContentService
 
         foreach ( $this->content as $key => $content )
         {
-            if ( $content->contentId === $contentInfo->contentId )
+            if ( $content->id === $contentInfo->id )
             {
                 unset( $this->content[$key] );
             }
         }
 
-        unset( $this->contentInfo[$contentInfo->contentId] );
+        unset( $this->contentInfo[$contentInfo->id] );
 
         // Delete all locations for the given $contentInfo
         $locations = $locationService->loadLocations( $contentInfo );
@@ -639,7 +639,7 @@ class ContentServiceStub implements ContentService
         // Select the greatest version number
         foreach ( $this->versionInfo as $versionInfo )
         {
-            if ( $versionInfo->contentId !== $contentInfo->contentId )
+            if ( $versionInfo->contentId !== $contentInfo->id )
             {
                 continue;
             }
@@ -648,7 +648,7 @@ class ContentServiceStub implements ContentService
 
         $contentDraft = new ContentStub(
             array(
-                'contentId'      =>  $content->contentId,
+                'id'      =>  $content->id,
                 'fields'         =>  $content->getFields(),
                 'relations'      =>  $content->getRelations(),
 
@@ -669,7 +669,7 @@ class ContentServiceStub implements ContentService
                 'languageCodes'        =>  $versionInfo->languageCodes,
                 'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
 
-                'contentId'            =>  $content->contentId,
+                'contentId'            =>  $content->id,
                 'repository'           =>  $this->repository
             )
         );
@@ -784,7 +784,7 @@ class ContentServiceStub implements ContentService
 
         $draftedContent = new ContentStub(
             array(
-                'contentId'      =>  $content->contentId,
+                'id'      =>  $content->id,
                 'fields'         =>  $fields,
                 'relations'      =>  $content->getRelations(),
 
@@ -797,7 +797,7 @@ class ContentServiceStub implements ContentService
         $draftedVersionInfo = new VersionInfoStub(
             array(
                 'id'                   =>  $versionInfo->id,
-                'contentId'            =>  $content->contentId,
+                'contentId'            =>  $content->id,
                 'status'               =>  $versionInfo->status,
                 'versionNo'            =>  $versionInfo->versionNo,
                 'creatorId'            =>  $versionInfo->creatorId,
@@ -851,7 +851,7 @@ class ContentServiceStub implements ContentService
 
         $publishedContentInfo = new ContentInfoStub(
             array(
-                'contentId'         =>  $contentInfo->contentId,
+                'id'         =>  $contentInfo->id,
                 'remoteId'          =>  $contentInfo->remoteId,
                 'sectionId'         =>  $contentInfo->sectionId,
                 'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
@@ -878,7 +878,7 @@ class ContentServiceStub implements ContentService
                 'languageCodes'        =>  $versionInfo->languageCodes,
                 'modificationDate'     =>  new \DateTime(),
 
-                'contentId'            =>  $contentInfo->contentId,
+                'contentId'            =>  $contentInfo->id,
                 'repository'           =>  $this->repository
             )
         );
@@ -886,7 +886,7 @@ class ContentServiceStub implements ContentService
         // Set all published versions of this content object to ARCHIVED
         foreach ( $this->versionInfo as $versionId => $versionInfo )
         {
-            if ( $versionInfo->contentId !== $contentInfo->contentId )
+            if ( $versionInfo->contentId !== $contentInfo->id )
             {
                 continue;
             }
@@ -905,14 +905,14 @@ class ContentServiceStub implements ContentService
                     'languageCodes'        =>  $versionInfo->languageCodes,
                     'modificationDate'     =>  new \DateTime(),
 
-                    'contentId'            =>  $contentInfo->contentId,
+                    'contentId'            =>  $contentInfo->id,
                     'repository'           =>  $this->repository
                 )
             );
         }
 
-        $this->contentInfo[$contentInfo->contentId] = $publishedContentInfo;
-        $this->versionInfo[$versionInfo->id]        = $publishedVersionInfo;
+        $this->contentInfo[$contentInfo->id] = $publishedContentInfo;
+        $this->versionInfo[$versionInfo->id] = $publishedVersionInfo;
 
         return $this->loadContentByVersionInfo( $versionInfo );
     }
@@ -943,7 +943,7 @@ class ContentServiceStub implements ContentService
             {
                 continue;
             }
-            else if ( $content->contentId !== $versionInfo->contentId )
+            else if ( $content->id !== $versionInfo->contentId )
             {
                 continue;
             }
@@ -957,7 +957,7 @@ class ContentServiceStub implements ContentService
         $references = 0;
         foreach ( $this->content as $i => $content )
         {
-            if ( $content->contentId === $versionInfo->contentId )
+            if ( $content->id === $versionInfo->contentId )
             {
                 ++$references;
             }
@@ -988,7 +988,7 @@ class ContentServiceStub implements ContentService
         $versions = array();
         foreach ( $this->versionInfo as $versionInfo )
         {
-            if ( $contentInfo->contentId === $versionInfo->contentId )
+            if ( $contentInfo->id === $versionInfo->contentId )
             {
                 $versions[] = $versionInfo;
             }
@@ -1021,7 +1021,7 @@ class ContentServiceStub implements ContentService
 
         $this->contentInfo[$this->contentNextId] = new ContentInfoStub(
             array(
-                'contentId'         =>  $this->contentNextId,
+                'id'         =>  $this->contentNextId,
                 'remoteId'          =>  md5( uniqid( $contentInfo->remoteId, true ) ),
                 'sectionId'         =>  $contentInfo->sectionId,
                 'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
@@ -1040,7 +1040,7 @@ class ContentServiceStub implements ContentService
 
         foreach ( $this->versionInfo as $versionInfoStub )
         {
-            if ( $versionInfoStub->contentId !== $contentInfo->contentId )
+            if ( $versionInfoStub->contentId !== $contentInfo->id )
             {
                 continue;
             }
@@ -1070,7 +1070,7 @@ class ContentServiceStub implements ContentService
 
         foreach ( $this->content as $content )
         {
-            if ( $content->contentId !== $contentInfo->contentId )
+            if ( $content->id !== $contentInfo->id )
             {
                 continue;
             }
@@ -1082,7 +1082,7 @@ class ContentServiceStub implements ContentService
             $this->content[] = $this->copyContentObject(
                 $content,
                 array(
-                    'contentId'  =>  $this->contentNextId,
+                    'id'  =>  $this->contentNextId,
                     'versionNo'  =>  $versionNo ? 1 : $content->versionNo
                 )
             );
@@ -1500,7 +1500,7 @@ class ContentServiceStub implements ContentService
     private function copyContentObject( Content $content, array $overwrites = array() )
     {
         $names = array(
-            'contentId',
+            'id',
             'fields',
             'relations',
             'contentTypeId',

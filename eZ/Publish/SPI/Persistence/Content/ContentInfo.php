@@ -26,7 +26,7 @@ class ContentInfo extends ValueObject
      *
      * @var mixed
      */
-    public $contentId;
+    public $id;
 
     /**
      * Computed name (via name schema) in the main language

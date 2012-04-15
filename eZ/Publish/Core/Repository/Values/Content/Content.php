@@ -18,10 +18,10 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
  * this class represents a content object in a specific version
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $contentInfo->contentType
- * @property-read mixed $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $versionInfo->contentInfo->contentType
+ * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields
+ * @property-read array $fields access fields, calls getFields()
  * @property-read array $relations calls getRelations()
  */
 class Content extends APIContent
@@ -34,7 +34,7 @@ class Content extends APIContent
     /**
      * @var integer
      */
-    protected $contentId;
+    protected $id;
 
     /**
      * @var integer
@@ -81,7 +81,7 @@ class Content extends APIContent
     public function getVersionInfo()
     {
         return $this->repository->getContentService()->loadVersionInfoById(
-            $this->contentId,
+            $this->id,
             $this->versionNo
         );
     }
@@ -207,7 +207,7 @@ class Content extends APIContent
      */
     private function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+        return $this->repository->getContentService()->loadContentInfo( $this->id );
     }
 
     /**

@@ -239,7 +239,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function loadRolesByGroupId( $groupId )
     {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId, 'contentId' );
+        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
 
         if ( !$content )
             throw new NotFound( 'Group', $groupId );
@@ -360,7 +360,7 @@ class UserHandler implements UserHandlerInterface
                 ),
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
-                    'match' => array( 'contentId' => 'id' ),
+                    'match' => array( 'id' => 'id' ),
                     'single' => true
                 )
             )
@@ -391,7 +391,7 @@ class UserHandler implements UserHandlerInterface
                         ),
                         'contentInfo' => array(
                             'type' => 'Content\\ContentInfo',
-                            'match' => array( 'contentId' => 'id' ),
+                            'match' => array( 'id' => 'id' ),
                             'single' => true
                         )
                     )
@@ -414,12 +414,12 @@ class UserHandler implements UserHandlerInterface
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {
         if ( $content->contentInfo->contentTypeId != $typeId )
-            throw new NotFound( "Content with TypeId:$typeId", $content->contentInfo->contentId );
+            throw new NotFound( "Content with TypeId:$typeId", $content->contentInfo->id );
 
         // fetch possible roles assigned to this object
         $list = $this->backend->find(
             'User\\Role',
-            array( 'groupIds' => $content->contentInfo->contentId ),
+            array( 'groupIds' => $content->contentInfo->id ),
             array(
                 'policies' => array(
                     'type' => 'User\\Policy',
@@ -468,7 +468,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function assignRole( $groupId, $roleId, array $limitation = null )
     {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId, 'contentId' );
+        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
         if ( !$content )
             throw new NotFound( 'User Group', $groupId );
 
@@ -495,7 +495,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function unAssignRole( $groupId, $roleId )
     {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId, 'contentId' );
+        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
         if ( !$content )
             throw new NotFound( 'User Group', $groupId );
 

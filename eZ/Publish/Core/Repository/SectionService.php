@@ -225,18 +225,18 @@ class SectionService implements SectionServiceInterface
      */
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->contentId );
+        $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->id );
         $loadedSection = $this->loadSection( $section->id );
 
         $this->persistenceHandler->sectionHandler()->assign(
             $loadedSection->id,
-            $loadedContentInfo->contentId
+            $loadedContentInfo->id
         );
     }
 

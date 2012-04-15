@@ -386,7 +386,7 @@ class LocationServiceStub implements LocationService
                 // Skip root location
                 continue;
             }
-            if ( $contentInfo->contentId == $candidateLocation->getContentInfo()->contentId
+            if ( $contentInfo->id == $candidateLocation->getContentInfo()->id
                  && strpos( $candidateLocation->pathString, $subPath ) === 0
                 )
             {
@@ -600,7 +600,7 @@ class LocationServiceStub implements LocationService
                 // Skip root location
                 continue;
             }
-            if ( $location->getContentInfo()->contentId == $contentInfo->contentId )
+            if ( $location->getContentInfo()->id == $contentInfo->id )
             {
                 return true;
             }

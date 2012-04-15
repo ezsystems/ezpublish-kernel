@@ -101,7 +101,7 @@ class Mapper
     {
         $versionInfo = new VersionInfo;
 
-        $versionInfo->contentId = $content->contentInfo->contentId;
+        $versionInfo->contentId = $content->contentInfo->id;
         $versionInfo->versionNo = $versionNo;
         $versionInfo->creatorId = $content->contentInfo->ownerId;
         $versionInfo->status = VersionInfo::STATUS_DRAFT;
@@ -224,7 +224,7 @@ class Mapper
     public function extractContentInfoFromRow( array $row, $prefix = '' )
     {
         $contentInfo = new ContentInfo;
-        $contentInfo->contentId = (int)$row["{$prefix}id"];
+        $contentInfo->id = (int)$row["{$prefix}id"];
         $contentInfo->name = $row["{$prefix}name"];
         $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
         $contentInfo->sectionId = (int)$row["{$prefix}section_id"];

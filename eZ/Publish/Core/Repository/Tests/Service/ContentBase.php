@@ -27,7 +27,7 @@ abstract class ContentBase extends BaseServiceTest
     {
         // Legacy fixture content ID=4 values
         return array(
-            "contentId"        => 4,
+            "id"               => 4,
             "name"             => "Users",
             "sectionId"        => 2,
             "currentVersionNo" => 1,
@@ -461,7 +461,7 @@ abstract class ContentBase extends BaseServiceTest
 
         // @todo assert relations
 
-        $this->assertEquals( $content->contentId, $content->contentInfo->contentId );
+        $this->assertEquals( $content->id, $content->contentInfo->id );
     }
 
     /**
@@ -657,7 +657,7 @@ abstract class ContentBase extends BaseServiceTest
         return array(
             "expected"     => $contentCreate,
             "actual"       => $contentDraft,
-            "loadedActual" => $contentService->loadContent( $contentDraft->contentId, null, 1 ),
+            "loadedActual" => $contentService->loadContent( $contentDraft->id, null, 1 ),
             "time"         => $time
         );
     }
@@ -724,7 +724,7 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                //"contentId"
+                //"id"
                 // @todo
                 //"name"             => ,
                 "sectionId"        => $contentCreate->sectionId,
@@ -743,7 +743,7 @@ abstract class ContentBase extends BaseServiceTest
             ),
             $contentDraft->contentInfo
         );
-        $this->assertNotNull( $contentDraft->contentId );
+        $this->assertNotNull( $contentDraft->id );
     }
 
     /**
@@ -770,7 +770,7 @@ abstract class ContentBase extends BaseServiceTest
                 "initialLanguageCode" => $contentCreate->mainLanguageCode,
                 //"languageCodes"
                 // implementation properties
-                "contentId"           => $contentDraft->contentId,
+                "contentId"           => $contentDraft->id,
                 // @todo
                 //"names"                =>
             ),
@@ -1297,7 +1297,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $content->contentId,
+            $content->id,
             $content->getVersionInfo()->versionNo
         );
 
@@ -1453,7 +1453,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $content->contentId,
+            $content->id,
             $content->getVersionInfo()->versionNo
         );
 
@@ -1481,7 +1481,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $content->contentId,
+            $content->id,
             $content->getVersionInfo()->versionNo
         );
 
@@ -1510,7 +1510,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $content->contentId,
+            $content->id,
             $content->getVersionInfo()->versionNo
         );
 
@@ -1539,7 +1539,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $content->contentId,
+            $content->id,
             $content->getVersionInfo()->versionNo
         );
 
@@ -1569,7 +1569,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $content->contentId,
+            $content->id,
             $content->getVersionInfo()->versionNo
         );
 
@@ -1601,7 +1601,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $content->contentId,
+            $content->id,
             $content->getVersionInfo()->versionNo
         );
 
@@ -1630,7 +1630,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $versionInfo = $contentService->loadVersionInfoById(
-            $draftContent->contentId,
+            $draftContent->id,
             $draftContent->getVersionInfo()->versionNo
         );
 
