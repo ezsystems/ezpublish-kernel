@@ -127,7 +127,6 @@ class ServiceContainer implements Container
      * Get service by name
      *
      * @uses lookupArguments()
-     * @uses getSettings()
      * @throws BadConfiguration
      * @throws MissingClass
      * @param string $serviceName
@@ -143,7 +142,12 @@ class ServiceContainer implements Container
             return $this->dependencies[$serviceKey];
         }
 
-        $settings = $this->getSettings( $serviceName );
+        if ( empty( $this->settings[$serviceName] ) )// Validate settings
+        {
+            throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
+        }
+
+        $settings = $this->settings[$serviceName] + array( 'shared' => true );
         if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "service\\[{$serviceName}]\\class", 'class setting is not defined' );
@@ -210,7 +214,7 @@ class ServiceContainer implements Container
                     list( $argument, $function  ) = explode( '::', $argument );
                 }
 
-                if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === '-' )// expand extended services
+                if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === ':' )// expand extended services
                 {
                     $builtArguments[$key] = $this->lookupArguments( $this->getListOfExtendedServices( $argument, $function ) );
                     continue;
@@ -272,44 +276,11 @@ class ServiceContainer implements Container
 
         foreach ( $this->settings as $service => $settings )
         {
-            if ( preg_match( "/^(?P<name>\w+){$parent}$/", $service, $match ) )
+            if ( preg_match( "/^(?P<prefix>[\w:]+){$parent}$/", $service, $match ) )
             {
-                $services[$match['name']] = $prefix . $match['name'] . $parent . $function;
+                $services[$match['prefix']] = $prefix . $match['prefix'] . $parent . $function;
             }
         }
         return $services;
-    }
-
-    /**
-     * @param $serviceName
-     * @return array
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
-     * @todo Consider adding support for several levels of settings inheretance, or consider adding settings includes
-     */
-    protected function getSettings( $serviceName )
-    {
-        if ( strpos( $serviceName, '-' ) )// If - is at a positive position, then service extends another one
-        {
-            $serviceParent = explode( '-', $serviceName );
-            $serviceParent = '-' . $serviceParent[1];
-            if ( !empty( $this->settings[$serviceName] ) && !empty( $this->settings[$serviceParent] ) )// Validate settings
-            {
-                return array_merge(
-                    $this->settings[$serviceParent] + array( 'shared' => true ),
-                    $this->settings[$serviceName]
-                );// uses array_merge on puposes to make sure arguments are reset
-            }
-            else if ( !empty( $this->settings[$serviceParent] ) )
-            {
-                return $this->settings[$serviceParent] + array( 'shared' => true );
-            }
-        }
-
-        if ( !empty( $this->settings[$serviceName] ) )// Validate settings
-        {
-            return $this->settings[$serviceName] + array( 'shared' => true );
-        }
-
-        throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
     }
 }

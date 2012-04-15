@@ -195,17 +195,17 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 'G' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\G',
                     'arguments' => array(
-                            'lazyHServiceCall' => '%H-parent::timesTwo',
+                            'lazyHServiceCall' => '%H:parent::timesTwo',
                             'hIntValue' => 42,
-                            'lazyHService' => '%H-parent',
+                            'lazyHService' => '%H:parent',
                     ),
                 ),
-                'H-parent' => array(
+                'H:parent' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\H',
                     'shared' => false,
                     'arguments' => array(),
                 ),
-                '-parent' => array(
+                'parent' => array(
                     'arguments' => array( 'test' => 33 ),
                 ),
             )
@@ -226,19 +226,22 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 'ExtendedTestCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestCheck',
                     'arguments' => array(
-                            'extendedTests' => '@-ExtendedTest',
+                            'extendedTests' => '@:ExtendedTest',
                     ),
                 ),
-                'ExtendedTest1-ExtendedTest' => array(
+                'ExtendedTest1:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest1',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest2-ExtendedTest' => array(
+                'ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest2',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest3-ExtendedTest' => array(
+                'ExtendedTest3:ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                '-ExtendedTest' => array(
+                'ExtendedTest' => array(
                     'arguments' => array( 'h' => '$H'),
                 ),
             ),
@@ -261,19 +264,22 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 'ExtendedTestLacyCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestLacyCheck',
                     'arguments' => array(
-                            'extendedTests' => '%-ExtendedTest',
+                            'extendedTests' => '%:ExtendedTest',
                     ),
                 ),
-                'ExtendedTest1-ExtendedTest' => array(
+                'ExtendedTest1:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest1',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest2-ExtendedTest' => array(
+                'ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest2',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest3-ExtendedTest' => array(
+                'ExtendedTest3:ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                '-ExtendedTest' => array(
+                'ExtendedTest' => array(
                     'arguments' => array( 'h' => '$H'),
                 ),
             ),
@@ -296,20 +302,23 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 'ExtendedTestLacyCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestLacyCheck',
                     'arguments' => array(
-                            'extendedTests' => '%-ExtendedTest::setTest',
+                            'extendedTests' => '%:ExtendedTest::setTest',
                             'test' => 'newValue',
                     ),
                 ),
-                'ExtendedTest1-ExtendedTest' => array(
+                'ExtendedTest1:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest1',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest2-ExtendedTest' => array(
+                'ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest2',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest3-ExtendedTest' => array(
+                'ExtendedTest3:ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                '-ExtendedTest' => array(
+                'ExtendedTest' => array(
                     'arguments' => array( 'h' => '$H' ),
                 ),
             ),
@@ -447,9 +456,10 @@ class ExtendedTestCheck
             $key++;
             if ( !$extendedTest instanceof ExtendedTest )
                 throw new \Exception( "Values in \$extendedTests must extend ExtendedTest" );
-            else if ( $extendedTestName !== "ExtendedTest{$key}" )
+            else if ( $key !== 3 && $extendedTestName !== "ExtendedTest{$key}" )
                 throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
-
+            else if ( $key === 3 && $extendedTestName !== "ExtendedTest3:ExtendedTest2" )
+                throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
         }
         $this->count = $key;
     }
@@ -473,7 +483,9 @@ class ExtendedTestLacyCheck
             $extendedTest = $extendedTest( $test );
             if ( !$extendedTest instanceof ExtendedTest )
                 throw new \Exception( "Values in \$extendedTests must extend ExtendedTest" );
-            else if ( $extendedTestName !== "ExtendedTest{$key}" )
+            else if ( $key !== 3 && $extendedTestName !== "ExtendedTest{$key}" )
+                throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
+            else if ( $key === 3 && $extendedTestName !== "ExtendedTest3:ExtendedTest2" )
                 throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
             else if ( $extendedTest->test !== $test )
                 throw new \Exception( "\$extendedTest->test is supposed to be '{$test}', got: {$extendedTest->test}" );
