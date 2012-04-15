@@ -30,7 +30,7 @@ class ContentStub extends Content
     /**
      * @var integer
      */
-    protected $contentId;
+    protected $id;
 
     /**
      * @var integer
@@ -153,7 +153,7 @@ class ContentStub extends Content
      */
     private function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+        return $this->repository->getContentService()->loadContentInfo( $this->id );
     }
 
     public function __get( $property )

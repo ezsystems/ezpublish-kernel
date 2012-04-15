@@ -147,7 +147,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                $content->contentId,
+                $content->id,
                 true,
                 1,
                 'abcdef0123456789abcdef0123456789',
@@ -157,7 +157,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 null
             ),
             array(
-                $content->contentInfo->contentId,
+                $content->contentInfo->id,
                 $content->contentInfo->alwaysAvailable,
                 $content->contentInfo->currentVersionNo,
                 $content->contentInfo->remoteId,
@@ -732,7 +732,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                $content->contentId,
+                $content->id,
                 true,
                 1,
                 'abcdef0123456789abcdef0123456789',
@@ -741,7 +741,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 true,
             ),
             array(
-                $content->contentInfo->contentId,
+                $content->contentInfo->id,
                 $content->contentInfo->alwaysAvailable,
                 $content->contentInfo->currentVersionNo,
                 $content->contentInfo->remoteId,
@@ -885,7 +885,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                $draft->contentId,
+                $draft->id,
                 true,
                 1,
                 'eng-GB',
@@ -894,7 +894,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 1
             ),
             array(
-                $contentInfo->contentId,
+                $contentInfo->id,
                 $contentInfo->alwaysAvailable,
                 $contentInfo->currentVersionNo,
                 $contentInfo->mainLanguageCode,
@@ -986,7 +986,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService->createContentDraft( $content->contentInfo );
 
         // This call will still load the published content version
-        $contentPublished = $contentService->loadContent( $content->contentId );
+        $contentPublished = $contentService->loadContent( $content->id );
         /* END: Use Case */
 
         $this->assertEquals( 1, $contentPublished->getVersionInfo()->versionNo );
@@ -1779,7 +1779,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentVersion2 = $this->createContentVersion2();
 
         // Will return the $versionInfo of $content
-        $versionInfo = $contentService->loadVersionInfoById( $contentVersion2->contentId, 1 );
+        $versionInfo = $contentService->loadVersionInfoById( $contentVersion2->id, 1 );
         /* END: Use Case */
 
         $this->assertEquals( 1, $versionInfo->versionNo );
@@ -1803,7 +1803,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // This call will fail with a "NotFoundException", because not versionNo
         // 2 exists for this content object.
-        $contentService->loadVersionInfoById( $content->contentId, 2 );
+        $contentService->loadVersionInfoById( $content->id, 2 );
         /* END: Use Case */
     }
 
@@ -2084,7 +2084,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $draft = $this->createMultipleLanguageDraftVersion1();
 
         // This draft contains those fields localized with "eng-US"
-        $draftLocalized = $contentService->loadContent( $draft->contentId, array( 'eng-US' ) );
+        $draftLocalized = $contentService->loadContent( $draft->id, array( 'eng-US' ) );
         /* END: Use Case */
 
         $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-US' );
@@ -2107,7 +2107,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $draftVersion2 = $this->createContentDraftVersion2();
 
         // This content instance is identical to $contentVersion1
-        $oldContent = $contentService->loadContent( $draftVersion2->contentId, null, 1 );
+        $oldContent = $contentService->loadContent( $draftVersion2->id, null, 1 );
         /* END: Use Case */
 
         $this->assertEquals( 1, $oldContent->getVersionInfo()->versionNo );
@@ -2132,7 +2132,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // This call will fail with a "NotFoundException", because for this
         // content object no versionNo=2 exists.
-        $contentService->loadContent( $content->contentId, null, 2 );
+        $contentService->loadContent( $content->id, null, 2 );
         /* END: Use Case */
     }
 
@@ -2238,7 +2238,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService->deleteVersion( $draft->getVersionInfo() );
         /* END: Use Case */
 
-        $contentService->loadContent( $draft->contentId );
+        $contentService->loadContent( $draft->id );
     }
 
     /**
@@ -2340,8 +2340,8 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertNotEquals(
-            $contentVersion2->contentId,
-            $contentCopied->contentId
+            $contentVersion2->id,
+            $contentCopied->id
         );
 
         $this->assertEquals(
@@ -2401,8 +2401,8 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertNotEquals(
-            $contentVersion2->contentId,
-            $contentCopied->contentId
+            $contentVersion2->id,
+            $contentCopied->id
         );
 
         $this->assertEquals(
@@ -2703,7 +2703,7 @@ class ContentServiceTest extends BaseContentServiceTest
             $relation
         );
 
-        return $contentService->loadContent( $draft->contentId );
+        return $contentService->loadContent( $draft->id );
     }
 
     /**
@@ -3076,7 +3076,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate->alwaysAvailable = true;
 
         // Create a new content object
-        $contentId = $contentService->createContent( $contentCreate )->contentId;
+        $contentId = $contentService->createContent( $contentCreate )->id;
 
         // Rollback all changes
         $repository->rollback();
@@ -3131,7 +3131,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate->alwaysAvailable = true;
 
         // Create a new content object
-        $contentId = $contentService->createContent( $contentCreate )->contentId;
+        $contentId = $contentService->createContent( $contentCreate )->id;
 
         // Rollback all changes
         $repository->commit();
@@ -3140,7 +3140,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $contentService->loadContent( $contentId );
         /* END: Use Case */
 
-        $this->assertEquals( $contentId, $content->contentId );
+        $this->assertEquals( $contentId, $content->id );
     }
 
     /**
@@ -3164,7 +3164,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $draft = $this->createContentDraftVersion1();
 
-        $contentId = $draft->contentId;
+        $contentId = $draft->id;
 
         // Roleback the transaction
         $repository->rollback();
@@ -3204,7 +3204,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $draft = $this->createContentDraftVersion1();
 
-        $contentId = $draft->contentId;
+        $contentId = $draft->id;
 
         // Roleback the transaction
         $repository->commit();
@@ -3213,7 +3213,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $contentService->loadContent( $contentId );
         /* END: Use Case */
 
-        $this->assertEquals( $contentId, $content->contentId );
+        $this->assertEquals( $contentId, $content->id );
     }
 
     /**
@@ -3725,7 +3725,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentInfo = $contentService->loadContentInfo( $contentId );
         /* END: Use Case */
 
-        $this->assertEquals( $contentId, $contentInfo->contentId );
+        $this->assertEquals( $contentId, $contentInfo->id );
     }
 
     /**

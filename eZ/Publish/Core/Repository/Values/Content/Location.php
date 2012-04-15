@@ -45,7 +45,7 @@ class Location extends APILocation
         switch ( $property )
         {
             case 'contentId':
-                return $this->contentInfo->contentId;
+                return $this->contentInfo->id;
         }
 
         return parent::__get( $property );

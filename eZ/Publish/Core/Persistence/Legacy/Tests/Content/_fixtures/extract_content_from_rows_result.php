@@ -9,7 +9,7 @@ use eZ\Publish\SPI\Persistence\Content,
 
 $content = new Content();
 $content->contentInfo = new ContentInfo();
-$content->contentInfo->contentId = 226;
+$content->contentInfo->id = 226;
 $content->contentInfo->contentTypeId = 16;
 $content->contentInfo->sectionId = 1;
 $content->contentInfo->ownerId = 14;

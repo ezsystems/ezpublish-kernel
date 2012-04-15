@@ -872,7 +872,6 @@ class UserService implements UserServiceInterface
                 'versionInfo'   => $content->getVersionInfo(),
                 'fields'        => $content->getFields(),
                 'relations'     => $content->getRelations(),
-                'id'            => $contentInfo->contentId,
                 'parentId'      => $mainLocation ? $mainLocation->parentLocationId : null,
                 'subGroupCount' => $subGroupCount
             )
@@ -897,7 +896,6 @@ class UserService implements UserServiceInterface
                 'versionInfo'   => $content->getVersionInfo(),
                 'fields'        => $content->getFields(),
                 'relations'     => $content->getRelations(),
-                'id'            => $spiUser->id,
                 'login'         => $spiUser->login,
                 'email'         => $spiUser->email,
                 'passwordHash'  => $spiUser->passwordHash,

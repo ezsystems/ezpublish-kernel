@@ -357,7 +357,7 @@ class LocationServiceTest extends BaseTest
             $location->contentInfo
         );
         $this->assertEquals(
-            4, $location->contentInfo->contentId
+            4, $location->contentInfo->id
         );
     }
 

@@ -492,7 +492,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testInsertNewField()
     {
         $content = $this->getContentFixture();
-        $content->contentInfo->contentId = 2342;
+        $content->contentInfo->id = 2342;
         // $content->versionInfo->versionNo = 3;
 
         $field = $this->getFieldFixture();
@@ -547,7 +547,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testUpdateField()
     {
         $content = $this->getContentFixture();
-        $content->contentInfo->contentId = 2342;
+        $content->contentInfo->id = 2342;
 
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
@@ -599,7 +599,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testUpdateNonTranslatableField()
     {
         $content = $this->getContentFixture();
-        $content->contentInfo->contentId = 2342;
+        $content->contentInfo->id = 2342;
 
         $fieldGb = $this->getFieldFixture();
         $fieldUs = $this->getOtherLanguageFieldFixture();
@@ -621,7 +621,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             )
         );
 
-        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $content->contentInfo->contentId );
+        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $content->contentInfo->id );
 
         $this->assertQueryResult(
             array(

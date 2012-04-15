@@ -55,7 +55,7 @@ class HandlerTest extends PHPUnit_Framework_TestCase
         $version->versionNo = 3;
 
         $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
-        $content->contentId = 1;
+        $content->id = 1;
         $content
             ->expects( $this->once() )
             ->method( 'getVersionInfo' )
@@ -77,7 +77,7 @@ class HandlerTest extends PHPUnit_Framework_TestCase
             ->method( 'addRelation' )
             ->with(
                 $this->logicalOr( $this->equalTo( Relation::FIELD ), $this->equalTo( Relation::LINK ) ),
-                $content->contentId,
+                $content->id,
                 $version->versionNo,
                 $this->logicalOr( $this->equalTo( 1 ), $this->equalTo( 2 ), $this->equalTo( 3 ) )
             );

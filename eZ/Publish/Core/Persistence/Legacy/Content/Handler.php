@@ -91,7 +91,7 @@ class Handler implements BaseContentHandler
             $struct
         );
 
-        $content->contentInfo->contentId = $this->contentGateway->insertContentObject( $struct );
+        $content->contentInfo->id = $this->contentGateway->insertContentObject( $struct );
 
         $content->versionInfo = $this->mapper->createVersionInfoForContent(
             $content, 1,
@@ -111,7 +111,7 @@ class Handler implements BaseContentHandler
         // Create node assignments
         foreach ( $struct->locations as $location )
         {
-            $location->contentId = $content->contentInfo->contentId;
+            $location->contentId = $content->contentInfo->id;
             $location->contentVersion = $content->versionInfo->versionNo;
             $this->locationGateway->createNodeAssignment(
                 $location,
@@ -124,7 +124,7 @@ class Handler implements BaseContentHandler
         foreach ( $content->versionInfo->names as $language => $name )
         {
             $this->contentGateway->setName(
-                $content->contentInfo->contentId,
+                $content->contentInfo->id,
                 $content->versionInfo->versionNo,
                 $name, $language
             );

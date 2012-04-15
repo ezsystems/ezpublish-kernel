@@ -64,7 +64,7 @@ class LocationHandler implements LocationHandlerInterface
         $newLocation = $this->create(
             new CreateStruct(
                 array(
-                    "contentId" => $contentCopy->contentInfo->contentId,
+                    "contentId" => $contentCopy->contentInfo->id,
                     "contentVersion" => $contentCopy->contentInfo->currentVersionNo,
                     "sortField" => $location->sortField,
                     "sortOrder" => $location->sortOrder,
@@ -311,10 +311,9 @@ class LocationHandler implements LocationHandlerInterface
 
         $this->backend->updateByMatch(
             'Content\\ContentInfo',
-            array( 'contentId' => $aContentIds ),
+            array( 'id' => $aContentIds ),
             array( 'sectionId' => $sectionId ),
-            true,
-            'contentId'
+            true
         );
     }
 
@@ -443,8 +442,7 @@ class LocationHandler implements LocationHandlerInterface
         );
         $parentContent = $this->backend->load(
             "Content\\ContentInfo",
-            $parentLocation->contentId,
-            "contentId"
+            $parentLocation->contentId
         );
 
         $this->setSectionForSubtree( $locationId, $parentContent->sectionId );
@@ -507,7 +505,7 @@ class LocationHandler implements LocationHandlerInterface
             "Content\\VersionInfo",
             array(
                 "contentId" => $vo->contentId,
-                "versionNo" => $this->backend->load( 'Content\\ContentInfo', $vo->contentId, 'contentId' )->currentVersionNo
+                "versionNo" => $this->backend->load( 'Content\\ContentInfo', $vo->contentId )->currentVersionNo
             )
         );
         return isset( $version[0]->names["eng-GB"] )

@@ -66,7 +66,7 @@ class SearchHandlerTest extends HandlerTest
 
         $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
-        $this->contentId = $this->content->contentInfo->contentId;
+        $this->contentId = $this->content->contentInfo->id;
     }
 
     protected function tearDown()
@@ -78,7 +78,7 @@ class SearchHandlerTest extends HandlerTest
             // Removing default objects as well as those created by tests
             foreach ( $this->contentToDelete as $content )
             {
-                $contentHandler->deleteContent( $content->contentInfo->contentId );
+                $contentHandler->deleteContent( $content->contentInfo->id );
             }
         }
         catch ( NotFound $e )
@@ -95,9 +95,9 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindSingle()
     {
-        $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->contentInfo->contentId ) );
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->contentInfo->id ) );
         $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content', $content );
-        $this->assertEquals( $this->contentId, $content->contentInfo->contentId );
+        $this->assertEquals( $this->contentId, $content->contentInfo->id );
         $this->assertEquals( 14, $content->contentInfo->ownerId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
         $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
@@ -112,6 +112,6 @@ class SearchHandlerTest extends HandlerTest
     {
         $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'remoteIDForLocation2' ) );
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( 1, $content->contentInfo->contentId );
+        $this->assertEquals( 1, $content->contentInfo->id );
     }
 }

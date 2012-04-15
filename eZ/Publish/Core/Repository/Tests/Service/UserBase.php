@@ -13,6 +13,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
     eZ\Publish\Core\Repository\Values\User\User,
     eZ\Publish\Core\Repository\Values\User\UserGroup,
+    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
 
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
@@ -94,7 +95,7 @@ abstract class UserBase extends BaseServiceTest
         try
         {
             $user = new User();
-            $user->id = 42;
+            $user->login = 'user';
             self::fail( "Succeeded setting read only property" );
         }
         catch( PropertyReadOnlyException $e ) {}
@@ -102,7 +103,7 @@ abstract class UserBase extends BaseServiceTest
         try
         {
             $userGroup = new UserGroup();
-            $userGroup->id = 42;
+            $userGroup->parentId = 42;
             self::fail( "Succeeded setting read only property" );
         }
         catch( PropertyReadOnlyException $e ) {}
@@ -137,18 +138,18 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $user = new User( array( "id" => 1 ) );
+        $user = new User( array( "login" => 'admin' ) );
         try
         {
-            unset( $user->id );
+            unset( $user->login );
             self::fail( 'Unsetting read-only property succeeded' );
         }
         catch ( PropertyReadOnlyException $e ) {}
 
-        $userGroup = new UserGroup( array( "id" => 1 ) );
+        $userGroup = new UserGroup( array( "parentId" => 1 ) );
         try
         {
-            unset( $userGroup->id );
+            unset( $userGroup->parentId );
             self::fail( 'Unsetting read-only property succeeded' );
         }
         catch ( PropertyReadOnlyException $e ) {}
@@ -254,7 +255,7 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $parentGroup = new UserGroup( array( "id" => PHP_INT_MAX ) );
+        $parentGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
         $userService->loadSubUserGroups( $parentGroup );
     }
 
@@ -287,7 +288,7 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $userGroup = new UserGroup( array( "id" => PHP_INT_MAX ) );
+        $userGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
         $userService->deleteUserGroup( $userGroup );
     }
 
@@ -318,8 +319,8 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $userGroupToMove = new UserGroup( array( "id" => PHP_INT_MAX ) );
-        $parentUserGroup = new UserGroup( array( "id" => PHP_INT_MAX ) );
+        $userGroupToMove = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $parentUserGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
         $userService->moveUserGroup( $userGroupToMove, $parentUserGroup );
     }
 
@@ -361,7 +362,7 @@ abstract class UserBase extends BaseServiceTest
         $userGroupUpdateStruct->contentUpdateStruct->initialLanguageCode = $initialLanguageCode;
         $userGroupUpdateStruct->contentUpdateStruct->setField( "name", null );
 
-        $userGroup = new UserGroup( array( "id" => 42 ) );
+        $userGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => 42 ) ) ) );
 
         $userService->updateUserGroup( $userGroup, $userGroupUpdateStruct );
     }
@@ -413,7 +414,7 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField( "first_name", "New" );
         $userCreateStruct->setField( "last_name", "User" );
 
-        $parentGroup = new UserGroup( array( "id" => PHP_INT_MAX ) );
+        $parentGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
         $userService->createUser( $userCreateStruct, array( $parentGroup ) );
     }
 
@@ -609,7 +610,7 @@ abstract class UserBase extends BaseServiceTest
         $userUpdateStruct->contentUpdateStruct->setField( "first_name", null );
         $userUpdateStruct->contentUpdateStruct->setField( "last_name", null );
 
-        $user = new User( array( "id" => 14 ) );
+        $user = new User( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
 
         $userService->updateUser( $user, $userUpdateStruct );
     }
