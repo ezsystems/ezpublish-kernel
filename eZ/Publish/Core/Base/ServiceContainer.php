@@ -269,14 +269,15 @@ class ServiceContainer implements Container
     protected function getListOfExtendedServices( $parent, $function = '' )
     {
         $prefix = $parent[0];
-        $parent = ltrim( $parent, '@%' );
+        $parent = ltrim( $parent, '@%' );// Keep starting ':' on parent for easier matching bellow
         $services = array();
         if ( $function !== '' )
             $function = '::' . $function;
 
         foreach ( $this->settings as $service => $settings )
         {
-            if ( preg_match( "/^(?P<prefix>[\w:]+){$parent}$/", $service, $match ) )
+            if ( stripos( $service, $parent ) !== false &&
+                 preg_match( "/^(?P<prefix>[\w:]+){$parent}$/", $service, $match ) )
             {
                 $services[$match['prefix']] = $prefix . $match['prefix'] . $parent . $function;
             }
