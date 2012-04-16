@@ -76,20 +76,22 @@ class Stream implements HttpClient
 
         $requestHeaders = $this->getRequestHeaders( $message->headers );
 
+        $url = $this->server . $path;
+
+        $contextOptions = array(
+            'http' => array(
+                'method'        => $method,
+                'content'       => $message->body,
+                'ignore_errors' => true,
+                'header'        => $requestHeaders,
+            ),
+        );
+
         $httpFilePointer = @fopen(
-            $this->server . $path,
+            $url,
             'r',
             false,
-            stream_context_create(
-                array(
-                    'http' => array(
-                        'method'        => $method,
-                        'content'       => $message->body,
-                        'ignore_errors' => true,
-                        'header'        => $requestHeaders,
-                    ),
-                )
-            )
+            stream_context_create( $contextOptions )
         );
 
         // Check if connection has been established successfully
