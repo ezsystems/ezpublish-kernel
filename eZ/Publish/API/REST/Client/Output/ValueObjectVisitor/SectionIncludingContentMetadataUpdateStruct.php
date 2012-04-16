@@ -37,7 +37,7 @@ class SectionIncludingContentMetadataUpdateStruct extends ValueObjectVisitor
         {
             $generator->startAttribute(
                 'href',
-                sprintf( '/content/sections/%s', $data->sectionId )
+                $data->sectionId
             );
             $generator->endAttribute( 'href' );
         }
@@ -48,7 +48,7 @@ class SectionIncludingContentMetadataUpdateStruct extends ValueObjectVisitor
         {
             $generator->startAttribute(
                 'href',
-                sprintf( '/user/users/%s', $data->ownerId )
+                $data->ownerId
             );
             $generator->endAttribute( 'href' );
         }

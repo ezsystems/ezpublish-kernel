@@ -31,8 +31,8 @@ class ContentInfo extends Parser
     {
         return new Values\Content\ContentInfoStub(
             array(
-                'contentId'  => $data['_id'],
-                'name'       => $data['name'],
+                'id'   => $data['_href'],
+                'name' => $data['name'],
             )
         );
     }

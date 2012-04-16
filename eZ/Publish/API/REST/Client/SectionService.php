@@ -119,7 +119,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
         // dies with it. m(
         $result = $this->client->request(
             'POST',
-            sprintf( '/content/sections/%s', $section->id ),
+            $section->id,
             $inputMessage
         );
 
@@ -140,7 +140,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     {
         $response = $this->client->request(
             'GET',
-            sprintf( '/content/sections/%s', $sectionId ),
+            $sectionId,
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'Section' ) )
             )
@@ -225,7 +225,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
 
         $response = $this->client->request(
             'POST',
-            sprintf( '/content/objects/%s', $contentInfo->contentId ),
+            $contentInfo->id,
             $inputMessage
         );
 
@@ -249,7 +249,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     {
         $response = $this->client->request(
             'DELETE',
-            sprintf( '/content/sections/%s', $section->id ),
+            $section->id,
             new Message(
                 // TODO: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,

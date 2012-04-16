@@ -31,7 +31,7 @@ class Section extends Parser
     {
         return new Values\Content\Section(
             array(
-                'id'         => $data['sectionId'],
+                'id'         => $data['_href'],
                 'identifier' => $data['identifier'],
                 'name'       => $data['name'],
             )
