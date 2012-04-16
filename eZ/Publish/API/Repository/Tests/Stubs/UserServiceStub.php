@@ -106,7 +106,6 @@ class UserServiceStub implements UserService
 
         $userGroup = new UserGroupStub(
             array(
-                'id'             =>  $content->id,
                 'parentId'       =>  $parentGroup->id,
                 'subGroupCount'  =>  0,
                 'content'        =>  $content
@@ -115,7 +114,6 @@ class UserServiceStub implements UserService
         $this->userGroups[$userGroup->id]   = $userGroup;
         $this->userGroups[$parentGroup->id] = new UserGroupStub(
             array(
-                'id'             =>  $parentGroup->id,
                 'parentId'       =>  $parentGroup->parentId,
                 'subGroupCount'  =>  $parentGroup->subGroupCount + 1,
                 'content'        =>  $parentGroup->content
@@ -296,7 +294,6 @@ class UserServiceStub implements UserService
         {
             $this->userGroups[$userGroup->id] = new UserGroupStub(
                 array(
-                    'id'             =>  $userGroup->id,
                     'parentId'       =>  $userGroup->parentId,
                     'subGroupCount'  =>  $userGroup->subGroupCount,
                     'content'        =>  $content
@@ -354,7 +351,6 @@ class UserServiceStub implements UserService
 
         $user = new UserStub(
             array(
-                'id'             =>  $content->id,
                 'login'          =>  $userCreateStruct->login,
                 'email'          =>  $userCreateStruct->email,
                 'passwordHash'   =>  $this->createHash(
@@ -508,7 +504,6 @@ class UserServiceStub implements UserService
 
         $this->users[$user->id] = new UserStub(
             array(
-                'id'             =>  $user->id,
                 'login'          =>  $user->login,
                 'email'          =>  $userUpdateStruct->email ?: $user->email,
                 'isEnabled'      =>  is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,

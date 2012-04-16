@@ -19,10 +19,9 @@ $repository = new RepositoryStub(
 $repository->setCurrentUser(
     new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
         array(
-            'id' => 14,
             'content'  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
                 array(
-                    'contentId' => 14
+                    'id' => 14
                 )
             )
         )
