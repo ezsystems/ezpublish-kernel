@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gatway as ContentGateway;
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 
 /**
  * Updater action base class
