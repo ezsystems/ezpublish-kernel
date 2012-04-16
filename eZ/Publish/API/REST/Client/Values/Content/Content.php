@@ -29,7 +29,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     /**
      * @var integer
      */
-    protected $contentId;
+    protected $id;
 
     /**
      * @var integer
@@ -153,7 +153,7 @@ echo "SKIP 2 ({$field->fieldDefIdentifier}, $field->languageCode !== $languageCo
      */
     private function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+        return $this->repository->getContentService()->loadContentInfo( $this->id );
     }
 
     public function __get( $property )

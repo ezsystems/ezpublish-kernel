@@ -37,8 +37,8 @@ class TrashItem extends \eZ\Publish\API\Repository\Values\Content\TrashItem
     {
         switch ( $property )
         {
-            case 'contentId':
-                return $this->getContentInfo()->contentId;
+            case 'id':
+                return $this->getContentInfo()->id;
         }
         return parent::__get( $property );
     }
