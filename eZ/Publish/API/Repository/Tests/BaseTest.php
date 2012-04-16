@@ -21,9 +21,9 @@ use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var \eZ\Publish\API\Repository\Tests\SetupFactory
      */
-    private $repositoryInit;
+    private $setupFactory;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -87,11 +87,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function getIdManager()
     {
-        if ( !isset( $this->idManager ) )
-        {
-            $this->idManager = new IdManager\Php;
-        }
-        return $this->idManager;
+        return $this->getSetupFactory()->getIdManager();
     }
 
     /**
@@ -135,40 +131,38 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if ( null === $this->repository )
         {
-            $file = $this->getRepositoryInit();
-
             // Change working directory to project root. This is required by the
             // current legacy implementation.
             $count = substr_count( __NAMESPACE__, '\\' ) + 1;
 
             chdir( realpath( str_repeat( '../', $count ) ) );
 
-            $this->repository = include $file;
-/*
-            $userService = $this->repository->getUserService();
-            $this->repository->setCurrentUser( $userService->loadUser( 14 ) );*/
+            $this->repository = $this->getSetupFactory()->getRepository();
         }
         return $this->repository;
     }
 
-    private function getRepositoryInit()
+    /**
+     * @return \eZ\Publish\API\Repository\Tests\SetupFactory
+     */
+    private function getSetupFactory()
     {
-        if ( null === $this->repositoryInit )
+        if ( null === $this->setupFactory )
         {
-            if ( false === isset( $_ENV['repositoryInit'] ) )
+            if ( false === isset( $_ENV['setupFactory'] ) )
             {
-                throw new \ErrorException( 'Missing mandatory setting $_ENV["repositoryInit"].' );
+                throw new \ErrorException( 'Missing mandatory setting $_ENV["setupFactory"].' );
             }
 
-            $file = realpath( $_ENV['repositoryInit'] );
-            if ( false === file_exists( $file ) )
+            $setupClass = $_ENV['setupFactory'];
+            if ( false === class_exists( $setupClass ) )
             {
-                throw new \ErrorException( '$_ENV["repositoryInit"] does not reference an existing file.' );
+                throw new \ErrorException( '$_ENV["setupFactory"] does not reference an existing class.' );
             }
 
-            $this->repositoryInit = $file;
+            $this->setupFactory = new $setupClass;
         }
-        return $this->repositoryInit;
+        return $this->setupFactory;
     }
 
     /**

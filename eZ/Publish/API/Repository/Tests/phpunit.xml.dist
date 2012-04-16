@@ -6,7 +6,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
     <php>
-        <env name="repositoryInit" value="common.php" />
+		<env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Memory" />
         <env name="backendVersion" value="5" />
     </php>
     <testsuites>

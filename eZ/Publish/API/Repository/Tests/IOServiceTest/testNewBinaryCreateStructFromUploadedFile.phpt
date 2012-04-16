@@ -22,7 +22,9 @@ chdir( __DIR__ . '/../../../../../../' );
 require 'bootstrap.php';
 
 // Load implementation specific init script
-$repository = include __DIR__ . '/../' . $_SERVER['repositoryInit'];
+
+$setupFactory = new $_SERVER['setupFactory'];
+$repository = $setupFactory->getRepository();
 
 $ioService = $repository->getIOService();
 
