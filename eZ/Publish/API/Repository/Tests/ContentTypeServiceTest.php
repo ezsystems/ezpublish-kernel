@@ -165,11 +165,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentTypeId = $this->generateId( 'type', 2 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
         // Loads the "Users" group
-        $loadedGroup = $contentTypeService->loadContentTypeGroup( 2 );
+        // $contentTypeId contains the ID value 2
+        $loadedGroup = $contentTypeService->loadContentTypeGroup( $contentTypeId );
         /* END: Use Case */
 
         $this->assertInstanceOf(

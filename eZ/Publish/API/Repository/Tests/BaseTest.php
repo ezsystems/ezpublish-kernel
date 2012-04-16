@@ -31,6 +31,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\IdManager
+     */
+    private $idManager;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -73,6 +78,44 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         chdir( __DIR__ );
 
         parent::tearDown();
+    }
+
+    /**
+     * Returns the ID generator, fitting to the repository implementation
+     *
+     * @return \eZ\Publish\API\Repository\Tests\IdManager
+     */
+    protected function getIdManager()
+    {
+        if ( !isset( $this->idManager ) )
+        {
+            $this->idManager = new IdManager\Php;
+        }
+        return $this->idManager;
+    }
+
+    /**
+     * Generates a repository specific ID value.
+     *
+     * @param string $type
+     * @param mixed $rawId
+     * @return mixed
+     */
+    protected function generateId( $type, $rawId )
+    {
+        return $this->getIdManager()->generateId( $type, $rawId );
+    }
+
+    /**
+     * Parses a repository specific ID value.
+     *
+     * @param string $type
+     * @param mixed $id
+     * @return mixed
+     */
+    protected function parseId( $type, $id )
+    {
+        return $this->getIdManager()->parseId( $type, $id );
     }
 
     /**
