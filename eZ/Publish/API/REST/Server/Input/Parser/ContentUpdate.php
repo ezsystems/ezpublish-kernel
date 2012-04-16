@@ -8,7 +8,6 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Input\Parser;
-use eZ\Publish\API\REST\Common\Input\Parser;
 use eZ\Publish\API\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\API\REST\Common\Exceptions;
 
@@ -17,7 +16,7 @@ use eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruc
 /**
  * Base class for input parser
  */
-class ContentUpdate extends Parser
+class ContentUpdate extends Base
 {
     /**
      * Parse input structure
@@ -35,11 +34,15 @@ class ContentUpdate extends Parser
         }
         if ( is_array( $data['Section'] ) && isset( $data['Section']['_href'] ) )
         {
-            if ( !preg_match( '(/content/sections/(?P<value>[^/]+)$)', $data['Section']['_href'], $matches ) )
+            try
+            {
+                $matches = $this->urlHandler->parse( 'section', $data['Section']['_href'] );
+            }
+            catch ( Exceptions\InvalidArgumentException $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <Section> reference in <ContentUpdate>.' );
             }
-            $parsedData['sectionId'] = $matches['value'];
+            $parsedData['sectionId'] = $matches['section'];
         }
 
         if ( !array_key_exists( 'Owner', $data ) )

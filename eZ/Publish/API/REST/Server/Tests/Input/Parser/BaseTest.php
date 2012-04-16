@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Tests\Input\Parser;
+use eZ\Publish\API\REST\Common\UrlHandler;
 
 /**
  * Base test for input parsers.
@@ -20,7 +21,12 @@ abstract class BaseTest extends \eZ\Publish\API\REST\Server\Tests\BaseTest
     protected $parsingDispatcherMock;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
+     * @var \eZ\Publish\API\REST\Common\UrlHandler\eZPublish
+     */
+    protected $urlHandler;
+
+    /**
+     * @return \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
     {
@@ -35,5 +41,17 @@ abstract class BaseTest extends \eZ\Publish\API\REST\Server\Tests\BaseTest
             );
         }
         return $this->parsingDispatcherMock;
+    }
+
+    /**
+     * @return \eZ\Publish\API\REST\Common\UrlHandler\eZPublish;
+     */
+    protected function getUrlHandler()
+    {
+        if ( !isset( $this->urlHandler ) )
+        {
+            $this->urlHandler = new UrlHandler\eZPublish;
+        }
+        return $this->urlHandler;
     }
 }

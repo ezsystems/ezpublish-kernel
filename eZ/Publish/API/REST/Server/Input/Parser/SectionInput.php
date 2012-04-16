@@ -8,7 +8,6 @@
  */
 
 namespace eZ\Publish\API\REST\Server\Input\Parser;
-use eZ\Publish\API\REST\Common\Input\Parser;
 use eZ\Publish\API\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\API\REST\Common\Exceptions;
 
@@ -17,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 /**
  * Base class for input parser
  */
-class SectionInput extends Parser
+class SectionInput extends Base
 {
     /**
      * Parse input structure

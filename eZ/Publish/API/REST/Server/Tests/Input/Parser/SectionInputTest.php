@@ -75,6 +75,6 @@ class SectionInputTest extends BaseTest
      */
     protected function getSectionInput()
     {
-        return new SectionInput();
+        return new SectionInput( $this->getUrlHandler() );
     }
 }
