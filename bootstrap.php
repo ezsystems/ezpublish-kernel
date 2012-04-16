@@ -21,7 +21,7 @@ if ( !( $settings = include( __DIR__ . '/config.php' ) ) )
 }
 
 require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
-$loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'], ClassLoader::MODE_PSR_0_STRICT );
+$loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'] );
 spl_autoload_register( array( $loader, 'load' ) );
 
 // Zeta Components
