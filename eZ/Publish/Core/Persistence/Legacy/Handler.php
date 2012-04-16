@@ -28,11 +28,8 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
     eZ\Publish\Core\Persistence\Legacy\User,
-    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
-    ezcDbFactory;
+    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
 
 /**
  * The repository handler for the legacy storage engine

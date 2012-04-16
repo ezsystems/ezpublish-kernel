@@ -3,7 +3,6 @@ return array(
     array(
         4  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
             array(
-                "id"  =>  4,
                 "parentId"  =>  0,
                 "subGroupCount"  =>  5,
                 "content"  =>  $this->getContentService()->loadContent( 4 ),
@@ -11,7 +10,6 @@ return array(
         ),
         11  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
             array(
-                "id"  =>  11,
                 "parentId"  =>  4,
                 "subGroupCount"  =>  0,
                 "content"  =>  $this->getContentService()->loadContent( 11 ),
@@ -19,7 +17,6 @@ return array(
         ),
         12  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
             array(
-                "id"  =>  12,
                 "parentId"  =>  4,
                 "subGroupCount"  =>  0,
                 "content"  =>  $this->getContentService()->loadContent( 12 ),
@@ -27,7 +24,6 @@ return array(
         ),
         13  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
             array(
-                "id"  =>  13,
                 "parentId"  =>  4,
                 "subGroupCount"  =>  0,
                 "content"  =>  $this->getContentService()->loadContent( 13 ),
@@ -35,7 +31,6 @@ return array(
         ),
         42  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
             array(
-                "id"  =>  42,
                 "parentId"  =>  4,
                 "subGroupCount"  =>  0,
                 "content"  =>  $this->getContentService()->loadContent( 42 ),
@@ -43,7 +38,6 @@ return array(
         ),
         225  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
             array(
-                "id"  =>  225,
                 "parentId"  =>  4,
                 "subGroupCount"  =>  0,
                 "content"  =>  $this->getContentService()->loadContent( 225 ),
