@@ -45,7 +45,8 @@ if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
 
 if ( !$repository )
 {
-    $repository = require __DIR__ . '/../../Repository/Tests/common.php';
+    $setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Memory();
+    $repository   = $setupFactory->getRepository();
 }
 
 /*
@@ -58,6 +59,10 @@ $handler = array(
     'xml'  => new Common\Input\Handler\Xml(),
 );
 
+// The URL Handler is responsible for URL parsing and generation. It will be
+// used in the output generators and in some parsing handlers.
+$urlHandler = new Common\UrlHandler\eZPublish();
+
 /*
  * The Input Dispatcher receives the array structure as decoded by a handler
  * fitting the input format. It selects a parser based on the media type of the
@@ -66,15 +71,11 @@ $handler = array(
 
 $inputDispatcher = new Common\Input\Dispatcher(
     new Common\Input\ParsingDispatcher( array(
-        'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $repository ),
-        'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $repository ),
+        'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler ),
+        'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
     ) ),
     $handler
 );
-
-// The URL Handler is responsible for URL parsing and generation. It will be
-// used in the output generators and in some parsing handlers.
-$urlHandler = new Common\UrlHandler\eZPublish();
 
 /*
  * Controllers are simple classes with public methods. They are the only ones
