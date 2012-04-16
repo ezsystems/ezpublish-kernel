@@ -28,11 +28,9 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\User,
-    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
-    ezcDbFactory;
+    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
 
 /**
  * The repository handler for the legacy storage engine
@@ -150,7 +148,7 @@ class Handler implements HandlerInterface
     /**
      * Trash handler
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler
      */
     protected $trashHandler;
 
@@ -190,6 +188,11 @@ class Handler implements HandlerInterface
     protected $configurator;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     */
+    protected $dbHandler;
+
+    /**
      * Creates a new repository handler.
      *
      * The $config parameter expects an array of configuration values as
@@ -226,6 +229,7 @@ class Handler implements HandlerInterface
      * - sqlite://:memory:
      *   for a SQLite in memory database (used e.g. for unit tests)
      *
+     * This config setting is not needed if $dbHandler is provided.
      * For further information on the database setup, please refer to
      * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
@@ -258,10 +262,12 @@ class Handler implements HandlerInterface
      * and then used for normalization in the full text search.
      *
      * @param array $config
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|null $dbHandler Optional injection of db handler
      */
-    public function __construct( array $config )
+    public function __construct( array $config, EzcDbHandler $dbHandler = null )
     {
         $this->configurator = new Configurator( $config );
+        $this->dbHandler = $dbHandler;
     }
 
     /**
@@ -273,22 +279,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->dbHandler ) )
         {
-            $connection = ezcDbFactory::create( $this->configurator->getDsn() );
-            $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->configurator->getDsn() );
-
-            switch ( $database )
-            {
-                case 'pgsql':
-                    $this->dbHandler = new Pgsql( $connection );
-                    break;
-
-                case 'sqlite':
-                    $this->dbHandler = new Sqlite( $connection );
-                    break;
-
-                default:
-                    $this->dbHandler = new EzcDbHandler( $connection );
-            }
+            $this->dbHandler = EzcDbHandler::create( $this->configurator->getDsn() );
         }
         return $this->dbHandler;
     }
