@@ -151,11 +151,13 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $sectionId = $this->generateId( 'section', 2 );
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
         // Loads user section
-        $section = $sectionService->loadSection( 2 );
+        // $sectionId contains the corresponding ID
+        $section = $sectionService->loadSection( $sectionId );
         /* END: Use Case */
 
         $this->assertEquals( 'users', $section->identifier );
@@ -214,9 +216,10 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
@@ -249,9 +252,10 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
@@ -276,9 +280,10 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
@@ -305,9 +310,10 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
@@ -370,42 +376,42 @@ class SectionServiceTest extends BaseTest
             array(
                 new Section(
                     array(
-                        'id'          =>  1,
+                        'id'          =>  $this->generateId( 'section', 1 ),
                         'name'        =>  'Standard',
                         'identifier'  =>  'standard'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  2,
+                        'id'          =>  $this->generateId( 'section', 2 ),
                         'name'        =>  'Users',
                         'identifier'  =>  'users'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  3,
+                        'id'          =>  $this->generateId( 'section', 3 ),
                         'name'        =>  'Media',
                         'identifier'  =>  'media'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  4,
+                        'id'          =>  $this->generateId( 'section', 4 ),
                         'name'        =>  'Setup',
                         'identifier'  =>  'setup'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  5,
+                        'id'          =>  $this->generateId( 'section', 5 ),
                         'name'        =>  'Design',
                         'identifier'  =>  'design'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  6,
+                        'id'          =>  $this->generateId( 'section', 6 ),
                         'name'        =>  'Restricted',
                         'identifier'  =>  ''
                     )
@@ -472,9 +478,10 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         // RemoteId of the "Support" page of an eZ Publish demo installation
         $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
@@ -514,12 +521,13 @@ class SectionServiceTest extends BaseTest
 
         $sectionService   = $repository->getSectionService();
         $assignedContents = $sectionService->countAssignedContents(
-            $sectionService->loadSection( 1 )
+            $sectionService->loadSection( $this->generateId( 'section', 1 ) )
         );
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
@@ -645,9 +653,10 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         // RemoteId of the "Support" page of an eZ Publish demo installation
         $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
