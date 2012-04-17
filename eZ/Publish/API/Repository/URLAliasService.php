@@ -98,15 +98,16 @@ interface URLAliasService
     public function removeAliases( array $aliasList );
     
     /**
-     * looks up the URLAlias for the given path
+     * looks up the URLAlias for the given url 
      * 
-     * @param $path
+     * @param string $url
+     * @param string $languageCode
      * 
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
      * 
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias 
      */
-    public function lookUp($path);
+    public function lookUp($url, $languageCode = null);
     
     
     
