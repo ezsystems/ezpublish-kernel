@@ -29,6 +29,10 @@ interface Handler
      * @param string $name the new name computed by the name schema or url alias schema
      * @param string $languageCode
      * @param eZ\Publish\SPI\Persistence\Content\UrlAlias $alwaysAvailable
+     * 
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * 
+     * @return eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
     public function publishUrlAliasForLocation( $locationId, $name,  $languageCode, $alwaysAvailable = false );
 
@@ -43,6 +47,9 @@ interface Handler
      * @param boolean $forwarding
      * @param string $languageName
      * @param boolean $alwaysAvailable
+     * 
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * 
      * @return eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
     public function createCustomUrlAlias(  $locationId, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false );
@@ -60,6 +67,9 @@ interface Handler
      * @param boolean $forwarding
      * @param string $languageName
      * @param boolean $alwaysAvailable
+     * 
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * 
      * @return eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
     public function createGlobalUrlAlias(  $resource, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false );
@@ -86,15 +96,15 @@ interface Handler
     public function removeURLAliases( array $urlAliases );
 
     /**
-     * Looks up a url alias for the given path
+     * Looks up a url alias for the given url
      *
-     * @param $path
+     * @param $url
      * 
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path was not found
      * 
      * @return eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function lookup( $path );
+    public function lookup( $url );
     
     /**
      * 
