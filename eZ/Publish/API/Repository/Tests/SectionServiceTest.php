@@ -414,8 +414,8 @@ class SectionServiceTest extends BaseTest
                 new Section(
                     array(
                         'id'          =>  $this->generateId( 'section', 6 ),
-                        'name'        =>  'Restricted',
-                        'identifier'  =>  ''
+                        'name'        =>  'Protected',
+                        'identifier'  =>  'protected'
                     )
                 ),
             ),
