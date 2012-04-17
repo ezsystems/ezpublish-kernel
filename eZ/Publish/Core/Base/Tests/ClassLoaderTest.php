@@ -25,8 +25,7 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
             array(
                 'eZ' => 'eZ',
                 'xyz\\Pizza' => 'xyz/Pasta'
-            ),
-            ClassLoader::PSR_2_FILECHECK
+            )
         );
 
         self::assertFalse( $loader->load( "eZ\\Pizza\\Box" ) );
@@ -47,7 +46,8 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
             array(
                 'eZ' => 'eZ',
                 'xyz' => 'xyz/Pasta'
-            )
+            ),
+            ClassLoader::PSR_0_NO_FILECHECK
         );
 
         include $loader->load( "eZ\\Will\\Fail", true );
@@ -56,14 +56,15 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ClassLoader::load
      */
-    public function testDefaultMapping()
+    public function testStrictMapping()
     {
         $loader = new ClassLoader(
             array(
                 'eZ' => 'eZ',
                 'xyz\\Pizza' => 'xyz/Pasta',
                 'xyz' => 'xyz/Pasta'
-            )
+            ),
+            ClassLoader::PSR_0_NO_FILECHECK | ClassLoader::PSR_0_STRICT_MODE
         );
 
         self::assertEquals( 'eZ/Pizza/Box.php', $loader->load( "eZ\\Pizza\\Box", true ) );
@@ -90,7 +91,7 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
                 'xyz\\Pizza' => 'xyz/Pasta',
                 'xyz' => 'xyz/Pasta'
             ),
-            ClassLoader::PSR_0_PEAR_COMPAT
+            ClassLoader::PSR_0_NO_FILECHECK
         );
 
         self::assertEquals( 'eZ/Pizza/Box.php', $loader->load( "eZ\\Pizza\\Box", true ) );
