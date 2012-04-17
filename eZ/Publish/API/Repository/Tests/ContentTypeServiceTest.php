@@ -165,13 +165,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        $contentTypeId = $this->generateId( 'type', 2 );
+        $contentTypeGroupId = $this->generateId( 'typegroup', 2 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
         // Loads the "Users" group
-        // $contentTypeId contains the ID value 2
-        $loadedGroup = $contentTypeService->loadContentTypeGroup( $contentTypeId );
+        // $contentTypeGroupId is the ID of an existing content type group
+        $loadedGroup = $contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -193,12 +193,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'id'               =>  2,
+                'id'               =>  $this->generateId( 'typegroup', 2 ),
                 'identifier'       =>  'Users',
                 'creationDate'     =>  new \DateTime( '@1031216941' ),
                 'modificationDate' =>  new \DateTime( '@1033922113' ),
-                'creatorId'        =>  14,
-                'modifierId'       =>  14,
+                'creatorId'        =>  $this->generateId( 'user', 14 ),
+                'modifierId'       =>  $this->generateId( 'user', 14 ),
             ),
             $group
         );
@@ -217,7 +217,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
 
         $contentTypeService = $repository->getContentTypeService();
-        $loadedGroup = $contentTypeService->loadContentTypeGroup( 2342 );
+        $loadedGroup = $contentTypeService->loadContentTypeGroup( $this->generateId( 'typegroup', 2342 ) );
     }
 
     /**
@@ -260,7 +260,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         $this->assertEquals(
-            $contentTypeService->loadContentTypeGroup( 3 ),
+            $contentTypeService->loadContentTypeGroup( $this->generateId( 'typegroup', 3 ) ),
             $group
         );
     }
@@ -389,7 +389,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
 
         $groupUpdate->identifier       = 'Teardown';
-        $groupUpdate->modifierId       = 42;
+        $groupUpdate->modifierId       = $this->generateId( 'user', 42 );
         $groupUpdate->modificationDate = new \DateTime();
         $groupUpdate->mainLanguageCode = 'eng-US';
 
@@ -855,11 +855,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $sorter = function ( $a, $b )
         {
-            if ( $a->id == $b->id )
-            {
-                return 0;
-            }
-            return ( $a->id < $b->id ) ? -1 : 1;
+            return strcmp( $a->id, $b->id );
         };
 
         usort( $expectedGroups, $sorter );
@@ -1032,11 +1028,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingContentTypeId = $this->generateId( 'type', 2342 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
         // Throws exception, since 2342 does not exist
-        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( 2342 );
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $nonExistingContentTypeId );
         /* END: Use Case */
     }
 
@@ -1052,6 +1049,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        $modifierId = $this->generateId( 'user', 42 );
         /* BEGIN: Use Case */
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -1063,7 +1061,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeUpdate->isContainer            = true;
         $typeUpdate->mainLanguageCode       = 'ger-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
-        $typeUpdate->modifierId             = 42;
+        $typeUpdate->modifierId             = $modifierId;
         $typeUpdate->modificationDate       = new \DateTime();
         $typeUpdate->names                  = array(
             'eng-US' => 'News article',
@@ -1639,13 +1637,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'               => 3,
+                'id'               => $this->generateId( 'type', 3 ),
                 'status'           => 0,
                 'identifier'       => 'user_group',
                 'creationDate'     => new \DateTime( '@1024392098' ),
                 'modificationDate' => new \DateTime( '@1048494743' ),
-                'creatorId'        => 14,
-                'modifierId'       => 14,
+                'creatorId'        => $this->generateId( 'user', 14 ),
+                'modifierId'       => $this->generateId( 'user', 14 ),
                 'remoteId'         => '25b4268cdcd01921b808a0d854b877ef',
                 'names'            => array(
                     'eng-US' => 'User group',
@@ -1709,7 +1707,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                     ),
                 ),
                 'contentTypeGroups' => array(
-                    0 => $contentTypeService->loadContentTypeGroup( 2 )
+                    0 => $contentTypeService->loadContentTypeGroup( $this->generateId( 'typegroup', 2 ) )
                 ),
             ),
             $userGroupType
@@ -1728,11 +1726,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $nonExistentTypeId = $this->generateId( 'type', 2342 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
         // Throws exception, since type with ID 2342 does not exist
-        $contentTypeService->loadContentType( 2342 );
+        $contentTypeService->loadContentType( $nonExistentTypeId );
         /* END: Use Case */
     }
 
@@ -1877,10 +1876,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $typeGroupId = $this->generateId( 'typegroup', 2 );
         /* BEGIN: Use Case */
+        // $typeGroupId is a valid ID of a content type group
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentTypeGroup = $contentTypeService->loadContentTypeGroup( 2 );
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroup( $typeGroupId );
 
         // Loads all types from content type group "Users"
         $types = $contentTypeService->loadContentTypes( $contentTypeGroup );
@@ -1905,8 +1906,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $this->assertEquals(
             array(
-                $contentTypeService->loadContentType( 3 ),
-                $contentTypeService->loadContentType( 4 ),
+                $contentTypeService->loadContentType( $this->generateId( 'type', 3 ) ),
+                $contentTypeService->loadContentType( $this->generateId( 'type', 4 ) ),
             ),
             $types
         );
