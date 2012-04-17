@@ -84,7 +84,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -143,13 +143,14 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $memberGroupId = $this->generateId( 'group', 11 );
         /* BEGIN: Use Case */
+        // $memberGroupId is the ID of the "Members" group in an eZ Publish
+        // demo installation
+        //
         $user = $this->createUserVersion1();
 
         $userGroup = $this->createUserGroupVersion1();
-
-        // ID of the "Members" group in an eZ Publish demo installation
-        $memberGroupId = 11;
 
         // Load new parent user group
         $newParentUserGroup = $userService->loadUserGroup( $memberGroupId );
@@ -211,7 +212,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -301,11 +302,12 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $administratorGroupId = $this->generateId( 'group', 12 );
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
 
-        // ID of the "Administrator" group in an eZ Publish demo installation
-        $administratorGroupId = 12;
+        $user = $this->createUserVersion1();
 
         // Now set the currently created "Editor" as current user
         $repository->setCurrentUser( $user );
@@ -331,13 +333,14 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        $memberGroupId = $this->generateId( 'group', 11 );
 
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $memberGroupId is the ID of the "Members" group in an eZ Publish
+        // demo installation
 
-        // ID of the "Members" group in an eZ Publish demo installation
-        $memberGroupId = 11;
+        $user = $this->createUserVersion1();
 
         // Assign group to newly created user
         $userService->assignUserToUserGroup(
@@ -416,9 +419,10 @@ class UserServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Inline */
-        // ID of the main "Users" group in an eZ Publish demo installation
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group in an eZ Publish
+        // demo installation
 
         $userService = $repository->getUserService();
 

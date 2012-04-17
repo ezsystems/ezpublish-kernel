@@ -188,12 +188,13 @@ class TrashServiceTest extends BaseTrashServiceTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingTrashId = $this->generateId( 'trash', 2342 );
         /* BEGIN: Use Case */
         $trashService = $repository->getTrashService();
 
         // This call will fail with a "NotFoundException", because no trash item
         // with the ID 1342 should exist in an eZ Publish demo installation
-        $trashService->loadTrashItem( 2342 );
+        $trashService->loadTrashItem( $nonExistingTrashId );
         /* END: Use Case */
     }
 
@@ -282,9 +283,10 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $homeLocationId = $this->generateId( 'location', 2 );
         /* BEGIN: Use Case */
-        // ID of the "Home" location in an eZ Publish demo installation
-        $homeLocationId = 2;
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
 
         $trashItem = $this->createTrashItem();
 
@@ -303,7 +305,7 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'depth'             =>  $trashItem->depth,
                 'hidden'            =>  false,
                 'invisible'         =>  $trashItem->invisible,
-                'pathString'        =>  "/1/2/{$location->id}/",
+                'pathString'        =>  "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
                 'priority'          =>  0,
                 'sortField'         =>  Location::SORT_FIELD_NAME,
                 'sortOrder'         =>  Location::SORT_ORDER_ASC,
@@ -325,9 +327,10 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $homeLocationId = $this->generateId( 'location', 2 );
         /* BEGIN: Use Case */
-        // ID of the "Home" location in an eZ Publish demo installation
-        $homeLocationId = 2;
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
 
         $trashItem = $this->createTrashItem();
 
@@ -357,11 +360,13 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        $childCount = $locationService->loadLocation( 2 )->childCount;
+        $homeLocationId = $this->generateId( 'location', 2 );
+
+        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
 
         /* BEGIN: Use Case */
-        // ID of the "Home" location in an eZ Publish demo installation
-        $homeLocationId = 2;
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
 
         $trashItem = $this->createTrashItem();
 
@@ -459,9 +464,10 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $supportLocationId = $this->generateId( 'location', 96 );
         /* BEGIN: Use Case */
-        // ID of the "Support" location in an eZ Publish demo installation
-        $supportLocationId = 96;
+        // $supportLocationId is the ID of the "Support" location in an eZ
+        // Publish demo installation
 
         $trashItem = $this->createTrashItem();
 

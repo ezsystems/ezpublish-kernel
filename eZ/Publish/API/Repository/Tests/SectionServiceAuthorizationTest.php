@@ -90,12 +90,13 @@ class SectionServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId is the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         $userService    = $repository->getUserService();
-        $sectionService = $repository->getSectionService();#
+        $sectionService = $repository->getSectionService();
 
         $section = $sectionService->loadSection( $standardSectionId );
 
@@ -187,9 +188,10 @@ class SectionServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
-        // ID of the "Standard" section in a eZ Publish demo installation.
-        $standardSectionId = 1;
+        // $standardSectionId is the ID of the "Standard" section in a eZ
+        // Publish demo installation.
 
         // RemoteId of the "Support" page of an eZ Publish demo installation
         $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';

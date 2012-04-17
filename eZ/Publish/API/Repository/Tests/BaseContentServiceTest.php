@@ -24,9 +24,11 @@ abstract class BaseContentServiceTest extends BaseTest
     protected function createContentDraftVersion1()
     {
         $repository = $this->getRepository();
+
+        $parentLocationId = $this->generateId( 'location', 167 );
+        $sectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Inline */
-        // Location id of the "Home > Community" node
-        $parentLocationId = 167;
+        // $parentLocationId is the id of the "Home > Community" node
 
         $contentService     = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -49,7 +51,8 @@ abstract class BaseContentServiceTest extends BaseTest
 
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
+        // $sectionId is the ID of section 1
+        $contentCreate->sectionId       = $sectionId;
         $contentCreate->alwaysAvailable = true;
 
         // Create a draft

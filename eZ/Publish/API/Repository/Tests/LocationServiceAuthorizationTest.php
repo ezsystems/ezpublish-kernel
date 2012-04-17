@@ -34,7 +34,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */;
         $contentService = $repository->getContentService();
@@ -75,7 +75,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
@@ -130,7 +130,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */;
         $user = $this->createUserVersion1();
@@ -168,7 +168,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */;
         $user = $this->createUserVersion1();
@@ -198,12 +198,14 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $communityLocationId = $this->generateId( 'location', 167 );
+        $supportLocationId = $this->generateId( 'location', 96 );
         /* BEGIN: Use Case */
-        // ID of the "Community" page location in an eZ Publish demo installation
-        $communityLocationId = 167;
+        // $communityLocationId is the ID of the "Community" page location in
+        // an eZ Publish demo installation
 
-        // ID of the "Support" page location in an eZ Publish demo installation
-        $supportLocationId = 96;
+        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // Publish demo installation
 
         // Load the location service
         $locationService = $repository->getLocationService();
@@ -239,7 +241,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -268,7 +270,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -300,7 +302,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -329,14 +331,16 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $communityLocationId = $this->generateId( 'location', 167 );
+        $supportLocationId = $this->generateId( 'location', 96 );
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
-        // ID of the "Community" page location in an eZ Publish demo installation
-        $communityLocationId = 167;
+        // $communityLocationId is the ID of the "Community" page location in
+        // an eZ Publish demo installation
 
-        // ID of the "Support" page location in an eZ Publish demo installation
-        $supportLocationId = 96;
+        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // Publish demo installation
 
         // Load the location service
         $locationService = $repository->getLocationService();
@@ -370,14 +374,16 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $communityLocationId = $this->generateId( 'location', 167 );
+        $supportLocationId = $this->generateId( 'location', 96 );
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
-        // ID of the "Community" page location in an eZ Publish demo installation
-        $communityLocationId = 167;
+        // $communityLocationId is the ID of the "Community" page location in
+        // an eZ Publish demo installation
 
-        // ID of the "Support" page location in an eZ Publish demo installation
-        $supportLocationId = 96;
+        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // Publish demo installation
 
         // Load the location service
         $locationService = $repository->getLocationService();

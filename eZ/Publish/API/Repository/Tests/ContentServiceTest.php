@@ -329,9 +329,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $parentLocationId = $this->generateId( 'location', 167 );
         /* BEGIN: Use Case */
-        // Location id of the "Home > Community" node
-        $parentLocationId = 167;
+        // $parentLocationId is the location id of the "Home > Community" node
 
         $contentService     = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -391,11 +391,12 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( 10 );
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -416,11 +417,12 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $nonExistentContentId = $this->generateId( 'object', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
         // This call will fail with a NotFoundException
-        $contentService->loadContentInfo( PHP_INT_MAX );
+        $contentService->loadContentInfo( $nonExistentContentId );
         /* END: Use Case */
     }
 
@@ -476,13 +478,14 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        // $anonymousUserId contains the ID of the "Anonymous User"
 
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonUserId );
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
 
         // Now load the current version info of the "Anonymous User"
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -505,13 +508,14 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonUserId = 10;
+        // $anonymousUserId contains the ID of the "Anonymous User"
 
         $contentService = $repository->getContentService();
 
         // Load the VersionInfo for "Anonymous User"
-        $versionInfo = $contentService->loadVersionInfoById( $anonUserId );
+        $versionInfo = $contentService->loadVersionInfoById( $anonymousUserId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -532,11 +536,12 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $nonExistentContentId = $this->generateId( 'object', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
         // This call will fail with a "NotFoundException"
-        $contentService->loadVersionInfoById( PHP_INT_MAX );
+        $contentService->loadVersionInfoById( $nonExistentContentId );
         /* END: Use Case */
     }
 
@@ -551,8 +556,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId contains the ID of the "Anonymous User"
 
         $contentService = $repository->getContentService();
 
@@ -580,8 +586,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId contains the ID of the "Anonymous User"
 
         $contentService = $repository->getContentService();
 
@@ -612,8 +619,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId contains the ID of the "Anonymous User"
 
         $contentService = $repository->getContentService();
 
@@ -639,11 +647,12 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $nonExistentContentId = $this->generateId( 'object', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
         // This call will fail with a "NotFoundException"
-        $contentService->loadContent( PHP_INT_MAX );
+        $contentService->loadContent( $nonExistentContentId );
         /* END: Use Case */
     }
 
@@ -1490,7 +1499,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 'remoteId'          =>  'aaaabbbbccccddddeeeeffff11112222',
-                'sectionId'         =>  1,
+                'sectionId'         =>  $this->generateId( 'section', 1 ),
                 'alwaysAvailable'   =>  false,
                 'currentVersionNo'  =>  1,
                 'mainLanguageCode'  =>  'eng-US',
@@ -1819,6 +1828,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $sectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1835,7 +1845,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-US' );
 
         $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
+        // $sectionId contains the ID of section 1
+        $contentCreateStruct->sectionId       = $sectionId;
         $contentCreateStruct->alwaysAvailable = true;
 
         // Create a new content draft
@@ -1922,6 +1933,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $sectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1938,7 +1950,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-US' );
 
         $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->sectionId       = 1;
+        // $sectionId contains the ID of section 1
+        $contentCreateStruct->sectionId       = $sectionId;
         $contentCreateStruct->alwaysAvailable = true;
 
         // Create a new content draft
@@ -2303,7 +2316,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCopyContent()
     {
-        $parentLocationId = 167;
+        $parentLocationId = $this->generateId( 'location', 167 );
 
         $repository = $this->getRepository();
 
@@ -2363,7 +2376,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCopyContentWithThirdParameter()
     {
-        $parentLocationId = 167;
+        $parentLocationId = $this->generateId( 'location', 167 );
 
         $repository = $this->getRepository();
 
@@ -3229,9 +3242,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" user group
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Get the content service
         $contentService = $repository->getContentService();
@@ -3278,9 +3291,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" user group
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Get the content service
         $contentService = $repository->getContentService();
@@ -3322,9 +3335,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" user group
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Get the content service
         $contentService = $repository->getContentService();
@@ -3419,9 +3432,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" group in an eZ Publish demo installation
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Load content service
         $contentService = $repository->getContentService();
@@ -3471,9 +3484,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" group in an eZ Publish demo installation
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Load content service
         $contentService = $repository->getContentService();
@@ -3522,9 +3535,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" group in an eZ Publish demo installation
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Get the content service
         $contentService = $repository->getContentService();
@@ -3571,9 +3584,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" group in an eZ Publish demo installation
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Get the content service
         $contentService = $repository->getContentService();
@@ -3621,9 +3634,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" group in an eZ Publish demo installation
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Get the content service
         $contentService = $repository->getContentService();
@@ -3662,9 +3675,9 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 12 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator users" group in an eZ Publish demo installation
-        $contentId = 12;
+        // $contentId is the ID of the "Administrator users" user group
 
         // Get the content service
         $contentService = $repository->getContentService();
@@ -3702,9 +3715,10 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 11 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $contentId = 11;
+        // $contentId is the ID of the "Members" user group in an eZ Publish
+        // demo installation
 
         // Get content service
         $contentService = $repository->getContentService();
@@ -3741,9 +3755,10 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 11 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $contentId = 11;
+        // $contentId is the ID of the "Members" user group in an eZ Publish
+        // demo installation
 
         // Get content service
         $contentService = $repository->getContentService();
@@ -3787,12 +3802,13 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 11 );
+        $locationId = $this->generateId( 'location', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" group content
-        $contentId = 11;
+        // $contentId is the ID of the "Members" user group in an eZ Publish
+        // demo installation
 
-        // ID of the "Adminstrator users" group location
-        $locationId = 13;
+        // $locationId is the ID of the "Adminstrator users" group location
 
         // Get services
         $contentService  = $repository->getContentService();
@@ -3839,12 +3855,13 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 11 );
+        $locationId = $this->generateId( 'location', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" group content
-        $contentId = 11;
+        // $contentId is the ID of the "Members" user group in an eZ Publish
+        // demo installation
 
-        // ID of the "Adminstrator users" group location
-        $locationId = 13;
+        // $locationId is the ID of the "Adminstrator users" group location
 
         // Get services
         $contentService  = $repository->getContentService();

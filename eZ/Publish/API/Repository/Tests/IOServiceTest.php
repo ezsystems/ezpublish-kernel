@@ -241,12 +241,14 @@ class IOServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        // TODO: What URL should be generated for this?
+        $binaryId = $this->generateId( 'binary', 2342 );
         /* BEGIN: Use Case */
         $ioService = $repository->getIOService();
 
         // This call will fail with a "NotFoundException", because no binary file
         // with an ID 2342 should exist in an eZ Publish demo installation
-        $ioService->loadBinaryFile( 2342 );
+        $ioService->loadBinaryFile( $binaryId );
         /* END: Use Case */
     }
 

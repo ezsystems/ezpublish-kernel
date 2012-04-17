@@ -184,11 +184,12 @@ class LanguageServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistentLanguageId = $this->generateId( 'language', 2342 );
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
         // This call should fail with a "NotFoundException"
-        $languageService->loadLanguageById( 2342 );
+        $languageService->loadLanguageById( $nonExistentLanguageId );
         /* END: Use Case */
     }
 
@@ -440,9 +441,10 @@ class LanguageServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $editorsGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
 
         $languageService = $repository->getContentLanguageService();
 

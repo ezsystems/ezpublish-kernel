@@ -122,9 +122,10 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $homeLocationId = $this->generateId( 'location', 2 );
         /* BEGIN: Use Case */
-        // ID of the "Home" location in an eZ Publish demo installation
-        $homeLocationId = 2;
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
 
         $trashItem = $this->createTrashItem();
 

@@ -198,12 +198,13 @@ class RoleServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingRoleId = $this->generateId( 'role', PHP_INT_MAX );
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
 
         // This call will fail with a NotFoundException, because no such role exists.
-        $roleService->loadRole( PHP_INT_MAX );
+        $roleService->loadRole( $nonExistingRoleId );
 
         /* END: Use Case */
     }
@@ -1268,9 +1269,9 @@ class RoleServiceTest extends BaseTest
     {
         $repository  = $this->getRepository();
 
+        $anonUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        // ID of the "Anonymous" user.
-        $anonUserId = 10;
+        // $anonUserId is the ID of the "Anonymous" user.
 
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
@@ -1333,12 +1334,13 @@ class RoleServiceTest extends BaseTest
     {
         $repository  = $this->getRepository();
 
+        $nonExstingUserId = $this->generateId( 'user', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
 
         // This call will fail with a "NotFoundException", because hopefully no
         // user with an ID equal to PHP_INT_MAX exists.
-        $roleService->loadPoliciesByUserId( PHP_INT_MAX );
+        $roleService->loadPoliciesByUserId( $nonExstingUserId );
         /* END: Use Case */
     }
 
@@ -1351,9 +1353,9 @@ class RoleServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Inline */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $roleService = $repository->getRoleService();
         $userService = $repository->getUserService();

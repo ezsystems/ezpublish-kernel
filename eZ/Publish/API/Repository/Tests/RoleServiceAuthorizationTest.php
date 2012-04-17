@@ -306,7 +306,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -339,7 +339,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -379,7 +379,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -560,7 +560,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $roleService = $repository->getRoleService();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();

@@ -33,9 +33,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -57,11 +57,12 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingGroupId = $this->generateId(  'group', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
         // This call will fail with a NotFoundException
-        $userService->loadUserGroup( PHP_INT_MAX );
+        $userService->loadUserGroup( $nonExistingGroupId );
         /* END: Use Case */
     }
 
@@ -76,9 +77,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -225,7 +226,7 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'parentId'       =>  4,
+                'parentId'       =>  $this->generateId( 'group', 4 ),
                 'subGroupCount'  =>  0
             ),
             array(
@@ -247,7 +248,7 @@ class UserServiceTest extends BaseTest
     {
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();
-        $mainGroupId = 4;
+        $mainGroupId = $this->generateId( 'group', 4 );
 
         $parentUserGroup  = $userService->loadUserGroup( $mainGroupId );
         $parentGroupCount = $parentUserGroup->subGroupCount;
@@ -274,9 +275,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -309,9 +310,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -340,9 +341,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -414,9 +415,10 @@ class UserServiceTest extends BaseTest
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $membersGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $membersGroupId = 13;
+        // $membersGroupId is the ID of the "Members" user group in an eZ
+        // Publish demo installation
 
         $userGroup = $this->createUserGroupVersion1();
 
@@ -451,9 +453,10 @@ class UserServiceTest extends BaseTest
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $membersGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $membersGroupId = 13;
+        // $membersGroupId is the ID of the "Members" user group in an eZ
+        // Publish demo installation
 
         $userGroup = $this->createUserGroupVersion1();
 
@@ -482,9 +485,10 @@ class UserServiceTest extends BaseTest
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $membersGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $membersGroupId = 13;
+        // $membersGroupId is the ID of the "Members" user group in an eZ
+        // Publish demo installation
 
         $userGroup = $this->createUserGroupVersion1();
 
@@ -495,7 +499,7 @@ class UserServiceTest extends BaseTest
         $userService->moveUserGroup( $userGroup, $membersUserGroup );
         /* END: Use Case */
 
-        $mainUserGroup = $userService->loadUserGroup( 4 );
+        $mainUserGroup = $userService->loadUserGroup( $this->generateId( 'group', 4 ) );
 
         $this->assertEquals( 5, $mainUserGroup->subGroupCount );
     }
@@ -833,9 +837,10 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $editorsGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
 
         $userService = $repository->getUserService();
 
@@ -930,12 +935,13 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingUserId = $this->generateId( 'useer', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
         // This call will fail with a "NotFoundException", because no user with
         // an id equal to PHP_INT_MAX should exist.
-        $userService->loadUser( PHP_INT_MAX );
+        $userService->loadUser( $nonExistingUserId );
         /* END: Use Case */
     }
 
@@ -1342,7 +1348,7 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $group = $userService->loadUserGroup( 13 );
+        $group = $userService->loadUserGroup( $this->generateId( 'group', 13 ) );
 
         /* BEGIN: Use Case */
         $this->createUserVersion1();
@@ -1369,11 +1375,12 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $administratorGroupId = $this->generateId( 'group', 12 );
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
 
-        // ID of the "Administrator" group in an eZ Publish demo installation
-        $administratorGroupId = 12;
+        $user = $this->createUserVersion1();
 
         // Assign group to newly created user
         $userService->assignUserToUserGroup(
@@ -1412,13 +1419,14 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId   = $this->generateId( 'group', 13 );
+        $anonymousGroupId = $this->generateId( 'group', 42 );
 
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $anonymousGroupId is the ID of the "Anonymous Users" group in an eZ
+        // Publish demo installation
 
-        // ID of the "Anonymous Users" group in an eZ Publish demo installation
-        $anonymousGroupId = 42;
+        $user = $this->createUserVersion1();
 
         // Assign group to newly created user
         $userService->assignUserToUserGroup(
@@ -1456,11 +1464,11 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $administratorGroupId = $this->generateId( 'group', 12 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
-
-        // ID of the "Administrator" group in an eZ Publish demo installation
-        $administratorGroupId = 12;
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
 
         // This call will fail with an "InvalidArgumentException", because the
         // user is not assigned to the "Adminstrator" group
@@ -1480,9 +1488,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Inline */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
