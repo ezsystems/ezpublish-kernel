@@ -223,7 +223,7 @@ function generateContentInfoFixture( array $fixture )
         );
 
         $contentInfos[$data['id']] = array(
-            'contentId'         =>  $data['id'],
+            'id'                =>  $data['id'],
             'name'              =>  $data['name'],
             'contentTypeId'     =>  $data['contentclass_id'],
             'sectionId'         =>  $data['section_id'],
@@ -324,7 +324,7 @@ function generateContentInfoFixture( array $fixture )
         $contentFields = trim( generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Field', $contentFields ) );
 
         $content[] = array(
-            'contentId'      =>  $data['contentobject_id'],
+            'id'             =>  $data['contentobject_id'],
             'contentTypeId'  =>  $contentInfos[$data['contentobject_id']]['contentTypeId'],
             'fields'         =>  $contentFields,
             'relations'      =>  array(),
@@ -353,11 +353,11 @@ function generateContentInfoFixture( array $fixture )
     } );
 
     uasort( $content, function( $content1, $content2 ) {
-        if ( $content1['contentId'] === $content2['contentId'] )
+        if ( $content1['id'] === $content2['id'] )
         {
             return $content2['versionNo'] - $content1['versionNo'];
         }
-        return $content1['contentId'] - $content2['contentId'];
+        return $content1['id'] - $content2['id'];
     } );
 
 
@@ -455,7 +455,7 @@ function generateUserFixture( array $fixture )
     foreach ( getFixtureTable( 'ezuser', $fixture ) as $data )
     {
         $users[] = array(
-            'id'             =>  $data['contentobject_id'],
+            '_id'            =>  $data['contentobject_id'],
             'login'          =>  $data['login'],
             'email'          =>  $data['email'],
             'passwordHash'   =>  $data['password_hash'],
@@ -464,7 +464,7 @@ function generateUserFixture( array $fixture )
             'content'         =>  '$this->getContentService()->loadContent( ' . $data['contentobject_id'] . ' )'
         );
     }
-    
+
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub', $users )
     );
@@ -509,7 +509,7 @@ function generateUserGroupFixture( array $fixture )
         }
 
         $groups[$data['id']] = array(
-            'id'              =>  $data['id'],
+            '_id'             =>  $data['id'],
             'parentId'        =>  is_numeric( $parentId ) ? $parentId : 'null',
             'subGroupCount'   =>  0,
             'content'         =>  '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
@@ -675,11 +675,17 @@ function generateValueObjects( $class, array $objects )
 
 function generateValueObject( $class, array $object )
 {
-    $id = isset( $object['id'] ) ? $object['id'] : $object['contentId'];
+    $id = isset( $object['id'] )
+        ? $object['id']
+        : $object['_id'];
     $code = '        ' . $id . '  =>  new ' . $class . '(' . PHP_EOL .
             '            array(' . PHP_EOL;
     foreach ( $object as $name => $value )
     {
+        if ( $name[0] == '_' )
+        {
+            continue;
+        }
 
         $code .= '                "' . $name . '"  =>  ' . valueToString( $value ) . ',' . PHP_EOL;
     }

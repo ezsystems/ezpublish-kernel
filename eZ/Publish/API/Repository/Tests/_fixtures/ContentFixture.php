@@ -6369,8 +6369,8 @@ return array(
                 "id"  =>  99,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "short_description",
             )
@@ -6476,8 +6476,8 @@ return array(
                 "id"  =>  125,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "short_description",
             )
@@ -6487,8 +6487,8 @@ return array(
                 "id"  =>  126,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "description",
             )
@@ -6550,8 +6550,8 @@ return array(
                 "id"  =>  144,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "short_description",
             )
@@ -6561,8 +6561,8 @@ return array(
                 "id"  =>  145,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "description",
             )
@@ -6624,8 +6624,8 @@ return array(
                 "id"  =>  149,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "short_description",
             )
@@ -6635,8 +6635,8 @@ return array(
                 "id"  =>  150,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "description",
             )
@@ -6698,8 +6698,8 @@ return array(
                 "id"  =>  154,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "short_description",
             )
@@ -6709,8 +6709,8 @@ return array(
                 "id"  =>  155,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "description",
             )
@@ -7049,8 +7049,8 @@ keywords=cms, publish, e-commerce, content management, development framework",
                 "id"  =>  183,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "short_description",
             )
@@ -7060,8 +7060,8 @@ keywords=cms, publish, e-commerce, content management, development framework",
                 "id"  =>  184,
                 "value"  =>  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\"
-     xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
-     xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
+         xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\"
+         xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\" />",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "description",
             )
@@ -7690,11 +7690,11 @@ keywords=cms, publish, e-commerce, content management, development framework",
             array(
                 "id"  =>  255,
                 "value"  =>  "<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph><custom name=\"factbox\" custom:title=\"Next steps\"><paragraph>Vivamus suscipit. Praesent tincidunt adipiscing urna. Etiam ligula velit, tincidunt accumsan, feugiat sit amet, malesuada vel, tellus.</paragraph><paragraph><ol><li><paragraph>Donec magna felis
-                        </paragraph></li><li><paragraph>Mauris sed lectus vel
-                        </paragraph></li><li><paragraph>Praesent pharetra
-                        </paragraph></li></ol></paragraph></custom></paragraph><section><header>Products sheets</header><paragraph><ul><li><paragraph>Donec magna felis
-                      </paragraph></li><li><paragraph>Maecenas quam nisi
-                      </paragraph></li></ul></paragraph></section></section>",
+                            </paragraph></li><li><paragraph>Mauris sed lectus vel
+                            </paragraph></li><li><paragraph>Praesent pharetra
+                            </paragraph></li></ol></paragraph></custom></paragraph><section><header>Products sheets</header><paragraph><ul><li><paragraph>Donec magna felis
+                          </paragraph></li><li><paragraph>Maecenas quam nisi
+                          </paragraph></li></ul></paragraph></section></section>",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "left_column",
             )
@@ -7704,15 +7704,15 @@ keywords=cms, publish, e-commerce, content management, development framework",
                 "id"  =>  256,
                 "value"  =>  "<?xml version=\"1.0\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><section><header>Products by Category</header><paragraph><table class=\"default\" width=\"100%\" border=\"0\"><tr><td><paragraph><ul><li><paragraph>Donec magna felis
-                              </paragraph></li><li><paragraph>Mauris sed lectus vel
-                              </paragraph></li><li><paragraph>Praesent pharetra
-                              </paragraph></li><li><paragraph>Maecenas quam nisi
-                              </paragraph></li><li><paragraph>Phasellus ut ante eu nunc
-                              </paragraph></li></ul></paragraph></td><td><paragraph><ul><li><paragraph>Donec hendrerit
-                              </paragraph></li><li><paragraph>Vivamus turpis
-                              </paragraph></li><li><paragraph>Vestibulum laoreet erat id tellus
-                              </paragraph></li><li><paragraph>Maecenas quam nisi
-                              </paragraph></li></ul></paragraph></td></tr></table></paragraph><paragraph><custom name=\"separator\"/></paragraph></section><section><header>Featured Products</header><paragraph><table class=\"default\" border=\"0\"><tr><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"71\"/></paragraph></td><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"72\"/></paragraph></td><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"73\"/></paragraph></td></tr></table></paragraph></section></section>
+                                  </paragraph></li><li><paragraph>Mauris sed lectus vel
+                                  </paragraph></li><li><paragraph>Praesent pharetra
+                                  </paragraph></li><li><paragraph>Maecenas quam nisi
+                                  </paragraph></li><li><paragraph>Phasellus ut ante eu nunc
+                                  </paragraph></li></ul></paragraph></td><td><paragraph><ul><li><paragraph>Donec hendrerit
+                                  </paragraph></li><li><paragraph>Vivamus turpis
+                                  </paragraph></li><li><paragraph>Vestibulum laoreet erat id tellus
+                                  </paragraph></li><li><paragraph>Maecenas quam nisi
+                                  </paragraph></li></ul></paragraph></td></tr></table></paragraph><paragraph><custom name=\"separator\"/></paragraph></section><section><header>Featured Products</header><paragraph><table class=\"default\" border=\"0\"><tr><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"71\"/></paragraph></td><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"72\"/></paragraph></td><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"73\"/></paragraph></td></tr></table></paragraph></section></section>
 ",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "center_column",
@@ -8339,12 +8339,12 @@ keywords=cms, publish, e-commerce, content management, development framework",
                 "id"  =>  320,
                 "value"  =>  "<?xml version=\"1.0\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph><embed class=\"highlighted_object\" size=\"medium\" align=\"center\" object_id=\"77\"/></paragraph><paragraph><table class=\"default\" width=\"100%\" border=\"0\"><tr><td xhtml:width=\"50%\"><paragraph>Solutions by industry:</paragraph><paragraph><ul><li><paragraph>Banking
-                            </paragraph></li><li><paragraph>Automotive
-                            </paragraph></li><li><paragraph>Education
-                            </paragraph></li><li><paragraph>Electronics
-                            </paragraph></li></ul></paragraph></td><td><paragraph>Solutions by business topics:</paragraph><paragraph><ul><li><paragraph><link object_id=\"76\">Web publishing</link></paragraph></li><li><paragraph><link object_id=\"80\">Content management</link></paragraph></li><li><paragraph>Information integration
-                            </paragraph></li><li><paragraph>Enterprise resource
-                            </paragraph></li></ul></paragraph></td></tr></table></paragraph><paragraph><custom name=\"separator\"/></paragraph><paragraph><embed size=\"medium\" align=\"center\" object_id=\"79\"/></paragraph><paragraph><embed size=\"medium\" align=\"center\" object_id=\"78\"/></paragraph></section>
+                                </paragraph></li><li><paragraph>Automotive
+                                </paragraph></li><li><paragraph>Education
+                                </paragraph></li><li><paragraph>Electronics
+                                </paragraph></li></ul></paragraph></td><td><paragraph>Solutions by business topics:</paragraph><paragraph><ul><li><paragraph><link object_id=\"76\">Web publishing</link></paragraph></li><li><paragraph><link object_id=\"80\">Content management</link></paragraph></li><li><paragraph>Information integration
+                                </paragraph></li><li><paragraph>Enterprise resource
+                                </paragraph></li></ul></paragraph></td></tr></table></paragraph><paragraph><custom name=\"separator\"/></paragraph><paragraph><embed size=\"medium\" align=\"center\" object_id=\"79\"/></paragraph><paragraph><embed size=\"medium\" align=\"center\" object_id=\"78\"/></paragraph></section>
 ",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "center_column",
@@ -9225,10 +9225,10 @@ keywords=cms, publish, e-commerce, content management, development framework",
                 "id"  =>  413,
                 "value"  =>  "<?xml version=\"1.0\"?>
 <section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph><table class=\"default\" width=\"100%\" border=\"0\"><tr><td xhtml:width=\"49%\"><paragraph><embed size=\"medium\" align=\"center\" object_id=\"85\"/></paragraph></td><td/><td xhtml:width=\"49%\"><paragraph><embed size=\"medium\" align=\"center\" object_id=\"93\"/></paragraph></td></tr><tr><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"91\"/></paragraph></td><td/><td><paragraph><embed size=\"medium\" align=\"center\" object_id=\"92\"/></paragraph></td></tr><tr><td/><td/><td/></tr><tr><td><paragraph><strong>Training by Type:</strong></paragraph><paragraph><ul><li><paragraph>Technical training
-                                </paragraph></li><li><paragraph>Standard exam
-                                </paragraph></li></ul></paragraph><paragraph><strong>Training by Delivery Method:</strong></paragraph><paragraph><ul><li><paragraph>Classroom
-                                </paragraph></li><li><paragraph>Online
-                                </paragraph></li></ul></paragraph></td><td/><td><paragraph><embed class=\"itemized_sub_items\" size=\"medium\" align=\"center\" custom:offset=\"0\" custom:limit=\"5\" object_id=\"86\"/></paragraph></td></tr></table></paragraph><paragraph><custom name=\"separator\"/></paragraph><paragraph><embed size=\"medium\" align=\"center\" custom:offset=\"0\" custom:limit=\"5\" object_id=\"87\"/></paragraph></section>
+                                    </paragraph></li><li><paragraph>Standard exam
+                                    </paragraph></li></ul></paragraph><paragraph><strong>Training by Delivery Method:</strong></paragraph><paragraph><ul><li><paragraph>Classroom
+                                    </paragraph></li><li><paragraph>Online
+                                    </paragraph></li></ul></paragraph></td><td/><td><paragraph><embed class=\"itemized_sub_items\" size=\"medium\" align=\"center\" custom:offset=\"0\" custom:limit=\"5\" object_id=\"86\"/></paragraph></td></tr></table></paragraph><paragraph><custom name=\"separator\"/></paragraph><paragraph><embed size=\"medium\" align=\"center\" custom:offset=\"0\" custom:limit=\"5\" object_id=\"87\"/></paragraph></section>
 ",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "center_column",
@@ -9238,9 +9238,9 @@ keywords=cms, publish, e-commerce, content management, development framework",
             array(
                 "id"  =>  414,
                 "value"  =>  "<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph><custom name=\"factbox\" custom:title=\"Next steps\"><paragraph>Vivamus suscipit. Praesent tincidunt adipiscing urna. Etiam ligula velit, tincidunt accumsan, feugiat sit amet, malesuada vel, tellus.</paragraph><paragraph><ol><li><paragraph>Donec magna felis
-                            </paragraph></li><li><paragraph>Mauris sed lectus vel
-                            </paragraph></li><li><paragraph>Praesent pharetra
-                            </paragraph></li></ol></paragraph></custom></paragraph></section>",
+                                </paragraph></li><li><paragraph>Mauris sed lectus vel
+                                </paragraph></li><li><paragraph>Praesent pharetra
+                                </paragraph></li></ol></paragraph></custom></paragraph></section>",
                 "languageCode"  =>  "eng-US",
                 "fieldDefIdentifier"  =>  "right_column",
             )
