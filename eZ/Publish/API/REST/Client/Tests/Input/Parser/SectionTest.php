@@ -21,7 +21,7 @@ class SectionTest extends BaseTest
         $sectionParser = $this->getParser();
 
         $inputArray = array(
-            'sectionId'  => 23,
+            '_href'      => '/content/sections/23',
             'identifier' => 'some-section',
             'name'       => 'Some Section',
         );
@@ -52,7 +52,7 @@ class SectionTest extends BaseTest
     public function testResultContainsId( $result )
     {
         $this->assertEquals(
-            23,
+            '/content/sections/23',
             $result->id
         );
     }

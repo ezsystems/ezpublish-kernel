@@ -187,8 +187,8 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     protected function getValidValues()
     {
         return array(
-            'sectionId' => 23,
-            'ownerId'   => 42,
+            'sectionId' => '/content/sections/23',
+            'ownerId'   => '/user/users/42',
             // TODO: Add missing properties
         );
     }
