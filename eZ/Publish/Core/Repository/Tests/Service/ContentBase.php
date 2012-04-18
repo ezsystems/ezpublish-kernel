@@ -11,10 +11,16 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Exceptions,
     eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Content as APIContent,
     eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\Content\Field;
+    eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
+    eZ\Publish\API\Repository\Values\Content\SearchResult,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Content service
@@ -42,10 +48,17 @@ abstract class ContentBase extends BaseServiceTest
         );
     }
 
-    protected function getVersionInfoExpectedValues()
+    /**
+     *
+     *
+     * @param bool $draft
+     *
+     * @return array
+     */
+    protected function getVersionInfoExpectedValues( $draft = false )
     {
         // Legacy fixture content 4 current version (1) values
-        return array(
+        $values = array(
             "id"                  => 4,
             "versionNo"           => 1,
             "modificationDate"    => new \DateTime( "@0" ),
@@ -55,6 +68,17 @@ abstract class ContentBase extends BaseServiceTest
             "initialLanguageCode" => "eng-US",
             "languageCodes"       => array( "eng-US" )
         );
+
+        if ( $draft )
+        {
+            $values["id"] = 675;
+            $values["versionNo"] = 2;
+            $values["status"] = VersionInfo::STATUS_DRAFT;
+            unset( $values["modificationDate"] );
+            unset( $values["creationDate"] );
+        }
+
+        return $values;
     }
 
     /**
@@ -87,17 +111,18 @@ abstract class ContentBase extends BaseServiceTest
      *
      *
      * @param array $languages
+     * @param bool $draft
      *
      * @return mixed
      */
-    protected function getFieldsExpectedValues( array $languages = null )
+    protected function getFieldsExpectedValues( array $languages = null, $draft = false )
     {
         // Legacy fixture content ID=4 fields
         $fields =  array(
             "eng-US" => array(
                 new Field(
                     array(
-                        "id" => 7,
+                        "id" => $draft ? 1332 : 7,
                         "fieldDefIdentifier" => "description",
                         "value" => "Main group",
                         "languageCode" => "eng-US"
@@ -105,7 +130,7 @@ abstract class ContentBase extends BaseServiceTest
                 ),
                 new Field(
                     array(
-                        "id" => 8,
+                        "id" => $draft ? 1333 : 8,
                         "fieldDefIdentifier" => "name",
                         "value" => "Users",
                         "languageCode" => "eng-US"
@@ -196,7 +221,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentInfo() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentInfo() is not implemented." );
     }
 
     /**
@@ -267,24 +292,22 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentInfoByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContentInfoByRemoteId() is not implemented." );
     }
 
     /**
-     * Test for the loadVersionInfo() method.
+     * Test for the loadVersionInfoById() method.
      *
-     * @depends testLoadContentInfo
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function testLoadVersionInfo()
+    public function testLoadVersionInfoById()
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 4 );
 
-        $versionInfo = $contentService->loadVersionInfo( $contentInfo );
+        $versionInfo = $contentService->loadVersionInfoById( 4 );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -296,15 +319,15 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Test for the loadVersionInfo() method.
+     * Test for the loadVersionInfoById() method.
      *
-     * @depends testLoadVersionInfo
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
+     * @depends testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @return void
      */
-    public function testLoadVersionInfoValues( $versionInfo )
+    public function testLoadVersionInfoByIdValues( $versionInfo )
     {
         $this->assertPropertiesCorrect(
             $this->getVersionInfoExpectedValues(),
@@ -313,20 +336,18 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Test for the loadVersionInfo() method.
+     * Test for the loadVersionInfoById() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     * @todo test for different version
      */
-    public function testLoadVersionInfoWithSecondParameter()
+    public function testLoadVersionInfoByIdWithSecondParameter()
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 4 );
 
-        $versionInfo = $contentService->loadVersionInfo( $contentInfo, 1 );
+        $versionInfo = $contentService->loadVersionInfoById( 4, 1 );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -338,15 +359,15 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Test for the loadVersionInfo() method.
+     * Test for the loadVersionInfoById() method.
      *
-     * @depends testLoadVersionInfoWithSecondParameter
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
+     * @depends testLoadVersionInfoByIdWithSecondParameter
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @return void
      */
-    public function testLoadVersionInfoWithSecondParameterValues( $versionInfo )
+    public function testLoadVersionInfoByIdWithSecondParameterValues( $versionInfo )
     {
         $this->assertPropertiesCorrect(
             $this->getVersionInfoExpectedValues(),
@@ -355,35 +376,60 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Test for the loadVersionInfo() method.
+     * Test for the loadVersionInfoById() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return void
      */
-    public function testLoadVersionInfoThrowsNotFoundException()
+    public function testLoadVersionInfoByIdThrowsNotFoundException()
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 4 );
 
         // Throws an exception because version with given number does not exists
-        $versionInfo = $contentService->loadVersionInfo( $contentInfo, PHP_INT_MAX );
+        $versionInfo = $contentService->loadVersionInfoById( 4, PHP_INT_MAX );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadVersionInfoById() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @return void
+     */
+    public function testLoadVersionInfoByIdThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
     }
 
     /**
      * Test for the loadVersionInfo() method.
      *
+     * @depends testLoadVersionInfoById
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     *
-     * @return void
      */
-    public function testLoadVersionInfoThrowsUnauthorizedException()
+    public function testLoadVersionInfo()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadVersionInfo() is not implemented." );
+        $contentServiceMock = $this->getPartlyMockedService(
+            array( "loadVersionInfoById" )
+        );
+        $contentServiceMock->expects(
+            $this->once()
+        )->method(
+            "loadVersionInfoById"
+        )->with(
+            $this->equalTo( 42 ),
+            $this->equalTo( 7 )
+        );
+
+        $contentServiceMock->loadVersionInfo(
+            new ContentInfo( array( "id" => 42 ) ),
+            7
+        );
     }
 
     /**
@@ -426,36 +472,44 @@ abstract class ContentBase extends BaseServiceTest
             $content
         );
 
-        $this->assertLoadContentValues( $content, $languages );
+        $this->assertContentValues( $content, $languages );
     }
 
     /**
+     *
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param array $languages
+     * @param bool $draft
      *
      * @return void
      */
-    protected function assertLoadContentValues( APIContent $content, array $languages = null )
+    protected function assertContentValues( APIContent $content, array $languages = null, $draft = false )
     {
+        $versionInfoValues = $this->getVersionInfoExpectedValues( $draft );
+        $contentInfoValues = $this->getContentInfoExpectedValues();
+        $fieldValuesValues = $this->getFieldValuesExpectedValues( $languages );
+        $fieldsValues = $this->getFieldsExpectedValues( $languages, $draft );
+
         $this->assertPropertiesCorrect(
-            $this->getVersionInfoExpectedValues(),
+            $versionInfoValues,
             $content->getVersionInfo()
         );
 
         $this->assertPropertiesCorrect(
-            $this->getContentInfoExpectedValues(),
+            $contentInfoValues,
             $content->contentInfo
         );
 
         $this->assertEquals(
-            $this->getFieldValuesExpectedValues( $languages ),
+            $fieldValuesValues,
             $content->fields
         );
 
         $fields = $content->getFields();
         usort( $fields, function( $a, $b ) { return strcmp( $a->id, $b->id ); } );
         $this->assertEquals(
-            $this->getFieldsExpectedValues( $languages ),
+            $fieldsValues,
             $fields
         );
 
@@ -472,7 +526,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
     }
 
     /**
@@ -537,6 +591,137 @@ abstract class ContentBase extends BaseServiceTest
         // Throws an exception because content does not exists in "eng-GB" language
         $content = $contentService->loadContent( 4, array( "eng-US", "eng-GB" ) );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadContentByContentInfo() method.
+     *
+     * @depends testLoadContent
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByContentInfo
+     */
+    public function testLoadContentByContentInfo()
+    {
+        $contentServiceMock = $this->getPartlyMockedService(
+            array( "loadContent" )
+        );
+        $contentServiceMock->expects(
+            $this->once()
+        )->method(
+            "loadContent"
+        )->with(
+            $this->equalTo( 42 ),
+            $this->equalTo( array( "cro-HR" ) ),
+            $this->equalTo( 7 )
+        );
+
+        $contentServiceMock->loadContentByContentInfo(
+            new ContentInfo( array( "id" => 42 ) ),
+            array( "cro-HR" ),
+            7
+        );
+    }
+
+    /**
+     * Test for the loadContentByVersionInfo() method.
+     *
+     * @depends testLoadContent
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByVersionInfo
+     */
+    public function testLoadContentByVersionInfo()
+    {
+        $this->markTestSkipped( "Enable when repository is removed from VersionInfo" );
+        $contentServiceMock = $this->getPartlyMockedService(
+            array( "loadContent" )
+        );
+        $contentServiceMock->expects(
+            $this->once()
+        )->method(
+            "loadContent"
+        )->with(
+            $this->equalTo( 42 ),
+            $this->equalTo( array( "cro-HR" ) ),
+            $this->equalTo( 7 )
+        );
+
+        $contentServiceMock->loadContentByVersionInfo(
+            new VersionInfo(
+                array(
+                    "contentInfo" => new ContentInfo( array( "id" => 42 ) ),
+                    "versionNo" => 7
+                )
+            ),
+            array( "cro-HR" )
+        );
+    }
+
+    /**
+     * Data provider for testLoadContentByRemoteId()
+     *
+     * @return array
+     */
+    public function testLoadContentByRemoteIdArgumentsProvider()
+    {
+        return array(
+            array( "f5c88a2209584891056f987fd965b0ba", null, null ),
+            array( "f5c88a2209584891056f987fd965b0ba", array( "eng-US" ), null ),
+            array( "f5c88a2209584891056f987fd965b0ba", null, 1 ),
+            array( "f5c88a2209584891056f987fd965b0ba", array( "eng-US" ), 1 )
+        );
+    }
+
+    /**
+     * Test for the loadContentByRemoteId() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByRemoteId
+     * @dataProvider testLoadContentByRemoteIdArgumentsProvider
+     *
+     * @param string $remoteId
+     * @param array $languages
+     * @param int $versionNo
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function testLoadContentByRemoteId( $remoteId, array $languages = null, $versionNo )
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $content = $contentService->loadContentByRemoteId( $remoteId, $languages, $versionNo );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\Content",
+            $content
+        );
+
+        $this->assertContentValues( $content, $languages );
+    }
+
+    /**
+     * Test for the loadContentByRemoteId() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByRemoteId
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadContentByRemoteIdThrowsNotFoundException()
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        // Throws an exception because given remoteId does not exist
+        $content = $contentService->loadContentByRemoteId( "non-existent-remote-id" );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadContentByRemoteId() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByRemoteId
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadContentByRemoteIdThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
     }
 
     /**
@@ -894,7 +1079,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContent() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -1078,7 +1263,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContent() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -1088,7 +1273,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContent() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -1210,7 +1395,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentMetadata() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::updateContentMetadata() is not implemented." );
     }
 
     /**
@@ -1405,7 +1590,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::testUpdateContent() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::testUpdateContent() is not implemented." );
     }
 
     /**
@@ -1435,7 +1620,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::testUpdateContent() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::testUpdateContent() is not implemented." );
     }
 
     /**
@@ -1670,7 +1855,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::publishVersion() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::publishVersion() is not implemented." );
     }
 
     /**
@@ -1678,43 +1863,80 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return array
      */
     public function testCreateContentDraft()
     {
+        $time = time();
+
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
         $contentInfo = $contentService->loadContentInfo( 4 );
 
-        $internalDraftContent = $contentService->createContentDraft( $contentInfo );
+        $draftContent = $contentService->createContentDraft( $contentInfo );
         /* END: Use Case */
 
         $this->assertInstanceOf(
             'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            $internalDraftContent
+            $draftContent
         );
 
-        return $internalDraftContent;
+        return array(
+            "draftContent" => $draftContent,
+            "time"         => $time
+        );
     }
 
-    public function testCreateContentDraftValues()
+    /**
+     * @param array $data
+     */
+    protected function assertDraftContentValues( array $data )
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentDraft() is not implemented." );
+        /** @var $draftContent \eZ\Publish\API\Repository\Values\Content\Content */
+        $draftContent = $data["draftContent"];
+        $time = $data["time"];
+
+        $this->assertContentValues( $data["draftContent"], null, true );
+        $this->assertGreaterThanOrEqual(
+            new \DateTime( "@{$time}" ),
+            $draftContent->getVersionInfo()->creationDate
+        );
+        $this->assertGreaterThanOrEqual(
+            new \DateTime( "@{$time}" ),
+            $draftContent->getVersionInfo()->modificationDate
+        );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @depends testCreateContentDraft
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
+     *
+     * @param array $data
+     */
+    public function testCreateContentDraftValues( array $data )
+    {
+        $this->assertDraftContentValues( $data );
     }
 
     /**
      * Test for the createContentDraft() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
+     *
+     * @return array
      */
     public function testCreateContentDraftWithSecondArgument()
     {
+        $time = time();
+
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
         $content = $contentService->loadContent( 4 );
 
-        $internalDraftContent = $contentService->createContentDraft(
+        $draftContent = $contentService->createContentDraft(
             $content->contentInfo,
             $content->getVersionInfo()
         );
@@ -1722,13 +1944,26 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertInstanceOf(
             'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            $internalDraftContent
+            $draftContent
+        );
+
+        return array(
+            "draftContent" => $draftContent,
+            "time"         => $time
         );
     }
 
-    public function testCreateContentDraftWithSecondArgumentValues()
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @depends testCreateContentDraftWithSecondArgument
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
+     *
+     * @param array $data
+     */
+    public function testCreateContentDraftWithSecondArgumentValues( array $data )
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentDraft() is not implemented." );
+        $this->assertDraftContentValues( $data );
     }
 
     /**
@@ -1736,16 +1971,46 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return array
      */
     public function testCreateContentDraftWithThirdArgument()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentDraft() is not implemented." );
+        $this->markTestSkipped( "Test for ContentService::createContentDraft() is skipped because Image converter (user class contains image type field) is not implemented." );
+        $time = time();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+        $content = $contentService->loadContent( 4 );
+
+        $draftContent = $contentService->createContentDraft(
+            $content->contentInfo,
+            $content->getVersionInfo(),
+            $this->repository->getCurrentUser()
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $draftContent
+        );
+
+        return array(
+            "draftContent" => $draftContent,
+            "time"         => $time
+        );
     }
 
-    public function testCreateContentDraftWithThirdArgumentValues()
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @depends testCreateContentDraftWithThirdArgument
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
+     *
+     * @param array $data
+     */
+    public function testCreateContentDraftWithThirdArgumentValues( array $data )
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentDraft() is not implemented." );
+        $this->assertDraftContentValues( $data );
     }
 
     /**
@@ -1755,18 +2020,20 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $internalDraftContent
+     * @param array $data
      */
-    public function testCreateContentDraftThrowsBadStateException( APIContent $internalDraftContent )
+    public function testCreateContentDraftThrowsBadStateException( array $data )
     {
+        $draftContent = $data["draftContent"];
+
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because version status is not
         // VersionInfo::STATUS_PUBLISHED nor VersionInfo::STATUS_ARCHIVED
-        $internalDraftContent = $contentService->createContentDraft(
-            $internalDraftContent->contentInfo,
-            $internalDraftContent->getVersionInfo()
+        $draftContent = $contentService->createContentDraft(
+            $draftContent->contentInfo,
+            $draftContent->getVersionInfo()
         );
         /* END: Use Case */
     }
@@ -1779,22 +2046,257 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentDraft() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
     }
 
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentDrafts
+     */
+    public function testLoadContentDrafts()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+    }
 
+    /**
+     * Test for the loadVersions() method.
+     *
+     * @depends testLoadContentInfo
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
+     */
+    public function testLoadVersions()
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
 
+        $contentInfo = $contentService->loadContentInfo( 4 );
+        $versions = $contentService->loadVersions( $contentInfo );
+        /* END: Use Case */
 
+        return $versions;
+    }
 
+    /**
+     * Test for the loadVersions() method.
+     *
+     * @depends testLoadVersions
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
+     *
+     * @param array $versions
+     */
+    public function testLoadVersionsValues( array $versions )
+    {
+        $versionInfoValues = $this->getVersionInfoExpectedValues();
 
+        $this->assertPropertiesCorrect(
+            $versionInfoValues,
+            $versions[0]
+        );
+    }
 
+    /**
+     * Test for the loadVersions() method.
+     *
+     * @depends testLoadContentInfo
+     * @depends testCreateContentDraft
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
+     */
+    public function testLoadVersionsMultiple()
+    {
+        $time = time();
 
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
 
+        $contentInfo = $contentService->loadContentInfo( 4 );
+        // Create one additional version
+        $draftContent = $contentService->createContentDraft( $contentInfo );
+        $versions = $contentService->loadVersions( $contentInfo );
+        /* END: Use Case */
 
+        return array(
+            "versions" => $versions,
+            "time"     => $time
+        );
+    }
 
+    /**
+     * Test for the loadVersions() method.
+     *
+     * @depends testLoadVersionsMultiple
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
+     *
+     * @param array $data
+     */
+    public function testLoadVersionsMultipleValues( array $data )
+    {
+        $versions = $data["versions"];
+        $time = $data["time"];
 
+        $versionInfoValues = $this->getVersionInfoExpectedValues();
+        $this->assertPropertiesCorrect(
+            $versionInfoValues,
+            $versions[0]
+        );
 
+        $versionInfoValues = $this->getVersionInfoExpectedValues( true );
+        $this->assertPropertiesCorrect(
+            $versionInfoValues,
+            $versions[1]
+        );
+        $this->assertGreaterThanOrEqual(
+            new \DateTime( "@{$time}" ),
+            $versions[1]->creationDate
+        );
+        $this->assertGreaterThanOrEqual(
+            new \DateTime( "@{$time}" ),
+            $versions[1]->modificationDate
+        );
+    }
 
+    /**
+     * Test for the loadVersions() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadVersionsThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadVersions() is not implemented." );
+    }
+
+    /**
+     * Test for the deleteVersion() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteVersion
+     */
+    public function testDeleteVersion()
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        // Create a version to delete
+        $draftContent = $contentService->createContentDraft( $contentInfo );
+
+        $contentService->deleteVersion( $draftContent->versionInfo );
+        /* END: Use Case */
+
+        try
+        {
+            $contentService->loadVersionInfo(
+                $draftContent->contentInfo,
+                $draftContent->versionInfo->versionNo
+            );
+
+            $this->fail( "Version was not successfully deleted!" );
+        }
+        catch ( NotFoundException $e ) {}
+    }
+
+    /**
+     * Test for the deleteVersion() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteVersion
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testDeleteVersionThrowsBadStateException()
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $versionInfo = $contentService->loadVersionInfoById( 4 );
+
+        // Throws an exception because version is published
+        $contentService->deleteVersion( $versionInfo );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the deleteVersion() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteVersion
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testDeleteVersionThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @depends testLoadContent
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     */
+    public function testDeleteContent()
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        $contentService->deleteContent( $contentInfo );
+        /* END: Use Case */
+
+        try
+        {
+            $contentService->loadContent( $contentInfo->id );
+
+            $this->fail( "Content was not successfully deleted!" );
+        }
+        catch ( NotFoundException $e ) {}
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testDeleteContentThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @depends testFindSingle
+     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
+     */
+    public function testFindSingleThrowsNotFoundException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @depends testFindSingle
+     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
+     */
+    public function testFindSingleThrowsNotFoundExceptionDueToPermissions()
+    {
+        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @depends testFindSingle
+     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
+     */
+    public function testFindSingleThrowsBadStateException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+    }
 
 
 
@@ -1852,6 +2354,21 @@ abstract class ContentBase extends BaseServiceTest
 
         foreach ( $translationValues as $propertyName => $propertyValue )
             $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
+    }
+
+    /**
+     * Returns the content service to test with $methods mocked
+     *
+     * @param string[] $methods
+     * @return \eZ\Publish\Core\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPartlyMockedService( array $methods = array() )
+    {
+        return $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\ContentService",
+            $methods,
+            array(), '', false
+        );
     }
 
     /**
