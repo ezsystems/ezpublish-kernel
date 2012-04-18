@@ -676,7 +676,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         foreach ( $res as $row )
         {
             $this->assertEquals(
-                12,
+                13,
                 count( $row )
             );
         }
@@ -723,7 +723,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         foreach ( $res as $row )
         {
             $this->assertEquals(
-                12,
+                13,
                 count( $row )
             );
         }
