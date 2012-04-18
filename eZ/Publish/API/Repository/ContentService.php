@@ -32,7 +32,6 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
  */
 interface ContentService
 {
-
     /**
      * Loads a content info object.
      *
@@ -228,7 +227,6 @@ interface ContentService
      */
     public function loadContentDrafts( User $user = null );
 
-
     /**
      * Translate a version
      *
@@ -423,7 +421,6 @@ interface ContentService
      * @since 5.0
      */
     public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() );
-
 
     /**
      * Instantiates a new content create struct object
