@@ -295,15 +295,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByContentInfo( APIContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
-        if ( $versionNo === null ) $versionNo = $contentInfo->currentVersionNo;
-
-        $spiContent = $this->persistenceHandler->contentHandler()->load(
+        return $this->loadContent(
             $contentInfo->id,
-            $versionNo,
-            $languages
+            $languages,
+            $versionNo
         );
-
-        return $this->buildContentDomainObject( $spiContent );
     }
 
     /**
@@ -319,7 +315,7 @@ class ContentService implements ContentServiceInterface
     public function loadContentByVersionInfo( APIVersionInfo $versionInfo, array $languages = null )
     {
         return $this->loadContent(
-            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->getContentInfo()->id,
             $languages,
             $versionInfo->versionNo
         );
@@ -1106,7 +1102,7 @@ class ContentService implements ContentServiceInterface
         }
 
         $success = $this->persistenceHandler->contentHandler()->deleteVersion(
-            $versionInfo->getContentInfo()->contentId,
+            $versionInfo->getContentInfo()->id,
             $versionInfo->versionNo
         );
     }
@@ -1134,8 +1130,8 @@ class ContentService implements ContentServiceInterface
             $versions,
             function( $a, $b )
             {
-                if ( $a->createdDate->getTimestamp() === $b->createdDate->getTimestamp() ) return 0;
-                return ( $a->createdDate->getTimestamp() < $b->createdDate->getTimestamp() ) ? -1 : 1;
+                if ( $a->creationDate->getTimestamp() === $b->creationDate->getTimestamp() ) return 0;
+                return ( $a->creationDate->getTimestamp() < $b->creationDate->getTimestamp() ) ? -1 : 1;
             }
         );
 
@@ -1163,7 +1159,7 @@ class ContentService implements ContentServiceInterface
         );
 
         $this->repository->getLocationService()->createLocation(
-            $this->buildContentInfoDomainObject( $spiContent ),
+            $this->buildContentInfoDomainObject( $spiContent->contentInfo ),
             $destinationLocationCreateStruct
         );
 
@@ -1227,7 +1223,7 @@ class ContentService implements ContentServiceInterface
 
         return new SearchResult(
             array(
-                'query'  =>  $query,
+                'query'  =>  clone $query,
                 'count'  =>  $spiSearchResult->count,
                 'items'  =>  $contentItems
             )
@@ -1380,10 +1376,10 @@ class ContentService implements ContentServiceInterface
         $spiRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new SPIRelationCreateStruct(
                 array(
-                    'sourceContentId'         => $sourceContentInfo->contentId,
+                    'sourceContentId'         => $sourceContentInfo->id,
                     'sourceContentVersionNo'  => $sourceVersion->versionNo,
                     'sourceFieldDefinitionId' => null,
-                    'destinationContentId'    => $destinationContent->contentId,
+                    'destinationContentId'    => $destinationContent->id,
                     'type'                    => APIRelation::COMMON
                 )
             )
@@ -1408,7 +1404,7 @@ class ContentService implements ContentServiceInterface
             throw new BadStateException( "sourceVersion", "relations of type common can only be removed from versions of status draft" );
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
-            $sourceVersion->getContentInfo()->contentId,
+            $sourceVersion->getContentInfo()->id,
             $sourceVersion->versionNo,
             APIRelation::COMMON
         );
@@ -1547,13 +1543,13 @@ class ContentService implements ContentServiceInterface
 
         return new Content(
             array(
-                "repository"               => $this->repository,
-                "id"                => $spiContent->contentInfo->id,
-                "versionNo"                => $spiContent->versionInfo->versionNo,
-                "contentTypeId"            => $spiContent->contentInfo->contentTypeId,
-                "internalFields"           => $fields,
+                "repository"     => $this->repository,
+                "id"             => $spiContent->contentInfo->id,
+                "versionNo"      => $spiContent->versionInfo->versionNo,
+                "contentTypeId"  => $spiContent->contentInfo->contentTypeId,
+                "internalFields" => $fields,
                 // @TODO: implement loadRelations()
-                //"relations"                => $this->loadRelations( $versionInfo )
+                //"relations" => $this->loadRelations( $versionInfo )
             )
         );
     }
