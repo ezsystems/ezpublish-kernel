@@ -175,7 +175,10 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^.*/.*$)'  => new View\InvalidApiUse(),
     ) ),
+    // This is just used for integration tests, DO NOT USE IN PRODUCTION
     new Authenticator\IntegrationTest( $repository )
+    // For productive use, e.g. use
+    // new Authenticator\BasicAuth( $repository )
 );
 
 /*
@@ -194,6 +197,10 @@ $request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
 
 // ATTENTION: Only used for test setup
 $request->addHandler( 'testUser', new RMF\Request\PropertyHandler\Server( 'HTTP_X_TEST_USER' ) );
+
+// For the use of Authenticator\BasicAuth:
+// $request->addHandler( 'username', new RMF\Request\PropertyHandler\Server( 'PHP_AUTH_USER' ) );
+// $request->addHandler( 'password', new RMF\Request\PropertyHandler\Server( 'PHP_AUTH_PW' ) );
 
 /*
  * This triggers working of the MVC.
