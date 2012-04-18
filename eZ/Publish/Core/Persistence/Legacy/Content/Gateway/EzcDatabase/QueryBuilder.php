@@ -179,6 +179,7 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'initial_language_id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
             // Language IDs
             $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
