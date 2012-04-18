@@ -298,35 +298,6 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Sets the object-state of object identified by $contentId and $stateGroup to $state.
-     *
-     * The $state is the id of the state within one group.
-     *
-     * @param mixed $contentId
-     * @param mixed $stateGroup
-     * @param mixed $state
-     * @return boolean
-     */
-    public function setObjectState( $contentId, $stateGroup, $state )
-    {
-        throw new \Exception( "@TODO: Not implemented yet." );
-    }
-
-    /**
-     * Gets the object-state of object identified by $contentId and $stateGroup to $state.
-     *
-     * The $state is the id of the state within one group.
-     *
-     * @param mixed $contentId
-     * @param mixed $stateGroup
-     * @return mixed
-     */
-    public function getObjectState( $contentId, $stateGroup )
-    {
-        throw new \Exception( "@TODO: Not implemented yet." );
-    }
-
-    /**
      * Updates a content object meta data, identified by $contentId
      *
      * @param int $contentId
