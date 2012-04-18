@@ -26,12 +26,17 @@ $generator = getenv( 'backendEncoding' ) === 'xml' ?
 // used in the output generators and in some parsing handlers.
 $urlHandler = new Common\UrlHandler\eZPublish();
 
-$repository = new Client\Repository(
+
+// The IntegrationTestRepository is only meant for integration tests. It
+// handles sessions which run throughout a single test case run and submission
+// of user information to the server, which needs a corresponding
+// authenticator.
+$repository = new Client\IntegrationTestRepository(
     // The HTTP Client. Needs to implement the Client\HttpClient interface.
     //
-    // We are using a test session client here, so that we maintain a
-    // consistent session during each test case.
-    new Client\HttpClient\TestSession(
+    // We are using a test client here, so that we maintain a consistent session during each test case
+    // and submit user information to the server.
+    $authenticator = new Client\HttpClient\Authentication\IntegrationTestAuthenticator(
         new Client\HttpClient\Stream(
             // Server address to communicate with. You might want to make this
             // configurable using environment variables, or something alike.
@@ -81,7 +86,8 @@ $repository = new Client\Repository(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct( $urlHandler ),
         )
-    )
+    ),
+    $authenticator
 );
 
 // Force sets the used user. This will be refactored most likely, since this is 
