@@ -178,6 +178,48 @@ handles the data and converts it into the corresponding ``Value`` object.
 For aggregated data it may call again the ``Common\Input\ParsingDispatcher`` to
 dispatch the data handling to a specialized parser.
 
+Authentication
+==============
+
+Authentication has to be performed through a mechanism over HTTP. Therefore,
+the slient and server both contain example implementation on how additional
+authentication mechanisms can be implemented.
+
+Server
+------
+
+The Server uses a derived version of the RMF\Dispatcher\Simple class, which
+handles authentication before the actual dispatching takes place. As
+examples, the …\REST\Server\Authenticator base class has been implemented for
+the integration test framework and basic auth.
+
+In order to realize multiple different authentication methods in the server, a
+PriorityAuthenticator can be implemented, which aggregates multiple
+authenticators and iterates through them. In production, the last authenticator
+in such a process should be an AnonymousAuthenticator, which loads the
+anonymous user and sets it as the current user in the repository.
+
+The IntegrationTest authenticator is ONLY meant to be used with integration
+tests. It loads the user for which the ID is provided in a special header. This
+is neccessary, since the test suite contains tests with different access
+permissions.
+
+Client
+------
+
+In the client Repository implementation, the setCurrentUser() method has been
+deactivated. This method does not make sense in a REST context, since the user
+to execute operations with, must be authenticated in every request anyway.
+
+Therefore, authentication is exclusively handled by different implementations
+of the HttpClient base class. The authentication mechanism can send arbitrary
+data with every request to trigger authentication in the server. As examples,
+the IntegrationTestAuthenticator and BasicAuth have been implemented. The user
+must provide his credentials for these, if he wants to use the API via REST.
+
+If a user of the SDK wants to act as the anonymous user, he can use one of the
+HttpClient impelementations without authentication facilities.
+
 Extending Server And Client
 ===========================
 
