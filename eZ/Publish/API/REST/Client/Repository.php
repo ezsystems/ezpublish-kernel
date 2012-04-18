@@ -142,7 +142,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository, Sessionable
      */
     public function getCurrentUser()
     {
-        return $this->currentUser;
+        return null;
     }
 
     /**
@@ -153,7 +153,9 @@ class Repository implements \eZ\Publish\API\Repository\Repository, Sessionable
      */
     public function setCurrentUser( User $user )
     {
-        $this->currentUser = $user;
+        throw new Exceptions\MethodNotAllowedException(
+            'It is not allowed to set a current user in this implementation. Please use a corresponding authenticating HttpClient instead.'
+        );
     }
 
     /**
