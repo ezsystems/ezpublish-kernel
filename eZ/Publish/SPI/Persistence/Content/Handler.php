@@ -112,29 +112,6 @@ interface Handler
     public function setStatus( $contentId, $status, $version );
 
     /**
-     * Sets the object-state of object identified by $contentId and $stateGroup to $state.
-     *
-     * The $state is the id of the state within one group.
-     *
-     * @param mixed $contentId
-     * @param mixed $stateGroup
-     * @param mixed $state
-     * @return boolean
-     */
-    public function setObjectState( $contentId, $stateGroup, $state );
-
-    /**
-     * Gets the object-state of object identified by $contentId and $stateGroup to $state.
-     *
-     * The $state is the id of the state within one group.
-     *
-     * @param mixed $contentId
-     * @param mixed $stateGroup
-     * @return mixed
-     */
-    public function getObjectState( $contentId, $stateGroup );
-
-    /**
      * Updates a content object meta data, identified by $contentId
      *
      * @param int $contentId
