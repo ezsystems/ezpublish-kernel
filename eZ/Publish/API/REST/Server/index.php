@@ -124,6 +124,10 @@ $valueObjectVisitors = array(
 );
 
 /*
+ * We use a simple derived implementation of the RMF dispatcher here, which
+ * first authenticates the user and then triggers the parent dispatching
+ * process.
+ *
  * The RMF dispatcher is the core of the MVC. It selects a controller method on
  * basis of the request URI (regex match) and the HTTP verb, which is then executed.
  * After the controller has been executed, the view (second parameter) is
@@ -135,7 +139,7 @@ $valueObjectVisitors = array(
  * Value Object to one of the visitors registered above.
  */
 
-$dispatcher = new RMF\Dispatcher\Simple(
+$dispatcher = new AuthenticatingDispatcher(
     new RMF\Router\Regexp( array(
         '(^/content/sections$)' => array(
             'GET'  => array( $sectionController, 'listSections' ),
@@ -149,7 +153,7 @@ $dispatcher = new RMF\Dispatcher\Simple(
             'PATCH'  => array( $sectionController, 'updateSection' ),
             'DELETE' => array( $sectionController, 'deleteSection' ),
         ),
-        '(^/content/objects\?remoteId=[0-9a-f]+$)' => array(
+        '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
             'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
         ),
         '(^/content/objects/[0-9]+$)' => array(
@@ -170,7 +174,8 @@ $dispatcher = new RMF\Dispatcher\Simple(
             )
         ),
         '(^.*/.*$)'  => new View\InvalidApiUse(),
-    ) )
+    ) ),
+    new Authenticator\IntegrationTest( $repository )
 );
 
 /*
@@ -186,6 +191,9 @@ $request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
     new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
     new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),
 ) ) );
+
+// ATTENTION: Only used for test setup
+$request->addHandler( 'testUser', new RMF\Request\PropertyHandler\Server( 'HTTP_X_TEST_USER' ) );
 
 /*
  * This triggers working of the MVC.
