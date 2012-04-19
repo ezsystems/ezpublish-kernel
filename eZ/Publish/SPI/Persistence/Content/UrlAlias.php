@@ -73,5 +73,10 @@ class UrlAlias extends ValueObject
      */
     public $isHistory;
  
-
+    /**
+     * Indicates if the url should be redirected
+     * 
+     * @var boolean
+     */
+    public $forward;
 }
