@@ -38,7 +38,7 @@ interface URLAliasService
      * 
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createUrlAlias(Location $location, $path,  $languageCode, $forward = false, $alwaysAvailable = false );
+    public function createUrlAlias(Location $location, $path,  $languageCode, $forwarding = false, $alwaysAvailable = false );
     
      /**
      * Create a user chosen $alias pointing to a resource in $languageName.
