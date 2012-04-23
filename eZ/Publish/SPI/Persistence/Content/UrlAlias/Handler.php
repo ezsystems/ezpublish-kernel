@@ -105,6 +105,15 @@ interface Handler
      * @return eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
     public function lookup( $url );
+
+     /**
+     * Returns all URL alias pointing to the the given location
+     * 
+     * @param mixed $locationId
+     * 
+     * @return eZ\Publish\SPI\Persistence\Content\UrlAlias[]
+     */
+    public function reverseLookup($locationId);
     
     /**
      * 
