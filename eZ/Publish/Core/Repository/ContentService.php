@@ -1570,7 +1570,7 @@ class ContentService implements ContentServiceInterface
             $fields[] = new Field(
                 array(
                     "id"                 => $spiField->id,
-                    "value"              => $spiField->value->data,
+                    "value"              => $this->newFieldTypeValue( $spiField->type, $spiField->value->data ),
                     "languageCode"       => $spiField->languageCode,
                     "fieldDefIdentifier" => $this->persistenceHandler->contentTypeHandler()
                         ->getFieldDefinition(

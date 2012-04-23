@@ -1199,7 +1199,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function buildFieldType( $type )
     {
         if ( !isset( $this->settings["field_type"][$type] ) )
-            throw new InvalidArgumentException( '$type', "Provided \$type is unknown: '{$type}'" );
+            throw new InvalidArgumentException( '$type', "Provided \$type is unknown: '{$type}', has: " . var_export(  array_keys( $this->settings["field_type"] ), true ) );
 
         return $this->settings["field_type"][$type]();
     }

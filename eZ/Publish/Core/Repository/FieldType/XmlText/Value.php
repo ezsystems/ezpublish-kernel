@@ -64,8 +64,9 @@ class Value extends BaseValue
     /**
      * Initializes a new XmlText Value object with $text in
      *
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler $handler
      * @param string $text
-     * @param string $type Which format the input is provided as. Expects one of the FORMAT_* class constants
+     * @param string $inputFormat Which format the input is provided as. Expects one of the FORMAT_* class constants
      */
     public function __construct( InputHandler $handler, $text = '', $inputFormat = self::INPUT_FORMAT_PLAIN )
     {

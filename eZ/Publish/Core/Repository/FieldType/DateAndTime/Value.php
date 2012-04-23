@@ -42,13 +42,24 @@ class Value extends BaseValue
      */
     public function __construct( $dateTime = "now" )
     {
-        if ( $dateTime !== null )
+        if ( $dateTime !== null && $dateTime !== 0 )
         {
             if ( is_string( $dateTime ) )
             {
                 try
                 {
                     $dateTime = new DateTime( $dateTime );
+                }
+                catch ( Exception $e )
+                {
+                    throw new InvalidArgumentValue( '$dateTime', $dateTime, __CLASS__, $e );
+                }
+            }
+            else if ( is_int( $dateTime ) )
+            {
+                try
+                {
+                    $dateTime = new DateTime( "@{$dateTime}" );
                 }
                 catch ( Exception $e )
                 {
