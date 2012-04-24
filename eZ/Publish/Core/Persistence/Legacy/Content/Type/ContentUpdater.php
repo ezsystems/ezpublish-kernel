@@ -25,7 +25,7 @@ class ContentUpdater
     /**
      * Content gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
