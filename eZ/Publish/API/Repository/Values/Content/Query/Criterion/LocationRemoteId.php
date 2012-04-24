@@ -24,7 +24,7 @@ class LocationRemoteId extends Criterion implements CriterionInterface
     /**
      * Creates a new locationRemoteId criterion
      *
-     * @param integer|array(integer) One or more locationRemoteId that must be matched
+     * @param integer|array(integer) $value One or more locationRemoteId that must be matched
      *
      * @throws InvalidArgumentException if a non numeric id is given
      * @throws InvalidArgumentException if the value type doesn't match the operator

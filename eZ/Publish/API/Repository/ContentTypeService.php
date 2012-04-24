@@ -89,7 +89,7 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $ContentTypeGroup
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup );
 

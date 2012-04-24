@@ -29,7 +29,7 @@ class SectionId extends Criterion implements CriterionInterface
      *        Possible values:
      *        - Operator::IN: match against a list of sectionId. $value must be an array of sectionId
      *        - Operator::EQ: match against a single sectionId. $value must be a single sectionId
-     * @param integer|array(integer) One or more sectionId that must be matched
+     * @param integer|array(integer) $value One or more sectionId that must be matched
      *
      * @throws InvalidArgumentException if a non numeric id is given
      * @throws InvalidArgumentException if the value type doesn't match the operator

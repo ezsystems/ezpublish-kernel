@@ -504,7 +504,7 @@ class UserService implements UserServiceInterface
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
@@ -851,7 +851,7 @@ class UserService implements UserServiceInterface
     /**
      * Builds the domain UserGroup object from provided Content object
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */

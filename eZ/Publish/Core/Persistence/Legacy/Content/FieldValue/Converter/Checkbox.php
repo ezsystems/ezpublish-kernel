@@ -22,7 +22,7 @@ class Checkbox implements Converter
      * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
