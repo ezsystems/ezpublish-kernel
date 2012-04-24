@@ -52,6 +52,14 @@ abstract class Gateway
     abstract public function getSubtreeContent( $sourceId );
 
     /**
+     * Returns data for the first level children of the location identified by given $locationId
+     *
+     * @param mixed $locationId
+     * @return array
+     */
+    abstract public function getChildren( $locationId );
+
+    /**
      * Update path strings to move nodes in the ezcontentobject_tree table
      *
      * This query can likely be optimized to use some more advanced string
@@ -133,7 +141,7 @@ abstract class Gateway
     /**
      * Create an entry in the node assignment table
      *
-     * @param CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
      * @return void
@@ -148,7 +156,7 @@ abstract class Gateway
      *
      * @return void
      */
-    abstract public function deleteNodeAssignment( $contentId, $versionNo );
+    abstract public function deleteNodeAssignment( $contentId, $versionNo = null );
 
     /**
      * Updates an existing location.
@@ -160,18 +168,25 @@ abstract class Gateway
     abstract public function update( UpdateStruct $location, $locationId );
 
     /**
-     * Removes all Locations under and includin $locationId.
-     *
-     * Performs a recursive delete on the location identified by $locationId,
-     * including all of its child locations. Content which is not referred to
-     * by any other location is automatically removed. Content which looses its
-     * main Location will get the first of its other Locations assigned as the
-     * new main Location.
+     * Deletes ezcontentobject_tree row for given $locationId (node_id)
      *
      * @param mixed $locationId
-     * @return boolean
      */
-    abstract public function removeSubtree( $locationId );
+    abstract public function removeLocation( $locationId );
+
+    /**
+     * Returns id of the next in line node to be set as a new main node
+     *
+     * This returns lowest node id for content identified by $contentId, and not of
+     * the node identified by given $locationId (current main node).
+     * Assumes that content has more than one location.
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return array
+     */
+    abstract public function getFallbackMainNodeData( $contentId, $locationId );
 
     /**
      * Sends a subtree to the trash
