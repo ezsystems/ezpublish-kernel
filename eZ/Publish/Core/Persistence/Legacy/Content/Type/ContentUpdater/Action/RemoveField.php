@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
 class RemoveField extends Action
 {
     /**
-     * Field definition of the field to add
+     * Field definition of the field to remove
      *
      * @var mixed
      */
