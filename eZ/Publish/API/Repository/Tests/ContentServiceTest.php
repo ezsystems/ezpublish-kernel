@@ -3056,7 +3056,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContent() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
@@ -3111,7 +3111,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContent() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
@@ -3158,7 +3158,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContent() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
@@ -3198,7 +3198,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContent() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
@@ -3231,7 +3231,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContentDraft() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
@@ -3280,7 +3280,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the createContentDraft() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
@@ -3324,7 +3324,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the publishVersion() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
@@ -3376,7 +3376,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the publishVersion() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
@@ -3420,7 +3420,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the updateContent() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
@@ -3472,7 +3472,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the updateContent() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
@@ -3524,7 +3524,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the updateContentMetadata() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
@@ -3573,7 +3573,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the updateContentMetadata() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
@@ -3622,7 +3622,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the deleteVersion() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
@@ -3663,7 +3663,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
     /**
      * Test for the deleteVersion() method.
-     * 
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit

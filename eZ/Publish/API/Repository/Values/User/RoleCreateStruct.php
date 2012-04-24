@@ -31,10 +31,10 @@ abstract class RoleCreateStruct extends ValueObject
      * @var string
      */
     public $mainLanguageCode;
-    
+
    /**
      * An array of names with languageCode keys
-     * 
+     *
      * @since 5.0
      *
      * @var array an array of string
@@ -43,7 +43,7 @@ abstract class RoleCreateStruct extends ValueObject
 
     /**
      * An array of descriptions with languageCode keys
-     * 
+     *
      * @since 5.0
      *
      * @var array an array of string

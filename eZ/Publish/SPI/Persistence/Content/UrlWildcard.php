@@ -16,30 +16,30 @@ namespace eZ\Publish\SPI\Persistence;
 class UrlWildcard extends ValueObject
 {
     /**
-     * 
+     *
      * The unique id
-     * 
+     *
      * @var mixed
      */
     public $id;
-    
+
     /**
      * The source url including "*"
-     * 
+     *
      * @var string
      */
     public $sourceUrl;
-    
+
     /**
-     * The destiantion url containing placeholders e.g. /destination/{1} 
-     * 
+     * The destiantion url containing placeholders e.g. /destination/{1}
+     *
      * @var string
      */
     public $destiantionUrl;
-    
+
     /**
      * indicates if the url is redirected or not
-     * 
+     *
      * @var boolean
      */
     public $foreward;

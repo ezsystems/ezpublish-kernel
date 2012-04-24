@@ -17,8 +17,8 @@ use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 abstract class ContentFieldValidationException extends ForbiddenException
 {
     /**
-     * 
-     * @return array 
+     *
+     * @return array
      */
     abstract public function getFieldExceptions();
 }

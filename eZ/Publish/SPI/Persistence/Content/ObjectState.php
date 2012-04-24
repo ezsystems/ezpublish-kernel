@@ -16,50 +16,50 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  */
 class ObjectState extends ValueObject
 {
-    
+
     /**
      * the id of the object state
-     * 
+     *
      * @var mixed
      */
     public $id;
-    
+
     /**
-     * 
+     *
      * The identifier for the object state group
-     * 
+     *
      * @var string
      */
     public $identifier;
 
      /**
      * The id of the group this object state belongs to
-     * 
+     *
      * @var mixed
      */
     public $groupId;
-    
+
     /**
-     * The priority of the object state in the group 
-     * 
+     * The priority of the object state in the group
+     *
      * @var int
      */
     public $priority;
-    
+
     /**
      * The default language code for
-     * 
+     *
      * @var string
      */
     public $defaultLanguage;
-    
+
     /**
-     * The available language codes for names an descriptions 
-     * 
+     * The available language codes for names an descriptions
+     *
      * @var string[]
      */
     public $languageCodes;
-    
+
      /**
      * Human readable name of the object state
      *
@@ -83,5 +83,5 @@ class ObjectState extends ValueObject
      * @var string[]
      */
     public $description;
-    
+
 }

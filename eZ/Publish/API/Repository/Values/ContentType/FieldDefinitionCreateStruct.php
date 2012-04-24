@@ -36,18 +36,18 @@ class FieldDefinitionCreateStruct extends ValueObject
 
     /**
      * An array of names with languageCode keys
-     * 
+     *
      * @var array an array of string
      */
     public $names;
 
     /**
-     * An array of descriptions with languageCode keys 
-     * 
+     * An array of descriptions with languageCode keys
+     *
      * @var array an array of string
      */
     public $descriptions;
-    
+
 
     /**
      * Field group name
@@ -87,18 +87,18 @@ class FieldDefinitionCreateStruct extends ValueObject
 
     /**
      * An array of validators
-     * 
+     *
      * @var array an array of {@link eZ\Publish\API\Repository\Values\ContentType\Validator}
      */
     public $validators;
 
     /**
      * An array of field settings
-     * 
+     *
      * @var array an array of mixed
      */
     public $fieldSettings;
-    
+
 
     /**
      * Default value of the field

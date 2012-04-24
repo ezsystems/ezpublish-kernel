@@ -33,7 +33,7 @@ interface ObjectStateService
      * creates a new object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state group
-     * 
+     *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
@@ -51,7 +51,7 @@ interface ObjectStateService
      */
     public function loadObjectStateGroup( $objectStateGroupId );
 
-    
+
     /**
      * Loads all object state groups
      *
@@ -61,7 +61,7 @@ interface ObjectStateService
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
     public function loadObjectStateGroups($offset = 0, $limit = -1);
-    
+
     /**
      * This method returns the ordered list of object states of a group
      *
@@ -70,12 +70,12 @@ interface ObjectStateService
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
     public function loadObjectStates(ObjectStateGroup $objectStateGroup);
-        
+
     /**
      * updates an object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state group
-     * 
+     *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
      *
@@ -87,19 +87,19 @@ interface ObjectStateService
      * Deletes a object state group including all states and links to content
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete an object state group
-     * 
+     *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
     public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup);
 
     /**
      * creates a new object state in the given group.
-     * 
+     *
      * Note: in current kernel: If it is the first state all content objects will
      * set to this state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state
-     * 
+     *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
      *
@@ -120,7 +120,7 @@ interface ObjectStateService
 
     /**
      * updates an object state
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
      *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
@@ -131,7 +131,7 @@ interface ObjectStateService
 
     /**
      * changes the priority of the state
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change priority on an object state
      *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
@@ -142,7 +142,7 @@ interface ObjectStateService
     /**
      * Deletes a object state. The state of the content objects is reset to the
      * first object state in the group.
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete an object state
      *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
@@ -155,11 +155,11 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentExceptioon if the object state does not belong to the given group
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change the object state
-     * 
+     *
      * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     * 
+     *
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState );
 
@@ -170,7 +170,7 @@ interface ObjectStateService
      *
      * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * 
+     *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup );
@@ -179,9 +179,9 @@ interface ObjectStateService
      * returns the number of objects which are in this state
      *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     * 
+     *
      * @return int
      */
     public function getContentCount( ObjectState $objectState );
-    
+
 }

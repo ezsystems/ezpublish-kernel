@@ -18,33 +18,33 @@ class Group extends ValueObject
 {
      /**
      * the id of the object state group
-     * 
+     *
      * @var mixed
      */
     public $id;
-    
+
     /**
-     * 
+     *
      * The identifier for the object state group
-     * 
+     *
      * @var string
      */
     public $identifier;
-        
+
     /**
      * The default language code for
-     * 
+     *
      * @var string
      */
     public $defaultLanguage;
-    
+
     /**
-     * The available language codes for names an descriptions 
-     * 
+     * The available language codes for names an descriptions
+     *
      * @var string[]
      */
     public $languageCodes;
-    
+
      /**
      * Human readable name of the object state group
      *
@@ -68,5 +68,5 @@ class Group extends ValueObject
      * @var string[]
      */
     public $description;
-    
+
 }

@@ -270,7 +270,7 @@ class LanguageServiceStub implements LanguageService
 
     /**
      * instanciates an object to be used for creating languages
-     * 
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
     public function newLanguageCreateStruct()

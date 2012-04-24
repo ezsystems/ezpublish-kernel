@@ -41,7 +41,7 @@ abstract class ObjectState extends ValueObject
      * @var int
      */
     protected $priority;
-    
+
     /**
      * the default language code
      *
@@ -50,12 +50,12 @@ abstract class ObjectState extends ValueObject
     protected $defaultLanguageCode;
 
      /**
-     * The available language codes for names an descriptions 
-     * 
+     * The available language codes for names an descriptions
+     *
      * @var string[]
      */
     protected $languageCodes;
-    
+
     /**
      *
      * This method returns the human readable name in all provided languages
@@ -99,10 +99,10 @@ abstract class ObjectState extends ValueObject
      * @return string the description for the given language or null if none existis.
      */
     abstract public function getDescription( $languageCode );
-    
+
     /**
      * The object state group this object state belongs to
-     * 
+     *
      * @return eZ\Publish\API\Repository\Values\Content\ObjectStateGroup
      */
     abstract public function getObjectStateGroup();

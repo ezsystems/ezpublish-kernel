@@ -17,20 +17,20 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class InputStruct extends ValueObject
 {
     /**
-     * 
+     *
      * The identifier for the object state group
-     * 
+     *
      * @var string
      */
     public $identifier;
-        
+
     /**
      * The default language code for
-     * 
+     *
      * @var string
      */
     public $defaultLanguage;
-    
+
      /**
      * Human readable name of the object state
      *
@@ -54,5 +54,5 @@ class InputStruct extends ValueObject
      * @var string[]
      */
     public $description;
-    
+
 }

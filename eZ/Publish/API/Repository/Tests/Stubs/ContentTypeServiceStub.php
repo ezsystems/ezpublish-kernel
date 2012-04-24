@@ -202,7 +202,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Get a Content Type Group object by identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     * 
+     *
      * @param string $contentTypeGroupIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
@@ -265,10 +265,10 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Delete a Content Type Group. 
-     * 
+     * Delete a Content Type Group.
+     *
      * This method only deletes an content type group which has content types without any content instances
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
@@ -313,8 +313,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Create a Content Type object. 
-     * 
+     * Create a Content Type object.
+     *
      * The content type is created in the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
@@ -519,8 +519,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Adds a new field definition to an existing content type. 
-     * 
+     * Adds a new field definition to an existing content type.
+     *
      * The content type must be in state DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
@@ -812,8 +812,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Creates a draft from an existing content type. 
-     * 
+     * Creates a draft from an existing content type.
+     *
      * This is a complete copy of the content
      * type wiich has the state STATUS_DRAFT.
      *
@@ -839,8 +839,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Delete a Content Type object. 
-     * 
+     * Delete a Content Type object.
+     *
      * Deletes a content type if it has no instances
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there exist content objects of this type

@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a result of a translated url wildcard which is not an URLAlias
- * 
+ *
  * @property-read string $uri The found resource uri
  * @property-read boolean $forward indicates if the url is redirected or not
  */
@@ -22,14 +22,14 @@ class URLWildcardTranslationResult extends ValueObject
 {
     /**
      * The found resource uri
-     * 
+     *
      * @var string
      */
-    protected $uri;    
-    
+    protected $uri;
+
     /**
      * indicates if the url is redirected or not
-     * 
+     *
      * @var boolean
      */
     protected $forward;

@@ -43,12 +43,12 @@ abstract class ObjectStateGroup extends ValueObject
     public $defaultLanguageCode;
 
      /**
-     * The available language codes for names an descriptions 
-     * 
+     * The available language codes for names an descriptions
+     *
      * @var string[]
      */
     protected $languageCodes;
-    
+
     /**
      *
      * This method returns the human readable name in all provided languages
@@ -92,5 +92,5 @@ abstract class ObjectStateGroup extends ValueObject
      * @return string the description for the given language or null if none existis.
      */
     abstract public function getDescription( $languageCode );
-    
+
 }
