@@ -38,6 +38,7 @@ class RemoveField extends Action
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
     }
+
     /**
      * Applies the action to the given $content
      *

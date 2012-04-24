@@ -448,6 +448,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $relations = $this->persistenceHandler->contentHandler()->loadRelations( $this->contentId );
         self::assertEmpty( $relations );
     }
+
     /**
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::removeRelation

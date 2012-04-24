@@ -552,6 +552,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             )
         );
     }
+
     /**
      * Builds a ContentTypeDraft domain object from value object returned by persistence
      * Decorates ContentType
