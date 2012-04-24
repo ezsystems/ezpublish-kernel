@@ -80,7 +80,7 @@ interface URLAliasService
      *
      * @param string $languageCode filters those which are valid for the given language
      * @param int $offset
-     * @param int limit
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
