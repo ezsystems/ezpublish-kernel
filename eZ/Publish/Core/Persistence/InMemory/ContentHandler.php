@@ -510,6 +510,14 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
+     */
+    public function removeRawContent( $contentId )
+    {
+        // Not used ATM
+    }
+
+    /**
      * Deletes given version, its fields, node assignment, relations and names.
      *
      * Removes the relations, but not the related objects.
