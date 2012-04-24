@@ -76,6 +76,13 @@ class ContentHandlerTest extends TestCase
     protected $fieldHandlerMock;
 
     /**
+     * Location handler mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     */
+    protected $locationHandlerMock;
+
+    /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
      */
@@ -589,47 +596,62 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * Test for the removeRawContent() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::removeRawContent
+     */
+    public function testRemoveRawContent()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $fieldHandlerMock  = $this->getFieldHandlerMock();
+
+        $fieldHandlerMock->expects( $this->once() )
+            ->method( "deleteFields" )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( "deleteRelations" )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( "deleteVersions" )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( "deleteNames" )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( "deleteContent" )
+            ->with( $this->equalTo( 23 ) );
+
+        $handler->removeRawContent( 23 );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
      */
     public function testDeleteContent()
     {
-        $handler = $this->getContentHandler();
-
+        $handlerMock = $this->getPartlyMockedHandler( array( "removeRawContent" ) );
         $gatewayMock = $this->getGatewayMock();
-        $locationHandlerMock = $this->getLocationGatewayMock();
-        $fieldHandlerMock  = $this->getFieldHandlerMock();
+        $locationHandlerMock  = $this->getLocationHandlerMock();
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'getAllLocationIds' )
+            ->method( "getAllLocationIds" )
             ->with( $this->equalTo( 23 ) )
             ->will( $this->returnValue( array( 42, 24 ) ) );
         $locationHandlerMock->expects( $this->exactly( 2 ) )
-            ->method( 'removeSubtree' )
+            ->method( "removeSubtree" )
             ->with(
-            $this->logicalOr(
-                $this->equalTo( 42 ),
-                $this->equalTo( 24 )
+                $this->logicalOr(
+                    $this->equalTo( 42 ),
+                    $this->equalTo( 24 )
             )
         );
 
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'deleteFields' )
-            ->with( $this->equalTo( 23 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteRelations' )
-            ->with( $this->equalTo( 23 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteVersions' )
-            ->with( $this->equalTo( 23 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteNames' )
-            ->with( $this->equalTo( 23 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteContent' )
-            ->with( $this->equalTo( 23 ) );
-
-        $handler->deleteContent( 23 );
+        $handlerMock->deleteContent( 23 );
     }
 
     /**
@@ -784,6 +806,7 @@ class ContentHandlerTest extends TestCase
                 $this->getMapperMock(),
                 $this->getFieldHandlerMock()
             );
+            $this->contentHandler->locationHandler = $this->getLocationHandlerMock();
         }
         return $this->contentHandler;
     }
@@ -796,7 +819,7 @@ class ContentHandlerTest extends TestCase
      */
     protected function getPartlyMockedHandler( array $methods )
     {
-        return $this->getMock(
+        $mock = $this->getMock(
             '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler',
             $methods,
             array(
@@ -806,6 +829,28 @@ class ContentHandlerTest extends TestCase
                 $this->getFieldHandlerMock()
             )
         );
+        $mock->locationHandler = $this->getLocationHandlerMock();
+        return $mock;
+    }
+
+    /**
+     * Returns a LocationHandler mock.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     */
+    protected function getLocationHandlerMock()
+    {
+        if ( !isset( $this->locationHandlerMock ) )
+        {
+            $this->locationHandlerMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->locationHandlerMock;
     }
 
     /**
