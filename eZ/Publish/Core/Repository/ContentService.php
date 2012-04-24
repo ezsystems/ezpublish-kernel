@@ -74,7 +74,7 @@ use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 
 /**
-* This class provides service methods for managing content
+ * This class provides service methods for managing content
  *
  * @example Examples/content.php
  *

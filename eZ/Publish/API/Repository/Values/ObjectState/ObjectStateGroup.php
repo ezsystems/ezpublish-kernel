@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $identifier the identifier of the content type group
  * @property-read string $defaultLanguage, the default language of the object state group names and description used for fallback.
  * @property-read string[] $languageCodes the available languages
-*/
+ */
 abstract class ObjectStateGroup extends ValueObject
 {
     /**

@@ -280,7 +280,7 @@ class RoleService implements RoleServiceInterface
      * @param mixed $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
-    */
+     */
     public function loadRole( $id )
     {
         if ( !is_numeric( $id ) )

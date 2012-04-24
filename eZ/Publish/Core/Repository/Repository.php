@@ -62,10 +62,10 @@ class Repository implements RepositoryInterface
     protected $contentService;
 
     /**
-    * Instance of section service
-    *
-    * @var \eZ\Publish\API\Repository\SectionService
-    */
+     * Instance of section service
+     *
+     * @var \eZ\Publish\API\Repository\SectionService
+     */
     protected $sectionService;
 
     /**
