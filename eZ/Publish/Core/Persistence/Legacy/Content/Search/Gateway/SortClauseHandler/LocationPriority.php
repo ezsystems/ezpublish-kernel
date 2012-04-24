@@ -20,7 +20,7 @@ class LocationPriority extends SortClauseHandler
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
      *
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @return bool
      */
     public function accept( SortClause $sortClause )
@@ -35,7 +35,7 @@ class LocationPriority extends SortClauseHandler
      * used for sorting.
      *
      * @param \ezcQuerySelect $query
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      * @return string
      */
@@ -59,7 +59,7 @@ class LocationPriority extends SortClauseHandler
      * Applies joins to the query, required to fetch sort data
      *
      * @param \ezcQuerySelect $query
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      * @return void
      */

@@ -100,8 +100,9 @@ class ContentUpdater
     /**
      * hasFieldDefinition
      *
-     * @param Content\Type $type
-     * @param Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     *
      * @return void
      */
     protected function hasFieldDefinition( Type $type, FieldDefinition $fieldDef )

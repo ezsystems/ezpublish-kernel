@@ -20,14 +20,14 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @param eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new EzcDatabase Section Gateway
      *
-     * @param eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
     public function __construct ( EzcDbHandler $dbHandler )
     {

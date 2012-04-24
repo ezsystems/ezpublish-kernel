@@ -156,7 +156,7 @@ interface ObjectStateService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentExceptioon if the object state does not belong to the given group
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change the object state
      *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
@@ -168,7 +168,7 @@ interface ObjectStateService
      *
      * The $state is the id of the state within one group.
      *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
