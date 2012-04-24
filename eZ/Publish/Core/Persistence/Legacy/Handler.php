@@ -285,6 +285,7 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @internal LocationHandler is injected into property to avoid circular dependency
      * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler()
@@ -297,6 +298,7 @@ class Handler implements HandlerInterface
                 $this->getContentMapper(),
                 $this->getFieldHandler()
             );
+            $this->contentHandler->locationHandler = $this->locationHandler();
         }
         return $this->contentHandler;
     }
