@@ -122,8 +122,7 @@ class ContentUpdater
      */
     public function applyUpdates( $contentTypeId, array $actions )
     {
-        $contentObjs = $this->loadContentObjects( $contentTypeId );
-        foreach ( $contentObjs as $content )
+        foreach ( $this->loadContentObjects( $contentTypeId ) as $content )
         {
             foreach ( $actions as $action )
             {
@@ -140,7 +139,6 @@ class ContentUpdater
      */
     protected function loadContentObjects( $contentTypeId )
     {
-        $criterion = new Criterion\ContentTypeId( $contentTypeId );
-        return $this->searchHandler->find( $criterion );
+        return $this->searchHandler->find( new Criterion\ContentTypeId( $contentTypeId ) );
     }
 }

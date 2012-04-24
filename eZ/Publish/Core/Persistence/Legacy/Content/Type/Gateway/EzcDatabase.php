@@ -138,8 +138,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $group->identifier )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentclassgroup', 'id' )
@@ -173,8 +172,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -264,8 +262,7 @@ class EzcDatabase extends Gateway
                     $q->bindValue( $groupId, null, \PDO::PARAM_INT )
                 )
             );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -438,8 +435,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $group['name'] )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -471,8 +467,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -616,8 +611,7 @@ class EzcDatabase extends Gateway
         );
         $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentclass_attribute', 'id' )
@@ -776,8 +770,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -816,8 +809,7 @@ class EzcDatabase extends Gateway
             );
         $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -874,8 +866,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         $this->deleteTypeNameData( $typeId, $status );
         $this->insertTypeNameData( $typeId, $status, $updateStruct->name );
@@ -1095,8 +1086,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -1124,8 +1114,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -1151,8 +1140,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -1185,8 +1173,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1207,8 +1194,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1229,8 +1215,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1251,8 +1236,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
     }
 
     /**

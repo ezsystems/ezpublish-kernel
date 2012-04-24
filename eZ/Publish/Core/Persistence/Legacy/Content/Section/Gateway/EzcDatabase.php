@@ -57,8 +57,7 @@ class EzcDatabase extends Gateway
             $query->bindValue( $identifier )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezsection', 'id' )
@@ -91,8 +90,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -222,8 +220,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -248,7 +245,6 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 }

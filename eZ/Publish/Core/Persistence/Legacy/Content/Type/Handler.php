@@ -112,8 +112,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadGroup( $groupId )
     {
-        $rows = $this->contentTypeGateway->loadGroupData( $groupId );
-        $groups = $this->mapper->extractGroupsFromRows( $rows );
+        $groups = $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadGroupData( $groupId )
+        );
 
         if ( count( $groups ) !== 1 )
         {
@@ -130,8 +131,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadGroupByIdentifier( $identifier )
     {
-        $rows = $this->contentTypeGateway->loadGroupDataByIdentifier( $identifier );
-        $groups = $this->mapper->extractGroupsFromRows( $rows );
+        $groups = $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadGroupDataByIdentifier( $identifier )
+        );
 
         if ( count( $groups ) !== 1 )
         {
@@ -146,8 +148,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadAllGroups()
     {
-        $rows = $this->contentTypeGateway->loadAllGroupsData();
-        return $this->mapper->extractGroupsFromRows( $rows );
+        return $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadAllGroupsData()
+        );
     }
 
     /**
@@ -157,8 +160,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadContentTypes( $groupId, $status = 0 )
     {
-        $rows = $this->contentTypeGateway->loadTypesDataForGroup( $groupId, $status );
-        return $this->mapper->extractTypesFromRows( $rows );
+        return $this->mapper->extractTypesFromRows(
+            $this->contentTypeGateway->loadTypesDataForGroup( $groupId, $status )
+        );
     }
 
     /**
@@ -168,10 +172,13 @@ class Handler implements BaseContentTypeHandler
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
-        $rows = $this->contentTypeGateway->loadTypeData(
-            $contentTypeId, $status
+        return $this->loadFromRows(
+            $this->contentTypeGateway->loadTypeData(
+                $contentTypeId, $status
+            ),
+            $contentTypeId,
+            $status
         );
-        return $this->loadFromRows( $rows, $contentTypeId, $status );
     }
 
     /**
@@ -198,10 +205,13 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadByRemoteId( $remoteId )
     {
-        $rows = $this->contentTypeGateway->loadTypeDataByRemoteId(
-            $remoteId, Type::STATUS_DEFINED
+        return $this->loadFromRows(
+            $this->contentTypeGateway->loadTypeDataByRemoteId(
+                $remoteId, Type::STATUS_DEFINED
+            ),
+            $remoteId,
+            Type::STATUS_DEFINED
         );
-        return $this->loadFromRows( $rows, $remoteId, Type::STATUS_DEFINED );
     }
 
     /**

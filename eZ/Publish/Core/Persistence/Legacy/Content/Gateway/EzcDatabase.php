@@ -157,8 +157,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentobject', 'id' )
@@ -242,8 +241,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentobject_version', 'id' )
@@ -591,8 +589,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentobject_attribute', 'id' )
@@ -1079,8 +1076,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1108,8 +1104,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1142,8 +1137,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1176,8 +1170,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1210,8 +1203,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1301,7 +1293,6 @@ class EzcDatabase extends Gateway
                 )
             );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 }

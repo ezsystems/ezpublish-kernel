@@ -172,8 +172,7 @@ class FieldHandler
      */
     public function deleteFields( $contentId, $versionNo = null )
     {
-        $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId, $versionNo );
-        foreach ( $fieldIds as $fieldType => $ids )
+        foreach ( $this->contentGateway->getFieldIdsByType( $contentId, $versionNo ) as $fieldType => $ids )
         {
             $this->storageHandler->deleteFieldData( $fieldType, $ids );
         }

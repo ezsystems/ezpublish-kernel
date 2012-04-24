@@ -171,8 +171,7 @@ class UrlStorage implements Storage
             $q->bindValue( $field->value->externalData )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $dbHandler->lastInsertId(
             $dbHandler->getSequenceName( self::URL_TABLE, "id" )

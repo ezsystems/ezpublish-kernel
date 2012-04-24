@@ -64,8 +64,7 @@ class EzcDatabase extends Gateway
         );
         $this->setCommonLanguageColumns( $query, $language );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
 
         return $nextId;
     }
@@ -115,8 +114,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -215,7 +213,6 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 }

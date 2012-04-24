@@ -83,8 +83,7 @@ class BinaryFileStorage implements Storage
             $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return false;
     }

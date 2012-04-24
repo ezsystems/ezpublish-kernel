@@ -78,8 +78,9 @@ class Handler implements BaseLanguageHandler
      */
     public function load( $id )
     {
-        $rows = $this->languageGateway->loadLanguageData( $id );
-        $languages = $this->languageMapper->extractLanguagesFromRows( $rows );
+        $languages = $this->languageMapper->extractLanguagesFromRows(
+            $this->languageGateway->loadLanguageData( $id )
+        );
 
         if ( count( $languages ) < 1 )
         {
@@ -97,8 +98,9 @@ class Handler implements BaseLanguageHandler
      */
     public function loadByLanguageCode( $languageCode )
     {
-        $rows = $this->languageGateway->loadLanguageDataByLanguageCode( $languageCode );
-        $languages = $this->languageMapper->extractLanguagesFromRows( $rows );
+        $languages = $this->languageMapper->extractLanguagesFromRows(
+            $this->languageGateway->loadLanguageDataByLanguageCode( $languageCode )
+        );
 
         if ( count( $languages ) < 1 )
         {
@@ -114,8 +116,9 @@ class Handler implements BaseLanguageHandler
      */
     public function loadAll()
     {
-        $rows = $this->languageGateway->loadAllLanguagesData();
-        return $this->languageMapper->extractLanguagesFromRows( $rows );
+        return $this->languageMapper->extractLanguagesFromRows(
+            $this->languageGateway->loadAllLanguagesData()
+        );
     }
 
     /**

@@ -52,8 +52,10 @@ class EzcDatabase extends Handler
      */
     public function updateContentObjects( $fromType, $toType )
     {
-        $actions = $this->contentUpdater->determineActions( $fromType, $toType );
-        $this->contentUpdater->applyUpdates( $fromType->id, $actions  );
+        $this->contentUpdater->applyUpdates(
+            $fromType->id,
+            $this->contentUpdater->determineActions( $fromType, $toType )
+        );
     }
 
     /**
