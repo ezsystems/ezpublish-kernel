@@ -951,7 +951,7 @@ class UserService implements UserServiceInterface
         switch ( $sortField )
         {
             case Location::SORT_FIELD_PATH:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
 
             case Location::SORT_FIELD_PUBLISHED:
                 return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished( $sortOrder );
@@ -987,7 +987,7 @@ class UserService implements UserServiceInterface
             // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
 
             default:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
         }
     }
 }

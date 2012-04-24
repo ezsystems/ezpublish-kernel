@@ -32,6 +32,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  */
 abstract class Location extends ValueObject
 {
+    // @todo Rename these to better fit current naming, also reuse these in Persistence or copy the change over.
     const SORT_FIELD_PATH = 1;
     const SORT_FIELD_PUBLISHED = 2;
     const SORT_FIELD_MODIFIED = 3;
