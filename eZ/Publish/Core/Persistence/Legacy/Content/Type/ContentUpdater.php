@@ -48,6 +48,7 @@ class ContentUpdater
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
     public function __construct(
         SearchHandler $searchHandler,
@@ -62,7 +63,9 @@ class ContentUpdater
     /**
      * Determines the neccessary update actions
      *
-     * @param mixed $contentTypeId
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
+     *
      * @return ContentUpdater\Action[]
      */
     public function determineActions( Type $fromType, Type $toType )
