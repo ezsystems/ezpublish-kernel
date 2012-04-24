@@ -37,6 +37,13 @@ class LocationHandlerTest extends TestCase
     protected $locationMapper;
 
     /**
+     * Mocked content handler instance
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
+     */
+    protected $contentHandler;
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
@@ -350,5 +357,162 @@ class LocationHandlerTest extends TestCase
             ->with( 34, 4 );
 
         $handler->changeMainLocation( 12, 34 );
+    }
+
+    /**
+     * Test for the removeSubtree() method.
+     *
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::removeSubtree
+     */
+    public function testRemoveSubtree()
+    {
+        $handler = $this->getPartlyMockedHandler( array( "changeMainLocation" ) );
+
+        // Original call
+        $this->locationGateway
+            ->expects( $this->at( 0 ) )
+            ->method( "getBasicNodeData" )
+            ->with( 42 )
+            ->will(
+            $this->returnValue(
+                array(
+                    "contentobject_id" => 100,
+                    "main_node_id" => 200
+                )
+            )
+        );
+        $this->locationGateway
+            ->expects( $this->at( 1 ) )
+            ->method( "getChildren" )
+            ->with( 42 )
+            ->will(
+            $this->returnValue(
+                array(
+                    array( "node_id" => 201 ),
+                    array( "node_id" => 202 )
+                )
+            )
+        );
+
+        // First recursive call
+        $this->locationGateway
+            ->expects( $this->at( 2 ) )
+            ->method( "getBasicNodeData" )
+            ->with( 201 )
+            ->will(
+            $this->returnValue(
+                array(
+                    "contentobject_id" => 101,
+                    "main_node_id" => 201
+                )
+            )
+        );
+        $this->locationGateway
+            ->expects( $this->at( 3 ) )
+            ->method( "getChildren" )
+            ->with( 201 )
+            ->will( $this->returnValue( array() ) );
+        $this->locationGateway
+            ->expects( $this->at( 4 ) )
+            ->method( "countLocationsByContentId" )
+            ->with( 101 )
+            ->will( $this->returnValue( 1 ) );
+        $this->contentHandler
+            ->expects( $this->once() )
+            ->method( "removeRawContent" )
+            ->with( 101 );
+        $this->locationGateway
+            ->expects( $this->at( 5 ) )
+            ->method( "removeLocation" )
+            ->with( 201 );
+        $this->locationGateway
+            ->expects( $this->at( 6 ) )
+            ->method( "deleteNodeAssignment" )
+            ->with( 101 );
+
+        // Second recursive call
+        $this->locationGateway
+            ->expects( $this->at( 7 ) )
+            ->method( "getBasicNodeData" )
+            ->with( 202 )
+            ->will(
+            $this->returnValue(
+                array(
+                    "contentobject_id" => 102,
+                    "main_node_id" => 202
+                )
+            )
+        );
+        $this->locationGateway
+            ->expects( $this->at( 8 ) )
+            ->method( "getChildren" )
+            ->with( 202 )
+            ->will(
+            $this->returnValue( array() ) );
+        $this->locationGateway
+            ->expects( $this->at( 9 ) )
+            ->method( "countLocationsByContentId" )
+            ->with( 102 )
+            ->will(
+            $this->returnValue( 2 ) );
+        $this->locationGateway
+            ->expects( $this->at( 10 ) )
+            ->method( "getFallbackMainNodeData" )
+            ->with( 102, 202 )
+            ->will(
+            $this->returnValue(
+                array(
+                    "node_id" => 203,
+                    "contentobject_version" => 1,
+                    "parent_node_id" => 204
+                )
+            )
+        );
+        $handler
+            ->expects( $this->once() )
+            ->method( "changeMainLocation" )
+            ->with( 102, 203, 1, 204 );
+        $this->locationGateway
+            ->expects( $this->at( 11 ) )
+            ->method( "removeLocation" )
+            ->with( 202 );
+        $this->locationGateway
+            ->expects( $this->at( 12 ) )
+            ->method( "deleteNodeAssignment" )
+            ->with( 102 );
+
+        // Continuation of the original call
+        $this->locationGateway
+            ->expects( $this->at( 13 ) )
+            ->method( "removeLocation" )
+            ->with( 42 );
+        $this->locationGateway
+            ->expects( $this->at( 14 ) )
+            ->method( "deleteNodeAssignment" )
+            ->with( 100 );
+
+        // Start
+        $handler->removeSubtree( 42 );
+    }
+
+    /**
+     * Returns the handler to test with $methods mocked
+     *
+     * @param string[] $methods
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     */
+    protected function getPartlyMockedHandler( array $methods )
+    {
+        return $this->getMock(
+            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler',
+            $methods,
+            array(
+                $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway', array(), array(), '', false ),
+                $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper', array(), array(), '', false ),
+                $this->contentHandler = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
+                $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false )
+            )
+        );
     }
 }
