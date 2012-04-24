@@ -24,11 +24,6 @@ class SectionId extends Criterion implements CriterionInterface
      *
      * Matches the content against one or more sectionId
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of sectionId. $value must be an array of sectionId
-     *        - Operator::EQ: match against a single sectionId. $value must be a single sectionId
      * @param integer|array(integer) $value One or more sectionId that must be matched
      *
      * @throws InvalidArgumentException if a non numeric id is given
