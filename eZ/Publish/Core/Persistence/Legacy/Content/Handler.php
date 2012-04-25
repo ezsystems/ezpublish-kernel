@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
@@ -38,6 +39,13 @@ class Handler implements BaseContentHandler
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
+
+    /**
+     * Location handler.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     */
+    public $locationHandler;
 
     /**
      * Mapper.
@@ -348,10 +356,18 @@ class Handler implements BaseContentHandler
         $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
         foreach ( $locationIds as $locationId )
         {
-            $this->locationGateway->removeSubtree( $locationId );
+            $this->locationHandler->removeSubtree( $locationId );
         }
-        $this->fieldHandler->deleteFields( $contentId );
+    }
 
+    /**
+     * Deletes raw content data
+     *
+     * @param int $contentId
+     */
+    public function removeRawContent( $contentId )
+    {
+        $this->fieldHandler->deleteFields( $contentId );
         $this->contentGateway->deleteRelations( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
         $this->contentGateway->deleteNames( $contentId );

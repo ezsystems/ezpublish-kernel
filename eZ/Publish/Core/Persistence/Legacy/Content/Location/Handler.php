@@ -65,7 +65,7 @@ class Handler implements BaseLocationHandler
     )
     {
         $this->locationGateway = $locationGateway;
-        $this->locationMapper          = $locationMapper;
+        $this->locationMapper  = $locationMapper;
         $this->contentHandler  = $contentHandler;
         $this->contentMapper   = $contentMapper;
     }
@@ -249,7 +249,7 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Removes all Locations under and includin $locationId.
+     * Removes all Locations under and including $locationId.
      *
      * Performs a recursive delete on the location identified by $locationId,
      * including all of its child locations. Content which is not referred to
@@ -262,7 +262,40 @@ class Handler implements BaseLocationHandler
      */
     public function removeSubtree( $locationId )
     {
-        throw new \RuntimeException( '@TODO: Implement' );
+        $locationRow = $this->locationGateway->getBasicNodeData( $locationId );
+        $contentId = $locationRow["contentobject_id"];
+        $mainLocationId = $locationRow["main_node_id"];
+
+        $subLocations = $this->locationGateway->getChildren( $locationId );
+        foreach ( $subLocations as $subLocation )
+        {
+            $this->removeSubtree( $subLocation["node_id"] );
+        }
+
+        if ( $locationId == $mainLocationId )
+        {
+            if ( 1 == $this->locationGateway->countLocationsByContentId( $contentId ) )
+            {
+                $this->contentHandler->removeRawContent( $contentId );
+            }
+            else
+            {
+                $newMainLocationRow = $this->locationGateway->getFallbackMainNodeData(
+                    $contentId,
+                    $locationId
+                );
+
+                $this->changeMainLocation(
+                    $contentId,
+                    $newMainLocationRow["node_id"],
+                    $newMainLocationRow["contentobject_version"],
+                    $newMainLocationRow["parent_node_id"]
+                );
+            }
+        }
+
+        $this->locationGateway->removeLocation( $locationId );
+        $this->locationGateway->deleteNodeAssignment( $contentId );
     }
 
     /**
