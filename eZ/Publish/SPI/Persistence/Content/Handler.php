@@ -142,14 +142,6 @@ interface Handler
     public function deleteContent( $contentId );
 
     /**
-     * Deletes raw content data
-     * @todo
-     *
-     * @param int $contentId
-     */
-    public function removeRawContent( $contentId );
-
-    /**
      * Deletes given version, its fields, node assignment, relations and names.
      *
      * Removes the relations, but not the related objects.
