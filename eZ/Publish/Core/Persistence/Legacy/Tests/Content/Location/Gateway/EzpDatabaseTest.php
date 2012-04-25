@@ -13,7 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\Location,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
-    eZ\Publish\SPI\Persistence;
+    eZ\Publish\SPI\Persistence,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
@@ -326,7 +327,7 @@ class EzpDatabaseTest extends TestCase
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'remoteId' => 'some_id',
-                    'mainLocationId' => 0,
+                    'mainLocationId' => true,
                 )
             ),
             $parentLocationData
@@ -348,7 +349,7 @@ class EzpDatabaseTest extends TestCase
         $handlerReflection = new \ReflectionObject( $handler );
         $methodReflection = $handlerReflection->getMethod( "getMainNodeId" );
         $methodReflection->setAccessible( true );
-        self::assertEquals( $mainLocation->id, $res = $methodReflection->invoke( $handler, 68, 1 ) );
+        self::assertEquals( $mainLocation->id, $res = $methodReflection->invoke( $handler, 68 ) );
     }
 
     public static function getCreateLocationValues()
@@ -609,6 +610,31 @@ class EzpDatabaseTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
 
+        $handler->deleteNodeAssignment( 11 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 0 ) ),
+            $query
+                ->select( 'count(*)' )
+                ->from( 'eznode_assignment' )
+                ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 11 )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     */
+    public function testDeleteNodeAssignmentWithSecondArgument()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+
         $query = $this->handler->createSelectQuery();
         $query
             ->select( 'count(*)' )
@@ -716,6 +742,11 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * Test for the setSectionForSubtree() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::setSectionForSubtree
+     */
     public function testSetSectionForSubtree()
     {
         $this->insertDatabaseFixture( __DIR__ . '/../../_fixtures/contentobjects.php' );
@@ -813,6 +844,73 @@ class EzpDatabaseTest extends TestCase
                 )
             )
         );
+    }
+
+    /**
+     * Test for the getChildren() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::getChildren
+     */
+    public function testGetChildren()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $gateway = $this->getLocationGateway();
+        $childrenRows = $gateway->getChildren( 213 );
+
+        $this->assertCount( 2, $childrenRows );
+        $this->assertCount( 16, $childrenRows[0] );
+        $this->assertEquals( 214, $childrenRows[0]["node_id"] );
+        $this->assertCount( 16, $childrenRows[1] );
+        $this->assertEquals( 215, $childrenRows[1]["node_id"] );
+    }
+
+    /**
+     * Test for the getFallbackMainNodeData() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::getFallbackMainNodeData
+     */
+    public function testGetFallbackMainNodeData()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        // Create additional location for test purpose
+        $query = $this->handler->createInsertQuery();
+        $query->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set( $this->handler->quoteColumn( 'contentobject_id' ), $query->bindValue( 12, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'contentobject_version' ), $query->bindValue( 1, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'main_node_id' ), $query->bindValue( 13, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'node_id' ), $query->bindValue( 228, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'parent_node_id' ), $query->bindValue( 227, null, \PDO::PARAM_INT ) )
+            ->set( $this->handler->quoteColumn( 'path_string' ), $query->bindValue( '/1/5/13/228/', null, \PDO::PARAM_STR ) )
+            ->set( $this->handler->quoteColumn( 'remote_id' ), $query->bindValue( 'asdfg123437', null, \PDO::PARAM_STR ) );
+        $query->prepare()->execute();
+
+        $gateway = $this->getLocationGateway();
+        $data = $gateway->getFallbackMainNodeData( 12, 13 );
+
+        $this->assertEquals( 228, $data["node_id"] );
+        $this->assertEquals( 1, $data["contentobject_version"] );
+        $this->assertEquals( 227, $data["parent_node_id"] );
+    }
+
+    /**
+     * Test for the removeLocation() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::removeLocation
+     */
+    public function testRemoveLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $gateway = $this->getLocationGateway();
+        $gateway->removeLocation( 13 );
+
+        try
+        {
+            $gateway->getBasicNodeData( 13 );
+            $this->fail( "Location was not deleted!" );
+        }
+        catch ( NotFoundException $e ) {}
     }
 }
 

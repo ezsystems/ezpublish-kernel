@@ -34,7 +34,7 @@ class EzcDatabase extends Gateway
     /**
      * Construct from database handler
      *
-     * @param EzcDbHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
      * @return void
      */
     public function __construct( EzcDbHandler $handler )
@@ -84,19 +84,39 @@ class EzcDatabase extends Gateway
     public function getSubtreeContent( $sourceId )
     {
         $query = $this->handler->createSelectQuery();
-        $query
-            ->select(
-                $this->handler->quoteColumn( '*' )
-            )->from(
-                $this->handler->quoteTable( 'ezcontentobject_tree' )
-            )->where(
-                $query->expr->like(
-                    $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
-                    $query->bindValue( '%/' . $sourceId . '/%' )
-                )
-            )->orderBy(
-                $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' )
-            );
+        $query->select( '*' )->from(
+            $this->handler->quoteTable( 'ezcontentobject_tree' )
+        )->where(
+            $query->expr->like(
+                $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
+                $query->bindValue( '%/' . $sourceId . '/%' )
+            )
+        )->orderBy(
+            $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Returns data for the first level children of the location identified by given $locationId
+     *
+     * @param mixed $locationId
+     * @return array
+     */
+    public function getChildren( $locationId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select( "*" )->from(
+            $this->handler->quoteTable( "ezcontentobject_tree" )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( "parent_node_id", "ezcontentobject_tree" ),
+                $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+            )
+        );
         $statement = $query->prepare();
         $statement->execute();
 
@@ -287,7 +307,7 @@ class EzcDatabase extends Gateway
             return;
         }
 
-        // Find nodes of explicitely hidden subtrees in the subtree which
+        // Find nodes of explicitly hidden subtrees in the subtree which
         // should be unhidden
         $query = $this->handler->createSelectQuery();
         $query
@@ -420,6 +440,8 @@ class EzcDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
+     * @param bool $published
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $createStruct, array $parentNode, $published = false )
@@ -433,7 +455,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $location->contentId = $createStruct->contentId, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'contentobject_is_published' ),
-                $query->bindValue( (int)$published, null, \PDO::PARAM_INT ) // Will be set to 1, once the contentt object has been published
+                $query->bindValue( (int)$published, null, \PDO::PARAM_INT ) // Will be set to 1, once the content object has been published
             )->set(
                 $this->handler->quoteColumn( 'contentobject_version' ),
                 $query->bindValue( $createStruct->contentVersion, null, \PDO::PARAM_INT )
@@ -505,7 +527,7 @@ class EzcDatabase extends Gateway
     /**
      * Create an entry in the node assignment table
      *
-     * @param CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
      * @return void
@@ -557,28 +579,33 @@ class EzcDatabase extends Gateway
     /**
      * Deletes node assignment for given $contentId and $versionNo
      *
+     * If $versionNo is not passed all node assignments for given $contentId are deleted
+     *
      * @param int $contentId
-     * @param int $versionNo
+     * @param int|null $versionNo
      *
      * @return void
      */
-    public function deleteNodeAssignment( $contentId, $versionNo )
+    public function deleteNodeAssignment( $contentId, $versionNo = null )
     {
         $query = $this->handler->createDeleteQuery();
-        $query
-            ->deleteFrom( 'eznode_assignment' )
-            ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
-                    ),
-                    $query->expr->eq(
-                        $this->handler->quoteColumn( 'contentobject_version' ),
-                        $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
-                    )
+        $query->deleteFrom(
+            'eznode_assignment'
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+        if ( isset( $versionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_version' ),
+                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
                 )
             );
+        }
         $query->prepare()->execute();
     }
 
@@ -664,7 +691,7 @@ class EzcDatabase extends Gateway
             }
             else
             {
-                $mainLocationId = $this->getMainNodeId( $contentId, $versionNo );
+                $mainLocationId = $this->getMainNodeId( $contentId );
             }
             $this->create(
                 new CreateStruct(
@@ -691,11 +718,11 @@ class EzcDatabase extends Gateway
 
     /**
      * Searches for the main nodeId of $contentId in $versionId
+     *
      * @param int $contentId
-     * @param int $versionId
-     * @return int
+     * @return int|bool
      */
-    private function getMainNodeId( $contentId, $versionNo )
+    private function getMainNodeId( $contentId )
     {
         $query = $this->handler->createSelectQuery();
         $query
@@ -703,17 +730,13 @@ class EzcDatabase extends Gateway
             ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->like(
+                    $query->expr->eq(
                         $this->handler->quoteColumn( 'contentobject_id' ),
                         $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                     ),
-                    $query->expr->like(
-                        $this->handler->quoteColumn( 'contentobject_version' ),
-                        $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
-                    ),
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'main_node_id' ),
-                        $query->bindValue( 0, null, \PDO::PARAM_INT )
+                        $this->handler->quoteColumn( 'node_id' ),
+                        $this->handler->quoteColumn( 'main_node_id' )
                     )
                 )
             );
@@ -770,20 +793,61 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Removes all Locations under and includin $locationId.
-     *
-     * Performs a recursive delete on the location identified by $locationId,
-     * including all of its child locations. Content which is not referred to
-     * by any other location is automatically removed. Content which looses its
-     * main Location will get the first of its other Locations assigned as the
-     * new main Location.
+     * Deletes ezcontentobject_tree row for given $locationId (node_id)
      *
      * @param mixed $locationId
-     * @return boolean
      */
-    public function removeSubtree( $locationId )
+    public function removeLocation( $locationId )
     {
-        throw new \RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createDeleteQuery();
+        $query->deleteFrom(
+            "ezcontentobject_tree"
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( "node_id" ),
+                $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+            )
+        );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Returns id of the next in line node to be set as a new main node
+     *
+     * This returns lowest node id for content identified by $contentId, and not of
+     * the node identified by given $locationId (current main node).
+     * Assumes that content has more than one location.
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return array
+     */
+    public function getFallbackMainNodeData( $contentId, $locationId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( "node_id" ),
+            $this->handler->quoteColumn( "contentobject_version" ),
+            $this->handler->quoteColumn( "parent_node_id" )
+        )->from(
+            $this->handler->quoteTable( "ezcontentobject_tree" )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "contentobject_id" ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->neq(
+                    $this->handler->quoteColumn( "node_id" ),
+                    $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+                )
+            )
+        )->orderBy( "node_id", Query::SORT_ASC )->limit( 1 );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetch( \PDO::FETCH_ASSOC );
     }
 
     /**
@@ -792,8 +856,8 @@ class EzcDatabase extends Gateway
      * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
      *
-     * @param mixed $locationId
-     * @return boolean
+     * @param string $pathString
+     * @return void
      */
     public function trashSubtree( $pathString )
     {
