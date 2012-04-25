@@ -39,6 +39,7 @@ class AddField extends Action
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $converter
      */
     public function __construct(
         Gateway $contentGateway,
