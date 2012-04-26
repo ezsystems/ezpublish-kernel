@@ -20396,7 +20396,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1243 => 
+    1244 => 
     array (
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
@@ -20412,7 +20412,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1244 => 
+    1245 => 
     array (
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
@@ -20428,7 +20428,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partners',
       'version' => '2',
     ),
-    1245 => 
+    1246 => 
     array (
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
@@ -20444,7 +20444,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1246 => 
+    1247 => 
     array (
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '302',
@@ -20460,7 +20460,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'forum',
       'version' => '2',
     ),
-    1247 => 
+    1248 => 
     array (
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '303',
@@ -32326,6 +32326,15 @@ keywords=cms, publish, e-commerce, content management, development framework',
     array(
       'content_translation'=>'eng-US',
       'content_version'=>1,
+      'contentobject_id'=>226,
+      'language_id'=>3,
+      'name'=>'Something',
+      'real_translation'=>'eng-US'
+    ),
+      
+    array(
+      'content_translation'=>'eng-US',
+      'content_version'=>2,
       'contentobject_id'=>226,
       'language_id'=>3,
       'name'=>'Something',
