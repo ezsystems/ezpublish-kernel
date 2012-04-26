@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
@@ -255,7 +256,6 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @todo Load referencing locations!
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
@@ -263,16 +263,10 @@ class MapperTest extends TestCase
      */
     public function testExtractContentFromRows()
     {
-        $locationMapperMock = $this->getLocationMapperMock();
-        $locationMapperMock->expects( $this->once() )
-            ->method( 'createLocationFromRow' )
-            ->with( $this->isType( 'array' ) )
-            ->will( $this->returnValue( new Content\Location() ) );
-
         $convMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->exactly( 12 ) )
+        $convMock->expects( $this->exactly( 13 ) )
             ->method( 'toFieldValue' )
             ->with(
                 $this->isInstanceOf(
@@ -296,7 +290,7 @@ class MapperTest extends TestCase
 
         $rowsFixture = $this->getContentExtractFixture();
 
-        $mapper = new Mapper( $locationMapperMock, $reg, $this->getLanguageHandlerMock() );
+        $mapper = new Mapper( new LocationMapper(), $reg, $this->getLanguageHandlerMock() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
