@@ -21,20 +21,49 @@ $content->contentInfo->currentVersionNo = 2;
 $content->contentInfo->isPublished = true;
 $content->contentInfo->mainLanguageCode = 'eng-US';
 $content->contentInfo->name = 'Something';
-$content->locations = array( new Location() );
+$content->locations = array(
+    new Location(
+        array(
+            "id" => "228",
+            "priority" => "0",
+            "hidden" => "0",
+            "invisible" => "0",
+            "remoteId" => "ee684db77223bb1a10300d7b250232cf",
+            "contentId" => "226",
+            "parentId" => "77",
+            "pathIdentificationString" => "solutions/something",
+            "pathString" => "/1/2/77/228/",
+            "modifiedSubLocation" => "1313061404",
+            "mainLocationId" => "228",
+            "depth" => "3",
+            "sortField" => "1",
+            "sortOrder" => "1"
+        )
+    )
+);
 $content->fields = array();
 
 $versionInfo = new VersionInfo();
-$versionInfo->id = 675;
+$versionInfo->id = 676;
 $versionInfo->names = array( 'eng-US' => 'Something' );
-$versionInfo->versionNo = 1;
-$versionInfo->modificationDate = 1313047907;
+$versionInfo->versionNo = 2;
+$versionInfo->modificationDate = 1313061404;
 $versionInfo->creatorId = 14;
-$versionInfo->creationDate = 1313047865;
-$versionInfo->status = 3;
+$versionInfo->creationDate = 1313061317;
+$versionInfo->status = 1;
 $versionInfo->contentId = 226;
 $versionInfo->initialLanguageCode = 'eng-US';
 $versionInfo->languageIds = array( 2 );
+
+$field = new Field();
+$field->id = 4000;
+$field->fieldDefinitionId = 194;
+$field->type = 'ezsrrating';
+$field->value = new FieldValue();
+$field->languageCode = 'eng-GB';
+$field->versionNo = 2;
+
+$content->fields[] = $field;
 
 $field = new Field();
 $field->id = 1332;
@@ -42,7 +71,7 @@ $field->fieldDefinitionId = 183;
 $field->type = 'ezstring';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -52,7 +81,7 @@ $field->fieldDefinitionId = 184;
 $field->type = 'ezstring';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -62,7 +91,7 @@ $field->fieldDefinitionId = 185;
 $field->type = 'ezauthor';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -72,7 +101,7 @@ $field->fieldDefinitionId = 186;
 $field->type = 'ezxmltext';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -82,7 +111,7 @@ $field->fieldDefinitionId = 187;
 $field->type = 'ezxmltext';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -92,7 +121,7 @@ $field->fieldDefinitionId = 188;
 $field->type = 'ezboolean';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -102,7 +131,7 @@ $field->fieldDefinitionId = 189;
 $field->type = 'ezimage';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -112,7 +141,7 @@ $field->fieldDefinitionId = 190;
 $field->type = 'ezxmltext';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -122,7 +151,7 @@ $field->fieldDefinitionId = 191;
 $field->type = 'ezdatetime';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -132,7 +161,7 @@ $field->fieldDefinitionId = 192;
 $field->type = 'ezdatetime';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -142,7 +171,7 @@ $field->fieldDefinitionId = 193;
 $field->type = 'ezkeyword';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
@@ -152,7 +181,7 @@ $field->fieldDefinitionId = 194;
 $field->type = 'ezsrrating';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
-$field->versionNo = 1;
+$field->versionNo = 2;
 
 $content->fields[] = $field;
 
