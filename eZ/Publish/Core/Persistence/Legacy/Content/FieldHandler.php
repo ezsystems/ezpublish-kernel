@@ -12,7 +12,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
