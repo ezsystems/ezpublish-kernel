@@ -189,7 +189,7 @@ class Mapper
             }
 
             $locationId = (int)$row['ezcontentobject_tree_node_id'];
-            if ( !isset( $locations[$contentId][$versionId][$locationId] ) )
+            if ( isset( $row['ezcontentobject_tree_node_id'] ) && !isset( $locations[$contentId][$versionId][$locationId] ) )
             {
                 $locations[$contentId][$versionId][$locationId] =
                     $this->locationMapper->createLocationFromRow(
