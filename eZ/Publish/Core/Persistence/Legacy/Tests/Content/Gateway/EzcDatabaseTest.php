@@ -837,7 +837,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 )
             );
 
-        $res = $gateway->load( 226, 1 );
+        $res = $gateway->load( 226, 2 );
 
         $res = array_merge( $res );
 
