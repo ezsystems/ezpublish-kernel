@@ -781,7 +781,6 @@ class EzcDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
-     * @todo Handle StorageFieldDefinition
      */
     public function updateFieldDefinition(
         $typeId, $status, FieldDefinition $fieldDefinition,
