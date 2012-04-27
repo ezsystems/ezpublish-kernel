@@ -294,7 +294,6 @@ class Handler implements BaseContentTypeHandler
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
-     * @todo Maintain contentclass_name
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
@@ -308,7 +307,6 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $contentTypeId
-     * @todo Maintain contentclass_name
      * @param int $status
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
