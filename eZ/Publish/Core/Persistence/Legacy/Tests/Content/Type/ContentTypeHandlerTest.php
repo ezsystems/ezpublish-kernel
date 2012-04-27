@@ -615,13 +615,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
             ->will( $this->returnValue( 0 ) );
         $gatewayMock->expects( $this->once() )
-            ->method( 'deleteGroupAssignmentsForType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteFieldDefinitionsForType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteType' )
+            ->method( 'delete' )
             ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
 
         $mapperMock = $this->getMapperMock();
@@ -648,11 +642,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             // An instance of this type exists
             ->will( $this->returnValue( 1 ) );
         $gatewayMock->expects( $this->never() )
-            ->method( 'deleteGroupAssignmentsForType' );
-        $gatewayMock->expects( $this->never() )
-            ->method( 'deleteFieldDefinitionsForType' );
-        $gatewayMock->expects( $this->never() )
-            ->method( 'deleteType' );
+            ->method( 'delete' );
 
         $mapperMock = $this->getMapperMock();
 

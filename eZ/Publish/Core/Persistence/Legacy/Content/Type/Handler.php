@@ -324,13 +324,7 @@ class Handler implements BaseContentTypeHandler
             throw new Exception\TypeStillHasContent( $contentTypeId, $status );
         }
 
-        $this->contentTypeGateway->deleteGroupAssignmentsForType(
-            $contentTypeId, $status
-        );
-        $this->contentTypeGateway->deleteFieldDefinitionsForType(
-            $contentTypeId, $status
-        );
-        $this->contentTypeGateway->deleteType(
+        $this->contentTypeGateway->delete(
             $contentTypeId, $status
         );
 
