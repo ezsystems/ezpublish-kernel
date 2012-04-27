@@ -253,14 +253,37 @@ class LanguageHandlerTest extends TestCase
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::delete
      */
-    public function testDelete()
+    public function testDeleteSuccess()
     {
         $handler = $this->getLanguageHandler();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
+            ->method( 'canDeleteLanguage' )
+            ->with( $this->equalTo( 2 ) )
+            ->will( $this->returnValue( true ) );
+        $gatewayMock->expects( $this->once() )
             ->method( 'deleteLanguage' )
             ->with( $this->equalTo( 2 ) );
+
+        $result = $handler->delete( 2 );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::delete
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\Logic
+     */
+    public function testDeleteFail()
+    {
+        $handler = $this->getLanguageHandler();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'canDeleteLanguage' )
+            ->with( $this->equalTo( 2 ) )
+            ->will( $this->returnValue( false ) );
+        $gatewayMock->expects( $this->never() )
+            ->method( 'deleteLanguage' );
 
         $result = $handler->delete( 2 );
     }

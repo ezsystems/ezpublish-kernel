@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\Logic;
 
 /**
  * Language Handler
@@ -124,13 +125,17 @@ class Handler implements BaseLanguageHandler
     /**
      * Delete a language
      *
-     * @todo Might throw an exception if the language is still associated with
-     *       some content / types / (...) ?
-     *
      * @param mixed $id
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If language could not be deleted
      */
     public function delete( $id )
     {
+        if ( !$this->languageGateway->canDeleteLanguage( $id ) )
+        {
+            throw new Logic( "Deleting language", "some content still references that language and therefore it can't be deleted" );
+        }
+
         $this->languageGateway->deleteLanguage( $id );
     }
 }
