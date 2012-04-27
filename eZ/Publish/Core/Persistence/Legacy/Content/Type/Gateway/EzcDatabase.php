@@ -1090,6 +1090,31 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Deletes a Type completely.
+     *
+     * Does no delete the field definitions!
+     *
+     * @param mixed $typeId
+     * @param int $status
+     * @return void
+     */
+    public function delete( $typeId, $status )
+    {
+        $this->deleteGroupAssignmentsForType(
+            $typeId, $status
+        );
+        $this->deleteFieldDefinitionsForType(
+            $typeId, $status
+        );
+        $this->deleteTypeNameData(
+            $typeId, $status
+        );
+        $this->deleteType(
+            $typeId, $status
+        );
+    }
+
+    /**
      * Deletes a the Type.
      *
      * Does no delete the field definitions!

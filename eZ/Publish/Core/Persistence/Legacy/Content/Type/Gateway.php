@@ -220,6 +220,17 @@ abstract class Gateway
     abstract public function countInstancesOfType( $typeId, $status );
 
     /**
+     * Deletes a Type completely.
+     *
+     * Does no delete the field definitions!
+     *
+     * @param mixed $typeId
+     * @param int $status
+     * @return void
+     */
+    abstract public function delete( $typeId, $status );
+
+    /**
      * Deletes all field definitions of a Type.
      *
      * @param mixed $typeId
