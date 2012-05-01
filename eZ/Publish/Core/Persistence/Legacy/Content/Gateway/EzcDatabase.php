@@ -846,14 +846,14 @@ class EzcDatabase extends Gateway
             ->select( '*' )
             ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
             ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq(
+            $qName->expr->lAnd(
+                $qName->expr->eq(
                         $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                        $q->bindValue( $contentId )
+                    $qName->bindValue( $contentId )
                     ),
-                    $q->expr->eq(
+                $qName->expr->eq(
                         $this->dbHandler->quoteColumn( 'content_version' ),
-                        $q->bindValue( $versionNo )
+                    $qName->bindValue( $versionNo )
                     )
                 )
             );
