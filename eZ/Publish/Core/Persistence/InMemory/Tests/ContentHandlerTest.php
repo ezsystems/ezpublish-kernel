@@ -378,7 +378,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $time = time();
         $contentHandler = $this->persistenceHandler->contentHandler();
-        $copy = $contentHandler->copy( 1, false );
+        $copy = $contentHandler->copy( 1 );
         $this->assertEquals( 1, $copy->contentInfo->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->contentInfo->contentTypeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->contentInfo->ownerId, "Owner ID does not match" );
