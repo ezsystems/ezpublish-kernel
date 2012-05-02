@@ -1065,13 +1065,13 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion( APIVersionInfo $versionInfo )
+    public function publishVersion( APIVersionInfo $versionInfo, $publicationDate = null )
     {
         if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
             throw new BadStateException( "versionInfo", "only versions in draft status can be published" );
 
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
-        $metadataUpdateStruct->publicationDate = time();
+        $metadataUpdateStruct->publicationDate = isset( $publicationDate ) ? $publicationDate : time();
         $metadataUpdateStruct->modificationDate = $metadataUpdateStruct->publicationDate;
 
         $spiContent = $this->persistenceHandler->contentHandler()->publish(
@@ -1149,13 +1149,34 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
-     * @TODO: contentHandler::copy is not implemented yet
      */
     public function copyContent( APIContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, APIVersionInfo $versionInfo = null)
     {
+        if ( $destinationLocationCreateStruct->remoteId !== null )
+        {
+            try
+            {
+                $existingLocation = $this->repository->getLocationService()->loadLocationByRemoteId(
+                    $destinationLocationCreateStruct->remoteId
+                );
+                if ( $existingLocation !== null )
+                    throw new InvalidArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
+            }
+            catch ( APINotFoundException $e ) {}
+        }
+        else
+        {
+            $destinationLocationCreateStruct->remoteId = md5( uniqid( get_class( $this ), true ) );
+        }
+
         $spiContent = $this->persistenceHandler->contentHandler()->copy(
             $contentInfo->id,
-            $versionInfo ? $versionInfo->versionNo : false
+            $versionInfo ? $versionInfo->versionNo : null
+        );
+
+        $content = $this->publishVersion(
+            $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
+            $spiContent->versionInfo->creationDate
         );
 
         $this->repository->getLocationService()->createLocation(
@@ -1163,7 +1184,7 @@ class ContentService implements ContentServiceInterface
             $destinationLocationCreateStruct
         );
 
-        return $this->loadContent( $spiContent->contentInfo->id );
+        return $content;
     }
 
     /**
@@ -1184,41 +1205,14 @@ class ContentService implements ContentServiceInterface
             $query->criterion,
             $query->offset,
             $query->limit,
-            $query->sortClauses
+            $query->sortClauses,
+            isset( $fieldFilters["languages"] ) ? $fieldFilters["languages"] : null
         );
-
-        $filteredFields = array();
-        $areFieldsFiltered = false;
-        foreach ( $fieldFilters as $filterName => $filterSettings )
-        {
-            switch ( $filterName )
-            {
-                case "language":
-                    $areFieldsFiltered = true;
-                    foreach ( $spiSearchResult->content as $spiContent )
-                    {
-                        if ( !isset( $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] ) )
-                            $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] =
-                                $spiContent->fields;
-
-                        $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] =
-                            $this->filterFieldsByLanguages(
-                                $spiContent->contentInfo->contentTypeId,
-                                $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id],
-                                $filterSettings
-                            );
-                    }
-                    break;
-            }
-        }
 
         $contentItems = array();
         foreach ( $spiSearchResult->content as $spiContent )
         {
-            $contentItems[] = $this->buildContentDomainObject(
-                $spiContent,
-                $areFieldsFiltered ? $filteredFields[$spiContent->contentInfo->id][$spiContent->versionInfo->id] : null
-            );
+            $contentItems[] = $this->buildContentDomainObject( $spiContent );
         }
 
         return new SearchResult(
@@ -1246,9 +1240,14 @@ class ContentService implements ContentServiceInterface
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
+        // @todo: Fallback-ing to self::findContent() until exceptions are defined for SearchHandler::findSingle()
         $searchResult = $this->findContent( $query, $fieldFilters, $filterOnUserPermissions );
 
-        if ( $searchResult->count > 1 )
+        if ( $searchResult->count === 0 )
+        {
+            throw new NotFoundException( "Content", "Search with given \$query found nothing" );
+        }
+        elseif ( $searchResult->count > 1 )
         {
             throw new InvalidArgumentException( "\$query", "Search with given \$query returned more than one result" );
         }
@@ -1615,7 +1614,9 @@ class ContentService implements ContentServiceInterface
                 "creationDate"        => $createdDate,
                 "status"              => $persistenceVersionInfo->status,
                 "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
-                "languageCodes"       => $languageCodes
+                "languageCodes"       => $languageCodes,
+                // Implementation properties
+                "names"               => $persistenceVersionInfo->names
             )
         );
     }

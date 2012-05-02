@@ -20,7 +20,9 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     eZ\Publish\API\Repository\Values\Content\SearchResult,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException;
+    eZ\Publish\SPI\Persistence\Content\Search\Result as SPISearchResult,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 /**
  * Test case for Content service
@@ -28,6 +30,20 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 abstract class ContentBase extends BaseServiceTest
 {
     protected $testContentType;
+
+    /**
+     * Returns a persistence Handler mock
+     *
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $persistenceHandlerMock;
+
+    /**
+     * Search handler mock
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Search\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchHandlerMock;
 
     protected function getContentInfoExpectedValues()
     {
@@ -66,7 +82,9 @@ abstract class ContentBase extends BaseServiceTest
             "creationDate"        => new \DateTime( "@0" ),
             "status"              => VersionInfo::STATUS_PUBLISHED,
             "initialLanguageCode" => "eng-US",
-            "languageCodes"       => array( "eng-US" )
+            "languageCodes"       => array( "eng-US" ),
+            // Implementation properties
+            "names"               => array( "eng-US" => "Users" )
         );
 
         if ( $draft )
@@ -2057,6 +2075,32 @@ abstract class ContentBase extends BaseServiceTest
     public function testLoadContentDrafts()
     {
         $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+        $content = $contentService->loadContentDrafts();
+
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentDrafts
+     */
+    public function testLoadContentDraftsWithFirstArgument()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+    }
+
+    /**
+     * Test for the loadContentDrafts() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentDrafts
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadContentDraftsThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
     }
 
     /**
@@ -2262,7 +2306,370 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+        $this->markTestIncomplete( "Test for ContentService::deleteContent() is not implemented." );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @group current
+     * @dep_ends testCreate
+     * @dep_ends testLoadContentInfo
+     * @dep_ends testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     */
+    public function testCopyContentSingleVersion()
+    {
+        $time = time();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( 11 );
+        $versionInfo = $contentService->loadVersionInfoById( 11, 1 );
+        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+
+        $copiedContent = $contentService->copyContent(
+            $contentInfo,
+            $destinationLocationCreateStruct,
+            $versionInfo
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            $copiedContent
+        );
+
+        $this->assertEquals( 1, $copiedContent->contentInfo->currentVersionNo );
+        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->modificationDate->getTimestamp() );
+        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->publishedDate->getTimestamp() );
+        $this->assertCopyContentValues(
+            $contentService->loadContent( 11, null, 1 ),
+            $copiedContent
+        );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @group current
+     * @dep_ends testLoadVersions
+     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     */
+    public function testCopyContentAllVersions()
+    {
+        $time = time();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( 11 );
+        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+
+        $copiedContent = $contentService->copyContent(
+            $contentInfo,
+            $destinationLocationCreateStruct
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            $copiedContent
+        );
+
+        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->modificationDate->getTimestamp() );
+        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->publishedDate->getTimestamp() );
+
+        $originalVersionInfos = $contentService->loadVersions( $contentInfo );
+        $copiedVersionInfos = $contentService->loadVersions( $copiedContent->contentInfo );
+        $sorter = function( $a, $b ) { return strcmp( $a->versionNo, $b->versionNo ); };
+        usort( $originalVersionInfos, $sorter );
+        usort( $copiedVersionInfos, $sorter );
+        $this->assertCount(
+            count( $originalVersionInfos ),
+            $copiedVersionInfos,
+            "Count of versions copied does not match the count of original versions"
+        );
+        $this->assertEquals( $contentInfo->currentVersionNo, $copiedContent->contentInfo->currentVersionNo );
+        foreach ( $originalVersionInfos as $index => $versionInfo )
+        {
+            $this->assertEquals( $versionInfo->versionNo, $copiedVersionInfos[$index]->versionNo );
+            $this->assertCopyContentValues(
+                $contentService->loadContent(
+                    $contentInfo->id,
+                    null,
+                    $versionInfo->versionNo
+                ),
+                $contentService->loadContent(
+                    $copiedContent->id,
+                    null,
+                    $copiedVersionInfos[$index]->versionNo
+                )
+            );
+        }
+    }
+
+    /**
+     * Asserts that $copiedContent is valid copy of $originalContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $originalContent
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $copiedContent
+     */
+    protected function assertCopyContentValues( APIContent $originalContent, APIContent $copiedContent )
+    {
+        $this->assertEquals(
+            $originalContent->contentType,
+            $copiedContent->contentType,
+            "Content type of content copy does not match the content type of original content"
+        );
+        $this->assertNotEquals(
+            $originalContent->id,
+            $copiedContent->id,
+            "Id of content copy is equal to id od original content"
+        );
+
+        $this->assertSameClassPropertiesCorrect(
+            array(
+                //"name",
+                "sectionId",
+                //"currentVersionNo",
+                "published",
+                "ownerId",
+                "alwaysAvailable",
+                "mainLanguageCode",
+                //"mainLocationId"
+            ),
+            $originalContent->contentInfo,
+            $copiedContent->contentInfo
+        );
+        $this->assertNotEquals( $originalContent->contentInfo->id, $copiedContent->contentInfo->id );
+        $this->assertNotEquals( $originalContent->contentInfo->remoteId, $copiedContent->contentInfo->remoteId );
+
+        $this->assertSameClassPropertiesCorrect(
+            array(
+                "versionNo",
+                //"contentId",
+                "names",
+                //"creationDate",
+                //"modificationDate",
+                "creatorId",
+                //"status",
+                "initialLanguageCode",
+                "languageCodes"
+            ),
+            $originalContent->versionInfo,
+            $copiedContent->versionInfo
+        );
+        $this->assertNotEquals( $originalContent->versionInfo->id, $copiedContent->versionInfo->id );
+
+        $originalFields = $originalContent->getFields();
+        $copiedFields = $copiedContent->getFields();
+        $this->assertCount(
+            count( $originalFields ),
+            $copiedFields,
+            "Count of fields copied does not match the count of original fields"
+        );
+        foreach ( $originalFields as $fieldIndex => $originalField )
+        {
+            $this->assertSameClassPropertiesCorrect(
+                array(
+                    "fieldDefIdentifier",
+                    "value",
+                    "languageCode"
+                ),
+                $originalField,
+                $copiedFields[$fieldIndex]
+            );
+            $this->assertNotEquals(
+                $originalField->id,
+                $copiedFields[$fieldIndex]->id
+            );
+        }
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCopyContentThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for ContentService::deleteContent() is not implemented." );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::findContent
+     */
+    public function testFindContentBehaviour()
+    {
+        $contentService = $this->repository->getContentService();
+
+        $refObject   = new \ReflectionObject( $contentService );
+        $refProperty = $refObject->getProperty( 'persistenceHandler' );
+        $refProperty->setAccessible( true );
+        $refProperty->setValue(
+            $contentService,
+            $this->getPersistenceHandlerMock()
+        );
+
+        $searchHandlerMock = $this->getSearchHandlerMock();
+        $searchHandlerMock->expects(
+            $this->once()
+        )->method(
+            "find"
+        )->with(
+            $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" ),
+            $this->equalTo( 0 ),
+            $this->equalTo( 10 ),
+            $this->isType( "array" )
+        )->will(
+            $this->returnValue( new SPISearchResult() )
+        );
+
+        $contentService->findContent(
+            new Query(
+                array(
+                    "criterion"   => new Criterion\ContentId( 4 ),
+                    "offset"      => 0,
+                    "limit"       => 10,
+                    "sortClauses" => array()
+                )
+            ),
+            array( "languages" => array( "eng-GB" ) )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::findContent
+     */
+    public function testFindContent()
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+        $query = new Query(
+            array(
+                "criterion" => new Criterion\ContentId( array( 4 ) ),
+                "offset"    => 0
+            )
+        );
+
+        $searchResult = $contentService->findContent(
+            $query,
+            array()
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult",
+            $searchResult
+        );
+
+        $this->assertEquals( $query, $searchResult->query );
+        $this->assertEquals( 1, $searchResult->count );
+        $this->assertCount( $searchResult->count, $searchResult->items );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            reset( $searchResult->items )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @todo finish
+     * @covers \eZ\Publish\Core\Repository\ContentService::findContent
+     */
+    public function testFindContentWithLanguageFilter()
+    {
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+        $query = new Query(
+            array(
+                "criterion" => new Criterion\ContentId( array( 4 ) ),
+                "offset"    => 0
+            )
+        );
+
+        $searchResult = $contentService->findContent(
+            $query,
+            array( "languages" => array( "eng-US" ) )
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult",
+            $searchResult
+        );
+
+        $this->assertEquals( $query, $searchResult->query );
+        $this->assertEquals( 1, $searchResult->count );
+        $this->assertCount( $searchResult->count, $searchResult->items );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            reset( $searchResult->items )
+        );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @depends testFindContent
+     * @depends testFindContentWithLanguageFilter
+     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
+     */
+    public function testFindSingle()
+    {
+        $contentServiceMock = $this->getPartlyMockedService(
+            array( "findContent" )
+        );
+        $contentServiceMock->expects(
+            $this->once()
+        )->method(
+            "findContent"
+        )->with(
+            $this->isInstanceOf(
+                "eZ\\Publish\\API\\Repository\\Values\\Content\\Query"
+            ),
+            $this->equalTo( array( "languages" => array( "eng-GB" ) ) ),
+            $this->equalTo( true )
+        )->will(
+            $this->returnValue(
+                new SearchResult(
+                    array(
+                        "count" => 1,
+                        "items" => array(
+                            new Content( array( "internalFields" => array() ) )
+                        )
+                    )
+                )
+            )
+        );
+
+        /* BEGIN: Use Case */
+        $content = $contentServiceMock->findSingle(
+            new Query(
+                array(
+                    "criterion" => new Criterion\ContentId( array( 42 ) ),
+                    "offset"    => 0
+                )
+            ),
+            array( "languages" => array( "eng-GB" ) ),
+            true
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            $content
+        );
     }
 
     /**
@@ -2270,10 +2677,25 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @depends testFindSingle
      * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testFindSingleThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+        $query = new Query(
+            array(
+                "criterion" => new Criterion\ContentId( array( PHP_INT_MAX ) ),
+                "offset"    => 0
+            )
+        );
+
+        // Throws an exception because content with given id does not exist
+        $searchResult = $contentService->findSingle(
+            $query,
+            array( "languages" => array( "eng-GB" ) )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -2281,6 +2703,7 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @depends testFindSingle
      * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testFindSingleThrowsNotFoundExceptionDueToPermissions()
     {
@@ -2292,13 +2715,59 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @depends testFindSingle
      * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testFindSingleThrowsBadStateException()
+    public function testFindSingleThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
+        /* BEGIN: Use Case */
+        /*$contentService = $this->repository->getContentService();
+        $query = new Query(
+            array(
+                "criterion" => new Criterion\ContentId( array( 1, 4 ) )
+            )
+        );
+
+        // Throws an exception because more than one result was returned for the given query
+        $searchResult = $contentService->findSingle(
+            $query,
+            array( "languages" => array( "eng-GB" ) )
+        );*/
+        /* END: Use Case */
+
+        $contentServiceMock = $this->getPartlyMockedService(
+            array( "findContent" )
+        );
+        $contentServiceMock->expects(
+            $this->once()
+        )->method(
+            "findContent"
+        )->with(
+            $this->isInstanceOf(
+                "eZ\\Publish\\API\\Repository\\Values\\Content\\Query"
+            ),
+            $this->equalTo( array( "languages" => array( "eng-GB" ) ) ),
+            $this->equalTo( true )
+        )->will(
+            $this->returnValue(
+                new SearchResult(
+                    array(
+                        "count" => 2,
+                        "items" => array(
+                            new Content( array( "internalFields" => array() ) ),
+                            new Content( array( "internalFields" => array() ) )
+                        )
+                    )
+                )
+            )
+        );
+
+        // Throws an exception because more than one result was returned for the given query
+        $content = $contentServiceMock->findSingle(
+            new Query,
+            array( "languages" => array( "eng-GB" ) ),
+            true
+        );
     }
-
-
 
 
 
@@ -2357,6 +2826,56 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
+     * Returns a SearchHandler mock
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getSearchHandlerMock()
+    {
+        if ( !isset( $this->searchHandlerMock ) )
+        {
+            $this->searchHandlerMock = $this->getMock(
+                "eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler",
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->searchHandlerMock;
+    }
+
+    /**
+     * Returns a persistence Handler mock
+     *
+     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPersistenceHandlerMock()
+    {
+        if ( !isset( $this->persistenceHandlerMock ) )
+        {
+            $this->persistenceHandlerMock = $this->getMock(
+                "eZ\\Publish\\SPI\\Persistence\\Handler",
+                array(),
+                array(),
+                '',
+                false
+            );
+            $this->persistenceHandlerMock->expects(
+                $this->any()
+            )->method(
+                "searchHandler"
+            )->will(
+                $this->returnValue(
+                    $this->getSearchHandlerMock()
+                )
+            );
+        }
+
+        return $this->persistenceHandlerMock;
+    }
+
+    /**
      * Returns the content service to test with $methods mocked
      *
      * @param string[] $methods
@@ -2367,7 +2886,10 @@ abstract class ContentBase extends BaseServiceTest
         return $this->getMock(
             "eZ\\Publish\\Core\\Repository\\ContentService",
             $methods,
-            array(), '', false
+            array(
+                $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ),
+                $this->getPersistenceHandlerMock()
+            )
         );
     }
 
