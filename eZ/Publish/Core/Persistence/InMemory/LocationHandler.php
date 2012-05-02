@@ -59,7 +59,7 @@ class LocationHandler implements LocationHandlerInterface
     public function copySubtree( $sourceId, $destinationParentId )
     {
         $location = $this->load( $sourceId );
-        $contentCopy = $this->handler->contentHandler()->copy( $location->contentId, false );
+        $contentCopy = $this->handler->contentHandler()->copy( $location->contentId );
 
         $newLocation = $this->create(
             new CreateStruct(
