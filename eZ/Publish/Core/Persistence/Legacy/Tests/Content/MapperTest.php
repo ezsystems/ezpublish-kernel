@@ -144,6 +144,7 @@ class MapperTest extends TestCase
     public function testCreateVersionInfoForContent()
     {
         $content = $this->getFullContentFixture();
+        $time = time();
 
         $mapper = $this->getMapper();
         $this->languageHandler
@@ -176,10 +177,11 @@ class MapperTest extends TestCase
                 'contentId' => 2342,
                 'initialLanguageCode' => 'eng-GB',
                 'languageIds' => array( 2 ),
-
             ),
             $versionInfo
         );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->creationDate );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->modificationDate );
     }
 
     /**
