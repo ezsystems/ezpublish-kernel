@@ -2,6 +2,7 @@
     "Content": [
         {"id": 1, "_currentVersionNo" : 1 },
         {"id": 4, "_currentVersionNo" : 1},
+        {"id": 11, "_currentVersionNo" : 1},
         {"id": 12, "_currentVersionNo" : 1},
         {"id": 14, "_currentVersionNo" : 1},
         {"id": 42, "_currentVersionNo" : 1},
@@ -10,6 +11,7 @@
     "Content\\ContentInfo": [
         {"id": 1, "contentTypeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "remoteIdForContent1", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "eZ Publish"},
         {"id": 4, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1033917596, "publicationDate": 1033917596, "isAlwaysAvailable": true, "remoteId": "f5c88a2209584891056f987fd965b0ba", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Users"},
+        {"id": 11, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 2, "status": 1, "modificationDate": 1311154215, "publicationDate": 1033920746, "isAlwaysAvailable": true, "remoteId": "5f7f0bdb3381d6a461d8c29ff53d908f", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Members"},
         {"id": 12, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "9b47a45624b023b1a76c73b74d704acf", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Administrator users"},
         {"id": 14, "contentTypeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "1bb4fe25487f05527efa8bfd394cecc7", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Administrator user"},
         {"id": 42, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "isAlwaysAvailable": true, "remoteId": "15b256dbea2ae72418ff5facc999e8f9", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Anonymous Users"},
@@ -29,6 +31,10 @@
         {"id": 11, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Anonymous Users"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 42},
         {"id": 12, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 42},
         {"id": 13, "fieldDefinitionId": 3, "type": "ezstring", "value": {"text": "Administrator user"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 10},
+        {"id": 23, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Guest accounts"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 11},
+        {"id": 24, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Members"}, "languageCode": "eng-GB", "versionNo": 2, "_contentId": 11},
+        {"id": 25, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 11},
+        {"id": 26, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 2, "_contentId": 11},
         {"id": 1331, "fieldDefinitionId": 3, "type": "ezstring", "value": {"text": "Anonymous User"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 14}
 
     ],
@@ -53,7 +59,9 @@
         {"id": 5, "contentId": 12, "versionNo" : 1, "modificationDate": 1310793400, "creationDate": 1310793400,  "creatorId": 14, "status": 1, "names": {"eng-GB": "Administrator users"}, "initialLanguageCode": "eng-GB", "languageIds": [4]},
         {"id": 6, "contentId": 14, "versionNo" : 1, "modificationDate": 1310793400, "creationDate": 1310793400,  "creatorId": 14, "status": 1, "names": {"eng-GB": "Administrator user"}, "initialLanguageCode": "eng-GB", "languageIds": [4]},
         {"id": 7, "contentId": 42, "versionNo" : 1, "modificationDate": 1310793400, "creationDate": 1310793400,  "creatorId": 14, "status": 1, "names": {"eng-GB": "Anonymous Users"}, "initialLanguageCode": "eng-GB", "languageIds": [4]},
-        {"id": 674, "contentId": 10, "versionNo" : 1, "modificationDate": 1310793400, "creationDate": 1310793400,  "creatorId": 14, "status": 1, "names": {"eng-GB": "Anonymous User"}, "initialLanguageCode": "eng-GB", "languageIds": [4]}
+        {"id": 8, "contentId": 10, "versionNo" : 1, "modificationDate": 1310793400, "creationDate": 1310793400,  "creatorId": 14, "status": 1, "names": {"eng-GB": "Anonymous User"}, "initialLanguageCode": "eng-GB", "languageIds": [4]},
+        {"id": 439, "contentId": 11, "versionNo" : 1, "modificationDate": 1033920746, "creationDate": 1033920737,  "creatorId": 14, "status": 3, "names": {"eng-US": "Guest accounts"}, "initialLanguageCode": "eng-US", "languageIds": [2]},
+        {"id": 674, "contentId": 11, "versionNo" : 2, "modificationDate": 1311154215, "creationDate": 1311154215,  "creatorId": 14, "status": 1, "names": {"eng-US": "Members"}, "initialLanguageCode": "eng-US", "languageIds": [2]}
     ],
     "Content\\Section" : [
         {"id": 1, "identifier": "standard", "name": "Standard"},
