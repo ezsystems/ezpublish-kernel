@@ -708,7 +708,7 @@ class ContentHandlerTest extends TestCase
      */
     public function testCopySingleVersion()
     {
-        $handler = $this->getPartlyMockedHandler( array( "load", "create" ) );
+        $handler = $this->getPartlyMockedHandler( array( "load", "internalCreate" ) );
         $mapperMock = $this->getMapperMock();
 
         $handler->expects(
@@ -735,7 +735,7 @@ class ContentHandlerTest extends TestCase
         $handler->expects(
             $this->once()
         )->method(
-            "create"
+            "internalCreate"
         )->with(
             $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct" ),
             $this->equalTo( 32 )
@@ -761,7 +761,7 @@ class ContentHandlerTest extends TestCase
             array(
                 "loadContentInfo",
                 "load",
-                "create",
+                "internalCreate",
                 "listVersions"
             )
         );
@@ -790,7 +790,7 @@ class ContentHandlerTest extends TestCase
             );
 
         $handler->expects( $this->once() )
-            ->method( "create" )
+            ->method( "internalCreate" )
             ->with(
                 $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct" ),
                 $this->equalTo( 2 )

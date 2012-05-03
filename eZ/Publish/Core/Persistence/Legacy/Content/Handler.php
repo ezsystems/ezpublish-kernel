@@ -91,11 +91,28 @@ class Handler implements BaseContentHandler
      * Will contain always a complete list of fields.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct Content creation struct.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content Content value object
+     */
+    public function create( CreateStruct $struct )
+    {
+        return $this->internalCreate( $struct );
+    }
+
+    /**
+     * Creates a new Content entity in the storage engine.
+     *
+     * The values contained inside the $content will form the basis of stored
+     * entity.
+     *
+     * Will contain always a complete list of fields.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct Content creation struct.
      * @param int $versionNo Used by self::copy() to maintain version numbers
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function create( CreateStruct $struct, $versionNo = 1 )
+    protected function internalCreate( CreateStruct $struct, $versionNo = 1 )
     {
         $content = $this->mapper->createContentFromCreateStruct(
             $struct,
@@ -443,7 +460,7 @@ class Handler implements BaseContentHandler
         $createStruct = $this->mapper->createCreateStructFromContent(
             $this->load( $contentId, $currentVersionNo )
         );
-        $content = $this->create(
+        $content = $this->internalCreate(
             $createStruct,
             $currentVersionNo
         );
