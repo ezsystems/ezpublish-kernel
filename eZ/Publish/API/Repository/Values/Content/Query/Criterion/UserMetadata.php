@@ -54,9 +54,11 @@ class UserMetadata extends Criterion implements CriterionInterface
     /**
      * Creates a new UserMetadata criterion on $metadata
      *
+     * @throws \InvalidArgumentException If target is unknown
+     *
      * @param string $target One of UserMetadata::OWNER, UserMetadata::GROUP, UserMetadata::CREATED or UserMetadata::MODIFIED
      * @param string $operator One of the Operator constants
-     * @param mixed $value The match value, either as an array of as a single value, depending on the operator*
+     * @param mixed $value The match value, either as an array of as a single value, depending on the operator
      */
     public function __construct( $target, $operator, $value )
     {

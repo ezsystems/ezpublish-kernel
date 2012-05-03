@@ -19,7 +19,7 @@ class LogicalAnd extends LogicalOperator
      *
      * This criterion will only match if ALL of the given criteria match
      *
-     * @param array(Criterion) $criteria
+     * @param Criterion[] $criteria
      */
     public function __construct( array $criteria )
     {

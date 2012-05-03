@@ -20,9 +20,9 @@ class LogicalNot extends LogicalOperator
      *
      * Will match of the given criterion doesn't match
      *
-     * @param array(Criterion) $criteria One criterion, as a an array
+     * @param Criterion[] $criteria One criterion, as a an array
      *
-     * @throws InvalidArgumentException if more than one criterion is given in the array parameter
+     * @throws \InvalidArgumentException if more than one criterion is given in the array parameter
      */
     public function __construct( Criterion $criterion )
     {

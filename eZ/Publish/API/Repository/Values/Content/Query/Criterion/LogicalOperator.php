@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    InvalidArgumentException;
 
 /**
  *
@@ -20,14 +21,16 @@ abstract class LogicalOperator extends Criterion
 {
     /**
      * The set of criteria combined by the logical operator
-     * @var array(Criterion)
+     * @var Criterion[]
      */
     public $criteria = array();
 
     /**
      * Creates a Logic operation with the given criteria
      *
-     * @param array(Criterion) $criteria
+     * @param Criterion[] $criteria
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct( array $criteria )
     {
