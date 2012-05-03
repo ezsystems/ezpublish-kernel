@@ -205,14 +205,14 @@ class ContentHandler implements ContentHandlerInterface
         $contentObj->contentInfo = $this->backend->create(
             'Content\\ContentInfo',
             array(
-                "contentTypeId"     => $contentInfo->contentTypeId,
-                "sectionId"         => $contentInfo->sectionId,
-                "ownerId"           => $contentInfo->ownerId,
-                "isPublished"       => false,
-                "currentVersionNo"  => $currentVersionNo,
-                "mainLanguageCode"  => $contentInfo->mainLanguageCode,
-                "modificationDate"  => 0,
-                "publicationDate"   => 0,
+                "contentTypeId" => $contentInfo->contentTypeId,
+                "sectionId" => $contentInfo->sectionId,
+                "ownerId" => $contentInfo->ownerId,
+                "isPublished" => false,
+                "currentVersionNo" => $currentVersionNo,
+                "mainLanguageCode" => $contentInfo->mainLanguageCode,
+                "modificationDate" => 0,
+                "publicationDate" => 0,
                 "isAlwaysAvailable" => $contentInfo->isAlwaysAvailable
             )
         );
@@ -229,17 +229,17 @@ class ContentHandler implements ContentHandlerInterface
             $this->backend->create(
                 "Content\\VersionInfo",
                 array(
-                    "names"               => $versionInfo->names,
-                    "versionNo"           => $versionInfo->versionNo,
-                    "modificationDate"    => $time,
-                    "creatorId"           => $versionInfo->creatorId,
-                    "creationDate"        => $time,
-                    "contentId"           => $contentObj->contentInfo->id,
-                    "status"              => $versionInfo->versionNo === $currentVersionNo ?
-                        VersionInfo::STATUS_DRAFT :
-                        $versionInfo->status,
+                    "names" => $versionInfo->names,
+                    "versionNo" => $versionInfo->versionNo,
+                    "modificationDate" => $time,
+                    "creatorId" => $versionInfo->creatorId,
+                    "creationDate" => $time,
+                    "contentId" => $contentObj->contentInfo->id,
                     "initialLanguageCode" => $versionInfo->initialLanguageCode,
-                    "languageIds"         => $versionInfo->languageIds
+                    "languageIds" => $versionInfo->languageIds,
+                    "status" => $versionInfo->versionNo === $currentVersionNo ?
+                        VersionInfo::STATUS_DRAFT :
+                        $versionInfo->status
                 )
             );
         }
@@ -281,7 +281,7 @@ class ContentHandler implements ContentHandlerInterface
             "Content\\Field",
             array(
                 "_contentId" => $contentObj->contentInfo->id,
-                "versionNo"  => $currentVersionNo
+                "versionNo" => $currentVersionNo
             )
         );
 
