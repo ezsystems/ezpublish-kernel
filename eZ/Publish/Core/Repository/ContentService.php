@@ -1065,7 +1065,23 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion( APIVersionInfo $versionInfo, $publicationDate = null )
+    public function publishVersion( APIVersionInfo $versionInfo )
+    {
+        return $this->internalPublishVersion( $versionInfo );
+    }
+
+    /**
+     * Publishes a content version
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param int|null $publicationDate
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function internalPublishVersion( APIVersionInfo $versionInfo, $publicationDate = null )
     {
         if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
             throw new BadStateException( "versionInfo", "only versions in draft status can be published" );
@@ -1174,7 +1190,7 @@ class ContentService implements ContentServiceInterface
             $versionInfo ? $versionInfo->versionNo : null
         );
 
-        $content = $this->publishVersion(
+        $content = $this->internalPublishVersion(
             $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
             $spiContent->versionInfo->creationDate
         );
