@@ -1217,9 +1217,9 @@ class ContentService implements ContentServiceInterface
 
         return new SearchResult(
             array(
-                'query'  =>  clone $query,
-                'count'  =>  $spiSearchResult->count,
-                'items'  =>  $contentItems
+                'query' => clone $query,
+                'count' => $spiSearchResult->count,
+                'items' => $contentItems
             )
         );
     }
@@ -1253,41 +1253,6 @@ class ContentService implements ContentServiceInterface
         }
 
         return reset( $searchResult->items );
-    }
-
-    /**
-     * Returns a filtered array of given fields when the given <b>$languages</b>
-     * is not <b>NULL</b> and not empty.
-     *
-     * @param int $contentTypeId
-     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
-     * @param array $languageCodes
-     *
-     * @return array
-     */
-    private function filterFieldsByLanguages( $contentTypeId, array $spiFields, array $languageCodes = null )
-    {
-        if ( null === $languageCodes || 0 === count( $languageCodes ) )
-        {
-            return $spiFields;
-        }
-
-        $contentType = $this->repository->getContentTypeService()->loadContentType( $contentTypeId );
-
-        $filteredFields = array();
-        foreach ( $spiFields as $field )
-        {
-            if ( false === $contentType->getFieldDefinition( $field->fieldDefinitionId )->isTranslatable )
-            {
-                $filteredFields[] = $field;
-            }
-            else if ( in_array( $field->languageCode, $languageCodes ) )
-            {
-                $filteredFields[] = $field;
-            }
-        }
-
-        return $filteredFields;
     }
 
     /**
@@ -1530,23 +1495,18 @@ class ContentService implements ContentServiceInterface
      * Builds a Content domain object from value object returned from persistence
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
-     * @param array $spiFields
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    protected function buildContentDomainObject( SPIContent $spiContent, array $spiFields = null )
+    protected function buildContentDomainObject( SPIContent $spiContent )
     {
-        $fields = $this->buildDomainFields(
-            null === $spiFields ? $spiContent->fields : $spiFields
-        );
-
         return new Content(
             array(
                 "repository"     => $this->repository,
                 "id"             => $spiContent->contentInfo->id,
                 "versionNo"      => $spiContent->versionInfo->versionNo,
                 "contentTypeId"  => $spiContent->contentInfo->contentTypeId,
-                "internalFields" => $fields,
+                "internalFields" => $this->buildDomainFields( $spiContent->fields ),
                 // @TODO: implement loadRelations()
                 //"relations" => $this->loadRelations( $versionInfo )
             )
