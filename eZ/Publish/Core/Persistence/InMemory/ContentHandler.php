@@ -75,7 +75,6 @@ class ContentHandler implements ContentHandlerInterface
             ),
             true
         );
-        $time = time();
         $languageCodes = array();
         $languageIds = array();
         foreach ( $content->fields as $field )
