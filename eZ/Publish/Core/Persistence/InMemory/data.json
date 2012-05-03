@@ -30,11 +30,11 @@
         {"id": 10, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 12},
         {"id": 11, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Anonymous Users"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 42},
         {"id": 12, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 42},
-        {"id": 22, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Guest accounts"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 11},
-        {"id": 22, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Members"}, "languageCode": "eng-GB", "versionNo": 2, "_contentId": 11},
-        {"id": 23, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 11},
-        {"id": 23, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 2, "_contentId": 11},
         {"id": 13, "fieldDefinitionId": 3, "type": "ezstring", "value": {"text": "Administrator user"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 10},
+        {"id": 23, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Guest accounts"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 11},
+        {"id": 24, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Members"}, "languageCode": "eng-GB", "versionNo": 2, "_contentId": 11},
+        {"id": 25, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 11},
+        {"id": 26, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "languageCode": "eng-GB", "versionNo": 2, "_contentId": 11},
         {"id": 1331, "fieldDefinitionId": 3, "type": "ezstring", "value": {"text": "Anonymous User"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 14}
 
     ],
