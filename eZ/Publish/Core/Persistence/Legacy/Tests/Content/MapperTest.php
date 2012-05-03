@@ -144,6 +144,7 @@ class MapperTest extends TestCase
     public function testCreateVersionInfoForContent()
     {
         $content = $this->getFullContentFixture();
+        $time = time();
 
         $mapper = $this->getMapper();
         $this->languageHandler
@@ -176,10 +177,11 @@ class MapperTest extends TestCase
                 'contentId' => 2342,
                 'initialLanguageCode' => 'eng-GB',
                 'languageIds' => array( 2 ),
-
             ),
             $versionInfo
         );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->creationDate );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->modificationDate );
     }
 
     /**
@@ -359,6 +361,7 @@ class MapperTest extends TestCase
      */
     public function testCreateCreateStructFromContent()
     {
+        $time = time();
         $mapper = $this->getMapper();
         $this->languageHandler
             ->expects( $this->once() )
@@ -385,7 +388,8 @@ class MapperTest extends TestCase
         );
         return array(
             'original' => $content,
-            'result' => $struct
+            'result' => $struct,
+            'time' => $time
         );
 
         // parentLocations
@@ -401,16 +405,17 @@ class MapperTest extends TestCase
     {
         $content = $data['original'];
         $struct = $data['result'];
+        $time = $data['time'];
         $this->assertStructsEqual(
             $content->contentInfo,
             $struct,
-            array( 'sectionId', 'ownerId', 'remoteId' )
+            array( 'sectionId', 'ownerId' )
         );
+        self::assertNotEquals( $content->contentInfo->remoteId, $struct->remoteId );
         self::assertSame( $content->contentInfo->contentTypeId, $struct->typeId );
         self::assertSame( 2, $struct->initialLanguageId );
         self::assertSame( $content->contentInfo->isAlwaysAvailable, $struct->alwaysAvailable );
-        self::assertSame( $content->contentInfo->modificationDate, $struct->modified );
-
+        self::assertGreaterThanOrEqual( $time, $struct->modified );
     }
 
     /**

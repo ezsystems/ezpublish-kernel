@@ -167,12 +167,14 @@ interface Handler
      * Copies all fields from $contentId in $version (or all versions if false)
      * to a new object which is returned. Version numbers are maintained.
      *
-     * @param mixed $contentId
-     * @param int|false $version Copy all versions if left false
-     * @return \eZ\Publish\SPI\Persistence\Content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found
+     *
+     * @param mixed $contentId
+     * @param mixed|null $versionNo Copy all versions if left null
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function copy( $contentId, $version );
+    public function copy( $contentId, $versionNo = null );
 
     /**
      * Creates a relation between $sourceContentId in $sourceContentVersionNo

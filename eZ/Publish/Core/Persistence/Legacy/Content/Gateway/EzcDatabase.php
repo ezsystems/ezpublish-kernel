@@ -97,9 +97,11 @@ class EzcDatabase extends Gateway
      * Inserts a new content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
+     * @param mixed $currentVersionNo
+     *
      * @return int ID
      */
-    public function insertContentObject( CreateStruct $struct )
+    public function insertContentObject( CreateStruct $struct, $currentVersionNo = 1 )
     {
         if ( isset( $struct->name['always-available'] ) )
         {
@@ -118,7 +120,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'current_version' ),
-            $q->bindValue( 1, null, \PDO::PARAM_INT )
+            $q->bindValue( $currentVersionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $name )
@@ -846,17 +848,17 @@ class EzcDatabase extends Gateway
             ->select( '*' )
             ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
             ->where(
-            $qName->expr->lAnd(
-                $qName->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                    $qName->bindValue( $contentId )
-                    ),
-                $qName->expr->eq(
-                        $this->dbHandler->quoteColumn( 'content_version' ),
-                    $qName->bindValue( $versionNo )
+                $qName->expr->lAnd(
+                    $qName->expr->eq(
+                            $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                        $qName->bindValue( $contentId )
+                        ),
+                    $qName->expr->eq(
+                            $this->dbHandler->quoteColumn( 'content_version' ),
+                        $qName->bindValue( $versionNo )
+                        )
                     )
-                )
-            );
+                );
         $stmt = $qName->prepare();
         $stmt->execute();
         $row['names'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
