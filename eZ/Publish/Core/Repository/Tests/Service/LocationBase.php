@@ -44,6 +44,7 @@ abstract class LocationBase extends BaseServiceTest
                 'remoteId'                => null,
                 'parentLocationId'        => null,
                 'pathString'              => null,
+                'path'                    => array(),
                 'modifiedSubLocationDate' => null,
                 'depth'                   => null,
                 'sortField'               => null,
@@ -377,6 +378,8 @@ abstract class LocationBase extends BaseServiceTest
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $createdLocation );
         self::assertGreaterThan( 0, $createdLocation->id );
+        $createdPath = $parentLocation->path;
+        $createdPath[] = $createdLocation->id;
 
         $this->assertPropertiesCorrect(
             array(
@@ -386,6 +389,7 @@ abstract class LocationBase extends BaseServiceTest
                 'remoteId'                => $locationCreateStruct->remoteId,
                 'parentLocationId'        => $locationCreateStruct->parentLocationId,
                 'pathString'              => $parentLocation->pathString . $createdLocation->id . '/',
+                'path'                    => $createdPath,
                 'depth'                   => $parentLocation->depth + 1,
                 'sortField'               => $locationCreateStruct->sortField,
                 'sortOrder'               => $locationCreateStruct->sortOrder,
@@ -394,7 +398,7 @@ abstract class LocationBase extends BaseServiceTest
             $createdLocation
         );
 
-        self::assertEquals( $contentInfo->id, $createdLocation->getContentInfo()->contentId );
+        self::assertEquals( $contentInfo->id, $createdLocation->getContentInfo()->id );
     }
 
     /**
