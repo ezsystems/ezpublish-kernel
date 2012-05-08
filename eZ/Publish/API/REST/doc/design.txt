@@ -156,12 +156,31 @@ be handled by the concrete parsers. For JSON this just means a call to
 
 The XML data is converted by the ``Common\Input\Handler\Xml`` implementation
 which will generate the JSON array structure from the XML. There is one
-speciality in this conversion process when it comes to lists. Since it is
-possible in XML that an element may contain multiple elements with the same
-name those are converted into an array in JSON. To ensure that for certain
-elements which usually occur multiple times, but may also only occur once, we
-force this array conversion for certain elements. See the ``$forceList``
-property in ``Common/Input/Handler/Xml.php``.
+speciality in this conversion process when it comes to lists.
+
+In XML it is possible to have multiple elements with the same name in a direct
+row. This is not possible in JSON and therefore an array needs to be used here,
+which is also used in the common array structure.
+
+However, in XML it cannot be decided if an element is part of a list or
+stand-alone, if it only occurs once. For example::
+
+    <ContentList href="/content/objects">
+      <ContentInfo href="/content/contents/94" id="94">
+        <ContentType href="/content/types/23"/>
+      </ContentInfo>
+    </ContentList>
+
+In this case, it is not clear to the XML parser, that the ``<ContentInfo />``
+elements form a list, since only one occurs here. To conform to the same
+structure as achieved by ``json_decode()``, the parser needs to know that this
+specific combination of parent-child elements forms a list, no matter how many
+elements are present.
+
+To achieve this, the ``$forceList`` property in
+``Common/Input/Handler/Xml.php`` is used. It defines element combinations,
+which are forced to create a list structure. In order to use this mechanism for
+your purposes, just extend the array mapping.
 
 Calling A Parser
 ----------------
@@ -177,6 +196,40 @@ handles the data and converts it into the corresponding ``Value`` object.
 
 For aggregated data it may call again the ``Common\Input\ParsingDispatcher`` to
 dispatch the data handling to a specialized parser.
+
+Exchanging the Server Back End
+==============================
+
+The REST server simply works on an instance of the Public API implementation.
+In the test environment, this is the *in memory* implementation also used by
+the integration tests. However, for production use or other test scenarios,
+this must be replaced by a real world implementation of the public API.
+
+None of the infrastructure (MVC) parts of the REST API needs the repository. It
+is only needed for:
+
+1. Controller
+
+   A controller by now receives the services it needs in order to fulfill its
+   requests. These services must descend from the same repository. For example,
+   the ``SectionController`` needs the ``SectionService``.
+
+2. Authenticator
+
+   The ``Authenticator`` given to the enhanced dispatching mechanism needs the
+   Repository, in order to call ``setCurrentUser()`` on it, based on the
+   credentials provided by a REST client.
+
+It is a wise decision to have the used repository created by a Dependency
+Injection Container, or similar, and to have this inject the necessary services
+into other components.
+
+
+.. note::
+    Since the memory back end used for integration tests does not provide state
+    between requests, the ``index.php`` used for integration currently
+    implements a rudimentary session management. This should not be required for
+    any other setup! See the ``index.php`` for further detail.
 
 Authentication
 ==============
@@ -232,6 +285,8 @@ configuration can be found in the inline documentation.
 
 The test client is configured in ``restapiv2/eZ/Publish/API/REST/common.php``.
 Details can also be found in the inline documentation.
+
+You can find addtional details on extending throughout this document.
 
 Running The Tests
 =================
