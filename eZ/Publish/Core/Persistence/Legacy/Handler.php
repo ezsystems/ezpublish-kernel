@@ -413,7 +413,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a storage handler
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\StorageHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getStorageHandler()
     {
