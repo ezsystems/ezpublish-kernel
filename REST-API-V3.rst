@@ -197,6 +197,13 @@ In the content module there are the root collections objects, locations, trash a
 /content/sections/<ID>                                .                   load section            update section               delete section
 /content/trash                                        .                   list trash items        .                            empty trash
 /content/trash/<ID>                                   .                   load trash item         untrash item                 delete from trsh
+/content/objectstategroups                            create objectstate  list objectstategroups  .                            .
+                                                      group
+/content/objectstategroups/<ID>                       .                   get objectstate group   update objectstategroup      delete osg.
+/content/objectstategroups/<ID>/objectstates          create object state list object states      .                            .          
+/content/objectstategroups/<ID>/objectstates/<ID>     .                   get object state        update objectstate           delete objectst.
+/content/objects/<ID>/objectstates                    .                   get object states of    update objectstates of       .
+                                                                          content                 content
 ===================================================== =================== ======================= ============================ ================ ==============
 
 
@@ -1569,7 +1576,7 @@ Get locations for a content object
 
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
@@ -1876,6 +1883,11 @@ Delete Subtree
     :404: If the  location with the given id does not exist
     :401: If the user is not authorized to delete this subtree  
 
+Url Alias
+~~~~~~~~~
+
+
+
 Views
 ~~~~~
 
@@ -2050,7 +2062,7 @@ List views
  
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
@@ -2069,7 +2081,7 @@ Get View
  
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
@@ -2092,7 +2104,7 @@ Get Results of existing View
  
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
@@ -2198,14 +2210,14 @@ Get Sections
 :Description: Returns a list of all sections
 :Headers:
     :Accept:
-         :application/vnd.ez.api.SectionList+xml:  if set the new section list is returned in xml format (see Section_)
-         :application/vnd.ez.api.SectionList+json:  if set the new section list is returned in json format (see Section_)
+         :application/vnd.ez.api.SectionList+xml:  if set the section list is returned in xml format (see Section_)
+         :application/vnd.ez.api.SectionList+json:  if set the section list is returned in json format (see Section_)
     :If-None-Match: <etag>
 :Response:
  
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           ETag: "<etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
@@ -2266,20 +2278,20 @@ Get Section
 :Description: Returns the section given by id
 :Headers:
     :Accept:
-         :application/vnd.ez.api.Section+xml:  if set the new section is returned in xml format (see Section_)
-         :application/vnd.ez.api.Section+json:  if set the new section is returned in json format (see Section_)
+         :application/vnd.ez.api.Section+xml:  if set the section is returned in xml format (see Section_)
+         :application/vnd.ez.api.Section+json:  if set the section is returned in json format (see Section_)
     :If-None-match: <etag>
 :Response: 
 
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           ETag: "<etag>"
           Accept-Patch: application/vnd.ez.api.SectionInput+(xml|json)
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Section_  (sectionListType)    
+          Section_
 
 :ErrorCodes:
     :401: If the user is not authorized to read this section  
@@ -2320,8 +2332,8 @@ Update a Section
 :Description: Updates a section
 :Headers:
     :Accept:
-         :application/vnd.ez.api.Section+xml:  if set the new section is returned in xml format (see Section_)
-         :application/vnd.ez.api.Section+json:  if set the new section is returned in json format (see Section_)
+         :application/vnd.ez.api.Section+xml:  if set the updated section is returned in xml format (see Section_)
+         :application/vnd.ez.api.Section+json:  if set the updated section is returned in json format (see Section_)
     :Content-Type:
          :application/vnd.ez.api.SectionInput+json: the Section_ input schema encoded in json
          :application/vnd.ez.api.SectionInput+xml: the Section_ input schema encoded in xml
@@ -2330,7 +2342,7 @@ Update a Section
 
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           ETag: "<etag>"
           Accept-Patch: application/vnd.ez.api.SectionInput+(xml|json)
           Content-Type: <depending on accept header>
@@ -2376,7 +2388,7 @@ List TrashItems
 
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
@@ -2455,6 +2467,326 @@ Delete TrashItem
 :Error Codes:
     :401: If the user is not authorized to empty the given trash item
     :404: if the given trash item does not exist
+
+Object States
+~~~~~~~~~~~~~
+
+Create ObjectStateGroup
+```````````````````````
+:Resource: /content/objectstategroups
+:Method: POST
+:Description: Creates a new objectstategroup
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectStateGroup+xml:  if set the new object state group is returned in xml format (see ObjectStateGroup_)
+         :application/vnd.ez.api.ObjectStateGroup+json:  if set the new object state group is returned in json format (see ObjectStateGroup_)
+    :Content-Type:
+         :application/vnd.ez.api.ObjectStateGroupCreate+json: the ObjectStateGroup_ input schema encoded in json
+         :application/vnd.ez.api.ObjectStateGroupCreate+xml: the ObjectStateGroup_ input schema encoded in xml
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 201 Created
+          Location: /content/objectstategroup/<ID>
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.ObjectStateGroupInput+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_      
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to create an object state group
+    :403: If a object state group with same identifier already exists
+
+List ObjectStateGroups
+``````````````````````
+:Resource: /content/objectstategroups
+:Method: GET
+:Description: Returns a list of all object state groups
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectStateGroupList+xml:  if set the object state group list is returned in xml format (see ObjectStateGroup_)
+         :application/vnd.ez.api.ObjectStateGroupList+json:  if set the object state group list is returned in json format (see ObjectStateGroup_)
+    :If-None-Match: <etag>
+:Response:
+ 
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_  
+
+:Error Codes:
+    :401: If the user has no permission to read object state groups
+
+
+
+Get ObjectStateGroup
+````````````````````
+:Resource: /content/objectstategroups/<ID>
+:Method: GET
+:Description: Returns the object state group given by id
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectStateGroup+xml:  if set the object state group is returned in xml format (see ObjectStateGroup_)
+         :application/vnd.ez.api.ObjectStateGroup+json:  if set the object state group is returned in json format (see ObjectStateGroup_)
+    :If-None-match: <etag>
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.ObjectStateGroupUpdate+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_ 
+
+:ErrorCodes:
+    :401: If the user is not authorized to read object state groups
+    :404: If the sobject state group does not exist
+
+Update ObjectStateGroup
+```````````````````````
+:Resource: /content/objectstategroups/<ID>
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Description: Updates an object state group
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectStateGroup+xml:  if set the updated object state group  is returned in xml format (see ObjectStateGroup_)
+         :application/vnd.ez.api.ObjectStateGroup+json:  if set the updated object state group is returned in json format (see ObjectStateGroup_)
+    :Content-Type:
+         :application/vnd.ez.api.ObjectStateGroupUpdate+json: the ObjectStateGroup_ input schema encoded in json
+         :application/vnd.ez.api.ObjectStateGroupUpdate+xml: the ObjectStateGroup_ input schema encoded in xml
+    :If-Match: <etag>
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.ObjectStateGroupUpdate+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_  
+
+:Error Codes:
+    :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to update an object state group
+    :403: If an object state group with the given new identifier already exists
+    :412: If the current ETag does not match with the provided one in the If-Match header
+
+Delete ObjectStateGroup
+```````````````````````
+:Resource: /content/objectstategroups/<ID>
+:Method: DELETE
+:Description: the given object state group including the object states is deleted
+:Parameters:
+:Response: 
+
+.. code:: http
+        
+         HTTP/1.1 204 No Content
+
+:Error Codes:
+    :401: If the user is not authorized to delete an object state group
+    :404: If the object statee group does not exist
+
+Create ObjectState
+``````````````````
+:Resource: /content/objectstategroups/<ID>/objectstates
+:Method: POST
+:Description: Creates a new objectstate
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectState+xml:  if set the new object state is returned in xml format (see ObjectState_)
+         :application/vnd.ez.api.ObjectState+json:  if set the new object state is returned in json format (see ObjectState_)
+    :Content-Type:
+         :application/vnd.ez.api.ObjectStateGroupCreate+json: the ObjectState_ input schema encoded in json
+         :application/vnd.ez.api.ObjectStateGroupCreate+xml: the ObjectState_ input schema encoded in xml
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 201 Created
+          Location: /content/objectstategroup/<ID>/objectstate/<ID>
+          ETag: "<new etag>"
+          Accept-Patch: application/vnd.ez.api.ObjectStateUpdate+(json|xml)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_      
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to create an object state 
+    :403: If a object state with same identifier already exists in the given group
+
+List Objectstates
+`````````````````
+:Resource: /content/objectstategroups/<ID>/objectstates
+:Method: GET
+:Description: Returns a list of all object states of the given group 
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectStateList+xml:  if set the object state list is returned in xml format (see ObjectState_)
+         :application/vnd.ez.api.ObjectStateList+json:  if set the object state list is returned in json format (see ObjectState_)
+    :If-None-Match: <etag>
+:Response:
+ 
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_  
+
+:Error Codes:
+    :401: If the user has no permission to read object states
+
+
+
+Get ObjectState
+```````````````
+:Resource: /content/objectstategroups/<ID>/objectstates/<ID>
+:Method: GET
+:Description: Returns the object state 
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectState+xml:  if set the object state is returned in xml format (see ObjectState_)
+         :application/vnd.ez.api.ObjectState+json:  if set the object state is returned in json format (see ObjectState_)
+    :If-None-match: <etag>
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.ObjectStateUpdate+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_ 
+
+:ErrorCodes:
+    :401: If the user is not authorized to read object state groups
+    :404: If the sobject state group does not exist
+
+Update ObjectState
+``````````````````
+:Resource: /content/objectstategroups/<ID>/objectstates/<ID>
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Description: Updates an object state
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ObjectState+xml:  if set the updated object state  is returned in xml format (see ObjectState_)
+         :application/vnd.ez.api.ObjectState+json:  if set the updated object state is returned in json format (see ObjectState_)
+    :Content-Type:
+         :application/vnd.ez.api.ObjectStateUpdate+json: the ObjectState_ input schema encoded in json
+         :application/vnd.ez.api.ObjectStateUpdate+xml: the ObjectState_ input schema encoded in xml
+    :If-Match: <etag>
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.ObjectStateUpdate+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ObjectStateGroup_  
+
+:Error Codes:
+    :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to update an object state 
+    :403: If an object state with the given new identifier already exists in this group
+    :412: If the current ETag does not match with the provided one in the If-Match header
+
+Delete ObjectState
+``````````````````
+:Resource: /content/objectstategroups/<ID>/objectstates/<ID>
+:Method: DELETE
+:Description: the given object state is deleted
+:Parameters:
+:Response: 
+
+.. code:: http
+        
+         HTTP/1.1 204 No Content
+
+:Error Codes:
+    :401: If the user is not authorized to delete an object state group
+    :404: If the object state does not exist
+
+
+Get ObjectStates of Content
+```````````````````````````
+:Resource: /content/objects/<ID>/objectstates
+:Method: GET
+:Description: Returns the object states of content 
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentObjectStates+xml:  if set the object state is returned in xml format (see ContentObjectStates_)
+         :application/vnd.ez.api.ContentObjectStates+json:  if set the object state is returned in json format (see ContentObjectStates_)
+    :If-None-match: <etag>
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.ContentObjectStates+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ContentObjectStates_ 
+
+:ErrorCodes:
+    :404: If the content object does not exist
+
+Set ObjectStates of Content
+```````````````````````````
+:Resource: /content/objects/<ID>/objectstates
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Description: Updates object states of content. An object state in the input overrides the state of the object state group.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentObjectStates+xml:  if set the updated object state  is returned in xml format (see ContentObjectStates_)
+         :application/vnd.ez.api.ContentObjectStates+json:  if set the updated object state is returned in json format (see ContentObjectStates_)
+    :Content-Type:
+         :application/vnd.ez.api.ContentObjectStates+json: the ContentObjectStates_ input schema encoded in json
+         :application/vnd.ez.api.ContentObjectStates+xml: the ContentObjectStates_ input schema encoded in xml
+    :If-Match: <etag>
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          ETag: "<etag>"
+          Accept-Patch: application/vnd.ez.api.ContentObjectStates+(xml|json)
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ContentObjectStates_  
+
+:Error Codes:
+    :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to set an object state 
+    :403: If the input contains multiple object states of the same object state group
+    :412: If the current ETag does not match with the provided one in the If-Match header
+
+
 
 Content Types
 =============
@@ -2568,7 +2900,7 @@ Get Content Type Groups
 
 .. code:: http
 
-          HTTP/1.1 200
+          HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
@@ -3346,7 +3678,7 @@ XML Example
 Unlink Group from Content Type
 ``````````````````````````````
 :Resource: /content/type/<ID>/groups/<ID>
-:Method: POST
+:Method: DELETE
 :Description: removes the given group from the content type and returns the updated group list
 :Headers:
     :Accept:
@@ -3372,7 +3704,7 @@ XML Example
 
 .. code:: http
 
-    POST /content/types/32/unlinkgroup?/content/typegroups/7
+    DELETE /content/types/32/groups/7
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
     
 .. code:: http
@@ -6445,6 +6777,237 @@ Section XML Schema
       
       
     </xsd:schema>
+
+.. _ObjectStateGroup:
+
+ObjectStateGroup XML Schema
+---------------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="vnd.ez.api.ObjectStateGroup">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:int">
+              </xsd:element>
+              <xsd:element name="identifier" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Readable string identifier of a group
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="defaultLanguageCode" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the default language code
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="languageCodes" type="xsd:string"
+                minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Comma separated List of language codes
+                    present in names and descriptions
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="names" type="multiLanguageValuesType" />
+              <xsd:element name="descriptions" type="multiLanguageValuesType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ObjectStateGroupList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="ObjectStateGroup" type="vnd.ez.api.ObjectStateGroup"
+                maxOccurs="unbounded"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ObjectStateGroupCreate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Readable string identifier of a group
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultLanguageCode" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                the default language code
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType" minOccurs="0"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ObjectStateGroupUpdate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Readable string identifier of a group
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultLanguageCode" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                the default language code
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" minOccurs="0"/>
+          <xsd:element name="descriptions" type="multiLanguageValuesType" minOccurs="0" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ObjectStateGroupCreate" type="vnd.ez.api.ObjectStateGroupCreate" />
+      <xsd:element name="ObjectStateGroupUpdate" type="vnd.ez.api.ObjectStateGroupUpdate" />
+      <xsd:element name="ObjectStateGroup" type="vnd.ez.api.ObjectStateGroup" />
+      <xsd:element name="ObjectStateGroupList" type="vnd.ez.api.ObjectStateGroupList" />
+    </xsd:schema>
+
+.. _ObjectState:
+
+ObjectStates XML Schema
+-----------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="vnd.ez.api.ObjectState">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:int">
+              </xsd:element>
+              <xsd:element name="identifier" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Readable string identifier of an object state
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="priority" type="xsd:int">
+              </xsd:element>
+              <xsd:element name="ObjectStateGroup" type="ref">
+              </xsd:element>
+              <xsd:element name="defaultLanguageCode" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the default language code
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="languageCodes" type="xsd:string"
+                minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Comma separated List of language codes
+                    present in names and descriptions
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="names" type="multiLanguageValuesType" />
+              <xsd:element name="descriptions" type="multiLanguageValuesType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ObjectStateList">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="ObjectState" type="vnd.ez.api.ObjectState"
+                maxOccurs="unbounded"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ObjectStateCreate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Readable string identifier of an object state
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="priority" type="xsd:int">
+          </xsd:element>
+          <xsd:element name="defaultLanguageCode" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                the default language code
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ObjectStateUpdate">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                Readable string identifier of an object state
+                  </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="priority" type="xsd:int"  minOccurs="0">
+          </xsd:element>
+          <xsd:element name="defaultLanguageCode" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation>
+                the default language code
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType"  minOccurs="0"/>
+          <xsd:element name="descriptions" type="multiLanguageValuesType"  minOccurs="0"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ObjectStateCreate" type="vnd.ez.api.ObjectStateCreate" />
+      <xsd:element name="ObjectStateUpdate" type="vnd.ez.api.ObjectStateUpdate" />
+      <xsd:element name="ObjectState" type="vnd.ez.api.ObjectState" />
+      <xsd:element name="ObjectStateList" type="vnd.ez.api.ObjectStateList" />
+    </xsd:schema>
+
+.. _ContentObjectStates:
+
+ContentObjectStates XML Schema
+------------------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="vnd.ez.api.ContentObjectStates">
+        <xsd:sequence>
+          <xsd:element name="ObjectState" type="ref" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+
 
 
 .. _ContentTypeGroup:
