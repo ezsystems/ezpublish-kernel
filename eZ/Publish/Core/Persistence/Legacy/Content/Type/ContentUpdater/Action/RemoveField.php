@@ -55,10 +55,11 @@ class RemoveField extends Action
      *
      * @param Content $content
      * @return void
-     * @todo Handle external field data.
      */
     public function apply( Content $content )
     {
+        $fieldIdsToRemoveMap = array();
+
         foreach ( $content->fields as $field )
         {
             if ( $field->fieldDefinitionId == $this->fieldDefinition->id )
@@ -66,7 +67,12 @@ class RemoveField extends Action
                 $this->contentGateway->deleteField(
                     $field->id, $field->versionNo
                 );
+                $fieldIdsToRemoveMap[$field->type][] = $field->id;
             }
+        }
+
+        foreach ( $fieldIdsToRemoveMap as $fieldType => $ids ) {
+            $this->storageHandler->deleteFieldData( $fieldType, $ids);
         }
     }
 }

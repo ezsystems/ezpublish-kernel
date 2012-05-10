@@ -73,6 +73,13 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 13 )
             );
 
+        $this->getContentStorageHandlerMock()->expects( $this->once() )
+            ->method( 'deleteFieldData' )
+            ->with(
+                $this->equalTo( 'ezstring' ),
+                $this->equalTo( array( 3 ) )
+            );
+
         $action->apply( $content );
     }
 
@@ -87,11 +94,13 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
         $fieldNoRemove->id = 2;
         $fieldNoRemove->versionNo = 13;
         $fieldNoRemove->fieldDefinitionId = 23;
+        $fieldNoRemove->type = 'ezstring';
 
         $fieldRemove = new Content\Field();
         $fieldRemove->id = 3;
         $fieldRemove->versionNo = 13;
         $fieldRemove->fieldDefinitionId = 42;
+        $fieldRemove->type = 'ezstring';
 
         $content = new Content();
         $content->versionInfo = new Content\VersionInfo();
