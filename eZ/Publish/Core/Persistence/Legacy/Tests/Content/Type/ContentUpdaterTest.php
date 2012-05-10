@@ -40,6 +40,13 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     protected $searchHandlerMock;
 
     /**
+     * Content StorageHandler mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected $contentStorageHandlerMock;
+
+    /**
      * Content Updater to test
      *
      * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
@@ -98,7 +105,8 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             array(
                 new ContentUpdater\Action\RemoveField(
                     $this->getContentGatewayMock(),
-                    $fromType->fieldDefinitions[0]
+                    $fromType->fieldDefinitions[0],
+                    $this->getContentStorageHandlerMock()
                 ),
                 new ContentUpdater\Action\AddField(
                     $this->getContentGatewayMock(),
@@ -254,6 +262,26 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a Content StorageHandler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected function getContentStorageHandlerMock()
+    {
+        if ( !isset( $this->contentStorageHandlerMock ) )
+        {
+            $this->contentStorageHandlerMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->contentStorageHandlerMock;
+    }
+
+    /**
      * Returns the content updater to test
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
@@ -265,7 +293,8 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             $this->contentUpdater = new ContentUpdater(
                 $this->getSearchHandlerMock(),
                 $this->getContentGatewayMock(),
-                $this->getConverterRegistryMock()
+                $this->getConverterRegistryMock(),
+                $this->getContentStorageHandlerMock()
             );
         }
         return $this->contentUpdater;

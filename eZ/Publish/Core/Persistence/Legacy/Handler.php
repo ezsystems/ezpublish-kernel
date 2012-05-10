@@ -551,7 +551,8 @@ class Handler implements HandlerInterface
                     new Type\ContentUpdater(
                         $this->searchHandler(),
                         $this->getContentGateway(),
-                        $this->getFieldValueConverterRegistry()
+                        $this->getFieldValueConverterRegistry(),
+                        $this->getStorageHandler()
                     )
                 );
             }

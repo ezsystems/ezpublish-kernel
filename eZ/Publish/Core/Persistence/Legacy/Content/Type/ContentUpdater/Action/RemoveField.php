@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -26,17 +27,27 @@ class RemoveField extends Action
     protected $fieldDefinition;
 
     /**
+     * Storage handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected $storageHandler;
+
+    /**
      * Creates a new action
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      */
     public function __construct(
         ContentGateway $contentGateway,
-        FieldDefinition $fieldDef )
+        FieldDefinition $fieldDef,
+        StorageHandler $storageHandler )
     {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
+        $this->storageHandler = $storageHandler;
     }
 
     /**
