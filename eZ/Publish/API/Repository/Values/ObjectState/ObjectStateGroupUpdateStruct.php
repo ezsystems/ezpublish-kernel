@@ -21,41 +21,34 @@ class ObjectStateGroupUpdateStruct extends ValueObject
      * Readable string identifier of a group
      *
      * @required
-     * 
+     *
      * @var string
      */
     public $identifier;
-    
-    /**
-     * Priority for ordering. If not set the object state is created as the last one.
-     *
-     * @var int
-     */
-    public $priority = false;
-    
+
     /**
      * the default language code
      *
      * @required
-     *  
+     *
      * @var string
      */
     public $defaultLanguageCode;
 
      /**
      * An array of names with languageCode keys
-     * 
+     *
      * @required - at least one name in the main language is required
-     * 
+     *
      * @var string[]
      */
     public $names;
 
     /**
      * An array of descriptions with languageCode keys
-     * 
+     *
      * @var string[]
      */
     public $descriptions;
-    
+
 }
