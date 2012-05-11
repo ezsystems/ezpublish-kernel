@@ -95,6 +95,9 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
                 )
             )->will( $this->returnValue( 23 ) );
 
+        $this->getContentStorageHandlerMock()->expects( $this->once() )
+            ->method( 'storeFieldData' );
+
         $action->apply( $content );
 
         $this->assertEquals(

@@ -72,7 +72,7 @@ class RemoveField extends Action
         }
 
         foreach ( $fieldIdsToRemoveMap as $fieldType => $ids ) {
-            $this->storageHandler->deleteFieldData( $fieldType, $ids);
+            $this->storageHandler->deleteFieldData( $fieldType, $ids );
         }
     }
 }
