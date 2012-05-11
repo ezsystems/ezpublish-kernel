@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
@@ -143,6 +144,7 @@ class MapperTest extends TestCase
     public function testCreateVersionInfoForContent()
     {
         $content = $this->getFullContentFixture();
+        $time = time();
 
         $mapper = $this->getMapper();
         $this->languageHandler
@@ -175,10 +177,11 @@ class MapperTest extends TestCase
                 'contentId' => 2342,
                 'initialLanguageCode' => 'eng-GB',
                 'languageIds' => array( 2 ),
-
             ),
             $versionInfo
         );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->creationDate );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->modificationDate );
     }
 
     /**
@@ -255,7 +258,6 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @todo Load referencing locations!
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
@@ -263,16 +265,10 @@ class MapperTest extends TestCase
      */
     public function testExtractContentFromRows()
     {
-        $locationMapperMock = $this->getLocationMapperMock();
-        $locationMapperMock->expects( $this->once() )
-            ->method( 'createLocationFromRow' )
-            ->with( $this->isType( 'array' ) )
-            ->will( $this->returnValue( new Content\Location() ) );
-
         $convMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->exactly( 12 ) )
+        $convMock->expects( $this->exactly( 13 ) )
             ->method( 'toFieldValue' )
             ->with(
                 $this->isInstanceOf(
@@ -296,7 +292,7 @@ class MapperTest extends TestCase
 
         $rowsFixture = $this->getContentExtractFixture();
 
-        $mapper = new Mapper( $locationMapperMock, $reg, $this->getLanguageHandlerMock() );
+        $mapper = new Mapper( new LocationMapper(), $reg, $this->getLanguageHandlerMock() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -365,6 +361,7 @@ class MapperTest extends TestCase
      */
     public function testCreateCreateStructFromContent()
     {
+        $time = time();
         $mapper = $this->getMapper();
         $this->languageHandler
             ->expects( $this->once() )
@@ -391,7 +388,8 @@ class MapperTest extends TestCase
         );
         return array(
             'original' => $content,
-            'result' => $struct
+            'result' => $struct,
+            'time' => $time
         );
 
         // parentLocations
@@ -407,16 +405,17 @@ class MapperTest extends TestCase
     {
         $content = $data['original'];
         $struct = $data['result'];
+        $time = $data['time'];
         $this->assertStructsEqual(
             $content->contentInfo,
             $struct,
-            array( 'sectionId', 'ownerId', 'remoteId' )
+            array( 'sectionId', 'ownerId' )
         );
+        self::assertNotEquals( $content->contentInfo->remoteId, $struct->remoteId );
         self::assertSame( $content->contentInfo->contentTypeId, $struct->typeId );
         self::assertSame( 2, $struct->initialLanguageId );
         self::assertSame( $content->contentInfo->isAlwaysAvailable, $struct->alwaysAvailable );
-        self::assertSame( $content->contentInfo->modificationDate, $struct->modified );
-
+        self::assertGreaterThanOrEqual( $time, $struct->modified );
     }
 
     /**

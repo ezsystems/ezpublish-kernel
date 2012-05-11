@@ -39,6 +39,8 @@ class Status extends Criterion implements CriterionInterface
      * Creates a new Status criterion
      *
      * @param string|string[] $value Status: self::STATUS_ARCHIVED, self::STATUS_DRAFT, self::STATUS_PUBLISHED
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct( $value )
     {

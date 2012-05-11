@@ -6,6 +6,34 @@ CREATE TABLE 'ezbinaryfile' (
 	'original_filename' text(255) NOT NULL,
 	'version' integer NOT NULL DEFAULT 0
 );
+CREATE TABLE 'ezcobj_state' (
+	'default_language_id' integer NOT NULL DEFAULT 0,
+	'group_id' integer NOT NULL DEFAULT 0,
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'identifier' text(45) NOT NULL DEFAULT '',
+	'language_mask' integer NOT NULL DEFAULT 0,
+	'priority' integer NOT NULL DEFAULT 0
+);
+CREATE TABLE 'ezcobj_state_group' (
+	'default_language_id' integer NOT NULL DEFAULT 0,
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'identifier' text(45) NOT NULL DEFAULT '',
+	'language_mask' integer NOT NULL DEFAULT 0
+);
+CREATE TABLE 'ezcobj_state_group_language' (
+	'contentobject_state_group_id' integer NOT NULL DEFAULT 0,
+	'description' text NOT NULL,
+	'language_id' integer NOT NULL DEFAULT 0,
+	'name' text(45) NOT NULL DEFAULT '',
+	PRIMARY KEY ( contentobject_state_group_id, language_id )
+);
+CREATE TABLE 'ezcobj_state_language' (
+	'contentobject_state_id' integer NOT NULL DEFAULT 0,
+	'description' text NOT NULL,
+	'language_id' integer NOT NULL DEFAULT 0,
+	'name' text(45) NOT NULL DEFAULT '',
+	PRIMARY KEY ( contentobject_state_id, language_id )
+);
 CREATE TABLE 'ezcontent_language' (
 	'disabled' integer NOT NULL DEFAULT 0,
 	'id' integer NOT NULL DEFAULT 0,
@@ -302,6 +330,11 @@ CREATE TABLE 'ezsection' (
   'navigation_part_identifier' text(100) DEFAULT 'ezcontentnavigationpart'
 );
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
+CREATE UNIQUE INDEX 'ezcobj_state_identifier' ON 'ezcobj_state' ( 'group_id', 'identifier' );
+CREATE INDEX 'ezcobj_state_lmask' ON 'ezcobj_state' ( 'language_mask' );
+CREATE INDEX 'ezcobj_state_priority' ON 'ezcobj_state' ( 'priority' );
+CREATE UNIQUE INDEX 'ezcobj_state_group_identifier' ON 'ezcobj_state_group' ( 'identifier' );
+CREATE INDEX 'ezcobj_state_group_lmask' ON 'ezcobj_state_group' ( 'language_mask' );
 CREATE INDEX 'ezco_link_from' ON 'ezcontentobject_link' ( 'from_contentobject_id', 'from_contentobject_version', 'contentclassattribute_id' );
 CREATE INDEX 'ezco_link_to_co_id' ON 'ezcontentobject_link' ( 'to_contentobject_id' );
 CREATE INDEX 'ezcobj_trash_co_id' ON 'ezcontentobject_trash' ( 'contentobject_id' );

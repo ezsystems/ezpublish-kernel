@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a field of a content object
- * 
+ *
  * @property-read mixed $id an internal id of the field
  * @property-read string $fieldDefIdentifier the field definition identifier
  * @property-read $value the value of the field

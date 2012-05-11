@@ -109,6 +109,7 @@ class Value extends BaseValue
                 throw new PropertyNotFound( $name, get_class() );
         }
     }
+
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */

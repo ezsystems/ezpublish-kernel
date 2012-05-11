@@ -248,7 +248,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
     public function deleteContentTypeGroup( APIContentTypeGroup $contentTypeGroup )
     {
@@ -552,6 +552,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             )
         );
     }
+
     /**
      * Builds a ContentTypeDraft domain object from value object returned by persistence
      * Decorates ContentType

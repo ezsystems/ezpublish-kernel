@@ -46,7 +46,7 @@ abstract class Criterion
      * @param string[]|int[]|int|string $value
      *
      * @todo Add a dedicated exception
-     * @throws InvalidArgumentException if the provided operator isn't supported
+     * @throws \InvalidArgumentException if the provided operator isn't supported
      */
     public function __construct( $target, $operator, $value )
     {
@@ -117,7 +117,7 @@ abstract class Criterion
     /**
      * Returns a callback that checks the values types depending on the operator specifications
      * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
-     * @return callback
+     * @return \Closure
      */
     private function getValueTypeCheckCallback( $valueTypes )
     {

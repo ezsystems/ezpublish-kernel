@@ -20,7 +20,7 @@ class DateModified extends SortClauseHandler
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
      *
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @return bool
      */
     public function accept( SortClause $sortClause )
@@ -35,7 +35,7 @@ class DateModified extends SortClauseHandler
      * used for sorting.
      *
      * @param \ezcQuerySelect $query
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      * @return string
      */

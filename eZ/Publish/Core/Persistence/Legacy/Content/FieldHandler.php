@@ -12,7 +12,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
@@ -173,8 +172,7 @@ class FieldHandler
      */
     public function deleteFields( $contentId, $versionNo = null )
     {
-        $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId, $versionNo );
-        foreach ( $fieldIds as $fieldType => $ids )
+        foreach ( $this->contentGateway->getFieldIdsByType( $contentId, $versionNo ) as $fieldType => $ids )
         {
             $this->storageHandler->deleteFieldData( $fieldType, $ids );
         }

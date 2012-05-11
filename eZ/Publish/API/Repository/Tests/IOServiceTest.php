@@ -290,7 +290,7 @@ class IOServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\IOService::getFileInputStream()
-     * 
+     *
      */
     public function testGetFileInputStream()
     {

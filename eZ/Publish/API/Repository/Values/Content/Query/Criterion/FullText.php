@@ -37,7 +37,7 @@ class FullText extends Criterion implements CriterionInterface
     /**
      * Creates a FullText criterion on $text, using the IN Operator
      *
-     * @param string $text The text to match on
+     * @param string $value The text to match on
      */
     public function __construct( $value )
     {

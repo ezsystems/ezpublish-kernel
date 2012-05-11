@@ -26,15 +26,10 @@ class LocationId extends Criterion implements CriterionInterface
     /**
      * Creates a new LocationId criterion
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of locationId. $value must be an array of locationId
-     *        - Operator::EQ: match against a single locationId. $value must be a single locationId
-     * @param integer|array(integer) One or more locationId that must be matched
+     * @param integer|array(integer) $value One or more locationId that must be matched
      *
-     * @throws InvalidArgumentException if a non numeric id is given
-     * @throws InvalidArgumentException if the value type doesn't match the operator
+     * @throws \InvalidArgumentException if a non numeric id is given
+     * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct( $value )
     {

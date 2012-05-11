@@ -50,7 +50,7 @@ $contentCreateStruct->remoteId = "12345";
 $parentLocationId = 123;
 
 
-// demonstrating transactions 
+// demonstrating transactions
 
 $repository->beginTransaction();
 try {
@@ -71,17 +71,17 @@ try {
     }
     // publish the content
     $contentService->publishContent( $content->versionInfo );
-    
+
     // now there is one location with parentId 123 in the returned array
     $locations = $locationService->getLocations( $content->contentInfo );
-    
+
     // print the fields
     foreach ( $content->getFields() as $field )
     {
         echo "Field '{$field->identifier}','{$field->language}': {$field->value}\n";
     }
     $repository->commit();
-    
+
 }
 catch(UnauthorizedException $e) {
     echo "permission denied\n" . $e.getMessage();

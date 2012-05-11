@@ -11,6 +11,53 @@ CREATE TABLE ezbinaryfile (
 ) ENGINE=InnoDB;
 
 
+DROP TABLE IF EXISTS ezcobj_state;
+CREATE TABLE ezcobj_state (
+  default_language_id int(11) NOT NULL DEFAULT 0,
+  group_id int(11) NOT NULL DEFAULT 0,
+  id int(11) NOT NULL auto_increment,
+  identifier varchar(45) NOT NULL DEFAULT '',
+  language_mask int(11) NOT NULL DEFAULT 0,
+  priority int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  UNIQUE KEY ezcobj_state_identifier ( group_id, identifier ),
+  KEY ezcobj_state_lmask ( language_mask ),
+  KEY ezcobj_state_priority ( priority )
+) ENGINE=InnoDB;
+
+
+DROP TABLE IF EXISTS ezcobj_state_group;
+CREATE TABLE ezcobj_state_group (
+  default_language_id int(11) NOT NULL DEFAULT 0,
+  id int(11) NOT NULL auto_increment,
+  identifier varchar(45) NOT NULL DEFAULT '',
+  language_mask int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY ( id ),
+  UNIQUE KEY ezcobj_state_group_identifier ( identifier ),
+  KEY ezcobj_state_group_lmask ( language_mask )
+) ENGINE=InnoDB;
+
+
+DROP TABLE IF EXISTS ezcobj_state_group_language;
+CREATE TABLE ezcobj_state_group_language (
+  contentobject_state_group_id int(11) NOT NULL DEFAULT 0,
+  description longtext NOT NULL,
+  language_id int(11) NOT NULL DEFAULT 0,
+  name varchar(45) NOT NULL DEFAULT '',
+  PRIMARY KEY ( contentobject_state_group_id, language_id )
+) ENGINE=InnoDB;
+
+
+DROP TABLE IF EXISTS ezcobj_state_language;
+CREATE TABLE ezcobj_state_language (
+  contentobject_state_id int(11) NOT NULL DEFAULT 0,
+  description longtext NOT NULL,
+  language_id int(11) NOT NULL DEFAULT 0,
+  name varchar(45) NOT NULL DEFAULT '',
+  PRIMARY KEY ( contentobject_state_id, language_id )
+) ENGINE=InnoDB;
+
+
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
   disabled int(11) NOT NULL default '0',

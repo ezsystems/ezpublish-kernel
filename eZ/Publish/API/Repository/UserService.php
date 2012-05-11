@@ -167,12 +167,12 @@ interface UserService
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
-     * 
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct );
@@ -202,28 +202,28 @@ interface UserService
 
     /**
      * Loads the user groups ther user belongs to
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * 
+     *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
     public function loadUserGroupsOfUser( User $user);
-    
+
     /**
      * loads the users of a user group
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
-     * 
+     *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset
      * @param int $limit
-     * 
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
     public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1);
-    
+
     /**
      * Instantiate a user create class
      *

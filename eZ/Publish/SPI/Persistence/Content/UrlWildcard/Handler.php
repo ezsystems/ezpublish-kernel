@@ -19,47 +19,47 @@ interface Handler
 {
     /**
      * creates a new url wildcard
-     * 
+     *
      * @param string $sourceUrl
      * @param string $destinationUrl
      * @param boolean $foreward
-     * 
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
      */
     public function create($sourceUrl, $destinationUrl, $foreward = false);
-    
+
     /**
-     * 
+     *
      * removes an url wildcard
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
-     * 
+     *
      * @param mixed $id
      */
     public function remove($id);
-    
+
     /**
-     * 
+     *
      * loads a url wild card
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
-     * 
+     *
      * @param $id
-     * 
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
      */
     public function load($id);
-    
+
     /**
      * loads all url wild card (paged)
-     * 
+     *
      * @param $offset
      * @param $limit
-     * 
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */
     public function loadAll($offset = 0, $limit = -1);
-    
-    
-    
+
+
+
 }

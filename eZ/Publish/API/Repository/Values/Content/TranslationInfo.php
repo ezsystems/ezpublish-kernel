@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 /**
  *
  * 5.x this class is used for reading and writing translation informations into the repository
- * @property-read ContentInfo $contentInfo returns $sourceVersionInfo->getContentInfo() 
+ * @property-read ContentInfo $contentInfo returns $sourceVersionInfo->getContentInfo()
  */
 class TranslationInfo extends ValueObject
 {

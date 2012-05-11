@@ -131,11 +131,11 @@ interface Repository
 
     /**
      * Get RoleService
-     * 
+     *
      * @return \eZ\Publish\API\Repository\RoleService
      */
     public function getRoleService();
-    
+
     /**
      * Begin transaction
      *

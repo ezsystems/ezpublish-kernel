@@ -97,9 +97,11 @@ class EzcDatabase extends Gateway
      * Inserts a new content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
+     * @param mixed $currentVersionNo
+     *
      * @return int ID
      */
-    public function insertContentObject( CreateStruct $struct )
+    public function insertContentObject( CreateStruct $struct, $currentVersionNo = 1 )
     {
         if ( isset( $struct->name['always-available'] ) )
         {
@@ -118,7 +120,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'current_version' ),
-            $q->bindValue( 1, null, \PDO::PARAM_INT )
+            $q->bindValue( $currentVersionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $name )
@@ -157,8 +159,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentobject', 'id' )
@@ -242,8 +243,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentobject_version', 'id' )
@@ -591,8 +591,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentobject_attribute', 'id' )
@@ -849,17 +848,17 @@ class EzcDatabase extends Gateway
             ->select( '*' )
             ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
             ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                        $q->bindValue( $contentId )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'content_version' ),
-                        $q->bindValue( $versionNo )
+                $qName->expr->lAnd(
+                    $qName->expr->eq(
+                            $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                        $qName->bindValue( $contentId )
+                        ),
+                    $qName->expr->eq(
+                            $this->dbHandler->quoteColumn( 'content_version' ),
+                        $qName->bindValue( $versionNo )
+                        )
                     )
-                )
-            );
+                );
         $stmt = $qName->prepare();
         $stmt->execute();
         $row['names'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
@@ -1079,8 +1078,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1108,8 +1106,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1142,8 +1139,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1176,8 +1172,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1210,8 +1205,7 @@ class EzcDatabase extends Gateway
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -1301,7 +1295,6 @@ class EzcDatabase extends Gateway
                 )
             );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $query->prepare()->execute();
     }
 }

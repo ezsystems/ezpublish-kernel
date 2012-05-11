@@ -30,10 +30,10 @@ class UrlAlias extends Criterion implements CriterionInterface
      *        Possible values:
      *        - Operator::IN, requires an array of subtree id as the $value
      *        - Operator::EQ, requires a single subtree id as the $value
-     * @param array(integer) $subtreeId an array of subtree ids
+     * @param integer[] $value an array of subtree ids
      *
-     * @throws InvalidArgumentException if a non numeric id is given
-     * @throws InvalidArgumentException if the value type doesn't match the operator
+     * @throws \InvalidArgumentException if a non numeric id is given
+     * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct( $operator, $value )
     {

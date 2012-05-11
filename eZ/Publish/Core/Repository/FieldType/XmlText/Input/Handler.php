@@ -37,7 +37,7 @@ class Handler
      * Construct a new Simplified InputHandler$xmlString
      *
      * @param string $xmlString
-     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser Parser
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser $parser
      */
     public function __construct( InputParserInterface $parser )
     {

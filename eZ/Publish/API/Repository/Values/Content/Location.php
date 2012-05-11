@@ -23,7 +23,8 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @property-read boolean $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
  * @property-read string $remoteId a global unique id of the content object
  * @property-read mixed $parentLocationId the id of the parent location
- * @property-read string $pathString the path to this location e.g. /1/2/4/23
+ * @property-read string $pathString the path to this location e.g. /1/2/4/23 where 23 is current id.
+ * @property-read string $path Same as $pathString but as array, e.g. [ 1, 2, 4, 23 ]
  * @property-read \DateTime $modifiedSubLocationDate Date of the latest update of a content object in a sub location.
  * @property-read int $depth Depth location has in the location tree
  * @property-read int $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
@@ -32,6 +33,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  */
 abstract class Location extends ValueObject
 {
+    // @todo Rename these to better fit current naming, also reuse these in Persistence or copy the change over.
     const SORT_FIELD_PATH = 1;
     const SORT_FIELD_PUBLISHED = 2;
     const SORT_FIELD_MODIFIED = 3;

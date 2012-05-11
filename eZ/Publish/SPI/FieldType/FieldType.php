@@ -82,11 +82,11 @@ interface FieldType
 
     /**
      * Indicates if the field type supports indexing and sort keys for searching
-     * 
+     *
      * @return bool
      */
     public function isSearchable();
-    
+
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
@@ -94,7 +94,7 @@ interface FieldType
      * @return mixed
      */
     public function getDefaultDefaultValue();
-    
+
     /**
      * Checks the type and structure of the $Value.
      *

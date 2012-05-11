@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * This class provides an abstract access to binary files.
  *
  * It allows reading & writing of files in a unified way
- * 
+ *
  * @property-read string $id The id of the binary file
  * @property-read int $size File size, in bytes
  * @property-read int $mtime File modification time

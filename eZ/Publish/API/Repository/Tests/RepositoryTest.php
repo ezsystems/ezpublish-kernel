@@ -54,7 +54,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
-     * 
+     *
      */
     public function testGetContentTypeService()
     {
@@ -70,7 +70,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getLocationService()
-     * 
+     *
      */
     public function testGetLocationService()
     {
@@ -86,7 +86,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getTrashService()
-     * 
+     *
      */
     public function testGetTrashService()
     {

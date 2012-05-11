@@ -49,7 +49,7 @@ interface Handler
      *
      * Returns newly restored location Id.
      *
-     * @param mixed $locationId
+     * @param mixed $trashedId
      * @param mixed $newParentId
      * @return int Newly restored location id
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid

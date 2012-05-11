@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Location Handler class
+ * File containing the Trash Handler class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash,
     eZ\Publish\SPI\Persistence\Content\Location\Trashed,
-    eZ\Publish\SPI\Persistence\Content\Location\Trash\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\Trash\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -49,7 +47,9 @@ class Handler implements BaseTrashHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Handler $contentHandler
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler
      */
     public function __construct(
         LocationGateway $locationGateway,
@@ -103,7 +103,7 @@ class Handler implements BaseTrashHandler
      *
      * Returns newly restored location Id.
      *
-     * @param mixed $locationId
+     * @param mixed $trashedId
      * @param mixed $newParentId
      * @return int Newly restored location id
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
@@ -120,8 +120,8 @@ class Handler implements BaseTrashHandler
      * If no criterion is provided (null), no filter is applied
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param $offset Offset to start listing from, 0 by default
-     * @param $limit Limit for the listing. Null by default (no limit)
+     * @param int $offset Offset to start listing from, 0 by default
+     * @param int $limit Limit for the listing. Null by default (no limit)
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */

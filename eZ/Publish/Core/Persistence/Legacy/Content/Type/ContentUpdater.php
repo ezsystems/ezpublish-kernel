@@ -25,7 +25,7 @@ class ContentUpdater
     /**
      * Content gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
@@ -48,6 +48,7 @@ class ContentUpdater
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
     public function __construct(
         SearchHandler $searchHandler,
@@ -62,7 +63,9 @@ class ContentUpdater
     /**
      * Determines the neccessary update actions
      *
-     * @param mixed $contentTypeId
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
+     *
      * @return ContentUpdater\Action[]
      */
     public function determineActions( Type $fromType, Type $toType )
@@ -97,8 +100,9 @@ class ContentUpdater
     /**
      * hasFieldDefinition
      *
-     * @param Content\Type $type
-     * @param Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     *
      * @return void
      */
     protected function hasFieldDefinition( Type $type, FieldDefinition $fieldDef )
@@ -122,8 +126,7 @@ class ContentUpdater
      */
     public function applyUpdates( $contentTypeId, array $actions )
     {
-        $contentObjs = $this->loadContentObjects( $contentTypeId );
-        foreach ( $contentObjs as $content )
+        foreach ( $this->loadContentObjects( $contentTypeId ) as $content )
         {
             foreach ( $actions as $action )
             {
@@ -140,7 +143,6 @@ class ContentUpdater
      */
     protected function loadContentObjects( $contentTypeId )
     {
-        $criterion = new Criterion\ContentTypeId( $contentTypeId );
-        return $this->searchHandler->find( $criterion );
+        return $this->searchHandler->find( new Criterion\ContentTypeId( $contentTypeId ) );
     }
 }

@@ -16,6 +16,11 @@ use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Simplified as Pars
 
 class SimplifiedTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
+     */
+    private $parser;
+
     public function setUp()
     {
         $this->parser = new Parser( new Schema );
@@ -40,8 +45,4 @@ class SimplifiedTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>
 ' ) );
     }
-    /**
-     * @var \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
-     */
-    private $parser;
 }

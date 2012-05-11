@@ -27,9 +27,9 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
      *
      * Content will be matched if it matches one of the contentTypeGroupId in $value
      *
-     * @param integer|array(integer) One or more contentTypeGroupId that must be matched
+     * @param integer|integer[] $value One or more contentTypeGroupId that must be matched
      *
-     * @throws InvalidArgumentException if the parameters don't match what the criterion expects
+     * @throws \InvalidArgumentException if the parameters don't match what the criterion expects
      */
     public function __construct( $value )
     {

@@ -25,7 +25,7 @@ class Field extends Criterion implements CriterionInterface
      * Matches $fieldIdentifier against $value using $operator.
      * $fieldIdentifier is same value as eZ\Publish\API\Repository\Values\Content\Field->fieldDefIdentifier
      *
-     * @param string $fieldIdentifier The target field identifer
+     * @param string $fieldIdentifier The target field identifier
      * @param string $operator The match operator
      * @param mixed $value The value to match against
      */

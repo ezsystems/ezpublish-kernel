@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $identifier the identifier of the content type group
  * @property-read string $defaultLanguage, the default language of the object state group names and description used for fallback.
  * @property-read string[] $languageCodes the available languages
-*/
+ */
 abstract class ObjectStateGroup extends ValueObject
 {
     /**
@@ -43,12 +43,12 @@ abstract class ObjectStateGroup extends ValueObject
     public $defaultLanguageCode;
 
      /**
-     * The available language codes for names an descriptions 
-     * 
+     * The available language codes for names an descriptions
+     *
      * @var string[]
      */
     protected $languageCodes;
-    
+
     /**
      *
      * This method returns the human readable name in all provided languages
@@ -92,5 +92,5 @@ abstract class ObjectStateGroup extends ValueObject
      * @return string the description for the given language or null if none existis.
      */
     abstract public function getDescription( $languageCode );
-    
+
 }

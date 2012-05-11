@@ -24,6 +24,11 @@ class Location extends APILocation
     protected $contentInfo;
 
     /**
+     * @var array
+     */
+    protected $path;
+
+    /**
      * returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -46,13 +51,20 @@ class Location extends APILocation
         {
             case 'contentId':
                 return $this->contentInfo->id;
+            case 'path':
+                if ( $this->path !== null )
+                    return $this->path;
+                else if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                    return $this->path = explode( '/', trim( $this->pathString, '/' ) );
+                else
+                    return $this->path = array();
         }
 
         return parent::__get( $property );
     }
 
     /**
-     * Magic isset for singaling existence of convenience properties
+     * Magic isset for signaling existence of convenience properties
      *
      * @param string $property
      *
@@ -60,7 +72,7 @@ class Location extends APILocation
      */
     public function __isset( $property )
     {
-        if ( $property === 'contentId' )
+        if ( $property === 'contentId' || $property === 'path' )
             return true;
 
         return parent::__isset( $property );

@@ -21,7 +21,7 @@ class RoleUpdateStruct extends ValueObject
      * @var string
      */
     public $identifier;
-    
+
     /**
      * the main language code
      *
@@ -30,10 +30,10 @@ class RoleUpdateStruct extends ValueObject
      * @var string
      */
     public $mainLanguageCode;
-    
+
    /**
      * An array of names with languageCode keys
-     * 
+     *
      * @since 5.0
      *
      * @var array an array of string
@@ -42,11 +42,11 @@ class RoleUpdateStruct extends ValueObject
 
     /**
      * An array of descriptions with languageCode keys
-     * 
+     *
      * @since 5.0
      *
      * @var array an array of string
      */
     public $descriptions;
-    
+
 }

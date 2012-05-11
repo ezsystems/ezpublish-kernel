@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
@@ -38,6 +39,13 @@ class Handler implements BaseContentHandler
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
+
+    /**
+     * Location handler.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     */
+    public $locationHandler;
 
     /**
      * Mapper.
@@ -83,18 +91,39 @@ class Handler implements BaseContentHandler
      * Will contain always a complete list of fields.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct Content creation struct.
+     *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
     public function create( CreateStruct $struct )
     {
+        return $this->internalCreate( $struct );
+    }
+
+    /**
+     * Creates a new Content entity in the storage engine.
+     *
+     * The values contained inside the $content will form the basis of stored
+     * entity.
+     *
+     * Will contain always a complete list of fields.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct Content creation struct.
+     * @param int $versionNo Used by self::copy() to maintain version numbers
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content Content value object
+     */
+    protected function internalCreate( CreateStruct $struct, $versionNo = 1 )
+    {
         $content = $this->mapper->createContentFromCreateStruct(
-            $struct
+            $struct,
+            $versionNo
         );
 
-        $content->contentInfo->id = $this->contentGateway->insertContentObject( $struct );
+        $content->contentInfo->id = $this->contentGateway->insertContentObject( $struct, $versionNo );
 
         $content->versionInfo = $this->mapper->createVersionInfoForContent(
-            $content, 1,
+            $content,
+            $versionNo,
             $struct->fields,
             $content->contentInfo->mainLanguageCode
         );
@@ -188,8 +217,6 @@ class Handler implements BaseContentHandler
             $fields,
             $content->versionInfo->initialLanguageCode
         );
-        $content->versionInfo->creationDate = time();
-        $content->versionInfo->modificationDate = $content->versionInfo->creationDate;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $content->fields,
@@ -205,6 +232,17 @@ class Handler implements BaseContentHandler
             $content->fields[] = $newField;
         }
         $this->fieldHandler->createNewFields( $content );
+
+        // Create name
+        foreach ( $content->versionInfo->names as $language => $name )
+        {
+            $this->contentGateway->setName(
+                $contentId,
+                $content->versionInfo->versionNo,
+                $name,
+                $language
+            );
+        }
 
         return $content;
     }
@@ -345,13 +383,20 @@ class Handler implements BaseContentHandler
      */
     public function deleteContent( $contentId )
     {
-        $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
-        foreach ( $locationIds as $locationId )
+        foreach ( $this->contentGateway->getAllLocationIds( $contentId ) as $locationId )
         {
-            $this->locationGateway->removeSubtree( $locationId );
+            $this->locationHandler->removeSubtree( $locationId );
         }
-        $this->fieldHandler->deleteFields( $contentId );
+    }
 
+    /**
+     * Deletes raw content data
+     *
+     * @param int $contentId
+     */
+    public function removeRawContent( $contentId )
+    {
+        $this->fieldHandler->deleteFields( $contentId );
         $this->contentGateway->deleteRelations( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
         $this->contentGateway->deleteNames( $contentId );
@@ -396,36 +441,65 @@ class Handler implements BaseContentHandler
      * Copies all fields from $contentId in $version (or all versions if false)
      * to a new object which is returned. Version numbers are maintained.
      *
-     * @param int $contentId
-     * @param int|false $version Copy all versions if left false
-     * @return \eZ\Publish\SPI\Persistence\Content
+     * @todo Should relations be copied? Which ones?
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found
-     */
-    public function copy( $contentId, $version )
-    {
-        throw new \Exception( "@TODO: Not implemented yet." );
-    }
-
-    /**
-     * Creates a copy of the latest published version of $contentId
      *
      * @param mixed $contentId
+     * @param mixed|null $versionNo Copy all versions if left null
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createCopy( $contentId )
+    public function copy( $contentId, $versionNo = null )
     {
-        $rows = $this->contentGateway->loadLatestPublishedData( $contentId );
+        $currentVersionNo = isset( $versionNo ) ?
+            $versionNo :
+            $this->loadContentInfo( $contentId )->currentVersionNo;
 
-        if ( 0 == count( $rows ) )
-        {
-            throw new NotFound( 'content', $contentId );
-        }
-        $contentObjects = $this->mapper->extractContentFromRows( $rows );
-
+        // Copy content in given version or current version
         $createStruct = $this->mapper->createCreateStructFromContent(
-            reset( $contentObjects )
+            $this->load( $contentId, $currentVersionNo )
         );
-        return $this->create( $createStruct );
+        $content = $this->internalCreate(
+            $createStruct,
+            $currentVersionNo
+        );
+
+        // If version was not passed also copy other versions
+        if ( !isset( $versionNo ) )
+        {
+            foreach ( $this->listVersions( $contentId ) as $versionInfo )
+            {
+                if ( $versionInfo->versionNo === $currentVersionNo ) continue;
+
+                $versionContent = $this->load( $contentId, $versionInfo->versionNo );
+
+                $versionContent->contentInfo->id = $content->contentInfo->id;
+                $versionContent->versionInfo->contentId = $content->contentInfo->id;
+                $versionContent->versionInfo->modificationDate = $createStruct->modified;
+                $versionContent->versionInfo->creationDate = $createStruct->modified;
+                $versionContent->versionInfo->id = $this->contentGateway->insertVersion(
+                    $versionContent->versionInfo,
+                    $versionContent->fields,
+                    $versionContent->contentInfo->isAlwaysAvailable
+                );
+
+                $this->fieldHandler->createNewFields( $versionContent );
+
+                // Create name
+                foreach ( $versionContent->versionInfo->names as $language => $name )
+                {
+                    $this->contentGateway->setName(
+                        $content->contentInfo->id,
+                        $versionInfo->versionNo,
+                        $name,
+                        $language
+                    );
+                }
+            }
+        }
+
+        return $content;
     }
 
     /**

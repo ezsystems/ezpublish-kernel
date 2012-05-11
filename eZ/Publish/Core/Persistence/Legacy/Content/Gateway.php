@@ -33,9 +33,11 @@ abstract class Gateway
      * Inserts a new content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
+     * @param mixed $currentVersionNo
+     *
      * @return int ID
      */
-    abstract public function insertContentObject( CreateStruct $struct );
+    abstract public function insertContentObject( CreateStruct $struct, $currentVersionNo = 1 );
 
     /**
      * Inserts a new version.
@@ -141,7 +143,7 @@ abstract class Gateway
      *
      * @param int $contentId
      * @return array
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     abstract public function loadContentInfo( $contentId );
 

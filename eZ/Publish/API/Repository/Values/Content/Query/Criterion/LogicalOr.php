@@ -19,7 +19,7 @@ class LogicalOr extends LogicalOperator
      *
      * This criterion will match if AT LEAST ONE of the given criteria match
      *
-     * @param array(Criterion) $criteria
+     * @param Criterion[] $criteria
      */
     public function __construct( array $criteria )
     {

@@ -186,8 +186,7 @@ class MediaStorage implements Storage
             $q->bindValue( (int)$data->isLoop, null, \PDO::PARAM_INT )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -242,8 +241,7 @@ class MediaStorage implements Storage
             $q->expr->eq( $dbHandler->quoteColumn( 'version' ), $field->versionNo )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**

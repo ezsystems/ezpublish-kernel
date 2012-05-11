@@ -51,7 +51,7 @@ class Manager extends Carpet
      * Constructor
      *
      * @param \eZ\Publish\Core\Repository\FieldType\Image\AliasCollection $aliasCollection The image alias collection calling this manager
-     * @param \ezp\Base\BinaryRepository The binary repository
+     * @param \ezp\Base\BinaryRepository $binaryRepository The binary repository
      */
     public function __construct( AliasCollection $aliasCollection, BinaryRepository $binaryRepository )
     {

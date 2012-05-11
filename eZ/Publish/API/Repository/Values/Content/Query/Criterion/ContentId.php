@@ -24,10 +24,10 @@ class ContentId extends Criterion implements CriterionInterface
     /**
      * Creates a new ContentId criterion
      *
-     * @param integer|array(integer) One or more content Id that must be matched.
+     * @param integer|integer[] $value One or more content Id that must be matched.
      *
-     * @throws InvalidArgumentException if a non numeric id is given
-     * @throws InvalidArgumentException if the value type doesn't match the operator
+     * @throws \InvalidArgumentException if a non numeric id is given
+     * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct( $value )
     {

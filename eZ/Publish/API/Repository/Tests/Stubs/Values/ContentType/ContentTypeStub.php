@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 /**
  * this class represents a content type value
- * 
+ *
  * @property-read array $names calls getNames() or on access getName($language)
  * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read array $contentTypeGroups calls getContentTypeGroups
@@ -119,8 +119,8 @@ class ContentTypeStub extends ContentType
     // parent::
 
     /**
-     * URL alias schema. 
-     * 
+     * URL alias schema.
+     *
      * If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
@@ -130,7 +130,7 @@ class ContentTypeStub extends ContentType
 
     /**
      * Name schema.
-     * 
+     *
      * Can be composed of FieldDefinition identifier place holders.
      * These place holders must comply this pattern : <field_definition_identifier>.
      * An OR condition can be used :

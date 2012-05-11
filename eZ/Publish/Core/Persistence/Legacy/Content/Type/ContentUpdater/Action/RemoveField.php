@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
 class RemoveField extends Action
 {
     /**
-     * Field definition of the field to add
+     * Field definition of the field to remove
      *
      * @var mixed
      */
@@ -29,7 +29,7 @@ class RemoveField extends Action
      * Creates a new action
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
     public function __construct(
         ContentGateway $contentGateway,
@@ -38,6 +38,7 @@ class RemoveField extends Action
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
     }
+
     /**
      * Applies the action to the given $content
      *

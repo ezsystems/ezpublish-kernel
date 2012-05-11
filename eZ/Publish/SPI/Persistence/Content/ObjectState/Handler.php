@@ -35,10 +35,10 @@ interface Handler
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group
      */
     public function loadGroup( $groupId);
-    
+
     /**
      * Loads all object state groups
-     * 
+     *
      * @param int $offset
      * @param int $limit
      *
@@ -54,8 +54,8 @@ interface Handler
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState[]
      */
     public function loadObjectStates($groupId);
-    
-    
+
+
     /**
      * updates an object state group
      *

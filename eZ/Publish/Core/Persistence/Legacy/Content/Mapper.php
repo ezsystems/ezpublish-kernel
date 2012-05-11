@@ -62,9 +62,11 @@ class Mapper
      * Creates a Content from the given $struct
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
+     * @param int $currentVersionNo
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createContentFromCreateStruct( CreateStruct $struct )
+    public function createContentFromCreateStruct( CreateStruct $struct, $currentVersionNo = 1 )
     {
         $content = new Content;
         $contentInfo = new ContentInfo;
@@ -78,7 +80,7 @@ class Mapper
         // For drafts published and modified timestamps should be 0
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
-        $contentInfo->currentVersionNo = 1;
+        $contentInfo->currentVersionNo = $currentVersionNo;
         $contentInfo->isPublished = false;
 
         $content->contentInfo = $contentInfo;
@@ -106,6 +108,9 @@ class Mapper
         $versionInfo->creatorId = $content->contentInfo->ownerId;
         $versionInfo->status = VersionInfo::STATUS_DRAFT;
         $versionInfo->initialLanguageCode = $initialLanguageCode;
+        $versionInfo->creationDate = time();
+        $versionInfo->modificationDate = $versionInfo->creationDate;
+        $versionInfo->names = is_object( $content->versionInfo ) ? $content->versionInfo->names : array();
         $languageCodes = array();
         foreach ( $fields as $field ) $languageCodes[] = $field->languageCode;
         foreach ( array_unique( $languageCodes ) as $languageCode )
@@ -189,7 +194,7 @@ class Mapper
             }
 
             $locationId = (int)$row['ezcontentobject_tree_node_id'];
-            if ( !isset( $locations[$contentId][$versionId][$locationId] ) )
+            if ( isset( $row['ezcontentobject_tree_node_id'] ) && !isset( $locations[$contentId][$versionId][$locationId] ) )
             {
                 $locations[$contentId][$versionId][$locationId] =
                     $this->locationMapper->createLocationFromRow(
@@ -382,9 +387,9 @@ class Mapper
         $struct->ownerId = $content->contentInfo->ownerId;
         $struct->locations = array();
         $struct->alwaysAvailable = $content->contentInfo->isAlwaysAvailable;
-        $struct->remoteId = $content->contentInfo->remoteId;
+        $struct->remoteId = md5( uniqid( get_class( $this ), true ) );
         $struct->initialLanguageId = $this->languageHandler->getByLocale( $content->versionInfo->initialLanguageCode )->id;
-        $struct->modified = $content->contentInfo->modificationDate;
+        $struct->modified = time();
 
         foreach ( $content->fields as $field )
         {

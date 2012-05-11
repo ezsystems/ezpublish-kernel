@@ -114,9 +114,7 @@ class Mapper
             $fieldId = (int)$row['ezcontentclass_attribute_id'];
             if ( !isset( $fields[$fieldId] ) )
             {
-                $field = $this->extractFieldFromRow( $row );
-                $fields[$fieldId] = $field;
-                $types[$typeId]->fieldDefinitions[] = $field;
+                $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow( $row );
             }
 
             $groupId = (int)$row['ezcontentclass_classgroup_group_id'];

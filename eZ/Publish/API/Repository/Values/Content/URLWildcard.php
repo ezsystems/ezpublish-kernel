@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a url alias in the repository
- * 
+ *
  * @property-read mixed $id A unique identifier for the alias
  * @property-read string $sourceUrl The source url with wildcards
  * @property-read string $destinationUrl The destination URL with placeholders
@@ -23,30 +23,30 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class URLWildcard extends ValueObject
 {
         /**
-     * 
+     *
      * The unique id
-     * 
+     *
      * @var mixed
      */
     protected $id;
-    
+
     /**
      * The source url including "*"
-     * 
+     *
      * @var string
      */
     protected $sourceUrl;
-    
+
     /**
-     * The destiantion url containing placeholders e.g. /destination/{1} 
-     * 
+     * The destiantion url containing placeholders e.g. /destination/{1}
+     *
      * @var string
      */
     protected $destiantionUrl;
-    
+
     /**
      * indicates if the url is redirected or not
-     * 
+     *
      * @var boolean
      */
     protected $forward;

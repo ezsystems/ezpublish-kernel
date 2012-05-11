@@ -88,4 +88,5 @@ class URLAlias extends ValueObject
      */
     protected $forward;
 
+
 }

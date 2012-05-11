@@ -138,8 +138,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $group->identifier )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentclassgroup', 'id' )
@@ -173,8 +172,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -264,8 +262,7 @@ class EzcDatabase extends Gateway
                     $q->bindValue( $groupId, null, \PDO::PARAM_INT )
                 )
             );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -438,8 +435,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $group['name'] )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -471,8 +467,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -616,8 +611,7 @@ class EzcDatabase extends Gateway
         );
         $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentclass_attribute', 'id' )
@@ -776,8 +770,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -788,7 +781,6 @@ class EzcDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
-     * @todo Handle StorageFieldDefinition
      */
     public function updateFieldDefinition(
         $typeId, $status, FieldDefinition $fieldDefinition,
@@ -816,8 +808,7 @@ class EzcDatabase extends Gateway
             );
         $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -874,8 +865,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         $this->deleteTypeNameData( $typeId, $status );
         $this->insertTypeNameData( $typeId, $status, $updateStruct->name );
@@ -1095,8 +1085,32 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
+    }
+
+    /**
+     * Deletes a Type completely.
+     *
+     * Does no delete the field definitions!
+     *
+     * @param mixed $typeId
+     * @param int $status
+     * @return void
+     */
+    public function delete( $typeId, $status )
+    {
+        $this->deleteGroupAssignmentsForType(
+            $typeId, $status
+        );
+        $this->deleteFieldDefinitionsForType(
+            $typeId, $status
+        );
+        $this->deleteTypeNameData(
+            $typeId, $status
+        );
+        $this->deleteType(
+            $typeId, $status
+        );
     }
 
     /**
@@ -1124,8 +1138,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -1151,8 +1164,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -1185,8 +1197,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1207,8 +1218,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1229,8 +1239,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1251,8 +1260,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
     }
 
     /**
