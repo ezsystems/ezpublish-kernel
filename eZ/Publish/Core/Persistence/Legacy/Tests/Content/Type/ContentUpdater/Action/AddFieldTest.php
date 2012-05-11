@@ -25,6 +25,13 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     protected $contentGatewayMock;
 
     /**
+     * Content gateway mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected $contentStorageHandlerMock;
+
+    /**
      * FieldValue converter mock
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
@@ -152,6 +159,26 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a Content StorageHandler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected function getContentStorageHandlerMock()
+    {
+        if ( !isset( $this->contentStorageHandlerMock ) )
+        {
+            $this->contentStorageHandlerMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->contentStorageHandlerMock;
+    }
+
+    /**
      * Returns a FieldDefinition fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
@@ -192,7 +219,8 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
             $this->addFieldAction = new AddField(
                 $this->getContentGatewayMock(),
                 $this->getFieldDefinitionFixture(),
-                $this->getFieldValueConverterMock()
+                $this->getFieldValueConverterMock(),
+                $this->getContentStorageHandlerMock()
             );
         }
         return $this->addFieldAction;

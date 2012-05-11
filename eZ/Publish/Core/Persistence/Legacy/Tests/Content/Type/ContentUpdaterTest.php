@@ -111,7 +111,8 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
                 new ContentUpdater\Action\AddField(
                     $this->getContentGatewayMock(),
                     $toType->fieldDefinitions[2],
-                    $converterMock
+                    $converterMock,
+                    $this->getContentStorageHandlerMock()
                 )
             ),
             $actions

@@ -102,7 +102,8 @@ class ContentUpdater
                     $fieldDef,
                     $this->converterRegistry->getConverter(
                         $fieldDef->fieldType
-                    )
+                    ),
+                    $this->storageHandler
                 );
             }
         }

@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -28,6 +29,13 @@ class AddField extends Action
     protected $fieldDefinition;
 
     /**
+     * Storage handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected $storageHandler;
+
+    /**
      * Field value converter
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
@@ -40,15 +48,18 @@ class AddField extends Action
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $converter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      */
     public function __construct(
         Gateway $contentGateway,
         FieldDefinition $fieldDef,
-        Converter $converter )
+        Converter $converter,
+        StorageHandler $storageHandler )
     {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
         $this->fieldValueConverter = $converter;
+        $this->storageHandler = $storageHandler;
     }
 
     /**
