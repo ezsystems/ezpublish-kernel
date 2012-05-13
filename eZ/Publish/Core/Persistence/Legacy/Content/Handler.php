@@ -178,7 +178,7 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
+    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
         $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct );
         $this->locationGateway->createLocationsFromNodeAssignments(

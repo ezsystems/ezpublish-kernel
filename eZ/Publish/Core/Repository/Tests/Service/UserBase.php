@@ -864,7 +864,7 @@ abstract class UserBase extends BaseServiceTest
         );
 
         self::assertNull( $userUpdateStruct->contentUpdateStruct );
-        self::assertNull( $userUpdateStruct->contentMetaDataUpdateStruct );
+        self::assertNull( $userUpdateStruct->contentMetadataUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -893,6 +893,6 @@ abstract class UserBase extends BaseServiceTest
         );
 
         self::assertNull( $userGroupUpdateStruct->contentUpdateStruct );
-        self::assertNull( $userGroupUpdateStruct->contentMetaDataUpdateStruct );
+        self::assertNull( $userGroupUpdateStruct->contentMetadataUpdateStruct );
     }
 }

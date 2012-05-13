@@ -297,7 +297,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         if ( $userGroupUpdateStruct->contentUpdateStruct === null &&
-             $userGroupUpdateStruct->contentMetaDataUpdateStruct === null )
+             $userGroupUpdateStruct->contentMetadataUpdateStruct === null )
         {
             // both update structs are empty, nothing to do
             return $userGroup;
@@ -320,11 +320,11 @@ class UserService implements UserServiceInterface
             $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
         }
 
-        if ( $userGroupUpdateStruct->contentMetaDataUpdateStruct !== null )
+        if ( $userGroupUpdateStruct->contentMetadataUpdateStruct !== null )
         {
             $publishedContent = $contentService->updateContentMetadata(
                 $publishedContent->getVersionInfo()->getContentInfo(),
-                $userGroupUpdateStruct->contentMetaDataUpdateStruct
+                $userGroupUpdateStruct->contentMetadataUpdateStruct
             );
         }
 
@@ -552,11 +552,11 @@ class UserService implements UserServiceInterface
             $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
         }
 
-        if ( $userUpdateStruct->contentMetaDataUpdateStruct !== null )
+        if ( $userUpdateStruct->contentMetadataUpdateStruct !== null )
         {
             $contentService->updateContentMetadata(
                 $publishedContent->getVersionInfo()->getContentInfo(),
-                $userUpdateStruct->contentMetaDataUpdateStruct
+                $userUpdateStruct->contentMetadataUpdateStruct
             );
         }
 

@@ -626,7 +626,7 @@ class UserServiceTest extends BaseTest
 
         // Create a group update struct and set content update struct
         $groupUpdate = $userService->newUserGroupUpdateStruct();
-        $groupUpdate->contentMetaDataUpdateStruct = $metadataUpdate;
+        $groupUpdate->contentMetadataUpdateStruct = $metadataUpdate;
 
         // This will update the name and the increment the group version number
         $userGroup = $userService->updateUserGroup(
@@ -1217,7 +1217,7 @@ class UserServiceTest extends BaseTest
         $userUpdate = $userService->newUserUpdateStruct();
 
         // Set the metadata update struct.
-        $userUpdate->contentMetaDataUpdateStruct = $metadataUpdate;
+        $userUpdate->contentMetadataUpdateStruct = $metadataUpdate;
 
         // Updated the user record.
         $userVersion2 = $userService->updateUser( $user, $userUpdate );

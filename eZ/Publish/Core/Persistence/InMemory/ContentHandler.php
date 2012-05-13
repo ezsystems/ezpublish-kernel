@@ -705,7 +705,7 @@ class ContentHandler implements ContentHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
+    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
         // Change Content currentVersionNo to the published version
         $this->backend->update(
