@@ -168,7 +168,7 @@ class User extends APIUser
             case 'id':
                 if ( empty( $this->versionInfo ) )
                     return null;
-                return $this->versionInfo->contentId;// @todo Make part of API or change to use getContentInfo()->id
+                return $this->versionInfo->getContentInfo()->id;
         }
 
         return parent::__get( $property );
