@@ -87,6 +87,11 @@ class RepositoryStub implements Repository
     private $ioService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\URLAliasServiceStub
+     */
+    private $urlAliasService;
+
+    /**
      * @var integer
      */
     private $transactionDepth = 0;
@@ -414,6 +419,20 @@ class RepositoryStub implements Repository
             $this->roleService = new RoleServiceStub( $this, $this->getUserService() );
         }
         return $this->roleService;
+    }
+
+    /**
+     * Get UrlAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getUrlAliasService()
+    {
+        if ( null === $this->urlAliasService )
+        {
+            $this->urlAliasService = new URLAliasServiceStub( $this );
+        }
+        return $this->urlAliasService;
     }
 
     /**

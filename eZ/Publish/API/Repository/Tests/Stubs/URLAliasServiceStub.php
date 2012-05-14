@@ -22,6 +22,24 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  */
 class URLAliasServiceStub implements URLAliasService
 {
+    /**
+     * Repository
+     *
+     * @var eZ\Publish\API\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
+    /**
+     * Creates a new URLServiceStub
+     *
+     * @param RepositoryStub $repository
+     * @return void
+     */
+    public function __construct( RepositoryStub $repository )
+    {
+        $this->repository = $repository;
+    }
+
      /**
      * Create a user chosen $alias pointing to $location in $languageCode.
      *
