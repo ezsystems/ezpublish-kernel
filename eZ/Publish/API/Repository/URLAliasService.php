@@ -120,7 +120,7 @@ interface URLAliasService
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param  string $languageCode
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
     public function reverseLookup(Location $location, $languageCode = null);
 
