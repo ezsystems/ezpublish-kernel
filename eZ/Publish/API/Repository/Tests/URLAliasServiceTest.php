@@ -17,6 +17,49 @@ namespace eZ\Publish\API\Repository\Tests;
 class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 {
     /**
+     * Tests that the required <b>LocationService::loadLocation()</b>
+     * at least returns an object, because this method is utilized in several
+     * tests.
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        try
+        {
+            // Load the LocationService
+            $locationService = $this->getRepository()->getLocationService();
+
+            $membersUserGroupLocationId = 12;
+
+            // Load a location instance
+            $location = $locationService->loadLocation(
+                $membersUserGroupLocationId
+            );
+
+            if ( false === is_object( $location ) )
+            {
+                $this->markTestSkipped(
+                    'This test cannot be executed, because the utilized ' .
+                    'LocationService::loadLocation() does not ' .
+                    'return an object.'
+                );
+            }
+        }
+        catch ( \Exception $e )
+        {
+            $this->markTestSkipped(
+                'This test cannot be executed, because the utilized ' .
+                'LocationService::loadLocation() failed with ' .
+                PHP_EOL . PHP_EOL .
+                $e->getTraceAsString()
+            );
+        }
+
+    }
+    /**
      * Test for the createUrlAlias() method.
      *
      * @return void
