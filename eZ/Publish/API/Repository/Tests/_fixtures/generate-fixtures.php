@@ -29,6 +29,7 @@ writeFixtureFile( generateUserGroupFixture( $fixture ), 'UserGroup', $argv[2] );
 writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
 writeFixtureFile( generateContentInfoFixture( $fixture ), 'Content', $argv[2] );
 writeFixtureFile( generateLocationFixture( $fixture ), 'Location', $argv[2] );
+writeFixtureFile( generateURLAliasFixture( $fixture ), 'URLAlias', $argv[2] );
 
 function generateContentTypeGroupFixture( array $fixture )
 {
@@ -191,18 +192,22 @@ function generateSectionFixture( array $fixture )
     );
 }
 
-function generateContentInfoFixture( array $fixture )
+function getLanguageCodes( array $fixture )
 {
-    $nextId       = 0;
-    $contentInfos = array();
-
-    $indexMap = array();
-
     $languageCodes = array();
     foreach ( getFixtureTable( 'ezcontent_language', $fixture ) as $data )
     {
         $languageCodes[$data['id']] = $data['locale'];
     }
+    return $languageCodes;
+}
+
+function generateContentInfoFixture( array $fixture )
+{
+    $nextId        = 0;
+    $contentInfos  = array();
+    $indexMap      = array();
+    $languageCodes = getLanguageCodes( $fixture );
 
     $mainLocationIds = array();
     foreach ( getFixtureTable( 'ezcontentobject_tree', $fixture ) as $data )
@@ -605,6 +610,85 @@ function generateRoleFixture( array $fixture )
         generateMapping( $role2policy ),
         generateMapping( $roleLimitations )
     );
+}
+
+function generateURLAliasFixture( array $fixture )
+{
+    $typeMap = array(
+        'nop'    => 2,
+        'eznode' => 0,
+        'module' => 1,
+    );
+
+    $languageCodes = getLanguageCodes( $fixture );
+
+    $nextId  = 0;
+    $aliases = array();
+    foreach ( getFixtureTable( 'ezurlalias_ml', $fixture ) as $data )
+    {
+        $destination = null;
+        switch ( $data['action_type'] )
+        {
+            case 'nop':
+                $destination = null;
+                break;
+
+            case 'eznode':
+                $destination = createRepoCall(
+                    'LocationService',
+                    'loadLocation',
+                    array( substr( $data['action'], 7 ) )
+                );
+                break;
+
+            case 'module':
+                $destination = substr( $data['action'], 7 );
+                break;
+        }
+
+        $aliases[$data['id']] = array(
+            'id'              => $data['id'],
+            'type'            => $typeMap[$data['action_type']],
+            'destination'     => $destination,
+            'path'            => getBaseUrlPath( $aliases, $data['parent'] ) . '/' . $data['text'],
+            'languageCodes'   => resolveLanguageMask( $languageCodes, $data['lang_mask'] ),
+            'alwaysAvailable' => $data['lang_mask'] & 1,
+            'isHistory'       => !( $data['is_original'] ),
+            'forward'         => (bool)$data['alias_redirects'],
+        );
+        $nextId = max( $nextId, $data['id'] );
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\URLAlias', $aliases ),
+        $nextId
+    );
+}
+
+function resolveLanguageMask( array $languageCodes, $mask )
+{
+    $assignedCodes = array();
+    foreach ( $languageCodes as $id => $languageCode )
+    {
+        if ( $mask & $id )
+        {
+            $assignedCodes[] = $languageCode;
+        }
+    }
+    return $assignedCodes;
+}
+
+function getBaseUrlPath( array $aliases, $parentId )
+{
+    if ( $parentId == 0 )
+    {
+        return '';
+    }
+    if ( !isset( $aliases[$parentId] ) )
+    {
+        throw new RuntimeException( sprintf( 'Alias with ID %s not found.', $parentId ) );
+    }
+    return $aliases[$parentId]['path'];
 }
 
 function getUser2GroupMapping( array $fixture )
