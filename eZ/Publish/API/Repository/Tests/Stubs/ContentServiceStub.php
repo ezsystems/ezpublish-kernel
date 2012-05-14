@@ -528,7 +528,7 @@ class ContentServiceStub implements ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
+    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
@@ -1408,7 +1408,7 @@ class ContentServiceStub implements ContentService
      */
     public function newContentMetadataUpdateStruct()
     {
-        return new ContentMetaDataUpdateStruct();
+        return new ContentMetadataUpdateStruct();
     }
 
     /**

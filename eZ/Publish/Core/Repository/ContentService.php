@@ -164,54 +164,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Builds a ContentInfo domain object from value object returned from persistence
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
-     *
-     * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
-     */
-    protected function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
-    {
-        $modificationDate = new \DateTime( "@{$spiContentInfo->modificationDate}" );
-        $publishedDate = new \DateTime( "@{$spiContentInfo->publicationDate}" );
-
-        // @todo: $mainLocationId should have been removed through SPI refactoring?
-        $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $spiContentInfo->id,
-            $spiContentInfo->currentVersionNo
-        );
-        $mainLocationId = null;
-        foreach ( $spiContent->locations as $spiLocation )
-        {
-            if ( $spiLocation->mainLocationId === $spiLocation->id )
-            {
-                $mainLocationId = $spiLocation->mainLocationId;
-                break;
-            }
-        }
-
-        return new ContentInfo(
-            array(
-                "repository"       => $this->repository,
-                "contentTypeId"    => $spiContentInfo->contentTypeId,
-
-                "id"               => $spiContentInfo->id,
-                "name"             => $spiContentInfo->name,
-                "sectionId"        => $spiContentInfo->sectionId,
-                "currentVersionNo" => $spiContentInfo->currentVersionNo,
-                "published"        => $spiContentInfo->isPublished,
-                "ownerId"          => $spiContentInfo->ownerId,
-                "modificationDate" => $modificationDate,
-                "publishedDate"    => $publishedDate,
-                "alwaysAvailable"  => $spiContentInfo->isAlwaysAvailable,
-                "remoteId"         => $spiContentInfo->remoteId,
-                "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
-                "mainLocationId"   => $mainLocationId
-            )
-        );
-    }
-
-    /**
      * loads a version info of the given content object.
      *
      * If no version number is given, the method returns the current version
@@ -711,18 +663,14 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( APIContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
+    public function updateContentMetadata( APIContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
-        $hasPropertySet = false;
+        $propertyCount = 0;
         foreach ( $contentMetadataUpdateStruct as $propertyName => $propertyValue )
         {
-            if ( isset( $contentMetadataUpdateStruct->$propertyName ) )
-            {
-                $hasPropertySet = true;
-                break;
-            }
+            if ( isset( $contentMetadataUpdateStruct->$propertyName ) ) $propertyCount += 1;
         }
-        if ( !$hasPropertySet )
+        if ( $propertyCount === 0 )
         {
             throw new InvalidArgumentException(
                 "\$contentMetadataUpdateStruct",
@@ -730,40 +678,48 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if ( isset( $contentMetadataUpdateStruct->remoteId ) )
+        if ( $propertyCount > 1 || empty( $contentMetadataUpdateStruct->mainLocationId ) )
         {
-            try
+            if ( isset( $contentMetadataUpdateStruct->remoteId ) )
             {
-                $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
-                    new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
-                );
-
-                if ( $spiContent->contentInfo->id !== $contentInfo->id )
-                    throw new InvalidArgumentException(
-                        "\$contentMetadataUpdateStruct->remoteId",
-                        "remoteId already exists"
+                try
+                {
+                    $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
+                        new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
                     );
+
+                    if ( $spiContent->contentInfo->id !== $contentInfo->id )
+                        throw new InvalidArgumentException(
+                            "\$contentMetadataUpdateStruct->remoteId",
+                            "remoteId already exists"
+                        );
+                }
+                catch ( APINotFoundException $e ) {}
             }
-            catch ( APINotFoundException $e ) {}
+
+            $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
+                array(
+                    "ownerId"          => $contentMetadataUpdateStruct->ownerId,
+                    //@todo name should be computed
+                    //"name"             => $contentMetadataUpdateStruct->name,
+                    "publicationDate"  => isset( $contentMetadataUpdateStruct->publishedDate ) ?
+                                            $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
+                    "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
+                                            $contentMetadataUpdateStruct->modificationDate->getTimestamp() : null,
+                    "mainLanguageId"   => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
+                                            $this->repository->getContentLanguageService()->loadLanguage(
+                                                $contentMetadataUpdateStruct->mainLanguageCode
+                                            )->id : null,
+                    "alwaysAvailable"  => $contentMetadataUpdateStruct->alwaysAvailable,
+                    "remoteId"         => $contentMetadataUpdateStruct->remoteId
+                )
+            );
+            $this->persistenceHandler->contentHandler()->updateMetadata(
+                $contentInfo->id,
+                $spiMetadataUpdateStruct
+            );
         }
 
-        $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
-            array(
-                "ownerId"          => $contentMetadataUpdateStruct->ownerId,
-                //@todo name should be computed
-                //"name"             => $contentMetadataUpdateStruct->name,
-                "publicationDate"  => isset( $contentMetadataUpdateStruct->publishedDate ) ?
-                                        $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
-                "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
-                                        $contentMetadataUpdateStruct->modificationDate->getTimestamp() : null,
-                "mainLanguageId"   => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
-                                        $this->repository->getContentLanguageService()->loadLanguage(
-                                            $contentMetadataUpdateStruct->mainLanguageCode
-                                        )->id : null,
-                "alwaysAvailable"  => $contentMetadataUpdateStruct->alwaysAvailable,
-                "remoteId"         => $contentMetadataUpdateStruct->remoteId
-            )
-        );
         if ( isset( $contentMetadataUpdateStruct->mainLocationId ) )
         {
             $this->persistenceHandler->locationHandler()->changeMainLocation(
@@ -771,10 +727,6 @@ class ContentService implements ContentServiceInterface
                 $contentMetadataUpdateStruct->mainLocationId
             );
         }
-        $this->persistenceHandler->contentHandler()->updateMetadata(
-            $contentInfo->id,
-            $spiMetadataUpdateStruct
-        );
 
         return $this->loadContent( $contentInfo->id );
     }
@@ -1506,13 +1458,10 @@ class ContentService implements ContentServiceInterface
     {
         return new Content(
             array(
-                "repository"     => $this->repository,
-                "id"             => $spiContent->contentInfo->id,
-                "versionNo"      => $spiContent->versionInfo->versionNo,
-                "contentTypeId"  => $spiContent->contentInfo->contentTypeId,
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
                 // @TODO: implement loadRelations()
-                //"relations" => $this->loadRelations( $versionInfo )
+                //"relations" => $this->loadRelations( $versionInfo ),
+                "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo )
             )
         );
     }
@@ -1532,9 +1481,9 @@ class ContentService implements ContentServiceInterface
         {
             $fields[] = new Field(
                 array(
-                    "id"                 => $spiField->id,
-                    "value"              => $this->newFieldTypeValue( $spiField->type, $spiField->value->data ),
-                    "languageCode"       => $spiField->languageCode,
+                    "id" => $spiField->id,
+                    "value" => $this->newFieldTypeValue( $spiField->type, $spiField->value->data ),
+                    "languageCode" => $spiField->languageCode,
                     "fieldDefIdentifier" => $this->persistenceHandler->contentTypeHandler()
                         ->getFieldDefinition(
                             $spiField->fieldDefinitionId,
@@ -1545,6 +1494,54 @@ class ContentService implements ContentServiceInterface
         }
 
         return $fields;
+    }
+
+    /**
+     * Builds a ContentInfo domain object from value object returned from persistence
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
+     *
+     * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
+     */
+    protected function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    {
+        $modificationDate = new \DateTime( "@{$spiContentInfo->modificationDate}" );
+        $publishedDate = new \DateTime( "@{$spiContentInfo->publicationDate}" );
+
+        // @todo: $mainLocationId should have been removed through SPI refactoring?
+        $spiContent = $this->persistenceHandler->contentHandler()->load(
+            $spiContentInfo->id,
+            $spiContentInfo->currentVersionNo
+        );
+        $mainLocationId = null;
+        foreach ( $spiContent->locations as $spiLocation )
+        {
+            if ( $spiLocation->mainLocationId === $spiLocation->id )
+            {
+                $mainLocationId = $spiLocation->mainLocationId;
+                break;
+            }
+        }
+
+        return new ContentInfo(
+            array(
+                "id" => $spiContentInfo->id,
+                "name" => $spiContentInfo->name,
+                "sectionId" => $spiContentInfo->sectionId,
+                "currentVersionNo" => $spiContentInfo->currentVersionNo,
+                "published" => $spiContentInfo->isPublished,
+                "ownerId" => $spiContentInfo->ownerId,
+                "modificationDate" => $modificationDate,
+                "publishedDate" => $publishedDate,
+                "alwaysAvailable" => $spiContentInfo->isAlwaysAvailable,
+                "remoteId" => $spiContentInfo->remoteId,
+                "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
+                "mainLocationId" => $mainLocationId,
+                "contentType" => $this->repository->getContentTypeService()->loadContentType(
+                    $spiContentInfo->contentTypeId
+                )
+            )
+        );
     }
 
     /**
@@ -1569,18 +1566,16 @@ class ContentService implements ContentServiceInterface
 
         return new VersionInfo(
             array(
-                "repository"          => $this->repository,
-                "contentId"           => $persistenceVersionInfo->contentId,
-                "id"                  => $persistenceVersionInfo->id,
-                "versionNo"           => $persistenceVersionInfo->versionNo,
-                "modificationDate"    => $modifiedDate,
-                "creatorId"           => $persistenceVersionInfo->creatorId,
-                "creationDate"        => $createdDate,
-                "status"              => $persistenceVersionInfo->status,
+                "id" => $persistenceVersionInfo->id,
+                "versionNo" => $persistenceVersionInfo->versionNo,
+                "modificationDate" => $modifiedDate,
+                "creatorId" => $persistenceVersionInfo->creatorId,
+                "creationDate" => $createdDate,
+                "status" => $persistenceVersionInfo->status,
                 "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
-                "languageCodes"       => $languageCodes,
-                // Implementation properties
-                "names"               => $persistenceVersionInfo->names
+                "languageCodes" => $languageCodes,
+                "names" => $persistenceVersionInfo->names,
+                "contentInfo" => $this->loadContentInfo( $persistenceVersionInfo->contentId )
             )
         );
     }
@@ -1612,11 +1607,11 @@ class ContentService implements ContentServiceInterface
 
         return new Relation(
             array(
-                'id'                              => $spiRelation->id,
-                'sourceFieldDefinitionIdentifier' => $sourceFieldDefinitionIdentifier,
-                'type'                            => $spiRelation->type,
-                'sourceContentInfo'               => $sourceContentInfo,
-                'destinationContentInfo'          => $destinationContentInfo
+                "id" => $spiRelation->id,
+                "sourceFieldDefinitionIdentifier" => $sourceFieldDefinitionIdentifier,
+                "type" => $spiRelation->type,
+                "sourceContentInfo" => $sourceContentInfo,
+                "destinationContentInfo" => $destinationContentInfo
             )
         );
     }

@@ -11,10 +11,11 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\Content\Location,
-
+    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct,
     eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 /**
@@ -115,21 +116,127 @@ abstract class LocationBase extends BaseServiceTest
     }
 
     /**
+     * @param $parentLocationId
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createTestContentLocation( $parentLocationId )
+    {
+        $contentService = $this->repository->getContentService();
+        $contentTypeService = $this->repository->getContentTypeService();
+        // User Group content type
+        $contentType = $contentTypeService->loadContentType( 3 );
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate->setField( "name", "dummy value" );
+        $contentCreate->sectionId = 1;
+        $contentCreate->ownerId = 14;
+        $contentCreate->remoteId = md5( uniqid( get_class( $this ), true ) );
+        $contentCreate->alwaysAvailable = true;
+
+        $locationCreates = array(
+            new LocationCreateStruct(
+                array(
+                    //priority = 0
+                    //hidden = false
+                    "remoteId" => md5( uniqid( get_class( $this ), true ) ),
+                    //sortField = Location::SORT_FIELD_NAME
+                    //sortOrder = Location::SORT_ORDER_ASC
+                    "parentLocationId" => $parentLocationId
+                )
+            )
+        );
+
+        return $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreate,
+                $locationCreates
+            )->versionInfo
+        );
+    }
+
+    /**
+     * @param $contentInfo
+     * @param $parentLocationId
+     *
+     * @return mixed
+     */
+    protected function addNewMainLocation( $contentInfo, $parentLocationId )
+    {
+        $locationService = $this->repository->getLocationService();
+        $contentService = $this->repository->getContentService();
+
+        $newLocation = $locationService->createLocation(
+            $contentInfo,
+            new LocationCreateStruct(
+                array(
+                    "remoteId" => md5( uniqid( get_class( $this ), true ) ),
+                    "parentLocationId" => $parentLocationId
+                )
+            )
+        );
+        $contentService->updateContentMetadata(
+            $contentInfo,
+            new ContentMetadataUpdateStruct( array( "mainLocationId" => $newLocation->id ) )
+        );
+
+        return $newLocation->id;
+    }
+
+    /**
      * Test copying a subtree
+     *
+     * @group current
      * @covers \eZ\Publish\API\Repository\LocationService::copySubtree
      */
     public function testCopySubtree()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        // Prepare test tree
+        $outsideLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
+        $targetLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
+        $locationToCopyContent = $this->createTestContentLocation( 5 );
+
+        $locationToCopyId = $locationToCopyContent->contentInfo->mainLocationId;
+
+        $this->createTestContentLocation( $locationToCopyId );
+        $subLocationContent20 =  $this->createTestContentLocation( $locationToCopyId );
+        $subLocationId20 =  $subLocationContent20->contentInfo->mainLocationId;
+        $subLocationContent21 = $this->createTestContentLocation( $subLocationId20 );
+
+        // Add main locations outside subtree
+        $this->addNewMainLocation( $locationToCopyContent->contentInfo, $outsideLocationId );
+        $this->addNewMainLocation( $subLocationContent20->contentInfo, $outsideLocationId );
+
+        // Add main locations inside subtree
+        $lastLocationId = $this->addNewMainLocation( $subLocationContent21->contentInfo, $locationToCopyId );
+
+        /* BEGIN: Use Case */
         $locationService = $this->repository->getLocationService();
-        $locationToCopy = $locationService->loadLocation( 5 );
-        $targetLocation = $locationService->loadLocation( 2 );
+        $locationToCopy = $locationService->loadLocation( $locationToCopyId );
+        $targetLocation = $locationService->loadLocation( $targetLocationId );
 
-        $copiedSubtree = $locationService->copySubtree( $locationToCopy, $targetLocation );
+        $copiedSubtreeRootLocation = $locationService->copySubtree( $locationToCopy, $targetLocation );
+        /* END: Use Case */
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $copiedSubtree );
-        self::assertGreaterThan( 0, $copiedSubtree->id );
-        self::assertEquals( $targetLocation->id, $copiedSubtree->parentLocationId );
+        self::assertEquals( $lastLocationId + 1, $copiedSubtreeRootLocation->id );
+
+        // Check structure
+        $subtreeRootChildren = $locationService->loadLocationChildren( $copiedSubtreeRootLocation );
+        self::assertCount( 3, $subtreeRootChildren );
+        self::assertCount( 0, $locationService->loadLocationChildren( $subtreeRootChildren[0] ) );
+        $subLocationChildren = $locationService->loadLocationChildren( $subtreeRootChildren[1] );
+        self::assertCount( 1, $subLocationChildren );
+        self::assertCount( 0, $locationService->loadLocationChildren( $subtreeRootChildren[2] ) );
+        self::assertCount( 0, $locationService->loadLocationChildren( $subLocationChildren[0] ) );
+
+        // Check main locations
+        self::assertEquals( $copiedSubtreeRootLocation->contentInfo->mainLocationId, $copiedSubtreeRootLocation->id );
+        self::assertEquals( $subtreeRootChildren[0]->contentInfo->mainLocationId, $subtreeRootChildren[0]->id );
+        self::assertEquals( $subtreeRootChildren[1]->contentInfo->mainLocationId, $subtreeRootChildren[1]->id );
+        self::assertEquals( $subtreeRootChildren[2]->contentInfo->mainLocationId, $subtreeRootChildren[2]->id );
+        self::assertEquals( $subLocationChildren[0]->contentInfo->mainLocationId, $subtreeRootChildren[2]->id );
+
+        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Location", $copiedSubtreeRootLocation );
+        self::assertEquals( $targetLocation->id, $copiedSubtreeRootLocation->parentLocationId );
     }
 
     /**
@@ -434,6 +541,7 @@ abstract class LocationBase extends BaseServiceTest
 
     /**
      * Test creating a location throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LocationService::createLocation
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionParentIsASubLocation()

@@ -14,6 +14,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\User\User,
     eZ\Publish\Core\Repository\Values\User\UserGroup,
     eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
 
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
@@ -255,7 +256,13 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $parentGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $parentGroup = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
         $userService->loadSubUserGroups( $parentGroup );
     }
 
@@ -288,7 +295,13 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $userGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $userGroup = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
         $userService->deleteUserGroup( $userGroup );
     }
 
@@ -319,8 +332,20 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $userGroupToMove = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
-        $parentUserGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $userGroupToMove = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
+        $parentUserGroup = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
         $userService->moveUserGroup( $userGroupToMove, $parentUserGroup );
     }
 
@@ -839,7 +864,7 @@ abstract class UserBase extends BaseServiceTest
         );
 
         self::assertNull( $userUpdateStruct->contentUpdateStruct );
-        self::assertNull( $userUpdateStruct->contentMetaDataUpdateStruct );
+        self::assertNull( $userUpdateStruct->contentMetadataUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -868,6 +893,6 @@ abstract class UserBase extends BaseServiceTest
         );
 
         self::assertNull( $userGroupUpdateStruct->contentUpdateStruct );
-        self::assertNull( $userGroupUpdateStruct->contentMetaDataUpdateStruct );
+        self::assertNull( $userGroupUpdateStruct->contentMetadataUpdateStruct );
     }
 }

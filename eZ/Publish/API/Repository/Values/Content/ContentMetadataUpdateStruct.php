@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * With this class data can be provided to update version independent fields of the content.
  * It is used in content update methods. At least one property in this class must be set.
  */
-class ContentMetaDataUpdateStruct extends ValueObject
+class ContentMetadataUpdateStruct extends ValueObject
 {
     /**
      * If set this value changes the owner id of the content object

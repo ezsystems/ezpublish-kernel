@@ -282,11 +282,11 @@ class UserServiceStub implements UserService
             $content = $contentService->publishVersion( $draft->getVersionInfo() );
         }
 
-        if ( $userGroupUpdateStruct->contentMetaDataUpdateStruct )
+        if ( $userGroupUpdateStruct->contentMetadataUpdateStruct )
         {
             $content = $contentService->updateContentMetadata(
                 $userGroup->contentInfo,
-                $userGroupUpdateStruct->contentMetaDataUpdateStruct
+                $userGroupUpdateStruct->contentMetadataUpdateStruct
             );
         }
 
@@ -494,11 +494,11 @@ class UserServiceStub implements UserService
             $contentDraft->getVersionInfo()
         );
 
-        if ( $userUpdateStruct->contentMetaDataUpdateStruct )
+        if ( $userUpdateStruct->contentMetadataUpdateStruct )
         {
             $content = $contentService->updateContentMetadata(
                 $content->contentInfo,
-                $userUpdateStruct->contentMetaDataUpdateStruct
+                $userUpdateStruct->contentMetadataUpdateStruct
             );
         }
 

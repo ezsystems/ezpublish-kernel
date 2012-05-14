@@ -48,7 +48,6 @@ class FieldDefinitionCreateStruct extends ValueObject
      */
     public $descriptions;
 
-
     /**
      * Field group name
      *
@@ -98,7 +97,6 @@ class FieldDefinitionCreateStruct extends ValueObject
      * @var array an array of mixed
      */
     public $fieldSettings;
-
 
     /**
      * Default value of the field

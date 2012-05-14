@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -186,7 +186,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct );
+    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct );
 
     /**
      * deletes a content object including all its versions and locations including their subtrees.

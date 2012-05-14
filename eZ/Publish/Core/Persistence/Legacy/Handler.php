@@ -64,14 +64,14 @@ class Handler implements HandlerInterface
     /**
      * Storage registry
      *
-     * @var Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
      */
     protected $storageRegistry;
 
     /**
      * Storage registry
      *
-     * @var Content\StorageHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $storageHandler;
 
@@ -92,7 +92,7 @@ class Handler implements HandlerInterface
     /**
      * Content type handler
      *
-     * @var Content\Type\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
@@ -134,14 +134,14 @@ class Handler implements HandlerInterface
     /**
      * User handler
      *
-     * @var User\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Handler
      */
     protected $userHandler;
 
     /**
      * Section handler
      *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler
      */
     protected $sectionHandler;
 
@@ -413,7 +413,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a storage handler
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\StorageHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getStorageHandler()
     {
@@ -551,7 +551,8 @@ class Handler implements HandlerInterface
                     new Type\ContentUpdater(
                         $this->searchHandler(),
                         $this->getContentGateway(),
-                        $this->getFieldValueConverterRegistry()
+                        $this->getFieldValueConverterRegistry(),
+                        $this->getStorageHandler()
                     )
                 );
             }
