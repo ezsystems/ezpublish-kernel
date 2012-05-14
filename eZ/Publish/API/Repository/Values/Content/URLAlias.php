@@ -28,12 +28,12 @@ class URLAlias extends ValueObject
 {
     const LOCATION = 0;
     const RESOURCE = 1;
-    const VIRTUAL = 2;
-
+    const VIRTUAL  = 2;
 
     /**
      * A unique identifier for the alias
      * (in legacy implementation this would be <parentid>-<md5text>)
+     *
      * @var string
      */
     protected $id;
@@ -87,6 +87,4 @@ class URLAlias extends ValueObject
      * @var boolean
      */
     protected $forward;
-
-
 }
