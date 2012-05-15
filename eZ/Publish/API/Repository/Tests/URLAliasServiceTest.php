@@ -434,30 +434,6 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
-     * Test for the createGlobalUrlAlias() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forward)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     */
-    public function testCreateGlobalUrlAliasThrowsForbiddenExceptionWithFourthParameter()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::createGlobalUrlAlias() is not implemented." );
-    }
-
-    /**
-     * Test for the createGlobalUrlAlias() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forward, $alwaysAvailable)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     */
-    public function testCreateGlobalUrlAliasThrowsForbiddenExceptionWithFifthParameter()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::createGlobalUrlAlias() is not implemented." );
-    }
-
-    /**
      * Test for the listLocationAliases() method.
      *
      * @return void
@@ -466,7 +442,56 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testListLocationAliases()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::listLocationAliases() is not implemented." );
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 12 );
+
+        /* BEGIN: Use Case */
+        // $locationId contains the ID of an existing Location
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( $locationId );
+
+        // $loadedAliases will contain an array of URLAlias objects
+        $loadedAliases = $urlAliasService->listLocationAliases( $location );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedAliases
+        );
+        return array( $loadedAliases, $location );
+    }
+
+    /**
+     * @param array $testData
+     * @return void
+     * @depends testListLocationAliases
+     */
+    public function testListLocationAliasesLoadsCorrectly( array $testData )
+    {
+        list( $loadedAliases, $location ) = $testData;
+
+        // FIXME: This is only the number of non-history aliases
+        // What about those? How to load their data properly?
+        $this->assertEquals( 1, count( $loadedAliases ) );
+
+        foreach ( $loadedAliases as $loadedAlias )
+        {
+            $this->assertInstanceOf(
+                'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+                $loadedAlias
+            );
+            $this->assertInstanceOf(
+                'eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+                $loadedAlias->destination
+            );
+            $this->assertEquals(
+                $location->id,
+                $loadedAlias->destination->id
+            );
+        }
     }
 
     /**

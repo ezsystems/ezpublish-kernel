@@ -168,7 +168,15 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function listLocationAliases( Location $location, $custom = true, $languageCode = null )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $locationAliases = array();
+        foreach ( $this->aliases as $existingAlias )
+        {
+            if ( $existingAlias->destination instanceof Location && $existingAlias->destination->id == $location->id )
+            {
+                $locationAliases[] = $existingAlias;
+            }
+        }
+        return $locationAliases;
     }
 
     /**
