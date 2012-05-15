@@ -75,19 +75,7 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        foreach ( $this->aliases as $existingAlias )
-        {
-            if ( !$existingAlias->isHistory && $existingAlias->path == $path )
-            {
-                throw new Exceptions\ForbiddenExceptionStub(
-                    sprintf(
-                        'An alias for path "%s" in language "%s" already exists.',
-                        $path,
-                        $languageCode
-                    )
-                );
-            }
-        }
+        $this->checkAliasNotExists( $path, $languageCode );
 
         $data = array(
             'id'              => ++$this->nextAliasId,
@@ -100,6 +88,34 @@ class URLAliasServiceStub implements URLAliasService
             'forward'         => $forwarding,
         );
         return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
+    }
+
+    /**
+     * Checks if an alias for the given $path already exists.
+     *
+     * @param string $path
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     *
+     * @return void
+     */
+    protected function checkAliasNotExists( $path, $languageCode )
+    {
+        foreach ( $this->aliases as $existingAlias )
+        {
+            if ( !$existingAlias->isHistory
+                && $existingAlias->path == $path
+                && in_array( $languageCode, $existingAlias->languageCodes ) )
+            {
+                throw new Exceptions\ForbiddenExceptionStub(
+                    sprintf(
+                        'An alias for path "%s" in language "%s" already exists.',
+                        $path,
+                        $languageCode
+                    )
+                );
+            }
+        }
     }
 
      /**
@@ -124,6 +140,8 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
     {
+        $this->checkAliasNotExists( $path, $languageCode );
+
         $data = array(
             'id'              => ++$this->nextAliasId,
             'type'            => URLAlias::RESOURCE,

@@ -420,7 +420,17 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testCreateGlobalUrlAliasThrowsForbiddenException()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::createGlobalUrlAlias() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Throws ForbiddenException, since this path already exists for the
+        // language
+        $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
+            '/My-new-Site', '/Support', 'eng-US'
+        );
+        /* END: Use Case */
     }
 
     /**
