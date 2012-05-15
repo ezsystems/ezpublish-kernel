@@ -876,7 +876,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * @return array Data rows.
      */
     public function loadTypeData( $typeId, $status )
     {
@@ -1034,10 +1034,9 @@ class EzcDatabase extends Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
-     * @param int $status @todo Remove or implement
      * @return int
      */
-    public function countInstancesOfType( $typeId, $status )
+    public function countInstancesOfType( $typeId )
     {
         $q = $this->dbHandler->createSelectQuery();
         $q->select(
@@ -1066,6 +1065,8 @@ class EzcDatabase extends Gateway
      * Deletes all field definitions of a Type.
      *
      * @param mixed $typeId
+     * @param int $status
+     *
      * @return void
      */
     public function deleteFieldDefinitionsForType( $typeId, $status )
@@ -1090,8 +1091,6 @@ class EzcDatabase extends Gateway
 
     /**
      * Deletes a Type completely.
-     *
-     * Does no delete the field definitions!
      *
      * @param mixed $typeId
      * @param int $status
@@ -1119,6 +1118,8 @@ class EzcDatabase extends Gateway
      * Does no delete the field definitions!
      *
      * @param mixed $typeId
+     * @param int $status
+     *
      * @return void
      */
     public function deleteType( $typeId, $status )
@@ -1145,6 +1146,8 @@ class EzcDatabase extends Gateway
      * Deletes all group assignments for a Type.
      *
      * @param mixed $typeId
+     * @param int $status
+     *
      * @return void
      */
     public function deleteGroupAssignmentsForType( $typeId, $status )
