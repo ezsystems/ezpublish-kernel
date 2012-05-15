@@ -448,19 +448,19 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $spiFieldDefinition = new SPIFieldDefinition(
             array(
-                "id"              => $fieldDefinition->id,
-                "name"            => $fieldDefinitionUpdateStruct->names,
-                "description"     => $fieldDefinitionUpdateStruct->descriptions,
-                "identifier"      => $fieldDefinitionUpdateStruct->identifier,
-                "fieldGroup"      => $fieldDefinitionUpdateStruct->fieldGroup,
-                "position"        => $fieldDefinitionUpdateStruct->position,
-                "fieldType"       => $fieldDefinition->fieldTypeIdentifier,
-                "isTranslatable"  => $fieldDefinitionUpdateStruct->isTranslatable,
-                "isRequired"      => $fieldDefinitionUpdateStruct->isRequired,
+                "id" => $fieldDefinition->id,
+                "name" => $fieldDefinitionUpdateStruct->names,
+                "description" => $fieldDefinitionUpdateStruct->descriptions,
+                "identifier" => $fieldDefinitionUpdateStruct->identifier,
+                "fieldGroup" => $fieldDefinitionUpdateStruct->fieldGroup,
+                "position" => $fieldDefinitionUpdateStruct->position,
+                "fieldType" => $fieldDefinition->fieldTypeIdentifier,
+                "isTranslatable" => $fieldDefinitionUpdateStruct->isTranslatable,
+                "isRequired" => $fieldDefinitionUpdateStruct->isRequired,
                 "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector,
                 //"fieldTypeConstraints"
                 //"defaultValue"
-                "isSearchable"    => $fieldDefinitionUpdateStruct->isSearchable
+                "isSearchable" => $fieldDefinitionUpdateStruct->isSearchable
             )
         );
         $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionUpdateStruct->validators;
@@ -502,25 +502,25 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return new ContentType(
             array(
-                "names"                  => $spiContentType->name,
-                "descriptions"           => $spiContentType->description,
-                "contentTypeGroups"      => $contentTypeGroups,
-                "fieldDefinitions"       => $fieldDefinitions,
-                "id"                     => $spiContentType->id,
-                "status"                 => $spiContentType->status,
-                "identifier"             => $spiContentType->identifier,
-                "creationDate"           => $createdDate,
-                "modificationDate"       => $modifiedDate,
-                "creatorId"              => $spiContentType->creatorId,
-                "modifierId"             => $spiContentType->modifierId,
-                "remoteId"               => $spiContentType->remoteId,
-                "urlAliasSchema"         => $spiContentType->urlAliasSchema,
-                "nameSchema"             => $spiContentType->nameSchema,
-                "isContainer"            => $spiContentType->isContainer,
-                "mainLanguageCode"       => $mainLanguageCode,
+                "names" => $spiContentType->name,
+                "descriptions" => $spiContentType->description,
+                "contentTypeGroups" => $contentTypeGroups,
+                "fieldDefinitions" => $fieldDefinitions,
+                "id" => $spiContentType->id,
+                "status" => $spiContentType->status,
+                "identifier" => $spiContentType->identifier,
+                "creationDate" => $createdDate,
+                "modificationDate" => $modifiedDate,
+                "creatorId" => $spiContentType->creatorId,
+                "modifierId" => $spiContentType->modifierId,
+                "remoteId" => $spiContentType->remoteId,
+                "urlAliasSchema" => $spiContentType->urlAliasSchema,
+                "nameSchema" => $spiContentType->nameSchema,
+                "isContainer" => $spiContentType->isContainer,
+                "mainLanguageCode" => $mainLanguageCode,
                 "defaultAlwaysAvailable" => $spiContentType->defaultAlwaysAvailable,
-                "defaultSortField"       => $spiContentType->sortField,
-                "defaultSortOrder"       => $spiContentType->sortOrder
+                "defaultSortField" => $spiContentType->sortField,
+                "defaultSortOrder" => $spiContentType->sortOrder
             )
         );
     }
@@ -535,20 +535,20 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         return new FieldDefinition(
             array(
-                "names"                     => $spiFieldDefinition->name,
-                "descriptions"              => $spiFieldDefinition->description,
-                "fieldSettings"             => $spiFieldDefinition->fieldTypeConstraints->fieldSettings,
-                "validators"                => $spiFieldDefinition->fieldTypeConstraints->validators,
-                "id"                        => $spiFieldDefinition->id,
-                "identifier"                => $spiFieldDefinition->identifier,
-                "fieldGroup"                => $spiFieldDefinition->fieldGroup,
-                "position"                  => $spiFieldDefinition->position,
-                "fieldTypeIdentifier"       => $spiFieldDefinition->fieldType,
-                "isTranslatable"            => $spiFieldDefinition->isTranslatable,
-                "isRequired"                => $spiFieldDefinition->isRequired,
-                "isInfoCollector"           => $spiFieldDefinition->isInfoCollector,
-                "defaultValue"              => $spiFieldDefinition->defaultValue->data,
-                "isSearchable"              => $spiFieldDefinition->isSearchable
+                "names" => $spiFieldDefinition->name,
+                "descriptions" => $spiFieldDefinition->description,
+                "fieldSettings" => $spiFieldDefinition->fieldTypeConstraints->fieldSettings,
+                "validators" => $spiFieldDefinition->fieldTypeConstraints->validators,
+                "id" => $spiFieldDefinition->id,
+                "identifier" => $spiFieldDefinition->identifier,
+                "fieldGroup" => $spiFieldDefinition->fieldGroup,
+                "position" => $spiFieldDefinition->position,
+                "fieldTypeIdentifier" => $spiFieldDefinition->fieldType,
+                "isTranslatable" => $spiFieldDefinition->isTranslatable,
+                "isRequired" => $spiFieldDefinition->isRequired,
+                "isInfoCollector" => $spiFieldDefinition->isInfoCollector,
+                "defaultValue" => $spiFieldDefinition->defaultValue->data,
+                "isSearchable" => $spiFieldDefinition->isSearchable
             )
         );
     }
@@ -850,7 +850,11 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
         catch ( APIBadStateException $e )
         {
-            throw new BadStateException( '$contentType', 'existing content exists of this content type', $e );
+            throw new BadStateException(
+                "\$contentType",
+                "ContentType still has content",
+                $e
+            );
         }
     }
 
@@ -1192,7 +1196,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Instantiates a FieldType\Type object
      *
      * @todo Add to API or remove!
-     * @throws InvalidArgumentException If $type not priorly setup with settings injeced to service
+     * @throws InvalidArgumentException If $type not priorly setup with settings injected to service
      *
      * @param string $type
      * @return \eZ\Publish\SPI\FieldType\FieldType
