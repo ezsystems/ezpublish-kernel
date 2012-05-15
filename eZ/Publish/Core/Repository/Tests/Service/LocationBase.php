@@ -259,12 +259,11 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocation()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
-        $loadedLocation = $locationService->loadLocation( 2 );
+        $loadedLocation = $locationService->loadLocation( 5 );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $loadedLocation );
-        self::assertEquals( 2, $loadedLocation->id );
+        self::assertEquals( 5, $loadedLocation->id );
     }
 
     /**
@@ -325,6 +324,8 @@ abstract class LocationBase extends BaseServiceTest
             $contentTypeService->loadContentType( 3 ),
             'eng-GB'
         );
+        $contentCreateStruct->sectionId = 1;
+        $contentCreateStruct->ownerId = 14;
 
         $contentCreateStruct->setField( 'name', 'New group' );
         $contentCreateStruct->setField( 'description', 'New group description' );
@@ -341,9 +342,9 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadMainLocationThrowsBadStateException()
     {
-        self::markTestSkipped( "@todo: enable when content type and content services are done" );
         $contentDraft = $this->createContentDraft();
 
+        // Throws an exception because content does not have published version
         $this->repository->getLocationService()->loadMainLocation(
             $contentDraft->getVersionInfo()->getContentInfo()
         );
@@ -351,12 +352,14 @@ abstract class LocationBase extends BaseServiceTest
 
     /**
      * Test loading locations for content
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation
      * @covers \eZ\Publish\API\Repository\LocationService::loadLocations
      */
     public function testLoadLocations()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 4 );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 12 );
 
         $locationService = $this->repository->getLocationService();
         $locations = $locationService->loadLocations( $contentInfo );
@@ -367,12 +370,12 @@ abstract class LocationBase extends BaseServiceTest
         foreach ( $locations as $location )
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
-            self::assertEquals( $contentInfo->id, $location->getContentInfo()->contentId );
+            self::assertEquals( $contentInfo->id, $location->getContentInfo()->id );
         }
 
         $locationsCount = count( $locations );
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 44 );
         $locationService->createLocation( $contentInfo, $locationCreateStruct );
 
         $locations = $locationService->loadLocations( $contentInfo );
@@ -383,7 +386,7 @@ abstract class LocationBase extends BaseServiceTest
         foreach ( $locations as $location )
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
-            self::assertEquals( $contentInfo->id, $location->getContentInfo()->contentId );
+            self::assertEquals( $contentInfo->id, $location->getContentInfo()->id );
         }
 
         $newLocationsCount = count( $locations );
@@ -397,8 +400,7 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationsWithRootLocation()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 10 );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 12 );
 
         $locationService = $this->repository->getLocationService();
         $parentLocation = $locationService->loadLocation( 5 );
@@ -427,7 +429,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationsThrowsBadStateException()
     {
-        self::markTestSkipped( "@todo: enable when content type and content services are done" );
         $contentDraft = $this->createContentDraft();
 
         $this->repository->getLocationService()->loadLocations(
@@ -441,7 +442,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testLoadLocationChildren()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
 
         $rootLocation = $locationService->loadLocation( 5 );
@@ -463,11 +463,10 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testCreateLocation()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
         $contentService = $this->repository->getContentService();
 
-        $parentLocation = $locationService->loadLocation( 2 );
+        $parentLocation = $locationService->loadLocation( 44 );
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $parentLocation->id );
         $locationCreateStruct->priority = 42;
@@ -476,7 +475,7 @@ abstract class LocationBase extends BaseServiceTest
         $locationCreateStruct->sortField = Location::SORT_FIELD_DEPTH;
         $locationCreateStruct->sortOrder = Location::SORT_ORDER_DESC;
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo( 12 );
 
         $createdLocation = $locationService->createLocation(
             $contentInfo,
@@ -606,22 +605,21 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testSwapLocation()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
 
-        $location1 = $locationService->loadLocation( 2 );
-        $location2 = $locationService->loadLocation( 5 );
+        $location1 = $locationService->loadLocation( 13 );
+        $location2 = $locationService->loadLocation( 44 );
 
-        $contentId1 = $location1->getContentInfo()->contentId;
-        $contentId2 = $location2->getContentInfo()->contentId;
+        $contentId1 = $location1->getContentInfo()->id;
+        $contentId2 = $location2->getContentInfo()->id;
 
         $locationService->swapLocation( $location1, $location2 );
 
-        $location1 = $locationService->loadLocation( 2 );
-        $location2 = $locationService->loadLocation( 5 );
+        $location1 = $locationService->loadLocation( 13 );
+        $location2 = $locationService->loadLocation( 44 );
 
-        self::assertEquals( $contentId1, $location2->getContentInfo()->contentId );
-        self::assertEquals( $contentId2, $location1->getContentInfo()->contentId );
+        self::assertEquals( $contentId1, $location2->getContentInfo()->id );
+        self::assertEquals( $contentId2, $location1->getContentInfo()->id );
     }
 
     /**
@@ -651,11 +649,10 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testMoveSubtree()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
 
-        $locationToMove = $locationService->loadLocation( 5 );
-        $newParent = $locationService->loadLocation( 2 );
+        $locationToMove = $locationService->loadLocation( 13 );
+        $newParent = $locationService->loadLocation( 44 );
         $locationService->moveSubtree( $locationToMove, $newParent );
 
         $loadedLocation = $locationService->loadLocation( $locationToMove->id );
@@ -668,7 +665,6 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testDeleteLocation()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $locationService = $this->repository->getLocationService();
 
         $location = $locationService->loadLocation( 44 );
