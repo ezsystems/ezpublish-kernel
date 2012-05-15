@@ -634,11 +634,19 @@ function generateURLAliasFixture( array $fixture )
                 break;
 
             case 'eznode':
-                $destination = createRepoCall(
-                    'LocationService',
-                    'loadLocation',
-                    array( substr( $data['action'], 7 ) )
-                );
+                if ( $data['link'] == $data['id'] )
+                {
+                    $destination = createRepoCall(
+                        'LocationService',
+                        'loadLocation',
+                        array( substr( $data['action'], 7 ) )
+                    );
+                }
+                else
+                {
+                    // TODO: How should we react? Location does not exist here
+                    // anymore.
+                }
                 break;
 
             case 'module':
