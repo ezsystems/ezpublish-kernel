@@ -610,15 +610,36 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     public function testDeleteSuccess()
     {
         $gatewayMock = $this->getGatewayMock();
-        $gatewayMock->expects( $this->once() )
-            ->method( 'countInstancesOfType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            ->will( $this->returnValue( 0 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'delete' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
 
-        $mapperMock = $this->getMapperMock();
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "loadTypeData"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        )->will(
+            $this->returnValue( array( 42 ) )
+        );
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "countInstancesOfType"
+        )->with(
+            $this->equalTo( 23 )
+        )->will(
+            $this->returnValue( 0 )
+        );
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "delete"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        );
 
         $handler = $this->getHandler();
         $res = $handler->delete( 23, 0 );
@@ -628,23 +649,61 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
-     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent
-     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent
-     * @expectedExceptionMessage Type with ID "23" in status "0" still has content instances and can therefore not be deleted.
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function testDeleteFailure()
+    public function testDeleteThrowsNotFoundException()
     {
         $gatewayMock = $this->getGatewayMock();
-        $gatewayMock->expects( $this->once() )
-            ->method( 'countInstancesOfType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            // An instance of this type exists
-            ->will( $this->returnValue( 1 ) );
-        $gatewayMock->expects( $this->never() )
-            ->method( 'delete' );
 
-        $mapperMock = $this->getMapperMock();
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "loadTypeData"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        )->will(
+            $this->returnValue( array() )
+        );
+
+        $gatewayMock->expects( $this->never() )->method( "delete" );
+
+        $handler = $this->getHandler();
+        $res = $handler->delete( 23, 0 );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\BadStateException
+     */
+    public function testDeleteThrowsBadStateException()
+    {
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "loadTypeData"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        )->will(
+            $this->returnValue( array( 42 ) )
+        );
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "countInstancesOfType"
+        )->with(
+            $this->equalTo( 23 )
+        )->will(
+            $this->returnValue( 1 )
+        );
+
+        $gatewayMock->expects( $this->never() )->method( "delete" );
 
         $handler = $this->getHandler();
         $res = $handler->delete( 23, 0 );
