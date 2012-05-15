@@ -785,7 +785,14 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testLookUpThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::lookUp() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Throws NotFoundException
+        $loadedAlias = $urlAliasService->lookUp( '/non-existent-url' );
+        /* END: Use Case */
     }
 
     /**
