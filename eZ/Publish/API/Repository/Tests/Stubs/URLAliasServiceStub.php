@@ -81,9 +81,9 @@ class URLAliasServiceStub implements URLAliasService
             'destination'     => $location,
             'path'            => $path,
             'languageCodes'   => array( $languageCode ),
-            'alwaysAvailable' => false,
+            'alwaysAvailable' => $alwaysAvailable,
             'isHistory'       => false,
-            'forward'         => false,
+            'forward'         => $forwarding,
         );
         return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
     }

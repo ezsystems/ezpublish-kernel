@@ -124,11 +124,57 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\URLAliasService::createUrlAlias($location, $path, $languageCode, $forwarding)
-     *
+     * @depends testCreateUrlAliasPropertyValues
      */
-    public function testCreateUrlAliasWithFourthParameter()
+    public function testCreateUrlAliasWithForwarding()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::createUrlAlias() is not implemented." );
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 5 );
+
+        /* BEGIN: Use Case */
+        // $locationId is the ID of an existing location
+
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $location = $locationService->loadLocation( $locationId );
+
+        $createdUrlAlias = $urlAliasService->createUrlAlias(
+            $location, '/Home/My-New-Site', 'eng-US', true
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $createdUrlAlias
+        );
+        return array( $createdUrlAlias, $location );
+    }
+
+    /**
+     * @param URLAlias $createdUrlAlias
+     * @return void
+     * @depends testCreateUrlAliasWithForwarding
+     */
+    public function testCreateUrlAliasPropertyValuesWithForwarding( array $testData )
+    {
+        list( $createdUrlAlias, $location ) = $testData;
+
+        $this->assertNotNull( $createdUrlAlias->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'type'            => URLAlias::LOCATION,
+                'destination'     => $location,
+                'path'            => '/Home/My-New-Site',
+                'languageCodes'   => array( 'eng-US' ),
+                'alwaysAvailable' => false,
+                'isHistory'       => false,
+                'forward'         => true,
+            ),
+            $createdUrlAlias
+        );
     }
 
     /**
@@ -138,9 +184,55 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\URLAliasService::createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable)
      *
      */
-    public function testCreateUrlAliasWithFifthParameter()
+    public function testCreateUrlAliasWithAlwaysAvailable()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::createUrlAlias() is not implemented." );
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 5 );
+
+        /* BEGIN: Use Case */
+        // $locationId is the ID of an existing location
+
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $location = $locationService->loadLocation( $locationId );
+
+        $createdUrlAlias = $urlAliasService->createUrlAlias(
+            $location, '/Home/My-New-Site', 'eng-US', false, true
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $createdUrlAlias
+        );
+        return array( $createdUrlAlias, $location );
+    }
+
+    /**
+     * @param URLAlias $createdUrlAlias
+     * @return void
+     * @depends testCreateUrlAliasWithAlwaysAvailable
+     */
+    public function testCreateUrlAliasPropertyValuesWithAlwaysAvailable( array $testData )
+    {
+        list( $createdUrlAlias, $location ) = $testData;
+
+        $this->assertNotNull( $createdUrlAlias->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'type'            => URLAlias::LOCATION,
+                'destination'     => $location,
+                'path'            => '/Home/My-New-Site',
+                'languageCodes'   => array( 'eng-US' ),
+                'alwaysAvailable' => true,
+                'isHistory'       => false,
+                'forward'         => false,
+            ),
+            $createdUrlAlias
+        );
     }
 
     /**
