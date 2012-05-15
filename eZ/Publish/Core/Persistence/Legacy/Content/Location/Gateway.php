@@ -76,9 +76,11 @@ abstract class Gateway
      * Updated subtree modification time for all nodes on path
      *
      * @param string $pathString
+     * @param int|null $timestamp
+     *
      * @return void
      */
-    abstract public function updateSubtreeModificationTime( $pathString );
+    abstract public function updateSubtreeModificationTime( $pathString, $timestamp = null );
 
     /**
      * Update node assignment table
