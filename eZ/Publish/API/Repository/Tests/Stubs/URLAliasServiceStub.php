@@ -208,7 +208,8 @@ class URLAliasServiceStub implements URLAliasService
             }
             $globalAliases[] = $existingAlias;
         }
-        return $globalAliases;
+
+        return array_slice( $globalAliases, $offset, ( $limit == -1 ? null : $limit ) );
     }
 
 

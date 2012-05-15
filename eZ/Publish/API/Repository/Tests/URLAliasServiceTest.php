@@ -629,9 +629,25 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\URLAliasService::listGlobalAliases($languageCode, $offset)
      *
      */
-    public function testListGlobalAliasesWithSecondParameter()
+    public function testListGlobalAliasesWithOffset()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::listGlobalAliases() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Create some global aliases
+        $this->createGlobalAliases();
+
+        // $loadedAliases will contain only 2 of 3 global aliases
+        $loadedAliases = $urlAliasService->listGlobalAliases( null, 1 );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedAliases
+        );
+        $this->assertEquals( 2, count( $loadedAliases ) );
     }
 
     /**
@@ -641,9 +657,25 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\URLAliasService::listGlobalAliases($languageCode, $offset, $limit)
      *
      */
-    public function testListGlobalAliasesWithThirdParameter()
+    public function testListGlobalAliasesWithLimit()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::listGlobalAliases() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Create some global aliases
+        $this->createGlobalAliases();
+
+        // $loadedAliases will contain only 1 of 3 global aliases
+        $loadedAliases = $urlAliasService->listGlobalAliases( null, 0, 1 );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedAliases
+        );
+        $this->assertEquals( 1, count( $loadedAliases ) );
     }
 
     /**
