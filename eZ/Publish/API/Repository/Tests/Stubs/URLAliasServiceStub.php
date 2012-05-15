@@ -11,6 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
@@ -25,9 +26,23 @@ class URLAliasServiceStub implements URLAliasService
     /**
      * Repository
      *
-     * @var eZ\Publish\API\Tests\Stubs\RepositoryStub
+     * @var eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
+
+    /**
+     * URL aliases
+     *
+     * @var eZ\Publish\API\Repository\Values\URLAlias
+     */
+    private $aliases = array();
+
+    /**
+     * Next ID to give to a new alias
+     *
+     * @var int
+     */
+    private $nextAliasId = 0;
 
     /**
      * Creates a new URLServiceStub
@@ -38,6 +53,7 @@ class URLAliasServiceStub implements URLAliasService
     public function __construct( RepositoryStub $repository )
     {
         $this->repository = $repository;
+        $this->initFromFixture();
     }
 
      /**
@@ -59,7 +75,17 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $data = array(
+            'id'              => ++$this->nextAliasId,
+            'type'            => URLAlias::LOCATION,
+            'destination'     => $location,
+            'path'            => $path,
+            'languageCodes'   => array( $languageCode ),
+            'alwaysAvailable' => false,
+            'isHistory'       => false,
+            'forward'         => false,
+        );
+        return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
     }
 
      /**
@@ -164,4 +190,36 @@ class URLAliasServiceStub implements URLAliasService
         throw new \RuntimeException( "Not implemented, yet." );
     }
 
+    /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        $this->aliases     = array();
+        $this->nextAliasId = 0;
+
+        list(
+            $aliases,
+            $this->nextAliasId
+        ) = $this->repository->loadFixture( 'URLAlias' );
+
+        foreach ( $aliases as $alias )
+        {
+            $this->aliases[$alias->id] = $alias;
+            $this->nextAliasId         = max( $this->nextAliasId, $alias->id );
+        }
+    }
 }
