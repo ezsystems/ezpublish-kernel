@@ -626,6 +626,12 @@ function generateURLAliasFixture( array $fixture )
     $aliases = array();
     foreach ( getFixtureTable( 'ezurlalias_ml', $fixture ) as $data )
     {
+        if ( $data['id'] == 46 || $data['id'] == 16 )
+        {
+            // FIXME: These aliases have a non-existing location assigned
+            continue;
+        }
+
         $destination = null;
         switch ( $data['action_type'] )
         {

@@ -28,20 +28,6 @@ return array(
                 "forward"  =>  true,
             )
         ),
-        46  =>  new \eZ\Publish\API\Repository\Values\Content\URLAlias(
-            array(
-                "id"  =>  46,
-                "type"  =>  0,
-                "destination"  =>  $this->getLocationService()->loadLocation( 67 ),
-                "path"  =>  "/eZ-Publish",
-                "languageCodes"  =>  array(
-                    0 => "eng-US",
-                ),
-                "alwaysAvailable"  =>  1,
-                "isHistory"  =>  false,
-                "forward"  =>  true,
-            )
-        ),
         25  =>  new \eZ\Publish\API\Repository\Values\Content\URLAlias(
             array(
                 "id"  =>  25,
@@ -573,20 +559,6 @@ return array(
                 ),
                 "alwaysAvailable"  =>  1,
                 "isHistory"  =>  true,
-                "forward"  =>  true,
-            )
-        ),
-        16  =>  new \eZ\Publish\API\Repository\Values\Content\URLAlias(
-            array(
-                "id"  =>  16,
-                "type"  =>  0,
-                "destination"  =>  $this->getLocationService()->loadLocation( 50 ),
-                "path"  =>  "/foo_bar_folder/images/vbanner",
-                "languageCodes"  =>  array(
-                    0 => "eng-US",
-                ),
-                "alwaysAvailable"  =>  0,
-                "isHistory"  =>  false,
                 "forward"  =>  true,
             )
         ),
