@@ -552,7 +552,31 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testListGlobalAliases()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::listGlobalAliases() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Create some global aliases
+        $urlAliasService->createGlobalUrlAlias(
+            '/Support', '/My/Special-Support', 'eng-US'
+        );
+        $urlAliasService->createGlobalUrlAlias(
+            '/Support', '/My/Spezial-Unterstützung', 'ger-DE'
+        );
+        $urlAliasService->createGlobalUrlAlias(
+            '/Home', '/My/Fancy-Site', 'eng-US'
+        );
+
+        // $loadedAliases will contain all 3 global aliases
+        $loadedAliases = $urlAliasService->listGlobalAliases();
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedAliases
+        );
+        $this->assertEquals( 3, count( $loadedAliases ) );
     }
 
     /**

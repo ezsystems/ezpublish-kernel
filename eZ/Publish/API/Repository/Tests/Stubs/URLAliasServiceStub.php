@@ -195,7 +195,16 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $globalAliases = array();
+        foreach ( $this->aliases as $existingAlias )
+        {
+            if ( !is_string( $existingAlias->destination ) )
+            {
+                continue;
+            }
+            $globalAliases[] = $existingAlias;
+        }
+        return $globalAliases;
     }
 
 
