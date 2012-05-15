@@ -753,9 +753,27 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\URLAliasService::lookUp($url, $languageCode)
      *
      */
-    public function testLookUpWithSecondParameter()
+    public function testLookUpWithLanguageFilter()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::lookUp() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Create aliases in multiple languages
+        $this->createGlobalAliases();
+
+        $loadedAlias = $urlAliasService->lookUp( '/My/Special-Support', 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $loadedAlias
+        );
+        $this->assertEquals(
+            '/Support',
+            $loadedAlias->destination
+        );
     }
 
     /**
