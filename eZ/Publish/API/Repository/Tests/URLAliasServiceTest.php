@@ -558,15 +558,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         // Create some global aliases
-        $urlAliasService->createGlobalUrlAlias(
-            '/Support', '/My/Special-Support', 'eng-US'
-        );
-        $urlAliasService->createGlobalUrlAlias(
-            '/Support', '/My/Spezial-Unterstützung', 'ger-DE'
-        );
-        $urlAliasService->createGlobalUrlAlias(
-            '/Home', '/My/Fancy-Site', 'eng-US'
-        );
+        $this->createGlobalAliases();
 
         // $loadedAliases will contain all 3 global aliases
         $loadedAliases = $urlAliasService->listGlobalAliases();
@@ -580,15 +572,54 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
+     * Creates 3 global aliases.
+     *
+     * @return void
+     */
+    private function createGlobalAliases()
+    {
+        $repository      = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+
+        /* BEGIN: Inline */
+        $urlAliasService->createGlobalUrlAlias(
+            '/Support', '/My/Special-Support', 'eng-US'
+        );
+        $urlAliasService->createGlobalUrlAlias(
+            '/Support', '/My/Spezial-Unterstützung', 'ger-DE'
+        );
+        $urlAliasService->createGlobalUrlAlias(
+            '/Home', '/My/Fancy-Site', 'eng-US'
+        );
+        /* END: Inline */
+    }
+
+    /**
      * Test for the listGlobalAliases() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\URLAliasService::listGlobalAliases($languageCode)
      *
      */
-    public function testListGlobalAliasesWithFirstParameter()
+    public function testListGlobalAliasesWithLanguageFilter()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::listGlobalAliases() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Create some global aliases
+        $this->createGlobalAliases();
+
+        // $loadedAliases will contain only 2 of 3 global aliases
+        $loadedAliases = $urlAliasService->listGlobalAliases( 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedAliases
+        );
+        $this->assertEquals( 2, count( $loadedAliases ) );
     }
 
     /**

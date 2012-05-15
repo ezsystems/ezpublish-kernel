@@ -202,6 +202,10 @@ class URLAliasServiceStub implements URLAliasService
             {
                 continue;
             }
+            if ( $languageCode !== null && !in_array( $languageCode, $existingAlias->languageCodes ) )
+            {
+                continue;
+            }
             $globalAliases[] = $existingAlias;
         }
         return $globalAliases;
