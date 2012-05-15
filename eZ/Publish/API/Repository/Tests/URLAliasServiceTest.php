@@ -687,7 +687,39 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testRemoveAliases()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::removeAliases() is not implemented." );
+        $repository = $this->getRepository();
+
+        $locationService = $repository->getLocationService();
+        $firstLocation = $locationService->loadLocation(
+            $this->generateId( 'location', 12 )
+        );
+        $secondLocation = $locationService->loadLocation(
+            $this->generateId( 'location', 58 )
+        );
+
+        /* BEGIN: Use Case */
+        // $firstLocation and $secondLocation contain different Locations which
+        // have both URLAliases assigned
+        $urlAliasService = $repository->getURLAliasService();
+
+        // $loadedAliases will contain an array of URLAlias objects
+        $loadedAliases = array_merge(
+            $urlAliasService->listLocationAliases( $firstLocation ),
+            $urlAliasService->listLocationAliases( $secondLocation )
+        );
+
+        // All URLAliases in $loadedAliases will be removed
+        $urlAliasService->removeAliases( $loadedAliases );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array(),
+            $urlAliasService->listLocationAliases( $firstLocation )
+        );
+        $this->assertEquals(
+            array(),
+            $urlAliasService->listLocationAliases( $secondLocation )
+        );
     }
 
     /**
@@ -699,7 +731,19 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testLookUp()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::lookUp() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        $loadedAlias = $urlAliasService->lookUp( '/Setup2' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $loadedAlias
+        );
+        return $loadedAlias;
     }
 
     /**
