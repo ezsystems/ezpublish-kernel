@@ -320,9 +320,46 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forward)
      *
      */
-    public function testCreateGlobalUrlAliasWithFourthParameter()
+    public function testCreateGlobalUrlAliasWithForward()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::createGlobalUrlAlias() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
+            '/Home/My-Site', '/Home/My-New-Site', 'eng-US', true
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $createdUrlAlias
+        );
+        return $createdUrlAlias;
+    }
+
+    /**
+     * @param eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @return void
+     * @depends testCreateGlobalUrlAliasWithForward
+     */
+    public function testCreateGlobalUrlAliasWithForwardPropertyValues( URLAlias $createdUrlAlias )
+    {
+        $this->assertNotNull( $createdUrlAlias->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'type'            => URLAlias::RESOURCE,
+                'destination'     => '/Home/My-Site',
+                'path'            => '/Home/My-New-Site',
+                'languageCodes'   => array( 'eng-US' ),
+                'alwaysAvailable' => false,
+                'isHistory'       => false,
+                'forward'         => true,
+            ),
+            $createdUrlAlias
+        );
     }
 
     /**
@@ -332,9 +369,46 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forward, $alwaysAvailable)
      *
      */
-    public function testCreateGlobalUrlAliasWithFifthParameter()
+    public function testCreateGlobalUrlAliasWithAlwaysAvailable()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::createGlobalUrlAlias() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
+            '/Home/My-Site', '/Home/My-New-Site', 'eng-US', false, true
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $createdUrlAlias
+        );
+        return $createdUrlAlias;
+    }
+
+    /**
+     * @param eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @return void
+     * @depends testCreateGlobalUrlAliasWithAlwaysAvailable
+     */
+    public function testCreateGlobalUrlAliasWithAlwaysAvailablePropertyValues( URLAlias $createdUrlAlias )
+    {
+        $this->assertNotNull( $createdUrlAlias->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'type'            => URLAlias::RESOURCE,
+                'destination'     => '/Home/My-Site',
+                'path'            => '/Home/My-New-Site',
+                'languageCodes'   => array( 'eng-US' ),
+                'alwaysAvailable' => true,
+                'isHistory'       => false,
+                'forward'         => false,
+            ),
+            $createdUrlAlias
+        );
     }
 
     /**
