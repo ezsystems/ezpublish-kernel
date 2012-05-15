@@ -244,7 +244,24 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testCreateUrlAliasThrowsForbiddenException()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::createUrlAlias() is not implemented." );
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 5 );
+
+        /* BEGIN: Use Case */
+        // $locationId is the ID of an existing location
+
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $location = $locationService->loadLocation( $locationId );
+
+        // Throws ForbiddenException, since this path already exists for the
+        // language
+        $createdUrlAlias = $urlAliasService->createUrlAlias(
+            $location, '/Support', 'eng-US'
+        );
+        /* END: Use Case */
     }
 
     /**

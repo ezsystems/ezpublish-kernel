@@ -75,6 +75,20 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
+        foreach ( $this->aliases as $existingAlias )
+        {
+            if ( !$existingAlias->isHistory && $existingAlias->path == $path )
+            {
+                throw new Exceptions\ForbiddenExceptionStub(
+                    sprintf(
+                        'An alias for path "%s" in language "%s" already exists.',
+                        $path,
+                        $languageCode
+                    )
+                );
+            }
+        }
+
         $data = array(
             'id'              => ++$this->nextAliasId,
             'type'            => URLAlias::LOCATION,
