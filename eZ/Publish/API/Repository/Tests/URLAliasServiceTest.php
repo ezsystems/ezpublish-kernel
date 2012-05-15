@@ -95,7 +95,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
-     * @param URLAlias $createdUrlAlias
+     * @param array $testData
      * @return void
      * @depends testCreateUrlAlias
      */
@@ -153,7 +153,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
-     * @param URLAlias $createdUrlAlias
+     * @param array $testData
      * @return void
      * @depends testCreateUrlAliasWithForwarding
      */
@@ -211,7 +211,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
-     * @param URLAlias $createdUrlAlias
+     * @param array $testData
      * @return void
      * @depends testCreateUrlAliasWithAlwaysAvailable
      */
@@ -265,30 +265,6 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
-     * Test for the createUrlAlias() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::createUrlAlias($location, $path, $languageCode, $forwarding)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     */
-    public function testCreateUrlAliasThrowsForbiddenExceptionWithFourthParameter()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::createUrlAlias() is not implemented." );
-    }
-
-    /**
-     * Test for the createUrlAlias() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     */
-    public function testCreateUrlAliasThrowsForbiddenExceptionWithFifthParameter()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::createUrlAlias() is not implemented." );
-    }
-
-    /**
      * Test for the createGlobalUrlAlias() method.
      *
      * @return void
@@ -297,7 +273,44 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testCreateGlobalUrlAlias()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::createGlobalUrlAlias() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
+            '/Home/My-Site', '/Home/My-New-Site', 'eng-US'
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $createdUrlAlias
+        );
+        return $createdUrlAlias;
+    }
+
+    /**
+     * @param eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @return void
+     * @depends testCreateGlobalUrlAlias
+     */
+    public function testCreateGlobalUrlAliasPropertyValues( URLAlias $createdUrlAlias )
+    {
+        $this->assertNotNull( $createdUrlAlias->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'type'            => URLAlias::RESOURCE,
+                'destination'     => '/Home/My-Site',
+                'path'            => '/Home/My-New-Site',
+                'languageCodes'   => array( 'eng-US' ),
+                'alwaysAvailable' => false,
+                'isHistory'       => false,
+                'forward'         => false,
+            ),
+            $createdUrlAlias
+        );
     }
 
     /**

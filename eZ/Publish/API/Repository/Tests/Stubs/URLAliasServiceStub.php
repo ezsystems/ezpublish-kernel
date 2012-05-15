@@ -124,7 +124,17 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $data = array(
+            'id'              => ++$this->nextAliasId,
+            'type'            => URLAlias::RESOURCE,
+            'destination'     => $resource,
+            'path'            => $path,
+            'languageCodes'   => array( $languageCode ),
+            'alwaysAvailable' => $alwaysAvailable,
+            'isHistory'       => false,
+            'forward'         => $forward,
+        );
+        return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
     }
 
      /**
