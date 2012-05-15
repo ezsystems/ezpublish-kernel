@@ -61,10 +61,10 @@ interface Handler
      * otherwise the current time is used.
      *
      * @param int|string $locationId
-     * @param int $timeStamp
+     * @param int $timestamp
      * @return void
      */
-    public function markSubtreeModified( $locationId, $timeStamp = null );
+    public function markSubtreeModified( $locationId, $timestamp = null );
 
     /**
      * Sets a location to be hidden, and it self + all children to invisible.
@@ -134,7 +134,8 @@ interface Handler
      *
      * @param mixed $locationId
      * @param mixed $sectionId
-     * @return boolean
+     *
+     * @return void
      */
     public function setSectionForSubtree( $locationId, $sectionId );
 

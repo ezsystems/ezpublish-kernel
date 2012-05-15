@@ -8,7 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
  * Mapper for Location objects
@@ -22,9 +23,10 @@ class Mapper
      *
      * Optionally pass a Location object, which will be filled with the values.
      *
-     * @param array $rows
+     * @param array $data
      * @param string $prefix
      * @param Location $location
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function createLocationFromRow( array $data, $prefix = '', Location $location = null )
@@ -47,5 +49,31 @@ class Mapper
         $location->sortOrder = $data[$prefix . 'sort_order'];
 
         return $location;
+    }
+
+    /**
+     * Creates a Location CreateStruct from a $data row
+     *
+     * @param array $data
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct
+     */
+    public function getLocationCreateStruct( array $data )
+    {
+        $struct = new CreateStruct();
+
+        $struct->contentId = $data["contentobject_id"];
+        $struct->contentVersion = $data["contentobject_version"];
+        $struct->hidden = $data["is_hidden"];
+        $struct->invisible = $data["is_invisible"];
+        $struct->mainLocationId = $data["main_node_id"];
+        $struct->parentId = $data["parent_node_id"];
+        $struct->pathIdentificationString = $data["path_identification_string"];
+        $struct->priority = $data["priority"];
+        $struct->remoteId = md5( uniqid( get_class( $this ), true ) );
+        $struct->sortField = $data["sort_field"];
+        $struct->sortOrder = $data["sort_order"];
+
+        return $struct;
     }
 }

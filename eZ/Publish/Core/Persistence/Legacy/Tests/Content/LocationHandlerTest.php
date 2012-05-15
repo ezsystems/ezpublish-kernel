@@ -9,13 +9,14 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler,
     eZ\Publish\SPI\Persistence,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo;
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
 
 /**
  * Test case for LocationHandlerTest
@@ -494,6 +495,156 @@ class LocationHandlerTest extends TestCase
 
         // Start
         $handler->removeSubtree( 42 );
+    }
+
+    /**
+     * Test for the copySubtree() method.
+     *
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::copySubtree
+     */
+    public function testCopySubtree()
+    {
+        $handler = $this->getPartlyMockedHandler(
+            array(
+                "load",
+                "changeMainLocation",
+                "setSectionForSubtree",
+                "create"
+            )
+        );
+        $subtreeContentRows = array(
+            array( "node_id" => 10, "main_node_id" => 1, "parent_node_id" => 3, "contentobject_id" => 21, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 11, "main_node_id" => 11, "parent_node_id" => 10, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 12, "main_node_id" => 15, "parent_node_id" => 10, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 13, "main_node_id" => 2, "parent_node_id" => 10, "contentobject_id" => 22, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 14, "main_node_id" => 11, "parent_node_id" => 13, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 15, "main_node_id" => 15, "parent_node_id" => 13, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 16, "main_node_id" => 16, "parent_node_id" => 15, "contentobject_id" => 216, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+        );
+        $destinationData = array( "node_id" => 5, "main_node_id" => 5, "parent_node_id" => 4, "contentobject_id" => 200, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 1 );
+        $mainLocationsMap = array( true, true, true, true, 1011, 1012, true );
+        $updateMainLocationsMap = array( 1215 => 1015 );
+        $offset = 1000;
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( "getSubtreeContent" )
+            ->with( $subtreeContentRows[0]["node_id"] )
+            ->will( $this->returnValue( $subtreeContentRows ) );
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( "getBasicNodeData" )
+            ->with( $destinationData["node_id"] )
+            ->will( $this->returnValue( $destinationData ) );
+
+        $contentIds = array_values( array_unique( array_map(
+            function ( $row ) { return $row["contentobject_id"]; },
+            $subtreeContentRows ) ) );
+        foreach ( $contentIds as $index => $contentId )
+        {
+            $this->contentHandler
+                ->expects( $this->at( $index * 2 ) )
+                ->method( "copy" )
+                ->with( $contentId, 1 )
+                ->will(
+                    $this->returnValue(
+                        new Content(
+                            array(
+                                "contentInfo" => new ContentInfo(
+                                    array(
+                                        "id" => $contentId + $offset,
+                                        "currentVersionNo" => 1
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+
+            $this->contentHandler
+                ->expects( $this->at( $index * 2 + 1 ) )
+                ->method( "publish" )
+                ->with(
+                    $contentId + $offset,
+                    1,
+                    $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct" )
+                )
+                ->will(
+                    $this->returnValue(
+                        new Content(
+                            array(
+                                "contentInfo" => new ContentInfo( array( "id" => $contentId + $offset ) )
+                            )
+                        )
+                    )
+                );
+        }
+
+        foreach ( $subtreeContentRows as $index => $row )
+        {
+            $mapper = new Mapper();
+            $createStruct = $mapper->getLocationCreateStruct( $row );
+            $this->locationMapper
+                ->expects( $this->at( $index ) )
+                ->method( "getLocationCreateStruct" )
+                ->with( $row )
+                ->will( $this->returnValue( $createStruct ) );
+
+            $createStruct = clone $createStruct;
+            $createStruct->contentId = $createStruct->contentId + $offset;
+            $createStruct->parentId = $index === 0 ? $destinationData["node_id"] : $createStruct->parentId + $offset;
+            $createStruct->invisible = true;
+            $createStruct->mainLocationId = $mainLocationsMap[$index];
+            $handler
+                ->expects( $this->at( $index ) )
+                ->method( 'create' )
+                ->with( $createStruct )
+                ->will(
+                    $this->returnValue(
+                        new Location(
+                            array(
+                                "id" => $row["node_id"] + $offset,
+                                "hidden" => false,
+                                "invisible" => true,
+                                "mainLocationId" => $mainLocationsMap[$index] === true ?
+                                    $row["node_id"] + $offset :
+                                    $mainLocationsMap[$index]
+                            )
+                        )
+                    )
+                );
+        }
+
+        foreach ( $updateMainLocationsMap as $contentId => $locationId )
+        {
+            $handler
+                ->expects( $this->any() )
+                ->method( "changeMainLocation" )
+                ->with( $contentId, $locationId );
+        }
+
+        $handler
+            ->expects( $this->once() )
+            ->method( "load" )
+            ->with( $destinationData["node_id"] )
+            ->will( $this->returnValue( new Location( array( "contentId" => $destinationData["contentobject_id"] ) ) ) );
+
+        $this->contentHandler
+            ->expects( $this->once() )
+            ->method( "loadContentInfo" )
+            ->with( $destinationData["contentobject_id"] )
+            ->will( $this->returnValue( new ContentInfo( array( "sectionId" => 12345 ) ) ) );
+
+        $handler
+            ->expects( $this->once() )
+            ->method( "setSectionForSubtree" )
+            ->with( $subtreeContentRows[0]["node_id"] + $offset, 12345 );
+
+        $handler->copySubtree(
+            $subtreeContentRows[0]["node_id"],
+            $destinationData["node_id"]
+        );
     }
 
     /**
