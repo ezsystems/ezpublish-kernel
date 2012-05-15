@@ -498,24 +498,49 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * Test for the listLocationAliases() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::listLocationAliases($location, $custom)
+     * @see \eZ\Publish\API\Repository\URLAliasService::listLocationAliases($location, $custom, $languageCode)
      *
      */
-    public function testListLocationAliasesWithSecondParameter()
+    public function testListLocationAliasesWithCustomFilter()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::listLocationAliases() is not implemented." );
+        $this->markTestIncomplete( "Needs discussion with CBA." );
     }
 
     /**
      * Test for the listLocationAliases() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::listLocationAliases($location, $custom, $languageCode)
+     * @see \eZ\Publish\API\Repository\URLAliasService::listLocationAliases($location, $custom)
      *
      */
-    public function testListLocationAliasesWithThirdParameter()
+    public function testListLocationAliasesWithLanguageCodeFilter()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::listLocationAliases() is not implemented." );
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 12 );
+
+        /* BEGIN: Use Case */
+        // $locationId contains the ID of an existing Location
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( $locationId );
+        // Create a second URL alias for $location
+        $urlAliasService->createUrlAlias(
+            $location, '/My/Great-new-Site', 'nor-NO'
+        );
+
+        // $loadedAliases will contain only 1 of 2 aliases
+        $loadedAliases = $urlAliasService->listLocationAliases(
+            $location, true, 'eng-US'
+        );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedAliases
+        );
+        $this->assertEquals( 1, count( $loadedAliases ) );
     }
 
     /**
