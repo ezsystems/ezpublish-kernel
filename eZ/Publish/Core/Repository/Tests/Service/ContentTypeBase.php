@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
+    eZ\Publish\Core\Repository\Values\User\User,
+    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Exceptions;
 
 /**
@@ -1434,51 +1437,65 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
-     * Asserts that two given ContentType objects contain the same content type data
+     * Compares two given ContentType objects
      *
      * @param array $data
-     * @param array $skipProperties
+     * @param array $properties
+     * @param array $fieldProperties
      *
      * @return void
      */
-    protected function assertLoadContentTypeValues( array $data, array $skipProperties = array(), array $skipFieldProperties = array() )
+    protected function compareContentTypes( array $data, array $properties = array(), array $fieldProperties = array() )
     {
         /** @var $storedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $storedContentType = $data['expected'];
         /** @var $loadedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $loadedContentType = $data['actual'];
 
+        $propertiesNames = array(
+            // Virtual properties
+            "names",
+            "descriptions",
+            "contentTypeGroups",
+            //"fieldDefinitions",
+            // Standard properties
+            "id",
+            "status",
+            "identifier",
+            "creationDate",
+            "modificationDate",
+            "creatorId",
+            "modifierId",
+            "remoteId",
+            "urlAliasSchema",
+            "nameSchema",
+            "isContainer",
+            "mainLanguageCode",
+            "defaultAlwaysAvailable",
+            "defaultSortField",
+            "defaultSortOrder"
+        );
+
         $this->assertSameClassPropertiesCorrect(
-            array(
-                 // Virtual properties
-                 "names",
-                 "descriptions",
-                 "contentTypeGroups",
-                 //"fieldDefinitions",
-                 // Standard properties
-                 "id",
-                 "status",
-                 "identifier",
-                 "creationDate",
-                 "modificationDate",
-                 "creatorId",
-                 "modifierId",
-                 "remoteId",
-                 "urlAliasSchema",
-                 "nameSchema",
-                 "isContainer",
-                 "mainLanguageCode",
-                 "defaultAlwaysAvailable",
-                 "defaultSortField",
-                 "defaultSortOrder"
+            array_diff(
+                $propertiesNames,
+                isset( $properties["notEqual"] ) ? $properties["notEqual"] : array()
             ),
             $storedContentType,
             $loadedContentType,
-            $skipProperties
+            isset( $properties["skip"] ) ? $properties["skip"] : array()
+        );
+
+        $this->assertSameClassPropertiesCorrect(
+            isset( $properties["notEqual"] ) ? $properties["notEqual"] : array(),
+            $storedContentType,
+            $loadedContentType,
+            isset( $properties["skip"] ) ? $properties["skip"] : array(),
+            false
         );
 
         $this->assertEquals(
@@ -1494,45 +1511,58 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
                 $actualFieldDefinition
             );
-            $this->assertFieldDefinitionsEqual(
+            $this->compareFieldDefinitions(
                 $expectedFieldDefinition,
                 $actualFieldDefinition,
-                $skipFieldProperties
+                $fieldProperties
             );
         }
     }
 
     /**
-     * Asserts that two FieldDefinition objects contain the same field data
+     * Compares two FieldDefinition objects
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $expectedFieldDefinition
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $actualFieldDefinition
-     * @param array $skip Array of field names to skip, used with createContentTypeDraft()
+     * @param array $properties Array of field names to skip or compare as not equal
      *
      * @return void
      */
-    protected function assertFieldDefinitionsEqual( $expectedFieldDefinition, $actualFieldDefinition, $skip = array() )
+    protected function compareFieldDefinitions( $expectedFieldDefinition, $actualFieldDefinition, $properties = array() )
     {
+        $propertiesNames = array(
+            "names",
+            "descriptions",
+            "fieldSettings",
+            "validators",
+            "id",
+            "identifier",
+            "fieldGroup",
+            "position",
+            "fieldTypeIdentifier",
+            "isTranslatable",
+            "isRequired",
+            "isInfoCollector",
+            "defaultValue",
+            "isSearchable"
+        );
+
         $this->assertSameClassPropertiesCorrect(
-            array(
-                 "names",
-                 "descriptions",
-                 "fieldSettings",
-                 "validators",
-                 "id",
-                 "identifier",
-                 "fieldGroup",
-                 "position",
-                 "fieldTypeIdentifier",
-                 "isTranslatable",
-                 "isRequired",
-                 "isInfoCollector",
-                 "defaultValue",
-                 "isSearchable"
+            array_diff(
+                $propertiesNames,
+                isset( $properties["notEqual"] ) ? $properties["notEqual"] : array()
             ),
             $expectedFieldDefinition,
             $actualFieldDefinition,
-            $skip
+            isset( $properties["skip"] ) ? $properties["skip"] : array()
+        );
+
+        $this->assertSameClassPropertiesCorrect(
+            isset( $properties["notEqual"] ) ? $properties["notEqual"] : array(),
+            $expectedFieldDefinition,
+            $actualFieldDefinition,
+            isset( $properties["skip"] ) ? $properties["skip"] : array(),
+            false
         );
     }
 
@@ -1609,7 +1639,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeByIdentifierValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
@@ -1685,7 +1715,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeByRemoteIdValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
@@ -1748,7 +1778,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeDraftValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
@@ -2028,19 +2058,21 @@ abstract class ContentTypeBase extends BaseServiceTest
         /** @var $draftType \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft */
         $draftType = $data['actual'];
 
-        $skipProperties = array(
-            "id",
-            "status",
-            "modificationDate",
-            "modifierId"
+        $typeProperties = array(
+            "skip" => array(
+                "id",
+                "status",
+                "modificationDate",
+                "modifierId"
+            )
         );
-        $skipFieldProperties = array(
-            "id"
+        $fieldProperties = array(
+            "skip" => array( "id" )
         );
-        $this->assertLoadContentTypeValues(
+        $this->compareContentTypes(
             $data,
-            $skipProperties,
-            $skipFieldProperties
+            $typeProperties,
+            $fieldProperties
         );
 
         $this->assertEquals(
@@ -2190,7 +2222,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
                 $actualFieldDefinition
             );
-            $this->assertFieldDefinitionsEqual(
+            $this->compareFieldDefinitions(
                 $expectedFieldDefinition,
                 $actualFieldDefinition
             );
@@ -2319,8 +2351,14 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testDeleteContentTypeThrowsBadStateException()
     {
-        // TODO: Needs existing content objects
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
+        /* BEGIN: Use Case */
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( "folder" );
+
+        // Throws an exception because folder type still has content instances
+        $contentTypeService->deleteContentType( $commentType );
+        /* END: Use Case */
     }
 
     /**
@@ -2347,7 +2385,113 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testCopyContentType()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $time = time();
+
+        /* BEGIN: Use Case */
+        // @todo: loading user is broken because of missing ezimage converter and ezuser field type
+        $user = new User(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => 10 ) ) )
+                )
+            )
+        );
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        $copiedCommentType = $contentTypeService->copyContentType( $commentType, $user );
+        /* END: Use Case */
+
+        return array(
+            'originalType' => $commentType,
+            'copiedType' => $copiedCommentType,
+            "time" => $time,
+            "userId" => 10
+        );
+    }
+
+    /**
+     * Test for the copyContentType() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     *
+     * @return array
+     * @todo needs users
+     */
+    public function testCopyContentTypeWithSecondArgument()
+    {
+        $time = time();
+
+        /* BEGIN: Use Case */
+        // @todo: loading user is broken because of missing ezimage converter and ezuser field type
+        $user = new User(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => 10 ) ) )
+                )
+            )
+        );
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( "comment" );
+
+        $copiedCommentType = $contentTypeService->copyContentType( $commentType, $user );
+        /* END: Use Case */
+
+        return array(
+            "originalType" => $commentType,
+            "copiedType" => $copiedCommentType,
+            "time" => $time,
+            "userId" => 10
+        );
+    }
+
+    /**
+     * Asserts that copied content type is valid copy of original content type
+     *
+     * @param array $data
+     */
+    protected function assertCopyContentTypeValues( array $data )
+    {
+        /** @var $originalType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        $originalType = $data["originalType"];
+        /** @var $copiedType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        $copiedType = $data["copiedType"];
+        $userId = $data["userId"];
+        $time = $data["time"];
+
+        $this->compareContentTypes(
+            array(
+                "expected" => $originalType,
+                "actual" => $copiedType
+            ),
+            array(
+                "notEqual" => array(
+                    "id",
+                    "identifier",
+                    "creationDate",
+                    "modificationDate",
+                    "remoteId"
+                ),
+                "skip" => array(
+                    "creatorId",
+                    "modifierId",
+                    "status"
+                )
+            ),
+            array(
+                "notEqual" => array(
+                    "id"
+                )
+            )
+        );
+
+        $this->assertGreaterThanOrEqual( $time, $copiedType->creationDate->getTimestamp() );
+        $this->assertGreaterThanOrEqual( $time, $copiedType->modificationDate->getTimestamp() );
+        $this->assertEquals( $userId, $copiedType->creatorId );
+        $this->assertEquals( $userId, $copiedType->modifierId );
+        $this->assertEquals( ContentType::STATUS_DRAFT, $copiedType->status );
     }
 
     /**
@@ -2356,11 +2500,28 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCopyContentType
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
      *
+     * @param array $data
+     *
      * @return void
      */
-    public function testCopyContentTypeValues()
+    public function testCopyContentTypeValues( array $data )
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $this->assertCopyContentTypeValues( $data );
+    }
+
+    /**
+     * Test for the copyContentType() method.
+     *
+     * @depends testCopyContentTypeWithSecondArgument
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function testCopyContentTypeWithSecondArgumentValues( array $data )
+    {
+        $this->assertCopyContentTypeValues( $data );
     }
 
     /**
