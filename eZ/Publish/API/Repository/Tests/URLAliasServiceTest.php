@@ -802,9 +802,16 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\URLAliasService::lookUp($url, $languageCode)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLookUpThrowsNotFoundExceptionWithSecondParameter()
+    public function testLookUpThrowsNotFoundExceptionWithLanguageFilter()
     {
-        $this->markTestIncomplete( "Test for URLAliasService::lookUp() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlAliasService = $repository->getURLAliasService();
+
+        // Throws NotFoundException
+        $loadedAlias = $urlAliasService->lookUp( '/Setup2', 'ger-DE' );
+        /* END: Use Case */
     }
 
     /**
