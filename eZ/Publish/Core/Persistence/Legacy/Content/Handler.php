@@ -438,7 +438,7 @@ class Handler implements BaseContentHandler
     /**
      * Copy Content with Fields and Versions from $contentId in $version.
      *
-     * Copies all fields from $contentId in $version (or all versions if false)
+     * Copies all fields from $contentId in $versionNo (or all versions if null)
      * to a new object which is returned. Version numbers are maintained.
      *
      * @todo Should relations be copied? Which ones?

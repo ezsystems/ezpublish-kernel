@@ -194,9 +194,11 @@ class EzcDatabase extends Gateway
      * Updated subtree modification time for all nodes on path
      *
      * @param string $pathString
+     * @param int|null $timestamp
+     *
      * @return void
      */
-    public function updateSubtreeModificationTime( $pathString )
+    public function updateSubtreeModificationTime( $pathString, $timestamp = null )
     {
         $nodes = array_filter( explode( '/', $pathString ) );
         $query = $this->handler->createUpdateQuery();
@@ -204,7 +206,9 @@ class EzcDatabase extends Gateway
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->set(
                 $this->handler->quoteColumn( 'modified_subnode' ),
-                $query->bindValue( time() )
+                $query->bindValue(
+                    $timestamp ?: time()
+                )
             )
             ->where(
                 $query->expr->in(
@@ -954,7 +958,6 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $nodeIds = array();
         if ( !( $row = $statement->fetch( \PDO::FETCH_ASSOC ) ) )
         {
             throw new NotFound( 'trashed location', $locationId );
@@ -996,6 +999,22 @@ class EzcDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+
+        // Restore content status to published
+        $q = $this->handler->createUpdateQuery();
+        $q
+            ->update( 'ezcontentobject' )
+            ->set(
+            $this->handler->quoteColumn( 'status' ),
+            $q->bindValue( ContentInfo::STATUS_PUBLISHED, null, \PDO::PARAM_INT )
+        )
+            ->where(
+            $q->expr->eq(
+                $this->handler->quoteColumn( 'id' ),
+                $q->bindValue( $row['contentobject_id'], null, \PDO::PARAM_INT )
+            )
+        );
+        $q->prepare()->execute();
 
         return $newLocation;
     }

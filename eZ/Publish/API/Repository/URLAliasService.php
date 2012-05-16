@@ -38,7 +38,7 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createUrlAlias(Location $location, $path,  $languageCode, $forwarding = false, $alwaysAvailable = false );
+    public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false );
 
      /**
      * Create a user chosen $alias pointing to a resource in $languageName.
@@ -60,7 +60,7 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias(  $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false );
+    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false );
 
      /**
      * List of url aliases pointing to $location.
@@ -84,7 +84,7 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listGlobalAliases($languageCode = null, $offset = 0, $limit = -1);
+    public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 );
 
 
     /**
@@ -108,7 +108,7 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookUp($url, $languageCode = null);
+    public function lookUp( $url, $languageCode = null );
 
     /**
      * Returns the URL alias for the given location in the given language.
@@ -122,6 +122,6 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function reverseLookup(Location $location, $languageCode = null);
+    public function reverseLookup( Location $location, $languageCode = null );
 
 }

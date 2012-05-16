@@ -186,7 +186,7 @@ abstract class Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * @return array Data rows.
      */
     abstract public function loadTypeData( $typeId, $status );
 
@@ -214,10 +214,9 @@ abstract class Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
-     * @param int $status
      * @return int
      */
-    abstract public function countInstancesOfType( $typeId, $status );
+    abstract public function countInstancesOfType( $typeId );
 
     /**
      * Deletes a Type completely.

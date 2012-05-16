@@ -143,6 +143,21 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getUrlAliasService() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Repository::getUrlAliasService()
+     */
+    public function testGetUrlAliasService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\URLAliasService',
+            $repository->getUrlAliasService()
+        );
+    }
+
+    /**
      * Test for the getIOService() method.
      *
      * @return void

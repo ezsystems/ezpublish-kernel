@@ -285,11 +285,11 @@ class LocationHandlerTest extends HandlerTest
     public function testCopySubtreeNoChildren()
     {
         // Copy the last location created in setUp
-        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId, 1 );
+        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId, 2 );
         $this->assertTrue( $newLocation instanceof LocationValue );
         $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
         $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
-        $this->assertEquals( 1, $newLocation->depth );
+        $this->assertEquals( 2, $newLocation->depth );
         $this->assertEquals( Location::SORT_FIELD_NAME, $newLocation->sortField );
         $this->assertEquals( Location::SORT_ORDER_ASC, $newLocation->sortOrder );
 
@@ -312,11 +312,11 @@ class LocationHandlerTest extends HandlerTest
     public function testCopySubtreeChildren()
     {
         // Copy the grand parent of the last location created in setUp
-        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId - 2, 1 );
+        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId - 2, 2 );
         $this->assertTrue( $newLocation instanceof LocationValue );
         $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
         $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
-        $this->assertEquals( 1, $newLocation->depth );
+        $this->assertEquals( 2, $newLocation->depth );
         $this->assertEquals( Location::SORT_FIELD_NAME, $newLocation->sortField );
         $this->assertEquals( Location::SORT_ORDER_ASC, $newLocation->sortOrder );
 

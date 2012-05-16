@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
- * Location service, used for complex subtree operations
+ * Trash service, used for managing trashed content
  *
  * @package eZ\Publish\API\Repository
  */
@@ -53,7 +53,7 @@ interface TrashService
     /**
      * Recovers the $trashedLocation at its original place if possible.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to recover the trash item at the parent location location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to recover the trash item at the parent location location
      *
      * If $newParentLocation is provided, $trashedLocation will be restored under it.
      *
