@@ -628,7 +628,8 @@ function generateURLAliasFixture( array $fixture )
     {
         if ( $data['id'] == 46 || $data['id'] == 16 )
         {
-            // FIXME: These aliases have a non-existing location assigned
+            // These 2 aliases are broken in the standard database, since they
+            // don't have a valid location assigned
             continue;
         }
 
@@ -640,19 +641,11 @@ function generateURLAliasFixture( array $fixture )
                 break;
 
             case 'eznode':
-                if ( $data['link'] == $data['id'] )
-                {
-                    $destination = createRepoCall(
-                        'LocationService',
-                        'loadLocation',
-                        array( substr( $data['action'], 7 ) )
-                    );
-                }
-                else
-                {
-                    // TODO: How should we react? Location does not exist here
-                    // anymore.
-                }
+                $destination = createRepoCall(
+                    'LocationService',
+                    'loadLocation',
+                    array( substr( $data['action'], 7 ) )
+                );
                 break;
 
             case 'module':
