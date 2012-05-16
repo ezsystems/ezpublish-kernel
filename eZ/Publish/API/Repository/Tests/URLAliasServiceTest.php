@@ -240,9 +240,9 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\URLAliasService::createUrlAlias()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testCreateUrlAliasThrowsForbiddenException()
+    public function testCreateUrlAliasThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -256,7 +256,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $location = $locationService->loadLocation( $locationId );
 
-        // Throws ForbiddenException, since this path already exists for the
+        // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createUrlAlias(
             $location, '/Support', 'eng-US'
@@ -416,16 +416,16 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testCreateGlobalUrlAliasThrowsForbiddenException()
+    public function testCreateGlobalUrlAliasThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
         $urlAliasService = $repository->getURLAliasService();
 
-        // Throws ForbiddenException, since this path already exists for the
+        // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
             '/My-new-Site', '/Support', 'eng-US'

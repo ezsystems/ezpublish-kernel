@@ -69,7 +69,7 @@ class URLAliasServiceStub implements URLAliasService
      * @param string $languageCode the languageCode for which this alias is valid
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
@@ -95,7 +95,7 @@ class URLAliasServiceStub implements URLAliasService
      *
      * @param string $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return void
      */
@@ -107,7 +107,7 @@ class URLAliasServiceStub implements URLAliasService
                 && $existingAlias->path == $path
                 && in_array( $languageCode, $existingAlias->languageCodes ) )
             {
-                throw new Exceptions\ForbiddenExceptionStub(
+                throw new Exceptions\InvalidArgumentExceptionStub(
                     sprintf(
                         'An alias for path "%s" in language "%s" already exists.',
                         $path,
@@ -134,7 +134,7 @@ class URLAliasServiceStub implements URLAliasService
      * @param string $languageName
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
