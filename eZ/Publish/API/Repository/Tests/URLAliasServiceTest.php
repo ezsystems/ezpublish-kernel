@@ -467,6 +467,9 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             'array',
             $loadedAliases
         );
+
+        $this->assertEquals( 3, count( $loadedAliases ) );
+
         return array( $loadedAliases, $location );
     }
 
@@ -478,8 +481,6 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     public function testListLocationAliasesLoadsCorrectly( array $testData )
     {
         list( $loadedAliases, $location ) = $testData;
-
-        $this->assertEquals( 3, count( $loadedAliases ) );
 
         foreach ( $loadedAliases as $loadedAlias )
         {
@@ -507,7 +508,33 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testListLocationAliasesWithCustomFilter()
     {
-        $this->markTestIncomplete( "Needs discussion with CBA." );
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 12 );
+
+        /* BEGIN: Use Case */
+        // $locationId contains the ID of an existing Location
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( $locationId );
+
+        // Create a second URL alias for $location, this is a "custom" one
+        $urlAliasService->createUrlAlias(
+            $location, '/My/Great-new-Site', 'nor-NO'
+        );
+
+        // $loadedAliases will contain all 3 aliases
+        $loadedAliases = $urlAliasService->listLocationAliases(
+            $location, false, 'eng-US'
+        );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedAliases
+        );
+        $this->assertEquals( 2, count( $loadedAliases ) );
     }
 
     /**

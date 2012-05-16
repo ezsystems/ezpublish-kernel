@@ -173,7 +173,12 @@ class URLAliasServiceStub implements URLAliasService
         $locationAliases = array();
         foreach ( $this->aliases as $existingAlias )
         {
+            // Filter chain
             if ( !( $existingAlias->destination instanceof Location ) || $existingAlias->destination->id != $location->id )
+            {
+                continue;
+            }
+            if ( !$custom && $existingAlias->isCustom )
             {
                 continue;
             }
@@ -181,6 +186,7 @@ class URLAliasServiceStub implements URLAliasService
             {
                 continue;
             }
+
             $locationAliases[] = $existingAlias;
         }
         return $locationAliases;
