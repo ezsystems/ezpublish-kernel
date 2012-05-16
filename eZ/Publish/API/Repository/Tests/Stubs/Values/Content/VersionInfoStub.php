@@ -30,6 +30,13 @@ class VersionInfoStub extends VersionInfo
      */
     protected $contentId;
 
+    /**
+     * Names
+     *
+     * @var string[]
+     */
+    protected $names = array();
+
     public function __construct( array $properties = array() )
     {
         parent::__construct( $properties );
@@ -58,7 +65,7 @@ class VersionInfoStub extends VersionInfo
      */
     public function getNames()
     {
-        // TODO: Implement getNames() method.
+        return $this->names;
     }
 
     /**
@@ -72,7 +79,7 @@ class VersionInfoStub extends VersionInfo
      */
     public function getName( $languageCode = null )
     {
-        // TODO: Implement getName() method.
+        return $this->name[$languageCode];
     }
 
     public function __get( $property )
