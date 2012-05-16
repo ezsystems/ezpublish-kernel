@@ -14,20 +14,6 @@ return array(
                 "forward"  =>  true,
             )
         ),
-        206  =>  new \eZ\Publish\API\Repository\Values\Content\URLAlias(
-            array(
-                "id"  =>  206,
-                "type"  =>  0,
-                "destination"  =>  $this->getLocationService()->loadLocation( 67 ),
-                "path"  =>  "/Home",
-                "languageCodes"  =>  array(
-                    0 => "eng-US",
-                ),
-                "alwaysAvailable"  =>  1,
-                "isHistory"  =>  true,
-                "forward"  =>  true,
-            )
-        ),
         25  =>  new \eZ\Publish\API\Repository\Values\Content\URLAlias(
             array(
                 "id"  =>  25,

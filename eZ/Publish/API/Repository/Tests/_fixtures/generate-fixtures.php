@@ -626,7 +626,7 @@ function generateURLAliasFixture( array $fixture )
     $aliases = array();
     foreach ( getFixtureTable( 'ezurlalias_ml', $fixture ) as $data )
     {
-        if ( $data['id'] == 46 || $data['id'] == 16 )
+        if ( $data['id'] == 46 || $data['id'] == 16 || $data['id'] == 206 )
         {
             // These 2 aliases are broken in the standard database, since they
             // don't have a valid location assigned
