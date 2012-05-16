@@ -661,6 +661,7 @@ function generateURLAliasFixture( array $fixture )
             'languageCodes'   => resolveLanguageMask( $languageCodes, $data['lang_mask'] ),
             'alwaysAvailable' => $data['lang_mask'] & 1,
             'isHistory'       => !( $data['is_original'] ),
+            'isCustom'        => (bool)$data['is_alias'],
             'forward'         => (bool)$data['alias_redirects'],
         );
         $nextId = max( $nextId, $data['id'] );
