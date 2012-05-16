@@ -62,7 +62,7 @@ class UrlAlias extends ValueObject
     /**
      * Specifies the path of this url alias element.
      *
-     * @var int
+     * @var string
      */
     public $path;
 

@@ -34,7 +34,7 @@ interface URLAliasService
      * @param string $languageCode the languageCode for which this alias is valid
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
@@ -56,7 +56,7 @@ interface URLAliasService
      * @param string $languageName
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
