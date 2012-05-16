@@ -473,9 +473,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         list( $loadedAliases, $location ) = $testData;
 
-        // FIXME: This is only the number of non-history aliases
-        // What about those? How to load their data properly?
-        $this->assertEquals( 1, count( $loadedAliases ) );
+        $this->assertEquals( 3, count( $loadedAliases ) );
 
         foreach ( $loadedAliases as $loadedAlias )
         {
@@ -530,7 +528,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             $location, '/My/Great-new-Site', 'nor-NO'
         );
 
-        // $loadedAliases will contain only 1 of 2 aliases
+        // $loadedAliases will contain only 2 of 3 aliases
         $loadedAliases = $urlAliasService->listLocationAliases(
             $location, true, 'eng-US'
         );
@@ -540,7 +538,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             'array',
             $loadedAliases
         );
-        $this->assertEquals( 1, count( $loadedAliases ) );
+        $this->assertEquals( 2, count( $loadedAliases ) );
     }
 
     /**
