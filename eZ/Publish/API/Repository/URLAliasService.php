@@ -109,19 +109,4 @@ interface URLAliasService
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
     public function lookUp( $url, $languageCode = null );
-
-    /**
-     * Returns the URL alias for the given location in the given language.
-     *
-     * If $languageCode is null the method returns the url alias in the most prioritized language.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no url alias exist for the given language
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param  string $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
-     */
-    public function reverseLookup( Location $location, $languageCode = null );
-
 }

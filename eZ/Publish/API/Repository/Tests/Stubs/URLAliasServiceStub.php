@@ -85,6 +85,7 @@ class URLAliasServiceStub implements URLAliasService
             'languageCodes'   => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
             'isHistory'       => false,
+            'isCustom'        => true,
             'forward'         => $forwarding,
         );
         return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
@@ -150,6 +151,7 @@ class URLAliasServiceStub implements URLAliasService
             'languageCodes'   => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
             'isHistory'       => false,
+            'isCustom'        => true,
             'forward'         => $forward,
         );
         return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
@@ -265,23 +267,6 @@ class URLAliasServiceStub implements URLAliasService
                 $languageCode
             )
         );
-    }
-
-    /**
-     * Returns the URL alias for the given location in the given language.
-     *
-     * If $languageCode is null the method returns the url alias in the most prioritized language.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no url alias exist for the given language
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param  string $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
-     */
-    public function reverseLookup( Location $location, $languageCode = null )
-    {
-        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**

@@ -113,6 +113,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
                 'languageCodes'   => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory'       => false,
+                'isCustom'        => true,
                 'forward'         => false,
             ),
             $createdUrlAlias
@@ -171,6 +172,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
                 'languageCodes'   => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory'       => false,
+                'isCustom'        => true,
                 'forward'         => true,
             ),
             $createdUrlAlias
@@ -229,6 +231,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
                 'languageCodes'   => array( 'eng-US' ),
                 'alwaysAvailable' => true,
                 'isHistory'       => false,
+                'isCustom'        => true,
                 'forward'         => false,
             ),
             $createdUrlAlias
@@ -307,6 +310,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
                 'languageCodes'   => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory'       => false,
+                'isCustom'        => true,
                 'forward'         => false,
             ),
             $createdUrlAlias
@@ -356,6 +360,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
                 'languageCodes'   => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory'       => false,
+                'isCustom'        => true,
                 'forward'         => true,
             ),
             $createdUrlAlias
@@ -405,6 +410,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
                 'languageCodes'   => array( 'eng-US' ),
                 'alwaysAvailable' => true,
                 'isHistory'       => false,
+                'isCustom'        => true,
                 'forward'         => false,
             ),
             $createdUrlAlias
@@ -811,53 +817,4 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $loadedAlias = $urlAliasService->lookUp( '/Setup2', 'ger-DE' );
         /* END: Use Case */
     }
-
-    /**
-     * Test for the reverseLookup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::reverseLookup()
-     *
-     */
-    public function testReverseLookup()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::reverseLookup() is not implemented." );
-    }
-
-    /**
-     * Test for the reverseLookup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::reverseLookup($location, $languageCode)
-     *
-     */
-    public function testReverseLookupWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::reverseLookup() is not implemented." );
-    }
-
-    /**
-     * Test for the reverseLookup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::reverseLookup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testReverseLookupThrowsNotFoundException()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::reverseLookup() is not implemented." );
-    }
-
-    /**
-     * Test for the reverseLookup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::reverseLookup($location, $languageCode)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testReverseLookupThrowsNotFoundExceptionWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for URLAliasService::reverseLookup() is not implemented." );
-    }
-
 }
