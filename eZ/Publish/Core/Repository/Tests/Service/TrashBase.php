@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\Content\TrashItem,
+    eZ\Publish\Core\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
     eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -249,18 +249,21 @@ abstract class TrashBase extends BaseServiceTest
     public function testRecoverToDifferentLocation()
     {
         // @todo: remove creating test locations when field types are fully functional
+        // Create test locations
         $deleteLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
-        $recoverParentLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
+        $recoverLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
 
+        /* BEGIN: Use Case */
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
         $location = $locationService->loadLocation( $deleteLocationId );
         $trashItem = $trashService->trash( $location );
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $recoverParentLocationId );
+        $newParentLocation = $locationService->loadLocation( $recoverLocationId );
 
-        $recoveredLocation = $trashService->recover( $trashItem, $locationCreateStruct );
+        $recoveredLocation = $trashService->recover( $trashItem, $newParentLocation );
+        /* END: Use Case */
 
         self::assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location", $recoveredLocation );
 
@@ -280,13 +283,13 @@ abstract class TrashBase extends BaseServiceTest
         );
 
         $parentLocation = $locationService->loadLocation( $recoveredLocation->parentLocationId );
-        $newPathString = $parentLocation->pathString . $recoveredLocation->id . '/';
+        $newPathString = $parentLocation->pathString . $recoveredLocation->id . "/";
 
         self::assertEquals( 1, $parentLocation->childCount );
         self::assertEquals( $parentLocation->depth + 1, $recoveredLocation->depth );
         self::assertEquals( $newPathString, $recoveredLocation->pathString );
         self::assertGreaterThan( 0, $recoveredLocation->id );
-        self::assertEquals( $locationCreateStruct->parentLocationId, $recoveredLocation->parentLocationId );
+        self::assertEquals( $newParentLocation->id, $recoveredLocation->parentLocationId );
     }
 
     /**
@@ -302,8 +305,13 @@ abstract class TrashBase extends BaseServiceTest
         $location = $locationService->loadLocation( 44 );
         $trashItem = $trashService->trash( $location );
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( PHP_INT_MAX );
-        $trashService->recover( $trashItem, $locationCreateStruct );
+        $newParentLocation = new Location(
+            array(
+                "id" => PHP_INT_MAX,
+                "parentLocationId" => PHP_INT_MAX
+            )
+        );
+        $trashService->recover( $trashItem, $newParentLocation );
     }
 
     /**
