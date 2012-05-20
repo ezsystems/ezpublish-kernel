@@ -390,6 +390,7 @@ class ContentService implements ContentServiceInterface
      * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
+     * @todo check sectionid, ownerid, use ContentValidationException
      */
     public function createContent( APIContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
@@ -499,7 +500,7 @@ class ContentService implements ContentServiceInterface
 
                 if ( $fieldDefinition->isRequired && (string) $fieldValue === "" )
                 {
-                    throw new ContentFieldValidationException( '@TODO: What error code should be used?' );
+                    throw new ContentValidationException( '@TODO: What error code should be used?' );
                 }
 
                 $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
@@ -950,7 +951,8 @@ class ContentService implements ContentServiceInterface
 
                 if ( $fieldDefinition->isRequired && (string) $fieldValue === "" )
                 {
-                    throw new ContentValidationException( '@TODO: What error code should be used?' );
+                    // @todo: ContentEcxeption or ContentValidationException?
+                    throw new ContentValidationException( "Required field value empty! @TODO: What error code should be used?" );
                 }
 
                 $this->validateField( $fieldDefinition, $fieldType, $fieldValue, $failedValidators );
@@ -971,7 +973,7 @@ class ContentService implements ContentServiceInterface
 
         if ( count( $failedValidators ) )
         {
-            throw new ContentFieldValidationException();
+            throw new ContentFieldValidationException( "Field validator failed! @TODO: What error code should be used?" );
         }
 
         $spiContentUpdateStruct = new SPIContentUpdateStruct(
