@@ -14,6 +14,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\User\User,
     eZ\Publish\Core\Repository\Values\Content\VersionInfo,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator,
     eZ\Publish\API\Repository\Exceptions;
 
 /**
@@ -1159,7 +1160,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             switch ( $propertyName )
             {
                 case 'fieldDefinitions':
-                    $this->assertFieldDefinitionsCreatesCorrect(
+                    $this->assertCreatedFieldDefinitionsCorrect(
                         $typeCreate->fieldDefinitions,
                         $contentType->fieldDefinitions
                     );
@@ -1203,7 +1204,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @return void
      */
-    protected function assertFieldDefinitionsCreatesCorrect( array $expectedDefinitionCreates, array $actualDefinitions )
+    protected function assertCreatedFieldDefinitionsCorrect( array $expectedDefinitionCreates, array $actualDefinitions )
     {
         $this->assertEquals(
             count( $expectedDefinitionCreates ),
@@ -1225,7 +1226,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
                 $actualDefinitions[$key]
             );
-            $this->assertFieldDefinitionsCreatesEqual(
+            $this->assertCreatedFieldDefinitionCorrect(
                 $expectedCreate,
                 $actualDefinitions[$key]
             );
@@ -1235,29 +1236,61 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Asserts that a field definition has been correctly created.
      *
-     * Asserts that the given $actualDefinition is correctly created from the
-     * create struct in $expectedDefinitionCreate.
+     * Asserts that the given $fieldDefinition is correctly created from the
+     * create struct in $fieldDefinitionCreateStruct.
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $expectedDefinitionCreate
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $actualDefinition
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      *
      * @return void
      */
-    protected function assertFieldDefinitionsCreatesEqual( $expectedDefinitionCreate, $actualDefinition )
+    protected function assertCreatedFieldDefinitionCorrect( $fieldDefinitionCreateStruct, $fieldDefinition )
     {
-        foreach ( $expectedDefinitionCreate as $propertyName => $propertyValue )
+        foreach ( $fieldDefinitionCreateStruct as $propertyName => $propertyValue )
         {
-            if ( is_object( $propertyValue ) )
-                $expectedType = get_class( $propertyValue );
-            else
-                $expectedType = gettype( $propertyValue );
+            switch ( $propertyName )
+            {
+                case "fieldSettings":
+                    $fieldDefinitionPropertyValue = $fieldDefinition->$propertyName ?
+                        // Cast ArrayObject to array for comparison
+                        (array) $fieldDefinition->$propertyName :
+                        null;
+                    // Sort arrays by key
+                    if ( !empty( $fieldDefinitionPropertyValue ) ) ksort( $fieldDefinitionPropertyValue );
+                    if ( !empty( $propertyValue ) ) ksort( $propertyValue );
+                    break;
+                default:
+                    $fieldDefinitionPropertyValue = $fieldDefinition->$propertyName;
+            }
 
             $this->assertEquals(
                 $propertyValue,
-                $actualDefinition->$propertyName,
-                "Property '{$propertyName}' should have been of type: " . $expectedType
+                $fieldDefinitionPropertyValue,
+                "Field definition property '{$propertyName}' is not correctly created"
             );
         }
+    }
+
+    /**
+     * An array of validators data as required by
+     * {@link \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints::$validators}
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Validator[]|null $validators
+     *
+     * @return array An array of validators data
+     */
+    protected function getValidatorsConstraintsData( $validators )
+    {
+        if ( empty( $validators ) ) return null;
+        $mappedValidators = array();
+        foreach ( $validators as $validator )
+            $mappedValidators[get_class( $validator )] = $validator->getValidatorConstraints();
+        return $mappedValidators;
+    }
+
+    protected function completeDefaultValidatorConstraints( $validators )
+    {
+
     }
 
     /**
@@ -2722,13 +2755,13 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the addFieldDefinition() method.
      *
-     * @depends testCreateContentType
-     * @depends testLoadContentTypeDraft
+     * @dep_ends testCreateContentType
+     * @dep_ends testLoadContentTypeDraft
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
      *
      * @return array
      */
-    public function testAddFieldDefinition()
+    public function testAddFieldDefinitionWithValidators()
     {
         $contentTypeDraft = $this->createDraftContentType();
 
@@ -2748,14 +2781,21 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'Tags of the blog post',
             'de-DE' => 'Schlagworte des Blog-Eintrages',
         );
-        $fieldDefCreate->fieldGroup      = 'blog-meta';
-        $fieldDefCreate->position        = 1;
-        $fieldDefCreate->isTranslatable  = true;
-        $fieldDefCreate->isRequired      = true;
+        $fieldDefCreate->fieldGroup = 'blog-meta';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = true;
+        $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->defaultValue = "New text line";
-        //$fieldDefCreate->validators
-        //$fieldDefCreate->fieldSettings
+        $fieldDefCreate->defaultValue = "New tags text line";
+        $validator = new StringLengthValidator();
+        $validator->initializeWithConstraints(
+            array(
+                "maxStringLength" => 256,
+                "minStringLength" => 2
+            )
+        );
+        $fieldDefCreate->validators = array( $validator );
+        $fieldDefCreate->fieldSettings = null;
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
@@ -2782,7 +2822,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @param array $data
      * @return void
      */
-    public function testAddFieldDefinitionStructValues( array $data )
+    public function testAddFieldDefinitionWithValidatorsStructValues( array $data )
     {
         $loadedType     = $data['loadedType'];
         $fieldDefCreate = $data['fieldDefCreate'];
@@ -2791,7 +2831,96 @@ abstract class ContentTypeBase extends BaseServiceTest
         {
             if ( $fieldDefinition->identifier == $fieldDefCreate->identifier )
             {
-                $this->assertFieldDefinitionsCreatesEqual( $fieldDefCreate, $fieldDefinition );
+                $this->assertCreatedFieldDefinitionCorrect( $fieldDefCreate, $fieldDefinition );
+                return;
+            }
+        }
+
+        $this->fail(
+            sprintf(
+                'Field definition with identifier "%s" not created.',
+                $fieldDefCreate->identifier
+            )
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @depends testCreateContentType
+     * @depends testLoadContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     *
+     * @return array
+     */
+    public function testAddFieldDefinitionWithSettings()
+    {
+        $contentTypeDraft = $this->createDraftContentType();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft
+
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'body2', 'ezxmltext'
+        );
+        $fieldDefCreate->names = array(
+            'eng-US' => 'Body',
+            'de-DE' => 'Körper',
+        );
+        $fieldDefCreate->descriptions = array(
+            'eng-US' => 'Body of the blog post',
+            'de-DE' => 'Körper der den Blog-Post',
+        );
+        $fieldDefCreate->fieldGroup = 'blog-content';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = true;
+        $fieldDefCreate->isRequired = false;
+        $fieldDefCreate->isInfoCollector = false;
+        $fieldDefCreate->defaultValue = "";
+        $fieldDefCreate->validators = null;
+        $fieldDefCreate->fieldSettings = array(
+            'numRows' => 10,
+            'tagPreset' => null,
+            'defaultText' => '',
+        );
+        $fieldDefCreate->isSearchable = true;
+
+        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
+        /* END: Use Case */
+
+        $loadedType = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
+            $loadedType
+        );
+        return array(
+            'loadedType'     => $loadedType,
+            'fieldDefCreate' => $fieldDefCreate,
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @depends testAddFieldDefinitionVariation
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     *
+     * @param array $data
+     * @return void
+     */
+    public function testAddFieldDefinitionWithSettingsStructValues( array $data )
+    {
+        $loadedType     = $data['loadedType'];
+        $fieldDefCreate = $data['fieldDefCreate'];
+
+        foreach ( $loadedType->fieldDefinitions as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier == $fieldDefCreate->identifier )
+            {
+                $this->assertCreatedFieldDefinitionCorrect( $fieldDefCreate, $fieldDefinition );
                 return;
             }
         }
