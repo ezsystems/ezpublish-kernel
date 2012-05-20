@@ -22,7 +22,8 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\SPI\Persistence\Content\Search\Result as SPISearchResult,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator;
 
 /**
  * Test case for Content service
@@ -647,7 +648,6 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentByVersionInfo()
     {
-        $this->markTestSkipped( "Enable when repository is removed from VersionInfo" );
         $contentServiceMock = $this->getPartlyMockedService(
             array( "loadContent" )
         );
@@ -1252,7 +1252,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      *
      * @return array
@@ -1280,10 +1280,31 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @todo expectedExceptionCode
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $testContentType = $this->createTestContentType();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
+        $contentCreate->setField(
+            "test_required_empty",
+            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890"
+        );
+        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate->sectionId = 1;
+        $contentCreate->ownerId = 14;
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // Throws an exception because "test_required_empty" field value is too long and fails
+        // field definition's string length validator
+        $contentService->createContent( $contentCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -1512,7 +1533,6 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty", "eng-US" );
         $contentUpdateStruct->setField( "test_translatable", "new eng-US value for test_translatable" );
         $contentUpdateStruct->setField( "test_untranslatable", "new value for test_untranslatable" );
-
         $contentUpdateStruct->setField( "test_translatable", "new eng-GB value for test_translatable", "eng-GB" );
 
         $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
@@ -1637,11 +1657,33 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the updateContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::testUpdateContent() is not implemented." );
+        $content = $this->createTestContent();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $versionInfo = $contentService->loadVersionInfoById(
+            $content->id,
+            $content->getVersionInfo()->versionNo
+        );
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = "eng-US";
+        $contentUpdateStruct->setField(
+            "test_required_empty",
+            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890",
+            "eng-US"
+        );
+
+        // Throws an exception because "test_required_empty" field value is too long and fails
+        // field definition's string length validator
+        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        /* END: Use Case */
     }
 
     /**
@@ -2081,6 +2123,8 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
         $content = $contentService->loadContentDrafts();
+
+
 
         /* END: Use Case */
     }
@@ -2770,18 +2814,6 @@ abstract class ContentBase extends BaseServiceTest
         );
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Test for the newTranslationInfo() method.
      *
@@ -2971,6 +3003,14 @@ abstract class ContentBase extends BaseServiceTest
         $fieldCreate->isInfoCollector = false;
         $fieldCreate->isSearchable    = true;
         $fieldCreate->defaultValue    = "";
+        $validator = new StringLengthValidator();
+        $validator->initializeWithConstraints(
+            array(
+                "maxStringLength" => 64,
+                "minStringLength" => 0
+            )
+        );
+        $fieldCreate->validators = array( $validator );
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $fieldCreate );
