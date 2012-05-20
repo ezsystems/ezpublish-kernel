@@ -412,27 +412,45 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $spiFieldDefinition = new SPIFieldDefinition(
             array(
-                "id"                   => null,
-                "name"                 => $fieldDefinitionCreateStruct->names,
-                "description"          => $fieldDefinitionCreateStruct->descriptions,
-                "identifier"           => $fieldDefinitionCreateStruct->identifier,
-                "fieldGroup"           => $fieldDefinitionCreateStruct->fieldGroup,
-                "position"             => $fieldDefinitionCreateStruct->position,
-                "fieldType"            => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
-                "isTranslatable"       => $fieldDefinitionCreateStruct->isTranslatable,
-                "isRequired"           => $fieldDefinitionCreateStruct->isRequired,
-                "isInfoCollector"      => $fieldDefinitionCreateStruct->isInfoCollector,
-                // These are precreated in constructor, need to be filled with data
+                "id" => null,
+                "name" => $fieldDefinitionCreateStruct->names,
+                "description" => $fieldDefinitionCreateStruct->descriptions,
+                "identifier" => $fieldDefinitionCreateStruct->identifier,
+                "fieldGroup" => $fieldDefinitionCreateStruct->fieldGroup,
+                "position" => $fieldDefinitionCreateStruct->position,
+                "fieldType" => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
+                "isTranslatable" => $fieldDefinitionCreateStruct->isTranslatable,
+                "isRequired" => $fieldDefinitionCreateStruct->isRequired,
+                "isInfoCollector" => $fieldDefinitionCreateStruct->isInfoCollector,
+                "isSearchable" => $fieldDefinitionCreateStruct->isSearchable
+                // These are precreated in constructor
                 //"fieldTypeConstraints"
                 //"defaultValue"
-                "isSearchable"         => $fieldDefinitionCreateStruct->isSearchable
             )
         );
-        $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validators;
+        $spiFieldDefinition->fieldTypeConstraints->validators =
+            $this->getValidatorsConstraintsData( $fieldDefinitionCreateStruct->validators );
         $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionCreateStruct->fieldSettings;
         $spiFieldDefinition->defaultValue->data = $fieldDefinitionCreateStruct->defaultValue;
 
         return $spiFieldDefinition;
+    }
+
+    /**
+     * An array of validators data as required by
+     * {@link \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints::$validators}
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Validator[]|null $validators
+     *
+     * @return array An array of validators data
+     */
+    protected function getValidatorsConstraintsData( $validators )
+    {
+        if ( empty( $validators ) ) return null;
+        $mappedValidators = array();
+        foreach ( $validators as $validator )
+            $mappedValidators[get_class( $validator )] = $validator->getValidatorConstraints();
+        return $mappedValidators;
     }
 
     /**
@@ -537,8 +555,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             array(
                 "names" => $spiFieldDefinition->name,
                 "descriptions" => $spiFieldDefinition->description,
-                "fieldSettings" => $spiFieldDefinition->fieldTypeConstraints->fieldSettings,
-                "validators" => $spiFieldDefinition->fieldTypeConstraints->validators,
                 "id" => $spiFieldDefinition->id,
                 "identifier" => $spiFieldDefinition->identifier,
                 "fieldGroup" => $spiFieldDefinition->fieldGroup,
@@ -548,9 +564,32 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isRequired" => $spiFieldDefinition->isRequired,
                 "isInfoCollector" => $spiFieldDefinition->isInfoCollector,
                 "defaultValue" => $spiFieldDefinition->defaultValue->data,
-                "isSearchable" => $spiFieldDefinition->isSearchable
+                "isSearchable" => $spiFieldDefinition->isSearchable,
+                "fieldSettings" => $spiFieldDefinition->fieldTypeConstraints->fieldSettings,
+                "validators" => $this->buildValidatorsFromConstraintsData(
+                    $spiFieldDefinition->fieldTypeConstraints->validators
+                )
             )
         );
+    }
+
+    /**
+     * @param $data
+     *
+     * @return array
+     */
+    protected function buildValidatorsFromConstraintsData( $data )
+    {
+        if ( empty( $data ) ) return null;
+        $validators = array();
+        foreach ( $data as $validatorFQN => $constraints )
+        {
+            /** @var $validator \eZ\Publish\Core\Repository\FieldType\Validator */
+            $validator = new $validatorFQN();
+            $validator->initializeWithConstraints( $constraints );
+            $validators[] = $validator;
+        }
+        return $validators;
     }
 
     /**
@@ -1196,7 +1235,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Instantiates a FieldType\Type object
      *
      * @todo Add to API or remove!
-     * @throws InvalidArgumentException If $type not priorly setup with settings injected to service
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup
+     *         with settings injected to service
      *
      * @param string $type
      * @return \eZ\Publish\SPI\FieldType\FieldType
@@ -1204,7 +1244,10 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function buildFieldType( $type )
     {
         if ( !isset( $this->settings["field_type"][$type] ) )
-            throw new InvalidArgumentException( '$type', "Provided \$type is unknown: '{$type}', has: " . var_export(  array_keys( $this->settings["field_type"] ), true ) );
+            throw new InvalidArgumentException(
+                '$type',
+                "Provided \$type is unknown: '{$type}', has: " . var_export(  array_keys( $this->settings["field_type"] ), true )
+            );
 
         return $this->settings["field_type"][$type]();
     }
