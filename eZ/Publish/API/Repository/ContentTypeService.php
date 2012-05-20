@@ -338,4 +338,14 @@ interface ContentTypeService
      */
     public function newFieldDefinitionUpdateStruct();
 
+    /**
+     * Instantiates a FieldType\Type object
+     *
+     * @todo Add to API or remove!
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup with settings injected to service
+     *
+     * @param string $type
+     * @return \eZ\Publish\SPI\FieldType\FieldType
+     */
+    public function buildFieldType( $type );
 }
