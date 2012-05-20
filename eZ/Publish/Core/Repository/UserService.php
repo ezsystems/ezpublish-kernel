@@ -174,7 +174,11 @@ class UserService implements UserServiceInterface
         if ( $mainGroupLocation === null )
             return array();
 
-        $searchResult = $this->searchSubGroups( $mainGroupLocation->id, $mainGroupLocation->sortField, $mainGroupLocation->sortOrder );
+        $searchResult = $this->searchSubGroups(
+            $mainGroupLocation->id,
+            $mainGroupLocation->sortField,
+            $mainGroupLocation->sortOrder
+        );
         if ( $searchResult->count == 0 )
             return array();
 
@@ -388,7 +392,7 @@ class UserService implements UserServiceInterface
         $spiUser = $this->persistenceHandler->userHandler()->create(
             new SPIUser(
                 array(
-                    'id'            => $publishedContent->contentId,
+                    'id'            => $publishedContent->id,
                     'login'         => $userCreateStruct->login,
                     'email'         => $userCreateStruct->email,
                     'passwordHash'  => $this->createPasswordHash(
@@ -761,7 +765,7 @@ class UserService implements UserServiceInterface
         foreach ( $searchResult->items as $resultItem )
         {
             /** @var $resultItem \eZ\Publish\API\Repository\Values\Content\Content */
-            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->contentId );
+            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->id );
 
             $users[] = $this->buildDomainUserObject( $spiUser, $resultItem );
         }
