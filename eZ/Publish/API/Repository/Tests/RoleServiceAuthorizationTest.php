@@ -155,7 +155,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Get a new role update struct and set new values
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-        $roleUpdateStruct->mainLanguageCode = 'eng-GB';
+        $roleUpdateStruct->mainLanguageCode = 'eng-US';
 
         // This call will fail with an "UnauthorizedException"
         $roleService->updateRole( $role, $roleUpdateStruct );
@@ -596,7 +596,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Get a role create struct instance and set properties
         $roleCreate = $roleService->newRoleCreateStruct( 'testRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+        $roleCreate->mainLanguageCode = 'eng-GB';
 
         $roleCreate->addPolicy( $policyCreate );
 

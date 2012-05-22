@@ -594,7 +594,7 @@ class UserServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertEquals( 'Sindelfingen', $userGroup->getFieldValue( 'name' ) );
+        $this->assertEquals( 'Sindelfingen', $userGroup->getFieldValue( 'name', 'eng-US' ) );
 
         $versionInfo = $userGroup->getVersionInfo();
 
@@ -1252,6 +1252,9 @@ class UserServiceTest extends BaseTest
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
         $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
+
+        // Required field
+        $contentUpdate->setField( 'user_account', $user );
 
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();

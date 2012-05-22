@@ -84,7 +84,7 @@ class ContentStub extends Content
 
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentType()->mainLanguageCode;
+            $languageCode = $this->getVersionInfo()->getContentInfo()->mainLanguageCode;
         }
 
         foreach ( $this->getFields() as $field )

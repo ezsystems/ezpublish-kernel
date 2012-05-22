@@ -481,8 +481,18 @@ class UserServiceStub implements UserService
 
         $contentService = $this->repository->getContentService();
 
-        $contentUpdate = $userUpdateStruct->contentUpdateStruct ?:
-            $contentService->newContentUpdateStruct();
+        $content = $contentService->loadContentByContentInfo( $user->contentInfo );
+
+        $contentUpdate = $userUpdateStruct->contentUpdateStruct;
+        if ( $contentUpdate === null )
+        {
+            $contentUpdate = $contentService->newContentUpdateStruct();
+            foreach ( $content->getFields() as $field )
+            {
+                $contentUpdate->setField( $field->fieldDefIdentifier, $field->value, $field->languageCode );
+            }
+            $contentUpdate->setField( 'user_account', $user );
+        }
 
         $contentDraft = $contentService->createContentDraft( $user->contentInfo );
         $contentDraft = $contentService->updateContent(

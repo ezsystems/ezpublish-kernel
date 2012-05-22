@@ -45,7 +45,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         /* END: Use Case */
 
         $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentCreateStruct', $contentCreate );
@@ -74,7 +74,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -151,7 +151,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 true,
                 1,
                 'abcdef0123456789abcdef0123456789',
-                'eng-GB',
+                'eng-US',
                 $this->getRepository()->getCurrentUser()->id,
                 false,
                 null
@@ -201,7 +201,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'status'               =>  VersionInfo::STATUS_DRAFT,
                 'versionNo'            =>  1,
                 'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode'  =>  'eng-GB',
+                'initialLanguageCode'  =>  'eng-US',
             ),
             array(
                 'status'               =>  $content->getVersionInfo()->status,
@@ -235,7 +235,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
-        $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate1->setField( 'title', 'An awesome story about eZ Publish' );
 
         $contentCreate1->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -243,7 +243,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService->createContent( $contentCreate1 );
 
-        $contentCreate2 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreate2 = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreate2->setField( 'title', 'Another awesome story about eZ Publish' );
 
         $contentCreate2->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -358,7 +358,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $locationCreate2->sortOrder = Location::SORT_ORDER_DESC;
 
         // Configure new content object
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -745,7 +745,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 true,
                 1,
                 'abcdef0123456789abcdef0123456789',
-                'eng-GB',
+                'eng-US',
                 $this->getRepository()->getCurrentUser()->id,
                 true,
             ),
@@ -781,7 +781,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 $this->getRepository()->getCurrentUser()->id,
-                'eng-GB',
+                'eng-US',
                 VersionInfo::STATUS_PUBLISHED,
                 1
             ),
@@ -897,7 +897,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 $draft->id,
                 true,
                 1,
-                'eng-GB',
+                'eng-US',
                 $this->getRepository()->getCurrentUser()->id,
                 'abcdef0123456789abcdef0123456789',
                 1
@@ -930,8 +930,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode'  =>  'eng-GB',
-                'languageCodes'        =>  array( 'eng-GB' ),
+                'initialLanguageCode'  =>  'eng-US',
+                'languageCodes'        =>  array( 0 => 'eng-US' ),
                 'status'               =>  VersionInfo::STATUS_DRAFT,
                 'versionNo'            =>  2
             ),
@@ -1144,7 +1144,23 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  null,
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'body'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
                     'languageCode'        =>  'eng-GB',
+                    'fieldDefIdentifier'  =>  'index_title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'index_title'
                 )
             ),
@@ -1159,7 +1175,15 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id'                  =>  0,
-                    'value'               =>  'An awesome² story about ezp.',
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'tags'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  'An awesome²³ story about ezp.',
                     'languageCode'        =>  'eng-GB',
                     'fieldDefIdentifier'  =>  'title'
                 )
@@ -1167,7 +1191,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id'                  =>  0,
-                    'value'               =>  'An awesome²³ story about ezp.',
+                    'value'               =>  'An awesome² story about ezp.',
                     'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'title'
                 )
@@ -1197,9 +1221,9 @@ class ContentServiceTest extends BaseContentServiceTest
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+        $contentUpdateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
 
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentUpdateStruct->initialLanguageCode = 'eng-US';
 
         // This call will fail with a "BadStateException", because $publishedContent
         // is not a draft.
@@ -1232,7 +1256,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
 
         // Don't set this, then the above call without languageCode will fail
-        //$contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        //$contentUpdateStruct->initialLanguageCode = 'eng-US';
 
         // This call will fail with a "ContentValidationException", because
         // "title" was set without a languageCode and no initialLanguageCode
@@ -1266,7 +1290,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentUpdateStruct->setField( 'title', null );
 
         // Don't set this, then the above call without languageCode will fail
-        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentUpdateStruct->initialLanguageCode = 'eng-US';
 
         // This call will fail with a "ContentValidationException", because the
         // mandatory "title" field is empty.
@@ -1432,7 +1456,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
         $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
-        $metadataUpdate->mainLanguageCode = 'eng-US';
+        $metadataUpdate->mainLanguageCode = 'eng-GB';
         $metadataUpdate->alwaysAvailable  = false;
         /* END: Use Case */
 
@@ -1463,7 +1487,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
         $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
-        $metadataUpdate->mainLanguageCode = 'eng-US';
+        $metadataUpdate->mainLanguageCode = 'eng-GB';
         $metadataUpdate->alwaysAvailable  = false;
         $metadataUpdate->publishedDate    = new \DateTime( '1984/01/01' );
         $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
@@ -1502,7 +1526,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'sectionId'         =>  $this->generateId( 'section', 1 ),
                 'alwaysAvailable'   =>  false,
                 'currentVersionNo'  =>  1,
-                'mainLanguageCode'  =>  'eng-US',
+                'mainLanguageCode'  =>  'eng-GB',
                 'modificationDate'  =>  new \DateTime( '1984/01/01' ),
                 'ownerId'           =>  $this->getRepository()->getCurrentUser()->id,
                 'published'         =>  true,
@@ -1836,13 +1860,13 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
         $contentCreateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentCreateStruct->setField( 'index_title', 'British index title...' );
+        $contentCreateStruct->setField( 'index_title', 'American index title...' );
 
-        $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-        $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-US' );
+        $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
+        $contentCreateStruct->setField( 'index_title', 'British index title...', 'eng-GB' );
 
         $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
@@ -1855,7 +1879,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Now publish this draft
         $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
 
-        // Will return a content instance with fields in "eng-GB"
+        // Will return a content instance with fields in "eng-US"
         $reloadedContent = $contentService->loadContentByVersionInfo(
             $publishedContent->getVersionInfo(),
             array(
@@ -1912,7 +1936,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id'                  =>  0,
-                    'value'               =>  'An awesome² story about ezp.',
+                    'value'               =>  'An awesome²³ story about ezp.',
                     'languageCode'        =>  'eng-GB',
                     'fieldDefIdentifier'  =>  'title'
                 )
@@ -1941,13 +1965,13 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
         $contentCreateStruct->setField( 'title', 'An awesome² story about ezp.' );
         $contentCreateStruct->setField( 'index_title', 'British index title...' );
 
-        $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-        $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-US' );
+        $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
+        $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-GB' );
 
         $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
@@ -1960,11 +1984,11 @@ class ContentServiceTest extends BaseContentServiceTest
         // Now publish this draft
         $publishedContent = $contentService->publishVersion( $content->getVersionInfo() );
 
-        // Will return a content instance with fields in "eng-GB"
+        // Will return a content instance with fields in "eng-US"
         $reloadedContent = $contentService->loadContentByContentInfo(
             $publishedContent->contentInfo,
             array(
-                'eng-GB'
+                'eng-US'
             )
         );
         /* END: Use Case */
@@ -1994,7 +2018,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
+                    'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'body'
                 )
             ),
@@ -2002,7 +2026,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  'British index title...',
-                    'languageCode'        =>  'eng-GB',
+                    'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'index_title'
                 )
             ),
@@ -2010,7 +2034,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
+                    'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'tags'
                 )
             ),
@@ -2018,7 +2042,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  'An awesome² story about ezp.',
-                    'languageCode'        =>  'eng-GB',
+                    'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'title'
                 )
             ),
@@ -2096,11 +2120,11 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
 
-        // This draft contains those fields localized with "eng-US"
-        $draftLocalized = $contentService->loadContent( $draft->id, array( 'eng-US' ) );
+        // This draft contains those fields localized with "eng-GB"
+        $draftLocalized = $contentService->loadContent( $draft->id, array( 'eng-GB' ) );
         /* END: Use Case */
 
-        $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-US' );
+        $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-GB' );
     }
 
     /**
@@ -2165,14 +2189,14 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
 
-        // This draft contains those fields localized with "eng-US"
+        // This draft contains those fields localized with "eng-GB"
         $draftLocalized = $contentService->loadContentByRemoteId(
             $draft->contentInfo->remoteId,
-            array( 'eng-US' )
+            array( 'eng-GB' )
         );
         /* END: Use Case */
 
-        $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-US' );
+        $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-GB' );
     }
 
     /**
@@ -2511,14 +2535,14 @@ class ContentServiceTest extends BaseContentServiceTest
         // Search for matching content with field language filter
         $searchResult = $contentService->findContent(
             $query,
-            array( 'languages' => array( 'eng-US' ) )
+            array( 'languages' => array( 'eng-GB' ) )
         );
         /* END: Use Case */
 
         $this->assertEquals( 1, $searchResult->count );
         $this->assertLocaleFieldsEquals(
             $searchResult->items[0]->getFields(),
-            'eng-US'
+            'eng-GB'
         );
     }
 
@@ -2601,13 +2625,13 @@ class ContentServiceTest extends BaseContentServiceTest
         // Search for matching content with field language filter
         $content = $contentService->findSingle(
             $query,
-            array( 'languages' => array( 'eng-US' ) )
+            array( 'languages' => array( 'eng-GB' ) )
         );
         /* END: Use Case */
 
         $this->assertLocaleFieldsEquals(
             $content->getFields(),
-            'eng-US'
+            'eng-GB'
         );
     }
 
@@ -3082,7 +3106,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
         // Get a content create struct and set mandatory properties
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -3137,7 +3161,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
         // Get a content create struct and set mandatory properties
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -3516,7 +3540,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $repository->commit();
 
         // Name is now "Administrators"
-        $name = $contentService->loadContent( $contentId )->getFieldValue( 'name' );
+        $name = $contentService->loadContent( $contentId )->getFieldValue( 'name', 'eng-US' );
         /* END: Use Case */
 
         $this->assertEquals( 'Administrators', $name );
@@ -3903,7 +3927,7 @@ class ContentServiceTest extends BaseContentServiceTest
     private function assertAllFieldsEquals( array $fields )
     {
         $actual   = $this->normalizeFields( $fields );
-        $expected = $this->createFieldsFixture();
+        $expected = $this->normalizeFields( $this->createFieldsFixture() );
 
         $this->assertEquals( $expected, $actual );
     }
@@ -4000,6 +4024,14 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  null,
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'body'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
                     'languageCode'        =>  'eng-GB',
                     'fieldDefIdentifier'  =>  'body'
                 )
@@ -4008,7 +4040,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  'British index title...',
-                    'languageCode'        =>  'eng-GB',
+                    'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'index_title'
                 )
             ),
@@ -4016,8 +4048,16 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  'American index title...',
-                    'languageCode'        =>  'eng-US',
+                    'languageCode'        =>  'eng-GB',
                     'fieldDefIdentifier'  =>  'index_title'
+                )
+            ),
+            new Field(
+                array(
+                    'id'                  =>  0,
+                    'value'               =>  null,
+                    'languageCode'        =>  'eng-US',
+                    'fieldDefIdentifier'  =>  'tags'
                 )
             ),
             new Field(
@@ -4032,7 +4072,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  'An awesome² story about ezp.',
-                    'languageCode'        =>  'eng-GB',
+                    'languageCode'        =>  'eng-US',
                     'fieldDefIdentifier'  =>  'title'
                 )
             ),
@@ -4040,7 +4080,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 array(
                     'id'                  =>  0,
                     'value'               =>  'An awesome²³ story about ezp.',
-                    'languageCode'        =>  'eng-US',
+                    'languageCode'        =>  'eng-GB',
                     'fieldDefIdentifier'  =>  'title'
                 )
             ),

@@ -47,7 +47,7 @@ abstract class BaseContentServiceTest extends BaseTest
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
         // Configure new content object
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -122,10 +122,9 @@ abstract class BaseContentServiceTest extends BaseTest
 
         // Create an update struct and modify some fields
         $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->initialLanguageCode = 'eng-US';
         $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdate->initialLanguageCode = 'eng-GB';
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
 
         // Update the content draft
         $draftVersion2 = $contentService->updateContent(
@@ -175,13 +174,13 @@ abstract class BaseContentServiceTest extends BaseTest
 
         $contentUpdate = $contentService->newContentUpdateStruct();
 
+        $contentUpdate->initialLanguageCode = 'eng-US';
+
         $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
         $contentUpdate->setField( 'index_title', 'British index title...' );
 
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-        $contentUpdate->setField( 'index_title', 'American index title...', 'eng-US' );
-
-        $contentUpdate->initialLanguageCode = 'eng-GB';
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
+        $contentUpdate->setField( 'index_title', 'American index title...', 'eng-GB' );
 
         $draft = $contentService->updateContent(
             $draft->getVersionInfo(),
@@ -218,6 +217,10 @@ abstract class BaseContentServiceTest extends BaseTest
         );
 
         $contentUpdate = $contentService->newContentUpdateStruct();
+        foreach ( $draftVersion2->fields as $field )
+        {
+            $contentUpdate->setField( $field->fieldDefIdentifier, $field->value, $field->languageCode );
+        }
 
         $contentService->updateContent(
             $draftVersion2->getVersionInfo(),
