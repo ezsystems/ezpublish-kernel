@@ -57,6 +57,11 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $roleService;
 
     /**
+     * @var \eZ\Publish\API\REST\Client\UrlAliasService
+     */
+    private $urlAliasService;
+
+    /**
      * @var \eZ\Publish\API\REST\Client\ContentService
      */
     private $contentService;
@@ -348,6 +353,24 @@ class Repository implements \eZ\Publish\API\Repository\Repository
             );
         }
         return $this->roleService;
+    }
+
+    /**
+     * Get UrlAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getUrlAliasService()
+    {
+        if ( null === $this->urlAliasService )
+        {
+            $this->urlAliasService = new URLAliasService(
+                $this->client,
+                $this->inputDispatcher,
+                $this->outputVisitor
+            );
+        }
+        return $this->urlAliasService;
     }
 
     /**
