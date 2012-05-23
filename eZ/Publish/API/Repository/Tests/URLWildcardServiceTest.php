@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
+use \eZ\Publish\API\Repository\Values\Content\URLAlias;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
 /**
  * Test case for operations in the URLWildcardService.
@@ -210,7 +212,7 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * Test for the loadAll() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @see \eZ\Publish\API\Repository\URLWildcardService::loadAll()
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
      */
     public function testLoadAll()
@@ -241,7 +243,7 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * Test for the loadAll() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @see \eZ\Publish\API\Repository\URLWildcardService::loadAll()
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoadAll
      */
     public function testLoadAllWithOffsetParameter()
@@ -266,7 +268,7 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * Test for the loadAll() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @see \eZ\Publish\API\Repository\URLWildcardService::loadAll()
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoadAll
      */
     public function testLoadAllWithOffsetAndLimitParameter()
@@ -291,7 +293,7 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * Test for the loadAll() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @see \eZ\Publish\API\Repository\URLWildcardService::loadAll()
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoadAll
      */
     public function testLoadAllReturnsEmptyArrayByDefault()
@@ -308,8 +310,135 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertSame( array(), $allUrlWildcards );
     }
 
+    /**
+     * Test for the translate() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
+     * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
     public function testTranslate()
     {
+        $repository = $this->getRepository();
 
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create a new url wildcard
+        $urlWildcardService->create( '/articles/*', '/content/{1}' );
+
+        // Translate a given url
+        $result = $urlWildcardService->translate( '/articles/2012/05/sindelfingen' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcardTranslationResult',
+            $result
+        );
+
+        return $result;
+    }
+
+    /**
+     * Test for the translate() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult $result
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate
+     */
+    public function testTranslateSetsPropertiesOnTranslationResult( URLWildcardTranslationResult $result )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'uri'  =>  '/content/2012/05/sindelfingen',
+                'forward'  =>  false
+            ),
+            $result
+        );
+    }
+
+    /**
+     * Test for the translate() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate
+     */
+    public function testTranslateWithForwardSetToTrue()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create a new url wildcard
+        $urlWildcardService->create( '/articles/*/05/*', '/content/{2}/year/{1}', true );
+
+        // Translate a given url
+        $result = $urlWildcardService->translate( '/articles/2012/05/sindelfingen' );
+        /* END: Use Case */
+
+        $this->assertPropertiesCorrect(
+            array(
+                'uri'  =>  '/content/sindelfingen/year/2012',
+                'forward'  =>  true
+            ),
+            $result
+        );
+    }
+
+    /**
+     * Test for the translate() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate
+     */
+    public function testTranslateReturnsLongestMatchingWildcard()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create new url wildcards
+        $urlWildcardService->create( '/articles/*/05/*', '/content/{2}/year/{1}' );
+        $urlWildcardService->create( '/articles/*/05/sindelfingen/*', '/content/{2}/bar/{1}' );
+
+        // Translate a given url
+        $result = $urlWildcardService->translate( '/articles/2012/05/sindelfingen/42' );
+        /* END: Use Case */
+
+        $this->assertEquals( '/content/42/bar/2012', $result->uri );
+    }
+
+    /**
+     * Test for the translate() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate
+     */
+    public function testTranslateReturnsUrlAliasWhenNoMatchingWildcardExists()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create new url wildcards
+        $urlWildcardService->create( '/articles/*/05/*', '/content/{2}/year/{1}' );
+
+        // Translate a given url into an url alias
+        $urlAlias = $urlWildcardService->translate( '/Design' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $urlAlias
+        );
+
+        return $urlAlias;
     }
 }
