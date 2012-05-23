@@ -71,6 +71,7 @@ $urlHandler = new Common\UrlHandler\eZPublish();
 
 $inputDispatcher = new Common\Input\Dispatcher(
     new Common\Input\ParsingDispatcher( array(
+        'application/vnd.ez.api.RoleInput'     => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
         'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler ),
         'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
     ) ),
@@ -97,6 +98,12 @@ $contentController = new Controller\Content(
     $repository->getSectionService()
 );
 
+$roleController = new Controller\Role(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getRoleService()
+);
+
 /*
  * Visitors are used to transform the Value Objects returned by the Public API
  * into the output format requested by the client. In some cases, it is
@@ -121,6 +128,9 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
+
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Role'           => new Output\ValueObjectVisitor\Role( $urlHandler ),
 );
 
 /*
@@ -158,6 +168,9 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objects/[0-9]+$)' => array(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
+        ),
+        '(^/user/roles$)' => array(
+            'POST' => array( $roleController, 'createRole' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

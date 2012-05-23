@@ -95,7 +95,16 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function createRole( RoleCreateStruct $roleCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $roleCreateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Role' );
+
+        $result = $this->client->request(
+            'POST',
+            '/user/roles',
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**

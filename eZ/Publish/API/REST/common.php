@@ -57,6 +57,7 @@ $repository = new Client\IntegrationTestRepository(
                 'application/vnd.ez.api.SectionList'  => new Client\Input\Parser\SectionList(),
                 'application/vnd.ez.api.Section'      => new Client\Input\Parser\Section(),
                 'application/vnd.ez.api.ErrorMessage' => new Client\Input\Parser\ErrorMessage(),
+                'application/vnd.ez.api.Role'         => new Client\Input\Parser\Role(),
             )
         ),
         array(
@@ -85,6 +86,7 @@ $repository = new Client\IntegrationTestRepository(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct'                  => new Client\Output\ValueObjectVisitor\SectionCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct'                        => new Client\Output\ValueObjectVisitor\RoleCreateStruct( $urlHandler ),
         )
     ),
     $authenticator
