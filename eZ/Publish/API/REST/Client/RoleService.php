@@ -337,7 +337,10 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function newRoleCreateStruct( $name )
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new Values\User\RoleCreateStruct( array(
+            'identifier' => $name,
+            'policies'   => array(),
+        ) );
     }
 
     /**
