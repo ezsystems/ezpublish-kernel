@@ -10,8 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\URLWildcardService;
-
-use \eZ\Publish\API\Repository\Values\Content\UrlWildcard;
+use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
 
 /**
  * Url wold service stub implementation.
@@ -20,6 +19,16 @@ use \eZ\Publish\API\Repository\Values\Content\UrlWildcard;
  */
 class URLWildcardServiceStub implements URLWildcardService
 {
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\URLWildcard[]
+     */
+    private $wildcards = array();
+
     /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
@@ -50,7 +59,16 @@ class URLWildcardServiceStub implements URLWildcardService
      */
     public function create( $sourceUrl, $destinationUrl, $foreward = false )
     {
-        // TODO: Implement create() method.
+        $wildcard = new URLWildcard(
+            array(
+                'id'  =>  ++$this->id,
+                'sourceUrl'  =>  $sourceUrl,
+                'destinationUrl'  =>  $destinationUrl,
+                'forward'  =>  $foreward
+            )
+        );
+
+        return ( $this->wildcards[$wildcard->id] = $wildcard );
     }
 
     /**
