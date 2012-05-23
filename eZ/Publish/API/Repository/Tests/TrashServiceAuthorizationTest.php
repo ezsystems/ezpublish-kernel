@@ -116,19 +116,21 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
-    public function testRecoverThrowsUnauthorizedExceptionWithNewParentLocation()
+    public function testRecoverThrowsUnauthorizedExceptionWithNewParentLocationParameter()
     {
         $repository      = $this->getRepository();
-
-        $baseLocationId = $this->generateId( 'location', 1 );
-        /* BEGIN: Use Case */
-        // $baseLocationId is the location of the root node
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $homeLocationId = $this->generateId( 'location', 2 );
+        /* BEGIN: Use Case */
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
+
         $trashItem = $this->createTrashItem();
 
-        $newParentLocation = $locationService->loadLocation( $baseLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Load user service
         $userService = $repository->getUserService();
@@ -137,7 +139,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with an "UnauthorizedException"
-        $location = $trashService->recover( $trashItem, $newParentLocation );
+        $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
     }
 

@@ -131,12 +131,12 @@ class TrashServiceStub implements TrashService
     /**
      * Recovers the $trashedLocation at its original place if possible.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to recover the trash item at the parent location location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to recover the trash item at the parent location location
      *
      * If $newParentLocation is provided, $trashedLocation will be restored under it.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $newParentLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
@@ -154,14 +154,11 @@ class TrashServiceStub implements TrashService
 
         unset( $this->locations[$trashItem->id][$trashItem->id] );
 
-        foreach ( $this->locations[$trashItem->id] as $descendantLocation )
+        foreach ( $this->locations[$trashItem->id] as $childLocation )
         {
-            $this->locationService->__recoverLocation(
-                $descendantLocation,
-                ( $descendantLocation->parentLocationId == $location->id
-                    ? $location
-                    : null )
-            );
+            $childLocation->contentInfo->__setMainLocationId( $location->contentInfo->mainLocationId );
+
+            $this->locationService->__recoverLocation( $childLocation );
         }
 
         unset(

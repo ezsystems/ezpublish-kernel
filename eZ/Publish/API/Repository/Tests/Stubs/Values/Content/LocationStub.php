@@ -156,6 +156,17 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @param int $parentLocationId
+     * @return void
+     */
+    public function __setParentLocationId( $parentLocationId )
+    {
+        $this->parentLocationId = $parentLocationId;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
      * @return void
      */
     public function __hide()

@@ -147,6 +147,30 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * Test for the trash() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\TrashService::trash()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     */
+    public function testTrashDecrementsChildCountOnParentLocation()
+    {
+        $repository      = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $homeLocationId = $this->generateId( 'location', 2 );
+
+        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
+
+        $this->createTrashItem();
+
+        $this->assertEquals(
+            $childCount - 1,
+            $locationService->loadLocation( $homeLocationId )->childCount
+        );
+    }
+
+    /**
      * Test for the loadTrashItem() method.
      *
      * @return void
@@ -275,21 +299,23 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @d epends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
      */
-    public function testRecoverWithNewParentLocation()
+    public function testRecoverWithLocationCreateStructParameter()
     {
         $repository      = $this->getRepository();
-
-        $baseLocationId = $this->generateId( 'location', 1 );
-        /* BEGIN: Use Case */
-        // $baseLocationId is the location of the root node
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $homeLocationId = $this->generateId( 'location', 2 );
+        /* BEGIN: Use Case */
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
+
         $trashItem = $this->createTrashItem();
 
-        $newParentLocation = $locationService->loadLocation( $baseLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
         $location = $trashService->recover( $trashItem, $newParentLocation );
@@ -298,15 +324,15 @@ class TrashServiceTest extends BaseTrashServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'remoteId'          =>  $trashItem->remoteId,
-                'parentLocationId'  =>  $baseLocationId,
+                'parentLocationId'  =>  $homeLocationId,
                 'childCount'        =>  $trashItem->childCount,
-                'depth'             =>  $newParentLocation->depth + 1,
-                'hidden'            =>  $trashItem->hidden,
+                'depth'             =>  $trashItem->depth,
+                'hidden'            =>  false,
                 'invisible'         =>  $trashItem->invisible,
-                'pathString'        =>  "/1/" . $this->parseId( 'location', $location->id ) . "/",
-                'priority'          =>  $trashItem->priority,
-                'sortField'         =>  $trashItem->sortField,
-                'sortOrder'         =>  $trashItem->sortOrder,
+                'pathString'        =>  "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
+                'priority'          =>  4,
+                'sortField'         =>  Location::SORT_FIELD_PUBLISHED,
+                'sortOrder'         =>  Location::SORT_ORDER_DESC,
             ),
             $location
         );
@@ -317,28 +343,30 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithNewParentLocation
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter
      */
-    public function testRecoverWithNewParentLocationSetsNewMainLocationId()
+    public function testRecoverWithLocationCreateStructParameterSetsNewMainLocationId()
     {
         $repository      = $this->getRepository();
-
-        $baseLocationId = $this->generateId( 'location', 1 );
-        /* BEGIN: Use Case */
-        // $baseLocationId is the location of the root node
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $homeLocationId = $this->generateId( 'location', 2 );
+        /* BEGIN: Use Case */
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
+
         $trashItem = $this->createTrashItem();
 
-        $newParentLocation = $locationService->loadLocation( $baseLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
         $location = $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertEquals(
-            $location->id,
+            $newParentLocation->getContentInfo()->mainLocationId,
             $location->getContentInfo()->mainLocationId
         );
     }
@@ -348,31 +376,34 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithNewParentLocation
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter
      */
-    public function testRecoverWithNewParentLocationIncrementsChildCountOnNewParent()
+    public function testRecoverWithLocationCreateStructParameterIncrementsChildCountOnNewParent()
     {
         $repository      = $this->getRepository();
-        $locationService = $repository->getLocationService();
-
-        $baseLocationId = $this->generateId( 'location', 1 );
-        $childCount = $locationService->loadLocation( $baseLocationId )->childCount;
-        /* BEGIN: Use Case */
-        // $baseLocationId is the location of the root node
         $trashService    = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
+        $homeLocationId = $this->generateId( 'location', 2 );
+
+        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
+
+        /* BEGIN: Use Case */
+        // $homeLocationId is the ID of the "Home" location in an eZ Publish
+        // demo installation
+
         $trashItem = $this->createTrashItem();
 
-        $newParentLocation = $locationService->loadLocation( $baseLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
-        $location = $trashService->recover( $trashItem, $newParentLocation );
+        $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertEquals(
-            $childCount + 1,
-            $locationService->loadLocation( $baseLocationId )->childCount
+            $childCount,
+            $locationService->loadLocation( $homeLocationId )->childCount
         );
     }
 
