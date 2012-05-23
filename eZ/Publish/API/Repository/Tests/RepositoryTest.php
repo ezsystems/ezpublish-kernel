@@ -158,6 +158,21 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getUrlWildcardService() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Repository::getUrlWildcardService()
+     */
+    public function testGetUrlWildcardService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\URLWildcardService',
+            $repository->getUrlWildcardService()
+        );
+    }
+
+    /**
      * Test for the getIOService() method.
      *
      * @return void
