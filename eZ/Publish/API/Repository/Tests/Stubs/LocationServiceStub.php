@@ -788,46 +788,42 @@ class LocationServiceStub implements LocationService
      * Internal helper method used to recover a location tree.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreate
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function __recoverLocation( Location $location, LocationCreateStruct $locationCreate = null )
+    public function __recoverLocation( Location $location, Location $newParentLocation = null )
     {
-        if ( $locationCreate )
+        $parentLocation = $newParentLocation ?: $this->loadLocation( $location->parentLocationId );
+
+        $childData = $this->locationToArray( $location );
+        $childData['parentLocationId'] = $parentLocation->id;
+        $childData['pathString']       = $parentLocation->pathString . $location->id . '/';
+        $childData['depth']            = $parentLocation->depth + 1;
+
+        if ( $location->parentLocationId !== $parentLocation->id )
         {
-            foreach ( get_object_vars( $locationCreate ) as $name => $value )
-            {
-                if ( null === $value )
-                {
-                    $locationCreate->{$name} = $location->{$name};
-                }
-            }
-
-            $contentInfo = $location->getContentInfo();
-            $newLocation = $this->createLocation( $contentInfo, $locationCreate );
-
-            // Restore child count
-            $newLocation->__setChildCount( $location->childCount );
-
-            // Update main location id
-            if ( $contentInfo->mainLocationId === $location->id )
-            {
-                $contentInfo->__setMainLocationId( $newLocation->id );
-            }
-
-            // Update child count on new parent
-            if ( isset( $this->locations[$newLocation->parentLocationId] ) )
-            {
-                $this->locations[$newLocation->parentLocationId]->__setChildCount(
-                    $this->locations[$newLocation->parentLocationId]->childCount + 1
-                );
-            }
-
-            return $newLocation;
+            $parentLocation->__setChildCount( $parentLocation->childCount + 1 );
         }
-        return ( $this->locations[$location->id] = $location );
 
+        return ( $this->locations[$location->id] = new LocationStub( $childData ) );
+    }
+
+    /**
+     * Sets $parentLocation as the new parent of $childLocation
+     *
+     * @param Location $childLocation
+     * @param Location $parentLocation
+     * @param bool $raiseChildCount
+     * @return Location
+     */
+    private function setNewParent( Location $childLocation, Location $parentLocation, $raiseChildCount = false )
+    {
+
+        $childLocation = $this->locations[$childLocation->id] = new Location( $childData );
+
+
+        return $childLocation;
     }
 
     /**

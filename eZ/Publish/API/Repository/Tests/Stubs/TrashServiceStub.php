@@ -140,7 +140,7 @@ class TrashServiceStub implements TrashService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, LocationCreateStruct $newParentLocation = null )
+    public function recover( TrashItem $trashItem, Location $newParentLocation = null )
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $trashItem ) )
         {
@@ -154,9 +154,14 @@ class TrashServiceStub implements TrashService
 
         unset( $this->locations[$trashItem->id][$trashItem->id] );
 
-        foreach ( $this->locations[$trashItem->id] as $childLocation )
+        foreach ( $this->locations[$trashItem->id] as $descendantLocation )
         {
-            $this->locationService->__recoverLocation( $childLocation );
+            $this->locationService->__recoverLocation(
+                $descendantLocation,
+                ( $descendantLocation->parentLocationId == $location->id
+                    ? $location
+                    : null )
+            );
         }
 
         unset(
