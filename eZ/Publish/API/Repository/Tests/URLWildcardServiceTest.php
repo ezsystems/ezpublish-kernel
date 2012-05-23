@@ -78,4 +78,32 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             $urlWildcard
         );
     }
+
+    /**
+     * Test for the create() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::create()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
+    public function testCreateWithOptionalForwardParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create a new url wildcard
+        $urlWildcard = $urlWildcardService->create( '/articles/*', '/content/{1}', true );
+        /* END: Use Case */
+
+        $this->assertPropertiesCorrect(
+            array(
+                'sourceUrl'  =>  '/articles/*',
+                'destinationUrl'  =>  '/content/{1}',
+                'forward'  =>  true
+            ),
+            $urlWildcard
+        );
+    }
 }

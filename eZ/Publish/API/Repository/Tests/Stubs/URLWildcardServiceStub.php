@@ -128,5 +128,4 @@ class URLWildcardServiceStub implements URLWildcardService
     {
         // TODO: Implement translate() method.
     }
-
 }
