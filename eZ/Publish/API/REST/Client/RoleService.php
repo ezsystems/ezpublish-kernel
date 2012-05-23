@@ -337,10 +337,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function newRoleCreateStruct( $name )
     {
-        return new Values\User\RoleCreateStruct( array(
-            'identifier' => $name,
-            'policies'   => array(),
-        ) );
+        return new Values\User\RoleCreateStruct( $name );
     }
 
     /**
