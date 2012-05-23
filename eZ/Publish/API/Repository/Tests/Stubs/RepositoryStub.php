@@ -431,7 +431,7 @@ class RepositoryStub implements Repository
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */
-    public function getUrlAliasService()
+    public function getURLAliasService()
     {
         if ( null === $this->urlAliasService )
         {
@@ -446,7 +446,7 @@ class RepositoryStub implements Repository
      * @return \eZ\Publish\API\Repository\URLWildcardService
      * @todo URLWildcardService This method should be part of the Repository interface.
      */
-    public function getUrlWildcardService()
+    public function getURLWildcardService()
     {
         if ( null === $this->urlWildcardService )
         {

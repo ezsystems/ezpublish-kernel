@@ -148,12 +148,12 @@ class RepositoryTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getUrlAliasService()
      */
-    public function testGetUrlAliasService()
+    public function testGetURLAliasService()
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\URLAliasService',
-            $repository->getUrlAliasService()
+            $repository->getURLAliasService()
         );
     }
 
@@ -163,12 +163,12 @@ class RepositoryTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getUrlWildcardService()
      */
-    public function testGetUrlWildcardService()
+    public function testGetURLWildcardService()
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\URLWildcardService',
-            $repository->getUrlWildcardService()
+            $repository->getURLWildcardService()
         );
     }
 
