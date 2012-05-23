@@ -205,4 +205,106 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlWildcardService->load( $urlWildcardId );
         /* END: Use Case */
     }
+
+    /**
+     * Test for the loadAll() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
+    public function testLoadAll()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create new url wildcards
+        $urlWildcardOne = $urlWildcardService->create( '/articles/*', '/content/{1}', true );
+        $urlWildcardTwo = $urlWildcardService->create( '/news/*', '/content/{1}', true );
+
+        // Load all available url wildcards
+        $allUrlWildcards = $urlWildcardService->loadAll();
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array(
+                $urlWildcardOne,
+                $urlWildcardTwo
+            ),
+            $allUrlWildcards
+        );
+    }
+
+    /**
+     * Test for the loadAll() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoadAll
+     */
+    public function testLoadAllWithOffsetParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create new url wildcards
+        $urlWildcardOne = $urlWildcardService->create( '/articles/*', '/content/{1}', true );
+        $urlWildcardTwo = $urlWildcardService->create( '/news/*', '/content/{1}', true );
+
+        // Load all available url wildcards
+        $allUrlWildcards = $urlWildcardService->loadAll( 1 );
+        /* END: Use Case */
+
+        $this->assertEquals( array( $urlWildcardTwo ), $allUrlWildcards );
+    }
+
+    /**
+     * Test for the loadAll() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoadAll
+     */
+    public function testLoadAllWithOffsetAndLimitParameter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create new url wildcards
+        $urlWildcardOne = $urlWildcardService->create( '/articles/*', '/content/{1}', true );
+        $urlWildcardTwo = $urlWildcardService->create( '/news/*', '/content/{1}', true );
+
+        // Load all available url wildcards
+        $allUrlWildcards = $urlWildcardService->loadAll( 0, 1 );
+        /* END: Use Case */
+
+        $this->assertEquals( array( $urlWildcardOne ), $allUrlWildcards );
+    }
+
+    /**
+     * Test for the loadAll() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoadAll
+     */
+    public function testLoadAllReturnsEmptyArrayByDefault()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Load all available url wildcards
+        $allUrlWildcards = $urlWildcardService->loadAll();
+        /* END: Use Case */
+
+        $this->assertSame( array(), $allUrlWildcards );
+    }
 }

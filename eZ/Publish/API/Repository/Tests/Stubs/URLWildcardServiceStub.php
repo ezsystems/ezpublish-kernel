@@ -117,7 +117,7 @@ class URLWildcardServiceStub implements URLWildcardService
      */
     public function loadAll( $offset = 0, $limit = -1 )
     {
-        // TODO: Implement loadAll() method.
+        return array_slice( $this->wildcards, $offset, -1 === $limit ? PHP_INT_MAX : $limit );
     }
 
     /**
