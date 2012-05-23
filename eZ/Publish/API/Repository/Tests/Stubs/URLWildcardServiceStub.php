@@ -82,7 +82,7 @@ class URLWildcardServiceStub implements URLWildcardService
      */
     public function remove( $urlWildcard )
     {
-        // TODO: Implement remove() method.
+        unset( $this->wildcards[$urlWildcard->id] );
     }
 
     /**

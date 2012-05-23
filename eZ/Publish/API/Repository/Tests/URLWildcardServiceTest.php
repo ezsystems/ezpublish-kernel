@@ -176,4 +176,33 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlWildcardService->load( 42 );
         /* END: Use Case */
     }
+
+    /**
+     * Test for the remove() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoad
+     */
+    public function testRemove()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create a new url wildcard
+        $urlWildcard = $urlWildcardService->create( '/articles/*', '/content/{1}', true );
+
+        // Store wildcard url for later reuse
+        $urlWildcardId = $urlWildcard->id;
+
+        // Remove the newly created url wildcard
+        $urlWildcardService->remove( $urlWildcard );
+
+        // This call will fail with a NotFoundException
+        $urlWildcardService->load( $urlWildcardId );
+        /* END: Use Case */
+    }
 }
