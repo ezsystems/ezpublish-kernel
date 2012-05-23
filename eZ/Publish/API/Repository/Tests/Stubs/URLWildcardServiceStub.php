@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\URLWildcardService;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Url wold service stub implementation.
@@ -97,7 +98,11 @@ class URLWildcardServiceStub implements URLWildcardService
      */
     public function load( $id )
     {
-        // TODO: Implement load() method.
+        if ( isset( $this->wildcards[$id] ) )
+        {
+            return $this->wildcards[$id];
+        }
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**

@@ -37,7 +37,7 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\Publish\API\Repository\Values\Content\\URLWildcard',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard',
             $urlWildcard
         );
 
@@ -105,5 +105,75 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             ),
             $urlWildcard
         );
+    }
+
+    /**
+     * Test for the load() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
+     * @see \eZ\Publish\API\Repository\URLWildcardService::load()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
+    public function testLoad()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create a new url wildcard
+        $urlWildcardId = $urlWildcardService->create( '/articles/*', '/content/{1}', true )->id;
+
+        // Load newly created url wildcard
+        $urlWildcard = $urlWildcardService->load( $urlWildcardId );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard',
+            $urlWildcard
+        );
+
+        return $urlWildcard;
+    }
+
+    /**
+     * Test for the load() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::load()
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoad
+     */
+    public function testLoadSetsPropertiesOnURLWildcard( URLWildcard $urlWildcard )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'sourceUrl'  =>  '/articles/*',
+                'destinationUrl'  =>  '/content/{1}',
+                'forward'  =>  true
+            ),
+            $urlWildcard
+        );
+    }
+
+    /**
+     * Test for the load() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::load()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoad
+     */
+    public function testLoadThrowsNotFoundException( URLWildcard $urlWildcard )
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // This call will fail with a NotFoundException
+        $urlWildcardService->load( 42 );
+        /* END: Use Case */
     }
 }
