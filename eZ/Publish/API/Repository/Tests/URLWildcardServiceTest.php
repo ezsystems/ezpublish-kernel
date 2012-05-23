@@ -277,8 +277,8 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlWildcardService = $repository->getURLWildcardService();
 
         // Create new url wildcards
-        $urlWildcardOne = $urlWildcardService->create( '/articles/*', '/content/{1}', true );
-        $urlWildcardTwo = $urlWildcardService->create( '/news/*', '/content/{1}', true );
+        $urlWildcardOne = $urlWildcardService->create( '/articles/*', '/content/{1}' );
+        $urlWildcardTwo = $urlWildcardService->create( '/news/*', '/content/{1}' );
 
         // Load all available url wildcards
         $allUrlWildcards = $urlWildcardService->loadAll( 0, 1 );
@@ -306,5 +306,10 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         /* END: Use Case */
 
         $this->assertSame( array(), $allUrlWildcards );
+    }
+
+    public function testTranslate()
+    {
+
     }
 }
