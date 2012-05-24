@@ -312,6 +312,7 @@ interface ContentService
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
 
     /**
+     * @deprecated use search service instead
      * finds content objects for the given query.
      *
      * @TODO define structs for the field filters
@@ -326,6 +327,7 @@ interface ContentService
     public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
 
     /**
+     * @deprecated use search service instead
      * Performs a query for a single content object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions

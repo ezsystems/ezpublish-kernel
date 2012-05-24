@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- *
+ * @deprecated
  * This class is returned by find methods providing a result of a search.
  */
 class SearchResult extends ValueObject
