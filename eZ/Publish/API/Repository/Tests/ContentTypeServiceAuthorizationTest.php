@@ -44,8 +44,8 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $groupCreate->creatorId        = $creatorId;
         $groupCreate->creationDate     = new \DateTime();
         $groupCreate->mainLanguageCode = 'de-DE';
-        $groupCreate->names            = array( 'eng-US' => 'A name.' );
-        $groupCreate->descriptions     = array( 'eng-US' => 'A description.' );
+        $groupCreate->names            = array( 'eng-GB' => 'A name.' );
+        $groupCreate->descriptions     = array( 'eng-GB' => 'A description.' );
 
         // Set anonymous user
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
@@ -80,15 +80,15 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         // $modifierId is the ID of user 42
         $groupUpdate->modifierId       = $modifierId;
         $groupUpdate->modificationDate = new \DateTime();
-        $groupUpdate->mainLanguageCode = 'eng-US';
+        $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
-            'eng-US' => 'A name',
             'eng-GB' => 'A name',
+            'eng-US' => 'A name',
         );
         $groupUpdate->descriptions = array(
-            'eng-US' => 'A description',
             'eng-GB' => 'A description',
+            'eng-US' => 'A description',
         );
 
         // Set anonymous user
@@ -161,11 +161,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $typeUpdate->modifierId             = $modifierId;
         $typeUpdate->modificationDate       = new \DateTime();
         $typeUpdate->names                  = array(
-            'eng-US' => 'News article',
+            'eng-GB' => 'News article',
             'de-DE'  => 'Nachrichten-Artikel',
         );
         $typeUpdate->descriptions = array(
-            'eng-US' => 'A news article',
+            'eng-GB' => 'A news article',
             'de-DE'  => 'Ein Nachrichten-Artikel',
         );
 
@@ -201,11 +201,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
             'tags', 'string'
         );
         $fieldDefCreate->names = array(
-            'eng-US' => 'Tags',
+            'eng-GB' => 'Tags',
             'de-DE' => 'Schlagworte',
         );
         $fieldDefCreate->descriptions = array(
-            'eng-US' => 'Tags of the blog post',
+            'eng-GB' => 'Tags of the blog post',
             'de-DE' => 'Schlagworte des Blog-Eintrages',
         );
         $fieldDefCreate->fieldGroup      = 'blog-meta';
@@ -288,11 +288,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
         $bodyUpdateStruct->identifier = 'blog-body';
         $bodyUpdateStruct->names = array(
-            'eng-US' => 'Blog post body',
+            'eng-GB' => 'Blog post body',
             'de-DE' => 'Blog-Eintrags-Textkörper',
         );
         $bodyUpdateStruct->descriptions = array(
-            'eng-US' => 'Blog post body of the blog post',
+            'eng-GB' => 'Blog post body of the blog post',
             'de-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
         );
         $bodyUpdateStruct->fieldGroup      = 'updated-blog-content';

@@ -385,69 +385,19 @@ class ContentServiceStub implements ContentService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-
-        $fields = array();
-        foreach ( $contentCreateStruct->fields as $field )
-        {
-            if ( false === isset( $fields[$field->fieldDefIdentifier] ) )
-            {
-                $fields[$field->fieldDefIdentifier] = array();
-            }
-            $fields[$field->fieldDefIdentifier][] = $field;
-        }
-
-        // Now validate that all required fields
-        $allFields = array();
-        foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
-        {
-            if ( isset( $fields[$fieldDefinition->identifier] ) )
-            {
-                foreach ( $fields[$fieldDefinition->identifier] as $field )
-                {
-                    $fieldId = ++$this->fieldNextId;
-
-                    $allFields[$fieldId] = new Field(
-                        array(
-                            'id'                  =>  $fieldId,
-                            'value'               =>  $field->value,
-                            'languageCode'        =>  $field->languageCode,
-                            'fieldDefIdentifier'  =>  $fieldDefinition->identifier
-                        )
-                    );
-                }
-            }
-            else if ( $fieldDefinition->isRequired )
-            {
-                throw new ContentValidationExceptionStub(
-                    '@TODO: What error code should be used? ' . $fieldDefinition->identifier
-                );
-            }
-            else
-            {
-                $fieldId = ++$this->fieldNextId;
-
-                $allFields[$fieldId] = new Field(
-                    array(
-                        'id'                  =>  $fieldId,
-                        'value'               =>  $fieldDefinition->defaultValue,
-                        'languageCode'        =>  $contentCreateStruct->contentType->mainLanguageCode,
-                        'fieldDefIdentifier'  =>  $fieldDefinition->identifier
-                    )
-                );
-            }
-        }
-
         if ( $this->remoteIdExists( $contentCreateStruct->remoteId ) )
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
-        $languageCodes = array( $contentCreateStruct->mainLanguageCode );
-        foreach ( $allFields as $field )
-        {
-            $languageCodes[] = $field->languageCode;
-        }
-        $languageCodes = array_unique( $languageCodes );
+        $languageCodes = $this->getLanguageCodes( $contentCreateStruct->fields, $contentCreateStruct->mainLanguageCode );
+        $fields        = $this->getFieldsByTypeAndLanguageCode( $contentCreateStruct->contentType, $contentCreateStruct->fields, $contentCreateStruct->mainLanguageCode );
+
+        // Validate all required fields available in each language;
+        $this->checkRequiredFields( $contentCreateStruct->contentType, $fields, $languageCodes, $contentCreateStruct->mainLanguageCode );
+
+        // Complete missing fields
+        $allFields = $this->createCompleteFields( $contentCreateStruct->contentType, $fields, $languageCodes, $contentCreateStruct->mainLanguageCode );
 
         $content = new ContentStub(
             array(
@@ -513,6 +463,233 @@ class ContentServiceStub implements ContentService
         }
 
         return $content;
+    }
+
+    /**
+     * Returns all language codes used in $fields, including $mainLanguageCode
+     * if not null
+     *
+     * @param array $fields
+     * @param string $mainLanguageCode
+     * @return string[]
+     */
+    private function getLanguageCodes( array $fields, $mainLanguageCode = null )
+    {
+        $languageCodes = array();
+
+        if ( $mainLanguageCode !== null )
+        {
+            $languageCodes[$mainLanguageCode] = true;
+        }
+
+        foreach ( $fields as $field )
+        {
+            if ( $field->languageCode !== null )
+            {
+                $languageCodes[$field->languageCode] = true;
+            }
+        }
+        return array_keys( $languageCodes );
+    }
+
+    /**
+     * Returns $fields structured by type and language code
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @param string $mainLanguageCode
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     *
+     * @throw Exceptions\ContentValidationException if the language code for a
+     *        field could not be determined.
+     */
+    private function getFieldsByTypeAndLanguageCode( ContentType $contentType, array $fields, $mainLanguageCode = null )
+    {
+        $structuredFields = array();
+        foreach ( $fields as $field )
+        {
+            $languageCode = ( $field->languageCode !== null
+                ? $field->languageCode
+                : $mainLanguageCode );
+
+            if ( $languageCode === null
+                && $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
+            {
+                throw new Exceptions\ContentValidationExceptionStub(
+                    '@TODO: What error code should be used?'
+                );
+            }
+
+            $field = $this->cloneField( $field, array( 'languageCode' => $languageCode ) );
+
+            if ( false === isset( $structuredFields[$field->fieldDefIdentifier] ) )
+            {
+                $structuredFields[$field->fieldDefIdentifier] = array();
+            }
+            // Only one field of each type per langauge code
+            $structuredFields[$field->fieldDefIdentifier][$languageCode] = $field;
+        }
+        return $structuredFields;
+    }
+
+    /**
+     * Clones $field, potentially overriding specific properties from
+     * $overrides
+     *
+     * @param Field $field
+     * @param array $overrides
+     * @return Field
+     */
+    private function cloneField( Field $field, array $overrides = array() )
+    {
+        $fieldData = array_merge(
+            array(
+                'id'                 =>  $field->id,
+                'value'              =>  $field->value,
+                'languageCode'       =>  $field->languageCode,
+                'fieldDefIdentifier' =>  $field->fieldDefIdentifier,
+            ),
+            $overrides
+        );
+        return new Field( $fieldData );
+    }
+
+    /**
+     * Returns $originalFieldId if not null, otherwise a new field ID
+     *
+     * @param mixed $originalFieldId
+     * @return void
+     */
+    private function getFieldId( $originalFieldId = null )
+    {
+        if ( $originalFieldId !== null )
+        {
+            return $originalFieldId;
+        }
+        return ++$this->fieldNextId;
+    }
+
+    /**
+     * Checks all fields required by $contentType are available in $fields,
+     * taking languages and non-translatable fields into account.
+     *
+     * Structure is $fields[$fieldIdentifier][$languageCode], while
+     * non-translatable fields are stored with $mainLanguageCode.
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @param array $languageCodes
+     * @param string $mainLanguageCode
+     * @return void
+     */
+    private function checkRequiredFields( ContentType $contentType, array $fields, array $languageCodes, $mainLanguageCode )
+    {
+        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( !$fieldDefinition->isRequired )
+            {
+                continue;
+            }
+
+            if ( $fieldDefinition->isTranslatable )
+            {
+                foreach ( $languageCodes as $languageCode )
+                {
+                    if ( !isset( $fields[$fieldDefinition->identifier][$languageCode] ) || empty( $fields[$fieldDefinition->identifier][$languageCode]->value ) )
+                    {
+                        throw new ContentValidationExceptionStub(
+                            '@TODO: What error code should be used? ' . $fieldDefinition->identifier . ' ' . $languageCode
+                        );
+                    }
+                }
+            }
+            else
+            {
+                if ( !isset( $fields[$fieldDefinition->identifier][$mainLanguageCode] ) || empty( $fields[$fieldDefinition->identifier][$mainLanguageCode]->value ) )
+                {
+                    throw new ContentValidationExceptionStub(
+                        '@TODO: What error code should be used? ' . $fieldDefinition->identifier
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a list of all fields, while missing non-required fields are
+     * completed
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @param array $languageCodes
+     * @param string $mainLanguageCode
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    private function createCompleteFields( ContentType $contentType, array $fields, array $languageCodes, $mainLanguageCode )
+    {
+        $allFields = array();
+        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->isTranslatable )
+            {
+                foreach ( $languageCodes as $languageCode )
+                {
+                    if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
+                    {
+                        $field   = $fields[$fieldDefinition->identifier][$languageCode];
+                        $fieldId = $this->getFieldId( $field->id );
+
+                        // Existing translatable field
+                        $allFields[$fieldId] = $this->cloneField(
+                            $field,
+                            array( 'id' =>  $fieldId )
+                        );
+                    }
+                    else
+                    {
+                        $fieldId = $this->getFieldId();
+                        // Missing translatable field
+                        $allFields[$fieldId] = new Field(
+                            array(
+                                'id'                  =>  $fieldId,
+                                'value'               =>  $fieldDefinition->defaultValue,
+                                'languageCode'        =>  $languageCode,
+                                'fieldDefIdentifier'  =>  $fieldDefinition->identifier
+                            )
+                        );
+                    }
+                }
+            }
+            else
+            {
+                if ( isset( $fields[$fieldDefinition->identifier][$mainLanguageCode] ) )
+                {
+                    $field = $fields[$fieldDefinition->identifier][$mainLanguageCode];
+                    $fieldId = $this->getFieldId( $field->id );
+
+                    // Existing non-translatable field
+                    $allFields[$fieldId] = $this->cloneField(
+                        $field,
+                        array( 'id' =>  $fieldId )
+                    );
+                }
+                else
+                {
+                    $fieldId = $this->getFieldId();
+
+                    // Missing non-translatable field
+                    $allFields[$fieldId] = new Field(
+                        array(
+                            'id'                  =>  $fieldId,
+                            'value'               =>  $fieldDefinition->defaultValue,
+                            'languageCode'        =>  null,
+                            'fieldDefIdentifier'  =>  $fieldDefinition->identifier
+                        )
+                    );
+                }
+            }
+        }
+        return $allFields;
     }
 
     /**
@@ -744,48 +921,21 @@ class ContentServiceStub implements ContentService
         $content     = $this->loadContentByVersionInfo( $versionInfo );
         $contentType = $content->contentType;
 
-        $fieldIds = array();
-        $fields   = array();
-        foreach ( $contentUpdateStruct->fields as $field )
-        {
-            $fieldIds[$field->fieldDefIdentifier] = true;
+        $mainLanguageCode = $contentUpdateStruct->initialLanguageCode;
 
-            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+        $languageCodes = $this->getLanguageCodes( $contentUpdateStruct->fields, $mainLanguageCode );
+        $fields        = $this->getFieldsByTypeAndLanguageCode( $contentType, $contentUpdateStruct->fields, $mainLanguageCode );
 
-            if ( null === $field->languageCode &&
-                 null === $contentUpdateStruct->initialLanguageCode &&
-                $fieldDefinition->isTranslatable )
-            {
-                throw new ContentValidationExceptionStub( 'What error code should be used?' );
-            }
-            if ( '' === trim( $field->value ) && $fieldDefinition->isRequired )
-            {
-                throw new ContentValidationExceptionStub( 'What error code should be used?' );
-            }
+        // Validate all required fields available in each language;
+        $this->checkRequiredFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
 
-            $fields[] = new Field(
-                array(
-                    'id'                  =>  ++$this->fieldNextId,
-                    'value'               =>  $field->value,
-                    'languageCode'        =>  $field->languageCode ?: $contentUpdateStruct->initialLanguageCode,
-                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
-                )
-            );
-        }
-
-        foreach ( $content->getFields() as $field )
-        {
-            if ( isset( $fieldIds[$field->fieldDefIdentifier] ) )
-            {
-                continue;
-            }
-            $fields[] = $field;
-        }
+        // Complete missing fields
+        $allFields = $this->createCompleteFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
 
         $draftedContent = new ContentStub(
             array(
                 'id'      =>  $content->id,
-                'fields'         =>  $fields,
+                'fields'         =>  $allFields,
                 'relations'      =>  $content->getRelations(),
 
                 'contentTypeId'  =>  $content->contentTypeId,
@@ -803,8 +953,8 @@ class ContentServiceStub implements ContentService
                 'creatorId'            =>  $versionInfo->creatorId,
                 'creationDate'         =>  $versionInfo->creationDate,
                 'modificationDate'     =>  new \DateTime(),
-                'languageCodes'        =>  $versionInfo->languageCodes,
-                'initialLanguageCode'  =>  $contentUpdateStruct->initialLanguageCode ?: $versionInfo->initialLanguageCode,
+                'languageCodes'        =>  $languageCodes,
+                'initialLanguageCode'  =>  $mainLanguageCode,
 
                 'repository'           =>  $this->repository
             )

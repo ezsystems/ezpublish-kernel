@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 class URLWildcard extends ValueObject
 {
-        /**
+    /**
      *
      * The unique id
      *
@@ -38,11 +38,11 @@ class URLWildcard extends ValueObject
     protected $sourceUrl;
 
     /**
-     * The destiantion url containing placeholders e.g. /destination/{1}
+     * The destination url containing placeholders e.g. /destination/{1}
      *
      * @var string
      */
-    protected $destiantionUrl;
+    protected $destinationUrl;
 
     /**
      * indicates if the url is redirected or not

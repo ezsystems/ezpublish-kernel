@@ -52,7 +52,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
         $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
@@ -824,9 +824,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Create an update struct and modify some fields
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
 
-        $contentUpdate->initialLanguageCode = 'eng-GB';
+        $contentUpdate->initialLanguageCode = 'eng-US';
 
         // This call will fail with a "UnauthorizedException"
         $contentService->updateContent( $versionInfo, $contentUpdate );

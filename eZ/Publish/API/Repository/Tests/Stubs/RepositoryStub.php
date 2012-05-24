@@ -92,6 +92,11 @@ class RepositoryStub implements Repository
     private $urlAliasService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\URLWildcardServiceStub
+     */
+    private $urlWildcardService;
+
+    /**
      * @var integer
      */
     private $transactionDepth = 0;
@@ -425,14 +430,30 @@ class RepositoryStub implements Repository
      * Get UrlAliasService
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
+     * @review The getURLAliasService() method should be part of the Repository interface.
      */
-    public function getUrlAliasService()
+    public function getURLAliasService()
     {
         if ( null === $this->urlAliasService )
         {
             $this->urlAliasService = new URLAliasServiceStub( $this );
         }
         return $this->urlAliasService;
+    }
+
+    /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     * @review The getURLWildcardService() method should be part of the Repository interface.
+     */
+    public function getURLWildcardService()
+    {
+        if ( null === $this->urlWildcardService )
+        {
+            $this->urlWildcardService = new URLWildcardServiceStub( $this );
+        }
+        return $this->urlWildcardService;
     }
 
     /**

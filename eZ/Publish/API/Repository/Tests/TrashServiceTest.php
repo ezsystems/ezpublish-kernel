@@ -147,6 +147,30 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * Test for the trash() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\TrashService::trash()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     */
+    public function testTrashDecrementsChildCountOnParentLocation()
+    {
+        $repository      = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $homeLocationId = $this->generateId( 'location', 2 );
+
+        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
+
+        $this->createTrashItem();
+
+        $this->assertEquals(
+            $childCount - 1,
+            $locationService->loadLocation( $homeLocationId )->childCount
+        );
+    }
+
+    /**
      * Test for the loadTrashItem() method.
      *
      * @return void
@@ -275,7 +299,7 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @d epends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
      */
     public function testRecoverWithLocationCreateStructParameter()
     {
@@ -290,11 +314,11 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
-        // Get a location create without property changes.
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
-        $location = $trashService->recover( $trashItem, $locationCreate );
+        $location = $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
@@ -306,9 +330,9 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'hidden'            =>  false,
                 'invisible'         =>  $trashItem->invisible,
                 'pathString'        =>  "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
-                'priority'          =>  0,
-                'sortField'         =>  Location::SORT_FIELD_NAME,
-                'sortOrder'         =>  Location::SORT_ORDER_ASC,
+                'priority'          =>  4,
+                'sortField'         =>  Location::SORT_FIELD_PUBLISHED,
+                'sortOrder'         =>  Location::SORT_ORDER_DESC,
             ),
             $location
         );
@@ -334,15 +358,15 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
-        // Get a location create without property changes.
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
-        $location = $trashService->recover( $trashItem, $locationCreate );
+        $location = $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertEquals(
-            $location->id,
+            $newParentLocation->getContentInfo()->mainLocationId,
             $location->getContentInfo()->mainLocationId
         );
     }
@@ -370,15 +394,15 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
-        // Get a location create without property changes.
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
-        $trashService->recover( $trashItem, $locationCreate );
+        $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertEquals(
-            $childCount + 1,
+            $childCount,
             $locationService->loadLocation( $homeLocationId )->childCount
         );
     }

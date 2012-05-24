@@ -59,7 +59,7 @@ class SectionServiceTest extends BaseTest
                 'This test cannot be executed, because the utilized ' .
                 'ContentService::loadContentInfoByRemoteId() failed with ' .
                 PHP_EOL . PHP_EOL .
-                $e->getTraceAsString()
+                $e
             );
         }
 
