@@ -132,7 +132,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\URLWildcardService
      */
-    public function getURLAliasService();
+    public function getURLWildcardService();
 
     /**
      * Get ObjectStateService
