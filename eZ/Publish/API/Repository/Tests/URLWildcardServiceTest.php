@@ -528,4 +528,25 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         return $urlAlias;
     }
+
+    /**
+     * Test for the translate() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate
+     */
+    public function testTranslateThrowsNotFoundExceptionWhenNotAliasOrWildcardMatches()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // This call will fail with a NotFoundException because no wildcard or
+        // url alias matches against the given url.
+        $urlWildcardService->translate( '/sindelfingen' );
+        /* END: Use Case */
+    }
 }
