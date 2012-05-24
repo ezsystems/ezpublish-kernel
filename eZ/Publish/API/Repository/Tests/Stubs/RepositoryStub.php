@@ -457,6 +457,16 @@ class RepositoryStub implements Repository
     }
 
     /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService()
+    {
+        throw new \RuntimeException( '@TODO: Implement.' );
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,

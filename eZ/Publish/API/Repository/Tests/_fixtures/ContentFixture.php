@@ -3329,6 +3329,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Users",
+                ),
             )
         ),
         474  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3344,6 +3347,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Anonymous User",
+                ),
             )
         ),
         674  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3359,6 +3365,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Members",
+                ),
             )
         ),
         439  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3374,6 +3383,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Guest accounts",
+                ),
             )
         ),
         440  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3389,6 +3401,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Administrator users",
+                ),
             )
         ),
         441  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3404,6 +3419,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Editors",
+                ),
             )
         ),
         672  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3419,6 +3437,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Administrator User",
+                ),
             )
         ),
         499  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3434,6 +3455,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Administrator User",
+                ),
             )
         ),
         472  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3449,6 +3473,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Media",
+                ),
             )
         ),
         473  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3464,6 +3491,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Anonymous Users",
+                ),
             )
         ),
         477  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3479,6 +3509,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Setup",
+                ),
             )
         ),
         488  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3494,6 +3527,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Images",
+                ),
             )
         ),
         489  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3509,6 +3545,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Files",
+                ),
             )
         ),
         490  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3524,6 +3563,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Multimedia",
+                ),
             )
         ),
         491  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3539,6 +3581,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Common INI settings",
+                ),
             )
         ),
         500  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3554,6 +3599,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Website Interface",
+                ),
             )
         ),
         495  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3569,6 +3617,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Design",
+                ),
             )
         ),
         504  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3584,6 +3635,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Banners",
+                ),
             )
         ),
         505  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3599,6 +3653,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Woman (Communities)",
+                ),
             )
         ),
         506  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3614,6 +3671,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Woman (Frontpage)",
+                ),
             )
         ),
         507  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3629,6 +3689,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Woman (Products)",
+                ),
             )
         ),
         508  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3644,6 +3707,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Woman (Partners)",
+                ),
             )
         ),
         509  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3659,6 +3725,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Pencils (Support)",
+                ),
             )
         ),
         510  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3674,6 +3743,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Woman (Training)",
+                ),
             )
         ),
         511  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3689,6 +3761,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Woman (Solutions)",
+                ),
             )
         ),
         512  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3704,6 +3779,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Home",
+                ),
             )
         ),
         513  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3719,6 +3797,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "rest_api",
+                ),
             )
         ),
         514  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3734,6 +3815,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Products",
+                ),
             )
         ),
         515  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3749,6 +3833,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Software",
+                ),
             )
         ),
         516  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3764,6 +3851,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "OS Type I",
+                ),
             )
         ),
         517  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3779,6 +3869,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Boxes",
+                ),
             )
         ),
         518  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3794,6 +3887,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "CD/DVD Box I",
+                ),
             )
         ),
         519  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3809,6 +3905,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "CD/DVD Box II",
+                ),
             )
         ),
         520  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3824,6 +3923,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "CD/DVD Box III",
+                ),
             )
         ),
         521  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3839,6 +3941,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Products sheets",
+                ),
             )
         ),
         522  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3854,6 +3959,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Solutions",
+                ),
             )
         ),
         523  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3869,6 +3977,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Web publishing",
+                ),
             )
         ),
         524  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3884,6 +3995,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Fusce sagittis sagittis",
+                ),
             )
         ),
         525  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3899,6 +4013,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Etiam posuere sodales arcu",
+                ),
             )
         ),
         526  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3914,6 +4031,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "In hac habitasse platea",
+                ),
             )
         ),
         527  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3929,6 +4049,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Content management",
+                ),
             )
         ),
         528  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3944,6 +4067,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Fusce sagittis sagittis urna",
+                ),
             )
         ),
         529  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3959,6 +4085,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Class aptent taciti sociosqu",
+                ),
             )
         ),
         530  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3974,6 +4103,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Aenean malesuada ligula",
+                ),
             )
         ),
         531  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -3989,6 +4121,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Training",
+                ),
             )
         ),
         532  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4004,6 +4139,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Certification",
+                ),
             )
         ),
         533  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4019,6 +4157,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Professional workshops",
+                ),
             )
         ),
         534  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4034,6 +4175,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Etiam sodales mauris",
+                ),
             )
         ),
         535  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4049,6 +4193,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Class aptent taciti",
+                ),
             )
         ),
         536  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4064,6 +4211,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Duis auctor vehicula erat",
+                ),
             )
         ),
         537  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4079,6 +4229,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Events and seminars",
+                ),
             )
         ),
         538  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4094,6 +4247,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Self-paced courses",
+                ),
             )
         ),
         539  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4109,6 +4265,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Instructor-led courses",
+                ),
             )
         ),
         540  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4124,6 +4283,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Additional learning resources",
+                ),
             )
         ),
         541  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4139,6 +4301,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Support",
+                ),
             )
         ),
         542  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4154,6 +4319,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Knowledgebase",
+                ),
             )
         ),
         543  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4169,6 +4337,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Sed suscipit",
+                ),
             )
         ),
         544  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4184,6 +4355,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Ut interdum",
+                ),
             )
         ),
         545  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4199,6 +4373,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Documentation",
+                ),
             )
         ),
         546  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4214,6 +4391,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Mauris pretium",
+                ),
             )
         ),
         547  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4229,6 +4409,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Aliquam posuere",
+                ),
             )
         ),
         548  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4244,6 +4427,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Books",
+                ),
             )
         ),
         549  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4259,6 +4445,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Aliquam pulvinar suscipit tellus",
+                ),
             )
         ),
         550  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4274,6 +4463,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Customer Service",
+                ),
             )
         ),
         551  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4289,6 +4481,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Support Programs",
+                ),
             )
         ),
         552  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4304,6 +4499,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Getting started",
+                ),
             )
         ),
         553  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4319,6 +4517,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Tutorials for",
+                ),
             )
         ),
         554  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4334,6 +4535,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Get involved",
+                ),
             )
         ),
         555  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4349,6 +4553,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "How to use eZ Publish",
+                ),
             )
         ),
         556  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4364,6 +4571,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         557  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4379,6 +4589,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         558  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4394,6 +4607,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         559  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4409,6 +4625,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         560  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4424,6 +4643,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         561  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4439,6 +4661,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         562  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4454,6 +4679,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         563  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4469,6 +4697,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         564  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4484,6 +4715,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         565  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4499,6 +4733,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "How to manage eZ Publish",
+                ),
             )
         ),
         566  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4514,6 +4751,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         567  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4529,6 +4769,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         568  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4544,6 +4787,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         569  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4559,6 +4805,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         570  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4574,6 +4823,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         571  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4589,6 +4841,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         572  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4604,6 +4859,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         573  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4619,6 +4877,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         574  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4634,6 +4895,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "How to develop with eZ Publish",
+                ),
             )
         ),
         575  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4649,6 +4913,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         576  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4664,6 +4931,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         577  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4679,6 +4949,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Adding Siteaccesses in eZ Publish",
+                ),
             )
         ),
         578  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4694,6 +4967,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "New features",
+                ),
             )
         ),
         579  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4709,6 +4985,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Improved user registration workflow",
+                ),
             )
         ),
         580  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4724,6 +5003,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         581  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4739,6 +5021,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         582  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4754,6 +5039,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         583  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4769,6 +5057,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Improved block editing",
+                ),
             )
         ),
         584  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4784,6 +5075,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         585  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4799,6 +5093,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         586  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4814,6 +5111,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Improved front-end editing",
+                ),
             )
         ),
         587  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4829,6 +5129,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         588  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4844,6 +5147,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         589  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4859,6 +5165,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         590  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4874,6 +5183,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         591  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4889,6 +5201,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "FastCGI",
+                ),
             )
         ),
         592  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4904,6 +5219,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Support for Red Hat Enterprise",
+                ),
             )
         ),
         593  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4919,6 +5237,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         594  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4934,6 +5255,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Canonical links",
+                ),
             )
         ),
         595  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4949,6 +5273,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Asynchronous publishing",
+                ),
             )
         ),
         596  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4964,6 +5291,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         597  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4979,6 +5309,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "REST API interface",
+                ),
             )
         ),
         598  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -4994,6 +5327,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "eZ Publish Enterprise",
+                ),
             )
         ),
         599  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5009,6 +5345,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         600  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5024,6 +5363,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "graphics1",
+                ),
             )
         ),
         601  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5039,6 +5381,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Partners",
+                ),
             )
         ),
         602  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5054,6 +5399,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Partner News",
+                ),
             )
         ),
         603  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5069,6 +5417,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Pellentesque quam mauris",
+                ),
             )
         ),
         604  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5084,6 +5435,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Penatibus et magnis dis",
+                ),
             )
         ),
         605  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5099,6 +5453,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "News",
+                ),
             )
         ),
         606  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5114,6 +5471,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Curabitur hendrerit dignissim",
+                ),
             )
         ),
         607  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5129,6 +5489,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Proin condimentum risus",
+                ),
             )
         ),
         608  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5144,6 +5507,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Morbi tristique senectus",
+                ),
             )
         ),
         609  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5159,6 +5525,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Partner Products",
+                ),
             )
         ),
         610  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5174,6 +5543,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Partners",
+                ),
             )
         ),
         611  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5189,6 +5561,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Neque orci malesuada felis",
+                ),
             )
         ),
         612  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5204,6 +5579,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Community",
+                ),
             )
         ),
         613  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5219,6 +5597,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Forum",
+                ),
             )
         ),
         614  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5234,6 +5615,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Nulla vitae tellus sit amet",
+                ),
             )
         ),
         615  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5249,6 +5633,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Ut mollis sodales nibh",
+                ),
             )
         ),
         616  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5264,6 +5651,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Nam risus leo",
+                ),
             )
         ),
         617  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5279,6 +5669,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Wiki",
+                ),
             )
         ),
         618  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5294,6 +5687,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Sed suscipit",
+                ),
             )
         ),
         619  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5309,6 +5705,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Ut interdum",
+                ),
             )
         ),
         620  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5324,6 +5723,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Fusce pulvinar",
+                ),
             )
         ),
         621  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5339,6 +5741,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Duis id tortor",
+                ),
             )
         ),
         622  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5354,6 +5759,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Curabitur lacinia",
+                ),
             )
         ),
         623  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5369,6 +5777,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Pictures",
+                ),
             )
         ),
         624  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5384,6 +5795,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Ivo on eZ Tags",
+                ),
             )
         ),
         625  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5399,6 +5813,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Are you ready for the Community day?",
+                ),
             )
         ),
         626  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5414,6 +5831,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Let's work together!",
+                ),
             )
         ),
         627  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5429,6 +5849,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "The Mediterranean seen from Nice!",
+                ),
             )
         ),
         628  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5444,6 +5867,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Hotel lobby at Isola2000",
+                ),
             )
         ),
         629  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5459,6 +5885,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Alexander on the past, Gaby on today and tomorrow",
+                ),
             )
         ),
         630  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5474,6 +5903,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Isola2000 in white - beautiful skiing!",
+                ),
             )
         ),
         631  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5489,6 +5921,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "CEO future pitch - Adaptable, open, reliable!",
+                ),
             )
         ),
         632  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5504,6 +5939,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Blog",
+                ),
             )
         ),
         633  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5519,6 +5957,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Visit Paris",
+                ),
             )
         ),
         634  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5534,6 +5975,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Paris in France",
+                ),
             )
         ),
         635  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5549,6 +5993,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Company",
+                ),
             )
         ),
         636  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5564,6 +6011,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "About company",
+                ),
             )
         ),
         637  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5579,6 +6029,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "New features",
+                ),
             )
         ),
         638  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5594,6 +6047,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Separate content & design in eZ Publish",
+                ),
             )
         ),
         639  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5609,6 +6065,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "separation_of_content_and_design",
+                ),
             )
         ),
         640  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5624,6 +6083,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "How to use eZ Publish",
+                ),
             )
         ),
         641  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5639,6 +6101,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "openoffice_import_large",
+                ),
             )
         ),
         642  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5654,6 +6119,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "translation_large",
+                ),
             )
         ),
         643  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5669,6 +6137,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "multiupload_large",
+                ),
             )
         ),
         644  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5684,6 +6155,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "gallery_large",
+                ),
             )
         ),
         645  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5699,6 +6173,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "search_result_large",
+                ),
             )
         ),
         646  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5714,6 +6191,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "ez_tool_bar_large",
+                ),
             )
         ),
         647  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5729,6 +6209,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "quicktime_large",
+                ),
             )
         ),
         648  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5744,6 +6227,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "web_2_0_large",
+                ),
             )
         ),
         649  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5759,6 +6245,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "How to manage eZ Publish",
+                ),
             )
         ),
         650  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5774,6 +6263,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "usermanagement_large",
+                ),
             )
         ),
         651  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5789,6 +6281,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "workflow_large",
+                ),
             )
         ),
         652  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5804,6 +6299,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "versioning_large",
+                ),
             )
         ),
         653  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5819,6 +6317,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "datatypes_attributes_content_class_and_objects_large",
+                ),
             )
         ),
         654  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5834,6 +6335,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "multiple_location_large",
+                ),
             )
         ),
         655  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5849,6 +6353,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "multisite_deployment_large",
+                ),
             )
         ),
         656  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5864,6 +6371,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "seo_large",
+                ),
             )
         ),
         657  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5879,6 +6389,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "admin_site_large",
+                ),
             )
         ),
         658  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5894,6 +6407,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "How to develop with eZ Publish",
+                ),
             )
         ),
         659  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5909,6 +6425,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "datatypes_attributes_content_class_and_objects_large",
+                ),
             )
         ),
         660  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5924,6 +6443,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "site_style_large",
+                ),
             )
         ),
         661  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5939,6 +6461,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "REST API interface",
+                ),
             )
         ),
         662  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5954,6 +6479,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Asynchronous Publishing",
+                ),
             )
         ),
         663  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5969,6 +6497,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Canonical links",
+                ),
             )
         ),
         664  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5984,6 +6515,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Support for Red Hat Enterprise",
+                ),
             )
         ),
         665  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -5999,6 +6533,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "FastCGI",
+                ),
             )
         ),
         666  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -6014,6 +6551,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Events",
+                ),
             )
         ),
         667  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -6029,6 +6569,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Career",
+                ),
             )
         ),
         668  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -6044,6 +6587,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Investors Relation",
+                ),
             )
         ),
         669  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -6059,6 +6605,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Contact",
+                ),
             )
         ),
         670  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -6074,6 +6623,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Morbi neque",
+                ),
             )
         ),
         671  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -6089,6 +6641,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Company banner",
+                ),
             )
         ),
         673  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub(
@@ -6104,6 +6659,9 @@ return array(
                 "languageCodes"  =>  array(
                 ),
                 "repository"  =>  $this,
+                "names"  =>  array(
+                    "eng-US" => "Partners",
+                ),
             )
         ),
     ),

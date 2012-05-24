@@ -17,14 +17,15 @@ use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
@@ -441,6 +442,7 @@ class ContentServiceStub implements ContentService
                 'modificationDate'     =>  $contentCreateStruct->modificationDate,
                 'languageCodes'        =>  $languageCodes,
                 'initialLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,
+                'names'                =>  $this->generateNames( $contentCreateStruct->contentType, $allFields ),
 
                 'repository'           =>  $this->repository
             )
@@ -690,6 +692,68 @@ class ContentServiceStub implements ContentService
             }
         }
         return $allFields;
+     }
+
+    /**
+     * Generates the names based on the given $contentType and $fields
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     * @return string[]
+     */
+    private function generateNames( ContentType $contentType, array $fields )
+    {
+        $languages = array_unique(
+            array_filter(
+                array_map(
+                    function ( $field ) use ( $contentType )
+                    {
+                        $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+                        return ( $fieldDefinition->isTranslatable
+                            ? $field->languageCode
+                            : false );
+                    },
+                    $fields
+                )
+            )
+        );
+
+        $names = array();
+        foreach ( $languages as $languageCode )
+        {
+            $names[$languageCode] = preg_replace_callback(
+                '(<([^>]+)>)',
+                function ( $matches ) use ( $fields )
+                {
+                    $fieldIdentifiers = explode( '|', $matches[1] );
+                    foreach ( $fieldIdentifiers as $fieldIdentifier )
+                    {
+                        foreach ( $fields as $field )
+                        {
+                            if ( $field->fieldDefIdentifier == $fieldIdentifier
+                                && !isset( $names[$field->languageCode] ) )
+                            {
+                                return $field->value;
+                            }
+                        }
+                    }
+                },
+                $contentType->nameSchema
+            );
+        }
+
+        return $names;
+    }
+
+    /**
+     * Parses a name template ala "<short_name|long_name>".
+     *
+     * @param string $nameTemplate
+     * @return string[]
+     */
+    private function parseNameTemplate( $nameTemplate )
+    {
+        return explode( '|', substr( $nameTemplate, 1, strlen( $nameTemplate ) - 2 ) );
     }
 
     /**
@@ -812,15 +876,16 @@ class ContentServiceStub implements ContentService
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
 
         $content = $this->loadContentByContentInfo( $contentInfo, null, $versionNo );
+        $versionInfo = $content->getVersionInfo();
 
         // Select the greatest version number
-        foreach ( $this->versionInfo as $versionInfo )
+        foreach ( $this->versionInfo as $existingVersionInfo )
         {
-            if ( $versionInfo->contentId !== $contentInfo->id )
+            if ( $existingVersionInfo->contentId !== $contentInfo->id )
             {
                 continue;
             }
-            $versionNo = max( $versionNo, $versionInfo->versionNo );
+            $versionNo = max( $versionNo, $existingVersionInfo->versionNo );
         }
 
         $contentDraft = new ContentStub(
@@ -845,6 +910,7 @@ class ContentServiceStub implements ContentService
                 'modificationDate'     =>  new \DateTime(),
                 'languageCodes'        =>  $versionInfo->languageCodes,
                 'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
+                'names'                =>  $versionInfo->getNames(),
 
                 'contentId'            =>  $content->id,
                 'repository'           =>  $this->repository
@@ -955,6 +1021,7 @@ class ContentServiceStub implements ContentService
                 'modificationDate'     =>  new \DateTime(),
                 'languageCodes'        =>  $languageCodes,
                 'initialLanguageCode'  =>  $mainLanguageCode,
+                'names'                =>  $this->generateNames( $contentType, $allFields ),
 
                 'repository'           =>  $this->repository
             )
@@ -1026,6 +1093,7 @@ class ContentServiceStub implements ContentService
                 'creatorId'            =>  $versionInfo->creatorId,
                 'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
                 'languageCodes'        =>  $versionInfo->languageCodes,
+                'names'                =>  $versionInfo->getNames(),
                 'modificationDate'     =>  new \DateTime(),
 
                 'contentId'            =>  $contentInfo->id,
@@ -1053,6 +1121,7 @@ class ContentServiceStub implements ContentService
                     'creatorId'            =>  $versionInfo->creatorId,
                     'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
                     'languageCodes'        =>  $versionInfo->languageCodes,
+                    'names'                =>  $versionInfo->getNames(),
                     'modificationDate'     =>  new \DateTime(),
 
                     'contentId'            =>  $contentInfo->id,
@@ -1063,6 +1132,10 @@ class ContentServiceStub implements ContentService
 
         $this->contentInfo[$contentInfo->id] = $publishedContentInfo;
         $this->versionInfo[$versionInfo->id] = $publishedVersionInfo;
+
+        $this->repository->getUrlAliasService()->_createAliasesForVersion(
+            $publishedVersionInfo
+        );
 
         return $this->loadContentByVersionInfo( $versionInfo );
     }
@@ -1211,6 +1284,7 @@ class ContentServiceStub implements ContentService
                     'modificationDate'     =>  new \DateTime(),
                     'languageCodes'        =>  $versionInfoStub->languageCodes,
                     'initialLanguageCode'  =>  $versionInfoStub->initialLanguageCode,
+                    'names'                =>  $versionInfoStub->getNames(),
 
                     'contentId'            =>  $this->contentNextId,
                     'repository'           =>  $this->repository
@@ -1239,10 +1313,12 @@ class ContentServiceStub implements ContentService
         }
 
         $locationService = $this->repository->getLocationService();
-        $locationService->createLocation(
+        $location = $locationService->createLocation(
             $this->contentInfo[$this->contentNextId],
             $destinationLocationCreateStruct
         );
+
+        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
 
         return $this->loadContent( $this->contentNextId );
     }

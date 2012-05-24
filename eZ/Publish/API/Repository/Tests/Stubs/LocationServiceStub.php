@@ -562,6 +562,8 @@ class LocationServiceStub implements LocationService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
+        $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
+
         $contentService = $this->repository->getContentService();
 
         unset( $this->locations[$location->id] );
@@ -744,7 +746,8 @@ class LocationServiceStub implements LocationService
             )
         );
 
-        $this->locations[$location->id] = new LocationStub( $values );
+        $newLocation = $this->locations[$location->id] = new LocationStub( $values );
+        $this->repository->getUrlAliasService()->_createAliasesForLocation( $newLocation );
 
         foreach ( $this->loadLocationChildren( $location ) as $childLocation )
         {
@@ -765,6 +768,8 @@ class LocationServiceStub implements LocationService
      */
     public function __trashLocation( Location $location, array $trashed = array() )
     {
+        $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
+
         // Decrement child count on parent location
         if ( 0 === count( $trashed ) && isset( $this->locations[$location->parentLocationId] ) )
         {
@@ -805,6 +810,8 @@ class LocationServiceStub implements LocationService
         $this->locations[$location->parentLocationId]->__setChildCount(
             $this->locations[$location->parentLocationId]->childCount + 1
         );
+
+        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
 
         return ( $this->locations[$location->id] = $location );
     }
