@@ -374,6 +374,26 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     }
 
     /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     */
+    public function getURLWildcardService()
+    {
+        throw new \RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService()
+    {
+        throw new \RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
