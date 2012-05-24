@@ -44,8 +44,15 @@ class IntegrationTest extends Authenticator
      */
     public function authenticate( RMF\Request $request )
     {
-        $this->repository->setCurrentUser(
-            $this->repository->getUserService()->loadUser( $request->testUser )
-        );
+        try
+        {
+            $this->repository->setCurrentUser(
+                $this->repository->getUserService()->loadUser( $request->testUser )
+            );
+        }
+        catch ( \InvalidArgumentException $e )
+        {
+            throw new \RuntimeException( "The Integration Test Authenticator requires a test user ID to be set using the HTTP Header X-Test-User." );
+        }
     }
 }
