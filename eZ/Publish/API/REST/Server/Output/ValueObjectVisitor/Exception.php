@@ -105,7 +105,7 @@ class Exception extends ValueObjectVisitor
         $generator->startElement( 'ErrorMessage' );
 
         $statusCode = $this->getStatus();
-        $visitor->setHeader( 'Status', $statusCode . ' ' . $this->httpStatusCodes[$statusCode] );
+        $visitor->setStatus( $statusCode );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ErrorMessage' ) );
 
         $generator->startValueElement( 'errorCode', $statusCode );
