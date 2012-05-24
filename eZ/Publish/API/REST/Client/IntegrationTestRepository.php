@@ -65,10 +65,9 @@ class IntegrationTestRepository extends Repository implements Sessionable
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\API\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication $authenticator
      */
-    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, IntegrationTestAuthenticator $authenticator )
+    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler, IntegrationTestAuthenticator $authenticator )
     {
-        parent::__construct( $client, $inputDispatcher, $outputVisitor );
-        $this->client        = $client;
+        parent::__construct( $client, $inputDispatcher, $outputVisitor, $urlHandler );
         $this->authenticator = $authenticator;
     }
 

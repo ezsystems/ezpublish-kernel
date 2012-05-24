@@ -106,17 +106,24 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $outputVisitor;
 
     /**
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    private $urlHandler;
+
+    /**
      * Instantiates the REST Client repository.
      *
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor )
+    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
+        $this->urlHandler      = $urlHandler;
     }
 
     /**
@@ -184,7 +191,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
             $this->contentService = new ContentService(
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->contentService;
@@ -206,7 +214,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 'eng-US',
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->languageService;
@@ -228,7 +237,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this->getContentService(),
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->contentTypeService;
@@ -248,7 +258,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
             $this->locationService = new LocationService(
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->locationService;
@@ -270,7 +281,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this->getLocationService(),
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->trashService;
@@ -290,7 +302,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
             $this->sectionService = new SectionService(
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->sectionService;
@@ -310,7 +323,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
             $this->userService = new UserService(
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->userService;
@@ -330,7 +344,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
             $this->ioService = new IOService(
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->ioService;
@@ -349,7 +364,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this->getUserService(),
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->roleService;
@@ -367,7 +383,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
             $this->urlAliasService = new URLAliasService(
                 $this->client,
                 $this->inputDispatcher,
-                $this->outputVisitor
+                $this->outputVisitor,
+                $this->urlHandler
             );
         }
         return $this->urlAliasService;
