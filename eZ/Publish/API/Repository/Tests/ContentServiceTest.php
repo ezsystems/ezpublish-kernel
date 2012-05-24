@@ -3372,10 +3372,10 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
+        $draftVersion = $contentService->createContentDraft( $content->contentInfo )->getVersionInfo();
+
         // Publish a new version
-        $content = $contentService->publishVersion(
-            $contentService->createContentDraft( $content->contentInfo )->getVersionInfo()
-        );
+        $content = $contentService->publishVersion( $draftVersion );
 
 
         // Store version number for later reuse
@@ -3916,6 +3916,41 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertEquals( 2, count( $locations ) );
+    }
+
+    /**
+     * @return void
+     */
+    public function testURLAliasesCreatedForNewContent()
+    {
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Automatically creates a new URLAlias for the content
+        $liveContent = $contentService->publishVersion( $draft->getVersionInfo() );
+        /* END: Use Case */
+
+        $location = $locationService->loadMainLocation(
+            $liveContent->getVersionInfo()->getContentInfo()
+        );
+
+        $aliases = $urlAliasService->listLocationAliases( $location );
+
+        $this->assertEquals( 1, count( $aliases ) );
+
+        $alias = reset( $aliases );
+
+        $this->assertEquals(
+            '/Community/An-awesome-story-about-eZ-Publish',
+            $alias->path
+        );
+        $this->assertFalse( $alias->isCustom );
     }
 
     /**

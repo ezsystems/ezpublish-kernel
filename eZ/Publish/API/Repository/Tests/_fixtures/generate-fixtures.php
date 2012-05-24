@@ -289,22 +289,47 @@ function generateContentInfoFixture( array $fixture )
         $fieldNextId = max( $fieldNextId, $data['id'] );
     }
 
+    $names = array();
+    foreach ( getFixtureTable( 'ezcontentobject_name', $fixture ) as $data )
+    {
+        $objectId  = $data['contentobject_id'];
+        $versionNo = $data['content_version'];
+
+        if ( !isset( $names[$objectId] ) )
+        {
+            $names[$objectId] = array();
+        }
+        if ( !isset( $names[$objectId][$versionNo] ) )
+        {
+            $names[$objectId][$versionNo] = array();
+        }
+
+        foreach ( $languageCodes as $bit => $code )
+        {
+            if ( $data['language_id'] & $bit )
+            {
+                $names[$objectId][$versionNo][$code] = $data['name'];
+            }
+        }
+    }
+
     $content       = array();
     $versionInfo   = array();
     $versionNextId = 0;
     foreach ( getFixtureTable( 'ezcontentobject_version', $fixture ) as $data )
     {
         $versionInfo[$data['id']] = array(
-            'id'                   =>  $data['id'],
-            'contentId'            =>  $data['contentobject_id'],
-            'status'               =>  $data['status'] <= 2 ? $data['status'] : 1,
-            'versionNo'            =>  $data['version'],
-            'modificationDate'     =>  'new \DateTime( "@' . $data['modified'] . '" )',
-            'creatorId'            =>  $data['creator_id'],
-            'creationDate'         =>  'new \DateTime( "@' . $data['created'] . '" )',
-            'initialLanguageCode'  =>  $languageCodes[$data['initial_language_id']],
-            'languageCodes'        =>  array(), // TODO: Extract language codes from fields
-            'repository'           =>  '$this',
+            'id'                  =>  $data['id'],
+            'contentId'           =>  $data['contentobject_id'],
+            'status'              =>  $data['status'] <= 2 ? $data['status'] : 1,
+            'versionNo'           =>  $data['version'],
+            'modificationDate'    =>  'new \DateTime( "@' . $data['modified'] . '" )',
+            'creatorId'           =>  $data['creator_id'],
+            'creationDate'        =>  'new \DateTime( "@' . $data['created'] . '" )',
+            'initialLanguageCode' =>  $languageCodes[$data['initial_language_id']],
+            'languageCodes'       =>  array(), // TODO: Extract language codes from fields
+            'repository'          =>  '$this',
+            'names'               => $names[$data['contentobject_id']][$data['version']],
         );
 
         $versionNextId = max( $versionNextId, $data['id'] );

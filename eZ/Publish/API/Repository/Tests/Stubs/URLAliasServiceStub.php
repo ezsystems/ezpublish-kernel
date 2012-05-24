@@ -13,6 +13,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * URLAlias service
@@ -78,17 +79,103 @@ class URLAliasServiceStub implements URLAliasService
         $this->checkAliasNotExists( $path, $languageCode );
 
         $data = array(
-            'id'              => ++$this->nextAliasId,
-            'type'            => URLAlias::LOCATION,
             'destination'     => $location,
             'path'            => $path,
             'languageCodes'   => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
-            'isHistory'       => false,
-            'isCustom'        => true,
             'forward'         => $forwarding,
         );
-        return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
+
+        return $this->createLocationUrlAlias( $data );
+    }
+
+    /**
+     * Creates an internal URL alias (autogeneration on publish)
+     *
+     * @param Location $location
+     * @param string $path
+     * @param string $languageCode
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    private function createInternalUrlAlias( Location $location, $path, $languageCode )
+    {
+        $this->checkAliasNotExists( $path, $languageCode );
+
+        return $this->createLocationUrlAlias(
+            array(
+                'destination'   => $location,
+                'path'          => $path,
+                'languageCodes' => array( $languageCode ),
+                'isCustom'      => false,
+            )
+        );
+    }
+
+    /**
+     * Marks the given alias as being historical.
+     *
+     * @param \eZ\Public\API\Repository\Values\Content\URLAlias $alias
+     * @return \eZ\Public\API\Repository\Values\Content\URLAlias
+     */
+    private function obsoleteAlias( URLAlias $alias )
+    {
+        $this->purgeObsoleteAliases( $alias->path );
+
+        $this->removeAliases( array( $alias ) );
+
+        $this->createLocationUrlAlias(
+            array(
+                'id'              => $alias->id,
+                'type'            => $alias->type,
+                'destination'     => $alias->destination,
+                'path'            => $alias->path,
+                'languageCodes'   => $alias->languageCodes,
+                'alwaysAvailable' => $alias->alwaysAvailable,
+                'isCustom'        => $alias->isCustom,
+                'forward'         => $alias->forward,
+
+                'isHistory'       => true,
+            )
+        );
+    }
+
+    /**
+     * Purges history aliases for $path.
+     *
+     * @param string $path
+     * @return void
+     */
+    private function purgeObsoleteAliases( $path )
+    {
+        foreach ( $this->aliases as $id => $existingAlias )
+        {
+            if ( $existingAlias->path == $path && $existingAlias->isHistory )
+            {
+                unset( $this->aliases[$id] );
+            }
+        }
+    }
+
+    /**
+     * Creates a location URL alias from the given $properties
+     *
+     * @param array $properties
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    private function createLocationUrlAlias( array $properties )
+    {
+        $properties = array_merge(
+            array(
+                'id'              => ++$this->nextAliasId,
+                'type'            => URLAlias::LOCATION,
+                'isHistory'       => false,
+                'isCustom'        => true,
+                'alwaysAvailable' => true,
+                'forward'         => true,
+            ),
+            $properties
+        );
+        return ( $this->aliases[$properties['id']] = new URLAlias( $properties ) );
     }
 
     /**
@@ -189,6 +276,10 @@ class URLAliasServiceStub implements URLAliasService
 
             $locationAliases[] = $existingAlias;
         }
+        if ( !count( $locationAliases ) && $languageCode !== '' )
+        {
+            $locationAliases = $this->listLocationAliases( $location, $custom, '' );;
+        }
         return $locationAliases;
     }
 
@@ -273,6 +364,178 @@ class URLAliasServiceStub implements URLAliasService
                 $languageCode
             )
         );
+    }
+
+    /**
+     * Auto-generates the URL aliases for $versionInfo
+     *
+     * ATTENTION: This method is not part of the Public API but is only used
+     * internally in this implementation.
+     *
+     * @param \eZ\Publish\API\Repository\Content\VersionInfo $versionInfo
+     * @return void
+     */
+    public function _createAliasesForVersion( VersionInfo $versionInfo )
+    {
+        $locationService = $this->repository->getLocationService();
+
+        $locations = $locationService->loadLocations(
+            $versionInfo->getContentInfo()
+        );
+
+        foreach ( $locations as $location )
+        {
+            $this->_obsoleteOldAliases( $location );
+            $this->_createAliasesForLocation( $location );
+        }
+    }
+
+    /**
+     * Auto-generates aliases for the given $location
+     *
+     * Old aliases will automatically be moved to history mode.
+     *
+     * ATTENTION: This method is not part of the Public API but is only used
+     * internally in this implementation.
+     *
+     * @param Location $location
+     * @return void
+     */
+    public function _createAliasesForLocation( Location $location )
+    {
+        $contentService = $this->repository->getContentService();
+        $content        = $contentService->loadContent(
+            $location->getContentInfo()->id
+        );
+
+        if ( $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED )
+        {
+            // Skip not yet published content
+            return;
+        }
+
+        $versionInfo = $content->getVersionInfo();
+
+        $this->_obsoleteOldAliases( $location );
+
+        foreach ( $versionInfo->getNames() as $languageCode => $name )
+        {
+            $this->createInternalUrlAlias(
+                $location,
+                $this->createUrlAliasPath( $location, $name, $languageCode ),
+                $languageCode
+            );
+        }
+    }
+
+    /**
+     * Removes aliases for the given $location
+     *
+     * Does not move them to history mode, but actually deletes them.
+     *
+     * ATTENTION: This method is not part of the Public API but is only used
+     * internally in this implementation.
+     *
+     * @param Location $location
+     * @return void
+     */
+    public function _removeAliasesForLocation( Location $location )
+    {
+        $this->removeAliases( $this->listLocationAliases( $location ) );
+    }
+
+    /**
+     * Creates the path for an alias to $location with $name in $languageCode
+     *
+     * @param Location $location
+     * @param mixed $name
+     * @param mixed $languageCode
+     * @return string
+     */
+    private function createUrlAliasPath( Location $location, $name, $languageCode )
+    {
+        $locationService = $this->repository->getLocationService();
+
+        $parentAliases = $this->listLocationAliases(
+            $locationService->loadLocation( $location->parentLocationId ),
+            false
+        );
+
+        $parentAlias = $this->guessCorrectParent( $parentAliases, $languageCode );
+
+
+        $parentAlias = reset( $parentAliases );
+        return $parentAlias->path . '/' . $this->generateAliasName( $name );
+    }
+
+    /**
+     * Guesses the correct parent alias from $parentAliases for $languageCode
+     *
+     * Performs the following steps:
+     *
+     * 1. Checks for alias with $languageCode and returns on success
+     * 2. Checks for alias with $alwaysAvailable and returns on success
+     * 3. Chooses the first alias from $parentAliases
+     * 4. Throws exception if $parentAliases is empty
+     *
+     * @param mixed $parentAliases
+     * @param mixed $languageCode
+     * @return void
+     */
+    private function guessCorrectParent( $parentAliases, $languageCode )
+    {
+        if ( !count( $parentAliases ) )
+        {
+            throw new \RuntimeException( "No parent aliases found." );
+        }
+
+        foreach ( $parentAliases as $potentialParent )
+        {
+            if ( in_array( $languageCode, $potentialParent->languageCodes ) )
+            {
+                return $potentialParent;
+            }
+        }
+
+        foreach ( $parentAliases as $potentialParent )
+        {
+            if ( $potentialParent->alwaysAvailable )
+            {
+                return $potentialParent;
+            }
+        }
+
+        return reset( $parentAliases );
+    }
+
+    /**
+     * Generates a URLAlias path element for $name.
+     *
+     * Highly simplified.
+     *
+     * @param string $name
+     * @return string
+     * @todo Need to use the configured URL transformation here, as soon as the
+     *       SPI and implementation are available.
+     */
+    private function generateAliasName( $name )
+    {
+        return strtr( $name, ' ', '-' );
+    }
+
+    /**
+     * Deprecates old aliases of $location
+     *
+     * @param Location $location
+     * @return void
+     */
+    public function _obsoleteOldAliases( Location $location )
+    {
+        $aliases = $this->listLocationAliases( $location );
+        foreach ( $aliases as $alias )
+        {
+            $this->obsoleteAlias( $alias );
+        }
     }
 
     /**
