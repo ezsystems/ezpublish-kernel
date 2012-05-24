@@ -29,6 +29,7 @@ class eZPublish extends Pattern
         'location'            => '/content/locations/{location}',
         ''                    => '/content/locations/{location}/children',
         'objects'             => '/content/objects',
+        'objectByRemote'      => '/content/objects?remoteId={object}',
         'object'              => '/content/objects/{object}',
         ''                    => '/content/objects/{object}/currentversion',
         ''                    => '/content/objects/{object}/{lang_code}',

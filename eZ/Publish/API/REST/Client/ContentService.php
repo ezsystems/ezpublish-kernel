@@ -122,7 +122,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     {
         $response = $this->client->request(
             'GET',
-            sprintf( '/content/objects?remoteId=%s', $remoteId ),
+            $this->urlHandler->generate( 'objectByRemote', array( 'object' => $remoteId ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentList' ) )
             )
