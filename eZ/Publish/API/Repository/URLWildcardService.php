@@ -10,6 +10,7 @@
 
 namespace eZ\Publish\API\Repository;
 
+
 /**
  * URLAlias service
  *
@@ -22,6 +23,12 @@ interface URLWildcardService
      /**
      * creates a new url wildcard
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
+     * @throws \eZ\Publish\API\Repository\Exceptions\ValidationException if the number of "*" patterns in $sourceUrl and
+     *          the number of {\d} placeholders in $destinationUrl doesn't match or
+     *          if the placeholders aren't a valid number sequence({1}/{2}/{3}), starting with 1.
+     *
      * @param string $sourceUrl
      * @param string $destinationUrl
      * @param boolean $foreward
@@ -31,10 +38,11 @@ interface URLWildcardService
     public function create($sourceUrl, $destinationUrl, $foreward = false);
 
     /**
-     *
      * removes an url wildcard
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
     public function remove($urlWildcard);
 
@@ -44,7 +52,7 @@ interface URLWildcardService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
-     * @param $id
+     * @param mixed $id
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
@@ -53,20 +61,25 @@ interface URLWildcardService
     /**
      * loads all url wild card (paged)
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
     public function loadAll($offset = 0, $limit = -1);
 
     /**
-     * translates an url to an existing uri resource or url alias based on the source/destination patterns of the url wildcard.
-     * this method runs also configured url translations and filter
+     * translates an url to an existing uri resource based on the
+     * source/destination patterns of the url wildcard. If the resulting
+     * url is an alias it will be transltated to the system uri.
      *
-     * @param $url
+     * This method runs also configured url translations and filter
      *
-     * @return mixed either an URLAlias or a URLWildcardTranslationResult
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url could not be translated
+     *
+     * @param mixed $url
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
     public function translate($url);
 
