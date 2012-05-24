@@ -110,6 +110,30 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
+     * Test for the create() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::create()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
+    public function testCreateThrowsInvalidArgumentExceptionOnDuplicateSourceUrl()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // Create a new url wildcard
+        $urlWildcardService->create( '/articles/*', '/content/{1}', true );
+
+        // This call will fail with a InvalidArgumentException because the
+        // sourceUrl '/articles/*' already exists.
+        $urlWildcardService->create( '/articles/*', '/content/data/{1}' );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the load() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard

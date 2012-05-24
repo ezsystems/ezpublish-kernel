@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 use \eZ\Publish\API\Repository\URLWildcardService;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
@@ -57,6 +58,15 @@ class URLWildcardServiceStub implements URLWildcardService
      */
     public function create( $sourceUrl, $destinationUrl, $foreward = false )
     {
+        foreach ( $this->wildcards as $wildcard )
+        {
+            if ( $wildcard->sourceUrl === $sourceUrl )
+            {
+                throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
+        }
+
+
         $wildcard = new URLWildcard(
             array(
                 'id'  =>  ++$this->id,
