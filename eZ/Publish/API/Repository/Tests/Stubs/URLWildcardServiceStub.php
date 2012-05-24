@@ -54,10 +54,6 @@ class URLWildcardServiceStub implements URLWildcardService
      * @param boolean $foreward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
-     * @review The method URLWildcardService::create() should check permissions and throw an AuthorizationException
-     * @review The method URLWildcardService::create() should throw an InvalidArgumentException if the $sourceUrl pattern already exists
-     * @review The method URLWildcardService::create() should throw a ValidationException if the number of * patterns in $sourceUrl and the number of {\d} placeholders in $destinationUrl doesn't match.
-     * @review The method URLWildcardService::create() should throw a ValidationException if the placeholders aren't a valid number sequence({1}/{2}/{3}), starting with 1.
      */
     public function create( $sourceUrl, $destinationUrl, $foreward = false )
     {
@@ -78,8 +74,6 @@ class URLWildcardServiceStub implements URLWildcardService
      * removes an url wildcard
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard
-     * @review The method URLWildcardService::remove() should check permissions and throw an AuthorizationException.
-     * @review The real method type hint for the $urlWildcard parameter of URLWildcardService::remove() is missing.
      */
     public function remove( $urlWildcard )
     {
@@ -94,8 +88,7 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param $id
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
-     * @review The type hint for the $id parameter of URLWildcardService::remove() is missing.
+     * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard.
      */
     public function load( $id )
     {
@@ -113,8 +106,6 @@ class URLWildcardServiceStub implements URLWildcardService
      * @param $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
-     * @review The type hint for the $offset parameter of URLWildcardService::loadAll() is missing
-     * @review The type hint for the $limit parameter of URLWildcardService::loadAll() is missing
      */
     public function loadAll( $offset = 0, $limit = -1 )
     {
@@ -128,9 +119,6 @@ class URLWildcardServiceStub implements URLWildcardService
      * @param $url
      *
      * @return mixed either an URLAlias or a URLWildcardTranslationResult
-     * @review The type hint for the $url parameter of URLWildcardService::translate() is missing
-     * @review Wouldn't it be better to translate a matching URLAlias into an URLWildcardTranslationResult, so that the behavior and usage of this method is unified for the using application.
-     * @review The URLWildcardService::translate() method should throw a NotFoundException when the given $url doesn't match on any wildcard or alias. Or it should at least specify a return value for this case.
      */
     public function translate( $url )
     {

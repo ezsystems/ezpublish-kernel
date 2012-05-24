@@ -430,7 +430,6 @@ class RepositoryStub implements Repository
      * Get UrlAliasService
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
-     * @review The getURLAliasService() method should be part of the Repository interface.
      */
     public function getURLAliasService()
     {
@@ -445,7 +444,6 @@ class RepositoryStub implements Repository
      * Get URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\URLWildcardService
-     * @review The getURLWildcardService() method should be part of the Repository interface.
      */
     public function getURLWildcardService()
     {
