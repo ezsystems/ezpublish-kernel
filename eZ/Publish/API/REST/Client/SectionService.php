@@ -14,6 +14,7 @@ use \eZ\Publish\API\Repository\Values\Content\Section;
 use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
+use \eZ\Publish\API\REST\Common\UrlHandler;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
@@ -46,15 +47,22 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     private $outputVisitor;
 
     /**
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    private $urlHandler;
+
+    /**
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
+        $this->urlHandler      = $urlHandler;
     }
 
     /**
@@ -91,7 +99,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
 
         $result = $this->client->request(
             'POST',
-            '/content/sections',
+            $this->urlHandler->generate( 'sections' ),
             $inputMessage
         );
 
@@ -158,7 +166,9 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     public function loadSections()
     {
         $response = $this->client->request(
-            'GET', '/content/sections', new Message(
+            'GET',
+            $this->urlHandler->generate( 'sections' ),
+            new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'SectionList' ) )
             )
         );
@@ -179,7 +189,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     {
         $response = $this->client->request(
             'GET',
-            sprintf( '/content/sections?identifier=%s', $sectionIdentifier ),
+            $this->urlHandler->generate( 'sectionByIdentifier', array( 'section' => $sectionIdentifier ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'SectionList' ) )
             )
