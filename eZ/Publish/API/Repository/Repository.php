@@ -121,6 +121,27 @@ interface Repository
     public function getUserService();
 
     /**
+     * Get URLAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getURLAliasService();
+
+    /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     */
+    public function getURLAliasService();
+
+    /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService();
+
+    /**
      * Get IO Service
      *
      * Get service object to perform operations on binary files
