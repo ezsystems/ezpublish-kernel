@@ -108,7 +108,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
 
         $result = $this->client->request(
             'POST',
-            '/user/roles',
+            $this->urlHandler->generate( 'roles' ),
             $inputMessage
         );
 
