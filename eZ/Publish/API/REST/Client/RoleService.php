@@ -20,6 +20,7 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\API\REST\Common\UrlHandler;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
@@ -54,16 +55,23 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     private $outputVisitor;
 
     /**
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    private $urlHandler;
+
+    /**
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( UserService $userService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
+    public function __construct( UserService $userService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->userService     = $userService;
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
+        $this->urlHandler      = $urlHandler;
     }
 
     /**

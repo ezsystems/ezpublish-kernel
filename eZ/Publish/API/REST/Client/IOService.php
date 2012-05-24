@@ -13,6 +13,7 @@ use \eZ\Publish\API\Repository\Values\IO\BinaryFile;
 use \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
 use \eZ\Publish\API\Repository\Values\IO\ContentType;
 
+use \eZ\Publish\API\REST\Common\UrlHandler;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
@@ -41,15 +42,22 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
     private $outputVisitor;
 
     /**
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    private $urlHandler;
+
+    /**
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
+        $this->urlHandler      = $urlHandler;
     }
 
     /**

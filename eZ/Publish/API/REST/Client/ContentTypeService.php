@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
+use \eZ\Publish\API\REST\Common\UrlHandler;
 use \eZ\Publish\API\REST\Common\Input;
 use \eZ\Publish\API\REST\Common\Output;
 use \eZ\Publish\API\REST\Common\Message;
@@ -54,16 +55,23 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     private $outputVisitor;
 
     /**
+     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     */
+    private $urlHandler;
+
+    /**
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( ContentService $contentService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor )
+    public function __construct( ContentService $contentService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->contentService  = $contentService;
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
+        $this->urlHandler      = $urlHandler;
     }
 
     /**
