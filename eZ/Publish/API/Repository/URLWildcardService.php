@@ -25,7 +25,7 @@ interface URLWildcardService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
-     * @throws \eZ\Publish\API\Repository\Exceptions\ValidationException if the number of "*" patterns in $sourceUrl and
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if the number of "*" patterns in $sourceUrl and
      *          the number of {\d} placeholders in $destinationUrl doesn't match or
      *          if the placeholders aren't a valid number sequence({1}/{2}/{3}), starting with 1.
      *

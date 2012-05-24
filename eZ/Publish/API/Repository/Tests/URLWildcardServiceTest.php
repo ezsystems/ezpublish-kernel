@@ -127,9 +127,72 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Create a new url wildcard
         $urlWildcardService->create( '/articles/*', '/content/{1}', true );
 
-        // This call will fail with a InvalidArgumentException because the
+        // This call will fail with an InvalidArgumentException because the
         // sourceUrl '/articles/*' already exists.
         $urlWildcardService->create( '/articles/*', '/content/data/{1}' );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the create() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::create()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
+    public function testCreateThrowsContentValidationExceptionWhenPatternsAndPlaceholdersNotMatch()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // This call will fail with a ContentValidationException because the
+        // number of patterns '*' does not match the number of {\d} placeholders
+        $urlWildcardService->create( '/articles/*', '/content/{1}/year{2}' );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the create() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::create()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
+    public function testCreateThrowsContentValidationExceptionWhenPlaceholdersNotValidNumberSequence()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // This call will fail with a ContentValidationException because the
+        // number of patterns '*' does not match the number of {\d} placeholders
+        $urlWildcardService->create( '/articles/*/*/*', '/content/{1}/year/{2}/{4}' );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the create() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\URLWildcardService::create()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
+     */
+    public function testCreateThrowsContentValidationExceptionWhenPlaceholderSequenceNotStartsWithOne()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        // This call will fail with a ContentValidationException because the
+        // number of patterns '*' does not match the number of {\d} placeholders
+        $urlWildcardService->create( '/articles/*/*/*', '/content/{0}/year/{1}/{2}' );
         /* END: Use Case */
     }
 

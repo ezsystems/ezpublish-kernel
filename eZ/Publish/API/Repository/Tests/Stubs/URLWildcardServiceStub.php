@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 use \eZ\Publish\API\Repository\URLWildcardService;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
@@ -66,6 +67,21 @@ class URLWildcardServiceStub implements URLWildcardService
             }
         }
 
+        preg_match_all( '(\\*)', $sourceUrl, $patterns );
+        preg_match_all( '(\{(\d+)\})', $destinationUrl, $placeholders );
+
+        if ( count( $patterns[0] ) !== count( $placeholders[1] ) )
+        {
+            throw new ContentValidationExceptionStub( 'What error code should be used?' );
+        }
+
+        $placeholders = array_map( 'intval', $placeholders[1] );
+        sort( $placeholders );
+
+        if ( array_keys( array_fill( 1, count( $placeholders ), null ) ) !== $placeholders  )
+        {
+            throw new ContentValidationExceptionStub( 'What error code should be used?' );
+        }
 
         $wildcard = new URLWildcard(
             array(
@@ -191,13 +207,16 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param string $destinationUrl
      * @param array $values
+     * @throws \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub
      * @return string
      */
     private function substitute( $destinationUrl, array $values )
     {
-        for ( $i = 1, $c = count( $values ); $i < $c; ++$i )
+        preg_match_all( '(\{(\d+)\})', $destinationUrl, $matches );
+
+        foreach ( $matches[1] as $match )
         {
-            $destinationUrl = str_replace( "{{$i}}", $values[$i], $destinationUrl );
+            $destinationUrl = str_replace( "{{$match}}", $values[$match], $destinationUrl );
         }
         return $destinationUrl;
     }
