@@ -13,9 +13,13 @@ eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications
 eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface,
 InvalidArgumentException;
 
+/**
+ * A more like this criterion is matched by content which contains similar terms
+ * found in the given content, text or url fetch
+ *
+ */
 class MoreLikeThis extends Criterion implements CriterionInterface
 {
-    const LOCATION = 0;
     const CONTENT = 1;
     const TEXT = 2;
     const URL = 3;
@@ -25,12 +29,12 @@ class MoreLikeThis extends Criterion implements CriterionInterface
      *
      * @var int
      */
-    private $type;
+    protected $type;
 
     /**
      * Creates a new more like this criterion
      *
-     * @param integer $type the type (one of LOCATION,CONTENT,TEXT,URL)
+     * @param integer $type the type (one of CONTENT,TEXT,URL)
      * @param mixed $value the value depending on the type
      *
      * @throws \InvalidArgumentException if the value type doesn't match the expected type
