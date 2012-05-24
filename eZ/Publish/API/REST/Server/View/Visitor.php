@@ -57,6 +57,12 @@ class Visitor extends RMF\View
 
         foreach ( $message->headers as $name => $value )
         {
+            if ( $name === 'Status' )
+            {
+                // Special handling for PHP running as an Apache module
+                header( $_SERVER['SERVER_PROTOCOL'] . ' ' . $value );
+            }
+
             header( "{$name}: {$value}" );
         }
         echo $message->body;
