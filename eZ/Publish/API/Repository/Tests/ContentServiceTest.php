@@ -3960,6 +3960,65 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * @return void
+     */
+    public function testURLAliasesCreatedForUpdatedContent()
+    {
+        $repository = $this->getRepository();
+
+        $contentService  = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createUpdatedDraftVersion2();
+
+        // Automatically marks old aliases for the content as history
+        // and creates new aliases, based on the changes
+        $liveContent = $contentService->publishVersion( $draft->getVersionInfo() );
+        /* END: Use Case */
+
+        $location = $locationService->loadMainLocation(
+            $liveContent->getVersionInfo()->getContentInfo()
+        );
+
+        $aliases = $urlAliasService->listLocationAliases( $location );
+
+        $this->assertAliasesCorrect(
+            array(
+                '/Community/An-awesome-story-about-eZ-Publish' => array(
+                    'type'          => URLAlias::LOCATION,
+                    'destination'   => $location,
+                    'path'          => '/Community/An-awesome-story-about-eZ-Publish',
+                    'languageCodes' => array( 'eng-US' ),
+                    'isHistory'     => true,
+                    'isCustom'      => false,
+                    'forward'       => false,
+                ),
+                '/Community/An-awesome²-story-about-ezp.' => array(
+                    'type'          => URLAlias::LOCATION,
+                    'destination'   => $location,
+                    'path'          => '/Community/An-awesome²-story-about-ezp.',
+                    'languageCodes' => array( 'eng-US' ),
+                    'isHistory'     => false,
+                    'isCustom'      => false,
+                    'forward'       => false,
+                ),
+                '/Community/An-awesome²³-story-about-ezp.' => array(
+                    'type'          => URLAlias::LOCATION,
+                    'destination'   => $location,
+                    'path'          => '/Community/An-awesome²³-story-about-ezp.',
+                    'languageCodes' => array( 'eng-GB' ),
+                    'isHistory'     => false,
+                    'isCustom'      => false,
+                    'forward'       => false,
+                ),
+            ),
+            $aliases
+        );
+    }
+
+    /**
      * Asserts that all aliases defined in $expectedAliasProperties with the
      * given properties are available in $actualAliases and not more.
      *

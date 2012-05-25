@@ -723,7 +723,7 @@ class ContentServiceStub implements ContentService
         {
             $names[$languageCode] = preg_replace_callback(
                 '(<([^>]+)>)',
-                function ( $matches ) use ( $fields )
+                function ( $matches ) use ( $fields, $languageCode )
                 {
                     $fieldIdentifiers = explode( '|', $matches[1] );
                     foreach ( $fieldIdentifiers as $fieldIdentifier )
@@ -731,7 +731,7 @@ class ContentServiceStub implements ContentService
                         foreach ( $fields as $field )
                         {
                             if ( $field->fieldDefIdentifier == $fieldIdentifier
-                                && !isset( $names[$field->languageCode] ) )
+                                && $field->languageCode == $languageCode )
                             {
                                 return $field->value;
                             }
