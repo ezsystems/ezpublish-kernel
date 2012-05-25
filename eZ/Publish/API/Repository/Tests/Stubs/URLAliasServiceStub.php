@@ -294,6 +294,7 @@ class URLAliasServiceStub implements URLAliasService
         }
 
         $versionInfo = $content->getVersionInfo();
+        $contentInfo = $versionInfo->getContentInfo();
 
         $this->_obsoleteOldAliases( $location );
 
@@ -302,7 +303,9 @@ class URLAliasServiceStub implements URLAliasService
             $this->createInternalUrlAlias(
                 $location,
                 $this->createUrlAliasPath( $location, $name, $languageCode ),
-                $languageCode
+                $languageCode,
+                ( $contentInfo->mainLanguageCode === $languageCode
+                    && $contentInfo->alwaysAvailable )
             );
         }
     }
@@ -426,18 +429,20 @@ class URLAliasServiceStub implements URLAliasService
      * @param Location $location
      * @param string $path
      * @param string $languageCode
+     * @param bool $alwaysAvailable
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    private function createInternalUrlAlias( Location $location, $path, $languageCode )
+    private function createInternalUrlAlias( Location $location, $path, $languageCode, $alwaysAvailable )
     {
         $this->checkAliasNotExists( $path, $languageCode );
 
         return $this->createLocationUrlAlias(
             array(
-                'destination'   => $location,
-                'path'          => $path,
-                'languageCodes' => array( $languageCode ),
-                'isCustom'      => false,
+                'destination'     => $location,
+                'path'            => $path,
+                'languageCodes'   => array( $languageCode ),
+                'isCustom'        => false,
+                'alwaysAvailable' => $alwaysAvailable,
             )
         );
     }
