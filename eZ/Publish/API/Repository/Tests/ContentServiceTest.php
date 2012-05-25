@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\Location;
+use \eZ\Publish\API\Repository\Values\Content\URLAlias;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\Content\Query;
@@ -3942,15 +3943,71 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $aliases = $urlAliasService->listLocationAliases( $location );
 
-        $this->assertEquals( 1, count( $aliases ) );
-
-        $alias = reset( $aliases );
-
-        $this->assertEquals(
-            '/Community/An-awesome-story-about-eZ-Publish',
-            $alias->path
+        $this->assertAliasesCorrect(
+            array(
+                '/Community/An-awesome-story-about-eZ-Publish' => array(
+                    'type'          => URLAlias::LOCATION,
+                    'destination'   => $location,
+                    'path'          => '/Community/An-awesome-story-about-eZ-Publish',
+                    'languageCodes' => array( 'eng-US' ),
+                    'isHistory'     => false,
+                    'isCustom'      => false,
+                    'forward'       => false,
+                ),
+            ),
+            $aliases
         );
-        $this->assertFalse( $alias->isCustom );
+    }
+
+    /**
+     * Asserts that all aliases defined in $expectedAliasProperties with the
+     * given properties are available in $actualAliases and not more.
+     *
+     * @param array $expectedAliasProperties
+     * @param array $actualAliases
+     * @return void
+     */
+    private function assertAliasesCorrect( array $expectedAliasProperties, array $actualAliases )
+    {
+        foreach ( $actualAliases as $actualAlias )
+        {
+            if ( !isset( $expectedAliasProperties[$actualAlias->path] ) )
+            {
+                $this->fail(
+                    sprintf(
+                        'Alias with path "%s" in languages "%s" not expected.',
+                        $actualAlias->path,
+                        implode( ', ', $actualAlias->languageCodes )
+                    )
+                );
+            }
+
+            foreach ( $expectedAliasProperties[$actualAlias->path] as $propertyName => $propertyValue )
+            {
+                $this->assertEquals(
+                    $propertyValue,
+                    $actualAlias->$propertyName,
+                    sprintf(
+                        'Property $%s incorrect on alias with path "%s" in languages "%s".',
+                        $propertyName,
+                        $actualAlias->path,
+                        implode( ', ', $actualAlias->languageCodes )
+                    )
+                );
+            }
+
+            unset( $expectedAliasProperties[$actualAlias->path] );
+        }
+
+        if ( !count( $expectedAliasProperties ) === 0 )
+        {
+            $this->fail(
+                sprintf(
+                    'Missing expected aliases with paths "%s".',
+                    implode( '", "', array_keys( $expectedAliasProperties ) )
+                )
+            );
+        }
     }
 
     /**

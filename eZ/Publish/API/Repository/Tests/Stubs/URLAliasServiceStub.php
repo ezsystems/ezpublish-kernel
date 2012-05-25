@@ -171,7 +171,7 @@ class URLAliasServiceStub implements URLAliasService
                 'isHistory'       => false,
                 'isCustom'        => true,
                 'alwaysAvailable' => true,
-                'forward'         => true,
+                'forward'         => false,
             ),
             $properties
         );
