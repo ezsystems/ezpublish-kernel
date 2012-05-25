@@ -33,6 +33,7 @@
             <file>UserServiceAuthorizationTest.php</file>
             <file>RoleServiceAuthorizationTest.php</file>
             <file>TrashServiceAuthorizationTest.php</file>
+            <file>URLWildcardServiceAuthorizationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

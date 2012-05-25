@@ -16,6 +16,7 @@ use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Url wold service stub implementation.
@@ -66,6 +67,11 @@ class URLWildcardServiceStub implements URLWildcardService
      */
     public function create( $sourceUrl, $destinationUrl, $foreward = false )
     {
+        if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         foreach ( $this->wildcards as $wildcard )
         {
             if ( $wildcard->sourceUrl === $sourceUrl )
@@ -111,6 +117,11 @@ class URLWildcardServiceStub implements URLWildcardService
      */
     public function remove( URLWildcard $urlWildcard )
     {
+        if ( false === $this->repository->canUser( 'content', 'edit', $urlWildcard ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         unset( $this->wildcards[$urlWildcard->id] );
     }
 
