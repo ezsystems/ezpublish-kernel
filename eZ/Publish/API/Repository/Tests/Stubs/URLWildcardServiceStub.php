@@ -101,7 +101,7 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard
      */
-    public function remove( $urlWildcard )
+    public function remove( URLWildcard $urlWildcard )
     {
         unset( $this->wildcards[$urlWildcard->id] );
     }

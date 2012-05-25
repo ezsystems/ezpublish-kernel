@@ -10,6 +10,7 @@
 
 namespace eZ\Publish\API\Repository;
 
+use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
 
 /**
  * URLAlias service
@@ -44,7 +45,7 @@ interface URLWildcardService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove($urlWildcard);
+    public function remove( URLWildcard $urlWildcard);
 
     /**
      *
