@@ -721,35 +721,34 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $repository = $this->getRepository();
 
         $locationService = $repository->getLocationService();
-        $firstLocation = $locationService->loadLocation(
+        $someLocation = $locationService->loadLocation(
             $this->generateId( 'location', 12 )
-        );
-        $secondLocation = $locationService->loadLocation(
-            $this->generateId( 'location', 58 )
         );
 
         /* BEGIN: Use Case */
-        // $firstLocation and $secondLocation contain different Locations which
-        // have both URLAliases assigned
+        // $someLocation contains a location with automatically generated
+        // aliases assigned
         $urlAliasService = $repository->getURLAliasService();
 
-        // $loadedAliases will contain an array of URLAlias objects
-        $loadedAliases = array_merge(
-            $urlAliasService->listLocationAliases( $firstLocation ),
-            $urlAliasService->listLocationAliases( $secondLocation )
+        $initialAliases = $urlAliasService->listLocationAliases( $someLocation );
+
+        // Creates a custom alias for $someLocation
+        $urlAliasService->createUrlAlias(
+            $someLocation,
+            '/my/fancy/url/alias/sindelfingen',
+            'eng-US'
         );
 
-        // All URLAliases in $loadedAliases will be removed
-        $urlAliasService->removeAliases( $loadedAliases );
+        $allAliases = $urlAliasService->listLocationAliases( $someLocation );
+
+        // The custom alias just created will be removed
+        // the automatic aliases stay in tact
+        $urlAliasService->removeAliases( $allAliases );
         /* END: Use Case */
 
         $this->assertEquals(
-            array(),
-            $urlAliasService->listLocationAliases( $firstLocation )
-        );
-        $this->assertEquals(
-            array(),
-            $urlAliasService->listLocationAliases( $secondLocation )
+            $initialAliases,
+            $urlAliasService->listLocationAliases( $someLocation )
         );
     }
 
