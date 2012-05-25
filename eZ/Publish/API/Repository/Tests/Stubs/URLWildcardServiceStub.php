@@ -139,12 +139,17 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     * translates an url to an existing uri resource or url alias based on the source/destination patterns of the url wildcard.
-     * this method runs also configured url translations and filter
+     * translates an url to an existing uri resource based on the
+     * source/destination patterns of the url wildcard. If the resulting
+     * url is an alias it will be transltated to the system uri.
      *
-     * @param $url
+     * This method runs also configured url translations and filter
      *
-     * @return mixed either an URLAlias or a URLWildcardTranslationResult
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url could not be translated
+     *
+     * @param mixed $url
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
     public function translate( $url )
     {
@@ -168,7 +173,15 @@ class URLWildcardServiceStub implements URLWildcardService
                 );
             }
         }
-        return $this->repository->getURLAliasService()->lookUp( $url );
+
+        $alias = $this->repository->getURLAliasService()->lookUp( $url );
+
+        return new URLWildcardTranslationResult(
+            array(
+                'uri'  =>  $alias->destination,
+                'forward'  =>  $alias->forward
+            )
+        );
     }
 
     /**

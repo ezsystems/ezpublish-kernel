@@ -503,7 +503,7 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     /**
      * Test for the translate() method.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate
      */
@@ -518,15 +518,15 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlWildcardService->create( '/articles/*/05/*', '/content/{2}/year/{1}' );
 
         // Translate a given url into an url alias
-        $urlAlias = $urlWildcardService->translate( '/Design' );
+        $result = $urlWildcardService->translate( '/Design' );
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
-            $urlAlias
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcardTranslationResult',
+            $result
         );
 
-        return $urlAlias;
+        return $result;
     }
 
     /**
