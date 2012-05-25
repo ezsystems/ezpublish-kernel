@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\URLWildcardService;
+use \eZ\Publish\API\Repository\Values\Content\URLAlias;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
@@ -50,6 +51,12 @@ class URLWildcardServiceStub implements URLWildcardService
 
     /**
      * creates a new url wildcard
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if the number of "*" patterns in $sourceUrl and
+     *          the number of {\d} placeholders in $destinationUrl doesn't match or
+     *          if the placeholders aren't a valid number sequence({1}/{2}/{3}), starting with 1.
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
@@ -96,10 +103,11 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     *
      * removes an url wildcard
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
     public function remove( URLWildcard $urlWildcard )
     {
@@ -107,14 +115,13 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     *
      * loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
-     * @param $id
+     * @param mixed $id
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard.
+     * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
     public function load( $id )
     {
@@ -128,8 +135,8 @@ class URLWildcardServiceStub implements URLWildcardService
     /**
      * loads all url wild card (paged)
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
@@ -178,7 +185,7 @@ class URLWildcardServiceStub implements URLWildcardService
 
         return new URLWildcardTranslationResult(
             array(
-                'uri'  =>  $alias->destination,
+                'uri'  =>  $alias->path,
                 'forward'  =>  $alias->forward
             )
         );
