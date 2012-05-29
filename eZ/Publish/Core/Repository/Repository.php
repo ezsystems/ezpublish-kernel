@@ -410,6 +410,36 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get URLAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getURLAliasService()
+    {
+        throw new \RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     */
+    public function getURLWildcardService()
+    {
+        throw new \RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService()
+    {
+        throw new \RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
      * Get IO Service
      *
      * Get service object to perform operations on binary files
