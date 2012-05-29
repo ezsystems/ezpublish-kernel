@@ -38,7 +38,7 @@ interface ObjectStateService
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct);
+    public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct );
 
     /**
      * Loads a object state group
@@ -60,7 +60,7 @@ interface ObjectStateService
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
-    public function loadObjectStateGroups($offset = 0, $limit = -1);
+    public function loadObjectStateGroups( $offset = 0, $limit = -1 );
 
     /**
      * This method returns the ordered list of object states of a group
@@ -69,7 +69,7 @@ interface ObjectStateService
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup);
+    public function loadObjectStates( ObjectStateGroup $objectStateGroup );
 
     /**
      * updates an object state group
@@ -81,7 +81,7 @@ interface ObjectStateService
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct);
+    public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct );
 
     /**
      * Deletes a object state group including all states and links to content
@@ -90,7 +90,7 @@ interface ObjectStateService
      *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
-    public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup);
+    public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup );
 
     /**
      * creates a new object state in the given group.
@@ -105,7 +105,7 @@ interface ObjectStateService
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function createObjectState( ObjectStateGroup $objectStateGroup,  ObjectStateCreateStruct $objectStateCreateStruct);
+    public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct );
 
     /**
      * Loads an object state
@@ -116,7 +116,7 @@ interface ObjectStateService
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function loadObjectState( $stateId);
+    public function loadObjectState( $stateId );
 
     /**
      * updates an object state
@@ -127,7 +127,7 @@ interface ObjectStateService
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function updateObjectState(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct);
+    public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct );
 
     /**
      * changes the priority of the state
@@ -137,7 +137,7 @@ interface ObjectStateService
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $priority
      */
-    public function setPriorityOfObjectState( ObjectState $objectState, $priority);
+    public function setPriorityOfObjectState( ObjectState $objectState, $priority );
 
     /**
      * Deletes a object state. The state of the content objects is reset to the
@@ -147,7 +147,7 @@ interface ObjectStateService
      *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function deleteObjectState($objectState);
+    public function deleteObjectState( ObjectState $objectState );
 
 
     /**
