@@ -127,4 +127,47 @@ abstract class ValueObject
     {
         return new static( $array );
     }
+
+    /**
+     * @deprecated Since 5.0, available purly for eZTemplate competability
+     * @uses __get()
+     *
+     * @param $property
+     *
+     * @return mixed
+     */
+    final public function attribute( $property )
+    {
+        return $this->__get( $property );
+    }
+
+    /**
+     * @deprecated Since 5.0, available purly for eZTemplate competability
+     * @uses __isset()
+     *
+     * @return array
+     */
+    final public function attributes()
+    {
+        $properties = array();
+        foreach ( $this as $property => $value )
+        {
+            if ( $this->__isset( $property ) )
+                $properties[] = $property;
+        }
+        return $properties;
+    }
+
+    /**
+     * @deprecated Since 5.0, available purly for eZTemplate competability
+     * @uses __isset()
+     *
+     * @param $property
+     *
+     * @return bool
+     */
+    final public function hasAttribute( $property )
+    {
+        return $this->__isset( $property );
+    }
 }
