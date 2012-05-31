@@ -73,12 +73,14 @@ class IntegrationTest extends TestCase
             'ezuser',
             $content->fields[2]->type
         );
+
+        return $content->fields[2];
     }
 
     /**
-     * @depends testLoadUserUserField
+     * @depends testLoadUserUserFieldType
      */
-    public function testLoadUserUserExternalData( $content )
+    public function testLoadUserUserExternalData( $field )
     {
         $this->assertEquals(
             array(
@@ -91,7 +93,7 @@ class IntegrationTest extends TestCase
                 'login_count'      => null,
                 'max_login'        => 1000,
             ),
-            $content->fields[2]->value->externalData
+            $field->value->externalData
         );
     }
 
