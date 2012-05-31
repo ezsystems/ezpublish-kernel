@@ -629,3 +629,25 @@ CREATE TABLE `ezsection` (
   `navigation_part_identifier` varchar(100) DEFAULT 'ezcontentnavigationpart',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezuser_accountkey`;
+CREATE TABLE `ezuser_accountkey` (
+      `hash_key` varchar(32) NOT NULL DEFAULT '',
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `time` int(11) NOT NULL DEFAULT '0',
+      `user_id` int(11) NOT NULL DEFAULT '0',
+      PRIMARY KEY (`id`),
+      KEY `hash_key` (`hash_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezuservisit`;
+CREATE TABLE `ezuservisit` (
+      `current_visit_timestamp` int(11) NOT NULL DEFAULT '0',
+      `failed_login_attempts` int(11) NOT NULL DEFAULT '0',
+      `last_visit_timestamp` int(11) NOT NULL DEFAULT '0',
+      `login_count` int(11) NOT NULL DEFAULT '0',
+      `user_id` int(11) NOT NULL DEFAULT '0',
+      PRIMARY KEY (`user_id`),
+      KEY `ezuservisit_co_visit_count` (`current_visit_timestamp`,`login_count`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

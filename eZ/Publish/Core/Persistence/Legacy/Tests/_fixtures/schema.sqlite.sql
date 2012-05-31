@@ -334,6 +334,19 @@ CREATE TABLE 'ezsection' (
   'name' text(255) DEFAULT NULL,
   'navigation_part_identifier' text(100) DEFAULT 'ezcontentnavigationpart'
 );
+CREATE TABLE 'ezuservisit' (
+  'current_visit_timestamp' integer NOT NULL DEFAULT '0',
+  'failed_login_attempts' integer NOT NULL DEFAULT '0',
+  'last_visit_timestamp' integer NOT NULL DEFAULT '0',
+  'login_count' integer NOT NULL DEFAULT '0',
+  'user_id' integer NOT NULL DEFAULT '0'
+);
+CREATE TABLE 'ezuser_accountkey' (
+  'hash_key' text(255) NOT NULL DEFAULT '',
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'time' integer NOT NULL DEFAULT '0',
+  'user_id' integer NOT NULL DEFAULT '0'
+);
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
 CREATE UNIQUE INDEX 'ezcobj_state_identifier' ON 'ezcobj_state' ( 'group_id', 'identifier' );
 CREATE INDEX 'ezcobj_state_lmask' ON 'ezcobj_state' ( 'language_mask' );
