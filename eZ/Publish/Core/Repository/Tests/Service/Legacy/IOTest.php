@@ -10,16 +10,19 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
 use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
 
-    eZ\Publish\Core\Repository\Tests\Service\Legacy\IOUploadTest;
+    eZ\Publish\Core\Repository\Tests\Service\Legacy\IOUploadPHPT;
 
 /**
  * Test case for IO Service using Legacy storage class
  */
 class IOTest extends BaseIOServiceTest
 {
-    public function __construct()
+    /**
+     * @return \PHPUnit_Extensions_PhptTestCase
+     */
+    protected function getFileUploadTest()
     {
-        $this->fileUploadTest = new IOUploadTest();
+        return new IOUploadPHPT();
     }
 
     protected function getRepository( array $serviceSettings )

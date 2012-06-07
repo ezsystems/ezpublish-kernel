@@ -13,16 +13,19 @@ use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
 
-    eZ\Publish\Core\Repository\Tests\Service\InMemory\IOUploadTest;
+    eZ\Publish\Core\Repository\Tests\Service\InMemory\IOUploadPHPT;
 
 /**
  * Test case for IO Service using InMemory storage class
  */
 class IOTest extends BaseIOServiceTest
 {
-    public function __construct()
+    /**
+     * @return \PHPUnit_Extensions_PhptTestCase
+     */
+    protected function getFileUploadTest()
     {
-        $this->fileUploadTest = new IOUploadTest();
+        return new IOUploadPHPT();
     }
 
     protected function getRepository( array $serviceSettings )

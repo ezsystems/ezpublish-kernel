@@ -14,7 +14,7 @@ use PHPUnit_Extensions_PhptTestCase;
 /**
  * Test case for IO file upload using Legacy storage class
  */
-class IOUploadTest extends PHPUnit_Extensions_PhptTestCase
+class IOUploadPHPT extends PHPUnit_Extensions_PhptTestCase
 {
     public function __construct()
     {

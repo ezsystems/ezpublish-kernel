@@ -22,9 +22,9 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 abstract class IOBase extends BaseServiceTest
 {
     /**
-     * @var \PHPUnit_Extensions_PhptTestCase
+     * @return \PHPUnit_Extensions_PhptTestCase
      */
-    protected $fileUploadTest;
+    abstract protected function getFileUploadTest();
 
     /**
      * Test a new class and default values on properties
@@ -113,14 +113,54 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testNewBinaryCreateStructFromUploadedFile()
     {
-        $result = $this->fileUploadTest->run();
+        $uploadTest = $this->getFileUploadTest();
+        $result = $uploadTest->run();
 
         if ( $result->failureCount() > 0 )
-            self::fail( "Failed file upload test, failureCount() > 0" );
+        {
+            self::fail( "Failed file upload test, failureCount() > 0: "
+                    . $this->expandFailureMessages( $result->failures() )
+            );
+        }
+
         if ( $result->errorCount() > 0 )
-            self::fail( "Failed file upload test, errorCount() > 0" );
+        {
+            self::fail( "Failed file upload test, errorCount() > 0: "
+                    . $this->expandFailureMessages( $result->errors() )
+            );
+        }
+
         if ( $result->skippedCount() > 0 )
-            self::fail( "Failed file upload test, skippedCount() > 0" );
+        {
+            self::fail( "Failed file upload test, skippedCount() > 0: "
+                    . $this->expandFailureMessages( $result->skipped() )
+            );
+        }
+    }
+
+    /**
+     * @param array $failures
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    private function expandFailureMessages( array $failures, $delimiter = ', ' )
+    {
+        $messages = array();
+        /**
+         * @var \PHPUnit_Framework_TestFailure $failure
+         */
+        foreach ( $failures as $failure )
+        {
+            $e = $failure->thrownException();
+            $text =  "\n\nException " . get_class($e) . ' in file ' . $e->getFile() . ':' . $e->getLine() . "\n";
+            $text .= $e->toString();
+            $text .= "\n" . $e->getTraceAsString();
+            $messages[] = $text;
+
+        }
+        return implode( $delimiter, $messages );
+
     }
 
     /**
