@@ -351,8 +351,8 @@ abstract class TrashBase extends BaseServiceTest
 
     /**
      * Test searching for trash items
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::findTrashItems
-     * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::emptyTrash
+     * @covers \eZ\Publish\API\Repository\TrashService::findTrashItems
+     * @covers \eZ\Publish\API\Repository\TrashService::emptyTrash
      */
     public function testFindTrashItemsAndEmptyTrash()
     {

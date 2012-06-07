@@ -217,7 +217,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::expandExtendedServices
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::getListOfExtendedServices
      */
     public function testComplexExtendedServicesUsingHash()
     {
@@ -255,7 +255,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::expandExtendedServices
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::getListOfExtendedServices
      */
     public function testComplexLazyExtendedServicesUsingHash()
     {
@@ -293,7 +293,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::expandExtendedServices
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::getListOfExtendedServices
      */
     public function testComplexLazyExtendedCallbackUsingHash()
     {
