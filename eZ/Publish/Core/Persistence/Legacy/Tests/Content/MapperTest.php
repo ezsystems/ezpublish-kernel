@@ -648,19 +648,19 @@ class MapperTest extends TestCase
                     $this->returnValue(
                         array(
                             new Language( array(
-                                'id'            => 2,
-                                'languageCode'  => 'eng-GB',
-                                'name'          => 'British english'
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
                             ) ),
                             new Language( array(
-                                'id'            => 4,
-                                'languageCode'  => 'eng-US',
-                                'name'          => 'US english'
+                                'id' => 4,
+                                'languageCode' => 'eng-US',
+                                'name' => 'US english'
                             ) ),
                             new Language( array(
-                                'id'            => 8,
-                                'languageCode'  => 'fre-FR',
-                                'name'          => 'Français franchouillard'
+                                'id' => 8,
+                                'languageCode' => 'fre-FR',
+                                'name' => 'Français franchouillard'
                             ) )
                         )
                     )

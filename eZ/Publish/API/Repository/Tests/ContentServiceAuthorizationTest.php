@@ -55,7 +55,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // This call will fail with a "UnauthorizedException"
@@ -629,10 +629,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Creates a metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
-        $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
+        $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-US';
-        $metadataUpdate->alwaysAvailable  = false;
-        $metadataUpdate->publishedDate    = new \DateTime( '1984/01/01' );
+        $metadataUpdate->alwaysAvailable = false;
+        $metadataUpdate->publishedDate = new \DateTime( '1984/01/01' );
         $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
 
         // This call will fail with a "UnauthorizedException"
@@ -653,7 +653,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
@@ -806,7 +806,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
@@ -843,7 +843,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
@@ -870,7 +870,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteVersionThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
@@ -933,7 +933,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
@@ -951,9 +951,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $targetLocationCreate->priority  = 42;
-        $targetLocationCreate->hidden    = true;
-        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -979,7 +979,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
@@ -994,9 +994,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $targetLocationCreate->priority  = 42;
-        $targetLocationCreate->hidden    = true;
-        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -1132,7 +1132,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
-        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
         $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
         $draft = $this->createContentDraftVersion1();
@@ -1277,7 +1277,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     private function createAnonymousWithEditorRole()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
 
         /* BEGIN: Inline */
         $roleService = $repository->getRoleService();
@@ -1292,7 +1292,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $user,
             new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  array( '/1/43/51/' )
+                    'limitationValues' =>  array( '/1/43/51/' )
                 )
             )
         );

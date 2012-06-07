@@ -69,7 +69,7 @@ class LocationServiceStub implements LocationService
     {
         return new LocationCreateStruct(
             array(
-                'parentLocationId'  =>  $parentLocationId
+                'parentLocationId' =>  $parentLocationId
             )
         );
     }
@@ -114,10 +114,10 @@ class LocationServiceStub implements LocationService
 
         $data['contentInfo'] = $contentInfo;
 
-        $data['id']          = ++$this->nextLocationId;
-        $data['pathString']  = $parentLocation->pathString . $data['id'] . '/';
-        $data['depth']       = substr_count( $data['pathString'], '/' ) - 2;
-        $data['childCount']  = 0;
+        $data['id'] = ++$this->nextLocationId;
+        $data['pathString'] = $parentLocation->pathString . $data['id'] . '/';
+        $data['depth'] = substr_count( $data['pathString'], '/' ) - 2;
+        $data['childCount'] = 0;
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
@@ -321,19 +321,19 @@ class LocationServiceStub implements LocationService
     protected function locationToArray( Location $location )
     {
         return array(
-            'id'                      => $location->id,
-            'priority'                => $location->priority,
-            'hidden'                  => $location->hidden,
-            'invisible'               => $location->invisible,
-            'remoteId'                => $location->remoteId,
-            'contentInfo'             => $location->contentInfo,
-            'parentLocationId'        => $location->parentLocationId,
-            'pathString'              => $location->pathString,
+            'id' => $location->id,
+            'priority' => $location->priority,
+            'hidden' => $location->hidden,
+            'invisible' => $location->invisible,
+            'remoteId' => $location->remoteId,
+            'contentInfo' => $location->contentInfo,
+            'parentLocationId' => $location->parentLocationId,
+            'pathString' => $location->pathString,
             'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
-            'depth'                   => $location->depth,
-            'sortField'               => $location->sortField,
-            'sortOrder'               => $location->sortOrder,
-            'childCount'              => $location->childCount,
+            'depth' => $location->depth,
+            'sortField' => $location->sortField,
+            'sortOrder' => $location->sortOrder,
+            'childCount' => $location->childCount,
         );
     }
 
@@ -659,11 +659,11 @@ class LocationServiceStub implements LocationService
         $values = array_merge(
             $this->locationToArray( $subtree ),
             array(
-                'id'                =>  ++$this->nextLocationId,
-                'remoteId'          =>  md5( uniqid( $subtree->remoteId, true ) ),
-                'depth'             =>  $targetParentLocation->depth + 1,
-                'parentLocationId'  =>  $targetParentLocation->id,
-                'pathString'        =>  "{$targetParentLocation->pathString}{$this->nextLocationId}/"
+                'id' =>  ++$this->nextLocationId,
+                'remoteId' =>  md5( uniqid( $subtree->remoteId, true ) ),
+                'depth' =>  $targetParentLocation->depth + 1,
+                'parentLocationId' =>  $targetParentLocation->id,
+                'pathString' =>  "{$targetParentLocation->pathString}{$this->nextLocationId}/"
             )
         );
 
@@ -740,9 +740,9 @@ class LocationServiceStub implements LocationService
         $values = array_merge(
             $this->locationToArray( $location ),
             array(
-                'depth'             =>  $newParentLocation->depth + 1,
-                'pathString'        =>  "{$newParentLocation->pathString}{$location->id}/",
-                'parentLocationId'  =>  $newParentLocation->id,
+                'depth' =>  $newParentLocation->depth + 1,
+                'pathString' =>  "{$newParentLocation->pathString}{$location->id}/",
+                'parentLocationId' =>  $newParentLocation->id,
             )
         );
 
@@ -857,7 +857,7 @@ class LocationServiceStub implements LocationService
      */
     private function initFromFixture()
     {
-        $this->locations      = array();
+        $this->locations = array();
         $this->nextLocationId = 0;
 
         list(

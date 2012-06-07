@@ -185,13 +185,13 @@ class ContentHandlerTest extends HandlerTest
         $contentHandler = $this->persistenceHandler->contentHandler();
         $updateStruct = new MetadataUpdateStruct(
             array(
-                "ownerId"          => 10,
-                "name"             => "the all new name",
-                "publicationDate"  => time(),
+                "ownerId" => 10,
+                "name" => "the all new name",
+                "publicationDate" => time(),
                 "modificationDate" => time(),
-                "mainLanguageId"   => 4,
-                "alwaysAvailable"  => false,
-                "remoteId"         => "the-all-new-remoteid"
+                "mainLanguageId" => 4,
+                "alwaysAvailable" => false,
+                "remoteId" => "the-all-new-remoteid"
             )
         );
 

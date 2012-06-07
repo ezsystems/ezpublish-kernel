@@ -81,17 +81,17 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'name'                => 'Content name',
-                    'contentclass_id'     => '23',
-                    'section_id'          => '42',
-                    'owner_id'            => '13',
-                    'current_version'     => '1',
+                    'name' => 'Content name',
+                    'contentclass_id' => '23',
+                    'section_id' => '42',
+                    'owner_id' => '13',
+                    'current_version' => '1',
                     'initial_language_id' => '1',
-                    'remote_id'           => 'some_remote_id',
-                    'language_mask'       => '1',
-                    'modified'            => '0',
-                    'published'           => '0',
-                    'status'              => ContentInfo::STATUS_DRAFT,
+                    'remote_id' => 'some_remote_id',
+                    'language_mask' => '1',
+                    'modified' => '0',
+                    'published' => '0',
+                    'status' => ContentInfo::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -799,7 +799,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $resFirst  = $gateway->load( 11, 1 );
+        $resFirst = $gateway->load( 11, 1 );
         $resSecond = $gateway->load( 11, 2 );
 
         $res = array_merge( $resFirst, $resSecond );
@@ -1669,19 +1669,19 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     $this->returnValue(
                         array(
                             new Language( array(
-                                'id'            => 2,
-                                'languageCode'  => 'eng-GB',
-                                'name'          => 'British english'
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
                             ) ),
                             new Language( array(
-                                'id'            => 4,
-                                'languageCode'  => 'eng-US',
-                                'name'          => 'US english'
+                                'id' => 4,
+                                'languageCode' => 'eng-US',
+                                'name' => 'US english'
                             ) ),
                             new Language( array(
-                                'id'            => 8,
-                                'languageCode'  => 'fre-FR',
-                                'name'          => 'Français franchouillard'
+                                'id' => 8,
+                                'languageCode' => 'fre-FR',
+                                'name' => 'Français franchouillard'
                             ) )
                         )
                     )

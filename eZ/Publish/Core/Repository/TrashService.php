@@ -233,20 +233,20 @@ class TrashService implements TrashServiceInterface
 
         return new TrashItem(
             array(
-                'contentInfo'             => $contentInfo,
-                'id'                      => (int) $spiTrashItem->id,
-                'priority'                => (int) $spiTrashItem->priority,
-                'hidden'                  => (bool) $spiTrashItem->hidden,
-                'invisible'               => (bool) $spiTrashItem->invisible,
-                'remoteId'                => $spiTrashItem->remoteId,
-                'parentLocationId'        => (int) $spiTrashItem->parentId,
-                'pathString'              => $spiTrashItem->pathString,
+                'contentInfo' => $contentInfo,
+                'id' => (int) $spiTrashItem->id,
+                'priority' => (int) $spiTrashItem->priority,
+                'hidden' => (bool) $spiTrashItem->hidden,
+                'invisible' => (bool) $spiTrashItem->invisible,
+                'remoteId' => $spiTrashItem->remoteId,
+                'parentLocationId' => (int) $spiTrashItem->parentId,
+                'pathString' => $spiTrashItem->pathString,
                 'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiTrashItem->modifiedSubLocation ),
-                'depth'                   => (int) $spiTrashItem->depth,
-                'sortField'               => (int) $spiTrashItem->sortField,
-                'sortOrder'               => (int) $spiTrashItem->sortOrder,
+                'depth' => (int) $spiTrashItem->depth,
+                'sortField' => (int) $spiTrashItem->sortField,
+                'sortOrder' => (int) $spiTrashItem->sortOrder,
                 //@todo: this has to be 0?
-                'childCount'              => 0
+                'childCount' => 0
             )
         );
     }

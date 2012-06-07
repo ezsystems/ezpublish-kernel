@@ -98,10 +98,10 @@ class URLWildcardServiceStub implements URLWildcardService
 
         $wildcard = new URLWildcard(
             array(
-                'id'  =>  ++$this->id,
-                'sourceUrl'  =>  $sourceUrl,
-                'destinationUrl'  =>  $destinationUrl,
-                'forward'  =>  $foreward
+                'id' =>  ++$this->id,
+                'sourceUrl' =>  $sourceUrl,
+                'destinationUrl' =>  $destinationUrl,
+                'forward' =>  $foreward
             )
         );
 
@@ -185,8 +185,8 @@ class URLWildcardServiceStub implements URLWildcardService
             {
                 return new URLWildcardTranslationResult(
                     array(
-                        'uri'  =>  $uri,
-                        'forward'  =>  $wildcard->forward
+                        'uri' =>  $uri,
+                        'forward' =>  $wildcard->forward
                     )
                 );
             }
@@ -196,8 +196,8 @@ class URLWildcardServiceStub implements URLWildcardService
 
         return new URLWildcardTranslationResult(
             array(
-                'uri'  =>  $alias->path,
-                'forward'  =>  $alias->forward
+                'uri' =>  $alias->path,
+                'forward' =>  $alias->forward
             )
         );
     }

@@ -65,12 +65,12 @@ class LocationServiceTest extends BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'priority'         => 0,
-                'hidden'           => false,
+                'priority' => 0,
+                'hidden' => false,
                 // remoteId should be initialized with a default value
-                //'remoteId'         => null,
-                'sortField'        => Location::SORT_FIELD_NAME,
-                'sortOrder'        => Location::SORT_ORDER_ASC,
+                //'remoteId' => null,
+                'sortField' => Location::SORT_FIELD_NAME,
+                'sortOrder' => Location::SORT_ORDER_ASC,
                 'parentLocationId' => $this->generateId( 'location', 1 ),
             ),
             $locationCreate
@@ -118,10 +118,10 @@ class LocationServiceTest extends BaseTest
         );
 
         return array(
-            'locationCreate'  => $locationCreate,
+            'locationCreate' => $locationCreate,
             'createdLocation' => $location,
-            'contentInfo'     => $contentInfo,
-            'parentLocation'  => $locationService->loadLocation( $this->generateId( 'location', 5 ) ),
+            'contentInfo' => $contentInfo,
+            'parentLocation' => $locationService->loadLocation( $this->generateId( 'location', 5 ) ),
         );
     }
 
@@ -134,24 +134,24 @@ class LocationServiceTest extends BaseTest
      */
     public function testCreateLocationStructValues( array $data )
     {
-        $locationCreate  = $data['locationCreate'];
+        $locationCreate = $data['locationCreate'];
         $createdLocation = $data['createdLocation'];
-        $contentInfo     = $data['contentInfo'];
+        $contentInfo = $data['contentInfo'];
 
         $this->assertPropertiesCorrect(
             array(
-                'priority'                => $locationCreate->priority,
-                'hidden'                  => $locationCreate->hidden,
-                'invisible'               => null,
-                'remoteId'                => $locationCreate->remoteId,
-                'contentInfo'             => $contentInfo,
-                'parentLocationId'        => $locationCreate->parentLocationId,
-                'pathString'              => '/1/5/' . $this->parseId( 'location', $createdLocation->id ) . '/',
+                'priority' => $locationCreate->priority,
+                'hidden' => $locationCreate->hidden,
+                'invisible' => null,
+                'remoteId' => $locationCreate->remoteId,
+                'contentInfo' => $contentInfo,
+                'parentLocationId' => $locationCreate->parentLocationId,
+                'pathString' => '/1/5/' . $this->parseId( 'location', $createdLocation->id ) . '/',
                 'modifiedSubLocationDate' => null, // TODO: Should be DateTime
-                'depth'                   => 2,
-                'childCount'              => 0,
-                'sortField'               => $locationCreate->sortField,
-                'sortOrder'               => $locationCreate->sortOrder,
+                'depth' => 2,
+                'childCount' => 0,
+                'sortField' => $locationCreate->sortField,
+                'sortOrder' => $locationCreate->sortOrder,
             ),
             $createdLocation
         );
@@ -253,7 +253,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId        = $this->generateId( 'object', 108 );
+        $contentId = $this->generateId( 'object', 108 );
         $parentLocationId = $this->generateId( 'location', 5 );
         /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
@@ -286,7 +286,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId        = $this->generateId( 'object', 108 );
+        $contentId = $this->generateId( 'object', 108 );
         $parentLocationId = $this->generateId( 'location', 5 );
         /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
@@ -362,18 +362,18 @@ class LocationServiceTest extends BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'id'                      =>  $this->generateId( 'location', 5 ),
-                'priority'                =>  0,
-                'hidden'                  =>  false,
-                'invisible'               =>  false,
-                'remoteId'                =>  '3f6d92f8044aed134f32153517850f5a',
-                'parentLocationId'        =>  $this->generateId( 'location', 1 ),
-                'pathString'              =>  '/1/5/',
+                'id' =>  $this->generateId( 'location', 5 ),
+                'priority' =>  0,
+                'hidden' =>  false,
+                'invisible' =>  false,
+                'remoteId' =>  '3f6d92f8044aed134f32153517850f5a',
+                'parentLocationId' =>  $this->generateId( 'location', 1 ),
+                'pathString' =>  '/1/5/',
                 'modifiedSubLocationDate' =>  1311154216,
-                'depth'                   =>  1,
-                'sortField'               =>  1,
-                'sortOrder'               =>  1,
-                'childCount'              =>  5,
+                'depth' =>  1,
+                'sortField' =>  1,
+                'sortOrder' =>  1,
+                'childCount' =>  5,
             ),
             $location
         );
@@ -500,8 +500,8 @@ class LocationServiceTest extends BaseTest
 
         /* BEGIN: Use Case */;
         $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
-        $locationService    = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
 
         // Create new content, which is not published
         $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
@@ -666,8 +666,8 @@ class LocationServiceTest extends BaseTest
 
         /* BEGIN: Use Case */;
         $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
-        $locationService    = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
 
         // Create new content, which is not published
         $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
@@ -700,8 +700,8 @@ class LocationServiceTest extends BaseTest
         /* BEGIN: Use Case */
         // $someLocationId is the ID of an existing location
         $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
-        $locationService    = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
 
         // Create new content, which is not published
         $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
@@ -966,8 +966,8 @@ class LocationServiceTest extends BaseTest
         $originalLocation = $locationService->loadLocation( $originalLocationId );
 
         $updateStruct = $locationService->newLocationUpdateStruct();
-        $updateStruct->priority  = 3;
-        $updateStruct->remoteId  = 'c7adcbf1e96bc29bca28c2d809d0c7ef69272651';
+        $updateStruct->priority = 3;
+        $updateStruct->remoteId = 'c7adcbf1e96bc29bca28c2d809d0c7ef69272651';
         $updateStruct->sortField = Location::SORT_FIELD_PRIORITY;
         $updateStruct->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -983,8 +983,8 @@ class LocationServiceTest extends BaseTest
 
         return array(
             'originalLocation' => $originalLocation,
-            'updateStruct'     => $updateStruct,
-            'updatedLocation'  => $updatedLocation,
+            'updateStruct' => $updateStruct,
+            'updatedLocation' => $updatedLocation,
         );
     }
 
@@ -998,24 +998,24 @@ class LocationServiceTest extends BaseTest
     public function testUpdateLocationStructValues( array $data )
     {
         $originalLocation = $data['originalLocation'];
-        $updateStruct     = $data['updateStruct'];
-        $updatedLocation  = $data['updatedLocation'];
+        $updateStruct = $data['updateStruct'];
+        $updatedLocation = $data['updatedLocation'];
 
         $this->assertPropertiesCorrect(
             array(
-                'id'                      => $originalLocation->id,
-                'priority'                => $updateStruct->priority,
-                'hidden'                  => $originalLocation->hidden,
-                'invisible'               => $originalLocation->invisible,
-                'remoteId'                => $updateStruct->remoteId,
-                'contentInfo'             => $originalLocation->contentInfo,
-                'parentLocationId'        => $originalLocation->parentLocationId,
-                'pathString'              => $originalLocation->pathString,
+                'id' => $originalLocation->id,
+                'priority' => $updateStruct->priority,
+                'hidden' => $originalLocation->hidden,
+                'invisible' => $originalLocation->invisible,
+                'remoteId' => $updateStruct->remoteId,
+                'contentInfo' => $originalLocation->contentInfo,
+                'parentLocationId' => $originalLocation->parentLocationId,
+                'pathString' => $originalLocation->pathString,
                 'modifiedSubLocationDate' => $originalLocation->modifiedSubLocationDate,
-                'depth'                   => $originalLocation->depth,
-                'sortField'               => $updateStruct->sortField,
-                'sortOrder'               => $updateStruct->sortOrder,
-                'childCount'              => $originalLocation->childCount,
+                'depth' => $originalLocation->depth,
+                'sortField' => $updateStruct->sortField,
+                'sortOrder' => $updateStruct->sortOrder,
+                'childCount' => $originalLocation->childCount,
             ),
             $updatedLocation
         );
@@ -1042,7 +1042,7 @@ class LocationServiceTest extends BaseTest
 
         $updateStruct = $locationService->newLocationUpdateStruct();
         // Remote ID of the root location
-        $updateStruct->remoteId  = '629709ba256fe317c3ddcee35453a96a';
+        $updateStruct->remoteId = '629709ba256fe317c3ddcee35453a96a';
 
         // Throws exception, since remote ID is already taken
         $locationService->updateLocation(
@@ -1087,27 +1087,27 @@ class LocationServiceTest extends BaseTest
         $locationService->swapLocation( $locationLeft, $locationRight );
 
         // Reload the swapped locations
-        $locationLeftReloaded  = $locationService->loadLocation( $locationLeft->id );
+        $locationLeftReloaded = $locationService->loadLocation( $locationLeft->id );
         $locationRightReloaded = $locationService->loadLocation( $locationRight->id );
         /* END: Use Case */
 
-        $pathStringLeft  = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
+        $pathStringLeft = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
         $pathStringRight = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationRight->pathString );
 
         $this->assertPropertiesCorrect(
             array(
-                'depth'             =>  $locationLeft->depth,
-                'parentLocationId'  =>  $locationLeft->parentLocationId,
-                'pathString'        =>  "{$pathStringLeft}" . $this->parseId( 'location', $locationRight->id ) . "/"
+                'depth' =>  $locationLeft->depth,
+                'parentLocationId' =>  $locationLeft->parentLocationId,
+                'pathString' =>  "{$pathStringLeft}" . $this->parseId( 'location', $locationRight->id ) . "/"
             ),
             $locationRightReloaded
         );
 
         $this->assertPropertiesCorrect(
             array(
-                'depth'             =>  $locationRight->depth,
-                'parentLocationId'  =>  $locationRight->parentLocationId,
-                'pathString'        =>  "{$pathStringRight}" . $this->parseId( 'location', $locationLeft->id ) . "/"
+                'depth' =>  $locationRight->depth,
+                'parentLocationId' =>  $locationRight->parentLocationId,
+                'pathString' =>  "{$pathStringRight}" . $this->parseId( 'location', $locationLeft->id ) . "/"
             ),
             $locationLeftReloaded
         );
@@ -1137,21 +1137,21 @@ class LocationServiceTest extends BaseTest
         // Load "Support" location
         $locationRight = $locationService->loadLocation( $secondLocationId );
 
-        $pathStringLeft  = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
+        $pathStringLeft = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
         $pathStringRight = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationRight->pathString );
 
         $expectedLeft = $this->loadSubtreeProperties( $locationLeft );
         foreach ( $expectedLeft as $i => $properties )
         {
             $expectedLeft[$i]['depth']      -= 1;
-            $expectedLeft[$i]['pathString']  = str_replace( $pathStringLeft, $pathStringRight, $properties['pathString'] );
+            $expectedLeft[$i]['pathString'] = str_replace( $pathStringLeft, $pathStringRight, $properties['pathString'] );
         }
 
         $expectedRight = $this->loadSubtreeProperties( $locationRight );
         foreach ( $expectedRight as $i => $properties )
         {
             $expectedRight[$i]['depth']      += 1;
-            $expectedRight[$i]['pathString']  = str_replace( $pathStringRight, $pathStringLeft, $properties['pathString'] );
+            $expectedRight[$i]['pathString'] = str_replace( $pathStringRight, $pathStringLeft, $properties['pathString'] );
         }
 
         $communityLocationId = $this->generateId(  'location', 167 );
@@ -1318,7 +1318,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $higherLocationId = $this->generateId( 'location', 5 );
-        $lowerLocationId  = $this->generateId( 'location', 13 );
+        $lowerLocationId = $this->generateId( 'location', 13 );
         /* BEGIN: Use Case */
         // $higherLocationId is the ID of a location
         // $lowerLocationId is the ID of a location below $higherLocationId
@@ -1507,9 +1507,9 @@ class LocationServiceTest extends BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'depth'             =>  $newParentLocation->depth + 1,
-                'parentLocationId'  =>  $newParentLocation->id,
-                'pathString'        =>  "{$newParentLocation->pathString}" . $this->parseId( 'location', $copiedLocation->id ) . "/"
+                'depth' =>  $newParentLocation->depth + 1,
+                'parentLocationId' =>  $newParentLocation->id,
+                'pathString' =>  "{$newParentLocation->pathString}" . $this->parseId( 'location', $copiedLocation->id ) . "/"
             ),
             $copiedLocation
         );
@@ -1524,7 +1524,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCopySubtreeUpdatesSubtreeProperties()
     {
-        $repository      = $this->getRepository();
+        $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
         $locationToCopy = $locationService->loadLocation( $this->generateId( 'location', 167 ) );
@@ -1591,7 +1591,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testCopySubtreeIncrementsChildCountOfNewParent()
     {
-        $repository      = $this->getRepository();
+        $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
         $childCountBefore = $locationService->loadLocation( 96 )->childCount;
@@ -1706,9 +1706,9 @@ class LocationServiceTest extends BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'depth'             =>  $newParentLocation->depth + 1,
-                'parentLocationId'  =>  $newParentLocation->id,
-                'pathString'        =>  "{$newParentLocation->pathString}" . $this->parseId( 'location' , $movedLocation->id ) . "/"
+                'depth' =>  $newParentLocation->depth + 1,
+                'parentLocationId' =>  $newParentLocation->id,
+                'pathString' =>  "{$newParentLocation->pathString}" . $this->parseId( 'location' , $movedLocation->id ) . "/"
             ),
             $movedLocation
         );
@@ -1723,17 +1723,17 @@ class LocationServiceTest extends BaseTest
      */
     public function testMoveSubtreeUpdatesSubtreeProperties()
     {
-        $repository      = $this->getRepository();
+        $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $locationToMove    = $locationService->loadLocation( $this->generateId( 'location', 167 ) );
+        $locationToMove = $locationService->loadLocation( $this->generateId( 'location', 167 ) );
         $newParentLocation = $locationService->loadLocation( $this->generateId( 'location', 96 ) );
 
         // Load Subtree properties before move
         $expected = $this->loadSubtreeProperties( $locationToMove );
         foreach ( $expected as $id => $properties )
         {
-            $expected[$id]['depth']      = $properties['depth'] + 1;
+            $expected[$id]['depth'] = $properties['depth'] + 1;
             $expected[$id]['pathString'] = str_replace(
                 $locationToMove->pathString,
                 "{$newParentLocation->pathString}" . $this->parseId( 'location', $locationToMove->id ) . "/",
@@ -1784,7 +1784,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testMoveSubtreeIncrementsChildCountOfNewParent()
     {
-        $repository      = $this->getRepository();
+        $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
         $newParentLocation = $locationService->loadLocation( $this->generateId( 'location', 96 ) );
@@ -1836,7 +1836,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testMoveSubtreeDecrementsChildCountOfOldParent()
     {
-        $repository      = $this->getRepository();
+        $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
         $oldParentLocation = $locationService->loadLocation( $this->generateId( 'location', 2 ) );
@@ -1914,17 +1914,17 @@ class LocationServiceTest extends BaseTest
     {
         return array_merge(
             array(
-                'id'                =>  $location->id,
-                'depth'             =>  $location->depth,
-                'parentLocationId'  =>  $location->parentLocationId,
-                'pathString'        =>  $location->pathString,
-                'childCount'        =>  $location->childCount,
-                'remoteId'          =>  $location->remoteId,
-                'hidden'            =>  $location->hidden,
-                'invisible'         =>  $location->invisible,
-                'priority'          =>  $location->priority,
-                'sortField'         =>  $location->sortField,
-                'sortOrder'         =>  $location->sortOrder
+                'id' =>  $location->id,
+                'depth' =>  $location->depth,
+                'parentLocationId' =>  $location->parentLocationId,
+                'pathString' =>  $location->pathString,
+                'childCount' =>  $location->childCount,
+                'remoteId' =>  $location->remoteId,
+                'hidden' =>  $location->hidden,
+                'invisible' =>  $location->invisible,
+                'priority' =>  $location->priority,
+                'sortField' =>  $location->sortField,
+                'sortOrder' =>  $location->sortOrder
             ),
             $overwrite
         );

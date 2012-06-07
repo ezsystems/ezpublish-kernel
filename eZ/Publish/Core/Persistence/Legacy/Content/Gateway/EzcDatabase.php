@@ -457,11 +457,11 @@ class EzcDatabase extends Gateway
     {
         $row = $this->loadContentInfo( $contentId );
         return array(
-            'current_version'       => (int)$row['current_version'],
-            'language_mask'         => $row['language_mask'],
-            'initial_language_id'   => (int)$row['initial_language_id'],
-            'main_language_code'    => $row['main_language_code'],
-            'always_available'      => $row['always_available']
+            'current_version' => (int)$row['current_version'],
+            'language_mask' => $row['language_mask'],
+            'initial_language_id' => (int)$row['initial_language_id'],
+            'main_language_code' => $row['main_language_code'],
+            'always_available' => $row['always_available']
         );
     }
 

@@ -33,11 +33,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService    = $repository->getUserService();
+        $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         // Set anonymous user
@@ -61,11 +61,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService    = $repository->getUserService();
+        $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $sectionId = $sectionService->createSection( $sectionCreate )->id;
@@ -95,13 +95,13 @@ class SectionServiceAuthorizationTest extends BaseTest
         // $standardSectionId is the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
-        $userService    = $repository->getUserService();
+        $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
         $section = $sectionService->loadSection( $standardSectionId );
 
-        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
-        $sectionUpdate->name       = 'New section name';
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'New section name';
         $sectionUpdate->identifier = 'newUniqueKey';
 
         // Set anonymous user
@@ -125,16 +125,16 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService    = $repository->getUserService();
+        $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
         // Create some sections
-        $sectionCreateOne             = $sectionService->newSectionCreateStruct();
-        $sectionCreateOne->name       = 'Test section one';
+        $sectionCreateOne = $sectionService->newSectionCreateStruct();
+        $sectionCreateOne->name = 'Test section one';
         $sectionCreateOne->identifier = 'uniqueKeyOne';
 
-        $sectionCreateTwo             = $sectionService->newSectionCreateStruct();
-        $sectionCreateTwo->name       = 'Test section two';
+        $sectionCreateTwo = $sectionService->newSectionCreateStruct();
+        $sectionCreateTwo->name = 'Test section two';
         $sectionCreateTwo->identifier = 'uniqueKeyTwo';
 
         $sectionService->createSection( $sectionCreateOne );
@@ -160,11 +160,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService    = $repository->getUserService();
+        $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $sectionService->createSection( $sectionCreate );
@@ -196,7 +196,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         // RemoteId of the "Support" page of an eZ Publish demo installation
         $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
 
-        $userService    = $repository->getUserService();
+        $userService = $repository->getUserService();
         $contentService = $repository->getContentService();
         $sectionService = $repository->getSectionService();
 
@@ -228,11 +228,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService    = $repository->getUserService();
+        $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $section = $sectionService->createSection( $sectionCreate );

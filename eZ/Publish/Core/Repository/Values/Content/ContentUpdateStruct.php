@@ -43,9 +43,9 @@ class ContentUpdateStruct extends APIContentUpdateStruct
 
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $language
+                'fieldDefIdentifier' =>  $fieldDefIdentifier,
+                'value' =>  $value,
+                'languageCode' =>  $language
             )
         );
     }

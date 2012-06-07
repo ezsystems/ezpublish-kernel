@@ -294,7 +294,7 @@ class ContentService implements ContentServiceInterface
             throw new NotFoundException(
                 "Content",
                 array(
-                    "id"        => $contentId,
+                    "id" => $contentId,
                     "languages" => $languages,
                     "versionNo" => $versionNo
                 ),
@@ -314,7 +314,7 @@ class ContentService implements ContentServiceInterface
                     throw new NotFoundException(
                         "Content",
                         array(
-                            "id"        => $contentId,
+                            "id" => $contentId,
                             "languages" => $languages,
                             "versionNo" => $versionNo
                         )
@@ -508,12 +508,12 @@ class ContentService implements ContentServiceInterface
 
                 $spiFields[] = new SPIField(
                     array(
-                        "id"                => null,
+                        "id" => null,
                         "fieldDefinitionId" => $fieldDefinition->id,
-                        "type"              => $fieldDefinition->fieldTypeIdentifier,
-                        "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                        "languageCode"      => $languageCode,
-                        "versionNo"         => null
+                        "type" => $fieldDefinition->fieldTypeIdentifier,
+                        "value" => $fieldType->toPersistenceValue( $fieldValue ),
+                        "languageCode" => $languageCode,
+                        "versionNo" => null
                     )
                 );
             }
@@ -527,15 +527,15 @@ class ContentService implements ContentServiceInterface
         $spiContentCreateStruct = new SPIContentCreateStruct(
             array(
                 // @todo calculate names
-                "name"              => array( "eng-US" => "Some name" ),
-                "typeId"            => $contentCreateStruct->contentType->id,
-                "sectionId"         => $contentCreateStruct->sectionId,
-                "ownerId"           => $contentCreateStruct->ownerId,
-                "locations"         => $this->buildSPILocationCreateStructs( $locationCreateStructs ),
-                "fields"            => $spiFields,
-                "alwaysAvailable"   => $contentCreateStruct->alwaysAvailable,
-                "remoteId"          => $remoteId,
-                "modified"          => isset( $contentCreateStruct->modificationDate ) ?
+                "name" => array( "eng-US" => "Some name" ),
+                "typeId" => $contentCreateStruct->contentType->id,
+                "sectionId" => $contentCreateStruct->sectionId,
+                "ownerId" => $contentCreateStruct->ownerId,
+                "locations" => $this->buildSPILocationCreateStructs( $locationCreateStructs ),
+                "fields" => $spiFields,
+                "alwaysAvailable" => $contentCreateStruct->alwaysAvailable,
+                "remoteId" => $remoteId,
+                "modified" => isset( $contentCreateStruct->modificationDate ) ?
                     $contentCreateStruct->modificationDate->getTimestamp() : time(),
                 "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()
                     ->loadByLanguageCode( $contentCreateStruct->mainLanguageCode )->id
@@ -596,19 +596,19 @@ class ContentService implements ContentServiceInterface
 
             $spiLocationCreateStructs[] = new SPILocationCreateStruct(
                 array(
-                    "priority"                 => $locationCreateStruct->priority,
-                    "hidden"                   => $locationCreateStruct->hidden,
-                    "invisible"                => ( $locationCreateStruct->hidden === true || $parentLocation->hidden || $parentLocation->invisible ),
-                    "remoteId"                 => $locationCreateStruct->remoteId,
+                    "priority" => $locationCreateStruct->priority,
+                    "hidden" => $locationCreateStruct->hidden,
+                    "invisible" => ( $locationCreateStruct->hidden === true || $parentLocation->hidden || $parentLocation->invisible ),
+                    "remoteId" => $locationCreateStruct->remoteId,
                     // contentId and contentVersion are set in ContentHandler upon draft creation
-                    "contentId"                => null,
-                    "contentVersion"           => null,
+                    "contentId" => null,
+                    "contentVersion" => null,
                     // @todo: set pathIdentificationString
                     "pathIdentificationString" => null,
-                    "mainLocationId"          => ( $index === 0 ),
-                    "sortField"                => $locationCreateStruct->sortField,
-                    "sortOrder"                => $locationCreateStruct->sortOrder,
-                    "parentId"                 => $locationCreateStruct->parentLocationId
+                    "mainLocationId" => ( $index === 0 ),
+                    "sortField" => $locationCreateStruct->sortField,
+                    "sortOrder" => $locationCreateStruct->sortOrder,
+                    "parentId" => $locationCreateStruct->parentLocationId
                 )
             );
         }
@@ -700,19 +700,19 @@ class ContentService implements ContentServiceInterface
 
             $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
                 array(
-                    "ownerId"          => $contentMetadataUpdateStruct->ownerId,
+                    "ownerId" => $contentMetadataUpdateStruct->ownerId,
                     //@todo name should be computed
-                    //"name"             => $contentMetadataUpdateStruct->name,
-                    "publicationDate"  => isset( $contentMetadataUpdateStruct->publishedDate ) ?
+                    //"name" => $contentMetadataUpdateStruct->name,
+                    "publicationDate" => isset( $contentMetadataUpdateStruct->publishedDate ) ?
                                             $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
                     "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
                                             $contentMetadataUpdateStruct->modificationDate->getTimestamp() : null,
-                    "mainLanguageId"   => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
+                    "mainLanguageId" => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
                                             $this->repository->getContentLanguageService()->loadLanguage(
                                                 $contentMetadataUpdateStruct->mainLanguageCode
                                             )->id : null,
-                    "alwaysAvailable"  => $contentMetadataUpdateStruct->alwaysAvailable,
-                    "remoteId"         => $contentMetadataUpdateStruct->remoteId
+                    "alwaysAvailable" => $contentMetadataUpdateStruct->alwaysAvailable,
+                    "remoteId" => $contentMetadataUpdateStruct->remoteId
                 )
             );
             $this->persistenceHandler->contentHandler()->updateMetadata(
@@ -825,16 +825,16 @@ class ContentService implements ContentServiceInterface
 
             $versionInfoList[] = new VersionInfo(
                 array(
-                    "id"                  => $spiVersionInfo->id,
-                    "versionNo"           => $spiVersionInfo->versionNo,
-                    "modificationDate"    => new \DateTime( "@{$spiVersionInfo->modificationDate}" ),
-                    "creatorId"           => $spiVersionInfo->creatorId,
-                    "creationDate"        => new \DateTime( "@{$spiVersionInfo->creationDate}" ),
-                    "status"              => $spiVersionInfo->status,
+                    "id" => $spiVersionInfo->id,
+                    "versionNo" => $spiVersionInfo->versionNo,
+                    "modificationDate" => new \DateTime( "@{$spiVersionInfo->modificationDate}" ),
+                    "creatorId" => $spiVersionInfo->creatorId,
+                    "creationDate" => new \DateTime( "@{$spiVersionInfo->creationDate}" ),
+                    "status" => $spiVersionInfo->status,
                     "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
-                    "languageCodes"       => $languageCodes,
+                    "languageCodes" => $languageCodes,
                     // implementation properties
-                    "contentId"           => $spiVersionInfo->contentId
+                    "contentId" => $spiVersionInfo->contentId
                 )
             );
         }
@@ -960,12 +960,12 @@ class ContentService implements ContentServiceInterface
 
                 $spiFields[] = new SPIField(
                     array(
-                        "id"                => $contentField->id,
+                        "id" => $contentField->id,
                         "fieldDefinitionId" => $fieldDefinition->id,
-                        "type"              => $fieldDefinition->fieldTypeIdentifier,
-                        "value"             => $fieldType->toPersistenceValue( $fieldValue ),
-                        "languageCode"      => $languageCode,
-                        "versionNo"         => $versionInfo->versionNo
+                        "type" => $fieldDefinition->fieldTypeIdentifier,
+                        "value" => $fieldType->toPersistenceValue( $fieldValue ),
+                        "languageCode" => $languageCode,
+                        "versionNo" => $versionInfo->versionNo
                     )
                 );
             }
@@ -979,10 +979,10 @@ class ContentService implements ContentServiceInterface
         $spiContentUpdateStruct = new SPIContentUpdateStruct(
             array(
                 // @todo name should be calculated from name schema
-                "name"              => array(),
-                "creatorId"         => 10,//$this->repository->getCurrentUser()->id,
-                "fields"            => $spiFields,
-                "modificationDate"  => time(),
+                "name" => array(),
+                "creatorId" => 10,//$this->repository->getCurrentUser()->id,
+                "fields" => $spiFields,
+                "modificationDate" => time(),
                 "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()
                     ->loadByLanguageCode( $contentUpdateStruct->initialLanguageCode )->id
             )
@@ -1298,11 +1298,11 @@ class ContentService implements ContentServiceInterface
         $spiRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new SPIRelationCreateStruct(
                 array(
-                    'sourceContentId'         => $sourceContentInfo->id,
-                    'sourceContentVersionNo'  => $sourceVersion->versionNo,
+                    'sourceContentId' => $sourceContentInfo->id,
+                    'sourceContentVersionNo' => $sourceVersion->versionNo,
                     'sourceFieldDefinitionId' => null,
-                    'destinationContentId'    => $destinationContent->id,
-                    'type'                    => APIRelation::COMMON
+                    'destinationContentId' => $destinationContent->id,
+                    'type' => APIRelation::COMMON
                 )
             )
         );
@@ -1389,7 +1389,7 @@ class ContentService implements ContentServiceInterface
     {
         return new ContentCreateStruct(
             array(
-                "contentType"      => $contentType,
+                "contentType" => $contentType,
                 "mainLanguageCode" => $mainLanguageCode
             )
         );

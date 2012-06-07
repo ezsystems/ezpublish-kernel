@@ -38,19 +38,19 @@ abstract class LocationBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'                      => null,
-                'priority'                => null,
-                'hidden'                  => null,
-                'invisible'               => null,
-                'remoteId'                => null,
-                'parentLocationId'        => null,
-                'pathString'              => null,
-                'path'                    => array(),
+                'id' => null,
+                'priority' => null,
+                'hidden' => null,
+                'invisible' => null,
+                'remoteId' => null,
+                'parentLocationId' => null,
+                'pathString' => null,
+                'path' => array(),
                 'modifiedSubLocationDate' => null,
-                'depth'                   => null,
-                'sortField'               => null,
-                'sortOrder'               => null,
-                'childCount'              => null
+                'depth' => null,
+                'sortField' => null,
+                'sortOrder' => null,
+                'childCount' => null
             ),
             $location
         );
@@ -489,17 +489,17 @@ abstract class LocationBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'priority'                => $locationCreateStruct->priority,
-                'hidden'                  => $locationCreateStruct->hidden,
-                'invisible'               => $locationCreateStruct->hidden,
-                'remoteId'                => $locationCreateStruct->remoteId,
-                'parentLocationId'        => $locationCreateStruct->parentLocationId,
-                'pathString'              => $parentLocation->pathString . $createdLocation->id . '/',
-                'path'                    => $createdPath,
-                'depth'                   => $parentLocation->depth + 1,
-                'sortField'               => $locationCreateStruct->sortField,
-                'sortOrder'               => $locationCreateStruct->sortOrder,
-                'childCount'              => 0
+                'priority' => $locationCreateStruct->priority,
+                'hidden' => $locationCreateStruct->hidden,
+                'invisible' => $locationCreateStruct->hidden,
+                'remoteId' => $locationCreateStruct->remoteId,
+                'parentLocationId' => $locationCreateStruct->parentLocationId,
+                'pathString' => $parentLocation->pathString . $createdLocation->id . '/',
+                'path' => $createdPath,
+                'depth' => $parentLocation->depth + 1,
+                'sortField' => $locationCreateStruct->sortField,
+                'sortOrder' => $locationCreateStruct->sortOrder,
+                'childCount' => 0
             ),
             $createdLocation
         );
@@ -574,10 +574,10 @@ abstract class LocationBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'priority'  => $locationUpdateStruct->priority,
+                'priority' => $locationUpdateStruct->priority,
                 'sortField' => $locationUpdateStruct->sortField,
                 'sortOrder' => $locationUpdateStruct->sortOrder,
-                'remoteId'  => $locationUpdateStruct->remoteId
+                'remoteId' => $locationUpdateStruct->remoteId
             ),
             $location
         );
@@ -691,11 +691,11 @@ abstract class LocationBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'priority'         => 0,
-                'hidden'           => false,
-                'remoteId'         => null,
-                'sortField'        => Location::SORT_FIELD_NAME,
-                'sortOrder'        => Location::SORT_ORDER_ASC,
+                'priority' => 0,
+                'hidden' => false,
+                'remoteId' => null,
+                'sortField' => Location::SORT_FIELD_NAME,
+                'sortOrder' => Location::SORT_ORDER_ASC,
                 'parentLocationId' => 2
             ),
             $locationCreateStruct
@@ -715,10 +715,10 @@ abstract class LocationBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'priority'         => null,
-                'remoteId'         => null,
-                'sortField'        => null,
-                'sortOrder'        => null
+                'priority' => null,
+                'remoteId' => null,
+                'sortField' => null,
+                'sortOrder' => null
             ),
             $locationUpdateStruct
         );

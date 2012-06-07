@@ -34,18 +34,18 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
 
         $creatorId = $this->generateId( 'user', 23 );
         /* BEGIN: Use Case */
-        $userService        = $repository->getUserService();
+        $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
 
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
         // $creatorId is the ID of user 23
-        $groupCreate->creatorId        = $creatorId;
-        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->creatorId = $creatorId;
+        $groupCreate->creationDate = new \DateTime();
         $groupCreate->mainLanguageCode = 'de-DE';
-        $groupCreate->names            = array( 'eng-GB' => 'A name.' );
-        $groupCreate->descriptions     = array( 'eng-GB' => 'A description.' );
+        $groupCreate->names = array( 'eng-GB' => 'A name.' );
+        $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
 
         // Set anonymous user
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
@@ -69,16 +69,16 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
 
         $modifierId = $this->generateId( 'user', 24 );
         /* BEGIN: Use Case */
-        $userService        = $repository->getUserService();
+        $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
 
         $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' );
 
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
 
-        $groupUpdate->identifier       = 'Teardown';
+        $groupUpdate->identifier = 'Teardown';
         // $modifierId is the ID of user 42
-        $groupUpdate->modifierId       = $modifierId;
+        $groupUpdate->modifierId = $modifierId;
         $groupUpdate->modificationDate = new \DateTime();
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
@@ -112,7 +112,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService        = $repository->getUserService();
+        $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
 
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
@@ -142,7 +142,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      */
     public function testUpdateContentTypeDraftThrowsUnauthorizedException()
     {
-        $repository         = $this->getRepository();
+        $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
         $modifierId = $this->generateId( 'user', 24 );
@@ -150,23 +150,23 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $contentTypeDraft = $this->createContentTypeDraft();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
-        $typeUpdate->identifier             = 'news-article';
-        $typeUpdate->remoteId               = '4cf35f5166fd31bf0cda859dc837e095daee9833';
-        $typeUpdate->urlAliasSchema         = 'url@alias|scheme';
-        $typeUpdate->nameSchema             = '@name@scheme@';
-        $typeUpdate->isContainer            = true;
-        $typeUpdate->mainLanguageCode       = 'de-DE';
+        $typeUpdate->identifier = 'news-article';
+        $typeUpdate->remoteId = '4cf35f5166fd31bf0cda859dc837e095daee9833';
+        $typeUpdate->urlAliasSchema = 'url@alias|scheme';
+        $typeUpdate->nameSchema = '@name@scheme@';
+        $typeUpdate->isContainer = true;
+        $typeUpdate->mainLanguageCode = 'de-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
         // $modifierId is the ID of user 42
-        $typeUpdate->modifierId             = $modifierId;
-        $typeUpdate->modificationDate       = new \DateTime();
-        $typeUpdate->names                  = array(
+        $typeUpdate->modifierId = $modifierId;
+        $typeUpdate->modificationDate = new \DateTime();
+        $typeUpdate->names = array(
             'eng-GB' => 'News article',
-            'de-DE'  => 'Nachrichten-Artikel',
+            'de-DE' => 'Nachrichten-Artikel',
         );
         $typeUpdate->descriptions = array(
             'eng-GB' => 'A news article',
-            'de-DE'  => 'Ein Nachrichten-Artikel',
+            'de-DE' => 'Ein Nachrichten-Artikel',
         );
 
         // Load the user service
@@ -191,7 +191,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      */
     public function testAddFieldDefinitionThrowsUnauthorizedException()
     {
-        $repository         = $this->getRepository();
+        $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
@@ -208,12 +208,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
             'eng-GB' => 'Tags of the blog post',
             'de-DE' => 'Schlagworte des Blog-Eintrages',
         );
-        $fieldDefCreate->fieldGroup      = 'blog-meta';
-        $fieldDefCreate->position        = 1;
-        $fieldDefCreate->isTranslatable  = true;
-        $fieldDefCreate->isRequired      = true;
+        $fieldDefCreate->fieldGroup = 'blog-meta';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = true;
+        $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->validators      = array(
+        $fieldDefCreate->validators = array(
             new StringLengthValidatorStub(),
         );
         $fieldDefCreate->fieldSettings = array(
@@ -242,7 +242,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      */
     public function testRemoveFieldDefinitionThrowsUnauthorizedException()
     {
-        $repository         = $this->getRepository();
+        $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
@@ -271,7 +271,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      */
     public function testUpdateFieldDefinitionThrowsUnauthorizedException()
     {
-        $repository         = $this->getRepository();
+        $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
@@ -295,12 +295,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
             'eng-GB' => 'Blog post body of the blog post',
             'de-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
         );
-        $bodyUpdateStruct->fieldGroup      = 'updated-blog-content';
-        $bodyUpdateStruct->position        = 3;
-        $bodyUpdateStruct->isTranslatable  = false;
-        $bodyUpdateStruct->isRequired      = false;
+        $bodyUpdateStruct->fieldGroup = 'updated-blog-content';
+        $bodyUpdateStruct->position = 3;
+        $bodyUpdateStruct->isTranslatable = false;
+        $bodyUpdateStruct->isRequired = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->validators      = array();
+        $bodyUpdateStruct->validators = array();
         $bodyUpdateStruct->fieldSettings = array(
             'textblockheight' => 60
         );
@@ -325,7 +325,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      */
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
-        $repository         = $this->getRepository();
+        $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
         /* BEGIN: Use Case */
@@ -472,7 +472,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
 
         $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
 
-        $mediaGroup   = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
+        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
         $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
 
         // May not unassign last group

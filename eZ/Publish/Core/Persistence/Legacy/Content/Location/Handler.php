@@ -70,9 +70,9 @@ class Handler implements BaseLocationHandler
     )
     {
         $this->locationGateway = $locationGateway;
-        $this->locationMapper  = $locationMapper;
-        $this->contentHandler  = $contentHandler;
-        $this->contentMapper   = $contentMapper;
+        $this->locationMapper = $locationMapper;
+        $this->contentHandler = $contentHandler;
+        $this->contentMapper = $contentMapper;
     }
 
     /**

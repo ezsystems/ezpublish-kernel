@@ -36,13 +36,13 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'            => null,
-                'login'         => null,
-                'email'         => null,
-                'passwordHash'  => null,
+                'id' => null,
+                'login' => null,
+                'email' => null,
+                'passwordHash' => null,
                 'hashAlgorithm' => null,
-                'maxLogin'      => null,
-                'isEnabled'     => null
+                'maxLogin' => null,
+                'isEnabled' => null
             ),
             $user
         );
@@ -54,8 +54,8 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'            => null,
-                'parentId'      => null,
+                'id' => null,
+                'parentId' => null,
                 'subGroupCount' => null
             ),
             $group
@@ -550,13 +550,13 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'            => 14,
-                'login'         => 'admin',
-                'email'         => 'kn@ez.no',
-                'passwordHash'  => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
+                'id' => 14,
+                'login' => 'admin',
+                'email' => 'kn@ez.no',
+                'passwordHash' => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
                 'hashAlgorithm' => User::PASSWORD_HASH_MD5_USER,
-                'isEnabled'     => true,
-                'maxLogin'      => 10
+                'isEnabled' => true,
+                'maxLogin' => 10
             ),
             $loadedUser
         );
@@ -842,11 +842,11 @@ abstract class UserBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'mainLanguageCode' => 'eng-GB',
-                'login'            => 'admin',
-                'email'            => 'admin@ez.no',
-                'password'         => 'password',
-                'enabled'          => true,
-                'fields'           => array()
+                'login' => 'admin',
+                'email' => 'admin@ez.no',
+                'password' => 'password',
+                'enabled' => true,
+                'fields' => array()
             ),
             $userCreateStruct
         );
@@ -885,10 +885,10 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'email'                       => null,
-                'password'                    => null,
-                'isEnabled'                   => null,
-                'maxLogin'                    => null
+                'email' => null,
+                'password' => null,
+                'isEnabled' => null,
+                'maxLogin' => null
             ),
             $userUpdateStruct
         );

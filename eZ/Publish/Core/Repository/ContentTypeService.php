@@ -115,13 +115,13 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         $spiGroupCreateStruct = new SPIContentTypeGroupCreateStruct(
             array(
-                "name"        => $contentTypeGroupCreateStruct->names,
+                "name" => $contentTypeGroupCreateStruct->names,
                 "description" => $contentTypeGroupCreateStruct->descriptions,
-                "identifier"  => $contentTypeGroupCreateStruct->identifier,
-                "created"     => $timestamp,
-                "modified"    => $timestamp,
-                "creatorId"   => $userId,
-                "modifierId"  => $userId
+                "identifier" => $contentTypeGroupCreateStruct->identifier,
+                "created" => $timestamp,
+                "modified" => $timestamp,
+                "creatorId" => $userId,
+                "modifierId" => $userId
             )
         );
 
@@ -226,12 +226,12 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
             array(
-                "id"          => $contentTypeGroup->id,
-                "name"        => $contentTypeGroupUpdateStruct->names,
+                "id" => $contentTypeGroup->id,
+                "name" => $contentTypeGroupUpdateStruct->names,
                 "description" => $contentTypeGroupUpdateStruct->descriptions,
-                "identifier"  => $contentTypeGroupUpdateStruct->identifier,
-                "modified"    => $modifiedTimestamp,
-                "modifierId"  => $contentTypeGroupUpdateStruct->modifierId
+                "identifier" => $contentTypeGroupUpdateStruct->identifier,
+                "modified" => $modifiedTimestamp,
+                "modifierId" => $contentTypeGroupUpdateStruct->modifierId
             )
         );
 
@@ -284,14 +284,14 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return new ContentTypeGroup(
             array(
-                "id"               => $spiGroup->id,
-                "identifier"       => $spiGroup->identifier,
-                "creationDate"     => $creationDate,
+                "id" => $spiGroup->id,
+                "identifier" => $spiGroup->identifier,
+                "creationDate" => $creationDate,
                 "modificationDate" => $modificationDate,
-                "creatorId"        => $spiGroup->creatorId,
-                "modifierId"       => $spiGroup->modifierId,
-                "names"            => $spiGroup->name,
-                "descriptions"     => $spiGroup->description
+                "creatorId" => $spiGroup->creatorId,
+                "modifierId" => $spiGroup->modifierId,
+                "names" => $spiGroup->name,
+                "descriptions" => $spiGroup->description
             )
         );
     }
@@ -373,23 +373,23 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         $spiContentTypeCreateStruct = new SPIContentTypeCreateStruct(
             array(
-                "name"                   => $contentTypeCreateStruct->names,
-                "status"                 => APIContentType::STATUS_DRAFT,
-                "description"            => $contentTypeCreateStruct->descriptions,
-                "identifier"             => $contentTypeCreateStruct->identifier,
-                "created"                => $timestamp,
-                "modified"               => $timestamp,
-                "creatorId"              => $userId,
-                "modifierId"             => $userId,
-                "remoteId"               => $contentTypeCreateStruct->remoteId,
-                "urlAliasSchema"         => $contentTypeCreateStruct->urlAliasSchema,
-                "nameSchema"             => $contentTypeCreateStruct->nameSchema,
-                "isContainer"            => $contentTypeCreateStruct->isContainer,
-                "initialLanguageId"      => $initialLanguageId,
-                "sortField"              => $contentTypeCreateStruct->defaultSortField,
-                "sortOrder"              => $contentTypeCreateStruct->defaultSortOrder,
-                "groupIds"               => $groupIds,
-                "fieldDefinitions"       => $fieldDefinitions,
+                "name" => $contentTypeCreateStruct->names,
+                "status" => APIContentType::STATUS_DRAFT,
+                "description" => $contentTypeCreateStruct->descriptions,
+                "identifier" => $contentTypeCreateStruct->identifier,
+                "created" => $timestamp,
+                "modified" => $timestamp,
+                "creatorId" => $userId,
+                "modifierId" => $userId,
+                "remoteId" => $contentTypeCreateStruct->remoteId,
+                "urlAliasSchema" => $contentTypeCreateStruct->urlAliasSchema,
+                "nameSchema" => $contentTypeCreateStruct->nameSchema,
+                "isContainer" => $contentTypeCreateStruct->isContainer,
+                "initialLanguageId" => $initialLanguageId,
+                "sortField" => $contentTypeCreateStruct->defaultSortField,
+                "sortOrder" => $contentTypeCreateStruct->defaultSortOrder,
+                "groupIds" => $groupIds,
+                "fieldDefinitions" => $fieldDefinitions,
                 "defaultAlwaysAvailable" => $contentTypeCreateStruct->defaultAlwaysAvailable
             )
         );
@@ -845,18 +845,18 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         $spiContentTypeUpdateStruct = new SPIContentTypeUpdateStruct(
             array(
-                "name"                   => $contentTypeUpdateStruct->names,
-                "description"            => $contentTypeUpdateStruct->descriptions,
-                "identifier"             => $contentTypeUpdateStruct->identifier,
-                "modified"               => $timestamp,
-                "modifierId"             => $userId,
-                "remoteId"               => $contentTypeUpdateStruct->remoteId,
-                "urlAliasSchema"         => $contentTypeUpdateStruct->urlAliasSchema,
-                "nameSchema"             => $contentTypeUpdateStruct->nameSchema,
-                "isContainer"            => $contentTypeUpdateStruct->isContainer,
-                "initialLanguageId"      => $initialLanguageId,
-                "sortField"              => $contentTypeUpdateStruct->defaultSortField,
-                "sortOrder"              => $contentTypeUpdateStruct->defaultSortOrder,
+                "name" => $contentTypeUpdateStruct->names,
+                "description" => $contentTypeUpdateStruct->descriptions,
+                "identifier" => $contentTypeUpdateStruct->identifier,
+                "modified" => $timestamp,
+                "modifierId" => $userId,
+                "remoteId" => $contentTypeUpdateStruct->remoteId,
+                "urlAliasSchema" => $contentTypeUpdateStruct->urlAliasSchema,
+                "nameSchema" => $contentTypeUpdateStruct->nameSchema,
+                "isContainer" => $contentTypeUpdateStruct->isContainer,
+                "initialLanguageId" => $initialLanguageId,
+                "sortField" => $contentTypeUpdateStruct->defaultSortField,
+                "sortOrder" => $contentTypeUpdateStruct->defaultSortOrder,
                 "defaultAlwaysAvailable" => $contentTypeUpdateStruct->defaultAlwaysAvailable
             )
         );
@@ -1215,7 +1215,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return new FieldDefinitionCreateStruct(
             array(
-                "identifier"          => $identifier,
+                "identifier" => $identifier,
                 "fieldTypeIdentifier" => $fieldTypeIdentifier
             )
         );

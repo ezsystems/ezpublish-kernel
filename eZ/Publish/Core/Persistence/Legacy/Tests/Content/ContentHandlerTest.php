@@ -118,10 +118,10 @@ class ContentHandlerTest extends TestCase
     {
         $handler = $this->getContentHandler();
 
-        $mapperMock         = $this->getMapperMock();
-        $gatewayMock        = $this->getGatewayMock();
-        $fieldHandlerMock   = $this->getFieldHandlerMock();
-        $locationMock       = $this->getLocationGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+        $locationMock = $this->getLocationGatewayMock();
 
         $mapperMock->expects( $this->once() )
             ->method( 'createContentFromCreateStruct' )
@@ -606,7 +606,7 @@ class ContentHandlerTest extends TestCase
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();
-        $fieldHandlerMock  = $this->getFieldHandlerMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( "deleteFields" )
@@ -637,7 +637,7 @@ class ContentHandlerTest extends TestCase
     {
         $handlerMock = $this->getPartlyMockedHandler( array( "removeRawContent" ) );
         $gatewayMock = $this->getGatewayMock();
-        $locationHandlerMock  = $this->getLocationHandlerMock();
+        $locationHandlerMock = $this->getLocationHandlerMock();
 
         $gatewayMock->expects( $this->once() )
             ->method( "getAllLocationIds" )
@@ -665,7 +665,7 @@ class ContentHandlerTest extends TestCase
 
         $gatewayMock = $this->getGatewayMock();
         $locationHandlerMock = $this->getLocationGatewayMock();
-        $fieldHandlerMock  = $this->getFieldHandlerMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
 
         $locationHandlerMock->expects( $this->once() )
             ->method( 'deleteNodeAssignment' )
@@ -837,10 +837,10 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo(
                     new VersionInfo(
                         array(
-                            "contentId"        => 24,
-                            "creationDate"     => $time,
+                            "contentId" => 24,
+                            "creationDate" => $time,
                             "modificationDate" => $time,
-                            "names"            => array( "eng-US" => "Test" )
+                            "names" => array( "eng-US" => "Test" )
                         )
                     )
                 ),
@@ -856,16 +856,16 @@ class ContentHandlerTest extends TestCase
                         array(
                             "versionInfo" => new VersionInfo(
                                 array(
-                                    "id"               => 42,
-                                    "contentId"        => 24,
-                                    "creationDate"     => $time,
+                                    "id" => 42,
+                                    "contentId" => 24,
+                                    "creationDate" => $time,
                                     "modificationDate" => $time,
-                                    "names"            => array( "eng-US" => "Test" )
+                                    "names" => array( "eng-US" => "Test" )
                                 )
                             ),
                             "contentInfo" => new ContentInfo(
                                 array(
-                                    "id"                => 24,
+                                    "id" => 24,
                                     "isAlwaysAvailable" => true
                                 )
                             ),

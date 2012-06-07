@@ -33,18 +33,18 @@ abstract class TrashBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'                      => null,
-                'priority'                => null,
-                'hidden'                  => null,
-                'invisible'               => null,
-                'remoteId'                => null,
-                'parentLocationId'        => null,
-                'pathString'              => null,
+                'id' => null,
+                'priority' => null,
+                'hidden' => null,
+                'invisible' => null,
+                'remoteId' => null,
+                'parentLocationId' => null,
+                'pathString' => null,
                 'modifiedSubLocationDate' => null,
-                'depth'                   => null,
-                'sortField'               => null,
-                'sortOrder'               => null,
-                'childCount'              => null
+                'depth' => null,
+                'sortField' => null,
+                'sortOrder' => null,
+                'childCount' => null
             ),
             $trashItem
         );

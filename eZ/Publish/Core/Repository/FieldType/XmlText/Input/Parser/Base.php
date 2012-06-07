@@ -94,7 +94,7 @@ abstract class Base
      *
      * <code>
      * public $OutputTags = array(
-     *    'custom'    => array( 'parsingHandler' => 'parsingHandlerCustom',
+     *    'custom' => array( 'parsingHandler' => 'parsingHandlerCustom',
      *                          'initHandler' => 'initHandlerCustom',
      *                          'structHandler' => 'structHandlerCustom',
      *                          'publishHandler' => 'publishHandlerCustom',

@@ -87,13 +87,13 @@ class SectionServiceStub implements SectionService
 
         $section = new Section(
             array(
-                'id'          =>  ++$this->nextId,
-                'name'        =>  $sectionCreateStruct->name,
-                'identifier'  =>  $sectionCreateStruct->identifier
+                'id' =>  ++$this->nextId,
+                'name' =>  $sectionCreateStruct->name,
+                'identifier' =>  $sectionCreateStruct->identifier
             )
         );
 
-        $this->sections[$section->id]            = $section;
+        $this->sections[$section->id] = $section;
         $this->identifiers[$section->identifier] = $section->id;
 
         return $section;
@@ -125,15 +125,15 @@ class SectionServiceStub implements SectionService
 
         $updatedSection = new Section(
             array(
-                'id'          =>  $section->id,
-                'name'        =>  ( $sectionUpdateStruct->name ? $sectionUpdateStruct->name : $section->name ),
-                'identifier'  =>  ( $sectionUpdateStruct->identifier ? $sectionUpdateStruct->identifier : $section->identifier )
+                'id' =>  $section->id,
+                'name' =>  ( $sectionUpdateStruct->name ? $sectionUpdateStruct->name : $section->name ),
+                'identifier' =>  ( $sectionUpdateStruct->identifier ? $sectionUpdateStruct->identifier : $section->identifier )
             )
         );
 
         unset( $this->identifiers[$section->identifier] );
 
-        $this->sections[$updatedSection->id]            = $updatedSection;
+        $this->sections[$updatedSection->id] = $updatedSection;
         $this->identifiers[$updatedSection->identifier] = $updatedSection->id;
 
         return $updatedSection;

@@ -79,11 +79,11 @@ class URLAliasServiceStub implements URLAliasService
         $this->checkAliasNotExists( $path, $languageCode );
 
         $data = array(
-            'destination'     => $location,
-            'path'            => $path,
-            'languageCodes'   => array( $languageCode ),
+            'destination' => $location,
+            'path' => $path,
+            'languageCodes' => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
-            'forward'         => $forwarding,
+            'forward' => $forwarding,
         );
 
         return $this->createLocationUrlAlias( $data );
@@ -114,15 +114,15 @@ class URLAliasServiceStub implements URLAliasService
         $this->checkAliasNotExists( $path, $languageCode );
 
         $data = array(
-            'id'              => ++$this->nextAliasId,
-            'type'            => URLAlias::RESOURCE,
-            'destination'     => $resource,
-            'path'            => $path,
-            'languageCodes'   => array( $languageCode ),
+            'id' => ++$this->nextAliasId,
+            'type' => URLAlias::RESOURCE,
+            'destination' => $resource,
+            'path' => $path,
+            'languageCodes' => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
-            'isHistory'       => false,
-            'isCustom'        => true,
-            'forward'         => $forward,
+            'isHistory' => false,
+            'isCustom' => true,
+            'forward' => $forward,
         );
         return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
     }
@@ -283,7 +283,7 @@ class URLAliasServiceStub implements URLAliasService
     public function _createAliasesForLocation( Location $location )
     {
         $contentService = $this->repository->getContentService();
-        $content        = $contentService->loadContent(
+        $content = $contentService->loadContent(
             $location->getContentInfo()->id
         );
 
@@ -438,10 +438,10 @@ class URLAliasServiceStub implements URLAliasService
 
         return $this->createLocationUrlAlias(
             array(
-                'destination'     => $location,
-                'path'            => $path,
-                'languageCodes'   => array( $languageCode ),
-                'isCustom'        => false,
+                'destination' => $location,
+                'path' => $path,
+                'languageCodes' => array( $languageCode ),
+                'isCustom' => false,
                 'alwaysAvailable' => $alwaysAvailable,
             )
         );
@@ -461,16 +461,16 @@ class URLAliasServiceStub implements URLAliasService
 
         $this->createLocationUrlAlias(
             array(
-                'id'              => $alias->id,
-                'type'            => $alias->type,
-                'destination'     => $alias->destination,
-                'path'            => $alias->path,
-                'languageCodes'   => $alias->languageCodes,
+                'id' => $alias->id,
+                'type' => $alias->type,
+                'destination' => $alias->destination,
+                'path' => $alias->path,
+                'languageCodes' => $alias->languageCodes,
                 'alwaysAvailable' => $alias->alwaysAvailable,
-                'isCustom'        => $alias->isCustom,
-                'forward'         => $alias->forward,
+                'isCustom' => $alias->isCustom,
+                'forward' => $alias->forward,
 
-                'isHistory'       => true,
+                'isHistory' => true,
             )
         );
     }
@@ -502,12 +502,12 @@ class URLAliasServiceStub implements URLAliasService
     {
         $properties = array_merge(
             array(
-                'id'              => ++$this->nextAliasId,
-                'type'            => URLAlias::LOCATION,
-                'isHistory'       => false,
-                'isCustom'        => true,
+                'id' => ++$this->nextAliasId,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+                'isCustom' => true,
                 'alwaysAvailable' => true,
-                'forward'         => false,
+                'forward' => false,
             ),
             $properties
         );
@@ -560,7 +560,7 @@ class URLAliasServiceStub implements URLAliasService
      */
     private function initFromFixture()
     {
-        $this->aliases     = array();
+        $this->aliases = array();
         $this->nextAliasId = 0;
 
         list(
@@ -571,7 +571,7 @@ class URLAliasServiceStub implements URLAliasService
         foreach ( $aliases as $alias )
         {
             $this->aliases[$alias->id] = $alias;
-            $this->nextAliasId         = max( $this->nextAliasId, $alias->id );
+            $this->nextAliasId = max( $this->nextAliasId, $alias->id );
         }
     }
 }

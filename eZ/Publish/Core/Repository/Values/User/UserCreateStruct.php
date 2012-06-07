@@ -43,8 +43,8 @@ class UserCreateStruct extends APIUserCreateStruct
         $this->fields[] = new Field(
             array(
                 'fieldDefIdentifier' => $fieldDefIdentifier,
-                'value'              => $value,
-                'languageCode'       => $language
+                'value' => $value,
+                'languageCode' => $language
             )
         );
     }

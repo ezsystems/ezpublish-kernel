@@ -190,9 +190,9 @@ class TrashHandlerTest extends TestCase
                     $this->returnValue(
                         new Trashed(
                             array(
-                                'id'            => $trashedElement['node_id'],
-                                'contentId'     => $trashedElement['contentobject_id'],
-                                'pathString'    => $trashedElement['path_string']
+                                'id' => $trashedElement['node_id'],
+                                'contentId' => $trashedElement['contentobject_id'],
+                                'pathString' => $trashedElement['path_string']
                             )
                         )
                     )
@@ -231,9 +231,9 @@ class TrashHandlerTest extends TestCase
             ->will(
                 $this->returnValue(
                     array(
-                        'node_id'           => 69,
-                        'contentobject_id'  => 67,
-                        'path_string'       => '/1/2/69'
+                        'node_id' => 69,
+                        'contentobject_id' => 67,
+                        'path_string' => '/1/2/69'
                     )
                 )
             );
@@ -245,9 +245,9 @@ class TrashHandlerTest extends TestCase
                 $this->returnValue(
                     new Trashed(
                         array(
-                            'id'            => 69,
-                            'contentId'     => 67,
-                            'pathString'    => '/1/2/69'
+                            'id' => 69,
+                            'contentId' => 67,
+                            'pathString' => '/1/2/69'
                         )
                     )
                 )
@@ -286,9 +286,9 @@ class TrashHandlerTest extends TestCase
             ->will(
                 $this->returnValue(
                     array(
-                        'node_id'           => 69,
-                        'contentobject_id'  => 67,
-                        'path_string'       => '/1/2/69'
+                        'node_id' => 69,
+                        'contentobject_id' => 67,
+                        'path_string' => '/1/2/69'
                     )
                 )
             );
@@ -300,9 +300,9 @@ class TrashHandlerTest extends TestCase
                 $this->returnValue(
                     new Trashed(
                         array(
-                            'id'            => 69,
-                            'contentId'     => 67,
-                            'pathString'    => '/1/2/69'
+                            'id' => 69,
+                            'contentId' => 67,
+                            'pathString' => '/1/2/69'
                         )
                     )
                 )

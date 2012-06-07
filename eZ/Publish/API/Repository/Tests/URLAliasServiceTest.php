@@ -107,14 +107,14 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'type'            => URLAlias::LOCATION,
-                'destination'     => $location,
-                'path'            => '/Home/My-New-Site',
-                'languageCodes'   => array( 'eng-US' ),
+                'type' => URLAlias::LOCATION,
+                'destination' => $location,
+                'path' => '/Home/My-New-Site',
+                'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
-                'isHistory'       => false,
-                'isCustom'        => true,
-                'forward'         => false,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => false,
             ),
             $createdUrlAlias
         );
@@ -166,14 +166,14 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'type'            => URLAlias::LOCATION,
-                'destination'     => $location,
-                'path'            => '/Home/My-New-Site',
-                'languageCodes'   => array( 'eng-US' ),
+                'type' => URLAlias::LOCATION,
+                'destination' => $location,
+                'path' => '/Home/My-New-Site',
+                'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
-                'isHistory'       => false,
-                'isCustom'        => true,
-                'forward'         => true,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => true,
             ),
             $createdUrlAlias
         );
@@ -225,14 +225,14 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'type'            => URLAlias::LOCATION,
-                'destination'     => $location,
-                'path'            => '/Home/My-New-Site',
-                'languageCodes'   => array( 'eng-US' ),
+                'type' => URLAlias::LOCATION,
+                'destination' => $location,
+                'path' => '/Home/My-New-Site',
+                'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => true,
-                'isHistory'       => false,
-                'isCustom'        => true,
-                'forward'         => false,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => false,
             ),
             $createdUrlAlias
         );
@@ -304,14 +304,14 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'type'            => URLAlias::RESOURCE,
-                'destination'     => '/Home/My-Site',
-                'path'            => '/Home/My-New-Site',
-                'languageCodes'   => array( 'eng-US' ),
+                'type' => URLAlias::RESOURCE,
+                'destination' => '/Home/My-Site',
+                'path' => '/Home/My-New-Site',
+                'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
-                'isHistory'       => false,
-                'isCustom'        => true,
-                'forward'         => false,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => false,
             ),
             $createdUrlAlias
         );
@@ -354,14 +354,14 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'type'            => URLAlias::RESOURCE,
-                'destination'     => '/Home/My-Site',
-                'path'            => '/Home/My-New-Site',
-                'languageCodes'   => array( 'eng-US' ),
+                'type' => URLAlias::RESOURCE,
+                'destination' => '/Home/My-Site',
+                'path' => '/Home/My-New-Site',
+                'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
-                'isHistory'       => false,
-                'isCustom'        => true,
-                'forward'         => true,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => true,
             ),
             $createdUrlAlias
         );
@@ -404,14 +404,14 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'type'            => URLAlias::RESOURCE,
-                'destination'     => '/Home/My-Site',
-                'path'            => '/Home/My-New-Site',
-                'languageCodes'   => array( 'eng-US' ),
+                'type' => URLAlias::RESOURCE,
+                'destination' => '/Home/My-Site',
+                'path' => '/Home/My-New-Site',
+                'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => true,
-                'isHistory'       => false,
-                'isCustom'        => true,
-                'forward'         => false,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => false,
             ),
             $createdUrlAlias
         );
@@ -609,7 +609,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     private function createGlobalAliases()
     {
-        $repository      = $this->getRepository();
+        $repository = $this->getRepository();
         $urlAliasService = $repository->getURLAliasService();
 
         /* BEGIN: Inline */

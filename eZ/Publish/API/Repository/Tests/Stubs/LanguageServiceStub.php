@@ -69,8 +69,8 @@ class LanguageServiceStub implements LanguageService
         $defaultLanguageCode
     )
     {
-        $this->repository          = $repository;
-        $this->contentService      = $contentService;
+        $this->repository = $repository;
+        $this->contentService = $contentService;
         $this->defaultLanguageCode = $defaultLanguageCode;
 
         $this->initFromFixture();
@@ -99,14 +99,14 @@ class LanguageServiceStub implements LanguageService
 
         $language = new Language(
             array(
-                'id'            =>  ++$this->nextId,
-                'name'          =>  $languageCreateStruct->name,
-                'enabled'       =>  $languageCreateStruct->enabled,
-                'languageCode'  =>  $languageCreateStruct->languageCode
+                'id' =>  ++$this->nextId,
+                'name' =>  $languageCreateStruct->name,
+                'enabled' =>  $languageCreateStruct->enabled,
+                'languageCode' =>  $languageCreateStruct->languageCode
             )
         );
 
-        $this->languages[$language->id]       = $language;
+        $this->languages[$language->id] = $language;
         $this->codes[$language->languageCode] = $language->id;
 
         return $language;
@@ -131,10 +131,10 @@ class LanguageServiceStub implements LanguageService
 
         $this->languages[$language->id] = new Language(
             array(
-                'id'            =>  $language->id,
-                'name'          =>  $newName,
-                'enabled'       =>  $language->enabled,
-                'languageCode'  =>  $language->languageCode
+                'id' =>  $language->id,
+                'name' =>  $newName,
+                'enabled' =>  $language->enabled,
+                'languageCode' =>  $language->languageCode
             )
         );
 
@@ -157,10 +157,10 @@ class LanguageServiceStub implements LanguageService
 
         $this->languages[$language->id] = new Language(
             array(
-                'id'            =>  $language->id,
-                'name'          =>  $language->name,
-                'enabled'       =>  true,
-                'languageCode'  =>  $language->languageCode
+                'id' =>  $language->id,
+                'name' =>  $language->name,
+                'enabled' =>  true,
+                'languageCode' =>  $language->languageCode
             )
         );
     }
@@ -181,10 +181,10 @@ class LanguageServiceStub implements LanguageService
 
         $this->languages[$language->id] = new Language(
             array(
-                'id'            =>  $language->id,
-                'name'          =>  $language->name,
-                'enabled'       =>  false,
-                'languageCode'  =>  $language->languageCode
+                'id' =>  $language->id,
+                'name' =>  $language->name,
+                'enabled' =>  false,
+                'languageCode' =>  $language->languageCode
             )
         );
     }

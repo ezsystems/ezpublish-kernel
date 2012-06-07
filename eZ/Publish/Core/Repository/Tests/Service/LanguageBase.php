@@ -31,10 +31,10 @@ abstract class LanguageBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => null,
+                'id' => null,
                 'languageCode' => null,
-                'name'         => null,
-                'enabled'      => null
+                'name' => null,
+                'enabled' => null
             ),
             $language
         );
@@ -120,8 +120,8 @@ abstract class LanguageBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'languageCode' => $languageCreateStruct->languageCode,
-                'name'         => $languageCreateStruct->name,
-                'enabled'      => $languageCreateStruct->enabled
+                'name' => $languageCreateStruct->name,
+                'enabled' => $languageCreateStruct->enabled
             ),
             $newLanguage
         );
@@ -160,10 +160,10 @@ abstract class LanguageBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => $language->id,
+                'id' => $language->id,
                 'languageCode' => $language->languageCode,
-                'name'         => 'English',
-                'enabled'      => $language->enabled
+                'name' => 'English',
+                'enabled' => $language->enabled
             ),
             $updatedLanguage
         );
@@ -199,10 +199,10 @@ abstract class LanguageBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => $language->id,
+                'id' => $language->id,
                 'languageCode' => $language->languageCode,
-                'name'         => $language->name,
-                'enabled'      => false
+                'name' => $language->name,
+                'enabled' => false
             ),
             $updatedLanguage
         );
@@ -211,10 +211,10 @@ abstract class LanguageBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => $updatedLanguage->id,
+                'id' => $updatedLanguage->id,
                 'languageCode' => $updatedLanguage->languageCode,
-                'name'         => $updatedLanguage->name,
-                'enabled'      => true
+                'name' => $updatedLanguage->name,
+                'enabled' => true
             ),
             $finalLanguage
         );
@@ -237,10 +237,10 @@ abstract class LanguageBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => $language->id,
+                'id' => $language->id,
                 'languageCode' => $language->languageCode,
-                'name'         => $language->name,
-                'enabled'      => false
+                'name' => $language->name,
+                'enabled' => false
             ),
             $updatedLanguage
         );
@@ -260,8 +260,8 @@ abstract class LanguageBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'languageCode' => 'eng-GB',
-                'name'         => 'English (United Kingdom)',
-                'enabled'      => true
+                'name' => 'English (United Kingdom)',
+                'enabled' => true
             ),
             $language
         );
@@ -318,10 +318,10 @@ abstract class LanguageBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => 4,
+                'id' => 4,
                 'languageCode' => 'eng-GB',
-                'name'         => 'English (United Kingdom)',
-                'enabled'      => true
+                'name' => 'English (United Kingdom)',
+                'enabled' => true
             ),
             $language
         );
@@ -410,8 +410,8 @@ abstract class LanguageBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'languageCode' => null,
-                'name'         => null,
-                'enabled'      => true
+                'name' => null,
+                'enabled' => true
             ),
             $languageCreateStruct
         );

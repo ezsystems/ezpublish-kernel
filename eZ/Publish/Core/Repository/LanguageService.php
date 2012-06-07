@@ -92,8 +92,8 @@ class LanguageService implements LanguageServiceInterface
         $createStruct = new CreateStruct(
             array(
                 'languageCode' => $languageCreateStruct->languageCode,
-                'name'         => $languageCreateStruct->name,
-                'isEnabled'    => $languageCreateStruct->enabled
+                'name' => $languageCreateStruct->name,
+                'isEnabled' => $languageCreateStruct->enabled
             )
         );
 
@@ -125,10 +125,10 @@ class LanguageService implements LanguageServiceInterface
 
         $updateLanguageStruct = new SPILanguage(
             array(
-                'id'           => $loadedLanguage->id,
+                'id' => $loadedLanguage->id,
                 'languageCode' => $loadedLanguage->languageCode,
-                'name'         => $newName,
-                'isEnabled'    => $loadedLanguage->enabled
+                'name' => $newName,
+                'isEnabled' => $loadedLanguage->enabled
             )
         );
 
@@ -155,10 +155,10 @@ class LanguageService implements LanguageServiceInterface
 
         $updateLanguageStruct = new SPILanguage(
             array(
-                'id'           => $loadedLanguage->id,
+                'id' => $loadedLanguage->id,
                 'languageCode' => $loadedLanguage->languageCode,
-                'name'         => $loadedLanguage->name,
-                'isEnabled'    => true
+                'name' => $loadedLanguage->name,
+                'isEnabled' => true
             )
         );
 
@@ -185,10 +185,10 @@ class LanguageService implements LanguageServiceInterface
 
         $updateLanguageStruct = new SPILanguage(
             array(
-                'id'           => $loadedLanguage->id,
+                'id' => $loadedLanguage->id,
                 'languageCode' => $loadedLanguage->languageCode,
-                'name'         => $loadedLanguage->name,
-                'isEnabled'    => false
+                'name' => $loadedLanguage->name,
+                'isEnabled' => false
             )
         );
 
@@ -309,10 +309,10 @@ class LanguageService implements LanguageServiceInterface
     {
         return new Language(
             array(
-                'id'           => $spiLanguage->id,
+                'id' => $spiLanguage->id,
                 'languageCode' => $spiLanguage->languageCode,
-                'name'         => $spiLanguage->name,
-                'enabled'      => $spiLanguage->isEnabled
+                'name' => $spiLanguage->name,
+                'enabled' => $spiLanguage->isEnabled
             )
         );
     }

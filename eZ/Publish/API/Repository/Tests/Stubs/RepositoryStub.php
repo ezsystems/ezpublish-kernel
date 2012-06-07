@@ -115,7 +115,7 @@ class RepositoryStub implements Repository
     public function __construct( $fixtureDir, $version )
     {
         $this->fixtureDir = $fixtureDir;
-        $this->version    = $version;
+        $this->version = $version;
     }
 
     /**

@@ -36,12 +36,12 @@ abstract class IOBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'           => null,
-                'size'         => null,
-                'mtime'        => null,
-                'ctime'        => null,
-                'mimeType'     => null,
-                'uri'          => null,
+                'id' => null,
+                'size' => null,
+                'mtime' => null,
+                'ctime' => null,
+                'mimeType' => null,
+                'uri' => null,
                 'originalFile' => null
             ),
             $binaryFile
@@ -176,11 +176,11 @@ abstract class IOBase extends BaseServiceTest
         $ioService = $this->repository->getIOService();
 
         $postArray = array(
-            'name'     => 'ezplogo.png',
-            'type'     => 'image/png',
+            'name' => 'ezplogo.png',
+            'type' => 'image/png',
             'tmp_name' => __DIR__ . '/ezplogo.png',
-            'size'     => 7329,
-            'error'    => 0
+            'size' => 7329,
+            'error' => 0
         );
 
         $ioService->newBinaryCreateStructFromUploadedFile( $postArray );
@@ -203,10 +203,10 @@ abstract class IOBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'mimeType'         => 'image/png',
-                'uri'              => $filePath,
+                'mimeType' => 'image/png',
+                'uri' => $filePath,
                 'originalFileName' => 'ezplogo.png',
-                'size'             => 7329
+                'size' => 7329
             ),
             $binaryCreateStruct
         );
@@ -251,10 +251,10 @@ abstract class IOBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 //@todo: is binary file ID equal to path?
-                'id'           => $filePath,
-                'size'         => $binaryCreateStruct->size,
-                'mimeType'     => $binaryCreateStruct->mimeType,
-                'uri'          => null,
+                'id' => $filePath,
+                'size' => $binaryCreateStruct->size,
+                'mimeType' => $binaryCreateStruct->mimeType,
+                'uri' => null,
                 'originalFile' => $binaryCreateStruct->originalFileName
             ),
             $binaryFile,

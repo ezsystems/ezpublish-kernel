@@ -78,7 +78,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         $content = $contentService->createContent( $contentCreate );
@@ -199,16 +199,16 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                'status'               =>  VersionInfo::STATUS_DRAFT,
-                'versionNo'            =>  1,
-                'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode'  =>  'eng-US',
+                'status' =>  VersionInfo::STATUS_DRAFT,
+                'versionNo' =>  1,
+                'creatorId' =>  $this->getRepository()->getCurrentUser()->id,
+                'initialLanguageCode' =>  'eng-US',
             ),
             array(
-                'status'               =>  $content->getVersionInfo()->status,
-                'versionNo'            =>  $content->getVersionInfo()->versionNo,
-                'creatorId'            =>  $content->getVersionInfo()->creatorId,
-                'initialLanguageCode'  =>  $content->getVersionInfo()->initialLanguageCode,
+                'status' =>  $content->getVersionInfo()->status,
+                'versionNo' =>  $content->getVersionInfo()->versionNo,
+                'creatorId' =>  $content->getVersionInfo()->creatorId,
+                'initialLanguageCode' =>  $content->getVersionInfo()->initialLanguageCode,
             )
         );
     }
@@ -232,14 +232,14 @@ class ContentServiceTest extends BaseContentServiceTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
+        $contentService = $repository->getContentService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
 
         $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate1->setField( 'title', 'An awesome story about eZ Publish' );
 
-        $contentCreate1->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate1->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate1->alwaysAvailable = true;
 
         $contentService->createContent( $contentCreate1 );
@@ -247,7 +247,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate2 = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
         $contentCreate2->setField( 'title', 'Another awesome story about eZ Publish' );
 
-        $contentCreate2->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate2->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate2->alwaysAvailable = false;
 
         // This call will fail with an "InvalidArgumentException", because the
@@ -311,7 +311,7 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         // These two values are equal
-        $locationId     = $location->id;
+        $locationId = $location->id;
         $mainLocationId = $draft->contentInfo->mainLocationId;
         /* END: Use Case */
 
@@ -334,9 +334,9 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         // $parentLocationId is the location id of the "Home > Community" node
 
-        $contentService     = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
-        $locationService    = $repository->getLocationService();
+        $locationService = $repository->getLocationService();
 
         // Load content type
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
@@ -344,17 +344,17 @@ class ContentServiceTest extends BaseContentServiceTest
         // Configure new locations
         $locationCreate1 = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $locationCreate1->priority  = 23;
-        $locationCreate1->hidden    = true;
-        $locationCreate1->remoteId  = '0123456789abcdef0123456789aaaaaa';
+        $locationCreate1->priority = 23;
+        $locationCreate1->hidden = true;
+        $locationCreate1->remoteId = '0123456789abcdef0123456789aaaaaa';
         $locationCreate1->sortField = Location::SORT_FIELD_NODE_ID;
         $locationCreate1->sortOrder = Location::SORT_ORDER_DESC;
 
         $locationCreate2 = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $locationCreate2->priority  = 42;
-        $locationCreate2->hidden    = true;
-        $locationCreate2->remoteId  = '0123456789abcdef0123456789bbbbbb';
+        $locationCreate2->priority = 42;
+        $locationCreate2->hidden = true;
+        $locationCreate2->remoteId = '0123456789abcdef0123456789bbbbbb';
         $locationCreate2->sortField = Location::SORT_FIELD_NODE_ID;
         $locationCreate2->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -362,7 +362,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // Create new content object under the specified location
@@ -870,12 +870,12 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                'fieldCount'     =>  4,
-                'relationCount'  =>  0
+                'fieldCount' =>  4,
+                'relationCount' =>  0
             ),
             array(
-                'fieldCount'     =>  count( $draft->getFields() ),
-                'relationCount'  =>  count( $draft->getRelations() )
+                'fieldCount' =>  count( $draft->getFields() ),
+                'relationCount' =>  count( $draft->getRelations() )
             )
         );
     }
@@ -930,18 +930,18 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'creatorId'            =>  $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode'  =>  'eng-US',
-                'languageCodes'        =>  array( 0 => 'eng-US' ),
-                'status'               =>  VersionInfo::STATUS_DRAFT,
-                'versionNo'            =>  2
+                'creatorId' =>  $this->getRepository()->getCurrentUser()->id,
+                'initialLanguageCode' =>  'eng-US',
+                'languageCodes' =>  array( 0 => 'eng-US' ),
+                'status' =>  VersionInfo::STATUS_DRAFT,
+                'versionNo' =>  2
             ),
             array(
-                'creatorId'            =>  $versionInfo->creatorId,
-                'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
-                'languageCodes'        =>  $versionInfo->languageCodes,
-                'status'               =>  $versionInfo->status,
-                'versionNo'            =>  $versionInfo->versionNo
+                'creatorId' =>  $versionInfo->creatorId,
+                'initialLanguageCode' =>  $versionInfo->initialLanguageCode,
+                'languageCodes' =>  $versionInfo->languageCodes,
+                'status' =>  $versionInfo->status,
+                'versionNo' =>  $versionInfo->versionNo
             )
         );
     }
@@ -1117,10 +1117,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $actual[] = new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  $field->value,
-                    'languageCode'        =>  $field->languageCode,
-                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                    'id' =>  0,
+                    'value' =>  $field->value,
+                    'languageCode' =>  $field->languageCode,
+                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
                 )
             );
         }
@@ -1135,66 +1135,66 @@ class ContentServiceTest extends BaseContentServiceTest
         $expected = array(
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'body'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'body'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'body'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'body'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'index_title'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'index_title'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'tags'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'tags'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'tags'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'tags'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'An awesome²³ story about ezp.',
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'title'
+                    'id' =>  0,
+                    'value' =>  'An awesome²³ story about ezp.',
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'An awesome² story about ezp.',
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'title'
+                    'id' =>  0,
+                    'value' =>  'An awesome² story about ezp.',
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'title'
                 )
             ),
         );
@@ -1350,12 +1350,12 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'status'     =>  VersionInfo::STATUS_PUBLISHED,
-                'versionNo'  =>  2
+                'status' =>  VersionInfo::STATUS_PUBLISHED,
+                'versionNo' =>  2
             ),
             array(
-                'status'     =>  $versionInfo->status,
-                'versionNo'  =>  $versionInfo->versionNo
+                'status' =>  $versionInfo->status,
+                'versionNo' =>  $versionInfo->versionNo
             )
         );
     }
@@ -1381,12 +1381,12 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'status'     =>  VersionInfo::STATUS_ARCHIVED,
-                'versionNo'  =>  1
+                'status' =>  VersionInfo::STATUS_ARCHIVED,
+                'versionNo' =>  1
             ),
             array(
-                'status'     =>  $versionInfo->status,
-                'versionNo'  =>  $versionInfo->versionNo
+                'status' =>  $versionInfo->status,
+                'versionNo' =>  $versionInfo->versionNo
             )
         );
     }
@@ -1456,9 +1456,9 @@ class ContentServiceTest extends BaseContentServiceTest
         // Creates a new metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
-        $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
+        $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-GB';
-        $metadataUpdate->alwaysAvailable  = false;
+        $metadataUpdate->alwaysAvailable = false;
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1487,10 +1487,10 @@ class ContentServiceTest extends BaseContentServiceTest
         // Creates a metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
-        $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
+        $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-GB';
-        $metadataUpdate->alwaysAvailable  = false;
-        $metadataUpdate->publishedDate    = new \DateTime( '1984/01/01' );
+        $metadataUpdate->alwaysAvailable = false;
+        $metadataUpdate->publishedDate = new \DateTime( '1984/01/01' );
         $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
 
         // Update the metadata of the published content object
@@ -1523,26 +1523,26 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'remoteId'          =>  'aaaabbbbccccddddeeeeffff11112222',
-                'sectionId'         =>  $this->generateId( 'section', 1 ),
-                'alwaysAvailable'   =>  false,
-                'currentVersionNo'  =>  1,
-                'mainLanguageCode'  =>  'eng-GB',
-                'modificationDate'  =>  new \DateTime( '1984/01/01' ),
-                'ownerId'           =>  $this->getRepository()->getCurrentUser()->id,
-                'published'         =>  true,
-                'publishedDate'     =>  new \DateTime( '1984/01/01' ),
+                'remoteId' =>  'aaaabbbbccccddddeeeeffff11112222',
+                'sectionId' =>  $this->generateId( 'section', 1 ),
+                'alwaysAvailable' =>  false,
+                'currentVersionNo' =>  1,
+                'mainLanguageCode' =>  'eng-GB',
+                'modificationDate' =>  new \DateTime( '1984/01/01' ),
+                'ownerId' =>  $this->getRepository()->getCurrentUser()->id,
+                'published' =>  true,
+                'publishedDate' =>  new \DateTime( '1984/01/01' ),
             ),
             array(
-                'remoteId'          =>  $contentInfo->remoteId,
-                'sectionId'         =>  $contentInfo->sectionId,
-                'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
-                'currentVersionNo'  =>  $contentInfo->currentVersionNo,
-                'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
-                'modificationDate'  =>  $contentInfo->modificationDate,
-                'ownerId'           =>  $contentInfo->ownerId,
-                'published'         =>  $contentInfo->published,
-                'publishedDate'     =>  $contentInfo->publishedDate,
+                'remoteId' =>  $contentInfo->remoteId,
+                'sectionId' =>  $contentInfo->sectionId,
+                'alwaysAvailable' =>  $contentInfo->alwaysAvailable,
+                'currentVersionNo' =>  $contentInfo->currentVersionNo,
+                'mainLanguageCode' =>  $contentInfo->mainLanguageCode,
+                'modificationDate' =>  $contentInfo->modificationDate,
+                'ownerId' =>  $contentInfo->ownerId,
+                'published' =>  $contentInfo->published,
+                'publishedDate' =>  $contentInfo->publishedDate,
             )
         );
     }
@@ -1582,7 +1582,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $this->createContentVersion1();
 
         // Creates a metadata update struct
-        $metadataUpdate           = $contentService->newContentMetadataUpdateStruct();
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
         $metadataUpdate->remoteId = $supportRemoteId;
 
         // This call will fail with an "InvalidArgumentException", because the
@@ -1606,7 +1606,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
@@ -1659,7 +1659,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
-        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
         $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
         $contentService = $repository->getContentService();
@@ -1869,9 +1869,9 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
         $contentCreateStruct->setField( 'index_title', 'British index title...', 'eng-GB' );
 
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
-        $contentCreateStruct->sectionId       = $sectionId;
+        $contentCreateStruct->sectionId = $sectionId;
         $contentCreateStruct->alwaysAvailable = true;
 
         // Create a new content draft
@@ -1894,10 +1894,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $actual[] = new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  $field->value,
-                    'languageCode'        =>  $field->languageCode,
-                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                    'id' =>  0,
+                    'value' =>  $field->value,
+                    'languageCode' =>  $field->languageCode,
+                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
                 )
             );
         }
@@ -1912,34 +1912,34 @@ class ContentServiceTest extends BaseContentServiceTest
         $expected = array(
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'body'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'body'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'British index title...',
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'index_title'
+                    'id' =>  0,
+                    'value' =>  'British index title...',
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'tags'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'tags'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'An awesome²³ story about ezp.',
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'title'
+                    'id' =>  0,
+                    'value' =>  'An awesome²³ story about ezp.',
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'title'
                 )
             ),
         );
@@ -1974,9 +1974,9 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
         $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-GB' );
 
-        $contentCreateStruct->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
-        $contentCreateStruct->sectionId       = $sectionId;
+        $contentCreateStruct->sectionId = $sectionId;
         $contentCreateStruct->alwaysAvailable = true;
 
         // Create a new content draft
@@ -1999,10 +1999,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $actual[] = new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  $field->value,
-                    'languageCode'        =>  $field->languageCode,
-                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                    'id' =>  0,
+                    'value' =>  $field->value,
+                    'languageCode' =>  $field->languageCode,
+                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
                 )
             );
         }
@@ -2017,34 +2017,34 @@ class ContentServiceTest extends BaseContentServiceTest
         $expected = array(
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'body'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'body'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'British index title...',
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'index_title'
+                    'id' =>  0,
+                    'value' =>  'British index title...',
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'tags'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'tags'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'An awesome² story about ezp.',
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'title'
+                    'id' =>  0,
+                    'value' =>  'An awesome² story about ezp.',
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'title'
                 )
             ),
         );
@@ -2345,7 +2345,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
@@ -2354,9 +2354,9 @@ class ContentServiceTest extends BaseContentServiceTest
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $targetLocationCreate->priority  = 42;
-        $targetLocationCreate->hidden    = true;
-        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -2405,7 +2405,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
@@ -2414,9 +2414,9 @@ class ContentServiceTest extends BaseContentServiceTest
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $targetLocationCreate->priority  = 42;
-        $targetLocationCreate->hidden    = true;
-        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -2773,16 +2773,16 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'type'                             =>  Relation::COMMON,
-                'sourceFieldDefinitionIdentifier'  =>  null,
-                'sourceContentInfo'                =>  'abcdef0123456789abcdef0123456789',
-                'destinationContentInfo'           =>  'affc99e41128c1475fa4f23dafb7159b',
+                'type' =>  Relation::COMMON,
+                'sourceFieldDefinitionIdentifier' =>  null,
+                'sourceContentInfo' =>  'abcdef0123456789abcdef0123456789',
+                'destinationContentInfo' =>  'affc99e41128c1475fa4f23dafb7159b',
             ),
             array(
-                'type'                             =>  $relations[0]->type,
-                'sourceFieldDefinitionIdentifier'  =>  $relations[0]->sourceFieldDefinitionIdentifier,
-                'sourceContentInfo'                =>  $relations[0]->sourceContentInfo->remoteId,
-                'destinationContentInfo'           =>  $relations[0]->destinationContentInfo->remoteId,
+                'type' =>  $relations[0]->type,
+                'sourceFieldDefinitionIdentifier' =>  $relations[0]->sourceFieldDefinitionIdentifier,
+                'sourceContentInfo' =>  $relations[0]->sourceContentInfo->remoteId,
+                'destinationContentInfo' =>  $relations[0]->destinationContentInfo->remoteId,
             )
         );
     }
@@ -2834,13 +2834,13 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
-        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
         $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
         $draft = $this->createContentDraftVersion1();
 
         // Load other content objects
-        $support   = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
         $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
 
         // Create relation between new content object and "Support" page
@@ -2869,22 +2869,22 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 array(
-                    'sourceContentInfo'       =>  'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo'  =>  'affc99e41128c1475fa4f23dafb7159b',
+                    'sourceContentInfo' =>  'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo' =>  'affc99e41128c1475fa4f23dafb7159b',
                 ),
                 array(
-                    'sourceContentInfo'       =>  'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo'  =>  '378acc2bc7a52400701956047a2f7d45',
+                    'sourceContentInfo' =>  'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo' =>  '378acc2bc7a52400701956047a2f7d45',
                 )
             ),
             array(
                 array(
-                    'sourceContentInfo'       =>  $relations[0]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'  =>  $relations[0]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' =>  $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' =>  $relations[0]->destinationContentInfo->remoteId,
                 ),
                 array(
-                    'sourceContentInfo'       =>  $relations[1]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'  =>  $relations[1]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' =>  $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' =>  $relations[1]->destinationContentInfo->remoteId,
                 )
             )
         );
@@ -2906,7 +2906,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
-        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
         $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
         $content = $this->createContentVersion1();
@@ -2945,22 +2945,22 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 array(
-                    'sourceContentInfo'       =>  'affc99e41128c1475fa4f23dafb7159b',
-                    'destinationContentInfo'  =>  'abcdef0123456789abcdef0123456789',
+                    'sourceContentInfo' =>  'affc99e41128c1475fa4f23dafb7159b',
+                    'destinationContentInfo' =>  'abcdef0123456789abcdef0123456789',
                 ),
                 array(
-                    'sourceContentInfo'       =>  '378acc2bc7a52400701956047a2f7d45',
-                    'destinationContentInfo'  =>  'abcdef0123456789abcdef0123456789',
+                    'sourceContentInfo' =>  '378acc2bc7a52400701956047a2f7d45',
+                    'destinationContentInfo' =>  'abcdef0123456789abcdef0123456789',
                 )
             ),
             array(
                 array(
-                    'sourceContentInfo'       =>  $relations[0]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'  =>  $relations[0]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' =>  $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' =>  $relations[0]->destinationContentInfo->remoteId,
                 ),
                 array(
-                    'sourceContentInfo'       =>  $relations[1]->sourceContentInfo->remoteId,
-                    'destinationContentInfo'  =>  $relations[1]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' =>  $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' =>  $relations[1]->destinationContentInfo->remoteId,
                 )
             )
         );
@@ -2982,7 +2982,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
-        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
         $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
         $draft = $this->createContentDraftVersion1();
@@ -3099,7 +3099,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
+        $contentService = $repository->getContentService();
 
         // Start a transaction
         $repository->beginTransaction();
@@ -3110,7 +3110,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // Create a new content object
@@ -3154,7 +3154,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
-        $contentService     = $repository->getContentService();
+        $contentService = $repository->getContentService();
 
         // Start a transaction
         $repository->beginTransaction();
@@ -3165,7 +3165,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // Create a new content object
@@ -3836,7 +3836,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // $locationId is the ID of the "Adminstrator users" group location
 
         // Get services
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         // Load content object to copy
@@ -3889,7 +3889,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // $locationId is the ID of the "Adminstrator users" group location
 
         // Get services
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         // Load content object to copy
@@ -3926,7 +3926,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
         $urlAliasService = $repository->getURLAliasService();
 
@@ -3946,13 +3946,13 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertAliasesCorrect(
             array(
                 '/Community/An-awesome-story-about-eZ-Publish' => array(
-                    'type'          => URLAlias::LOCATION,
-                    'destination'   => $location,
-                    'path'          => '/Community/An-awesome-story-about-eZ-Publish',
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location,
+                    'path' => '/Community/An-awesome-story-about-eZ-Publish',
                     'languageCodes' => array( 'eng-US' ),
-                    'isHistory'     => false,
-                    'isCustom'      => false,
-                    'forward'       => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
                 ),
             ),
             $aliases
@@ -3966,7 +3966,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
         $urlAliasService = $repository->getURLAliasService();
 
@@ -3987,31 +3987,31 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertAliasesCorrect(
             array(
                 '/Community/An-awesome-story-about-eZ-Publish' => array(
-                    'type'          => URLAlias::LOCATION,
-                    'destination'   => $location,
-                    'path'          => '/Community/An-awesome-story-about-eZ-Publish',
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location,
+                    'path' => '/Community/An-awesome-story-about-eZ-Publish',
                     'languageCodes' => array( 'eng-US' ),
-                    'isHistory'     => true,
-                    'isCustom'      => false,
-                    'forward'       => false,
+                    'isHistory' => true,
+                    'isCustom' => false,
+                    'forward' => false,
                 ),
                 '/Community/An-awesome²-story-about-ezp.' => array(
-                    'type'          => URLAlias::LOCATION,
-                    'destination'   => $location,
-                    'path'          => '/Community/An-awesome²-story-about-ezp.',
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location,
+                    'path' => '/Community/An-awesome²-story-about-ezp.',
                     'languageCodes' => array( 'eng-US' ),
-                    'isHistory'     => false,
-                    'isCustom'      => false,
-                    'forward'       => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
                 ),
                 '/Community/An-awesome²³-story-about-ezp.' => array(
-                    'type'          => URLAlias::LOCATION,
-                    'destination'   => $location,
-                    'path'          => '/Community/An-awesome²³-story-about-ezp.',
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location,
+                    'path' => '/Community/An-awesome²³-story-about-ezp.',
                     'languageCodes' => array( 'eng-GB' ),
-                    'isHistory'     => false,
-                    'isCustom'      => false,
-                    'forward'       => false,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
                 ),
             ),
             $aliases
@@ -4025,7 +4025,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
         $urlAliasService = $repository->getURLAliasService();
@@ -4065,33 +4065,33 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertAliasesCorrect(
             array(
                 '/Community/An-awesome-story-about-eZ-Publish' => array(
-                    'type'            => URLAlias::LOCATION,
-                    'destination'     => $location,
-                    'path'            => '/Community/An-awesome-story-about-eZ-Publish',
-                    'languageCodes'   => array( 'eng-US' ),
-                    'isHistory'       => true,
-                    'isCustom'        => false,
-                    'forward'         => false,
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location,
+                    'path' => '/Community/An-awesome-story-about-eZ-Publish',
+                    'languageCodes' => array( 'eng-US' ),
+                    'isHistory' => true,
+                    'isCustom' => false,
+                    'forward' => false,
                     'alwaysAvailable' => true,
                 ),
                 '/Community/An-awesome²-story-about-ezp.' => array(
-                    'type'            => URLAlias::LOCATION,
-                    'destination'     => $location,
-                    'path'            => '/Community/An-awesome²-story-about-ezp.',
-                    'languageCodes'   => array( 'eng-US' ),
-                    'isHistory'       => false,
-                    'isCustom'        => false,
-                    'forward'         => false,
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location,
+                    'path' => '/Community/An-awesome²-story-about-ezp.',
+                    'languageCodes' => array( 'eng-US' ),
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
                     'alwaysAvailable' => true,
                 ),
                 '/my/fancy/story-about-ez-publish' => array(
-                    'type'            => URLAlias::LOCATION,
-                    'destination'     => $location,
-                    'path'            => '/my/fancy/story-about-ez-publish',
-                    'languageCodes'   => array( 'eng-US' ),
-                    'isHistory'       => false,
-                    'isCustom'        => true,
-                    'forward'         => false,
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location,
+                    'path' => '/my/fancy/story-about-ez-publish',
+                    'languageCodes' => array( 'eng-US' ),
+                    'isHistory' => false,
+                    'isCustom' => true,
+                    'forward' => false,
                     'alwaysAvailable' => false,
                 ),
             ),
@@ -4158,7 +4158,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     private function assertAllFieldsEquals( array $fields )
     {
-        $actual   = $this->normalizeFields( $fields );
+        $actual = $this->normalizeFields( $fields );
         $expected = $this->normalizeFields( $this->createFieldsFixture() );
 
         $this->assertEquals( $expected, $actual );
@@ -4206,10 +4206,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $normalized[] = new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  $field->value,
-                    'languageCode'        =>  $field->languageCode,
-                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
+                    'id' =>  0,
+                    'value' =>  $field->value,
+                    'languageCode' =>  $field->languageCode,
+                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
                 )
             );
         }
@@ -4254,66 +4254,66 @@ class ContentServiceTest extends BaseContentServiceTest
         return array(
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'body'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'body'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'body'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'body'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'British index title...',
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'index_title'
+                    'id' =>  0,
+                    'value' =>  'British index title...',
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'American index title...',
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'index_title'
+                    'id' =>  0,
+                    'value' =>  'American index title...',
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'tags'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'tags'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  null,
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'tags'
+                    'id' =>  0,
+                    'value' =>  null,
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'tags'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'An awesome² story about ezp.',
-                    'languageCode'        =>  'eng-US',
-                    'fieldDefIdentifier'  =>  'title'
+                    'id' =>  0,
+                    'value' =>  'An awesome² story about ezp.',
+                    'languageCode' =>  'eng-US',
+                    'fieldDefIdentifier' =>  'title'
                 )
             ),
             new Field(
                 array(
-                    'id'                  =>  0,
-                    'value'               =>  'An awesome²³ story about ezp.',
-                    'languageCode'        =>  'eng-GB',
-                    'fieldDefIdentifier'  =>  'title'
+                    'id' =>  0,
+                    'value' =>  'An awesome²³ story about ezp.',
+                    'languageCode' =>  'eng-GB',
+                    'fieldDefIdentifier' =>  'title'
                 )
             ),
         );

@@ -30,16 +30,16 @@ abstract class BaseContentServiceTest extends BaseTest
         /* BEGIN: Inline */
         // $parentLocationId is the id of the "Home > Community" node
 
-        $contentService     = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
-        $locationService    = $repository->getLocationService();
+        $locationService = $repository->getLocationService();
 
         // Configure new location
         $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $locationCreate->priority  = 23;
-        $locationCreate->hidden    = true;
-        $locationCreate->remoteId  = '0123456789abcdef0123456789abcdef';
+        $locationCreate->priority = 23;
+        $locationCreate->hidden = true;
+        $locationCreate->remoteId = '0123456789abcdef0123456789abcdef';
         $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -50,9 +50,9 @@ abstract class BaseContentServiceTest extends BaseTest
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId is the ID of section 1
-        $contentCreate->sectionId       = $sectionId;
+        $contentCreate->sectionId = $sectionId;
         $contentCreate->alwaysAvailable = true;
 
         // Create a draft

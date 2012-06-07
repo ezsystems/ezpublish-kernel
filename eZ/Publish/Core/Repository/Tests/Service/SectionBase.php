@@ -30,9 +30,9 @@ abstract class SectionBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => null,
+                'id' => null,
                 'identifier' => null,
-                'name'       => null
+                'name' => null
             ),
             $section
         );
@@ -190,8 +190,8 @@ abstract class SectionBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => 1,
-                'name'       => 'Standard',
+                'id' => 1,
+                'name' => 'Standard',
                 'identifier' => 'standard'
             ),
             $section
@@ -239,8 +239,8 @@ abstract class SectionBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => 1,
-                'name'       => 'Standard',
+                'id' => 1,
+                'name' => 'Standard',
                 'identifier' => 'standard'
             ),
             $section
@@ -369,7 +369,7 @@ abstract class SectionBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => null,
-                'name'       => null
+                'name' => null
             ),
             $sectionCreateStruct
         );
@@ -390,7 +390,7 @@ abstract class SectionBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => null,
-                'name'       => null
+                'name' => null
             ),
             $sectionUpdateStruct
         );
