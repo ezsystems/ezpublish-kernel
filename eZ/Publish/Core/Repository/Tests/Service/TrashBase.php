@@ -333,7 +333,10 @@ abstract class TrashBase extends BaseServiceTest
             $trashService->loadTrashItem( $trashItem->id );
             self::fail( "Succeeded loading deleted trash item" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**

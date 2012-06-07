@@ -910,7 +910,10 @@ class EzpDatabaseTest extends TestCase
             $gateway->getBasicNodeData( 13 );
             $this->fail( "Location was not deleted!" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 }
 

@@ -2288,7 +2288,10 @@ abstract class ContentBase extends BaseServiceTest
 
             $this->fail( "Version was not successfully deleted!" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**
@@ -2342,7 +2345,10 @@ abstract class ContentBase extends BaseServiceTest
 
             $this->fail( "Content was not successfully deleted!" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**

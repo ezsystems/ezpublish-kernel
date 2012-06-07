@@ -675,7 +675,10 @@ abstract class LocationBase extends BaseServiceTest
             $locationService->loadLocation( $location->id );
             self::fail( "failed deleting a location" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**

@@ -288,7 +288,10 @@ abstract class IOBase extends BaseServiceTest
             $ioService->loadBinaryFile( $loadedBinaryFile->id );
             self::fail( "succeeded loading deleted file" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**

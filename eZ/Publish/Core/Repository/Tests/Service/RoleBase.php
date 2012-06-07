@@ -580,7 +580,10 @@ abstract class RoleBase extends BaseServiceTest
             $roleService->loadRole( 1 );
             self::fail( 'Succeeded loading role after deleting it' );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**

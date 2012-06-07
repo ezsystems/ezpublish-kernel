@@ -603,7 +603,10 @@ abstract class UserBase extends BaseServiceTest
             $userService->loadUser( 14 );
             self::fail( "failed deleting a user" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**

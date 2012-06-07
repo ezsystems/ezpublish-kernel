@@ -323,7 +323,10 @@ abstract class SectionBase extends BaseServiceTest
             $sectionService->loadSection( $newSection->id );
             self::fail( 'Section is still returned after being deleted' );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**

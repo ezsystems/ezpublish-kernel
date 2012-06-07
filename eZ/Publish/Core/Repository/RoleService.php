@@ -107,7 +107,10 @@ class RoleService implements RoleServiceInterface
             if ( $existingRole !== null )
                 throw new InvalidArgumentException( "roleCreateStruct", "role with specified identifier already exists" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
 
         $spiRole = $this->buildPersistenceRoleObject( $roleCreateStruct );
         $createdRole = $this->persistenceHandler->userHandler()->createRole( $spiRole );
@@ -151,7 +154,10 @@ class RoleService implements RoleServiceInterface
                 if ( $existingRole !== null )
                     throw new InvalidArgumentException( "roleUpdateStruct", "role with specified identifier already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( NotFoundException $e )
+            {
+                // Do nothing
+            }
         }
 
         $loadedRole = $this->loadRole( $role->id );
@@ -549,7 +555,10 @@ class RoleService implements RoleServiceInterface
                         )
                     );
                 }
-                catch ( NotFoundException $e ) {}
+                catch ( NotFoundException $e )
+                {
+                    // Do nothing
+                }
             }
         }
 
