@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
-use ezp\Base\Collection\Type as TypeCollection,
+use ArrayObject,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\InvalidAlias,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\MissingAlias,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\API\Repository\IOService,
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
     splFileInfo;
@@ -22,8 +23,13 @@ use ezp\Base\Collection\Type as TypeCollection,
  *
  * @todo Rewrite image fieldtype
  */
-class AliasCollection extends TypeCollection
+class AliasCollection extends ArrayObject
 {
+    /**
+     * @var string The class name (including namespace) to accept as input
+     */
+    private $type;
+
     /**
      * Image type value
      *
@@ -61,7 +67,13 @@ class AliasCollection extends TypeCollection
         $this->IOService = $IOService;
         $this->imageConf = Configuration::getInstance( 'image' );
         $this->imageManager = new Manager( $this, $IOService );
-        parent::__construct( 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Alias', $elements );
+        $this->type = 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Alias';
+        foreach ( $elements as $item )
+        {
+            if ( !$item instanceof $this->type )
+                throw new InvalidArgumentType( 'elements', $this->type, $item );
+        }
+        parent::__construct( $elements );
     }
 
     /**
@@ -85,7 +97,73 @@ class AliasCollection extends TypeCollection
             throw new MissingAlias( 'original' );
 
         $alias = $this->imageManager->createImageAlias( $aliasName );
-        parent::offsetSet( $aliasName, $alias );
+        self::offsetSet( $aliasName, $alias );
+    }
+
+    /**
+     * Overrides offsetSet to check type and allow if correct
+     *
+     * @internal
+     * @throws InvalidArgumentType On wrong type
+     * @param string|int $offset
+     * @param mixed $value
+     */
+    public function offsetSet( $offset, $value )
+    {
+        // throw if wrong type
+        if ( !$value instanceof $this->type )
+            throw new InvalidArgumentType( 'value', $this->type, $value );
+
+        // use existing $index if $value exists in collection to avoid duplicated objects
+        if ( ( $index = $this->indexOf( $value ) ) !== false )
+            $offset = $index;
+
+        parent::offsetSet( $offset, $value );
+    }
+
+    /**
+     * Returns the first index at which a given element can be found in the array, or false if it is not present.
+     *
+     * Uses strict comparison.
+     *
+     * @param mixed $item
+     * @return int|string|bool False if nothing was found
+     */
+    public function indexOf( $item )
+    {
+        if ( !$item instanceof $this->type )
+            return false;
+
+        foreach ( $this as $key => $value )
+        {
+            if ( $item->id === null )
+            {
+                if ( $value === $item )
+                    return $key;
+            }
+            else if ( $value->id === $item->id )
+            {
+                return $key;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Overloads exchangeArray() to do type checks on input.
+     *
+     * @throws InvalidArgumentType
+     * @param array $input
+     * @return array
+     */
+    public function exchangeArray( $input )
+    {
+        foreach ( $input as $item )
+        {
+            if ( !$item instanceof $this->type )
+                throw new InvalidArgumentType( 'input', $this->type, $item );
+        }
+        return parent::exchangeArray( $input );
     }
 
     /**
