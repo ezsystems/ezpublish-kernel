@@ -123,7 +123,7 @@ class Alias extends ValueObject
      * It will typically contain EXIF information from digital cameras or information about animated GIFs.
      * If there is no information, the info will be a boolean FALSE.
      *
-     * @var \ezp\Base\Image\Data
+     * @var \eZ\Publish\Core\Repository\FieldType\Image\Data
      */
     public $info;
 
@@ -142,7 +142,7 @@ class Alias extends ValueObject
                 return $this->modified->getTimestamp();
 
             case 'mimeType':
-                return $this->fileInfo->getContentType();
+                return $this->fileInfo->getType();
 
             case 'filename':
                 return $this->fileInfo->getFilename();
