@@ -808,7 +808,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     protected function getTypeFieldDefinition()
     {
-        $field =  new FieldDefinition();
+        $field = new FieldDefinition();
         $field->identifier = 'title';
         $field->fieldType = 'ezstring';
         $field->position = 0;

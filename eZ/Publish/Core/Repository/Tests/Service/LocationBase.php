@@ -198,8 +198,8 @@ abstract class LocationBase extends BaseServiceTest
         $locationToCopyId = $locationToCopyContent->contentInfo->mainLocationId;
 
         $this->createTestContentLocation( $locationToCopyId );
-        $subLocationContent20 =  $this->createTestContentLocation( $locationToCopyId );
-        $subLocationId20 =  $subLocationContent20->contentInfo->mainLocationId;
+        $subLocationContent20 = $this->createTestContentLocation( $locationToCopyId );
+        $subLocationId20 = $subLocationContent20->contentInfo->mainLocationId;
         $subLocationContent21 = $this->createTestContentLocation( $subLocationId20 );
 
         // Add main locations outside subtree

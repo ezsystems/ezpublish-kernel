@@ -156,7 +156,7 @@ abstract class IOBase extends BaseServiceTest
         foreach ( $failures as $failure )
         {
             $e = $failure->thrownException();
-            $text =  "\n\nException " . get_class($e) . ' in file ' . $e->getFile() . ':' . $e->getLine() . "\n";
+            $text = "\n\nException " . get_class($e) . ' in file ' . $e->getFile() . ':' . $e->getLine() . "\n";
             $text .= $e->toString();
             $text .= "\n" . $e->getTraceAsString();
             $messages[] = $text;

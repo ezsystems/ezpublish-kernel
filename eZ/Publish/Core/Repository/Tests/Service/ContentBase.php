@@ -110,7 +110,7 @@ abstract class ContentBase extends BaseServiceTest
     protected function getFieldValuesExpectedValues( array $languages = null )
     {
         // Legacy fixture content ID=4 field values
-        $fieldValues =  array(
+        $fieldValues = array(
             "eng-US" => array(
                 "name" => array( "eng-US" => "Users" ),
                 "description" => array( "eng-US" => "Main group" )
@@ -137,7 +137,7 @@ abstract class ContentBase extends BaseServiceTest
     protected function getFieldsExpectedValues( array $languages = null, $draft = false )
     {
         // Legacy fixture content ID=4 fields
-        $fields =  array(
+        $fields = array(
             "eng-US" => array(
                 new Field(
                     array(

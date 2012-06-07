@@ -25,7 +25,7 @@ $contentTypeGroup = $contentTypeService->createContentTypeGroup( $contentTypeGro
 
 // create a new content type
 // make a new instance of a ContentTypeCreate class
-$contentTypeCreate =  $contentTypeService->newContentTypeCreateStruct( "newtype" );
+$contentTypeCreate = $contentTypeService->newContentTypeCreateStruct( "newtype" );
 
 $contentTypeCreate->remoteId = "myRemoteId-1234567890";
 $contentTypeCreate->defaultAlwaysAvailable = true;

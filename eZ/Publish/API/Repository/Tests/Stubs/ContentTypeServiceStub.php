@@ -1035,7 +1035,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
     {
-        $fieldDefinitionCreate =  new FieldDefinitionCreateStruct();
+        $fieldDefinitionCreate = new FieldDefinitionCreateStruct();
 
         $fieldDefinitionCreate->identifier = $identifier;
         $fieldDefinitionCreate->fieldTypeIdentifier = $fieldTypeIdentifier;
