@@ -15,7 +15,7 @@ use eZ\Publish\Core\Base\ClassLoader,
     eZ\Publish\Core\Base\ServiceContainer;
 
 // Setup autoloaders
-if ( !( $settings = include( __DIR__ . '/config.php' ) ) )
+if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
     die( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
 }

@@ -111,7 +111,7 @@ class ContentServiceStub implements ContentService
             {
                 throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
-            return  $this->contentInfo[$contentId];
+            return $this->contentInfo[$contentId];
         }
         throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
