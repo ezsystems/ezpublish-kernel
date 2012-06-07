@@ -362,18 +362,18 @@ class LocationServiceTest extends BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'id' =>  $this->generateId( 'location', 5 ),
-                'priority' =>  0,
-                'hidden' =>  false,
-                'invisible' =>  false,
-                'remoteId' =>  '3f6d92f8044aed134f32153517850f5a',
-                'parentLocationId' =>  $this->generateId( 'location', 1 ),
-                'pathString' =>  '/1/5/',
-                'modifiedSubLocationDate' =>  1311154216,
-                'depth' =>  1,
-                'sortField' =>  1,
-                'sortOrder' =>  1,
-                'childCount' =>  5,
+                'id' => $this->generateId( 'location', 5 ),
+                'priority' => 0,
+                'hidden' => false,
+                'invisible' => false,
+                'remoteId' => '3f6d92f8044aed134f32153517850f5a',
+                'parentLocationId' => $this->generateId( 'location', 1 ),
+                'pathString' => '/1/5/',
+                'modifiedSubLocationDate' => 1311154216,
+                'depth' => 1,
+                'sortField' => 1,
+                'sortOrder' => 1,
+                'childCount' => 5,
             ),
             $location
         );
@@ -1096,18 +1096,18 @@ class LocationServiceTest extends BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'depth' =>  $locationLeft->depth,
-                'parentLocationId' =>  $locationLeft->parentLocationId,
-                'pathString' =>  "{$pathStringLeft}" . $this->parseId( 'location', $locationRight->id ) . "/"
+                'depth' => $locationLeft->depth,
+                'parentLocationId' => $locationLeft->parentLocationId,
+                'pathString' => "{$pathStringLeft}" . $this->parseId( 'location', $locationRight->id ) . "/"
             ),
             $locationRightReloaded
         );
 
         $this->assertPropertiesCorrect(
             array(
-                'depth' =>  $locationRight->depth,
-                'parentLocationId' =>  $locationRight->parentLocationId,
-                'pathString' =>  "{$pathStringRight}" . $this->parseId( 'location', $locationLeft->id ) . "/"
+                'depth' => $locationRight->depth,
+                'parentLocationId' => $locationRight->parentLocationId,
+                'pathString' => "{$pathStringRight}" . $this->parseId( 'location', $locationLeft->id ) . "/"
             ),
             $locationLeftReloaded
         );
@@ -1507,9 +1507,9 @@ class LocationServiceTest extends BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'depth' =>  $newParentLocation->depth + 1,
-                'parentLocationId' =>  $newParentLocation->id,
-                'pathString' =>  "{$newParentLocation->pathString}" . $this->parseId( 'location', $copiedLocation->id ) . "/"
+                'depth' => $newParentLocation->depth + 1,
+                'parentLocationId' => $newParentLocation->id,
+                'pathString' => "{$newParentLocation->pathString}" . $this->parseId( 'location', $copiedLocation->id ) . "/"
             ),
             $copiedLocation
         );
@@ -1706,9 +1706,9 @@ class LocationServiceTest extends BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'depth' =>  $newParentLocation->depth + 1,
-                'parentLocationId' =>  $newParentLocation->id,
-                'pathString' =>  "{$newParentLocation->pathString}" . $this->parseId( 'location' , $movedLocation->id ) . "/"
+                'depth' => $newParentLocation->depth + 1,
+                'parentLocationId' => $newParentLocation->id,
+                'pathString' => "{$newParentLocation->pathString}" . $this->parseId( 'location' , $movedLocation->id ) . "/"
             ),
             $movedLocation
         );
@@ -1914,17 +1914,17 @@ class LocationServiceTest extends BaseTest
     {
         return array_merge(
             array(
-                'id' =>  $location->id,
-                'depth' =>  $location->depth,
-                'parentLocationId' =>  $location->parentLocationId,
-                'pathString' =>  $location->pathString,
-                'childCount' =>  $location->childCount,
-                'remoteId' =>  $location->remoteId,
-                'hidden' =>  $location->hidden,
-                'invisible' =>  $location->invisible,
-                'priority' =>  $location->priority,
-                'sortField' =>  $location->sortField,
-                'sortOrder' =>  $location->sortOrder
+                'id' => $location->id,
+                'depth' => $location->depth,
+                'parentLocationId' => $location->parentLocationId,
+                'pathString' => $location->pathString,
+                'childCount' => $location->childCount,
+                'remoteId' => $location->remoteId,
+                'hidden' => $location->hidden,
+                'invisible' => $location->invisible,
+                'priority' => $location->priority,
+                'sortField' => $location->sortField,
+                'sortOrder' => $location->sortOrder
             ),
             $overwrite
         );

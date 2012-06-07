@@ -59,18 +59,18 @@ class TrashServiceTest extends BaseTrashServiceTest
             ->loadLocationByRemoteId( $communityRemoteId );
 
         $expected = array(
-            'id' =>  $location->id,
-            'childCount' =>  $location->childCount,
-            'depth' =>  $location->depth,
-            'hidden' =>  $location->hidden,
-            'invisible' =>  $location->invisible,
-            'modifiedSubLocationDate' =>  $location->modifiedSubLocationDate,
-            'parentLocationId' =>  $location->parentLocationId,
-            'pathString' =>  $location->pathString,
-            'priority' =>  $location->priority,
-            'remoteId' =>  $location->remoteId,
-            'sortField' =>  $location->sortField,
-            'sortOrder' =>  $location->sortOrder,
+            'id' => $location->id,
+            'childCount' => $location->childCount,
+            'depth' => $location->depth,
+            'hidden' => $location->hidden,
+            'invisible' => $location->invisible,
+            'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+            'parentLocationId' => $location->parentLocationId,
+            'pathString' => $location->pathString,
+            'priority' => $location->priority,
+            'remoteId' => $location->remoteId,
+            'sortField' => $location->sortField,
+            'sortOrder' => $location->sortOrder,
         );
 
         $trashItem = $this->createTrashItem();
@@ -323,16 +323,16 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'remoteId' =>  $trashItem->remoteId,
-                'parentLocationId' =>  $homeLocationId,
-                'childCount' =>  $trashItem->childCount,
-                'depth' =>  $trashItem->depth,
-                'hidden' =>  false,
-                'invisible' =>  $trashItem->invisible,
-                'pathString' =>  "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
-                'priority' =>  4,
-                'sortField' =>  Location::SORT_FIELD_PUBLISHED,
-                'sortOrder' =>  Location::SORT_ORDER_DESC,
+                'remoteId' => $trashItem->remoteId,
+                'parentLocationId' => $homeLocationId,
+                'childCount' => $trashItem->childCount,
+                'depth' => $trashItem->depth,
+                'hidden' => false,
+                'invisible' => $trashItem->invisible,
+                'pathString' => "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
+                'priority' => 4,
+                'sortField' => Location::SORT_FIELD_PUBLISHED,
+                'sortOrder' => Location::SORT_ORDER_DESC,
             ),
             $location
         );

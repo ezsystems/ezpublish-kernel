@@ -30,8 +30,8 @@ class PolicyCreateStructStub extends PolicyCreateStruct
     {
         parent::__construct(
             array(
-                'module' =>  $module,
-                'function' =>  $function
+                'module' => $module,
+                'function' => $function
             )
         );
     }

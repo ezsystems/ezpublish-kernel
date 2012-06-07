@@ -33,7 +33,7 @@ class Memory extends SetupFactory
         $repository->setCurrentUser(
             new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
                 array(
-                    'content' =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
+                    'content' => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
                         array(
                             'id' => 14
                         )

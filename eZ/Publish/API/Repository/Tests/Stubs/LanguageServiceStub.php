@@ -99,10 +99,10 @@ class LanguageServiceStub implements LanguageService
 
         $language = new Language(
             array(
-                'id' =>  ++$this->nextId,
-                'name' =>  $languageCreateStruct->name,
-                'enabled' =>  $languageCreateStruct->enabled,
-                'languageCode' =>  $languageCreateStruct->languageCode
+                'id' => ++$this->nextId,
+                'name' => $languageCreateStruct->name,
+                'enabled' => $languageCreateStruct->enabled,
+                'languageCode' => $languageCreateStruct->languageCode
             )
         );
 
@@ -131,10 +131,10 @@ class LanguageServiceStub implements LanguageService
 
         $this->languages[$language->id] = new Language(
             array(
-                'id' =>  $language->id,
-                'name' =>  $newName,
-                'enabled' =>  $language->enabled,
-                'languageCode' =>  $language->languageCode
+                'id' => $language->id,
+                'name' => $newName,
+                'enabled' => $language->enabled,
+                'languageCode' => $language->languageCode
             )
         );
 
@@ -157,10 +157,10 @@ class LanguageServiceStub implements LanguageService
 
         $this->languages[$language->id] = new Language(
             array(
-                'id' =>  $language->id,
-                'name' =>  $language->name,
-                'enabled' =>  true,
-                'languageCode' =>  $language->languageCode
+                'id' => $language->id,
+                'name' => $language->name,
+                'enabled' => true,
+                'languageCode' => $language->languageCode
             )
         );
     }
@@ -181,10 +181,10 @@ class LanguageServiceStub implements LanguageService
 
         $this->languages[$language->id] = new Language(
             array(
-                'id' =>  $language->id,
-                'name' =>  $language->name,
-                'enabled' =>  false,
-                'languageCode' =>  $language->languageCode
+                'id' => $language->id,
+                'name' => $language->name,
+                'enabled' => false,
+                'languageCode' => $language->languageCode
             )
         );
     }

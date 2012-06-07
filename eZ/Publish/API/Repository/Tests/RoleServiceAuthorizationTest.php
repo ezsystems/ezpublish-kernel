@@ -355,7 +355,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
             array(
-                'limitationValues' =>  array( '/1/2/' )
+                'limitationValues' => array( '/1/2/' )
             )
         );
 
@@ -452,7 +452,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
             array(
-                'limitationValues' =>  array( '/1/2/' )
+                'limitationValues' => array( '/1/2/' )
             )
         );
 

@@ -68,16 +68,16 @@ class LocationHandlerTest extends TestCase
      * @var array
      */
     protected $locationCreateStructValues = array(
-        'contentId' =>  75,
-        'contentVersion' =>  1,
-        'hidden' =>  0,
-        'invisible' =>  0,
-        'mainLocationId' =>  77,
-        'parentId' =>  2,
-        'pathIdentificationString' =>  'solutions',
-        'priority' =>  0,
-        'sortField' =>  2,
-        'sortOrder' =>  1,
+        'contentId' => 75,
+        'contentVersion' => 1,
+        'hidden' => 0,
+        'invisible' => 0,
+        'mainLocationId' => 77,
+        'parentId' => 2,
+        'pathIdentificationString' => 'solutions',
+        'priority' => 0,
+        'sortField' => 2,
+        'sortOrder' => 1,
     );
 
     /**

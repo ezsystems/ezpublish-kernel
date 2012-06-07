@@ -199,16 +199,16 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                'status' =>  VersionInfo::STATUS_DRAFT,
-                'versionNo' =>  1,
-                'creatorId' =>  $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode' =>  'eng-US',
+                'status' => VersionInfo::STATUS_DRAFT,
+                'versionNo' => 1,
+                'creatorId' => $this->getRepository()->getCurrentUser()->id,
+                'initialLanguageCode' => 'eng-US',
             ),
             array(
-                'status' =>  $content->getVersionInfo()->status,
-                'versionNo' =>  $content->getVersionInfo()->versionNo,
-                'creatorId' =>  $content->getVersionInfo()->creatorId,
-                'initialLanguageCode' =>  $content->getVersionInfo()->initialLanguageCode,
+                'status' => $content->getVersionInfo()->status,
+                'versionNo' => $content->getVersionInfo()->versionNo,
+                'creatorId' => $content->getVersionInfo()->creatorId,
+                'initialLanguageCode' => $content->getVersionInfo()->initialLanguageCode,
             )
         );
     }
@@ -870,12 +870,12 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                'fieldCount' =>  4,
-                'relationCount' =>  0
+                'fieldCount' => 4,
+                'relationCount' => 0
             ),
             array(
-                'fieldCount' =>  count( $draft->getFields() ),
-                'relationCount' =>  count( $draft->getRelations() )
+                'fieldCount' => count( $draft->getFields() ),
+                'relationCount' => count( $draft->getRelations() )
             )
         );
     }
@@ -930,18 +930,18 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'creatorId' =>  $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode' =>  'eng-US',
-                'languageCodes' =>  array( 0 => 'eng-US' ),
-                'status' =>  VersionInfo::STATUS_DRAFT,
-                'versionNo' =>  2
+                'creatorId' => $this->getRepository()->getCurrentUser()->id,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => array( 0 => 'eng-US' ),
+                'status' => VersionInfo::STATUS_DRAFT,
+                'versionNo' => 2
             ),
             array(
-                'creatorId' =>  $versionInfo->creatorId,
-                'initialLanguageCode' =>  $versionInfo->initialLanguageCode,
-                'languageCodes' =>  $versionInfo->languageCodes,
-                'status' =>  $versionInfo->status,
-                'versionNo' =>  $versionInfo->versionNo
+                'creatorId' => $versionInfo->creatorId,
+                'initialLanguageCode' => $versionInfo->initialLanguageCode,
+                'languageCodes' => $versionInfo->languageCodes,
+                'status' => $versionInfo->status,
+                'versionNo' => $versionInfo->versionNo
             )
         );
     }
@@ -1117,10 +1117,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $actual[] = new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  $field->value,
-                    'languageCode' =>  $field->languageCode,
-                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
+                    'id' => 0,
+                    'value' => $field->value,
+                    'languageCode' => $field->languageCode,
+                    'fieldDefIdentifier' => $field->fieldDefIdentifier
                 )
             );
         }
@@ -1135,66 +1135,66 @@ class ContentServiceTest extends BaseContentServiceTest
         $expected = array(
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'body'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'body'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'body'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'body'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'index_title'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'index_title'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'tags'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'tags'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'tags'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'tags'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'An awesome²³ story about ezp.',
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'title'
+                    'id' => 0,
+                    'value' => 'An awesome²³ story about ezp.',
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'An awesome² story about ezp.',
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'title'
+                    'id' => 0,
+                    'value' => 'An awesome² story about ezp.',
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'title'
                 )
             ),
         );
@@ -1350,12 +1350,12 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'status' =>  VersionInfo::STATUS_PUBLISHED,
-                'versionNo' =>  2
+                'status' => VersionInfo::STATUS_PUBLISHED,
+                'versionNo' => 2
             ),
             array(
-                'status' =>  $versionInfo->status,
-                'versionNo' =>  $versionInfo->versionNo
+                'status' => $versionInfo->status,
+                'versionNo' => $versionInfo->versionNo
             )
         );
     }
@@ -1381,12 +1381,12 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'status' =>  VersionInfo::STATUS_ARCHIVED,
-                'versionNo' =>  1
+                'status' => VersionInfo::STATUS_ARCHIVED,
+                'versionNo' => 1
             ),
             array(
-                'status' =>  $versionInfo->status,
-                'versionNo' =>  $versionInfo->versionNo
+                'status' => $versionInfo->status,
+                'versionNo' => $versionInfo->versionNo
             )
         );
     }
@@ -1523,26 +1523,26 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'remoteId' =>  'aaaabbbbccccddddeeeeffff11112222',
-                'sectionId' =>  $this->generateId( 'section', 1 ),
-                'alwaysAvailable' =>  false,
-                'currentVersionNo' =>  1,
-                'mainLanguageCode' =>  'eng-GB',
-                'modificationDate' =>  new \DateTime( '1984/01/01' ),
-                'ownerId' =>  $this->getRepository()->getCurrentUser()->id,
-                'published' =>  true,
-                'publishedDate' =>  new \DateTime( '1984/01/01' ),
+                'remoteId' => 'aaaabbbbccccddddeeeeffff11112222',
+                'sectionId' => $this->generateId( 'section', 1 ),
+                'alwaysAvailable' => false,
+                'currentVersionNo' => 1,
+                'mainLanguageCode' => 'eng-GB',
+                'modificationDate' => new \DateTime( '1984/01/01' ),
+                'ownerId' => $this->getRepository()->getCurrentUser()->id,
+                'published' => true,
+                'publishedDate' => new \DateTime( '1984/01/01' ),
             ),
             array(
-                'remoteId' =>  $contentInfo->remoteId,
-                'sectionId' =>  $contentInfo->sectionId,
-                'alwaysAvailable' =>  $contentInfo->alwaysAvailable,
-                'currentVersionNo' =>  $contentInfo->currentVersionNo,
-                'mainLanguageCode' =>  $contentInfo->mainLanguageCode,
-                'modificationDate' =>  $contentInfo->modificationDate,
-                'ownerId' =>  $contentInfo->ownerId,
-                'published' =>  $contentInfo->published,
-                'publishedDate' =>  $contentInfo->publishedDate,
+                'remoteId' => $contentInfo->remoteId,
+                'sectionId' => $contentInfo->sectionId,
+                'alwaysAvailable' => $contentInfo->alwaysAvailable,
+                'currentVersionNo' => $contentInfo->currentVersionNo,
+                'mainLanguageCode' => $contentInfo->mainLanguageCode,
+                'modificationDate' => $contentInfo->modificationDate,
+                'ownerId' => $contentInfo->ownerId,
+                'published' => $contentInfo->published,
+                'publishedDate' => $contentInfo->publishedDate,
             )
         );
     }
@@ -1894,10 +1894,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $actual[] = new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  $field->value,
-                    'languageCode' =>  $field->languageCode,
-                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
+                    'id' => 0,
+                    'value' => $field->value,
+                    'languageCode' => $field->languageCode,
+                    'fieldDefIdentifier' => $field->fieldDefIdentifier
                 )
             );
         }
@@ -1912,34 +1912,34 @@ class ContentServiceTest extends BaseContentServiceTest
         $expected = array(
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'body'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'body'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'British index title...',
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'index_title'
+                    'id' => 0,
+                    'value' => 'British index title...',
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'tags'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'tags'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'An awesome²³ story about ezp.',
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'title'
+                    'id' => 0,
+                    'value' => 'An awesome²³ story about ezp.',
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'title'
                 )
             ),
         );
@@ -1999,10 +1999,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $actual[] = new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  $field->value,
-                    'languageCode' =>  $field->languageCode,
-                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
+                    'id' => 0,
+                    'value' => $field->value,
+                    'languageCode' => $field->languageCode,
+                    'fieldDefIdentifier' => $field->fieldDefIdentifier
                 )
             );
         }
@@ -2017,34 +2017,34 @@ class ContentServiceTest extends BaseContentServiceTest
         $expected = array(
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'body'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'body'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'British index title...',
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'index_title'
+                    'id' => 0,
+                    'value' => 'British index title...',
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'tags'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'tags'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'An awesome² story about ezp.',
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'title'
+                    'id' => 0,
+                    'value' => 'An awesome² story about ezp.',
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'title'
                 )
             ),
         );
@@ -2773,16 +2773,16 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertEquals(
             array(
-                'type' =>  Relation::COMMON,
-                'sourceFieldDefinitionIdentifier' =>  null,
-                'sourceContentInfo' =>  'abcdef0123456789abcdef0123456789',
-                'destinationContentInfo' =>  'affc99e41128c1475fa4f23dafb7159b',
+                'type' => Relation::COMMON,
+                'sourceFieldDefinitionIdentifier' => null,
+                'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
+                'destinationContentInfo' => 'affc99e41128c1475fa4f23dafb7159b',
             ),
             array(
-                'type' =>  $relations[0]->type,
-                'sourceFieldDefinitionIdentifier' =>  $relations[0]->sourceFieldDefinitionIdentifier,
-                'sourceContentInfo' =>  $relations[0]->sourceContentInfo->remoteId,
-                'destinationContentInfo' =>  $relations[0]->destinationContentInfo->remoteId,
+                'type' => $relations[0]->type,
+                'sourceFieldDefinitionIdentifier' => $relations[0]->sourceFieldDefinitionIdentifier,
+                'sourceContentInfo' => $relations[0]->sourceContentInfo->remoteId,
+                'destinationContentInfo' => $relations[0]->destinationContentInfo->remoteId,
             )
         );
     }
@@ -2869,22 +2869,22 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 array(
-                    'sourceContentInfo' =>  'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo' =>  'affc99e41128c1475fa4f23dafb7159b',
+                    'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo' => 'affc99e41128c1475fa4f23dafb7159b',
                 ),
                 array(
-                    'sourceContentInfo' =>  'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo' =>  '378acc2bc7a52400701956047a2f7d45',
+                    'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
+                    'destinationContentInfo' => '378acc2bc7a52400701956047a2f7d45',
                 )
             ),
             array(
                 array(
-                    'sourceContentInfo' =>  $relations[0]->sourceContentInfo->remoteId,
-                    'destinationContentInfo' =>  $relations[0]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' => $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' => $relations[0]->destinationContentInfo->remoteId,
                 ),
                 array(
-                    'sourceContentInfo' =>  $relations[1]->sourceContentInfo->remoteId,
-                    'destinationContentInfo' =>  $relations[1]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' => $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' => $relations[1]->destinationContentInfo->remoteId,
                 )
             )
         );
@@ -2945,22 +2945,22 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 array(
-                    'sourceContentInfo' =>  'affc99e41128c1475fa4f23dafb7159b',
-                    'destinationContentInfo' =>  'abcdef0123456789abcdef0123456789',
+                    'sourceContentInfo' => 'affc99e41128c1475fa4f23dafb7159b',
+                    'destinationContentInfo' => 'abcdef0123456789abcdef0123456789',
                 ),
                 array(
-                    'sourceContentInfo' =>  '378acc2bc7a52400701956047a2f7d45',
-                    'destinationContentInfo' =>  'abcdef0123456789abcdef0123456789',
+                    'sourceContentInfo' => '378acc2bc7a52400701956047a2f7d45',
+                    'destinationContentInfo' => 'abcdef0123456789abcdef0123456789',
                 )
             ),
             array(
                 array(
-                    'sourceContentInfo' =>  $relations[0]->sourceContentInfo->remoteId,
-                    'destinationContentInfo' =>  $relations[0]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' => $relations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' => $relations[0]->destinationContentInfo->remoteId,
                 ),
                 array(
-                    'sourceContentInfo' =>  $relations[1]->sourceContentInfo->remoteId,
-                    'destinationContentInfo' =>  $relations[1]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' => $relations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' => $relations[1]->destinationContentInfo->remoteId,
                 )
             )
         );
@@ -4206,10 +4206,10 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $normalized[] = new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  $field->value,
-                    'languageCode' =>  $field->languageCode,
-                    'fieldDefIdentifier' =>  $field->fieldDefIdentifier
+                    'id' => 0,
+                    'value' => $field->value,
+                    'languageCode' => $field->languageCode,
+                    'fieldDefIdentifier' => $field->fieldDefIdentifier
                 )
             );
         }
@@ -4254,66 +4254,66 @@ class ContentServiceTest extends BaseContentServiceTest
         return array(
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'body'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'body'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'body'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'body'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'British index title...',
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'index_title'
+                    'id' => 0,
+                    'value' => 'British index title...',
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'American index title...',
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'index_title'
+                    'id' => 0,
+                    'value' => 'American index title...',
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'index_title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'tags'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'tags'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  null,
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'tags'
+                    'id' => 0,
+                    'value' => null,
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'tags'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'An awesome² story about ezp.',
-                    'languageCode' =>  'eng-US',
-                    'fieldDefIdentifier' =>  'title'
+                    'id' => 0,
+                    'value' => 'An awesome² story about ezp.',
+                    'languageCode' => 'eng-US',
+                    'fieldDefIdentifier' => 'title'
                 )
             ),
             new Field(
                 array(
-                    'id' =>  0,
-                    'value' =>  'An awesome²³ story about ezp.',
-                    'languageCode' =>  'eng-GB',
-                    'fieldDefIdentifier' =>  'title'
+                    'id' => 0,
+                    'value' => 'An awesome²³ story about ezp.',
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'title'
                 )
             ),
         );

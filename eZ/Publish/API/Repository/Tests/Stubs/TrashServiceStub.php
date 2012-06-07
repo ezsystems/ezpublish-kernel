@@ -108,20 +108,20 @@ class TrashServiceStub implements TrashService
 
         $this->trashItems[$location->id] = new TrashItemStub(
             array(
-                'id' =>  $location->id,
-                'childCount' =>  $location->childCount,
-                'depth' =>  $location->depth,
-                'hidden' =>  $location->hidden,
-                'invisible' =>  $location->invisible,
-                'modifiedSubLocationDate' =>  $location->modifiedSubLocationDate,
-                'parentLocationId' =>  $location->parentLocationId,
-                'pathString' =>  $location->pathString,
-                'priority' =>  $location->priority,
-                'remoteId' =>  $location->remoteId,
-                'sortField' =>  $location->sortField,
-                'sortOrder' =>  $location->sortOrder,
+                'id' => $location->id,
+                'childCount' => $location->childCount,
+                'depth' => $location->depth,
+                'hidden' => $location->hidden,
+                'invisible' => $location->invisible,
+                'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+                'parentLocationId' => $location->parentLocationId,
+                'pathString' => $location->pathString,
+                'priority' => $location->priority,
+                'remoteId' => $location->remoteId,
+                'sortField' => $location->sortField,
+                'sortOrder' => $location->sortOrder,
 
-                'location' =>  $location
+                'location' => $location
             )
         );
 
@@ -242,9 +242,9 @@ class TrashServiceStub implements TrashService
 
         return new SearchResult(
             array(
-                'query' =>  $query,
-                'count' =>  count( $trashItems ),
-                'items' =>  array_values( $trashItems ),
+                'query' => $query,
+                'count' => count( $trashItems ),
+                'items' => array_values( $trashItems ),
             )
         );
     }

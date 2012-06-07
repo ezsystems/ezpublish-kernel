@@ -69,7 +69,7 @@ class LocationServiceStub implements LocationService
     {
         return new LocationCreateStruct(
             array(
-                'parentLocationId' =>  $parentLocationId
+                'parentLocationId' => $parentLocationId
             )
         );
     }
@@ -659,11 +659,11 @@ class LocationServiceStub implements LocationService
         $values = array_merge(
             $this->locationToArray( $subtree ),
             array(
-                'id' =>  ++$this->nextLocationId,
-                'remoteId' =>  md5( uniqid( $subtree->remoteId, true ) ),
-                'depth' =>  $targetParentLocation->depth + 1,
-                'parentLocationId' =>  $targetParentLocation->id,
-                'pathString' =>  "{$targetParentLocation->pathString}{$this->nextLocationId}/"
+                'id' => ++$this->nextLocationId,
+                'remoteId' => md5( uniqid( $subtree->remoteId, true ) ),
+                'depth' => $targetParentLocation->depth + 1,
+                'parentLocationId' => $targetParentLocation->id,
+                'pathString' => "{$targetParentLocation->pathString}{$this->nextLocationId}/"
             )
         );
 
@@ -740,9 +740,9 @@ class LocationServiceStub implements LocationService
         $values = array_merge(
             $this->locationToArray( $location ),
             array(
-                'depth' =>  $newParentLocation->depth + 1,
-                'pathString' =>  "{$newParentLocation->pathString}{$location->id}/",
-                'parentLocationId' =>  $newParentLocation->id,
+                'depth' => $newParentLocation->depth + 1,
+                'pathString' => "{$newParentLocation->pathString}{$location->id}/",
+                'parentLocationId' => $newParentLocation->id,
             )
         );
 

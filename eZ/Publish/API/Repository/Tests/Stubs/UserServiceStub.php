@@ -106,17 +106,17 @@ class UserServiceStub implements UserService
 
         $userGroup = new UserGroupStub(
             array(
-                'parentId' =>  $parentGroup->id,
-                'subGroupCount' =>  0,
-                'content' =>  $content
+                'parentId' => $parentGroup->id,
+                'subGroupCount' => 0,
+                'content' => $content
             )
         );
         $this->userGroups[$userGroup->id] = $userGroup;
         $this->userGroups[$parentGroup->id] = new UserGroupStub(
             array(
-                'parentId' =>  $parentGroup->parentId,
-                'subGroupCount' =>  $parentGroup->subGroupCount + 1,
-                'content' =>  $parentGroup->content
+                'parentId' => $parentGroup->parentId,
+                'subGroupCount' => $parentGroup->subGroupCount + 1,
+                'content' => $parentGroup->content
             )
         );
 
@@ -217,9 +217,9 @@ class UserServiceStub implements UserService
 
         $this->userGroups[$oldParent->id] = new UserGroupStub(
             array(
-                'parentId' =>  $oldParent->parentId,
-                'subGroupCount' =>  $oldParent->subGroupCount - 1,
-                'content' =>  $contentService->loadContent(
+                'parentId' => $oldParent->parentId,
+                'subGroupCount' => $oldParent->subGroupCount - 1,
+                'content' => $contentService->loadContent(
                     $oldParent->id
                 )
             )
@@ -227,9 +227,9 @@ class UserServiceStub implements UserService
 
         $this->userGroups[$userGroup->id] = new UserGroupStub(
             array(
-                'parentId' =>  $newParent->id,
-                'subGroupCount' =>  $userGroup->subGroupCount,
-                'content' =>  $contentService->loadContent(
+                'parentId' => $newParent->id,
+                'subGroupCount' => $userGroup->subGroupCount,
+                'content' => $contentService->loadContent(
                     $userGroup->id
                 )
             )
@@ -237,9 +237,9 @@ class UserServiceStub implements UserService
 
         $this->userGroups[$newParent->id] = new UserGroupStub(
             array(
-                'parentId' =>  $newParent->parentId,
-                'subGroupCount' =>  $newParent->subGroupCount + 1,
-                'content' =>  $contentService->loadContent(
+                'parentId' => $newParent->parentId,
+                'subGroupCount' => $newParent->subGroupCount + 1,
+                'content' => $contentService->loadContent(
                     $newParent->id
                 )
             )
@@ -294,9 +294,9 @@ class UserServiceStub implements UserService
         {
             $this->userGroups[$userGroup->id] = new UserGroupStub(
                 array(
-                    'parentId' =>  $userGroup->parentId,
-                    'subGroupCount' =>  $userGroup->subGroupCount,
-                    'content' =>  $content
+                    'parentId' => $userGroup->parentId,
+                    'subGroupCount' => $userGroup->subGroupCount,
+                    'content' => $content
                 )
             );
         }
@@ -351,16 +351,16 @@ class UserServiceStub implements UserService
 
         $user = new UserStub(
             array(
-                'login' =>  $userCreateStruct->login,
-                'email' =>  $userCreateStruct->email,
-                'passwordHash' =>  $this->createHash(
+                'login' => $userCreateStruct->login,
+                'email' => $userCreateStruct->email,
+                'passwordHash' => $this->createHash(
                     $userCreateStruct->login,
                     $userCreateStruct->password,
                     2
                 ),
-                'hashAlgorithm' =>  2,
-                'isEnabled' =>  $userCreateStruct->enabled,
-                'content' =>  $content
+                'hashAlgorithm' => 2,
+                'isEnabled' => $userCreateStruct->enabled,
+                'content' => $content
             )
         );
         $this->users[$user->id] = $user;
@@ -514,18 +514,18 @@ class UserServiceStub implements UserService
 
         $this->users[$user->id] = new UserStub(
             array(
-                'login' =>  $user->login,
-                'email' =>  $userUpdateStruct->email ?: $user->email,
-                'isEnabled' =>  is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,
-                'maxLogin' =>  is_null( $userUpdateStruct->maxLogin ) ? $user->maxLogin : $userUpdateStruct->maxLogin,
-                'hashAlgorithm' =>  $user->hashAlgorithm,
-                'passwordHash' =>  $userUpdateStruct->password ?
+                'login' => $user->login,
+                'email' => $userUpdateStruct->email ?: $user->email,
+                'isEnabled' => is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,
+                'maxLogin' => is_null( $userUpdateStruct->maxLogin ) ? $user->maxLogin : $userUpdateStruct->maxLogin,
+                'hashAlgorithm' => $user->hashAlgorithm,
+                'passwordHash' => $userUpdateStruct->password ?
                     $this->createHash(
                         $user->login,
                         $userUpdateStruct->password,
                         $user->hashAlgorithm ) : $user->passwordHash,
 
-                'content' =>  $content,
+                'content' => $content,
             )
         );
 
@@ -677,12 +677,12 @@ class UserServiceStub implements UserService
 
         return new UserCreateStructStub(
             array(
-                'login' =>  $login,
-                'email' =>  $email,
-                'password' =>  $password,
-                'mainLanguageCode' =>  $mainLanguageCode,
-                'contentType' =>  $contentType,
-                'remoteId' =>  md5( uniqid( __METHOD__, true ) )
+                'login' => $login,
+                'email' => $email,
+                'password' => $password,
+                'mainLanguageCode' => $mainLanguageCode,
+                'contentType' => $contentType,
+                'remoteId' => md5( uniqid( __METHOD__, true ) )
             )
         );
 
@@ -703,9 +703,9 @@ class UserServiceStub implements UserService
 
         return new UserGroupCreateStructStub(
             array(
-                'mainLanguageCode' =>  $mainLanguageCode,
-                'contentType' =>  $contentType,
-                'remoteId' =>  md5( uniqid( __METHOD__, true ) )
+                'mainLanguageCode' => $mainLanguageCode,
+                'contentType' => $contentType,
+                'remoteId' => md5( uniqid( __METHOD__, true ) )
             )
         );
     }

@@ -73,9 +73,9 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'sourceUrl' =>  '/articles/*',
-                'destinationUrl' =>  '/content/{1}',
-                'forward' =>  false
+                'sourceUrl' => '/articles/*',
+                'destinationUrl' => '/content/{1}',
+                'forward' => false
             ),
             $urlWildcard
         );
@@ -101,9 +101,9 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'sourceUrl' =>  '/articles/*',
-                'destinationUrl' =>  '/content/{1}',
-                'forward' =>  true
+                'sourceUrl' => '/articles/*',
+                'destinationUrl' => '/content/{1}',
+                'forward' => true
             ),
             $urlWildcard
         );
@@ -237,9 +237,9 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'sourceUrl' =>  '/articles/*',
-                'destinationUrl' =>  '/content/{1}',
-                'forward' =>  true
+                'sourceUrl' => '/articles/*',
+                'destinationUrl' => '/content/{1}',
+                'forward' => true
             ),
             $urlWildcard
         );
@@ -438,8 +438,8 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'uri' =>  '/content/2012/05/sindelfingen',
-                'forward' =>  false
+                'uri' => '/content/2012/05/sindelfingen',
+                'forward' => false
             ),
             $result
         );
@@ -468,8 +468,8 @@ class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'uri' =>  '/content/sindelfingen/year/2012',
-                'forward' =>  true
+                'uri' => '/content/sindelfingen/year/2012',
+                'forward' => true
             ),
             $result
         );

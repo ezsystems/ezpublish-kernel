@@ -193,12 +193,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'id' =>  $this->generateId( 'typegroup', 2 ),
-                'identifier' =>  'Users',
-                'creationDate' =>  new \DateTime( '@1031216941' ),
-                'modificationDate' =>  new \DateTime( '@1033922113' ),
-                'creatorId' =>  $this->generateId( 'user', 14 ),
-                'modifierId' =>  $this->generateId( 'user', 14 ),
+                'id' => $this->generateId( 'typegroup', 2 ),
+                'identifier' => 'Users',
+                'creationDate' => new \DateTime( '@1031216941' ),
+                'modificationDate' => new \DateTime( '@1033922113' ),
+                'creatorId' => $this->generateId( 'user', 14 ),
+                'modifierId' => $this->generateId( 'user', 14 ),
             ),
             $group
         );
@@ -2200,8 +2200,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'creatorId' =>  $user->id,
-                'modifierId' =>  $user->id
+                'creatorId' => $user->id,
+                'modifierId' => $user->id
             ),
             $copiedType
         );

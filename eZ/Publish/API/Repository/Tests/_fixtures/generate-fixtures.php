@@ -38,12 +38,12 @@ function generateContentTypeGroupFixture( array $fixture )
     foreach ( getFixtureTable( 'ezcontentclassgroup', $fixture ) as $data )
     {
         $groups[$data['id']] = array(
-            'id' =>  $data['id'],
-            'identifier' =>  $data['name'],
-            'creationDate' =>  'new \DateTime( "@' . $data['created'] . '" )',
-            'modificationDate' =>  'new \DateTime( "@' . $data['modified'] . '" )',
-            'creatorId' =>  $data['creator_id'],
-            'modifierId' =>  $data['modifier_id']
+            'id' => $data['id'],
+            'identifier' => $data['name'],
+            'creationDate' => 'new \DateTime( "@' . $data['created'] . '" )',
+            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'creatorId' => $data['creator_id'],
+            'modifierId' => $data['modifier_id']
         );
         $nextId = max( $nextId, $data['id'] );
     }
@@ -89,27 +89,27 @@ function generateContentTypeFixture( array $fixture )
     foreach ( getFixtureTable( 'ezcontentclass', $fixture ) as $data )
     {
         $types[$data['id']] = array(
-            'id' =>  $data['id'],
-            'status' =>  0, // Type::STATUS_DEFINED
-            'identifier' =>  $data['identifier'],
-            'creationDate' =>  'new \DateTime( "@' . $data['created'] . '" )',
-            'modificationDate' =>  'new \DateTime( "@' . $data['modified'] . '" )',
-            'creatorId' =>  $data['creator_id'],
-            'modifierId' =>  $data['modifier_id'],
-            'remoteId' =>  $data['remote_id'],
+            'id' => $data['id'],
+            'status' => 0, // Type::STATUS_DEFINED
+            'identifier' => $data['identifier'],
+            'creationDate' => 'new \DateTime( "@' . $data['created'] . '" )',
+            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'creatorId' => $data['creator_id'],
+            'modifierId' => $data['modifier_id'],
+            'remoteId' => $data['remote_id'],
             // TODO: How do we build the userAliasSchema?
-            //'urlAliasSchema' =>  $data[]
-            'names' =>  $typeNames[$data['id']],
-            'descriptions' =>  array(),
-            'nameSchema' =>  $data['contentobject_name'],
-            'isContainer' =>  (boolean) $data['is_container'],
-            'mainLanguageCode' =>  $languageCodes[$data['initial_language_id']],
-            'defaultAlwaysAvailable' =>  (boolean) $data['always_available'],
-            'defaultSortField' =>  $data['sort_field'],
-            'defaultSortOrder' =>  $data['sort_order'],
+            //'urlAliasSchema' => $data[]
+            'names' => $typeNames[$data['id']],
+            'descriptions' => array(),
+            'nameSchema' => $data['contentobject_name'],
+            'isContainer' => (boolean) $data['is_container'],
+            'mainLanguageCode' => $languageCodes[$data['initial_language_id']],
+            'defaultAlwaysAvailable' => (boolean) $data['always_available'],
+            'defaultSortField' => $data['sort_field'],
+            'defaultSortOrder' => $data['sort_order'],
 
-            'fieldDefinitions' =>  trim ( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDef[$data['id']] ) ? $fieldDef[$data['id']] : array() ) ),
-            'contentTypeGroups' =>  isset( $typeGroups[$data['id']] ) ? $typeGroups[$data['id']] : array(),
+            'fieldDefinitions' => trim ( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDef[$data['id']] ) ? $fieldDef[$data['id']] : array() ) ),
+            'contentTypeGroups' => isset( $typeGroups[$data['id']] ) ? $typeGroups[$data['id']] : array(),
         );
 
         $nextTypeId = max( $nextTypeId, $data['id'] );
@@ -140,21 +140,21 @@ function getContentTypeFieldDefinition( array $fixture )
         unset( $description['always-available'] );
 
         $fieldDef[$data['contentclass_id']][$data['id']] = array(
-            'id' =>  (int) $data['id'],
-            'identifier' =>  $data['identifier'],
-            'fieldGroup' =>  $data['category'],
-            'position' =>  (int) $data['placement'],
-            'fieldTypeIdentifier' =>  $data['data_type_string'],
-            'isTranslatable' =>  (boolean) $data['can_translate'],
-            'isRequired' =>  (boolean) $data['is_required'],
-            'isInfoCollector' =>  (boolean) $data['is_information_collector'],
-            'isSearchable' =>  (boolean) $data['is_searchable'],
-            'defaultValue' =>  null,
+            'id' => (int) $data['id'],
+            'identifier' => $data['identifier'],
+            'fieldGroup' => $data['category'],
+            'position' => (int) $data['placement'],
+            'fieldTypeIdentifier' => $data['data_type_string'],
+            'isTranslatable' => (boolean) $data['can_translate'],
+            'isRequired' => (boolean) $data['is_required'],
+            'isInfoCollector' => (boolean) $data['is_information_collector'],
+            'isSearchable' => (boolean) $data['is_searchable'],
+            'defaultValue' => null,
 
-            'names' =>  $names,
-            'descriptions' =>  $description,
-            'fieldSettings' =>  array(),
-            'validators' =>  array(),
+            'names' => $names,
+            'descriptions' => $description,
+            'fieldSettings' => array(),
+            'validators' => array(),
         );
 
         $nextFieldId = max( $nextFieldId, $data['id'] );
@@ -172,9 +172,9 @@ function generateSectionFixture( array $fixture )
     foreach ( getFixtureTable( 'ezsection', $fixture ) as $data )
     {
         $sections[$data['id']] = array(
-            'id' =>  $data['id'],
-            'name' =>  $data['name'],
-            'identifier' =>  $data['identifier'],
+            'id' => $data['id'],
+            'name' => $data['name'],
+            'identifier' => $data['identifier'],
         );
 
         if ( $data['identifier'] )
@@ -218,30 +218,30 @@ function generateContentInfoFixture( array $fixture )
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
         $indexMap[$data['remote_id']] = array(
-            'versionId' =>  array(),
-            'contentId' =>  array(),
+            'versionId' => array(),
+            'contentId' => array(),
         );
 
         $indexMap[$data['id']] = array(
-            'versionId' =>  array(),
-            'contentId' =>  array(),
+            'versionId' => array(),
+            'contentId' => array(),
         );
 
         $contentInfos[$data['id']] = array(
-            'id' =>  $data['id'],
-            'name' =>  $data['name'],
-            'contentTypeId' =>  $data['contentclass_id'],
-            'sectionId' =>  $data['section_id'],
-            'currentVersionNo' =>  $data['current_version'],
-            'published' =>  ( $data['published'] != 0 ),
-            'ownerId' =>  $data['owner_id'],
-            'modificationDate' =>  'new \DateTime( "@' . $data['modified'] . '" )',
-            'publishedDate' =>  'new \DateTime( "@' . $data['published'] . '" )',
-            'alwaysAvailable' =>  (boolean) ( $data['language_mask'] & 1 ),
-            'remoteId' =>  $data['remote_id'],
-            'mainLanguageCode' =>  $languageCodes[$data['initial_language_id']],
-            'repository' =>  '$this',
-            'mainLocationId' =>  $mainLocationIds[$data['id']],
+            'id' => $data['id'],
+            'name' => $data['name'],
+            'contentTypeId' => $data['contentclass_id'],
+            'sectionId' => $data['section_id'],
+            'currentVersionNo' => $data['current_version'],
+            'published' => ( $data['published'] != 0 ),
+            'ownerId' => $data['owner_id'],
+            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'publishedDate' => 'new \DateTime( "@' . $data['published'] . '" )',
+            'alwaysAvailable' => (boolean) ( $data['language_mask'] & 1 ),
+            'remoteId' => $data['remote_id'],
+            'mainLanguageCode' => $languageCodes[$data['initial_language_id']],
+            'repository' => '$this',
+            'mainLocationId' => $mainLocationIds[$data['id']],
         );
         $nextId = max( $nextId, $data['id'] );
     }
@@ -277,13 +277,13 @@ function generateContentInfoFixture( array $fixture )
         }
 
         $fields[$data['id']] = array(
-            'id' =>  $data['id'],
-            'value' =>  $value,
-            'languageCode' =>  $data['language_code'],
-            'fieldDefIdentifier' =>  $identifier,
+            'id' => $data['id'],
+            'value' => $value,
+            'languageCode' => $data['language_code'],
+            'fieldDefIdentifier' => $identifier,
 
-            'contentId' =>  $data['contentobject_id'],
-            'version' =>  $data['version']
+            'contentId' => $data['contentobject_id'],
+            'version' => $data['version']
         );
 
         $fieldNextId = max( $fieldNextId, $data['id'] );
@@ -319,16 +319,16 @@ function generateContentInfoFixture( array $fixture )
     foreach ( getFixtureTable( 'ezcontentobject_version', $fixture ) as $data )
     {
         $versionInfo[$data['id']] = array(
-            'id' =>  $data['id'],
-            'contentId' =>  $data['contentobject_id'],
-            'status' =>  $data['status'] <= 2 ? $data['status'] : 1,
-            'versionNo' =>  $data['version'],
-            'modificationDate' =>  'new \DateTime( "@' . $data['modified'] . '" )',
-            'creatorId' =>  $data['creator_id'],
-            'creationDate' =>  'new \DateTime( "@' . $data['created'] . '" )',
-            'initialLanguageCode' =>  $languageCodes[$data['initial_language_id']],
-            'languageCodes' =>  array(), // TODO: Extract language codes from fields
-            'repository' =>  '$this',
+            'id' => $data['id'],
+            'contentId' => $data['contentobject_id'],
+            'status' => $data['status'] <= 2 ? $data['status'] : 1,
+            'versionNo' => $data['version'],
+            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'creatorId' => $data['creator_id'],
+            'creationDate' => 'new \DateTime( "@' . $data['created'] . '" )',
+            'initialLanguageCode' => $languageCodes[$data['initial_language_id']],
+            'languageCodes' => array(), // TODO: Extract language codes from fields
+            'repository' => '$this',
             'names' => $names[$data['contentobject_id']][$data['version']],
         );
 
@@ -354,13 +354,13 @@ function generateContentInfoFixture( array $fixture )
         $contentFields = trim( generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Field', $contentFields ) );
 
         $content[] = array(
-            'id' =>  $data['contentobject_id'],
-            'contentTypeId' =>  $contentInfos[$data['contentobject_id']]['contentTypeId'],
-            'fields' =>  $contentFields,
-            'relations' =>  array(),
+            'id' => $data['contentobject_id'],
+            'contentTypeId' => $contentInfos[$data['contentobject_id']]['contentTypeId'],
+            'fields' => $contentFields,
+            'relations' => array(),
 
-            'versionNo' =>  $data['version'],
-            'repository' =>  '$this'
+            'versionNo' => $data['version'],
+            'repository' => '$this'
         );
 
         $remoteId = $contentInfos[$data['contentobject_id']]['remoteId'];
@@ -461,10 +461,10 @@ function generateLanguageFixture( array $fixture )
     foreach ( getFixtureTable( 'ezcontent_language', $fixture ) as $data )
     {
         $languages[$data['id']] = array(
-            'id' =>  $data['id'],
-            'name' =>  $data['name'],
-            'enabled' =>  !$data['disabled'],
-            'languageCode' =>  $data['locale']
+            'id' => $data['id'],
+            'name' => $data['name'],
+            'enabled' => !$data['disabled'],
+            'languageCode' => $data['locale']
         );
 
         $languageCodes[$data['locale']] = $data['id'];
@@ -485,13 +485,13 @@ function generateUserFixture( array $fixture )
     foreach ( getFixtureTable( 'ezuser', $fixture ) as $data )
     {
         $users[] = array(
-            '_id' =>  $data['contentobject_id'],
-            'login' =>  $data['login'],
-            'email' =>  $data['email'],
-            'passwordHash' =>  $data['password_hash'],
-            'hashAlgorithm' =>  $data['password_hash_type'],
-            'isEnabled' =>  true,
-            'content' =>  '$this->getContentService()->loadContent( ' . $data['contentobject_id'] . ' )'
+            '_id' => $data['contentobject_id'],
+            'login' => $data['login'],
+            'email' => $data['email'],
+            'passwordHash' => $data['password_hash'],
+            'hashAlgorithm' => $data['password_hash_type'],
+            'isEnabled' => true,
+            'content' => '$this->getContentService()->loadContent( ' . $data['contentobject_id'] . ' )'
         );
     }
 
@@ -539,10 +539,10 @@ function generateUserGroupFixture( array $fixture )
         }
 
         $groups[$data['id']] = array(
-            '_id' =>  $data['id'],
-            'parentId' =>  is_numeric( $parentId ) ? $parentId : 'null',
-            'subGroupCount' =>  0,
-            'content' =>  '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
+            '_id' => $data['id'],
+            'parentId' => is_numeric( $parentId ) ? $parentId : 'null',
+            'subGroupCount' => 0,
+            'content' => '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
         );
     }
 
@@ -569,8 +569,8 @@ function generateRoleFixture( array $fixture )
     foreach ( getFixtureTable( 'ezrole', $fixture ) as $data )
     {
         $roles[$data['id']] = array(
-            'id' =>  $data['id'],
-            'identifier' =>  $data['name']
+            'id' => $data['id'],
+            'identifier' => $data['name']
         );
 
         $names[$data['name']] = $data['id'];
@@ -595,11 +595,11 @@ function generateRoleFixture( array $fixture )
         }
 
         $roleLimitations[$data['id']] = array(
-            'id' =>  $data['id'],
-            'roleId' =>  $data['role_id'],
-            'contentId' =>  $data['contentobject_id'],
-            'identifier' =>  $data['limit_identifier'],
-            'value' =>  array( $data['limit_value'] )
+            'id' => $data['id'],
+            'roleId' => $data['role_id'],
+            'contentId' => $data['contentobject_id'],
+            'identifier' => $data['limit_identifier'],
+            'value' => array( $data['limit_value'] )
         );
     }
 
@@ -615,11 +615,11 @@ function generateRoleFixture( array $fixture )
         $role2policy[$data['role_id']][] = $data['id'];
 
         $policies[$data['id']] = array(
-            'id' =>  $data['id'],
-            'roleId' =>  $data['role_id'],
-            'module' =>  $data['module_name'],
-            'function' =>  $data['function_name'],
-            'limitations' =>  array()
+            'id' => $data['id'],
+            'roleId' => $data['role_id'],
+            'module' => $data['module_name'],
+            'function' => $data['function_name'],
+            'limitations' => array()
         );
 
         $policyNextId = max( $policyNextId, $data['id'] );
@@ -771,7 +771,7 @@ function generateMapping( array $mapping )
     $code = 'array(' . PHP_EOL;
     foreach ( $mapping as $key => $value )
     {
-        $code .= '        "' . $key . '" =>  ' . valueToString( $value ) . ',' . PHP_EOL;
+        $code .= '        "' . $key . '" => ' . valueToString( $value ) . ',' . PHP_EOL;
     }
     $code .= '    )';
 
@@ -795,7 +795,7 @@ function generateValueObject( $class, array $object )
     $id = isset( $object['id'] )
         ? $object['id']
         : $object['_id'];
-    $code = '        ' . $id . ' =>  new ' . $class . '(' . PHP_EOL .
+    $code = '        ' . $id . ' => new ' . $class . '(' . PHP_EOL .
             '            array(' . PHP_EOL;
     foreach ( $object as $name => $value )
     {
@@ -804,7 +804,7 @@ function generateValueObject( $class, array $object )
             continue;
         }
 
-        $code .= '                "' . $name . '" =>  ' . valueToString( $value ) . ',' . PHP_EOL;
+        $code .= '                "' . $name . '" => ' . valueToString( $value ) . ',' . PHP_EOL;
     }
 
     $code .= '            )' . PHP_EOL .

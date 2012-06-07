@@ -226,12 +226,12 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'parentId' =>  $this->generateId( 'group', 4 ),
-                'subGroupCount' =>  0
+                'parentId' => $this->generateId( 'group', 4 ),
+                'subGroupCount' => 0
             ),
             array(
-                'parentId' =>  $userGroup->parentId,
-                'subGroupCount' =>  $userGroup->subGroupCount
+                'parentId' => $userGroup->parentId,
+                'subGroupCount' => $userGroup->subGroupCount
             )
         );
     }
@@ -722,16 +722,16 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login' =>  'user',
-                'email' =>  'user@example.com',
-                'password' =>  'secret',
-                'mainLanguageCode' =>  'eng-US',
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'password' => 'secret',
+                'mainLanguageCode' => 'eng-US',
             ),
             array(
-                'login' =>  $userCreate->login,
-                'email' =>  $userCreate->email,
-                'password' =>  $userCreate->password,
-                'mainLanguageCode' =>  $userCreate->mainLanguageCode,
+                'login' => $userCreate->login,
+                'email' => $userCreate->email,
+                'password' => $userCreate->password,
+                'mainLanguageCode' => $userCreate->mainLanguageCode,
             )
         );
     }
@@ -807,20 +807,20 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login' =>  'user',
-                'email' =>  'user@example.com',
-                'passwordHash' =>  $this->createHash(
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'passwordHash' => $this->createHash(
                     'user',
                     'secret',
                     $user->hashAlgorithm
                 ),
-                'mainLanguageCode' =>  'eng-US'
+                'mainLanguageCode' => 'eng-US'
             ),
             array(
-                'login' =>  $user->login,
-                'email' =>  $user->email,
-                'passwordHash' =>  $user->passwordHash,
-                'mainLanguageCode' =>  $user->contentInfo->mainLanguageCode
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'mainLanguageCode' => $user->contentInfo->mainLanguageCode
             )
         );
     }
@@ -1141,22 +1141,22 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login' =>  'user',
-                'email' =>  'user@example.com',
-                'passwordHash' =>  $this->createHash(
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'passwordHash' => $this->createHash(
                     'user',
                     'my-new-password',
                     $user->hashAlgorithm
                 ),
-                'maxLogin' =>  42,
-                'isEnabled' =>  false
+                'maxLogin' => 42,
+                'isEnabled' => false
             ),
             array(
-                'login' =>  $user->login,
-                'email' =>  $user->email,
-                'passwordHash' =>  $user->passwordHash,
-                'maxLogin' =>  $user->maxLogin,
-                'isEnabled' =>  $user->isEnabled
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'maxLogin' => $user->maxLogin,
+                'isEnabled' => $user->isEnabled
             )
         );
     }

@@ -378,44 +378,44 @@ class SectionServiceTest extends BaseTest
             array(
                 new Section(
                     array(
-                        'id' =>  $this->generateId( 'section', 1 ),
-                        'name' =>  'Standard',
-                        'identifier' =>  'standard'
+                        'id' => $this->generateId( 'section', 1 ),
+                        'name' => 'Standard',
+                        'identifier' => 'standard'
                     )
                 ),
                 new Section(
                     array(
-                        'id' =>  $this->generateId( 'section', 2 ),
-                        'name' =>  'Users',
-                        'identifier' =>  'users'
+                        'id' => $this->generateId( 'section', 2 ),
+                        'name' => 'Users',
+                        'identifier' => 'users'
                     )
                 ),
                 new Section(
                     array(
-                        'id' =>  $this->generateId( 'section', 3 ),
-                        'name' =>  'Media',
-                        'identifier' =>  'media'
+                        'id' => $this->generateId( 'section', 3 ),
+                        'name' => 'Media',
+                        'identifier' => 'media'
                     )
                 ),
                 new Section(
                     array(
-                        'id' =>  $this->generateId( 'section', 4 ),
-                        'name' =>  'Setup',
-                        'identifier' =>  'setup'
+                        'id' => $this->generateId( 'section', 4 ),
+                        'name' => 'Setup',
+                        'identifier' => 'setup'
                     )
                 ),
                 new Section(
                     array(
-                        'id' =>  $this->generateId( 'section', 5 ),
-                        'name' =>  'Design',
-                        'identifier' =>  'design'
+                        'id' => $this->generateId( 'section', 5 ),
+                        'name' => 'Design',
+                        'identifier' => 'design'
                     )
                 ),
                 new Section(
                     array(
-                        'id' =>  $this->generateId( 'section', 6 ),
-                        'name' =>  'Protected',
-                        'identifier' =>  'protected'
+                        'id' => $this->generateId( 'section', 6 ),
+                        'name' => 'Protected',
+                        'identifier' => 'protected'
                     )
                 ),
             ),

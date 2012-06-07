@@ -133,10 +133,10 @@ class RoleServiceStub implements RoleService
 
         $role = new RoleStub(
             array(
-                'id' =>  ++$this->nextRoleId,
-                'identifier' =>  $roleCreateStruct->identifier,
-                'names' =>  $roleCreateStruct->names,
-                'descriptions' =>  $roleCreateStruct->descriptions
+                'id' => ++$this->nextRoleId,
+                'identifier' => $roleCreateStruct->identifier,
+                'names' => $roleCreateStruct->names,
+                'descriptions' => $roleCreateStruct->descriptions
             )
         );
 
@@ -177,10 +177,10 @@ class RoleServiceStub implements RoleService
 
         $updatedRole = new RoleStub(
             array(
-                'id' =>  $role->id,
-                'identifier' =>  $roleName,
-                'names' =>  $roleUpdateStruct->names ?: $role->getNames(),
-                'descriptions' =>  $roleUpdateStruct->descriptions ?: $role->getDescriptions()
+                'id' => $role->id,
+                'identifier' => $roleName,
+                'names' => $roleUpdateStruct->names ?: $role->getNames(),
+                'descriptions' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
             )
         );
 
@@ -211,10 +211,10 @@ class RoleServiceStub implements RoleService
 
         $this->policies[++$this->policyNextId] = new PolicyStub(
             array(
-                'id' =>  $this->policyNextId,
-                'roleId' =>  $role->id,
-                'module' =>  $policyCreateStruct->module,
-                'function' =>  $policyCreateStruct->function
+                'id' => $this->policyNextId,
+                'roleId' => $role->id,
+                'module' => $policyCreateStruct->module,
+                'function' => $policyCreateStruct->function
             )
         );
 
@@ -223,10 +223,10 @@ class RoleServiceStub implements RoleService
 
         $this->roles[$role->id] = new RoleStub(
             array(
-                'id' =>  $role->id,
-                'identifier' =>  $role->identifier,
-                'names' =>  $role->getNames(),
-                'descriptions' =>  $role->getDescriptions()
+                'id' => $role->id,
+                'identifier' => $role->identifier,
+                'names' => $role->getNames(),
+                'descriptions' => $role->getDescriptions()
             ),
             $policies
         );
@@ -269,10 +269,10 @@ class RoleServiceStub implements RoleService
 
         $this->roles[$role->id] = new RoleStub(
             array(
-                'id' =>  $role->id,
-                'identifier' =>  $role->identifier,
-                'names' =>  $role->getNames(),
-                'descriptions' =>  $role->getDescriptions()
+                'id' => $role->id,
+                'identifier' => $role->identifier,
+                'names' => $role->getNames(),
+                'descriptions' => $role->getDescriptions()
             ),
             $policies
         );
@@ -300,11 +300,11 @@ class RoleServiceStub implements RoleService
 
         $newPolicy = new PolicyStub(
             array(
-                'id' =>  $policy->id,
-                'roleId' =>  $policy->roleId,
-                'module' =>  $policy->module,
-                'function' =>  $policy->function,
-                'limitations' =>  $policyUpdateStruct->getLimitations()
+                'id' => $policy->id,
+                'roleId' => $policy->roleId,
+                'module' => $policy->module,
+                'function' => $policy->function,
+                'limitations' => $policyUpdateStruct->getLimitations()
             )
         );
 
@@ -324,10 +324,10 @@ class RoleServiceStub implements RoleService
 
         $this->roles[$policy->roleId] = new RoleStub(
             array(
-                'id' =>  $this->roles[$policy->roleId]->id,
-                'identifier' =>  $this->roles[$policy->roleId]->identifier,
-                'names' =>  $this->roles[$policy->roleId]->getNames(),
-                'descriptions' =>  $this->roles[$policy->roleId]->getDescriptions()
+                'id' => $this->roles[$policy->roleId]->id,
+                'identifier' => $this->roles[$policy->roleId]->identifier,
+                'names' => $this->roles[$policy->roleId]->getNames(),
+                'descriptions' => $this->roles[$policy->roleId]->getDescriptions()
             ),
             $policies
         );
@@ -486,11 +486,11 @@ class RoleServiceStub implements RoleService
 
                 $this->policies[$policyId] = $policies[] = new PolicyStub(
                     array(
-                        'id' =>  $policy->id,
-                        'roleId' =>  $policy->roleId,
-                        'module' =>  $policy->module,
-                        'function' =>  $policy->function,
-                        'limitations' =>  $limitations
+                        'id' => $policy->id,
+                        'roleId' => $policy->roleId,
+                        'module' => $policy->module,
+                        'function' => $policy->function,
+                        'limitations' => $limitations
                     )
                 );
             }
@@ -739,8 +739,8 @@ class RoleServiceStub implements RoleService
         if ( $roleLimitation )
         {
             $this->roleLimitations[$this->limitationId] = array(
-                'identifier' =>  $roleLimitation->getIdentifier(),
-                'value' =>  $roleLimitation->limitationValues
+                'identifier' => $roleLimitation->getIdentifier(),
+                'value' => $roleLimitation->limitationValues
             );
         }
     }
@@ -790,9 +790,9 @@ class RoleServiceStub implements RoleService
         {
             return new UserGroupRoleAssignmentStub(
                 array(
-                    'role' =>  $role,
-                    'userGroup' =>  $userService->loadUserGroup( $contentId ),
-                    'limitation' =>  $this->getOptionalRoleLimitation( $limitationId ),
+                    'role' => $role,
+                    'userGroup' => $userService->loadUserGroup( $contentId ),
+                    'limitation' => $this->getOptionalRoleLimitation( $limitationId ),
                 )
             );
         }
@@ -800,9 +800,9 @@ class RoleServiceStub implements RoleService
         {
             return new UserRoleAssignmentStub(
                 array(
-                    'role' =>  $role,
-                    'user' =>  $userService->loadUser( $contentId ),
-                    'limitation' =>  $this->getOptionalRoleLimitation( $limitationId ),
+                    'role' => $role,
+                    'user' => $userService->loadUser( $contentId ),
+                    'limitation' => $this->getOptionalRoleLimitation( $limitationId ),
                 )
             );
         }
