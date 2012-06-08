@@ -173,6 +173,21 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getObjectStateService()
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Repository::getObjectStateService()
+     */
+    public function testGetObjectStateService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\ObjectStateService',
+            $repository->getObjectStateService()
+        );
+    }
+
+    /**
      * Test for the getIOService() method.
      *
      * @return void

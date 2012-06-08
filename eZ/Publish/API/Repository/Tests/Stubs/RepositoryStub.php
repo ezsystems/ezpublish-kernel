@@ -97,6 +97,11 @@ class RepositoryStub implements Repository
     private $urlWildcardService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateService
+     */
+    private $objectStateService;
+
+    /**
      * @var integer
      */
     private $transactionDepth = 0;
@@ -461,7 +466,11 @@ class RepositoryStub implements Repository
      */
     public function getObjectStateService()
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        if ( null === $this->objectStateService )
+        {
+            $this->objectStateService = new ObjectStateServiceStub( $this );
+        }
+        return $this->objectStateService;
     }
 
     /**
