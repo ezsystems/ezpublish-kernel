@@ -30,7 +30,14 @@ abstract class FieldTypeIntegrationTest extends TestCase
      *
      * @var string
      */
-    protected $contentType;
+    protected static $contentType;
+
+    /**
+     * Id of test content type
+     *
+     * @var string
+     */
+    protected static $contentTypeId;
 
     /**
      * Get name of tested field tyoe
@@ -45,6 +52,15 @@ abstract class FieldTypeIntegrationTest extends TestCase
      * @return Handler
      */
     abstract public function getCustomHandler();
+
+    /**
+     * Get field definition data values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
+     */
+    abstract public function getFieldDefinitionData();
 
     /**
      * Get initial field externals data
@@ -103,10 +119,10 @@ abstract class FieldTypeIntegrationTest extends TestCase
 
     public function testCreateContentType()
     {
-        $this->contentType = 'test-' . $this->getTypeName();
+        self::$contentType = 'test-' . $this->getTypeName();
         $createStruct = new Content\Type\CreateStruct( array(
             'name'              => array( 'eng-GB' => 'Test' ),
-            'identifier'        => $this->contentType,
+            'identifier'        => self::$contentType,
             'status'            => 0,
             'creatorId'         => 14,
             'created'           => time(),
@@ -140,7 +156,61 @@ abstract class FieldTypeIntegrationTest extends TestCase
         $handler            = $this->getCustomHandler();
         $contentTypeHandler = $handler->contentTypeHandler();
 
-        $contentTypeHandler->create( $createStruct );
+        $contentType = $contentTypeHandler->create( $createStruct );
+
+        $this->assertNotNull( $contentType->id );
+        self::$contentTypeId = $contentType->id;
+
+        return $contentType;
+    }
+
+    /**
+     * @depends testCreateContentType
+     */
+    public function testContentTypeField( $contentType )
+    {
+        $this->assertSame(
+            $this->getTypeName(),
+            $contentType->fieldDefinitions[1]->fieldType
+        );
+    }
+
+    /**
+     * @depends testCreateContentType
+     */
+    public function testLoadContentTypeField()
+    {
+        $handler            = $this->getCustomHandler();
+        $contentTypeHandler = $handler->contentTypeHandler();
+
+        return $contentTypeHandler->load( self::$contentTypeId );
+    }
+
+    /**
+     * @depends testLoadContentTypeField
+     */
+    public function testLoadContentTypeFieldType( $contentType )
+    {
+        $this->assertSame(
+            $this->getTypeName(),
+            $contentType->fieldDefinitions[1]->fieldType
+        );
+
+        return $contentType->fieldDefinitions[1];
+    }
+
+    /**
+     * @depends testLoadContentTypeFieldType
+     * @dataProvider getFieldDefinitionData
+     */
+    public function testLoadContentTypeFieldData( $name, $value, $field )
+    {
+        $this->markTestIncomplete( "There is no property special container yet -- so there is nothing to check." );
+
+        $this->assertEquals(
+            $value,
+            $field->$name
+        );
     }
 
     public function testLoadField()

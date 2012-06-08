@@ -50,7 +50,8 @@ class User implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        echo __METHOD__, PHP_EOL;
+        // There is no contained data. All data is external. So we just do
+        // nothing here.
     }
 
     /**
@@ -61,7 +62,8 @@ class User implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        echo __METHOD__, PHP_EOL;
+        // There is no contained data. All data is external. So we just do
+        // nothing here.
     }
 
     /**

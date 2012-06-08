@@ -18,6 +18,16 @@ use eZ\Publish\Core\Persistence\Legacy;
 class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
 {
     /**
+     * Get name of tested field tyoe
+     *
+     * @return string
+     */
+    public function getTypeName()
+    {
+        return 'ezuser';
+    }
+
+    /**
      * Get handler with required custom field types registered
      *
      * @return Handler
@@ -41,13 +51,19 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     }
 
     /**
-     * Get name of tested field tyoe
+     * Get field definition data values
+     *
+     * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function getTypeName()
+    public function getFieldDefinitionData()
     {
-        return 'ezuser';
+        return array(
+            // The suer field type does not have any special field definition
+            // properties
+            array( 'fieldTyoe', 'ezuser' ),
+        );
     }
 
     /**
