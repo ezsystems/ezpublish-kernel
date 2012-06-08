@@ -167,7 +167,39 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testNewObjectStateUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::newObjectStateUpdateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateUpdate = $objectStateService->newObjectStateUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateUpdateStruct',
+            $objectStateUpdate
+        );
+        return $objectStateUpdate;
+    }
+
+    /**
+     * testNewObjectStateUpdateStructValues
+     *
+     * @param ObjectStateUpdateStruct $objectStateUpdate
+     * @return void
+     * @depends testNewObjectStateUpdateStruct
+     */
+    public function testNewObjectStateUpdateStructValues( ObjectStateUpdateStruct $objectStateUpdate )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'          => null,
+                'defaultLanguageCode' => null,
+                'names'               => null,
+                'descriptions'        => null,
+            ),
+            $objectStateUpdate
+        );
     }
 
     /**

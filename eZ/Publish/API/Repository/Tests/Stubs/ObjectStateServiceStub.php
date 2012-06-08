@@ -266,6 +266,6 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function newObjectStateUpdateStruct()
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return new ObjectStateUpdateStruct();
     }
 }
