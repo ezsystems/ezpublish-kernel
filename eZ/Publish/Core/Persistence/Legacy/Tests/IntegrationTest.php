@@ -15,68 +15,31 @@ use eZ\Publish\Core\Persistence\Legacy;
  *
  * @group integration
  */
-class IntegrationTest extends TestCase
+class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
 {
-    protected static $setUp = false;
-
     /**
-     * Only set up once for these read only tests on a large fixture
+     * Get initial field externals data
      *
-     * Skipping the reset-up, since setting up for these tests takes quite some
-     * time, which is not required to spent, since we are only reading from the
-     * database anyways.
+     * @return array
+     */
+    public function getInitialFieldData()
+    {
+        return array(
+            'account_key' => 'foobar',
+            'is_enabled'  => false,
+            'last_visit'  => 123456789,
+            'login_count' => 23,
+            'max_login'   => 10,
+        );
+    }
+
+    /**
+     * Get externals field data values
      *
-     * @return void
+     * This is a PHPUnit data provider
+     *
+     * @return array
      */
-    public function setUp()
-    {
-        if ( !self::$setUp )
-        {
-            parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/Content/SearchHandler/_fixtures/full_dump.php' );
-            self::$setUp = $this->handler;
-        }
-        else
-        {
-            $this->handler = self::$setUp;
-        }
-    }
-
-    /**
-     * @return void
-     */
-    public function testLoadUserUserField()
-    {
-        $handler        = $this->getHandler();
-
-        $handler->getStorageRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
-            ) )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
-        );
-
-        $contentHandler = $handler->contentHandler();
-        return $contentHandler->load( 10, 2 );
-    }
-
-    /**
-     * @depends testLoadUserUserField
-     */
-    public function testLoadUserUserFieldType( $content )
-    {
-        $this->assertSame(
-            'ezuser',
-            $content->fields[2]->type
-        );
-
-        return $content->fields[2];
-    }
-
     public static function getExternalsFieldData()
     {
         return array(
@@ -92,69 +55,28 @@ class IntegrationTest extends TestCase
     }
 
     /**
-     * @depends testLoadUserUserFieldType
-     * @dataProvider getExternalsFieldData
+     * Get update field externals data
+     *
+     * @return array
      */
-    public function testLoadUserUserExternalData( $name, $value, $field )
+    public function getUpdateFieldData()
     {
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
-    }
-
-    /**
-     * @depends testLoadUserUserFieldType
-     */
-    public function testUpdateUserUserField( $field )
-    {
-        $handler        = $this->getHandler();
-
-        $handler->getStorageRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
-            ) )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
-        );
-
-        $field->value->externalData = array(
+        return array(
             'account_key' => 'foobar',
             'is_enabled'  => false,
             'last_visit'  => 123456789,
             'login_count' => 23,
             'max_login'   => 10,
         );
-
-        $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
-            'creatorId' => 14,
-            'modificationDate' => time(),
-            'initialLanguageId' => 2,
-            'fields' => array(
-                $field,
-            )
-        ) );
-
-        $contentHandler = $handler->contentHandler();
-        return $contentHandler->updateContent( 10, 2, $updateStruct );
     }
 
     /**
-     * @depends testUpdateUserUserField
+     * Get externals updated field data values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
      */
-    public function testUpdateUserUserFieldType( $content )
-    {
-        $this->assertSame(
-            'ezuser',
-            $content->fields[2]->type
-        );
-
-        return $content->fields[2];
-    }
-
     public static function getUpdatedExternalsFieldData()
     {
         return array(
@@ -169,22 +91,7 @@ class IntegrationTest extends TestCase
         );
     }
 
-    /**
-     * @depends testUpdateUserUserFieldType
-     * @dataProvider getUpdatedExternalsFieldData
-     */
-    public function testUpdateUserUserExternalData( $name, $value, $field )
-    {
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
-    }
-
-    /**
-     * @depends testLoadUserUserFieldType
-     */
-    public function testRemoveAccountKey( $field )
+    public function testRemoveAccountKey()
     {
         $handler        = $this->getHandler();
 
@@ -199,6 +106,9 @@ class IntegrationTest extends TestCase
             new Legacy\Content\FieldValue\Converter\User()
         );
 
+        $contentHandler = $handler->contentHandler();
+        $content = $contentHandler->load( 10, 2 );
+        $field = $content->fields[2];
         $field->value->externalData['account_key'] = null;
 
         $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
@@ -217,42 +127,5 @@ class IntegrationTest extends TestCase
             $content->fields[2]->value->externalData['account_key']
         );
     }
-
-    /**
-     * Returns the Handler
-     *
-     * @return Handler
-     */
-    protected function getHandler()
-    {
-        return new Legacy\Handler(
-            array(
-                'external_storage' => array(
-                    'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-                    'ezuser'   => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-                    'eztext'   => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-                    'ezimage'  => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-                ),
-                'field_converter' => array(
-                    'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-                    'ezuser'   => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
-                    'eztext'   => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextBlock',
-                    'ezimage'  => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
-                )
-            ),
-            self::$setUp
-        );
-    }
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
-    }
 }
+
