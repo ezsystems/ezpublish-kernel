@@ -26,18 +26,25 @@ abstract class FieldTypeIntegrationTest extends TestCase
     protected static $setUp = false;
 
     /**
-     * Name of test content type
-     *
-     * @var string
-     */
-    protected static $contentType;
-
-    /**
      * Id of test content type
      *
      * @var string
      */
     protected static $contentTypeId;
+
+    /**
+     * Id of test content
+     *
+     * @var string
+     */
+    protected static $contentId;
+
+    /**
+     * Current version of test content
+     *
+     * @var string
+     */
+    protected static $contentVersion;
 
     /**
      * Get name of tested field tyoe
@@ -95,6 +102,21 @@ abstract class FieldTypeIntegrationTest extends TestCase
     abstract public function getUpdatedExternalsFieldData();
 
     /**
+     * Method called after content creation
+     *
+     * Useful, if additional stuff should be executed (like creating the actual 
+     * user).
+     *
+     * @param Legacy\Handler $handler
+     * @param Content $content
+     * @return void
+     */
+    public function postCreationHook( Legacy\Handler $handler, Content $content )
+    {
+        // Do nothing by default
+    }
+
+    /**
      * Only set up once for these read only tests on a large fixture
      *
      * Skipping the reset-up, since setting up for these tests takes quite some
@@ -119,10 +141,9 @@ abstract class FieldTypeIntegrationTest extends TestCase
 
     public function testCreateContentType()
     {
-        self::$contentType = 'test-' . $this->getTypeName();
         $createStruct = new Content\Type\CreateStruct( array(
             'name'              => array( 'eng-GB' => 'Test' ),
-            'identifier'        => self::$contentType,
+            'identifier'        => 'test-' . $this->getTypeName(),
             'status'            => 0,
             'creatorId'         => 14,
             'created'           => time(),
@@ -213,12 +234,73 @@ abstract class FieldTypeIntegrationTest extends TestCase
         );
     }
 
+    /**
+     * @depends testLoadContentTypeField
+     */
+    public function testCreateContent( $contentType )
+    {
+        $createStruct = new Content\CreateStruct( array(
+            'name'              => array( 'eng-GB' => 'Test object' ),
+            'typeId'            => $contentType->id,
+            'sectionId'         => 1,
+            'ownerId'           => 14,
+            'locations'         => array( new Content\Location\CreateStruct( array( 'parentId' => 2 ) ) ),
+            'initialLanguageId' => 2,
+            'remoteId'          => 'sindelfingen',
+            'modified'          => time(),
+            'fields'            => array(
+                new Content\Field( array(
+                    'type'              => 'ezstring',
+                    'languageCode'      => 'eng-GB',
+                    'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
+                    'value'             => new Content\FieldValue( array(
+                        'data' => 'This is just a test object',
+                        'sortKey' => array( 'sort_key_string' => 'This is just a test object' ),
+                    ) ),
+                ) ),
+                new Content\Field( array(
+                    'type'              => 'ezuser',
+                    'languageCode'      => 'eng-GB',
+                    'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
+                    'value'             => new Content\FieldValue( array(
+                        'data'         => null,
+                        'externalData' => $this->getInitialFieldData(),
+                    ) ),
+                ) ),
+            ),
+        ) );
+
+        $handler = $this->getCustomHandler();
+        $contentHandler = $handler->contentHandler();
+
+        $content = $contentHandler->create( $createStruct );
+        self::$contentId      = $content->contentInfo->id;
+        self::$contentVersion = $content->contentInfo->currentVersionNo;
+
+        $this->postCreationHook( $handler, $content );
+
+        return $content;
+    }
+
+    /**
+     * @depends testCreateContent
+     */
+    public function testCreatedFieldType( $content )
+    {
+        $this->assertSame(
+            $this->getTypeName(),
+            $content->fields[1]->type
+        );
+
+        return $content->fields[1];
+    }
+
     public function testLoadField()
     {
         $handler = $this->getCustomHandler();
 
         $contentHandler = $handler->contentHandler();
-        return $contentHandler->load( 10, 2 );
+        return $contentHandler->load( self::$contentId, self::$contentVersion );
     }
 
     /**
@@ -227,11 +309,11 @@ abstract class FieldTypeIntegrationTest extends TestCase
     public function testLoadFieldType( $content )
     {
         $this->assertSame(
-            'ezuser',
-            $content->fields[2]->type
+            $this->getTypeName(),
+            $content->fields[1]->type
         );
 
-        return $content->fields[2];
+        return $content->fields[1];
     }
 
     /**
@@ -269,7 +351,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
         ) );
 
         $contentHandler = $handler->contentHandler();
-        return $contentHandler->updateContent( 10, 2, $updateStruct );
+        return $contentHandler->updateContent( self::$contentId, self::$contentVersion, $updateStruct );
     }
 
     /**
@@ -278,11 +360,11 @@ abstract class FieldTypeIntegrationTest extends TestCase
     public function testUpdateFieldType( $content )
     {
         $this->assertSame(
-            'ezuser',
-            $content->fields[2]->type
+            $this->getTypeName(),
+            $content->fields[1]->type
         );
 
-        return $content->fields[2];
+        return $content->fields[1];
     }
 
     /**

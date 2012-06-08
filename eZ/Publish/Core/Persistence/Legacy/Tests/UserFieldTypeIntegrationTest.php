@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\Persistence\Legacy,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\User;
 
 /**
  * Integration test for the legacy storage
@@ -62,7 +64,7 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         return array(
             // The suer field type does not have any special field definition
             // properties
-            array( 'fieldTyoe', 'ezuser' ),
+            array( 'fieldType', 'ezuser' ),
         );
     }
 
@@ -74,11 +76,11 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     public function getInitialFieldData()
     {
         return array(
-            'account_key' => 'foobar',
-            'is_enabled'  => false,
-            'last_visit'  => 123456789,
-            'login_count' => 23,
-            'max_login'   => 10,
+            'account_key' => null,
+            'is_enabled'  => true,
+            'last_visit'  => null,
+            'login_count' => 0,
+            'max_login'   => 1000,
         );
     }
 
@@ -140,30 +142,29 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         );
     }
 
-    public function testRemoveAccountKey()
+    /**
+     * Method called after content creation
+     *
+     * Useful, if additional stuff should be executed (like creating the actual 
+     * user).
+     *
+     * @param Legacy\Handler $handler
+     * @param Content $content
+     * @return void
+     */
+    public function postCreationHook( Legacy\Handler $handler, Content $content )
     {
-        $handler = $this->getCustomHandler();
+        $user = new User();
+        $user->id            = $content->contentInfo->id;
+        $user->login         = 'hans';
+        $user->email         = 'hans@example.com';
+        $user->passwordHash  = '*';
+        $user->hashAlgorithm = 0;
+        $user->isEnabled     = true;
+        $user->maxLogin      = 1000;
 
-        $contentHandler = $handler->contentHandler();
-        $content = $contentHandler->load( 10, 2 );
-        $field = $content->fields[2];
-        $field->value->externalData['account_key'] = null;
-
-        $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
-            'creatorId' => 14,
-            'modificationDate' => time(),
-            'initialLanguageId' => 2,
-            'fields' => array(
-                $field,
-            )
-        ) );
-
-        $contentHandler = $handler->contentHandler();
-        $content = $contentHandler->updateContent( 10, 2, $updateStruct );
-
-        $this->assertNull(
-            $content->fields[2]->value->externalData['account_key']
-        );
+        $userHandler = $handler->userHandler();
+        $userHandler->create( $user );
     }
 }
 
