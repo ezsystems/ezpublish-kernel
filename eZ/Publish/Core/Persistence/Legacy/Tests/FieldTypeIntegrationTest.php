@@ -45,10 +45,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
      *
      * @return array
      */
-    public static function getExternalsFieldData()
-    {
-        throw new \RuntimeException( "Please implement this data provider." );
-    }
+    abstract public function getExternalsFieldData();
 
     /**
      * Get update field externals data
@@ -64,10 +61,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
      *
      * @return array
      */
-    public static function getUpdatedExternalsFieldData()
-    {
-        throw new \RuntimeException( "Please implement this data provider." );
-    }
+    abstract public function getUpdatedExternalsFieldData();
 
     /**
      * Only set up once for these read only tests on a large fixture
@@ -122,6 +116,11 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testLoadExternalData( $name, $value, $field )
     {
+        if ( !array_key_exists( $name, $field->value->externalData ) )
+        {
+            $this->fail( "Property $name not avialable." );
+        }
+
         $this->assertEquals(
             $value,
             $field->value->externalData[$name]
@@ -168,6 +167,11 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testUpdateExternalData( $name, $value, $field )
     {
+        if ( !array_key_exists( $name, $field->value->externalData ) )
+        {
+            $this->fail( "Property $name not avialable." );
+        }
+
         $this->assertEquals(
             $value,
             $field->value->externalData[$name]

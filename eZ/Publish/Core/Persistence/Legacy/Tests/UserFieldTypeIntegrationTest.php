@@ -63,7 +63,7 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
      *
      * @return array
      */
-    public static function getExternalsFieldData()
+    public function getExternalsFieldData()
     {
         return array(
             array( 'account_key', null ),
@@ -100,7 +100,7 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
      *
      * @return array
      */
-    public static function getUpdatedExternalsFieldData()
+    public function getUpdatedExternalsFieldData()
     {
         return array(
             array( 'account_key', 'foobar' ),
