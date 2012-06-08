@@ -231,7 +231,9 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function newObjectStateGroupCreateStruct( $identifier )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return new ObjectStateGroupCreateStruct(
+            array( 'identifier' => $identifier )
+        );
     }
 
     /**
