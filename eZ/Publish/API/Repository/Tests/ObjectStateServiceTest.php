@@ -34,7 +34,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $objectStateService = $repository->getObjectStateService();
 
         $objectStateGroupCreate = $objectStateService->newObjectStateGroupCreateStruct(
-            'pending'
+            'publishing'
         );
         /* END: Use Case */
 
@@ -56,7 +56,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'identifier'          => 'pending',
+                'identifier'          => 'publishing',
                 'defaultLanguageCode' => null,
                 'names'               => null,
                 'descriptions'        => null,
