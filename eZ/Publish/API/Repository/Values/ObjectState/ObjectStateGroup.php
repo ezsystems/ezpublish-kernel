@@ -40,7 +40,7 @@ abstract class ObjectStateGroup extends ValueObject
      *
      * @var string
      */
-    public $defaultLanguageCode;
+    protected $defaultLanguageCode;
 
      /**
      * The available language codes for names an descriptions
