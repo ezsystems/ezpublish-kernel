@@ -14,6 +14,9 @@ use eZ\Publish\Core\Persistence\Legacy,
 /**
  * Integration test for the legacy storage
  *
+ * @TODO: Copy content / field
+ * @TODO: Delete content / field
+ *
  * @group integration
  */
 abstract class FieldTypeIntegrationTest extends TestCase
