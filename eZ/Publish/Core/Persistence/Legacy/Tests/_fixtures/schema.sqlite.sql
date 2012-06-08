@@ -34,6 +34,11 @@ CREATE TABLE 'ezcobj_state_language' (
 	'name' text(45) NOT NULL DEFAULT '',
 	PRIMARY KEY ( contentobject_state_id, language_id )
 );
+CREATE TABLE 'ezcobj_state_link' (
+  'contentobject_id' integer NOT NULL DEFAULT '0',
+  'contentobject_state_id' integer NOT NULL DEFAULT '0',
+  PRIMARY KEY ( contentobject_id, contentobject_state_id )
+);
 CREATE TABLE 'ezcontent_language' (
 	'disabled' integer NOT NULL DEFAULT 0,
 	'id' integer NOT NULL DEFAULT 0,

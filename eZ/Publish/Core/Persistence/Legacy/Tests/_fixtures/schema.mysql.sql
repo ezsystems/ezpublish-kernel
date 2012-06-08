@@ -57,6 +57,14 @@ CREATE TABLE ezcobj_state_language (
   PRIMARY KEY ( contentobject_state_id, language_id )
 ) ENGINE=InnoDB;
 
+--
+DROP TABLE IF EXISTS ezcobj_state_link;
+CREATE TABLE ezcobj_state_link (
+  contentobject_id int(11) NOT NULL DEFAULT '0',
+  contentobject_state_id int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (contentobject_id,contentobject_state_id)
+) ENGINE=InnoDB;
+--
 
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
