@@ -184,4 +184,33 @@ interface ObjectStateService
      */
     public function getContentCount( ObjectState $objectState );
 
+    /**
+     * Instantiates a new Object State Group Create Struct and sets $identified in it.
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
+     */
+    public function newObjectStateGroupCreateStruct( $identifier );
+
+    /**
+     * Instantiates a new Object State Group Update Struct.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct
+     */
+    public function newObjectStateGroupUpdateStruct();
+
+    /**
+     * Instantiates a new Object State Create Struct and sets $identifier in it.
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
+     */
+    public function newObjectStateCreateStruct( $identifier );
+
+    /**
+     * Instantiates a new Object State Update Struct and sets $identifier in it.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct
+     */
+    public function newObjectStateUpdateStruct();
 }
