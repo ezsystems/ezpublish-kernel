@@ -182,25 +182,40 @@ class IntegrationTest extends TestCase
     }
 
     /**
-     * @return void
+     * @depends testLoadUserUserFieldType
      */
-    public function testLoadUserImageField()
+    public function testRemoveAccountKey( $field )
     {
-        $this->markTestSkipped( "@TODO: We will work on this later…" );
-
         $handler        = $this->getHandler();
 
         $handler->getStorageRegistry()->register(
-            'ezimage',
-            new Legacy\Content\FieldValue\Converter\ImageStorage()
+            'ezuser',
+            new Legacy\Content\FieldValue\Converter\UserStorage( array(
+                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
+            ) )
         );
         $handler->getFieldValueConverterRegistry()->register(
-            'ezimage',
-            new Legacy\Content\FieldValue\Converter\Image()
+            'ezuser',
+            new Legacy\Content\FieldValue\Converter\User()
         );
 
+        $field->value->externalData['account_key'] = null;
+
+        $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
+            'creatorId' => 14,
+            'modificationDate' => time(),
+            'initialLanguageId' => 2,
+            'fields' => array(
+                $field,
+            )
+        ) );
+
         $contentHandler = $handler->contentHandler();
-        $contentHandler->load( 10, 2 );
+        $content = $contentHandler->updateContent( 10, 2, $updateStruct );
+
+        $this->assertNull(
+            $content->fields[2]->value->externalData['account_key']
+        );
     }
 
     /**

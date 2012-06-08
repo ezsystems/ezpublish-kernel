@@ -287,7 +287,7 @@ class LegacyStorage extends Gateway
                     $query->bindValue( $base['contentobject_id'] )
                 );
         }
-        elseif ( !$data )
+        elseif ( !$data['account_key'] )
         {
             $query = $this->dbHandler->createDeleteQuery();
             $query
