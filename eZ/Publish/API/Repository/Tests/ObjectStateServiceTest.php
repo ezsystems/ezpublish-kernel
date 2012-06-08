@@ -340,4 +340,52 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->markTestIncomplete( "Test for ObjectStateService::getContentCount() is not implemented." );
     }
 
+    /**
+     * Test for the newObjectStateGroupCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateGroupCreateStruct()
+     *
+     */
+    public function testNewObjectStateGroupCreateStruct()
+    {
+        $this->markTestIncomplete( "Test for ObjectStateService::newObjectStateGroupCreateStruct() is not implemented." );
+    }
+
+    /**
+     * Test for the newObjectStateGroupUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateGroupUpdateStruct()
+     *
+     */
+    public function testNewObjectStateGroupUpdateStruct()
+    {
+        $this->markTestIncomplete( "Test for ObjectStateService::newObjectStateGroupUpdateStruct() is not implemented." );
+    }
+
+    /**
+     * Test for the newObjectStateCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateCreateStruct()
+     *
+     */
+    public function testNewObjectStateCreateStruct()
+    {
+        $this->markTestIncomplete( "Test for ObjectStateService::newObjectStateCreateStruct() is not implemented." );
+    }
+
+    /**
+     * Test for the newObjectStateUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateUpdateStruct()
+     *
+     */
+    public function testNewObjectStateUpdateStruct()
+    {
+        $this->markTestIncomplete( "Test for ObjectStateService::newObjectStateUpdateStruct() is not implemented." );
+    }
+
 }
