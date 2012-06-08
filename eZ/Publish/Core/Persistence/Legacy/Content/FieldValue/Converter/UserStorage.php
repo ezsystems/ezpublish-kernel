@@ -114,7 +114,8 @@ class UserStorage implements Storage
      */
     public function storeFieldData( Field $field, array $context )
     {
-        echo __METHOD__, PHP_EOL;
+        $gateway = $this->getGateway( $context );
+        $field->value->externalData = $gateway->storeFieldData( $field->id, $field->value->externalData );
     }
 
     /**
@@ -141,6 +142,7 @@ class UserStorage implements Storage
     public function deleteFieldData( array $fieldId, array $context )
     {
         echo __METHOD__, PHP_EOL;
+        var_dump( func_get_args() );
     }
 
     /**
@@ -160,6 +162,7 @@ class UserStorage implements Storage
     public function copyFieldData( Field $field, array $context )
     {
         echo __METHOD__, PHP_EOL;
+        var_dump( func_get_args() );
     }
 
     /**
@@ -169,6 +172,7 @@ class UserStorage implements Storage
     public function getIndexData( Field $field, array $context )
     {
         echo __METHOD__, PHP_EOL;
+        var_dump( func_get_args() );
     }
 
     /**

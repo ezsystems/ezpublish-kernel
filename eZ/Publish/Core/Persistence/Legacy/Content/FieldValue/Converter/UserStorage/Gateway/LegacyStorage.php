@@ -25,13 +25,14 @@ class LegacyStorage extends Gateway
      * @var array
      */
     protected $defaultValues = array(
-        'account_key'                   => null,
-        'has_stored_login'              => false,
-        'is_logged_in'                  => true,
-        'is_enabled'                    => false,
-        'is_locked'                     => false,
-        'last_visit'                    => null,
-        'login_count'                   => null,
+        'account_key'      => null,
+        'has_stored_login' => false,
+        'is_logged_in'     => true,
+        'is_enabled'       => false,
+        'is_locked'        => false,
+        'last_visit'       => null,
+        'login_count'      => null,
+        'max_login'        => null,
     );
 
     /**
@@ -60,24 +61,47 @@ class LegacyStorage extends Gateway
      * The User storage handles the following attributes, following the user field
      * type in eZ Publish 4:
      *  - account_key
-     *  - groups
      *  - has_stored_login
-     *  - original_password
-     *  - original_password_confirm
-     *  - roles
-     *  - role_id_list
-     *  - limited_assignment_value_list
      *  - is_logged_in
      *  - is_enabled
      *  - is_locked
      *  - last_visit
      *  - login_count
-     *  - has_manage_locations
      *
      * @param mixed $fieldId
      * @return array
      */
-    public function getFieldData( $fieldId )
+    public function getFieldData( $fieldId, array $baseData = null )
+    {
+        $baseData = $baseData ?: $this->fetchBasicUserData( $fieldId );
+
+        if ( !isset( $baseData['login'] ) )
+        {
+            return $this->defaultValues;
+        }
+
+        $result = array_merge(
+            $this->defaultValues,
+            array(
+                'has_stored_login' => true,
+            ),
+            $this->fetchAccountKeyData( $baseData['contentobject_id'] ),
+            $this->fetchUserSettings( $baseData['contentobject_id'] ),
+            $this->fetchUserVisits( $baseData['contentobject_id'] )
+        );
+
+        $result['is_locked'] = $result['login_count'] > $result['max_login'];
+
+        return $result;
+    }
+
+    /**
+     * Fetch basic user data
+     *
+     * @param mixed $fieldId
+     * @return array
+     */
+    protected function fetchBasicUserData( $fieldId )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
@@ -104,26 +128,7 @@ class LegacyStorage extends Gateway
         $stmt->execute();
 
         $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-        $baseData = isset( $rows[0] ) ? $rows[0] : array();
-
-        if ( !isset( $baseData['login'] ) )
-        {
-            return $this->defaultValues;
-        }
-
-        $result = array_merge(
-            $this->defaultValues,
-            array(
-                'has_stored_login' => true,
-            ),
-            $this->fetchAccountKeyData( $baseData['contentobject_id'] ),
-            $this->fetchUserSettings( $baseData['contentobject_id'] ),
-            $this->fetchUserVisits( $baseData['contentobject_id'] )
-        );
-
-        $result['is_locked'] = $result['login_count'] > $result['max_login'];
-
-        return $result;
+        return isset( $rows[0] ) ? $rows[0] : array();
     }
 
     /**
@@ -133,7 +138,7 @@ class LegacyStorage extends Gateway
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId
-     * @return void
+     * @return array
      */
     protected function fetchAccountKeyData( $userId )
     {
@@ -145,7 +150,7 @@ class LegacyStorage extends Gateway
             ->from( $this->dbHandler->quoteTable( 'ezuser_accountkey' ) )
             ->where(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'user_id', 'ezuser_accountkey' ),
+                    $this->dbHandler->quoteColumn( 'id', 'ezuser_accountkey' ),
                     $query->bindValue( $userId )
                 )
             );
@@ -164,7 +169,7 @@ class LegacyStorage extends Gateway
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId
-     * @return void
+     * @return array
      */
     protected function fetchUserSettings( $userId )
     {
@@ -196,16 +201,17 @@ class LegacyStorage extends Gateway
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId
-     * @return void
+     * @return array
      */
     protected function fetchUserVisits( $userId )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
             ->select(
-                $this->dbHandler->quoteColumn( 'current_visit_timestamp', 'ezuservisit' ),
-                $this->dbHandler->quoteColumn( 'failed_login_attempts', 'ezuservisit' ),
-                $this->dbHandler->quoteColumn( 'last_visit_timestamp', 'ezuservisit' ),
+                $query->alias(
+                    $this->dbHandler->quoteColumn( 'last_visit_timestamp', 'ezuservisit' ),
+                    'last_visit'
+                ),
                 $this->dbHandler->quoteColumn( 'login_count', 'ezuservisit' )
             )
             ->from( $this->dbHandler->quoteTable( 'ezuservisit' ) )
@@ -221,6 +227,215 @@ class LegacyStorage extends Gateway
 
         $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
         return isset( $rows[0] ) ? $rows[0] : array();
+    }
+
+    /**
+     * Store external field data
+     *
+     * @param mixed $fieldId
+     * @param array $data
+     * @return void
+     */
+    public function storeFieldData( $fieldId, array $data )
+    {
+        $baseData = $this->fetchBasicUserData( $fieldId );
+        $oldData  = $this->getFieldData( $fieldId, $baseData );
+
+        if ( !$oldData['has_stored_login'] )
+        {
+            throw new \RuntimeException( "User data not found. Cannot update related data" );
+        }
+
+        $this->storeAccountKey( $baseData, $oldData, $data );
+        $this->storeVisits( $baseData, $oldData, $data );
+        $this->storeSettings( $baseData, $oldData, $data );
+
+        return $this->getFieldData( $fieldId, $baseData );
+    }
+
+    /**
+     * Store account key associated with user
+     *
+     * @param array $base
+     * @param array $old
+     * @param array $data
+     * @return void
+     */
+    protected function storeAccountKey( array $base, array $old, array $data )
+    {
+        if ( !array_key_exists( 'account_key', $data ) ||
+             ( $data['account_key'] == $old['account_key'] ) )
+        {
+            return;
+        }
+
+        if ( !$old['account_key'] )
+        {
+            $query = $this->dbHandler->createInsertQuery();
+            $query
+                ->insertInto( $this->dbHandler->quoteTable( 'ezuser_accountkey' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'hash_key' ),
+                    $query->bindValue( $data['account_key'] )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'time' ),
+                    $query->bindValue( time() )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $query->bindValue( $base['contentobject_id'] )
+                );
+        }
+        elseif ( !$data )
+        {
+            $query = $this->dbHandler->createDeleteQuery();
+            $query
+                ->deleteFrom( $this->dbHandler->quoteTable( 'ezuser_accountkey' ) )
+                ->where(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'id' ),
+                        $query->bindValue( $base['contentobject_id'] )
+                    )
+                );
+        }
+        else
+        {
+            $query = $this->dbHandler->createUpdateQuery();
+            $query
+                ->update( $this->dbHandler->quoteTable( 'ezuser_accountkey' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'hash_key' ),
+                    $query->bindValue( $data['account_key'] )
+                )
+                ->where(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'id' ),
+                        $query->bindValue( $base['contentobject_id'] )
+                    )
+                );
+        }
+
+        $stmt = $query->prepare();
+        $stmt->execute();
+    }
+
+    /**
+     * Store user visit data
+     *
+     * @param array $base
+     * @param array $old
+     * @param array $data
+     * @return void
+     */
+    protected function storeVisits( array $base, array $old, array $data )
+    {
+        if ( ( $data['last_visit'] == $old['last_visit'] ) &&
+             ( $data['login_count'] == $old['login_count'] ) )
+        {
+            return;
+        }
+
+        if ( $old['last_visit'] === null )
+        {
+            $query = $this->dbHandler->createInsertQuery();
+            $query
+                ->insertInto( $this->dbHandler->quoteTable( 'ezuservisit' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'last_visit_timestamp' ),
+                    $query->bindValue( $data['last_visit'] )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'login_count' ),
+                    $query->bindValue( $data['login_count'] )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'user_id' ),
+                    $query->bindValue( $base['contentobject_id'] )
+                );
+        }
+        else
+        {
+            $query = $this->dbHandler->createUpdateQuery();
+            $query
+                ->update( $this->dbHandler->quoteTable( 'ezuservisit' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'last_visit_timestamp' ),
+                    $query->bindValue( $data['last_visit'] )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'login_count' ),
+                    $query->bindValue( $data['login_count'] )
+                )
+                ->where(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'user_id' ),
+                        $query->bindValue( $base['contentobject_id'] )
+                    )
+                );
+        }
+
+        $stmt = $query->prepare();
+        $stmt->execute();
+    }
+
+    /**
+     * Store user settings
+     *
+     * @param array $base
+     * @param array $old
+     * @param array $data
+     * @return void
+     */
+    protected function storeSettings( array $base, array $old, array $data )
+    {
+        if ( ( $data['max_login'] == $old['max_login'] ) &&
+             ( $data['is_enabled'] == $old['is_enabled'] ) )
+        {
+            return;
+        }
+
+        if ( $old['max_login'] === null )
+        {
+            $query = $this->dbHandler->createInsertQuery();
+            $query
+                ->insertInto( $this->dbHandler->quoteTable( 'ezuser_setting' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'max_login' ),
+                    $query->bindValue( $data['max_login'] )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'is_enabled' ),
+                    $query->bindValue( $data['is_enabled'] )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'user_id' ),
+                    $query->bindValue( $base['contentobject_id'] )
+                );
+        }
+        else
+        {
+            $query = $this->dbHandler->createUpdateQuery();
+            $query
+                ->update( $this->dbHandler->quoteTable( 'ezuser_setting' ) )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'max_login' ),
+                    $query->bindValue( $data['max_login'] )
+                )
+                ->set(
+                    $this->dbHandler->quoteColumn( 'is_enabled' ),
+                    $query->bindValue( $data['is_enabled'] )
+                )
+                ->where(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'user_id' ),
+                        $query->bindValue( $base['contentobject_id'] )
+                    )
+                );
+        }
+
+        $stmt = $query->prepare();
+        $stmt->execute();
     }
 }
 

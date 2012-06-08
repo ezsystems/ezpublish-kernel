@@ -26,7 +26,8 @@ class User implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        echo __METHOD__, PHP_EOL;
+        // There is no contained data. All data is external. So we just do
+        // nothing here.
     }
 
     /**

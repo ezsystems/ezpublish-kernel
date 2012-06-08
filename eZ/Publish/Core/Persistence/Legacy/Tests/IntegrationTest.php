@@ -77,23 +77,107 @@ class IntegrationTest extends TestCase
         return $content->fields[2];
     }
 
+    public static function getExternalsFieldData()
+    {
+        return array(
+            array( 'account_key', null ),
+            array( 'has_stored_login', true ),
+            array( 'is_logged_in', true ),
+            array( 'is_enabled', true ),
+            array( 'is_locked', false ),
+            array( 'last_visit', null ),
+            array( 'login_count', null ),
+            array( 'max_login', 1000 ),
+        );
+    }
+
+    /**
+     * @depends testLoadUserUserFieldType
+     * @dataProvider getExternalsFieldData
+     */
+    public function testLoadUserUserExternalData( $name, $value, $field )
+    {
+        $this->assertEquals(
+            $value,
+            $field->value->externalData[$name]
+        );
+    }
+
     /**
      * @depends testLoadUserUserFieldType
      */
-    public function testLoadUserUserExternalData( $field )
+    public function testUpdateUserUserField( $field )
+    {
+        $handler        = $this->getHandler();
+
+        $handler->getStorageRegistry()->register(
+            'ezuser',
+            new Legacy\Content\FieldValue\Converter\UserStorage( array(
+                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
+            ) )
+        );
+        $handler->getFieldValueConverterRegistry()->register(
+            'ezuser',
+            new Legacy\Content\FieldValue\Converter\User()
+        );
+
+        $field->value->externalData = array(
+            'account_key' => 'foobar',
+            'is_enabled'  => false,
+            'last_visit'  => 123456789,
+            'login_count' => 23,
+            'max_login'   => 10,
+        );
+
+        $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
+            'creatorId' => 14,
+            'modificationDate' => time(),
+            'initialLanguageId' => 2,
+            'fields' => array(
+                $field,
+            )
+        ) );
+
+        $contentHandler = $handler->contentHandler();
+        return $contentHandler->updateContent( 10, 2, $updateStruct );
+    }
+
+    /**
+     * @depends testUpdateUserUserField
+     */
+    public function testUpdateUserUserFieldType( $content )
+    {
+        $this->assertSame(
+            'ezuser',
+            $content->fields[2]->type
+        );
+
+        return $content->fields[2];
+    }
+
+    public static function getUpdatedExternalsFieldData()
+    {
+        return array(
+            array( 'account_key', 'foobar' ),
+            array( 'has_stored_login', true ),
+            array( 'is_logged_in', true ),
+            array( 'is_enabled', false ),
+            array( 'is_locked', true ),
+            array( 'last_visit', 123456789 ),
+            array( 'login_count', 23 ),
+            array( 'max_login', 10 ),
+        );
+    }
+
+    /**
+     * @depends testUpdateUserUserFieldType
+     * @dataProvider getUpdatedExternalsFieldData
+     */
+    public function testUpdateUserUserExternalData( $name, $value, $field )
     {
         $this->assertEquals(
-            array(
-                'account_key'      => null,
-                'has_stored_login' => true,
-                'is_logged_in'     => true,
-                'is_enabled'       => true,
-                'is_locked'        => false,
-                'last_visit'       => null,
-                'login_count'      => null,
-                'max_login'        => 1000,
-            ),
-            $field->value->externalData
+            $value,
+            $field->value->externalData[$name]
         );
     }
 
