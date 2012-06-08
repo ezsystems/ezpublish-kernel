@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
+use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
@@ -73,7 +74,39 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testNewObjectStateGroupUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::newObjectStateGroupUpdateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroupUpdate = $objectStateService->newObjectStateGroupUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupUpdateStruct',
+            $objectStateGroupUpdate
+        );
+        return $objectStateGroupUpdate;
+    }
+
+    /**
+     * testNewObjectStateGroupUpdateStructValues
+     *
+     * @param ObjectStateGroupUpdateStruct $objectStateGroupUpdate
+     * @return void
+     * @depends testNewObjectStateGroupUpdateStruct
+     */
+    public function testNewObjectStateGroupUpdateStructValues( ObjectStateGroupUpdateStruct $objectStateGroupUpdate )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'          => null,
+                'defaultLanguageCode' => null,
+                'names'               => null,
+                'descriptions'        => null,
+            ),
+            $objectStateGroupUpdate
+        );
     }
 
     /**
