@@ -18,6 +18,29 @@ use eZ\Publish\Core\Persistence\Legacy;
 class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
 {
     /**
+     * Get handler with required custom field types registered
+     *
+     * @return Handler
+     */
+    public function getCustomHandler()
+    {
+        $handler = $this->getHandler();
+
+        $handler->getStorageRegistry()->register(
+            'ezuser',
+            new Legacy\Content\FieldValue\Converter\UserStorage( array(
+                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
+            ) )
+        );
+        $handler->getFieldValueConverterRegistry()->register(
+            'ezuser',
+            new Legacy\Content\FieldValue\Converter\User()
+        );
+
+        return $handler;
+    }
+
+    /**
      * Get initial field externals data
      *
      * @return array
@@ -93,18 +116,7 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
 
     public function testRemoveAccountKey()
     {
-        $handler        = $this->getHandler();
-
-        $handler->getStorageRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
-            ) )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
-        );
+        $handler = $this->getCustomHandler();
 
         $contentHandler = $handler->contentHandler();
         $content = $contentHandler->load( 10, 2 );

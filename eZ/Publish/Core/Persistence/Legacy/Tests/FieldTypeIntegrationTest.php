@@ -25,6 +25,13 @@ abstract class FieldTypeIntegrationTest extends TestCase
     protected static $setUp = false;
 
     /**
+     * Get handler with required custom field types registered
+     *
+     * @return Handler
+     */
+    abstract public function getCustomHandler();
+
+    /**
      * Get initial field externals data
      *
      * @return array
@@ -88,29 +95,18 @@ abstract class FieldTypeIntegrationTest extends TestCase
     /**
      * @return void
      */
-    public function testLoadUserUserField()
+    public function testLoadField()
     {
-        $handler        = $this->getHandler();
-
-        $handler->getStorageRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
-            ) )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
-        );
+        $handler = $this->getCustomHandler();
 
         $contentHandler = $handler->contentHandler();
         return $contentHandler->load( 10, 2 );
     }
 
     /**
-     * @depends testLoadUserUserField
+     * @depends testLoadField
      */
-    public function testLoadUserUserFieldType( $content )
+    public function testLoadFieldType( $content )
     {
         $this->assertSame(
             'ezuser',
@@ -121,10 +117,10 @@ abstract class FieldTypeIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testLoadUserUserFieldType
+     * @depends testLoadFieldType
      * @dataProvider getExternalsFieldData
      */
-    public function testLoadUserUserExternalData( $name, $value, $field )
+    public function testLoadExternalData( $name, $value, $field )
     {
         $this->assertEquals(
             $value,
@@ -133,22 +129,11 @@ abstract class FieldTypeIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testLoadUserUserFieldType
+     * @depends testLoadFieldType
      */
-    public function testUpdateUserUserField( $field )
+    public function testUpdateField( $field )
     {
-        $handler        = $this->getHandler();
-
-        $handler->getStorageRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
-            ) )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
-        );
+        $handler = $this->getCustomHandler();
 
         $field->value->externalData = $this->getUpdateFieldData();
         $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
@@ -165,9 +150,9 @@ abstract class FieldTypeIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testUpdateUserUserField
+     * @depends testUpdateField
      */
-    public function testUpdateUserUserFieldType( $content )
+    public function testUpdateFieldType( $content )
     {
         $this->assertSame(
             'ezuser',
@@ -178,10 +163,10 @@ abstract class FieldTypeIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testUpdateUserUserFieldType
+     * @depends testUpdateFieldType
      * @dataProvider getUpdatedExternalsFieldData
      */
-    public function testUpdateUserUserExternalData( $name, $value, $field )
+    public function testUpdateExternalData( $name, $value, $field )
     {
         $this->assertEquals(
             $value,
