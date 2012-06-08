@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
+use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
+use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
@@ -118,7 +120,42 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testNewObjectStateCreateStruct()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::newObjectStateCreateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateCreate = $objectStateService->newObjectStateCreateStruct(
+            'pending'
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateCreateStruct',
+            $objectStateCreate
+        );
+        return $objectStateCreate;
+    }
+
+    /**
+     * testNewObjectStateCreateStructValues
+     *
+     * @param ObjectStateCreateStruct $objectStateCreate
+     * @return void
+     * @depends testNewObjectStateCreateStruct
+     */
+    public function testNewObjectStateCreateStructValues( ObjectStateCreateStruct $objectStateCreate )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'          => 'pending',
+                'priority'            => false,
+                'defaultLanguageCode' => null,
+                'names'               => null,
+                'descriptions'        => null,
+            ),
+            $objectStateCreate
+        );
     }
 
     /**
