@@ -41,6 +41,16 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     }
 
     /**
+     * Get name of tested field tyoe
+     *
+     * @return array
+     */
+    public function getTypeName()
+    {
+        return 'ezuser';
+    }
+
+    /**
      * Get initial field externals data
      *
      * @return array

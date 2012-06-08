@@ -8,7 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\Persistence\Legacy,
+    eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Integration test for the legacy storage
@@ -23,6 +24,20 @@ abstract class FieldTypeIntegrationTest extends TestCase
      * @var bool
      */
     protected static $setUp = false;
+
+    /**
+     * Name of test content type
+     *
+     * @var string
+     */
+    protected $contentType;
+
+    /**
+     * Get name of tested field tyoe
+     *
+     * @return string
+     */
+    abstract public function getTypeName();
 
     /**
      * Get handler with required custom field types registered
@@ -86,9 +101,48 @@ abstract class FieldTypeIntegrationTest extends TestCase
         }
     }
 
-    /**
-     * @return void
-     */
+    public function testCreateContentType()
+    {
+        $this->contentType = 'test-' . $this->getTypeName();
+        $createStruct = new Content\Type\CreateStruct( array(
+            'name'              => array( 'eng-GB' => 'Test' ),
+            'identifier'        => $this->contentType,
+            'status'            => 0,
+            'creatorId'         => 14,
+            'created'           => time(),
+            'modifierId'        => 14,
+            'modified'          => time(),
+            'initialLanguageId' => 2,
+            'remoteId'          => 'abcdef',
+        ) );
+
+        $createStruct->fieldDefinitions = array(
+            new Content\Type\FieldDefinition( array(
+                'name'           => array( 'eng-GB' => 'Name' ),
+                'identifier'     => 'name',
+                'fieldGroup'     => 'main',
+                'position'       => 1,
+                'fieldType'      => 'ezstring',
+                'isTranslatable' => false,
+                'isRequired'     => true,
+            ) ),
+            new Content\Type\FieldDefinition( array(
+                'name'           => array( 'eng-GB' => 'Data' ),
+                'identifier'     => 'data',
+                'fieldGroup'     => 'main',
+                'position'       => 2,
+                'fieldType'      => $this->getTypeName(),
+                'isTranslatable' => false,
+                'isRequired'     => true,
+            ) ),
+        );
+
+        $handler            = $this->getCustomHandler();
+        $contentTypeHandler = $handler->contentTypeHandler();
+
+        $contentTypeHandler->create( $createStruct );
+    }
+
     public function testLoadField()
     {
         $handler = $this->getCustomHandler();
