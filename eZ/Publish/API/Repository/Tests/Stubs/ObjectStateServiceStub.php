@@ -99,7 +99,7 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function loadObjectStateGroup( $objectStateGroupId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return $this->groups[$objectStateGroupId];
     }
 
 

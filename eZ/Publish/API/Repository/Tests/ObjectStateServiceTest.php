@@ -278,7 +278,24 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testLoadObjectStateGroup()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::loadObjectStateGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateGroupId contains the ID of the standard object state
+        // group ez_lock.
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $objectStateGroupId
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup',
+            $loadedObjectStateGroup
+        );
+        return $loadedObjectStateGroup;
     }
 
     /**
