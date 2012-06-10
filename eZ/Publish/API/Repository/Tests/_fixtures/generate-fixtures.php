@@ -30,6 +30,7 @@ writeFixtureFile( generateRoleFixture( $fixture ), 'Role', $argv[2] );
 writeFixtureFile( generateContentInfoFixture( $fixture ), 'Content', $argv[2] );
 writeFixtureFile( generateLocationFixture( $fixture ), 'Location', $argv[2] );
 writeFixtureFile( generateURLAliasFixture( $fixture ), 'URLAlias', $argv[2] );
+writeFixtureFile( generateObjectStateGroupFixture( $fixture ), 'ObjectStateGroup', $argv[2] );
 
 function generateContentTypeGroupFixture( array $fixture )
 {
@@ -694,6 +695,40 @@ function generateURLAliasFixture( array $fixture )
 
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\URLAlias', $aliases ),
+        $nextId
+    );
+}
+
+function generateObjectStateGroupFixture( array $fixture )
+{
+    $languageCodes = getLanguageCodes( $fixture );
+
+    $nextId = 0;
+    $groups = array();
+    foreach ( getFixtureTable( 'ezcobj_state_group', $fixture ) as $data )
+    {
+        $groups[$data['id']] = array(
+            'id'                  => $data['id'],
+            'identifier'          => $data['identifier'],
+            'defaultLanguageCode' => $languageCodes[$data['default_language_id']],
+            'names'               => array(),
+            'descriptions'        => array(),
+        );
+        $nextId = max( $nextId, $data['id'] );
+    }
+
+    foreach ( getFixtureTable( 'ezcobj_state_group_language', $fixture ) as $data )
+    {
+        $groupId  = $data['contentobject_state_group_id'];
+        // Set lowest bit to 0 (always_available)
+        $langCode = $languageCodes[( $data['language_id'] & -2 )];
+
+        $groups[$groupId]['names'][$langCode]        = $data['name'];
+        $groups[$groupId]['descriptions'][$langCode] = $data['description'];
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ObjectStateGroupStub', $groups ),
         $nextId
     );
 }
