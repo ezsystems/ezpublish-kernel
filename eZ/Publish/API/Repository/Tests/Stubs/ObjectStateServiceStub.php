@@ -31,7 +31,7 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @var int
      */
-    private $nextObjectStateGroupId = 0;
+    private $nextGroupId = 0;
 
     /**
      * Object state groups
@@ -39,6 +39,23 @@ class ObjectStateServiceStub implements ObjectStateService
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
     private $groups = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
+    /**
+     * Instantiates a new content type service stub.
+     *
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     */
+    public function __construct( RepositoryStub $repository )
+    {
+        $this->repository = $repository;
+
+        $this->initFromFixture();
+    }
 
      /**
      * creates a new object state group
@@ -298,5 +315,23 @@ class ObjectStateServiceStub implements ObjectStateService
     public function newObjectStateUpdateStruct()
     {
         return new ObjectStateUpdateStruct();
+    }
+
+    /**
+     * Helper method that initializes some default data from an existing legacy
+     * test fixture.
+     *
+     * @return void
+     */
+    private function initFromFixture()
+    {
+        $this->groups = array();
+
+        list(
+            $this->groups,
+            $this->nextGroupId
+        ) = $this->repository->loadFixture( 'ObjectStateGroup' );
+
+        ++$this->nextGroupId;
     }
 }

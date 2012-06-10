@@ -728,7 +728,7 @@ function generateObjectStateGroupFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ObjectStateGroupStub', $groups ),
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState\ObjectStateGroupStub', $groups ),
         $nextId
     );
 }
