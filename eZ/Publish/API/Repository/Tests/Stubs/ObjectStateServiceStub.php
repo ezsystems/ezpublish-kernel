@@ -26,6 +26,20 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
  */
 class ObjectStateServiceStub implements ObjectStateService
 {
+    /**
+     * Contains the next object state group ID
+     *
+     * @var int
+     */
+    private $nextObjectStateGroupId = 0;
+
+    /**
+     * Object state groups
+     *
+     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
+     */
+    private $groups = array();
+
      /**
      * creates a new object state group
      *
@@ -37,7 +51,24 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $groupData = array();
+        foreach ( $objectStateGroupCreateStruct as $propertyName => $propertyValue )
+        {
+            $groupData[$propertyName] = $propertyValue;
+        }
+
+        $groupData['languageCodes'] = array_unique( array_keys( array_merge(
+            $objectStateGroupCreateStruct->names ?: array(),
+            $objectStateGroupCreateStruct->descriptions ?: array()
+        ) ) );
+
+        $groupData['id'] = $this->nextObjectStateGroupId++;
+
+        $group = new Values\ObjectState\ObjectStateGroupStub( $groupData );
+
+        $this->groups[$group->id] = $group;
+
+        return $group;
     }
 
     /**

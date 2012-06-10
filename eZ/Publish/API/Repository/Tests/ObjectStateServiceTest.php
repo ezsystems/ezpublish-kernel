@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
+use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 
@@ -211,7 +212,61 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testCreateObjectStateGroup()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::createObjectStateGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroupCreate = $objectStateService->newObjectStateGroupCreateStruct(
+            'publishing'
+        );
+        $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
+        $objectStateGroupCreate->names = array(
+            'eng-US' => 'Publishing',
+            'eng-GB' => 'Sindelfingen',
+        );
+        $objectStateGroupCreate->descriptions = array(
+            'eng-US' => 'Put something online',
+            'eng-GB' => 'Put something ton Sindelfingen.',
+        );
+
+        $createdObjectStateGroup = $objectStateService->createObjectStateGroup(
+            $objectStateGroupCreate
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup',
+            $createdObjectStateGroup
+        );
+        return $createdObjectStateGroup;
+    }
+
+    /**
+     * testCreateObjectStateGroupStructValues
+     *
+     * @param ObjectStateGroup $createdObjectStateGroup
+     * @return void
+     * @depends testCreateObjectStateGroup
+     */
+    public function testCreateObjectStateGroupStructValues( ObjectStateGroup $createdObjectStateGroup )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'          => 'publishing',
+                'defaultLanguageCode' => 'eng-US',
+                'languageCodes'       => array( 'eng-US', 'eng-GB' ),
+                'names'               => array(
+                    'eng-US' => 'Publishing',
+                    'eng-GB' => 'Sindelfingen',
+                ),
+                'descriptions'        => array(
+                    'eng-US' => 'Put something online',
+                    'eng-GB' => 'Put something ton Sindelfingen.',
+                ),
+            ),
+            $createdObjectStateGroup
+        );
     }
 
     /**
