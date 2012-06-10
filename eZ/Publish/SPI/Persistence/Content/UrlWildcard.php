@@ -7,7 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\Persistence;
+namespace eZ\Publish\SPI\Persistence\Content;
+
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * UrlWildCard models one url alias path with wild cards
@@ -31,16 +33,16 @@ class UrlWildcard extends ValueObject
     public $sourceUrl;
 
     /**
-     * The destiantion url containing placeholders e.g. /destination/{1}
+     * The destination url containing placeholders e.g. /destination/{1}
      *
      * @var string
      */
-    public $destiantionUrl;
+    public $destinationUrl;
 
     /**
      * indicates if the url is redirected or not
      *
      * @var boolean
      */
-    public $foreward;
+    public $forward;
 }
