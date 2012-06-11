@@ -143,6 +143,28 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     }
 
     /**
+     * Get externals copied field data values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
+     */
+    public function getCopiedExternalsFieldData()
+    {
+        // @TODO: Failing because of reloading issue. Intentional.
+        return array(
+            array( 'account_key', null ),
+            array( 'has_stored_login', true ),
+            array( 'is_logged_in', true ),
+            array( 'is_enabled', true ),
+            array( 'is_locked', false ),
+            array( 'last_visit', null ),
+            array( 'login_count', null ),
+            array( 'max_login', 1000 ),
+        );
+    }
+
+    /**
      * Method called after content creation
      *
      * Useful, if additional stuff should be executed (like creating the actual 

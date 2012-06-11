@@ -105,6 +105,15 @@ abstract class FieldTypeIntegrationTest extends TestCase
     abstract public function getUpdatedExternalsFieldData();
 
     /**
+     * Get externals copied field data values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
+     */
+    abstract public function getCopiedExternalsFieldData();
+
+    /**
      * Method called after content creation
      *
      * Useful, if additional stuff should be executed (like creating the actual 
@@ -257,7 +266,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
                     'languageCode'      => 'eng-GB',
                     'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
                     'value'             => new Content\FieldValue( array(
-                        'data' => 'This is just a test object',
+                        'data'    => 'This is just a test object',
                         'sortKey' => array( 'sort_key_string' => 'This is just a test object' ),
                     ) ),
                 ) ),
@@ -375,6 +384,54 @@ abstract class FieldTypeIntegrationTest extends TestCase
      * @dataProvider getUpdatedExternalsFieldData
      */
     public function testUpdateExternalData( $name, $value, $field )
+    {
+        if ( !array_key_exists( $name, $field->value->externalData ) )
+        {
+            $this->fail( "Property $name not avialable." );
+        }
+
+        $this->assertEquals(
+            $value,
+            $field->value->externalData[$name]
+        );
+    }
+
+    /**
+     * @depends testCreateContent
+     */
+    public function testCopyField( $content )
+    {
+        $handler        = $this->getCustomHandler();
+        $contentHandler = $handler->contentHandler();
+
+        $copied = $contentHandler->copy( self::$contentId, self::$contentVersion );
+
+        $this->assertNotSame(
+            $content->versionInfo->contentId,
+            $copied->versionInfo->contentId
+        );
+
+        return $copied;
+    }
+
+    /**
+     * @depends testCopyField
+     */
+    public function testCopiedFieldType( $content )
+    {
+        $this->assertSame(
+            $this->getTypeName(),
+            $content->fields[1]->type
+        );
+
+        return $content->fields[1];
+    }
+
+    /**
+     * @depends testCopiedFieldType
+     * @dataProvider getCopiedExternalsFieldData
+     */
+    public function testCopiedExternalData( $name, $value, $field )
     {
         if ( !array_key_exists( $name, $field->value->externalData ) )
         {

@@ -161,8 +161,7 @@ class UserStorage implements Storage
      */
     public function copyFieldData( Field $field, array $context )
     {
-        echo __METHOD__, PHP_EOL;
-        var_dump( func_get_args() );
+        // @TODO: What do we actually want to do in here?
     }
 
     /**
