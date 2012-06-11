@@ -307,7 +307,19 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testLoadObjectStateGroupThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::loadObjectStateGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        $nonExistentObjectStateGroupId = $this->generateId( 'objectstategroup', PHP_INT_MAX );
+        /* BEGIN: Use Case */
+        // $nonExistentObjectStateGroupId contains an ID for an object state
+        // that does not exist
+        $objectStateService = $repository->getObjectStateService();
+
+        // Throws a not found exception
+        $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $nonExistentObjectStateGroupId
+        );
+        /* END: Use Case */
     }
 
     /**

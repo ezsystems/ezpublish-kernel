@@ -21,6 +21,8 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+
 /**
  * ObjectStateServiceStub
  */
@@ -99,6 +101,10 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function loadObjectStateGroup( $objectStateGroupId )
     {
+        if ( !isset( $this->groups[$objectStateGroupId] ) )
+        {
+            throw new Exceptions\NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        }
         return $this->groups[$objectStateGroupId];
     }
 
