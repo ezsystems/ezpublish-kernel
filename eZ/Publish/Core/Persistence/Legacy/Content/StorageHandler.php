@@ -68,6 +68,17 @@ class StorageHandler
     }
 
     /**
+     * Stores data from $field in its corresponding external storage
+     *
+     * @param Field $field
+     * @return void
+     */
+    public function copyFieldData( Field $field )
+    {
+        return $this->storageRegistry->getStorage( $field->type )->copyFieldData( $field, $this->context );
+    }
+
+    /**
      * Deletes data for field $ids from external storage of $fieldType
      *
      * @param string $fieldType

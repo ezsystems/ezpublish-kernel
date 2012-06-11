@@ -112,7 +112,7 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    protected function internalCreate( CreateStruct $struct, $versionNo = 1 )
+    protected function internalCreate( CreateStruct $struct, $versionNo = 1, $copy = false )
     {
         $content = $this->mapper->createContentFromCreateStruct(
             $struct,
@@ -135,7 +135,14 @@ class Handler implements BaseContentHandler
         $content->fields = $struct->fields;
         $content->versionInfo->names = $struct->name;
 
-        $this->fieldHandler->createNewFields( $content );
+        if ( $copy )
+        {
+            $this->fieldHandler->copyFields( $content );
+        }
+        else
+        {
+            $this->fieldHandler->createNewFields( $content );
+        }
 
         // Create node assignments
         foreach ( $struct->locations as $location )
@@ -462,7 +469,8 @@ class Handler implements BaseContentHandler
         );
         $content = $this->internalCreate(
             $createStruct,
-            $currentVersionNo
+            $currentVersionNo,
+            true
         );
 
         // If version was not passed also copy other versions
@@ -484,7 +492,7 @@ class Handler implements BaseContentHandler
                     $versionContent->contentInfo->isAlwaysAvailable
                 );
 
-                $this->fieldHandler->createNewFields( $versionContent );
+                $this->fieldHandler->copyFields( $versionContent );
 
                 // Create name
                 foreach ( $versionContent->versionInfo->names as $language => $name )
