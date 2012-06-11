@@ -411,7 +411,10 @@ abstract class FieldTypeIntegrationTest extends TestCase
             $copied->versionInfo->contentId
         );
 
-        return $copied;
+        return $contentHandler->load(
+            $copied->versionInfo->contentId,
+            $copied->versionInfo->versionNo
+        );
     }
 
     /**
@@ -441,6 +444,25 @@ abstract class FieldTypeIntegrationTest extends TestCase
         $this->assertEquals(
             $value,
             $field->value->externalData[$name]
+        );
+    }
+
+    /**
+     * @depends testCopyField
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function testDeleteField( $content )
+    {
+        $handler        = $this->getCustomHandler();
+        $contentHandler = $handler->contentHandler();
+
+        $contentHandler->removeRawContent(
+            $content->versionInfo->contentId
+        );
+
+        $contentHandler->load(
+            $content->versionInfo->contentId,
+            $content->versionInfo->versionNo
         );
     }
 

@@ -433,5 +433,75 @@ class LegacyStorage extends Gateway
         $stmt = $query->prepare();
         $stmt->execute();
     }
+
+    /**
+     * Copy all field data
+     *
+     * @param mixed $fieldId
+     * @return void
+     */
+    public function copyFieldData( $fieldId )
+    {
+        return $this->defaultValues;
+    }
+
+    /**
+     * Delete all field data
+     *
+     * @param mixed $fieldId
+     * @return void
+     */
+    public function deleteFieldData( $fieldId )
+    {
+        $userId = $this->fetchUserId( $fieldId );
+
+        $query = $this->dbHandler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->dbHandler->quoteTable( 'ezuser_accountkey' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $query->bindValue( $userId )
+                )
+            );
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        $query = $this->dbHandler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->dbHandler->quoteTable( 'ezuser_setting' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'user_id' ),
+                    $query->bindValue( $userId )
+                )
+            );
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        $query = $this->dbHandler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->dbHandler->quoteTable( 'ezuservisit' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'user_id' ),
+                    $query->bindValue( $userId )
+                )
+            );
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        $query = $this->dbHandler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->dbHandler->quoteTable( 'ezuser' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $userId )
+                )
+            );
+        $stmt = $query->prepare();
+        $stmt->execute();
+    }
 }
 

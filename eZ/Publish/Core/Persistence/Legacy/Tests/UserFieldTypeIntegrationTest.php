@@ -151,16 +151,15 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
      */
     public function getCopiedExternalsFieldData()
     {
-        // @TODO: Failing because of reloading issue. Intentional.
         return array(
             array( 'account_key', null ),
-            array( 'has_stored_login', true ),
+            array( 'has_stored_login', false ),
             array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
+            array( 'is_enabled', false ),
             array( 'is_locked', false ),
             array( 'last_visit', null ),
             array( 'login_count', null ),
-            array( 'max_login', 1000 ),
+            array( 'max_login', null ),
         );
     }
 
