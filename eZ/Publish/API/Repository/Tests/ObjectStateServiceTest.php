@@ -331,7 +331,52 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testLoadObjectStateGroups()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::loadObjectStateGroups() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroups = $objectStateService->loadObjectStateGroups();
+        /* END: Use Case */
+
+        $this->assertInternalType( 'array', $loadedObjectStateGroups );
+
+        return $loadedObjectStateGroups;
+    }
+
+    /**
+     * testLoadObjectStateGroupsLoadedExpectedGroups
+     *
+     * @param array $loadObjectStateGroups
+     * @depends testLoadObjectStateGroups
+     */
+    public function testLoadObjectStateGroupsLoadedExpectedGroups( array $loadedObjectStateGroups )
+    {
+        $expectedGroupIds = array(
+            $this->generateId( 'objectstategroup', 2 ) => true,
+        );
+
+        foreach ( $loadedObjectStateGroups as $loadedObjectStateGroup )
+        {
+            if ( !isset( $expectedGroupIds[$loadedObjectStateGroup->id] ) )
+            {
+                $this->fail(
+                    sprintf(
+                        'Loaded not expected ObjectStateGroup with ID "%s"',
+                        $loadedObjectStateGroup->id
+                    )
+                );
+            }
+            unset( $expectedGroupIds[$loadedObjectStateGroup->id] );
+        }
+
+        if ( count( $expectedGroupIds ) !== 0 )
+        {
+            $this->fail(
+                'Expected object state groups with IDs "%s" not loaded.',
+                implode( '", "', $expectedGroupIds )
+            );
+        }
     }
 
     /**

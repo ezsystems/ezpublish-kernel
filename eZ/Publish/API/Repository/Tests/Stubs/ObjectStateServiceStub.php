@@ -119,7 +119,7 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function loadObjectStateGroups( $offset = 0, $limit = -1 )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return array_values( $this->groups );
     }
 
     /**
