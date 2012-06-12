@@ -20,7 +20,8 @@ use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  */
@@ -112,8 +113,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadGroup( $groupId )
     {
-        $rows = $this->contentTypeGateway->loadGroupData( $groupId );
-        $groups = $this->mapper->extractGroupsFromRows( $rows );
+        $groups = $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadGroupData( $groupId )
+        );
 
         if ( count( $groups ) !== 1 )
         {
@@ -130,8 +132,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadGroupByIdentifier( $identifier )
     {
-        $rows = $this->contentTypeGateway->loadGroupDataByIdentifier( $identifier );
-        $groups = $this->mapper->extractGroupsFromRows( $rows );
+        $groups = $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadGroupDataByIdentifier( $identifier )
+        );
 
         if ( count( $groups ) !== 1 )
         {
@@ -146,8 +149,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadAllGroups()
     {
-        $rows = $this->contentTypeGateway->loadAllGroupsData();
-        return $this->mapper->extractGroupsFromRows( $rows );
+        return $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadAllGroupsData()
+        );
     }
 
     /**
@@ -157,8 +161,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadContentTypes( $groupId, $status = 0 )
     {
-        $rows = $this->contentTypeGateway->loadTypesDataForGroup( $groupId, $status );
-        return $this->mapper->extractTypesFromRows( $rows );
+        return $this->mapper->extractTypesFromRows(
+            $this->contentTypeGateway->loadTypesDataForGroup( $groupId, $status )
+        );
     }
 
     /**
@@ -168,10 +173,13 @@ class Handler implements BaseContentTypeHandler
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
-        $rows = $this->contentTypeGateway->loadTypeData(
-            $contentTypeId, $status
+        return $this->loadFromRows(
+            $this->contentTypeGateway->loadTypeData(
+                $contentTypeId, $status
+            ),
+            $contentTypeId,
+            $status
         );
-        return $this->loadFromRows( $rows, $contentTypeId, $status );
     }
 
     /**
@@ -198,10 +206,13 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadByRemoteId( $remoteId )
     {
-        $rows = $this->contentTypeGateway->loadTypeDataByRemoteId(
-            $remoteId, Type::STATUS_DEFINED
+        return $this->loadFromRows(
+            $this->contentTypeGateway->loadTypeDataByRemoteId(
+                $remoteId, Type::STATUS_DEFINED
+            ),
+            $remoteId,
+            Type::STATUS_DEFINED
         );
-        return $this->loadFromRows( $rows, $remoteId, Type::STATUS_DEFINED );
     }
 
     /**
@@ -226,9 +237,24 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function create( CreateStruct $createStruct )
+    {
+        return $this->internalCreate( $createStruct );
+    }
+
+    /**
+     * @todo $contentTypeId is used to create draft from existing content type (called by self::createDraft()).
+     *       This is a temporary solution until self::createDraft is fixed not to reuse this method.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     * @param mixed|null $contentTypeId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    protected function internalCreate( CreateStruct $createStruct, $contentTypeId = null )
     {
         $createStruct = clone $createStruct;
         $contentType = $this->mapper->createTypeFromCreateStruct(
@@ -236,16 +262,19 @@ class Handler implements BaseContentTypeHandler
         );
 
         $contentType->id = $this->contentTypeGateway->insertType(
-            $contentType
+            $contentType,
+            $contentTypeId
         );
+
         foreach ( $contentType->groupIds as $groupId )
         {
-            $this->contentTypeGateway->insertGroupAssignement(
+            $this->contentTypeGateway->insertGroupAssignment(
                 $groupId,
                 $contentType->id,
                 $contentType->status
             );
         }
+
         foreach ( $contentType->fieldDefinitions as $fieldDef )
         {
             $storageFieldDef = new StorageFieldDefinition();
@@ -257,6 +286,7 @@ class Handler implements BaseContentTypeHandler
                 $storageFieldDef
             );
         }
+
         return $contentType;
     }
 
@@ -265,7 +295,6 @@ class Handler implements BaseContentTypeHandler
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
-     * @todo Maintain contentclass_name
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
@@ -278,30 +307,38 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param mixed $contentTypeId
-     * @todo Maintain contentclass_name
-     * @param int $status
+     *
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
-     * @todo Add throw when type does not exist
+     *
+     * @param mixed $contentTypeId
+     * @param int $status
+     *
+     * @return boolean
      */
     public function delete( $contentTypeId, $status )
     {
-        $count = Type::STATUS_DEFINED !== $status ? 0 : $this->contentTypeGateway->countInstancesOfType(
-            $contentTypeId, $status
-        );
-        if ( $count > 0 )
+        if ( !$this->contentTypeGateway->loadTypeData( $contentTypeId, $status ) )
         {
-            throw new Exception\TypeStillHasContent( $contentTypeId, $status );
+            throw new NotFoundException(
+                "ContentType",
+                array(
+                    "id" => $contentTypeId,
+                    "status" => $status
+                )
+            );
         }
 
-        $this->contentTypeGateway->deleteGroupAssignementsForType(
-            $contentTypeId, $status
-        );
-        $this->contentTypeGateway->deleteFieldDefinitionsForType(
-            $contentTypeId, $status
-        );
-        $this->contentTypeGateway->deleteType(
+        if ( Type::STATUS_DEFINED === $status && $this->contentTypeGateway->countInstancesOfType( $contentTypeId ) )
+        {
+            throw new BadStateException(
+                "\$contentTypeId",
+                "ContentType with given id still has content instances and therefore can't be deleted"
+            );
+        }
+
+        $this->contentTypeGateway->delete(
             $contentTypeId, $status
         );
 
@@ -328,7 +365,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $modifierId;
         $createStruct->modified = time();
 
-        return $this->create( $createStruct );
+        return $this->internalCreate( $createStruct, $contentTypeId );
     }
 
     /**
@@ -345,6 +382,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
+        $createStruct->status = Type::STATUS_DRAFT;
         $createStruct->identifier .= '_' . ( $createStruct->remoteId = md5( uniqid( get_class( $createStruct ), true ) ) );
 
         return $this->create( $createStruct );
@@ -373,7 +411,7 @@ class Handler implements BaseContentTypeHandler
             );
         }
 
-        $this->contentTypeGateway->deleteGroupAssignement(
+        $this->contentTypeGateway->deleteGroupAssignment(
             $groupId, $contentTypeId, $status
         );
         // FIXME: What is to be returned?
@@ -391,11 +429,40 @@ class Handler implements BaseContentTypeHandler
      */
     public function link( $groupId, $contentTypeId, $status )
     {
-        $this->contentTypeGateway->insertGroupAssignement(
+        $this->contentTypeGateway->insertGroupAssignment(
             $groupId, $contentTypeId, $status
         );
         // FIXME: What is to be returned?
         return true;
+    }
+
+
+    /**
+     * Returns field definition for the given field definition id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field definition is not found
+     *
+     * @param mixed $id
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    public function getFieldDefinition( $id, $status )
+    {
+        $row = $this->contentTypeGateway->loadFieldDefinition( $id, $status );
+
+        if ( $row === false )
+        {
+            throw new NotFoundException(
+                "FieldDefinition",
+                array(
+                    "id" => $id,
+                    "status" => $status
+                )
+            );
+        }
+
+        return $this->mapper->extractFieldFromRow( $row );
     }
 
     /**

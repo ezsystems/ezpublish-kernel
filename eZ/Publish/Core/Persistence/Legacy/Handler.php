@@ -18,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
@@ -27,11 +28,9 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\User,
-    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
-    ezcDbFactory;
+    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
 
 /**
  * The repository handler for the legacy storage engine
@@ -65,14 +64,14 @@ class Handler implements HandlerInterface
     /**
      * Storage registry
      *
-     * @var Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
      */
     protected $storageRegistry;
 
     /**
      * Storage registry
      *
-     * @var Content\StorageHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $storageHandler;
 
@@ -93,7 +92,7 @@ class Handler implements HandlerInterface
     /**
      * Content type handler
      *
-     * @var Content\Type\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
@@ -135,16 +134,23 @@ class Handler implements HandlerInterface
     /**
      * User handler
      *
-     * @var User\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Handler
      */
     protected $userHandler;
 
     /**
      * Section handler
      *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler
      */
     protected $sectionHandler;
+
+    /**
+     * Trash handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler
+     */
+    protected $trashHandler;
 
     /**
      * Content gateway
@@ -180,6 +186,11 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\Core\Persistence\Legacy\Configurator
      */
     protected $configurator;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     */
+    protected $dbHandler;
 
     /**
      * Creates a new repository handler.
@@ -218,6 +229,7 @@ class Handler implements HandlerInterface
      * - sqlite://:memory:
      *   for a SQLite in memory database (used e.g. for unit tests)
      *
+     * This config setting is not needed if $dbHandler is provided.
      * For further information on the database setup, please refer to
      * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
@@ -250,10 +262,12 @@ class Handler implements HandlerInterface
      * and then used for normalization in the full text search.
      *
      * @param array $config
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|null $dbHandler Optional injection of db handler
      */
-    public function __construct( array $config )
+    public function __construct( array $config, EzcDbHandler $dbHandler = null )
     {
         $this->configurator = new Configurator( $config );
+        $this->dbHandler = $dbHandler;
     }
 
     /**
@@ -265,27 +279,13 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->dbHandler ) )
         {
-            $connection = ezcDbFactory::create( $this->configurator->getDsn() );
-            $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->configurator->getDsn() );
-
-            switch ( $database )
-            {
-                case 'pgsql':
-                    $this->dbHandler = new Pgsql( $connection );
-                    break;
-
-                case 'sqlite':
-                    $this->dbHandler = new Sqlite( $connection );
-                    break;
-
-                default:
-                    $this->dbHandler = new EzcDbHandler( $connection );
-            }
+            $this->dbHandler = EzcDbHandler::create( $this->configurator->getDsn() );
         }
         return $this->dbHandler;
     }
 
     /**
+     * @internal LocationHandler is injected into property to avoid circular dependency
      * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler()
@@ -298,6 +298,7 @@ class Handler implements HandlerInterface
                 $this->getContentMapper(),
                 $this->getFieldHandler()
             );
+            $this->contentHandler->locationHandler = $this->locationHandler();
         }
         return $this->contentHandler;
     }
@@ -313,7 +314,8 @@ class Handler implements HandlerInterface
         {
             $this->contentMapper = new ContentMapper(
                 $this->getLocationMapper(),
-                $this->getFieldValueConverterRegistry()
+                $this->getFieldValueConverterRegistry(),
+                $this->contentLanguageHandler()
             );
         }
         return $this->contentMapper;
@@ -411,7 +413,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a storage handler
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\StorageHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getStorageHandler()
     {
@@ -474,6 +476,7 @@ class Handler implements HandlerInterface
                             new CriterionHandler\LocationId( $db ),
                             new CriterionHandler\ParentLocationId( $db ),
                             new CriterionHandler\RemoteId( $db ),
+                            new CriterionHandler\LocationRemoteId( $db ),
                             new CriterionHandler\SectionId( $db ),
                             new CriterionHandler\Status( $db ),
                             new CriterionHandler\FullText(
@@ -491,9 +494,17 @@ class Handler implements HandlerInterface
                             new SortClauseHandler\LocationPathString( $db ),
                             new SortClauseHandler\LocationDepth( $db ),
                             new SortClauseHandler\LocationPriority( $db ),
+                            new SortClauseHandler\DateModified( $db ),
+                            new SortClauseHandler\DatePublished( $db ),
+                            new SortClauseHandler\SectionIdentifier( $db ),
+                            new SortClauseHandler\SectionName( $db ),
+                            new SortClauseHandler\ContentName( $db ),
+                            new SortClauseHandler\Field( $db ),
                         )
                     ),
-                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() )
+                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
+                    $this->contentLanguageHandler(),
+                    $this->getLanguageMaskGenerator()
                 ),
                 $this->getContentMapper(),
                 $this->getFieldHandler()
@@ -540,7 +551,8 @@ class Handler implements HandlerInterface
                     new Type\ContentUpdater(
                         $this->searchHandler(),
                         $this->getContentGateway(),
-                        $this->getFieldValueConverterRegistry()
+                        $this->getFieldValueConverterRegistry(),
+                        $this->getStorageHandler()
                     )
                 );
             }
@@ -677,7 +689,16 @@ class Handler implements HandlerInterface
      */
     public function trashHandler()
     {
-        throw new \RuntimeException( 'Not implemented yet' );
+        if ( !isset( $this->trashHandler ) )
+        {
+            $this->trashHandler = new TrashHandler(
+                $this->getLocationGateway(),
+                $this->getLocationMapper(),
+                $this->contentHandler()
+            );
+        }
+
+        return $this->trashHandler;
     }
 
     /**

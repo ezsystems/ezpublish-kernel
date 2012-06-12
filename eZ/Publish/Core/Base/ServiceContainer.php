@@ -12,6 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\MissingClass,
+    eZ\Publish\API\Container,
     ReflectionClass;
 
 /**
@@ -38,21 +39,20 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  * Settings are defined in service.ini like the following example:
  *
  *     [repository]
- *     public=true
  *     class=eZ\Publish\Core\Base\Repository
  *     arguments[persistence_handler]=@inmemory_persistence_handler
  *
  *     [inmemory_persistence_handler]
  *     class=eZ\Publish\Core\Persistence\InMemory\Handler
  *
- *     @todo Update service.ini reference bellow
- *     # @see \eZ\Publish\Core\Base\settings\service.ini For more options and examples.
+ *     # @see \eZ\Publish\Core\settings\service.ini For more options and examples.
  *
  * "arguments" values in service.ini can start with either @ in case of other services being dependency, $ if a
- * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer )
+ * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES )
  * or plain scalar if that is to be given directly as argument value.
+ * If the argument value starts with %, then it is a lazy loaded service provided as a callback (closure).
  */
-class ServiceContainer
+class ServiceContainer implements Container
 {
     /**
      * Holds service objects and variables
@@ -99,14 +99,14 @@ class ServiceContainer
     {
         if ( isset( $this->dependencies['@repository'] ) )
             return $this->dependencies['@repository'];
-        return $this->internalGet( 'repository' );
+        return $this->get( 'repository' );
     }
 
     /**
      * Get a variable dependency
      *
-     * @param $variable
-     * @return object
+     * @param string $variable
+     * @return mixed
      * @throws InvalidArgumentException
      */
     public function getVariable( $variable )
@@ -126,27 +126,13 @@ class ServiceContainer
     /**
      * Get service by name
      *
-     * @uses internalGet()
+     * @uses lookupArguments()
+     * @throws BadConfiguration
+     * @throws MissingClass
      * @param string $serviceName
      * @return object
      */
     public function get( $serviceName )
-    {
-        return $this->internalGet( $serviceName );
-    }
-
-    /**
-     * Get service by name (internal variant, exposes possibility to allow private services as used by dependencies)
-     *
-     * @uses lookupArguments()
-     * @throws BadConfiguration
-     * @throws MissingClass
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If dependency is private & !$allowPrivate
-     * @param string $serviceName
-     * @param bool $allowPrivate
-     * @return object
-     */
-    protected function internalGet( $serviceName, $allowPrivate = false )
     {
         $serviceKey = "@{$serviceName}";
 
@@ -156,49 +142,17 @@ class ServiceContainer
             return $this->dependencies[$serviceKey];
         }
 
-        if ( strpos( $serviceName, '-' ) )// If - is at a positive position, then service extends another one
-        {
-            $serviceParent = explode( '-', $serviceName );
-            $serviceParent = '-' . $serviceParent[1];
-            if ( empty( $this->settings[$serviceName] ) && empty( $this->settings[$serviceParent] ) )// Validate settings
-            {
-                throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
-            }
-            else if ( empty( $this->settings[$serviceName] ) )
-            {
-                $settings = $this->settings[$serviceParent] + array( 'shared' => true, 'public' => false );
-            }
-            else
-            {
-                $settings = array_merge(
-                    $this->settings[$serviceParent] + array( 'shared' => true, 'public' => false ),
-                    $this->settings[$serviceName]
-                );// uses array_merge on puposes to make sure arguments are reset
-            }
-        }
-        else if ( empty( $this->settings[$serviceName] ) )// Validate settings
+        if ( empty( $this->settings[$serviceName] ) )// Validate settings
         {
             throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
-        else
-        {
-            $settings = $this->settings[$serviceName] + array( 'shared' => true, 'public' => false );
-        }
 
+        $settings = $this->settings[$serviceName] + array( 'shared' => true );
         if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "service\\[{$serviceName}]\\class", 'class setting is not defined' );
         }
-
-        if ( $allowPrivate === false && $settings['public'] === false )
-        {
-            throw new InvalidArgumentException(
-                "service\\[{$serviceName}]",
-                'It is marked as private & can only be used as a dependency'
-            );
-        }
-
-        if ( !class_exists( $settings['class'] ) )
+        else if ( !class_exists( $settings['class'] ) )
         {
             throw new MissingClass( $settings['class'], 'service' );
         }
@@ -227,7 +181,7 @@ class ServiceContainer
         else // use Reflection to create a new instance, using the $args
         {
             $reflectionObj = new ReflectionClass( $settings['class'] );
-            $serviceObject =  $reflectionObj->newInstanceArgs( $arguments );
+            $serviceObject = $reflectionObj->newInstanceArgs( $arguments );
         }
 
         if ( $settings['shared'] )
@@ -260,21 +214,21 @@ class ServiceContainer
                     list( $argument, $function  ) = explode( '::', $argument );
                 }
 
-                if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === '-' )// expand extended services
+                if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === ':' )// expand extended services
                 {
-                    $builtArguments[$key] = $this->lookupArguments( $this->expandExtendedServices( $argument, $function ) );
+                    $builtArguments[$key] = $this->lookupArguments( $this->getListOfExtendedServices( $argument, $function ) );
                     continue;
                 }
                 elseif ( $argument[0] === '%' )// lazy loaded services
                 {
                     if ( $function !== '' )
                         $builtArguments[$key] = function() use ( $serviceContainer, $argument, $function ){
-                            $service = $serviceContainer->get( ltrim( $argument, '%' ), true );
+                            $service = $serviceContainer->get( ltrim( $argument, '%' ) );
                             return call_user_func_array( array( $service, $function ), func_get_args() );
                         };
                     else
                         $builtArguments[$key] = function() use ( $serviceContainer, $argument ){
-                            return $serviceContainer->get( ltrim( $argument, '%' ), true );
+                            return $serviceContainer->get( ltrim( $argument, '%' ) );
                         };
                 }
                 else if ( isset( $this->dependencies[ $argument ] ) )// Existing dependencies (@Service / $Variable)
@@ -287,7 +241,7 @@ class ServiceContainer
                 }
                 else// Try to load a @service dependency
                 {
-                    $builtArguments[$key] = $this->internalGet( ltrim( $argument, '@' ), true );
+                    $builtArguments[$key] = $this->get( ltrim( $argument, '@' ) );
                 }
 
                 if ( $function !== '' && $argument[0] !== '%' )
@@ -308,23 +262,24 @@ class ServiceContainer
     }
 
     /**
-     * @param string $argument Eg: %-controller
+     * @param string $parent Eg: %-controller
      * @param string $function Optional function string
-     * @return array|int|string
+     * @return array
      */
-    protected function expandExtendedServices( $argument, $function = '' )
+    protected function getListOfExtendedServices( $parent, $function = '' )
     {
-        $prefix = $argument[0];
-        $argument = ltrim( $argument, '@%' );
+        $prefix = $parent[0];
+        $parent = ltrim( $parent, '@%' );// Keep starting ':' on parent for easier matching bellow
         $services = array();
         if ( $function !== '' )
             $function = '::' . $function;
 
         foreach ( $this->settings as $service => $settings )
         {
-            if ( preg_match( "/^(?P<name>\w+){$argument}$/", $service, $match ) )
+            if ( stripos( $service, $parent ) !== false &&
+                 preg_match( "/^(?P<prefix>[\w:]+){$parent}$/", $service, $match ) )
             {
-                $services[$match['name']] = $prefix . $match['name'] . $argument . $function;
+                $services[$match['prefix']] = $prefix . $match['prefix'] . $parent . $function;
             }
         }
         return $services;

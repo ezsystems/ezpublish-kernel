@@ -33,7 +33,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->parserMock = $this->getMock( 'eZ\Publish\Core\Base\Configuration\Parser' );
+        $this->parserMock = $this->getMock( 'eZ\\Publish\\Core\\Base\\Configuration\\Parser' );
 
         $this->configuration = new Configuration(
             'test',
@@ -146,5 +146,35 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $config['Test']['Array']['clear'] = array();// Change array to excepted return value
         self::assertSame( $config, $this->configuration->getAll() );
+    }
+
+    /**
+     * Test Configuration
+     *
+     * @covers \eZ\Publish\Core\Base\Configuration::load
+     * @covers \eZ\Publish\Core\Base\Configuration::parse
+     */
+    public function testParsingExtendedSections()
+    {
+        $config = array(
+            'Test' => array(
+                'String' => 'test ',
+                'Int' => 42,
+                'Bool' => true,
+                'Array' => array( 1 ),
+            ),
+            'Test3:Test2:Test' => array(),
+            'Test2:Test' => array( 'Float' => 3.4 ),
+        );
+        $this->parserMock->expects( $this->once() )
+            ->method( 'parse' )
+            ->will( $this->returnValue( $config ) );
+        $this->configuration->load();
+
+        // Set extended value as we expect it
+        $config['Test2:Test'] += $config['Test'];
+        $config['Test3:Test2:Test'] = $config['Test2:Test'];
+
+        self::assertEquals( $config, $this->configuration->getAll() );
     }
 }

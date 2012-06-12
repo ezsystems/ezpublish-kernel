@@ -77,23 +77,23 @@ class SectionServiceStub implements SectionService
     {
         if ( true !== $this->repository->hasAccess( 'section', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         if ( isset( $this->identifiers[$sectionCreateStruct->identifier] ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $section = new Section(
             array(
-                'id'          =>  ++$this->nextId,
-                'name'        =>  $sectionCreateStruct->name,
-                'identifier'  =>  $sectionCreateStruct->identifier
+                'id' => ++$this->nextId,
+                'name' => $sectionCreateStruct->name,
+                'identifier' => $sectionCreateStruct->identifier
             )
         );
 
-        $this->sections[$section->id]            = $section;
+        $this->sections[$section->id] = $section;
         $this->identifiers[$section->identifier] = $section->id;
 
         return $section;
@@ -114,26 +114,26 @@ class SectionServiceStub implements SectionService
     {
         if ( true !== $this->repository->hasAccess( 'section', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         if ( isset( $this->identifiers[$sectionUpdateStruct->identifier] ) &&
             ( $this->identifiers[$sectionUpdateStruct->identifier] !== $section->id ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
         $updatedSection = new Section(
             array(
-                'id'          =>  $section->id,
-                'name'        =>  ( $sectionUpdateStruct->name ? $sectionUpdateStruct->name : $section->name ),
-                'identifier'  =>  ( $sectionUpdateStruct->identifier ? $sectionUpdateStruct->identifier : $section->identifier )
+                'id' => $section->id,
+                'name' => ( $sectionUpdateStruct->name ? $sectionUpdateStruct->name : $section->name ),
+                'identifier' => ( $sectionUpdateStruct->identifier ? $sectionUpdateStruct->identifier : $section->identifier )
             )
         );
 
         unset( $this->identifiers[$section->identifier] );
 
-        $this->sections[$updatedSection->id]            = $updatedSection;
+        $this->sections[$updatedSection->id] = $updatedSection;
         $this->identifiers[$updatedSection->identifier] = $updatedSection->id;
 
         return $updatedSection;
@@ -153,13 +153,13 @@ class SectionServiceStub implements SectionService
     {
         if ( true !== $this->repository->hasAccess( 'section', 'view' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( isset( $this->sections[$sectionId] ) )
         {
             return $this->sections[$sectionId];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -173,7 +173,7 @@ class SectionServiceStub implements SectionService
     {
         if ( true !== $this->repository->hasAccess( 'section', 'view' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         return array_values( $this->sections );
     }
@@ -192,13 +192,13 @@ class SectionServiceStub implements SectionService
     {
         if ( true !== $this->repository->hasAccess( 'section', 'view' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( isset( $this->identifiers[$sectionIdentifier] ) )
         {
             return $this->sections[$this->identifiers[$sectionIdentifier]];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -230,13 +230,13 @@ class SectionServiceStub implements SectionService
     {
         if ( true !== $this->repository->hasAccess( 'section', 'assign' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( false === isset( $this->assignedContents[$section->id] ) )
         {
             $this->assignedContents[$section->id] = array();
         }
-        $this->assignedContents[$section->id][] = $contentInfo->contentId;
+        $this->assignedContents[$section->id][] = $contentInfo->id;
     }
 
     /**
@@ -253,15 +253,15 @@ class SectionServiceStub implements SectionService
     {
         if ( false === isset( $this->sections[$section->id] ) )
         {
-            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
         if ( isset( $this->assignedContents[$section->id] ) )
         {
-            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
         if ( true !== $this->repository->hasAccess( 'section', 'edit' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         unset( $this->sections[$section->id], $this->identifiers[$section->identifier] );
     }
@@ -284,6 +284,16 @@ class SectionServiceStub implements SectionService
     public function newSectionUpdateStruct()
     {
         return new SectionUpdateStruct();
+    }
+
+    /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
     }
 
     /**

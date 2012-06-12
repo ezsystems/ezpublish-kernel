@@ -1,7 +1,13 @@
 <?php
 /**
+ * File containing the eZ\Publish\API\Repository\ContentTypeService class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  * @package eZ\Publish\API\Repository
  */
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
@@ -83,7 +89,7 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $ContentTypeGroup
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup );
 
@@ -151,7 +157,7 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return array an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
      */
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup );
 
@@ -159,7 +165,7 @@ interface ContentTypeService
      * Creates a draft from an existing content type.
      *
      * This is a complete copy of the content
-     * type wiich has the state STATUS_DRAFT.
+     * type which has the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there is already a draft assigned to another user
@@ -176,7 +182,7 @@ interface ContentTypeService
      * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier or remoteId already exists.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
@@ -274,6 +280,7 @@ interface ContentTypeService
      * Publish the content type and update content objects.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type has no field definitions
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
      *
      * This method updates content objects, depending on the changed field definitions.
@@ -331,4 +338,14 @@ interface ContentTypeService
      */
     public function newFieldDefinitionUpdateStruct();
 
+    /**
+     * Instantiates a FieldType\Type object
+     *
+     * @todo Add to API or remove!
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup with settings injected to service
+     *
+     * @param string $type
+     * @return \eZ\Publish\SPI\FieldType\FieldType
+     */
+    public function buildFieldType( $type );
 }

@@ -81,4 +81,48 @@ class MaskGenerator
         );
     }
 
+    /**
+     * Checks if $languageMask contains the alwaysAvailable bit field
+     *
+     * @param int $languageMask
+     * @return bool
+     */
+    public function isAlwaysAvailable( $languageMask )
+    {
+        return (bool)( $languageMask & 1 );
+    }
+
+    /**
+     * Removes the alwaysAvailable flag from $languageId and returns cleaned up $languageId
+     *
+     * @param int $languageId
+     * @return int
+     */
+    public function removeAlwaysAvailableFlag( $languageId )
+    {
+        return $languageId & ~1;
+    }
+
+    /**
+     * Extracts every language Ids contained in $languageMask
+     *
+     * @param int $languageMask
+     * @return array Array of language Id
+     */
+    public function extractLanguageIdsFromMask( $languageMask )
+    {
+        $exp = 2;
+        $result = array();
+
+        // Decomposition of $languageMask into its binary components.
+        while ( $exp <= $languageMask )
+        {
+            if ( $languageMask & $exp )
+                $result[] = $exp;
+
+            $exp *= 2;
+        }
+
+        return $result;
+    }
 }

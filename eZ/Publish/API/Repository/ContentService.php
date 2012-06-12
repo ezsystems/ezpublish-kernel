@@ -1,7 +1,13 @@
 <?php
 /**
+ * File containing the eZ\Publish\API\Repository\ContentService class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  * @package eZ\Publish\API\Repository
  */
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
@@ -10,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -26,7 +32,6 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
  */
 interface ContentService
 {
-
     /**
      * Loads a content info object.
      *
@@ -118,7 +123,7 @@ interface ContentService
      *
      * If no version number is given, the method returns the current version
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given id does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param int $contentId
@@ -159,7 +164,7 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
      *                                                            or (4.x) there is no location provided
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an emtpy value
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
      * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
@@ -181,7 +186,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct );
+    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct );
 
     /**
      * deletes a content object including all its versions and locations including their subtrees.
@@ -221,7 +226,6 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
     public function loadContentDrafts( User $user = null );
-
 
     /**
      * Translate a version
@@ -269,9 +273,6 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      */
     public function publishVersion( VersionInfo $versionInfo );
 
@@ -311,6 +312,7 @@ interface ContentService
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
 
     /**
+     * @deprecated use search service instead
      * finds content objects for the given query.
      *
      * @TODO define structs for the field filters
@@ -322,13 +324,14 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findContent( Query $query, array $fieldFilters,  $filterOnUserPermissions = true );
+    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
 
     /**
+     * @deprecated use search service instead
      * Performs a query for a single content object
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the found content object
-     * @TODO throw an exception if the found object count is > 1
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
      * @TODO define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
@@ -336,7 +339,7 @@ interface ContentService
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
 
@@ -420,7 +423,6 @@ interface ContentService
      * @since 5.0
      */
     public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() );
-
 
     /**
      * Instantiates a new content create struct object

@@ -98,6 +98,7 @@ interface Handler
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function create( CreateStruct $contentType );
@@ -165,6 +166,18 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $status );
+
+    /**
+     * Returns field definition for the given field definition id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field definition is not found
+     *
+     * @param mixed $id
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    public function getFieldDefinition( $id, $status );
 
     /**
      * Adds a new field definition to an existing Type.

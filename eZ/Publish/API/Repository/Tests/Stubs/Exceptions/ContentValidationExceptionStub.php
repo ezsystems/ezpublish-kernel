@@ -19,12 +19,4 @@ use \eZ\Publish\API\Repository\Exceptions\ContentValidationException;
  */
 class ContentValidationExceptionStub extends ContentValidationException
 {
-    /**
-     * returns an additional error code which indicates why an action could not be performed
-     * @return integer an error code
-     */
-    public function getErrorCode()
-    {
-        // TODO: Implement getErrorCode() method.
-    }
 }

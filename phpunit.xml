@@ -32,6 +32,15 @@
           <directory suffix=".php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
           <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests</directory>
           <directory suffix=".php">eZ/Publish/Core/Io/Tests</directory>
+          <directory suffix=".php">eZ/Publish/API/Repository/Examples/</directory>
+          <directory suffix=".php">eZ/Publish/API/Repository/Tests/_fixtures</directory>
+          <directory suffix=".php">eZ/Publish/Core/Repository/Tests/Service/Legacy/_fixtures</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/_fixtures</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/Gateway/_fixtures</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/_fixtures</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/Location/Gateway/_fixtures</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/_fixtures</directory>
           <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>

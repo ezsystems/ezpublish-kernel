@@ -41,7 +41,8 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $text = "eZ Systems";
-        $value->data = new UrlValue( "http://ez.no/", $text );
+        $value->data = array( "text" => $text );
+        $value->externalData = "http://ez.no/";
         $value->sortKey = false;
         $storageFieldValue = new StorageFieldValue;
 
@@ -66,10 +67,10 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Url\\Value", $fieldValue->data );
+        self::assertInternalType( "array", $fieldValue->data );
         self::assertFalse( $fieldValue->sortKey );
-        self::assertSame( $text, $fieldValue->data->text );
-        self::assertEquals( $urlId, $fieldValue->data->getState( "urlId" ) );
+        self::assertSame( $text, $fieldValue->data["text"] );
+        self::assertEquals( $urlId, $fieldValue->data["urlId"] );
     }
 
     /**

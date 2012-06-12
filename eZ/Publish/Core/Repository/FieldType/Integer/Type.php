@@ -8,10 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Integer;
-use eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\InvalidArgumentType;
+use eZ\Publish\Core\Repository\FieldType\FieldType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Integer field types
@@ -27,6 +25,20 @@ class Type extends FieldType
     protected $allowedSettings = array(
         'defaultValue' => 0
     );
+
+    /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $value as value.
+     *
+     * @param int $value
+     * @return \eZ\Publish\Core\Repository\FieldType\Integer\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $value )
+    {
+        return new Value( $value );
+    }
 
     /**
      * Return the field type identifier for this field type
@@ -52,23 +64,31 @@ class Type extends FieldType
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Integer\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Integer\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_integer( $inputValue->value ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->value',
+                'integer',
+                $inputValue->value
+            );
         }
 
         return $inputValue;
@@ -79,7 +99,7 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         return array( 'sort_key_int' => $value->value );
     }
@@ -89,7 +109,7 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\Integer\Value $value
      */
     public function fromHash( $hash )
     {
@@ -99,11 +119,11 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\Integer\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
         return $value->value;
     }

@@ -23,7 +23,7 @@ class BinaryFile implements Converter
      * Nothing has to be stored for eZBinaryFile, as everything has to be stored in an external table.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {

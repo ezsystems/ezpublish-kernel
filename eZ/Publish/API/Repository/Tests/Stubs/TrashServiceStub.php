@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentServiceStub class
+ * File containing the TrashServiceStub class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,15 +13,50 @@ use \eZ\Publish\API\Repository\TrashService;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TrashItem;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub;
+
 /**
- * Location service, used for complex subtree operations
+ * Trash service used for content/location trash handling.
  *
  * @package eZ\Publish\API\Repository
  */
 class TrashServiceStub implements TrashService
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub[]
+     */
+    private $trashItems = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Location[][]
+     */
+    private $locations = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
+     */
+    private $repository;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\LocationServiceStub
+     */
+    private $locationService;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\LocationServiceStub $locationService
+     */
+    public function __construct( RepositoryStub $repository, LocationServiceStub $locationService )
+    {
+        $this->repository = $repository;
+        $this->locationService = $locationService;
+    }
+
     /**
      * Loads a trashed location object from its $id.
      *
@@ -36,7 +71,15 @@ class TrashServiceStub implements TrashService
      */
     public function loadTrashItem( $trashItemId )
     {
-        // TODO: Implement loadTrashItem() method.
+        if ( false === isset( $this->trashItems[$trashItemId] ) )
+        {
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
+        }
+        if ( false === $this->repository->canUser( 'content', 'edit', $this->locations[$trashItemId][$trashItemId] ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+        return $this->trashItems[$trashItemId];
     }
 
     /**
@@ -52,24 +95,78 @@ class TrashServiceStub implements TrashService
      */
     public function trash( Location $location )
     {
-        // TODO: Implement trash() method.
+        if ( false === $this->repository->canUser( 'content', 'edit', $location ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $this->locations[$location->id] = array();
+        foreach ( $this->locationService->__trashLocation( $location ) as $trashedLocation )
+        {
+            $this->locations[$location->id][$trashedLocation->id] = $trashedLocation;
+        }
+
+        $this->trashItems[$location->id] = new TrashItemStub(
+            array(
+                'id' => $location->id,
+                'childCount' => $location->childCount,
+                'depth' => $location->depth,
+                'hidden' => $location->hidden,
+                'invisible' => $location->invisible,
+                'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+                'parentLocationId' => $location->parentLocationId,
+                'pathString' => $location->pathString,
+                'priority' => $location->priority,
+                'remoteId' => $location->remoteId,
+                'sortField' => $location->sortField,
+                'sortOrder' => $location->sortOrder,
+
+                'location' => $location
+            )
+        );
+
+        return $this->trashItems[$location->id];
     }
 
     /**
      * Recovers the $trashedLocation at its original place if possible.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to recover the trash item at the parent location location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to recover the trash item at the parent location location
      *
      * If $newParentLocation is provided, $trashedLocation will be restored under it.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $newParentLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, LocationCreateStruct $newParentLocation = null )
+    public function recover( TrashItem $trashItem, Location $newParentLocation = null )
     {
-        // TODO: Implement recover() method.
+        if ( false === $this->repository->canUser( 'content', 'edit', $trashItem ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $location = $this->locationService->__recoverLocation(
+            $this->locations[$trashItem->id][$trashItem->id],
+            $newParentLocation
+        );
+
+        unset( $this->locations[$trashItem->id][$trashItem->id] );
+
+        foreach ( $this->locations[$trashItem->id] as $childLocation )
+        {
+            $childLocation->contentInfo->__setMainLocationId( $location->contentInfo->mainLocationId );
+
+            $this->locationService->__recoverLocation( $childLocation );
+        }
+
+        unset(
+            $this->trashItems[$trashItem->id],
+            $this->locations[$trashItem->id]
+        );
+
+        return $location;
     }
 
     /**
@@ -82,7 +179,13 @@ class TrashServiceStub implements TrashService
      */
     public function emptyTrash()
     {
-        // TODO: Implement emptyTrash() method.
+        if ( false === $this->repository->hasAccess( 'content', 'remove' ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $this->trashItems = array();
+        $this->locations = array();
     }
 
     /**
@@ -96,7 +199,15 @@ class TrashServiceStub implements TrashService
      */
     public function deleteTrashItem( TrashItem $trashItem )
     {
-        // TODO: Implement deleteTrashItem() method.
+        if ( false === $this->repository->canUser( 'content', 'remove', $trashItem ) )
+        {
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        unset(
+            $this->trashItems[$trashItem->id],
+            $this->locations[$trashItem->id]
+        );
     }
 
     /**
@@ -110,7 +221,41 @@ class TrashServiceStub implements TrashService
      */
     public function findTrashItems( Query $query )
     {
-        // TODO: Implement findTrashItems() method.
+        $contentService = $this->repository->getContentService();
+
+        $trashItems = array();
+        $searchResult = $contentService->findContent( $query, array() );
+
+        /* @var $item \eZ\Publish\API\Repository\Values\Content\Content */
+        foreach ( $searchResult->items as $item )
+        {
+            $locationId = $item->contentInfo->mainLocationId;
+            foreach ( $this->locations as $trashItemId => $locations )
+            {
+                if ( false === isset( $locations[$locationId] ) )
+                {
+                    continue;
+                }
+                $trashItems[$trashItemId] = $this->trashItems[$trashItemId];
+            }
+        }
+
+        return new SearchResult(
+            array(
+                'query' => $query,
+                'count' => count( $trashItems ),
+                'items' => array_values( $trashItems ),
+            )
+        );
     }
 
+    /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->emptyTrash();
+    }
 }

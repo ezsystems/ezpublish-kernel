@@ -20,15 +20,16 @@ class LocationHandlerTest extends TestCase
     /**
      * Location data from the database
      *
-     * @var string[]
+     * @var array
      */
-    protected $locationData = array(
+    protected $locationRow = array(
         'node_id' => 77,
         'priority' => 0,
         'is_hidden' => 0,
         'is_invisible' => 0,
         'remote_id' => 'dbc2f3c8716c12f32c379dbf0b1cb133',
         'contentobject_id' => 75,
+        'contentobject_version' => 1,
         'parent_node_id' => 2,
         'path_identification_string' => 'solutions',
         'path_string' => '/1/2/77/',
@@ -37,6 +38,46 @@ class LocationHandlerTest extends TestCase
         'depth' => 2,
         'sort_field' => 2,
         'sort_order' => 1,
+    );
+
+    /**
+     * Expected Location object properties values
+     *
+     * @var array
+     */
+    protected $locationValues = array(
+        'id' => 77,
+        'priority' => 0,
+        'hidden' => 0,
+        'invisible' => 0,
+        'remoteId' => 'dbc2f3c8716c12f32c379dbf0b1cb133',
+        'contentId' => 75,
+        'parentId' => 2,
+        'pathIdentificationString' => 'solutions',
+        'pathString' => '/1/2/77/',
+        'modifiedSubLocation' => 1311065017,
+        'mainLocationId' => 77,
+        'depth' => 2,
+        'sortField' => 2,
+        'sortOrder' => 1,
+    );
+
+    /**
+     * Expected Location CreateStruct object properties values
+     *
+     * @var array
+     */
+    protected $locationCreateStructValues = array(
+        'contentId' => 75,
+        'contentVersion' => 1,
+        'hidden' => 0,
+        'invisible' => 0,
+        'mainLocationId' => 77,
+        'parentId' => 2,
+        'pathIdentificationString' => 'solutions',
+        'priority' => 0,
+        'sortField' => 2,
+        'sortOrder' => 1,
     );
 
     /**
@@ -50,82 +91,51 @@ class LocationHandlerTest extends TestCase
     }
 
     /**
-     * Data provider for testCreateLocation(  )
-     *
-     * @return void
-     */
-    public static function getLoadLocationValues()
-    {
-        return array(
-            array( 'id', 77 ),
-            array( 'priority', 0 ),
-            array( 'hidden', 0 ),
-            array( 'invisible', 0 ),
-            array( 'remoteId', 'dbc2f3c8716c12f32c379dbf0b1cb133' ),
-            array( 'contentId', 75 ),
-            array( 'parentId', 2 ),
-            array( 'pathIdentificationString', 'solutions' ),
-            array( 'pathString', '/1/2/77/' ),
-            array( 'modifiedSubLocation', 1311065017 ),
-            array( 'mainLocationId', 77 ),
-            array( 'depth', 2 ),
-            array( 'sortField', 2 ),
-            array( 'sortOrder', 1 ),
-        );
-    }
-
-    /**
-     * @dataProvider getLoadLocationValues
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
-    public function testCreateLocationFromRow( $field, $value )
+    public function testCreateLocationFromRow()
     {
         $mapper = new Mapper();
 
         $location = $mapper->createLocationFromRow(
-            $this->locationData
+            $this->locationRow
         );
 
-        $this->assertEquals(
-            $value,
-            $location->$field,
-            "Property \\$$field not set correctly"
+        $this->assertPropertiesCorrect(
+            $this->locationValues,
+            $location
         );
     }
 
     /**
-     * @dataProvider getLoadLocationValues
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
-    public function testCreateTrashedFromRow( $field, $value )
+    public function testCreateTrashedFromRow()
     {
         $mapper = new Mapper();
 
         $location = $mapper->createLocationFromRow(
-            $this->locationData,
+            $this->locationRow,
             null,
             new Trashed()
         );
 
         $this->assertTrue( $location instanceof Trashed );
-        $this->assertEquals(
-            $value,
-            $location->$field,
-            "Property \\$$field not set correctly"
+        $this->assertPropertiesCorrect(
+            $this->locationValues,
+            $location
         );
     }
 
     /**
-     * @return void
-     * @dataProvider getLoadLocationValues
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
-    public function testCreateLocationFromRowWithPrefix( $field, $value )
+    public function testCreateLocationFromRowWithPrefix()
     {
         $prefix = 'some_prefix_';
 
         $data = array();
-        foreach ( $this->locationData as $key => $val )
+        foreach ( $this->locationRow as $key => $val )
         {
             $data[$prefix . $key] = $val;
         }
@@ -136,10 +146,27 @@ class LocationHandlerTest extends TestCase
             $data, $prefix
         );
 
-        $this->assertEquals(
-            $value,
-            $location->$field,
-            "Property \\$$field not set correctly"
+        $this->assertPropertiesCorrect(
+            $this->locationValues,
+            $location
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::getLocationCreateStruct
+     */
+    public function testGetLocationCreateStruct()
+    {
+        $mapper = new Mapper();
+
+        $createStruct = $mapper->getLocationCreateStruct(
+            $this->locationRow
+        );
+
+        $this->assertNotEquals( $this->locationRow["remote_id"], $createStruct->remoteId );
+        $this->assertPropertiesCorrect(
+            $this->locationCreateStructValues,
+            $createStruct
         );
     }
 }

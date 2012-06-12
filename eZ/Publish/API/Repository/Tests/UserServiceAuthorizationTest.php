@@ -15,6 +15,7 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
  * Test case for operations in the UserService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\UserService
+ * @group integration
  */
 class UserServiceAuthorizationTest extends BaseTest
 {
@@ -83,7 +84,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -142,13 +143,14 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $memberGroupId = $this->generateId( 'group', 11 );
         /* BEGIN: Use Case */
+        // $memberGroupId is the ID of the "Members" group in an eZ Publish
+        // demo installation
+        //
         $user = $this->createUserVersion1();
 
         $userGroup = $this->createUserGroupVersion1();
-
-        // ID of the "Members" group in an eZ Publish demo installation
-        $memberGroupId = 11;
 
         // Load new parent user group
         $newParentUserGroup = $userService->loadUserGroup( $memberGroupId );
@@ -210,7 +212,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -279,7 +281,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $user );
 
         // Instantiate a user update struct
-        $userUpdateStruct           = $userService->newUserUpdateStruct();
+        $userUpdateStruct = $userService->newUserUpdateStruct();
         $userUpdateStruct->maxLogin = 42;
 
         // This call will fail with an "UnauthorizedException"
@@ -300,11 +302,12 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $administratorGroupId = $this->generateId( 'group', 12 );
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
 
-        // ID of the "Administrator" group in an eZ Publish demo installation
-        $administratorGroupId = 12;
+        $user = $this->createUserVersion1();
 
         // Now set the currently created "Editor" as current user
         $repository->setCurrentUser( $user );
@@ -330,13 +333,14 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        $memberGroupId = $this->generateId( 'group', 11 );
 
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $memberGroupId is the ID of the "Members" group in an eZ Publish
+        // demo installation
 
-        // ID of the "Members" group in an eZ Publish demo installation
-        $memberGroupId = 11;
+        $user = $this->createUserVersion1();
 
         // Assign group to newly created user
         $userService->assignUserToUserGroup(
@@ -415,9 +419,10 @@ class UserServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Inline */
-        // ID of the main "Users" group in an eZ Publish demo installation
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group in an eZ Publish
+        // demo installation
 
         $userService = $repository->getUserService();
 
@@ -436,43 +441,5 @@ class UserServiceAuthorizationTest extends BaseTest
         /* END: Inline */
 
         return $userGroup;
-    }
-
-    /**
-     * Create a user fixture in a variable named <b>$user</b>,
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    private function createUserVersion1()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Inline */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
-
-        $userService = $repository->getUserService();
-
-        // Instantiate a create struct with mandatory properties
-        $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
-            'secret',
-            'eng-US'
-        );
-        $userCreate->enabled = true;
-
-        // Set some fields required by the user ContentType
-        $userCreate->setField( 'first_name', 'Example' );
-        $userCreate->setField( 'last_name', 'User' );
-
-        // Load parent group for the user
-        $group = $userService->loadUserGroup( $editorsGroupId );
-
-        // Create a new user instance.
-        $user = $userService->createUser( $userCreate, array( $group ) );
-        /* END: Inline */
-
-        return $user;
     }
 }

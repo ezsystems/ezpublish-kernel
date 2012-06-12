@@ -10,13 +10,16 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
 
@@ -38,6 +41,13 @@ class MapperTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $valueConverterRegistryMock;
+
+    /**
+     * Language handler mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+     */
+    protected $languageHandler;
 
     /**
      * @return void
@@ -65,15 +75,36 @@ class MapperTest extends TestCase
         $struct = $this->getCreateStructFixture();
 
         $mapper = $this->getMapper();
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'getById' )
+            ->with( '2' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-GB',
+                        )
+                    )
+                )
+            );
         $content = $mapper->createContentFromCreateStruct( $struct );
 
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' , $content );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo', $content->contentInfo );
         $this->assertStructsEqual(
             $struct,
-            $content,
-            array( 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
-            'remoteId', 'initialLanguageId', 'published', 'modified' )
+            $content->contentInfo,
+            array( 'sectionId', 'ownerId', 'remoteId' )
         );
-        $this->assertEquals( 1, $content->currentVersionNo );
+        self::assertSame( $struct->typeId, $content->contentInfo->contentTypeId );
+        self::assertSame( 'eng-GB', $content->contentInfo->mainLanguageCode );
+        self::assertSame( $struct->alwaysAvailable, $content->contentInfo->isAlwaysAvailable );
+        self::assertSame( 0, $content->contentInfo->publicationDate );
+        self::assertSame( 0, $content->contentInfo->modificationDate );
+        self::assertEquals( 1, $content->contentInfo->currentVersionNo );
+        self::assertFalse( $content->contentInfo->isPublished );
     }
 
     /**
@@ -89,6 +120,7 @@ class MapperTest extends TestCase
         $struct->typeId = 23;
         $struct->sectionId = 42;
         $struct->ownerId = 13;
+        $struct->initialLanguageId = 2;
         $struct->locations = array(
             new LocationCreateStruct(
                 array( 'parentId' => 2 )
@@ -107,14 +139,34 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionForContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionInfoForContent
      */
-    public function testCreateVersionFromContent()
+    public function testCreateVersionInfoForContent()
     {
-        $content = $this->getContentFixture();
+        $content = $this->getFullContentFixture();
+        $time = time();
 
         $mapper = $this->getMapper();
-        $version = $mapper->createVersionForContent( $content, 1 );
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'loadByLanguageCode' )
+            ->with( 'eng-GB' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-GB',
+                        )
+                    )
+                )
+            );
+        $versionInfo = $mapper->createVersionInfoForContent(
+            $content,
+            1,
+            $content->fields,
+            $content->versionInfo->initialLanguageCode
+        );
 
         $this->assertPropertiesCorrect(
             array(
@@ -123,38 +175,13 @@ class MapperTest extends TestCase
                 'creatorId' => 13,
                 'status' => 0,
                 'contentId' => 2342,
-                'fields' => array(),
+                'initialLanguageCode' => 'eng-GB',
+                'languageIds' => array( 2 ),
             ),
-            $version
+            $versionInfo
         );
-
-        $this->assertAttributeGreaterThanOrEqual(
-            time() - 1000,
-            'created',
-            $version
-        );
-        $this->assertAttributeGreaterThanOrEqual(
-            time() - 1000,
-            'modified',
-            $version
-        );
-    }
-
-    public function testCreateLocationFromContent()
-    {
-        $mapper = $this->getMapper();
-        $location = $mapper->createLocationCreateStruct(
-            $content = $this->getFullContentFixture(),
-            $struct = $this->getCreateStructFixture()
-        );
-
-        $this->assertPropertiesCorrect(
-            array(
-                'contentId' => $content->id,
-                'contentVersion' => 1,
-            ),
-            $location
-        );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->creationDate );
+        $this->assertGreaterThanOrEqual( $time, $versionInfo->modificationDate );
     }
 
     /**
@@ -164,12 +191,15 @@ class MapperTest extends TestCase
      */
     protected function getContentFixture()
     {
-        $content = new Content();
-
-        $content->id = 2342;
-        $content->typeId = 23;
-        $content->sectionId = 42;
-        $content->ownerId = 13;
+        $content = new Content;
+        $content->contentInfo = new ContentInfo;
+        $content->contentInfo->id = 2342;
+        $content->contentInfo->contentTypeId = 23;
+        $content->contentInfo->sectionId = 42;
+        $content->contentInfo->ownerId = 13;
+        $content->fields = array(
+            new Field( array( "languageCode" => "eng-GB" ) ),
+        );
         $content->locations = array();
 
         return $content;
@@ -179,9 +209,10 @@ class MapperTest extends TestCase
     {
         $content = $this->getContentFixture();
 
-        $content->version = new Content\Version(
+        $content->versionInfo = new VersionInfo(
             array(
                 'versionNo' => 1,
+                'initialLanguageCode' => 'eng-GB'
             )
         );
 
@@ -215,9 +246,8 @@ class MapperTest extends TestCase
         $field = new Field();
         $field->type = 'some-type';
         $field->value = new FieldValue();
-        $field->value->data = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
 
-        $mapper = new Mapper( $this->getLocationMapperMock(), $reg );
+        $mapper = new Mapper( $this->getLocationMapperMock(), $reg, $this->getLanguageHandlerMock() );
         $res = $mapper->convertToStorageValue( $field );
 
         $this->assertInstanceOf(
@@ -228,27 +258,17 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @todo Load referencing locations!
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionFromRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::mapCommonVersionFields
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function testExtractContentFromRows()
     {
-        $locationMapperMock = $this->getLocationMapperMock();
-        $locationMapperMock->expects( $this->once() )
-            ->method( 'createLocationFromRow' )
-            ->with( $this->isType( 'array' ) )
-            ->will( $this->returnValue( new Content\Location() ) );
-
         $convMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->exactly( 12 ) )
+        $convMock->expects( $this->exactly( 13 ) )
             ->method( 'toFieldValue' )
             ->with(
                 $this->isInstanceOf(
@@ -256,7 +276,7 @@ class MapperTest extends TestCase
                 )
             )->will(
                 $this->returnValue(
-                    new FieldValue( array( 'data' => $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) ) )
+                    new FieldValue()
                 )
             );
 
@@ -272,7 +292,7 @@ class MapperTest extends TestCase
 
         $rowsFixture = $this->getContentExtractFixture();
 
-        $mapper = new Mapper( $locationMapperMock, $reg );
+        $mapper = new Mapper( new LocationMapper(), $reg, $this->getLanguageHandlerMock() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -308,7 +328,7 @@ class MapperTest extends TestCase
 
         $rowsFixture = $this->getMultipleVersionsExtractFixture();
 
-        $mapper = new Mapper( $locationMapperMock, $reg );
+        $mapper = new Mapper( $locationMapperMock, $reg, $this->getLanguageHandlerMock() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -318,38 +338,20 @@ class MapperTest extends TestCase
 
         $this->assertEquals(
             11,
-            $result[0]->id
+            $result[0]->contentInfo->id
         );
         $this->assertEquals(
             11,
-            $result[1]->id
+            $result[1]->contentInfo->id
         );
 
         $this->assertEquals(
             1,
-            $result[0]->version->versionNo
+            $result[0]->versionInfo->versionNo
         );
         $this->assertEquals(
             2,
-            $result[1]->version->versionNo
-        );
-    }
-
-    /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionListFromRows
-     */
-    public function testExtractVersionListFromRows()
-    {
-        $mapper = $this->getMapper();
-
-        $rows = $this->getRestrictedVersionExtractFixture();
-
-        $res = $mapper->extractVersionListFromRows( $rows );
-
-        $this->assertEquals(
-            $this->getRestrictedVersionExtractReference(),
-            $res
+            $result[1]->versionInfo->versionNo
         );
     }
 
@@ -359,19 +361,35 @@ class MapperTest extends TestCase
      */
     public function testCreateCreateStructFromContent()
     {
+        $time = time();
         $mapper = $this->getMapper();
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( 'eng-US' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-US',
+                        )
+                    )
+                )
+            );
 
         $content = $this->getContentExtractReference();
 
         $struct = $mapper->createCreateStructFromContent( $content );
 
         $this->assertInstanceOf(
-            'eZ\Publish\SPI\Persistence\Content\CreateStruct',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct',
             $struct
         );
         return array(
             'original' => $content,
-            'result' => $struct
+            'result' => $struct,
+            'time' => $time
         );
 
         // parentLocations
@@ -385,12 +403,19 @@ class MapperTest extends TestCase
      */
     public function testCreateCreateStructFromContentBasicProperties( $data )
     {
+        $content = $data['original'];
+        $struct = $data['result'];
+        $time = $data['time'];
         $this->assertStructsEqual(
-            $data['original'],
-            $data['result'],
-            array( 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
-            'remoteId', 'initialLanguageId', 'published', 'modified' )
+            $content->contentInfo,
+            $struct,
+            array( 'sectionId', 'ownerId' )
         );
+        self::assertNotEquals( $content->contentInfo->remoteId, $struct->remoteId );
+        self::assertSame( $content->contentInfo->contentTypeId, $struct->typeId );
+        self::assertSame( 2, $struct->initialLanguageId );
+        self::assertSame( $content->contentInfo->isAlwaysAvailable, $struct->alwaysAvailable );
+        self::assertGreaterThanOrEqual( $time, $struct->modified );
     }
 
     /**
@@ -414,7 +439,7 @@ class MapperTest extends TestCase
     public function testCreateCreateStructFromContentFieldCount( $data )
     {
         $this->assertEquals(
-            count( $data['original']->version->fields ),
+            count( $data['original']->fields ),
             count( $data['result']->fields )
         );
     }
@@ -447,6 +472,97 @@ class MapperTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
+     * @dataProvider extractContentInfoFromRowProvider
+     * @param array $fixtures
+     * @param string $prefix
+     */
+    public function testExtractContentInfoFromRow( array $fixtures, $prefix )
+    {
+        $contentInfoReference = $this->getContentExtractReference()->contentInfo;
+        $mapper = new Mapper(
+            $this->getLocationMapperMock(),
+            $this->getValueConverterRegistryMock(),
+            $this->getLanguageHandlerMock()
+        );
+        self::assertEquals( $contentInfoReference, $mapper->extractContentInfoFromRow( $fixtures, $prefix) );
+    }
+
+    /**
+     * Returns test data for {@link testExtractContentInfoFromRow()}
+     *
+     * @return array
+     */
+    public function extractContentInfoFromRowProvider()
+    {
+        $fixtures = $this->getContentExtractFixture();
+        $fixturesNoPrefix = array();
+        foreach ( $fixtures[0] as $key => $value )
+        {
+            $keyNoPrefix = str_replace( 'ezcontentobject_', '', $key );
+            $fixturesNoPrefix[$keyNoPrefix] = $value;
+        }
+
+        return array(
+            array( $fixtures[0], 'ezcontentobject_' ),
+            array( $fixturesNoPrefix, '' )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionInfoFromRow
+     * @dataProvider extractVersionInfoFromRowProvider
+     * @param array $fixtures
+     * @param string $prefix
+     */
+    public function testExtractVersionInfoFromRow( array $fixtures, $prefix )
+    {
+        $versionInfoReference = $this->getContentExtractReference()->versionInfo;
+        $mapper = new Mapper(
+            $this->getLocationMapperMock(),
+            $this->getValueConverterRegistryMock(),
+            $this->getLanguageHandlerMock()
+        );
+
+        $versionInfo = $mapper->extractVersionInfoFromRow( $fixtures, $prefix );
+        foreach ( $versionInfoReference as $property => $value )
+        {
+            switch ( $property )
+            {
+                default:
+                    self::assertSame( $value, $versionInfo->$property );
+            }
+        }
+    }
+
+    /**
+     * Returns test data for {@link testExtractVersionInfoFromRow()}
+     *
+     * @return array
+     */
+    public function extractVersionInfoFromRowProvider()
+    {
+        $fixturesAll = $this->getContentExtractFixture();
+        $fixtures = $fixturesAll[0];
+        $fixtures['ezcontentobject_version_names'] = array(
+            array( 'content_translation' => 'eng-US', 'name' => 'Something' )
+        );
+        $fixtures['ezcontentobject_version_languages'] = array( 2 );
+        $fixtures['ezcontentobject_version_initial_language_code'] = 'eng-US';
+        $fixturesNoPrefix = array();
+        foreach ( $fixtures as $key => $value )
+        {
+            $keyNoPrefix = str_replace( 'ezcontentobject_version_', '', $key );
+            $fixturesNoPrefix[$keyNoPrefix] = $value;
+        }
+
+        return array(
+            array( $fixtures, 'ezcontentobject_version_' ),
+            array( $fixturesNoPrefix, '' )
+        );
+    }
+
+    /**
      * Returns a fixture of database rows for content extraction
      *
      * Fixture is stored in _fixtures/extract_content_from_rows.php
@@ -468,16 +584,6 @@ class MapperTest extends TestCase
     protected function getContentExtractReference()
     {
         return require __DIR__ . '/_fixtures/extract_content_from_rows_result.php';
-    }
-
-    /**
-     * Returns a fixture for mapping RestrictedVersion objects
-     *
-     * @return string[][]
-     */
-    protected function getRestrictedVersionExtractFixture()
-    {
-        return require __DIR__ . '/_fixtures/restricted_version_rows.php';
     }
 
     /**
@@ -561,7 +667,8 @@ class MapperTest extends TestCase
     {
         return new Mapper(
             $this->getLocationMapperMock(),
-            $this->getValueConverterRegistryMock()
+            $this->getValueConverterRegistryMock(),
+            $this->getLanguageHandlerMock()
         );
     }
 
@@ -599,6 +706,51 @@ class MapperTest extends TestCase
             );
         }
         return $this->valueConverterRegistryMock;
+    }
+
+    /**
+     * Returns a language handler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+     */
+    protected function getLanguageHandlerMock()
+    {
+        if ( !isset( $this->languageHandler ) )
+        {
+            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $innerLanguageHandler->expects( $this->any() )
+                ->method( 'loadAll' )
+                ->will(
+                    $this->returnValue(
+                        array(
+                            new Language( array(
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
+                            ) ),
+                            new Language( array(
+                                'id' => 4,
+                                'languageCode' => 'eng-US',
+                                'name' => 'US english'
+                            ) ),
+                            new Language( array(
+                                'id' => 8,
+                                'languageCode' => 'fre-FR',
+                                'name' => 'Français franchouillard'
+                            ) )
+                        )
+                    )
+                );
+            $this->languageHandler = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
+                array( 'getByLocale', 'getById', 'loadByLanguageCode' ),
+                array(
+                    $innerLanguageHandler,
+                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
+                )
+            );
+        }
+        return $this->languageHandler;
     }
 
     /**

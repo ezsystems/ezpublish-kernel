@@ -17,8 +17,9 @@ use Exception,
  * Use:
  *   throw new Logic( "readWriteProperties", "property {$property} could not be found." );
  *
+ * @todo Add a exception type in API that uses Logic exception and change this to extend it
  */
-class Logic extends LogicException implements \ezp\Base\Exception
+class Logic extends LogicException
 {
     /**
      * Generates: '$what' has a logic error[, $consequence]

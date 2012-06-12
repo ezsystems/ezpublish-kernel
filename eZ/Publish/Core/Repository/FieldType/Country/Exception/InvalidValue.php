@@ -5,17 +5,16 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Country\Exception;
-use ezp\Base\Exception as BaseException,
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     Exception;
 
 /**
  * Exception thrown if an invalid identifier is used for a country
  */
-class InvalidValue extends Exception implements BaseException
+class InvalidValue extends InvalidArgumentException
 {
     /**
      * Creates a new exception when $value is invalid.
@@ -25,7 +24,7 @@ class InvalidValue extends Exception implements BaseException
     public function __construct( $value )
     {
         parent::__construct(
-            "\"$value\" is not a valid value country identifier."
+            '$value', "is not a valid value country identifier"
         );
     }
 }

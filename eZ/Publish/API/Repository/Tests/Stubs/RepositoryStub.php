@@ -13,6 +13,7 @@ use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Values\ValueObject;
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\Limitation;
@@ -81,9 +82,34 @@ class RepositoryStub implements Repository
     private $locationService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\IOServiceStub
+     */
+    private $ioService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\URLAliasServiceStub
+     */
+    private $urlAliasService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\URLWildcardServiceStub
+     */
+    private $urlWildcardService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateService
+     */
+    private $objectStateService;
+
+    /**
      * @var integer
      */
-    private $initializing = 0;
+    private $transactionDepth = 0;
+
+    /**
+     * @var integer
+     */
+    private $permissionChecks = 0;
 
     /**
      * Instantiates the stubbed repository.
@@ -94,7 +120,7 @@ class RepositoryStub implements Repository
     public function __construct( $fixtureDir, $version )
     {
         $this->fixtureDir = $fixtureDir;
-        $this->version    = $version;
+        $this->version = $version;
     }
 
     /**
@@ -128,7 +154,7 @@ class RepositoryStub implements Repository
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        if ( $this->initializing > 0 )
+        if ( $this->permissionChecks > 0 )
         {
             return true;
         }
@@ -142,6 +168,7 @@ class RepositoryStub implements Repository
         {
             if ( $policy->module === '*' )
             {
+
                 return true;
             }
             if ( $policy->module !== $module )
@@ -183,7 +210,7 @@ class RepositoryStub implements Repository
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
     {
-        if ( $this->initializing > 0 )
+        if ( $this->permissionChecks > 0 )
         {
             return true;
         }
@@ -194,6 +221,9 @@ class RepositoryStub implements Repository
             return $hasAccess;
         }
 
+        ++$this->permissionChecks;
+
+        $locations = null;
         $contentInfoValue = null;
         if ( $value instanceof ContentInfo )
         {
@@ -207,14 +237,22 @@ class RepositoryStub implements Repository
         {
             $contentInfoValue = $value->contentInfo;
         }
-
-        if ( null === $contentInfoValue || false === $contentInfoValue->published )
+        else if ( $value instanceof Location )
         {
-            return true;
+            $locations = array( $value );
         }
 
-        $locationService = $this->getLocationService();
-        $locations = $locationService->loadLocations( $contentInfoValue );
+        if ( null !== $contentInfoValue && true === $contentInfoValue->published )
+        {
+            $locationService = $this->getLocationService();
+            $locations = $locationService->loadLocations( $contentInfoValue );
+        }
+
+        if ( null === $locations )
+        {
+            --$this->permissionChecks;
+            return true;
+        }
 
         foreach ( $hasAccess as $limitation )
         {
@@ -224,12 +262,18 @@ class RepositoryStub implements Repository
             }
             foreach ( $locations as $location )
             {
-                if ( 0 === strpos( $location->pathString, $limitation->limitationValues ) )
+                foreach ( $limitation->limitationValues as $pathString )
                 {
-                    return true;
+                    if ( 0 === strpos( $location->pathString, $pathString ) )
+                    {
+                        --$this->permissionChecks;
+                        return true;
+                    }
                 }
             }
         }
+
+        --$this->permissionChecks;
         return false;
     }
 
@@ -260,7 +304,11 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->languageService )
         {
-            $this->languageService = new LanguageServiceStub( $this );
+            $this->languageService = new LanguageServiceStub(
+                $this,
+                $this->getContentService(),
+                'eng-US'
+            );
         }
         return $this->languageService;
     }
@@ -277,7 +325,10 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->contentTypeService )
         {
-            $this->contentTypeService = new ContentTypeServiceStub( $this );
+            $this->contentTypeService = new ContentTypeServiceStub(
+                $this,
+                $this->getContentService()
+            );
         }
         return $this->contentTypeService;
     }
@@ -310,7 +361,10 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->trashService )
         {
-            $this->trashService = new TrashServiceStub( $this );
+            $this->trashService = new TrashServiceStub(
+                $this,
+                $this->getLocationService()
+            );
         }
         return $this->trashService;
     }
@@ -356,7 +410,11 @@ class RepositoryStub implements Repository
      */
     public function getIOService()
     {
-        // TODO: Implement getIOService() method.
+        if ( null === $this->ioService )
+        {
+            $this->ioService = new IOServiceStub( $this );
+        }
+        return $this->ioService;
     }
 
     /**
@@ -374,6 +432,48 @@ class RepositoryStub implements Repository
     }
 
     /**
+     * Get UrlAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getURLAliasService()
+    {
+        if ( null === $this->urlAliasService )
+        {
+            $this->urlAliasService = new URLAliasServiceStub( $this );
+        }
+        return $this->urlAliasService;
+    }
+
+    /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     */
+    public function getURLWildcardService()
+    {
+        if ( null === $this->urlWildcardService )
+        {
+            $this->urlWildcardService = new URLWildcardServiceStub( $this );
+        }
+        return $this->urlWildcardService;
+    }
+
+    /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService()
+    {
+        if ( null === $this->objectStateService )
+        {
+            $this->objectStateService = new ObjectStateServiceStub( $this );
+        }
+        return $this->objectStateService;
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -381,7 +481,7 @@ class RepositoryStub implements Repository
      */
     public function beginTransaction()
     {
-        // TODO: Implement beginTransaction() method.
+        ++$this->transactionDepth;
     }
 
     /**
@@ -389,11 +489,15 @@ class RepositoryStub implements Repository
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit()
     {
-        // TODO: Implement commit() method.
+        if ( 0 === $this->transactionDepth )
+        {
+            throw new \RuntimeException( 'What error code should be used?' );
+        }
+        --$this->transactionDepth;
     }
 
     /**
@@ -401,11 +505,53 @@ class RepositoryStub implements Repository
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback()
     {
-        // TODO: Implement rollback() method.
+        if ( 0 === $this->transactionDepth )
+        {
+            throw new \RuntimeException( 'What error code should be used?' );
+        }
+
+        if ( $this->contentService )
+        {
+            $this->contentService->__rollback();
+        }
+        if ( $this->contentTypeService )
+        {
+            $this->contentTypeService->__rollback();
+        }
+        if ( $this->ioService )
+        {
+            $this->ioService->__rollback();
+        }
+        if ( $this->languageService )
+        {
+            $this->languageService->__rollback();
+        }
+        if ( $this->locationService )
+        {
+            $this->locationService->__rollback();
+        }
+        if ( $this->roleService )
+        {
+            $this->roleService->__rollback();
+        }
+        if ( $this->sectionService )
+        {
+            $this->sectionService->__rollback();
+        }
+        if ( $this->trashService )
+        {
+            $this->trashService->__rollback();
+        }
+        if ( $this->userService )
+        {
+            $this->userService->__rollback();
+        }
+
+        --$this->transactionDepth;
     }
 
     /**
@@ -418,10 +564,30 @@ class RepositoryStub implements Repository
      */
     public function loadFixture( $fixtureName, array $scopeValues = array() )
     {
-        ++$this->initializing;
+        ++$this->permissionChecks;
         $fixture = include $this->fixtureDir . '/' . $fixtureName . 'Fixture.php';
-        --$this->initializing;
+        --$this->permissionChecks;
 
         return $fixture;
+    }
+
+    /**
+     * Internal helper method used to disable permission checks.
+     *
+     * @return void
+     */
+    public function disableUserPermissions()
+    {
+        ++$this->permissionChecks;
+    }
+
+    /**
+     * Internal helper method used to enable permission checks.
+     *
+     * @return void
+     */
+    public function enableUserPermissions()
+    {
+        --$this->permissionChecks;
     }
 }

@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
@@ -44,9 +43,11 @@ class Field extends ValueObject
     public $value;
 
     /**
-     * @todo What is supposed to be stored here? Object or languageCode?
+     * Language code of this Field
+     *
+     * @var string
      */
-    public $language;
+    public $languageCode;
 
     /**
      * @var int|null Null if not created yet

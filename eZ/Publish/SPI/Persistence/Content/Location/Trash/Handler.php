@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Location,
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.
- *
  */
 interface Handler
 {
@@ -27,10 +26,11 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function load( $id );
+    public function loadTrashItem( $id );
 
     /**
-     * Sends a subtree to the trash
+     * Sends a subtree starting to $locationId to the trash
+     * and returns a Trashed object corresponding to $locationId.
      *
      * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
@@ -38,7 +38,7 @@ interface Handler
      * @param mixed $locationId
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
-    public function trashSubtree( $locationId );
+    public function trash( $locationId );
 
     /**
      * Returns a trashed location to normal state.
@@ -49,12 +49,12 @@ interface Handler
      *
      * Returns newly restored location Id.
      *
-     * @param mixed $locationId
+     * @param mixed $trashedId
      * @param mixed $newParentId
      * @return int Newly restored location id
-     * @throws \ezp\Content\Location\Exception\ParentNotFound
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
      */
-    public function untrashLocation( $trashedId, $newParentId );
+    public function recover( $trashedId, $newParentId );
 
     /**
      * Returns an array of all trashed locations satisfying the $criterion (if provided),
@@ -62,16 +62,19 @@ interface Handler
      * If no criterion is provided (null), no filter is applied
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param $offset Offset to start listing from, 0 by default
-     * @param $limit Limit for the listing. Null by default (no limit)
+     * @param int $offset Offset to start listing from, 0 by default
+     * @param int $limit Limit for the listing. Null by default (no limit)
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
-    public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );
+    public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );
 
     /**
      * Empties the trash
      * Everything contained in the trash must be removed
+     *
+     * @return void
      */
     public function emptyTrash();
 
@@ -80,6 +83,7 @@ interface Handler
      * Associated content has to be deleted
      *
      * @param int $trashedId
+     * @return void
      */
-    public function emptyOne( $trashedId );
+    public function deleteTrashItem( $trashedId );
 }

@@ -13,17 +13,17 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for SearchHandler using in memory storage.
- *
  */
 class SearchHandlerTest extends HandlerTest
 {
     /**
-     * @var \ezp\Content
+     * @var \eZ\Publish\SPI\Persistence\Content
      */
     protected $content;
 
@@ -34,7 +34,7 @@ class SearchHandlerTest extends HandlerTest
     protected $contentId;
 
     /**
-     * @var \ezp\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contentToDelete = array();
 
@@ -46,26 +46,27 @@ class SearchHandlerTest extends HandlerTest
         parent::setUp();
 
         $struct = new CreateStruct();
-        $struct->name = "test";
+        $struct->name = array( 'eng-GB' => "test" );
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
+        $struct->initialLanguageId = 2;
         $struct->fields[] = new Field(
             array(
                 "type" => "ezstring",
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
                     array(
-                        "data" => new TextLineValue( "Welcome" )
+                        "data" => "Welcome"
                     )
                 ),
-                "language" => "eng-GB",
+                "languageCode" => "eng-GB",
             )
         );
 
         $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
-        $this->contentId = $this->content->id;
+        $this->contentId = $this->content->contentInfo->id;
     }
 
     protected function tearDown()
@@ -77,7 +78,7 @@ class SearchHandlerTest extends HandlerTest
             // Removing default objects as well as those created by tests
             foreach ( $this->contentToDelete as $content )
             {
-                $contentHandler->delete( $content->id );
+                $contentHandler->deleteContent( $content->contentInfo->id );
             }
         }
         catch ( NotFound $e )
@@ -94,11 +95,23 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindSingle()
     {
-        $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->id ) );
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->contentInfo->id ) );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content', $content );
+        $this->assertEquals( $this->contentId, $content->contentInfo->id );
+        $this->assertEquals( 14, $content->contentInfo->ownerId );
+        $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
+    }
+
+    /**
+     * Test finding content by location remote ID
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     */
+    public function testFindByLocationRemoteId()
+    {
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'remoteIDForLocation2' ) );
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( $this->contentId, $content->id );
-        $this->assertEquals( 14, $content->ownerId );
-        $this->assertEquals( "test", $content->version->name );
-        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Version", $content->version );
+        $this->assertEquals( 1, $content->contentInfo->id );
     }
 }

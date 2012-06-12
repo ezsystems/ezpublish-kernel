@@ -5,15 +5,15 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
     eZ\Publish\API\Repository\Values\Content\Query\Criterion as AbstractCriterion,
-    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
@@ -46,7 +46,7 @@ interface Handler
      *
      * @param mixed $contentId
      * @param int $srcVersion
-     * @return \eZ\Publish\SPI\Persistence\Content\Version
+     * @return \eZ\Publish\SPI\Persistence\Content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException Thrown if $contentId and/or $srcVersion are invalid
      */
     public function createDraftFromVersion( $contentId, $srcVersion );
@@ -70,51 +70,65 @@ interface Handler
     public function load( $id, $version, $translations = null );
 
     /**
-     * Sets the state of object identified by $contentId and $version to $status.
+     * Returns the metadata object for a content identified by $contentId.
      *
-     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
-     * @todo Is this supposed to be constants from Content or Version? They differ..
+     * @param int|string $contentId
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfo( $contentId );
+
+    /**
+     * Returns the version object for a content/version identified by $contentId and $versionNo
      *
-     * @param mixed $contentId
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found
+     *
+     * @param int|string $contentId
+     * @param int $versionNo Version number to load
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
+     */
+    public function loadVersionInfo( $contentId, $versionNo );
+
+    /**
+     * Returns all versions with draft status created by the given $userId
+     *
+     * @param $userId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
+     */
+    public function loadDraftsForUser( $userId );
+
+    /**
+     * Sets the status of object identified by $contentId and $version to $status.
+     *
+     * The $status can be one of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * When status is set to VersionInfo::STATUS_PUBLISHED content status is updated to ContentInfo::STATUS_PUBLISHED
+     *
+     * @param int $contentId
      * @param int $status
      * @param int $version
-     * @see ezp\Content
      * @return boolean
      */
     public function setStatus( $contentId, $status, $version );
 
     /**
-     * Sets the object-state of object identified by $contentId and $stateGroup to $state.
+     * Updates a content object meta data, identified by $contentId
      *
-     * The $state is the id of the state within one group.
-     *
-     * @param mixed $contentId
-     * @param mixed $stateGroup
-     * @param mixed $state
-     * @return boolean
-     * @see ezp\Content
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function setObjectState( $contentId, $stateGroup, $state );
+    public function updateMetadata( $contentId, MetadataUpdateStruct $content );
 
     /**
-     * Gets the object-state of object identified by $contentId and $stateGroup to $state.
+     * Updates a content version, identified by $contentId and $versionNo
      *
-     * The $state is the id of the state within one group.
-     *
-     * @param mixed $contentId
-     * @param mixed $stateGroup
-     * @return mixed
-     * @see ezp\Content
-     */
-    public function getObjectState( $contentId, $stateGroup );
-
-    /**
-     * Updates a content object entity with data and identifier $content
-     *
+     * @param int $contentId
+     * @param int $versionNo
      * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function update( UpdateStruct $content );
+    public function updateContent( $contentId, $versionNo, UpdateStruct $content );
 
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
@@ -125,13 +139,25 @@ interface Handler
      * @param int $contentId
      * @return boolean
      */
-    public function delete( $contentId );
+    public function deleteContent( $contentId );
+
+    /**
+     * Deletes given version, its fields, node assignment, relations and names.
+     *
+     * Removes the relations, but not the related objects.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     *
+     * @return boolean
+     */
+    public function deleteVersion( $contentId, $versionNo );
 
     /**
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return \eZ\Publish\SPI\Persistence\Content\RestrictedVersion[]
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
     public function listVersions( $contentId );
 
@@ -141,12 +167,14 @@ interface Handler
      * Copies all fields from $contentId in $version (or all versions if false)
      * to a new object which is returned. Version numbers are maintained.
      *
-     * @param mixed $contentId
-     * @param int|false $version Copy all versions if left false
-     * @return \eZ\Publish\SPI\Persistence\Content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content or version is not found
+     *
+     * @param mixed $contentId
+     * @param mixed|null $versionNo Copy all versions if left null
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function copy( $contentId, $version );
+    public function copy( $contentId, $versionNo = null );
 
     /**
      * Creates a relation between $sourceContentId in $sourceContentVersionNo
@@ -173,7 +201,10 @@ interface Handler
      *
      * @param mixed $sourceContentId Source Content ID
      * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
-     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null );
@@ -184,7 +215,10 @@ interface Handler
      * Only loads relations against published versions.
      *
      * @param mixed $destinationContentId Destination Content ID
-     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null );
@@ -193,11 +227,11 @@ interface Handler
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * The UpdateStruct will also contain an array of Content name indexed by Locale.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( UpdateStruct $updateStruct );
+    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct );
 }

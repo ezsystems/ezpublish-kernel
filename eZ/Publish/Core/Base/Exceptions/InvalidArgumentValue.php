@@ -15,12 +15,11 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
  * Invalid Argument Type Exception implementation
  *
  * @use: throw new InvalidArgument( 'nodes', 'array' );
- *
  */
 class InvalidArgumentValue extends InvalidArgumentException
 {
     /**
-     * Generates: "Argument '{$argumentName}' is invalid: '{$value}'[ in class '{$className}']"
+     * Generates: "Argument '{$argumentName}' is invalid: '{$value}' is wrong value[ in class '{$className}']"
      *
      * @param string $argumentName
      * @param mixed $value
@@ -31,7 +30,7 @@ class InvalidArgumentValue extends InvalidArgumentException
     {
         parent::__construct(
             $argumentName,
-            "'" . var_export( $value, true ) . "'" .( $className ? " in class '{$className}'" : "" ),
+            "'" . var_export( $value, true ) . "' is wrong value" .( $className ? " in class '{$className}'" : "" ),
             $previous
         );
     }

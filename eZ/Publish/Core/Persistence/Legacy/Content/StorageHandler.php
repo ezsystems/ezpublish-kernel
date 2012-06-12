@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
@@ -50,8 +49,7 @@ class StorageHandler
      */
     public function storeFieldData( Field $field )
     {
-        $storage = $this->storageRegistry->getStorage( $field->type );
-        return $storage->storeFieldData( $field, $this->context );
+        return $this->storageRegistry->getStorage( $field->type )->storeFieldData( $field, $this->context );
     }
 
     /**
@@ -67,6 +65,17 @@ class StorageHandler
         {
             $storage->getFieldData( $field, $this->context );
         }
+    }
+
+    /**
+     * Stores data from $field in its corresponding external storage
+     *
+     * @param Field $field
+     * @return void
+     */
+    public function copyFieldData( Field $field )
+    {
+        return $this->storageRegistry->getStorage( $field->type )->copyFieldData( $field, $this->context );
     }
 
     /**

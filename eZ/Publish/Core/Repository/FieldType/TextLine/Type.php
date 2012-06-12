@@ -8,10 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\TextLine;
-use eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\InvalidArgumentType;
+use eZ\Publish\Core\Repository\FieldType\FieldType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The TextLine field type.
@@ -23,6 +21,20 @@ class Type extends FieldType
     protected $allowedValidators = array(
         'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator'
     );
+
+    /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $text as value.
+     *
+     * @param string $text
+     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $text )
+    {
+        return new Value( $text );
+    }
 
     /**
      * Return the field type identifier for this field type
@@ -48,23 +60,31 @@ class Type extends FieldType
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\TextLine\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_string( $inputValue->text ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->text',
+                'string',
+                $inputValue->text
+            );
         }
 
         return $inputValue;
@@ -76,7 +96,7 @@ class Type extends FieldType
      * @todo String normalization should occur here.
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         return array( 'sort_key_string' => $value->text );
     }
@@ -86,7 +106,7 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value $value
      */
     public function fromHash( $hash )
     {
@@ -96,11 +116,11 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\TextLine\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
         return $value->text;
     }

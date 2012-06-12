@@ -4,7 +4,7 @@
  *
  * Returns instance of Service Container setup with configuration service and setups autoloader.
  *
- * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,13 +15,13 @@ use eZ\Publish\Core\Base\ClassLoader,
     eZ\Publish\Core\Base\ServiceContainer;
 
 // Setup autoloaders
-if ( !( $settings = include( __DIR__ . '/config.php' ) ) )
+if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
     die( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
 }
 
 require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
-$loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'], ClassLoader::MODE_PSR_0_STRICT );
+$loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'] );
 spl_autoload_register( array( $loader, 'load' ) );
 
 // Zeta Components

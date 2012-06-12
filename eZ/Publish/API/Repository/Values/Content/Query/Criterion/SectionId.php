@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
@@ -16,15 +24,10 @@ class SectionId extends Criterion implements CriterionInterface
      *
      * Matches the content against one or more sectionId
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of sectionId. $value must be an array of sectionId
-     *        - Operator::EQ: match against a single sectionId. $value must be a single sectionId
-     * @param integer|array(integer) One or more sectionId that must be matched
+     * @param integer|integer[] $value One or more sectionId that must be matched
      *
-     * @throws InvalidArgumentException if a non numeric id is given
-     * @throws InvalidArgumentException if the value type doesn't match the operator
+     * @throws \InvalidArgumentException if a non numeric id is given
+     * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct( $value  )
     {

@@ -8,13 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Rating;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
 /**
  * Value for Rating field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Is rating disabled
@@ -36,21 +35,13 @@ class Value extends BaseValue implements ValueInterface
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
-    public static function fromString( $stringValue )
-    {
-        return new static( (bool)(int)$stringValue );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
     public function __toString()
     {
         return $this->isDisabled ? "1" : "0";
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

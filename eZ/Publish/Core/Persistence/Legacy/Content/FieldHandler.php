@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
@@ -13,7 +12,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
@@ -74,14 +72,14 @@ class FieldHandler
     /**
      * Creates new fields in the database from $content
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @return void
      */
     public function createNewFields( Content $content )
     {
-        foreach ( $content->version->fields as $field )
+        foreach ( $content->fields as $field )
         {
-            $field->versionNo = $content->version->versionNo;
+            $field->versionNo = $content->versionInfo->versionNo;
             $field->id = $this->contentGateway->insertNewField(
                 $content,
                 $field,
@@ -102,6 +100,36 @@ class FieldHandler
     }
 
     /**
+     * Copies fields in the database
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @return void
+     */
+    public function copyFields( Content $content )
+    {
+        foreach ( $content->fields as $field )
+        {
+            $field->versionNo = $content->versionInfo->versionNo;
+            $field->id = $this->contentGateway->insertNewField(
+                $content,
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+
+            // If the storage handler returns true, it means that $field value has been modified
+            // So we need to update it in order to store those modifications
+            // Field converter is called once again via the Mapper
+            if ( $this->storageHandler->copyFieldData( $field ) === true )
+            {
+                $this->contentGateway->updateField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field )
+                );
+            }
+        }
+    }
+
+    /**
      * Performs external loads for the fields in $content
      *
      * @param Content $content
@@ -109,23 +137,25 @@ class FieldHandler
      */
     public function loadExternalFieldData( Content $content )
     {
-        foreach ( $content->version->fields as $field )
+        foreach ( $content->fields as $field )
         {
             $this->storageHandler->getFieldData( $field );
         }
     }
 
     /**
-     * Updates the fields in $content in the database
+     * Updates the fields in for content identified by $contentId and $versionNo in the database in respect to $updateStruct
      *
-     * @param Content $content
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $updateStruct
      * @return void
      */
-    public function updateFields( UpdateStruct $updateStruct )
+    public function updateFields( $contentId, $versionNo, UpdateStruct $updateStruct )
     {
         foreach ( $updateStruct->fields as $field )
         {
-            $field->versionNo = $updateStruct->versionNo;
+            $field->versionNo = $versionNo;
 
             if (
                 $this->typeGateway->isFieldTranslatable(
@@ -144,7 +174,7 @@ class FieldHandler
                 $this->contentGateway->updateNonTranslatableField(
                     $field,
                     $this->mapper->convertToStorageValue( $field ),
-                    $updateStruct
+                    $contentId
                 );
             }
 
@@ -162,18 +192,20 @@ class FieldHandler
     }
 
     /**
-     * Deletes the fields in $content from the database
+     * Deletes the fields in $content from the database.
+     * If $versionNo is set only field IDs for that version are returned.
      *
-     * @param Content $content
+     * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    public function deleteFields( $contentId )
+    public function deleteFields( $contentId, $versionNo = null )
     {
-        $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId );
-        foreach ( $fieldIds as $fieldType => $ids )
+        foreach ( $this->contentGateway->getFieldIdsByType( $contentId, $versionNo ) as $fieldType => $ids )
         {
             $this->storageHandler->deleteFieldData( $fieldType, $ids );
         }
-        $this->contentGateway->deleteFields( $contentId );
+        $this->contentGateway->deleteFields( $contentId, $versionNo );
     }
 }

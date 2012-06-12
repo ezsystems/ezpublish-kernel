@@ -87,10 +87,10 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'create', $parentGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $contentService  = $this->repository->getContentService();
+        $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
         $locationCreate = $locationService->newLocationCreateStruct(
@@ -106,19 +106,17 @@ class UserServiceStub implements UserService
 
         $userGroup = new UserGroupStub(
             array(
-                'id'             =>  $content->contentId,
-                'parentId'       =>  $parentGroup->id,
-                'subGroupCount'  =>  0,
-                'content'        =>  $content
+                'parentId' => $parentGroup->id,
+                'subGroupCount' => 0,
+                'content' => $content
             )
         );
-        $this->userGroups[$userGroup->id]   = $userGroup;
+        $this->userGroups[$userGroup->id] = $userGroup;
         $this->userGroups[$parentGroup->id] = new UserGroupStub(
             array(
-                'id'             =>  $parentGroup->id,
-                'parentId'       =>  $parentGroup->parentId,
-                'subGroupCount'  =>  $parentGroup->subGroupCount + 1,
-                'content'        =>  $parentGroup->content
+                'parentId' => $parentGroup->parentId,
+                'subGroupCount' => $parentGroup->subGroupCount + 1,
+                'content' => $parentGroup->content
             )
         );
 
@@ -139,11 +137,11 @@ class UserServiceStub implements UserService
     {
         if ( false === isset( $this->userGroups[$id] ) )
         {
-            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
         if ( false === $this->repository->canUser( 'content', 'read', $this->userGroups[$id] ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         return $this->userGroups[$id];
     }
@@ -161,7 +159,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'read', $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $subUserGroups = array();
@@ -188,7 +186,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'remove', $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         foreach ( array_keys( $this->user2groups ) as $userId )
@@ -210,7 +208,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'move', $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $contentService = $this->repository->getContentService();
@@ -219,33 +217,30 @@ class UserServiceStub implements UserService
 
         $this->userGroups[$oldParent->id] = new UserGroupStub(
             array(
-                'id'             =>  $oldParent->id,
-                'parentId'       =>  $oldParent->parentId,
-                'subGroupCount'  =>  $oldParent->subGroupCount - 1,
-                'content'        =>  $contentService->loadContent(
-                    $oldParent->contentId
+                'parentId' => $oldParent->parentId,
+                'subGroupCount' => $oldParent->subGroupCount - 1,
+                'content' => $contentService->loadContent(
+                    $oldParent->id
                 )
             )
         );
 
         $this->userGroups[$userGroup->id] = new UserGroupStub(
             array(
-                'id'             =>  $userGroup->id,
-                'parentId'       =>  $newParent->id,
-                'subGroupCount'  =>  $userGroup->subGroupCount,
-                'content'        =>  $contentService->loadContent(
-                    $userGroup->contentId
+                'parentId' => $newParent->id,
+                'subGroupCount' => $userGroup->subGroupCount,
+                'content' => $contentService->loadContent(
+                    $userGroup->id
                 )
             )
         );
 
         $this->userGroups[$newParent->id] = new UserGroupStub(
             array(
-                'id'             =>  $newParent->id,
-                'parentId'       =>  $newParent->parentId,
-                'subGroupCount'  =>  $newParent->subGroupCount + 1,
-                'content'        =>  $contentService->loadContent(
-                    $newParent->contentId
+                'parentId' => $newParent->parentId,
+                'subGroupCount' => $newParent->subGroupCount + 1,
+                'content' => $contentService->loadContent(
+                    $newParent->id
                 )
             )
         );
@@ -270,7 +265,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $contentService = $this->repository->getContentService();
@@ -287,11 +282,11 @@ class UserServiceStub implements UserService
             $content = $contentService->publishVersion( $draft->getVersionInfo() );
         }
 
-        if ( $userGroupUpdateStruct->contentMetaDataUpdateStruct )
+        if ( $userGroupUpdateStruct->contentMetadataUpdateStruct )
         {
             $content = $contentService->updateContentMetadata(
                 $userGroup->contentInfo,
-                $userGroupUpdateStruct->contentMetaDataUpdateStruct
+                $userGroupUpdateStruct->contentMetadataUpdateStruct
             );
         }
 
@@ -299,10 +294,9 @@ class UserServiceStub implements UserService
         {
             $this->userGroups[$userGroup->id] = new UserGroupStub(
                 array(
-                    'id'             =>  $userGroup->id,
-                    'parentId'       =>  $userGroup->parentId,
-                    'subGroupCount'  =>  $userGroup->subGroupCount,
-                    'content'        =>  $content
+                    'parentId' => $userGroup->parentId,
+                    'subGroupCount' => $userGroup->subGroupCount,
+                    'content' => $content
                 )
             );
         }
@@ -327,10 +321,10 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->hasAccess( 'content', 'create' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $contentService  = $this->repository->getContentService();
+        $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
         $locationCreateStruts = array();
@@ -338,7 +332,7 @@ class UserServiceStub implements UserService
         {
             if ( false === $this->repository->canUser( 'content', 'edit', $parentGroup ) )
             {
-                throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+                throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
 
             $locationCreateStruts[] = $locationService->newLocationCreateStruct(
@@ -357,17 +351,16 @@ class UserServiceStub implements UserService
 
         $user = new UserStub(
             array(
-                'id'             =>  $content->contentId,
-                'login'          =>  $userCreateStruct->login,
-                'email'          =>  $userCreateStruct->email,
-                'passwordHash'   =>  $this->createHash(
+                'login' => $userCreateStruct->login,
+                'email' => $userCreateStruct->email,
+                'passwordHash' => $this->createHash(
                     $userCreateStruct->login,
                     $userCreateStruct->password,
                     2
                 ),
-                'hashAlgorithm'  =>  2,
-                'isEnabled'      =>  $userCreateStruct->enabled,
-                'content'        =>  $content
+                'hashAlgorithm' => 2,
+                'isEnabled' => $userCreateStruct->enabled,
+                'content' => $content
             )
         );
         $this->users[$user->id] = $user;
@@ -395,7 +388,7 @@ class UserServiceStub implements UserService
         {
             return $this->users[$userId];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -441,7 +434,7 @@ class UserServiceStub implements UserService
             }
             return $user;
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -455,7 +448,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'remove', $user ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         unset(
@@ -483,13 +476,23 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $user ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $contentService = $this->repository->getContentService();
 
-        $contentUpdate = $userUpdateStruct->contentUpdateStruct ?:
-            $contentService->newContentUpdateStruct();
+        $content = $contentService->loadContentByContentInfo( $user->contentInfo );
+
+        $contentUpdate = $userUpdateStruct->contentUpdateStruct;
+        if ( $contentUpdate === null )
+        {
+            $contentUpdate = $contentService->newContentUpdateStruct();
+            foreach ( $content->getFields() as $field )
+            {
+                $contentUpdate->setField( $field->fieldDefIdentifier, $field->value, $field->languageCode );
+            }
+            $contentUpdate->setField( 'user_account', $user );
+        }
 
         $contentDraft = $contentService->createContentDraft( $user->contentInfo );
         $contentDraft = $contentService->updateContent(
@@ -501,29 +504,28 @@ class UserServiceStub implements UserService
             $contentDraft->getVersionInfo()
         );
 
-        if ( $userUpdateStruct->contentMetaDataUpdateStruct )
+        if ( $userUpdateStruct->contentMetadataUpdateStruct )
         {
             $content = $contentService->updateContentMetadata(
                 $content->contentInfo,
-                $userUpdateStruct->contentMetaDataUpdateStruct
+                $userUpdateStruct->contentMetadataUpdateStruct
             );
         }
 
         $this->users[$user->id] = new UserStub(
             array(
-                'id'             =>  $user->id,
-                'login'          =>  $user->login,
-                'email'          =>  $userUpdateStruct->email ?: $user->email,
-                'isEnabled'      =>  is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,
-                'maxLogin'       =>  is_null( $userUpdateStruct->maxLogin ) ? $user->maxLogin : $userUpdateStruct->maxLogin,
-                'hashAlgorithm'  =>  $user->hashAlgorithm,
-                'passwordHash'   =>  $userUpdateStruct->password ?
+                'login' => $user->login,
+                'email' => $userUpdateStruct->email ?: $user->email,
+                'isEnabled' => is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,
+                'maxLogin' => is_null( $userUpdateStruct->maxLogin ) ? $user->maxLogin : $userUpdateStruct->maxLogin,
+                'hashAlgorithm' => $user->hashAlgorithm,
+                'passwordHash' => $userUpdateStruct->password ?
                     $this->createHash(
                         $user->login,
                         $userUpdateStruct->password,
                         $user->hashAlgorithm ) : $user->passwordHash,
 
-                'content'    =>  $content,
+                'content' => $content,
             )
         );
 
@@ -544,7 +546,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $user, $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( false === isset( $this->user2groups[$user->id] ) )
         {
@@ -566,11 +568,11 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $user, $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( false === isset( $this->user2groups[$user->id][$userGroup->id] ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
         unset( $this->user2groups[$user->id][$userGroup->id] );
     }
@@ -588,7 +590,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'read', $user ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $userGroups = array();
@@ -614,7 +616,7 @@ class UserServiceStub implements UserService
     {
         if ( false === $this->repository->canUser( 'content', 'read', $userGroup ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $users = array();
@@ -642,7 +644,7 @@ class UserServiceStub implements UserService
             return array();
         }
 
-        $groupIds   = array_keys( $this->user2groups[$userId] );
+        $groupIds = array_keys( $this->user2groups[$userId] );
         $userGroups = array();
         while ( count( $groupIds ) > 0 )
         {
@@ -675,12 +677,12 @@ class UserServiceStub implements UserService
 
         return new UserCreateStructStub(
             array(
-                'login'             =>  $login,
-                'email'             =>  $email,
-                'password'          =>  $password,
-                'mainLanguageCode'  =>  $mainLanguageCode,
-                'contentType'       =>  $contentType,
-                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
+                'login' => $login,
+                'email' => $email,
+                'password' => $password,
+                'mainLanguageCode' => $mainLanguageCode,
+                'contentType' => $contentType,
+                'remoteId' => md5( uniqid( __METHOD__, true ) )
             )
         );
 
@@ -701,9 +703,9 @@ class UserServiceStub implements UserService
 
         return new UserGroupCreateStructStub(
             array(
-                'mainLanguageCode'  =>  $mainLanguageCode,
-                'contentType'       =>  $contentType,
-                'remoteId'          =>  md5( uniqid( __METHOD__, true ) )
+                'mainLanguageCode' => $mainLanguageCode,
+                'contentType' => $contentType,
+                'remoteId' => md5( uniqid( __METHOD__, true ) )
             )
         );
     }
@@ -729,6 +731,16 @@ class UserServiceStub implements UserService
     }
 
     /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
+    }
+
+    /**
      * Helper method that initializes some default data from an existing legacy
      * test fixture.
      *
@@ -737,7 +749,7 @@ class UserServiceStub implements UserService
     private function initFromFixture()
     {
         list( $this->userGroups ) = $this->repository->loadFixture( 'UserGroup' );
-        list( $this->users )      = $this->repository->loadFixture( 'User' );
+        list( $this->users ) = $this->repository->loadFixture( 'User' );
 
         // Set the default relations.
         $this->user2groups[10] = array( 42 => true );

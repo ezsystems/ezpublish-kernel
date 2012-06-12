@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\User,
 
 /**
  * Storage Engine handler for user module
- *
  */
 interface Handler
 {
@@ -130,7 +129,7 @@ interface Handler
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
      */
     public function addPolicy( $roleId, Policy $policy );
 
@@ -140,7 +139,7 @@ interface Handler
      * Replaces limitations values with new values.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy );
 

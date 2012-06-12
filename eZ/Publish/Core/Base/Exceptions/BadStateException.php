@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateExcepti
  * BadState Exception implementation
  *
  * @use: throw new BadState( 'nodes', 'array' );
- *
  */
 class BadStateException extends APIBadStateException
 {
@@ -33,16 +32,5 @@ class BadStateException extends APIBadStateException
             0,
             $previous
         );
-    }
-
-    /**
-     * Returns an additional error code which indicates why an action could not be performed
-     * @todo implement
-     *
-     * @return int An error code
-     */
-    public function getErrorCode()
-    {
-        return 0;
     }
 }

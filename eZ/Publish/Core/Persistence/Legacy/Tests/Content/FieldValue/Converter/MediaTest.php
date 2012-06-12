@@ -17,7 +17,9 @@ use eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media as MediaTypeConverter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    ezp\Base\BinaryRepository;
+    eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
+    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 
 /**
  * Test case for MediaType converter in Legacy storage
@@ -45,12 +47,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->converter = new MediaTypeConverter;
-        BinaryRepository::setOverrideOptions( 'inmemory' );
-        $this->mediaPath = __DIR__ . '/../../../../../../../Content/Tests/FieldType/developer-got-hurt.m4v';
+        $this->mediaPath = 'eZ/Publish/Core/Repository/Tests/FieldType/developer-got-hurt.m4v';
 
-        $mediaValue = new MediaTypeValue;
-        $mediaValue->file = $mediaValue->getHandler()->createFromLocalPath( $this->mediaPath );
-        $mediaValue->pluginspage = $mediaValue->getHandler()->getPluginspageByType( MediaType::TYPE_HTML5_VIDEO );
+        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
+        $mediaValue = new MediaTypeValue( $repository->getIOService(), $this->mediaPath );
         $this->persistenceMediaValue = new FieldValue;
         $this->persistenceMediaValue->data = $mediaValue;
         $this->persistenceMediaValue->sortKey = false;
@@ -110,10 +110,11 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'mediaType' => MediaType::TYPE_HTML5_VIDEO
             )
         );
+        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
         $fieldDef = new PersistenceFieldDefinition(
             array(
                 'fieldTypeConstraints' => $fieldTypeConstraints,
-                'defaultValue' => new MediaTypeValue
+                'defaultValue' => new MediaTypeValue( $repository->getIOService() )
             )
         );
 

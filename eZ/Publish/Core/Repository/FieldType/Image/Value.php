@@ -9,13 +9,18 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
 use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    ezp\Base\BinaryRepository;
+    eZ\Publish\API\Repository\IOService;
 
 /**
  * Value for Image field type
+ *
+ * @todo Rewrite image fieldtype
+ *
+ * @property string $filename The name of the file in the eZ publish var directory
+ *                            (for example "44b963c9e8d1ffa80cbb08e84d576735.avi").
+ * @property string $mimeType
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * The alternative image text (for example "Picture of an apple.").
@@ -48,29 +53,23 @@ class Value extends BaseValue implements ValueInterface
         'fieldId' => null,
         'contentId' => null,
         'versionNo' => null,
-        // Publication status (one of \ezp\Content\Version::STATUS_*)
+        // Publication status (one of \eZ\Publish\API\Repository\Values\Content\VersionInfo::STATUS_*)
         'status' => null,
         'languageCode' => null,
     );
 
     /**
      * Construct a new Value object.
+     *
+     * @param \eZ\Publish\API\Repository\IOService $IOService
+     * @param string|null $file
+     * @param string $alternativeText
      */
-    public function __construct( $imagePath = null, $alternativeText = '' )
+    public function __construct( IOService $IOService, $file = null, $alternativeText = '' )
     {
         $this->alternativeText = $alternativeText;
-        $this->aliasList = new AliasCollection( $this, new BinaryRepository );
-        $this->aliasList->initializeFromLocalImage( $imagePath );
-    }
-
-    /**
-     * @param string $stringValue Image path (can be real path or relative to eZ Publish root).
-     *
-     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
+        $this->aliasList = new AliasCollection( $this, $IOService );
+        $this->aliasList->initializeFromLocalImage( $file );
     }
 
     /**
@@ -79,7 +78,7 @@ class Value extends BaseValue implements ValueInterface
     public function __toString()
     {
         $string = $this->aliasList['original']->url;
-        if ( isset( $this->alternativeText ) )
+        if ( !empty( $this->alternativeText ) )
             $string .= "|$this->alternativeText";
 
         return $string;
@@ -95,16 +94,10 @@ class Value extends BaseValue implements ValueInterface
         switch ( $name )
         {
             case 'filename':
-                return basename( $this->file->path );
+                return basename( $this->file->id );
 
             case 'mimeType':
-                return $this->file->contentType->__toString();
-
-            case 'mimeTypeCategory':
-                return $this->file->contentType->type;
-
-            case 'mimeTypePart':
-                return $this->file->contentType->subType;
+                return $this->file->contentType;
 
             case 'filesize':
                 return $this->file->size;
@@ -116,8 +109,9 @@ class Value extends BaseValue implements ValueInterface
                 throw new PropertyNotFound( $name, get_class() );
         }
     }
+
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

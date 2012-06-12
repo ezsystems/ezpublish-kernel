@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -28,6 +29,13 @@ class AddField extends Action
     protected $fieldDefinition;
 
     /**
+     * Storage handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected $storageHandler;
+
+    /**
      * Field value converter
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
@@ -38,16 +46,20 @@ class AddField extends Action
      * Creates a new action
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $converter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      */
     public function __construct(
         Gateway $contentGateway,
         FieldDefinition $fieldDef,
-        Converter $converter )
+        Converter $converter,
+        StorageHandler $storageHandler )
     {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
         $this->fieldValueConverter = $converter;
+        $this->storageHandler = $storageHandler;
     }
 
     /**
@@ -73,7 +85,9 @@ class AddField extends Action
             $storageValue
         );
 
-        $content->version->fields[] = $field;
+        $this->storageHandler->storeFieldData( $field );
+
+        $content->fields[] = $field;
     }
 
     /**
@@ -81,6 +95,7 @@ class AddField extends Action
      *
      * @param Content $content
      * @return void
+     * @todo Handle ->languageCode
      */
     protected function createField( Content $content )
     {
@@ -88,8 +103,8 @@ class AddField extends Action
         $field->fieldDefinitionId = $this->fieldDefinition->id;
         $field->type = $this->fieldDefinition->fieldType;
         $field->value = clone $this->fieldDefinition->defaultValue;
-        $field->versionNo = $content->version->versionNo;
-        // $field->language = ...;
+        $field->versionNo = $content->versionInfo->versionNo;
+        //$field->languageCode = $content->initialLanguageId;
         return $field;
     }
 }

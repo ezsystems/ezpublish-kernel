@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
+use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 /**
@@ -38,13 +37,16 @@ class LanguageServiceTest extends BaseTest
         $languageCreate = $languageService->newLanguageCreateStruct();
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct', $languageCreate );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct',
+            $languageCreate
+        );
     }
 
     /**
      * Test for the createLanguage() method.
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Language
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testNewLanguageCreateStruct
      */
@@ -55,69 +57,52 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English (New Zealand)';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $language );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Language',
+            $language
+        );
+
+        return $language;
     }
 
     /**
      * Test for the createLanguage() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Language $language
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
-    public function testCreateLanguageSetsIdPropertyOnReturnedLanguage()
+    public function testCreateLanguageSetsIdPropertyOnReturnedLanguage( $language )
     {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $languageService = $repository->getContentLanguageService();
-
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'German';
-        $languageCreate->languageCode = 'ger-DE';
-
-        $language = $languageService->createLanguage( $languageCreate );
-        /* END: Use Case */
-
         $this->assertNotNull( $language->id );
     }
 
     /**
      * Test for the createLanguage() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Language $language
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
-    public function testCreateLanguageSetsPropertiesFromCreateStruct()
+    public function testCreateLanguageSetsExpectedProperties( $language )
     {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $languageService = $repository->getContentLanguageService();
-
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'French';
-        $languageCreate->languageCode = 'fre-FR';
-
-        $language = $languageService->createLanguage( $languageCreate );
-        /* END: Use Case */
-
         $this->assertEquals(
             array(
                 true,
-                'French',
-                'fre-FR'
+                'English (New Zealand)',
+                'eng-NZ'
             ),
             array(
                 $language->enabled,
@@ -142,20 +127,23 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'Norwegian';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'Norwegian';
         $languageCreate->languageCode = 'nor-NO';
 
         $languageService->createLanguage( $languageCreate );
 
-        // This call should fail with an InvalidArgumentException, because nor-NO already exists
+        // This call should fail with an InvalidArgumentException, because
+        // the language code "nor-NO" already exists.
         $languageService->createLanguage( $languageCreate );
         /* END: Use Case */
     }
 
     /**
      * Test for the loadLanguageById() method.
+     *
+     *
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::loadLanguageById()
@@ -168,9 +156,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $languageId = $languageService->createLanguage( $languageCreate )->id;
@@ -178,7 +166,10 @@ class LanguageServiceTest extends BaseTest
         $language = $languageService->loadLanguageById( $languageId );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $language );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Language',
+            $language
+        );
     }
 
     /**
@@ -193,11 +184,12 @@ class LanguageServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistentLanguageId = $this->generateId( 'language', 2342 );
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        // This call should fail with a NotFoundException
-        $languageService->loadLanguageById( PHP_INT_MAX );
+        // This call should fail with a "NotFoundException"
+        $languageService->loadLanguageById( $nonExistentLanguageId );
         /* END: Use Case */
     }
 
@@ -215,20 +207,26 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $languageId = $languageService->createLanguage( $languageCreate )->id;
 
         $language = $languageService->loadLanguageById( $languageId );
 
-        $updatedLanguage = $languageService->updateLanguageName( $language, 'New language name.' );
+        $updatedLanguage = $languageService->updateLanguageName(
+            $language,
+            'New language name.'
+        );
         /* END: Use Case */
 
         // Verify that the service returns an updated language instance.
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $updatedLanguage );
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\Content\Language',
+            $updatedLanguage
+        );
 
         // Verify that the service also persists the changes
         $updatedLanguage = $languageService->loadLanguageById( $languageId );
@@ -250,9 +248,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
@@ -280,9 +278,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
@@ -310,9 +308,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $languageId = $languageService->createLanguage( $languageCreate )->id;
@@ -359,14 +357,14 @@ class LanguageServiceTest extends BaseTest
         $languageService = $repository->getContentLanguageService();
 
         // Create some languages
-        $languageCreateEnglish               = $languageService->newLanguageCreateStruct();
-        $languageCreateEnglish->enabled      = false;
-        $languageCreateEnglish->name         = 'English';
+        $languageCreateEnglish = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled = false;
+        $languageCreateEnglish->name = 'English';
         $languageCreateEnglish->languageCode = 'eng-NZ';
 
-        $languageCreateFrench               = $languageService->newLanguageCreateStruct();
-        $languageCreateFrench->enabled      = false;
-        $languageCreateFrench->name         = 'French';
+        $languageCreateFrench = $languageService->newLanguageCreateStruct();
+        $languageCreateFrench->enabled = false;
+        $languageCreateFrench->name = 'French';
         $languageCreateFrench->languageCode = 'fre-FR';
 
         $languageService->createLanguage( $languageCreateEnglish );
@@ -412,9 +410,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreateEnglish               = $languageService->newLanguageCreateStruct();
-        $languageCreateEnglish->enabled      = false;
-        $languageCreateEnglish->name         = 'English';
+        $languageCreateEnglish = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled = false;
+        $languageCreateEnglish->name = 'English';
         $languageCreateEnglish->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreateEnglish );
@@ -429,13 +427,50 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the deleteLanguage() method.
      *
+     * NOTE: This test has a dependency against several methods in the content
+     * service, but because there is no topological sort for test dependencies
+     * we cannot declare them here.
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::deleteLanguage()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testDeleteLanguage
+     * @depend(s) eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testDeleteLanguageThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::deleteLanguage() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
+
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreateEnglish = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled = true;
+        $languageCreateEnglish->name = 'English';
+        $languageCreateEnglish->languageCode = 'eng-NZ';
+
+        $language = $languageService->createLanguage( $languageCreateEnglish );
+
+        $contentService = $repository->getContentService();
+
+        // Get metadata update struct and set new language as main language.
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+        $metadataUpdate->mainLanguageCode = 'eng-NZ';
+
+        // Update content object
+        $contentService->updateContentMetadata(
+            $contentService->loadContentInfo( $editorsGroupId ),
+            $metadataUpdate
+        );
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // new language is used by a content object.
+        $languageService->deleteLanguage( $language );
+        /* END: Use Case */
     }
 
     /**
@@ -446,7 +481,13 @@ class LanguageServiceTest extends BaseTest
      */
     public function testGetDefaultLanguageCode()
     {
-        $this->markTestIncomplete( "@TODO: Test for LanguageService::getDefaultLanguageCode() is not implemented." );
+        $repository = $this->getRepository();
+        $languageService = $repository->getContentLanguageService();
+
+        $this->assertRegExp(
+            '(^[a-z]{3}\-[A-Z]{2}$)',
+            $languageService->getDefaultLanguageCode()
+        );
     }
 
     /**
@@ -460,12 +501,161 @@ class LanguageServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $languageService = $repository->getContentLanguageService();
-        $languageCreate  = $languageService->newLanguageCreateStruct();
+        $languageCreate = $languageService->newLanguageCreateStruct();
 
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-US';
 
         return $languageService->createLanguage( $languageCreate );
+    }
+
+    /**
+     * Test for the createLanguage() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     */
+    public function testCreateLanguageInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get create struct and set properties
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English (New Zealand)';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        // Create new language
+        $languageService->createLanguage( $languageCreate );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $languageService->loadLanguage( 'eng-NZ' );
+        }
+        catch ( NotFoundException $e )
+        {
+            // Expected execution path
+        }
+        /* END: Use Case */
+
+        $this->assertTrue( isset( $e ), 'Can still load language after rollback' );
+    }
+
+    /**
+     * Test for the createLanguage() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     */
+    public function testCreateLanguageInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Get create struct and set properties
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English (New Zealand)';
+        $languageCreate->languageCode = 'eng-NZ';
+
+        // Create new language
+        $languageService->createLanguage( $languageCreate );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load new language
+        $language = $languageService->loadLanguage( 'eng-NZ' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'eng-NZ', $language->languageCode );
+    }
+
+    /**
+     * Test for the updateLanguageName() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
+     */
+    public function testUpdateLanguageNameInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Load an existing language
+        $language = $languageService->loadLanguage( 'eng-US' );
+
+        // Update the language name
+        $languageService->updateLanguageName( $language, 'My English' );
+
+        // Rollback all changes
+        $repository->rollback();
+
+        // Load updated version, name will still be "English (American)"
+        $updatedLanguage = $languageService->loadLanguage( 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'English (American)', $updatedLanguage->name );
+    }
+
+    /**
+     * Test for the updateLanguageName() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
+     */
+    public function testUpdateLanguageNameInTransactionWithCommit()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // Start a new transaction
+        $repository->beginTransaction();
+
+        // Load an existing language
+        $language = $languageService->loadLanguage( 'eng-US' );
+
+        // Update the language name
+        $languageService->updateLanguageName( $language, 'My English' );
+
+        // Commit all changes
+        $repository->commit();
+
+        // Load updated version, name will be "My English"
+        $updatedLanguage = $languageService->loadLanguage( 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'My English', $updatedLanguage->name );
     }
 }

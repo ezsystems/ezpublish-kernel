@@ -77,19 +77,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'deleteType' )
-            ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 0 )
-            );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteGroupAssignementsForType' )
-            ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 0 )
-            );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteFieldDefinitionsForType' )
+            ->method( 'delete' )
             ->with(
                 $this->equalTo( 23 ),
                 $this->equalTo( 0 )

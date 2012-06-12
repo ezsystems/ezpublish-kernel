@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\Content\ContentCreateStruct class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -12,10 +20,10 @@ abstract class ContentCreateStruct extends ValueObject
 {
     /**
      * The content type for which the new content is created
-     * 
+     *
      * @required
      *
-     * @var ContentType
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public $contentType;
 
@@ -52,7 +60,7 @@ abstract class ContentCreateStruct extends ValueObject
      * the main language code for the content. This language will also
      * be used for as initial language for the first created version.
      * It is also used as default language for added fields.
-     * 
+     *
      * @required
      *
      * @var string

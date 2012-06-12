@@ -25,7 +25,7 @@ class Url implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data->text;
+        $storageFieldValue->dataText = $value->data["text"];
     }
 
     /**
@@ -36,8 +36,10 @@ class Url implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new UrlValue( "", $value->dataText );
-        $fieldValue->data->setState( array( "urlId" => $value->dataInt ) );
+        $fieldValue->data = array(
+            "text" => $value->dataText,
+            "urlId" => $value->dataInt,
+        );
         $fieldValue->sortKey = false;
     }
 

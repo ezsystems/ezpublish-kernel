@@ -18,7 +18,7 @@ $locationService = $repository->getLocationService();
 $location = $locationService->loadLocation( $homeLocation );
 
 // print out the computed name of the content object in the main language
-echo  $location->contentInfo->name . '\n';
+echo $location->contentInfo->name . '\n';
 
 // get the 10 first childs in the sort settings of the home location
 $childLocations = $locationService->loadLocationChildren( $location, 0, 10 );
@@ -30,7 +30,7 @@ foreach ( $childLocations as $child )
         echo "+ ";
     else
         echo "  ";
-    echo  $child->contentInfo->name . '\n';
+    echo $child->contentInfo->name . '\n';
 }
 
 // browsing locations in a specific language

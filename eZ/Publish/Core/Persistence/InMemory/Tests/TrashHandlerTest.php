@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content\Location,
+    eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
 
 /**
@@ -57,14 +57,14 @@ class TrashHandlerTest extends HandlerTest
     /**
      * Locations which should be removed in tearDown
      *
-     * @var \ezp\Content\Location[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     protected $locationToDelete = array();
 
     /**
      * Contents which should be removed in tearDown
      *
-     * @var \ezp\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contentToDelete = array();
 
@@ -91,6 +91,7 @@ class TrashHandlerTest extends HandlerTest
                         "ownerId" => 14,
                         "sectionId" => 1,
                         "typeId" => 2,
+                        "initialLanguageId" => 2,
                         "fields" => array(
                             new Field(
                                 array(
@@ -98,10 +99,10 @@ class TrashHandlerTest extends HandlerTest
                                     // FieldValue object compatible with ezstring
                                     "value" => new FieldValue(
                                         array(
-                                            "data" => new TextLineValue( "Welcome $i" )
+                                            "data" => "Welcome $i"
                                         )
                                     ),
-                                    "language" => "eng-GB",
+                                    "languageCode" => "eng-GB",
                                 )
                             )
                         )
@@ -109,7 +110,7 @@ class TrashHandlerTest extends HandlerTest
                 )
             );
 
-            $this->lastContentId = $content->id;
+            $this->lastContentId = $content->contentInfo->id;
 
             $this->locations[] = $location = $this->persistenceHandler->locationHandler()->create(
                 new CreateStruct(
@@ -157,7 +158,7 @@ class TrashHandlerTest extends HandlerTest
         {
             try
             {
-                $contentHandler->delete( $content->id );
+                $contentHandler->deleteContent( $content->contentInfo->id );
             }
             catch ( NotFound $e )
             {
@@ -171,16 +172,16 @@ class TrashHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::load
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::loadTrashItem
      * @group trashHandler
      */
     public function testLoad()
     {
-        $trashed = $this->trashHandler->trashSubtree( $this->locations[0]->id );
+        $trashed = $this->trashHandler->trash( $this->locations[0]->id );
         $trashedId = $trashed->id;
         unset( $trashed );
 
-        $trashed = $this->trashHandler->load( $trashedId );
+        $trashed = $this->trashHandler->loadTrashItem( $trashedId );
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashed );
         foreach ( $this->locations[0] as $property => $value )
         {
@@ -189,13 +190,13 @@ class TrashHandlerTest extends HandlerTest
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::load
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::loadTrashItem
      * @group trashHandler
      */
     public function testLoadNonExistent()
     {
-        $this->trashHandler->load( 0 );
+        $this->trashHandler->loadTrashItem( 0 );
     }
 
     /**

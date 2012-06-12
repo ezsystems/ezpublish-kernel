@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Repository\RoleService class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
@@ -99,7 +107,10 @@ class RoleService implements RoleServiceInterface
             if ( $existingRole !== null )
                 throw new InvalidArgumentException( "roleCreateStruct", "role with specified identifier already exists" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
 
         $spiRole = $this->buildPersistenceRoleObject( $roleCreateStruct );
         $createdRole = $this->persistenceHandler->userHandler()->createRole( $spiRole );
@@ -143,7 +154,10 @@ class RoleService implements RoleServiceInterface
                 if ( $existingRole !== null )
                     throw new InvalidArgumentException( "roleUpdateStruct", "role with specified identifier already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( NotFoundException $e )
+            {
+                // Do nothing
+            }
         }
 
         $loadedRole = $this->loadRole( $role->id );
@@ -151,9 +165,9 @@ class RoleService implements RoleServiceInterface
         $this->persistenceHandler->userHandler()->updateRole(
             new SPIRoleUpdateStruct(
                 array(
-                    'id'          => $loadedRole->id,
-                    'identifier'  => $roleUpdateStruct->identifier ?: $role->identifier,
-                    'name'        => $roleUpdateStruct->names ?: $role->getNames(),
+                    'id' => $loadedRole->id,
+                    'identifier' => $roleUpdateStruct->identifier ?: $role->identifier,
+                    'name' => $roleUpdateStruct->names ?: $role->getNames(),
                     'description' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
                 )
             )
@@ -272,7 +286,7 @@ class RoleService implements RoleServiceInterface
      * @param mixed $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
-    */
+     */
     public function loadRole( $id )
     {
         if ( !is_numeric( $id ) )
@@ -522,8 +536,8 @@ class RoleService implements RoleServiceInterface
                     array(
                         // @todo: add limitation
                         'limitation' => null,
-                        'role'       => $this->buildDomainRoleObject( $spiRole ),
-                        'userGroup'  => $userGroup
+                        'role' => $this->buildDomainRoleObject( $spiRole ),
+                        'userGroup' => $userGroup
                     )
                 );
             }
@@ -536,12 +550,15 @@ class RoleService implements RoleServiceInterface
                         array(
                             // @todo: add limitation
                             'limitation' => null,
-                            'role'       => $this->buildDomainRoleObject( $spiRole ),
-                            'user'       => $user
+                            'role' => $this->buildDomainRoleObject( $spiRole ),
+                            'user' => $user
                         )
                     );
                 }
-                catch ( NotFoundException $e ) {}
+                catch ( NotFoundException $e )
+                {
+                    // Do nothing
+                }
             }
         }
 
@@ -571,8 +588,8 @@ class RoleService implements RoleServiceInterface
                 array(
                     // @todo: add limitation
                     'limitation' => null,
-                    'role'       => $this->buildDomainRoleObject( $spiRole ),
-                    'user'       => $user
+                    'role' => $this->buildDomainRoleObject( $spiRole ),
+                    'user' => $user
                 )
             );
         }
@@ -603,8 +620,8 @@ class RoleService implements RoleServiceInterface
                 array(
                     // @todo: add limitation
                     'limitation' => null,
-                    'role'       => $this->buildDomainRoleObject( $spiRole ),
-                    'userGroup'  => $userGroup
+                    'role' => $this->buildDomainRoleObject( $spiRole ),
+                    'userGroup' => $userGroup
                 )
             );
         }
@@ -623,8 +640,8 @@ class RoleService implements RoleServiceInterface
     {
         return new RoleCreateStruct(
             array(
-                'identifier'   => $name,
-                'policies'     => array()
+                'identifier' => $name,
+                'policies' => array()
             )
         );
     }
@@ -641,8 +658,8 @@ class RoleService implements RoleServiceInterface
     {
         return new PolicyCreateStruct(
             array(
-                'module'      => $module,
-                'function'    => $function,
+                'module' => $module,
+                'function' => $function,
                 'limitations' => array()
             )
         );
@@ -689,13 +706,13 @@ class RoleService implements RoleServiceInterface
 
         return new Role(
             array(
-                'id'               => $role->id,
-                'identifier'       => $role->identifier,
+                'id' => (int) $role->id,
+                'identifier' => $role->identifier,
                 //@todo: add main language code
                 'mainLanguageCode' => null,
-                'names'            => $role->name,
-                'descriptions'     => $role->description,
-                'policies'         => $rolePolicies
+                'names' => $role->name,
+                'descriptions' => $role->description,
+                'policies' => $rolePolicies
             )
         );
     }
@@ -723,10 +740,10 @@ class RoleService implements RoleServiceInterface
 
         return new Policy(
             array(
-                'id'          => $policy->id,
-                'roleId'      => $role ? $role->id : $policy->roleId,
-                'module'      => $policy->module,
-                'function'    => $policy->function,
+                'id' => (int) $policy->id,
+                'roleId' => $role ? (int) $role->id : (int) $policy->roleId,
+                'module' => $policy->module,
+                'function' => $policy->function,
                 'limitations' => $policyLimitations
             )
         );
@@ -822,11 +839,11 @@ class RoleService implements RoleServiceInterface
 
         return new SPIRole(
             array(
-                'identifier'  => $roleCreateStruct->identifier,
+                'identifier' => $roleCreateStruct->identifier,
                 //@todo: main language code ?
-                'name'        => $roleCreateStruct->names,
+                'name' => $roleCreateStruct->names,
                 'description' => $roleCreateStruct->descriptions,
-                'policies'    => $policiesToCreate
+                'policies' => $policiesToCreate
             )
         );
     }
@@ -854,8 +871,8 @@ class RoleService implements RoleServiceInterface
 
         return new SPIPolicy(
             array(
-                'module'      => $module,
-                'function'    => $function,
+                'module' => $module,
+                'function' => $function,
                 'limitations' => $limitationsToCreate
             )
         );

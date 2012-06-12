@@ -14,18 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 /**
  *
  * This exception is throen if a service method is called with an illegal or non appriprite value
- *
  */
 class InvalidArgumentExceptionStub extends InvalidArgumentException
 {
-    /**
-     * Returns an additional error code which indicates why an action could not be performed
-     *
-     * @return int An error code
-     */
-    function getErrorCode()
-    {
-        // TODO: Implement getErrorCode() method.
-    }
-
 }

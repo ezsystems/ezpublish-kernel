@@ -20,70 +20,6 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class RepositoryTest extends BaseTest
 {
     /**
-     * Test for the getCurrentUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::getCurrentUser()
-     */
-    public function testGetCurrentUser()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $currentUser = $repository->getCurrentUser();
-        /* END: Use Case */
-
-        $this->assertNotNull( $currentUser );
-    }
-
-    /**
-     * Test for the setCurrentUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::setCurrentUser()
-     */
-    public function testSetCurrentUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::testSetCurrentUser() is not implemented." );
-    }
-
-    /**
-     * Test for the hasAccess() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess()
-     * 
-     */
-    public function testHasAccess()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::hasAccess() is not implemented." );
-    }
-
-    /**
-     * Test for the hasAccess() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::hasAccess($module, $function, $user)
-     * 
-     */
-    public function testHasAccessWithThirdParameter()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::hasAccess() is not implemented." );
-    }
-
-    /**
-     * Test for the canUser() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
-     * 
-     */
-    public function testCanUser()
-    {
-        $this->markTestIncomplete( "@TODO: Test for Repository::canUser() is not implemented." );
-    }
-
-    /**
      * Test for the getContentService() method.
      *
      * @return void
@@ -92,7 +28,10 @@ class RepositoryTest extends BaseTest
     public function testGetContentService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\ContentService', $repository->getContentService() );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\ContentService',
+            $repository->getContentService()
+        );
     }
 
     /**
@@ -104,7 +43,10 @@ class RepositoryTest extends BaseTest
     public function testGetContentLanguageService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\LanguageService', $repository->getContentLanguageService() );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\LanguageService',
+            $repository->getContentLanguageService()
+        );
     }
 
     /**
@@ -112,12 +54,15 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
-     * 
+     *
      */
     public function testGetContentTypeService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\ContentTypeService', $repository->getContentTypeService() );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\ContentTypeService',
+            $repository->getContentTypeService()
+        );
     }
 
     /**
@@ -125,12 +70,15 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getLocationService()
-     * 
+     *
      */
     public function testGetLocationService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\LocationService', $repository->getLocationService() );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\LocationService',
+            $repository->getLocationService()
+        );
     }
 
     /**
@@ -138,13 +86,13 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getTrashService()
-     * 
+     *
      */
     public function testGetTrashService()
     {
         $repository = $this->getRepository();
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\TrashService',
+            '\\eZ\\Publish\\API\\Repository\\TrashService',
             $repository->getTrashService()
         );
     }
@@ -158,7 +106,10 @@ class RepositoryTest extends BaseTest
     public function testGetSectionService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\SectionService', $repository->getSectionService() );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\SectionService',
+            $repository->getSectionService()
+        );
     }
 
     /**
@@ -170,7 +121,10 @@ class RepositoryTest extends BaseTest
     public function testGetUserService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\UserService', $repository->getUserService() );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\UserService',
+            $repository->getUserService()
+        );
     }
 
     /**
@@ -182,19 +136,70 @@ class RepositoryTest extends BaseTest
     public function testGetRoleService()
     {
         $repository = $this->getRepository();
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\RoleService', $repository->getRoleService() );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\RoleService',
+            $repository->getRoleService()
+        );
     }
 
     /**
-     * Test for the beginTransaction() method.
+     * Test for the getUrlAliasService() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\Repository::beginTransaction()
-     * 
+     * @see \eZ\Publish\API\Repository\Repository::getUrlAliasService()
      */
-    public function testBeginTransaction()
+    public function testGetURLAliasService()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::beginTransaction() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\URLAliasService',
+            $repository->getURLAliasService()
+        );
+    }
+
+    /**
+     * Test for the getUrlWildcardService() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Repository::getUrlWildcardService()
+     */
+    public function testGetURLWildcardService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\URLWildcardService',
+            $repository->getURLWildcardService()
+        );
+    }
+
+    /**
+     * Test for the getObjectStateService()
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Repository::getObjectStateService()
+     */
+    public function testGetObjectStateService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\ObjectStateService',
+            $repository->getObjectStateService()
+        );
+    }
+
+    /**
+     * Test for the getIOService() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Repository::getIOService()
+     */
+    public function testGetIOService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\IOService',
+            $repository->getIOService()
+        );
     }
 
     /**
@@ -202,11 +207,12 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::commit()
-     * 
      */
     public function testCommit()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::commit() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->beginTransaction();
+        $repository->commit();
     }
 
     /**
@@ -218,7 +224,8 @@ class RepositoryTest extends BaseTest
      */
     public function testCommitThrowsRuntimeException()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::commit() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->commit();
     }
 
     /**
@@ -226,11 +233,12 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::rollback()
-     * 
      */
     public function testRollback()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::rollback() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->beginTransaction();
+        $repository->rollback();
     }
 
     /**
@@ -242,7 +250,7 @@ class RepositoryTest extends BaseTest
      */
     public function testRollbackThrowsRuntimeException()
     {
-        $this->markTestIncomplete( "@TODO: Test for Repository::rollback() is not implemented." );
+        $repository = $this->getRepository();
+        $repository->rollback();
     }
-
 }

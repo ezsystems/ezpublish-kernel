@@ -139,7 +139,7 @@ class Handler extends BaseSearchHandler
     /**
      * Indexes a content object
      *
-     * @param eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @return void
      */
     public function indexContent( Content $content )

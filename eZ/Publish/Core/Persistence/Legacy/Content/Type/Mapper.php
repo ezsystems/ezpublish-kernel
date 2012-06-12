@@ -34,7 +34,7 @@ class Mapper
     /**
      * Creates a new content type mapper
      *
-     * @param ConverterRegistry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
     public function __construct( ConverterRegistry $converterRegistry )
     {
@@ -54,7 +54,7 @@ class Mapper
 
         $group->name = $struct->name;
 
-        // Indentionally left out, since DB structure does not support it, yet
+        // Intentionally left out, since DB structure does not support it, yet
         // $group->description = $struct->description;
 
         $group->identifier = $struct->identifier;
@@ -67,7 +67,7 @@ class Mapper
     }
 
     /**
-     * Extracts Group objects from theb given $rows.
+     * Extracts Group objects from the given $rows.
      *
      * @param array $rows
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
@@ -114,9 +114,7 @@ class Mapper
             $fieldId = (int)$row['ezcontentclass_attribute_id'];
             if ( !isset( $fields[$fieldId] ) )
             {
-                $field = $this->extractFieldFromRow( $row );
-                $fields[$fieldId] = $field;
-                $types[$typeId]->fieldDefinitions[] = $field;
+                $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow( $row );
             }
 
             $groupId = (int)$row['ezcontentclass_classgroup_group_id'];
@@ -171,7 +169,7 @@ class Mapper
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      * @todo Handle field definition conversion.
      */
-    protected function extractFieldFromRow( array $row )
+    public function extractFieldFromRow( array $row )
     {
         $storageFieldDef = $this->extractStorageFieldFromRow( $row );
 
@@ -226,9 +224,9 @@ class Mapper
     /**
      * Maps properties from $struct to $type.
      *
-     * @param Type $type
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $struct
-     * @return void
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function createTypeFromCreateStruct( CreateStruct $createStruct )
     {
@@ -259,7 +257,7 @@ class Mapper
     /**
      * Creates a create struct from an existing $type.
      *
-     * @param Type $type
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
     public function createCreateStructFromType( Type $type )

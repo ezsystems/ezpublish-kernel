@@ -52,8 +52,10 @@ class EzcDatabase extends Handler
      */
     public function updateContentObjects( $fromType, $toType )
     {
-        $actions = $this->contentUpdater->determineActions( $fromType, $toType );
-        $this->contentUpdater->applyUpdates( $fromType->id, $actions  );
+        $this->contentUpdater->applyUpdates(
+            $fromType->id,
+            $this->contentUpdater->determineActions( $fromType, $toType )
+        );
     }
 
     /**
@@ -64,12 +66,7 @@ class EzcDatabase extends Handler
      */
     public function deleteOldType( $fromType )
     {
-        $this->contentTypeGateway->deleteType( $fromType->id, $fromType->status );
-        $this->contentTypeGateway->deleteGroupAssignementsForType(
-            $fromType->id, $fromType->status );
-        $this->contentTypeGateway->deleteFieldDefinitionsForType(
-            $fromType->id, $fromType->status
-        );
+        $this->contentTypeGateway->delete( $fromType->id, $fromType->status );
     }
 
     /**

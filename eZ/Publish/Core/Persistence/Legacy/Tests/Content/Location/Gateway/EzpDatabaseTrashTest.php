@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\Location\Trashed,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    ezp\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\SPI\Persistence;
 
 /**
@@ -341,6 +341,69 @@ class EzpDatabaseTrashTest extends TestCase
                 ) )
             )
         );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::cleanupTrash
+     */
+    public function testCleanupTrash()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69' );
+        $handler->cleanupTrash();
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(),
+            $query
+                ->select( '*' )
+                ->from( 'ezcontentobject_trash' )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::removeElementFromTrash
+     */
+    public function testRemoveElementFromTrash()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69' );
+        $handler->removeElementFromTrash( 69 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(),
+            $query
+                ->select( '*' )
+                ->from( 'ezcontentobject_trash' )
+                ->where( $query->expr->eq( 'node_id', 69 ) )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::countLocationsByContentId
+     */
+    public function testCountLocationsByContentId()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+
+        self::assertSame( 0, $handler->countLocationsByContentId( 123456789 ) );
+        self::assertSame( 1, $handler->countLocationsByContentId( 67 ) );
+
+        // Insert a new node and count again
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( 'ezcontentobject_tree' )
+            ->set( 'contentobject_id', $query->bindValue( 67, null, \PDO::PARAM_INT ) )
+            ->set( 'contentobject_version', $query->bindValue( 1, null, \PDO::PARAM_INT ) )
+            ->set( 'path_string', $query->bindValue( '/1/2/96' ) )
+            ->set( 'parent_node_id', $query->bindValue( 96, null, \PDO::PARAM_INT ) )
+            ->set( 'remote_id', $query->bindValue( 'some_remote_id' ) );
+        $query->prepare()->execute();
+        self::assertSame( 2, $handler->countLocationsByContentId( 67 ) );
     }
 }
 

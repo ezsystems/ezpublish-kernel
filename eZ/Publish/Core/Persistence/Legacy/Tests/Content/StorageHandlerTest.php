@@ -64,7 +64,6 @@ class StorageHandlerTest extends TestCase
         $field = new Field();
         $field->type = 'foobar';
         $field->value = new FieldValue();
-        $field->value->data = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
 
         $handler = $this->getStorageHandler();
         $handler->storeFieldData( $field );
@@ -97,7 +96,6 @@ class StorageHandlerTest extends TestCase
         $field = new Field();
         $field->type = 'foobar';
         $field->value = new FieldValue();
-        $field->value->data = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
 
         $handler = $this->getStorageHandler();
         $handler->getFieldData( $field );
@@ -126,7 +124,6 @@ class StorageHandlerTest extends TestCase
         $field = new Field();
         $field->type = 'foobar';
         $field->value = new FieldValue();
-        $field->value->data = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
 
         $handler = $this->getStorageHandler();
         $handler->getFieldData( $field );

@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
@@ -54,7 +53,10 @@ class Relation extends ValueObject
     /**
      * Type bitmask
      *
-     * @see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE
+     * @see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD
      * @var int
      */
     public $type;

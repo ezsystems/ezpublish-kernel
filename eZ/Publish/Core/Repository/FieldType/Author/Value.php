@@ -8,14 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Author;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\Logic;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\Core\Base\Exceptions\Logic;
 
 /**
  * Value for Author field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * List of authors
@@ -32,14 +31,6 @@ class Value extends BaseValue implements ValueInterface
     public function __construct( array $authors = array() )
     {
         $this->authors = new AuthorCollection( $this, $authors );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        throw new Logic( 'fromString() is not supported by this field type' );
     }
 
     /**
@@ -64,7 +55,7 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

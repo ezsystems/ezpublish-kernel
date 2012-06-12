@@ -1,13 +1,20 @@
 <?php
 /**
+ * File containing the eZ\Publish\Core\Repository\LocationService class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  * @package eZ\Publish\Core\Repository
  */
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
+    eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
     eZ\Publish\Core\Repository\Values\Content\Location,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Location as APILocation,
 
     eZ\Publish\SPI\Persistence\Content\Location as SPILocation,
@@ -179,14 +186,14 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null if no location exists
      */
-    public function loadMainLocation( ContentInfo $contentInfo )
+    public function loadMainLocation( APIContentInfo $contentInfo )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         $searchCriterion = new CriterionLogicalAnd(
             array(
-                new CriterionContentId( $contentInfo->contentId ),
+                new CriterionContentId( $contentInfo->id ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
             )
         );
@@ -221,17 +228,17 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
-    public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null )
+    public function loadLocations( APIContentInfo $contentInfo, APILocation $rootLocation = null )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         if ( $rootLocation !== null && !is_string( $rootLocation->pathString ) )
             throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
 
         $searchCriterion = new CriterionLogicalAnd(
             array(
-                new CriterionContentId( $contentInfo->contentId ),
+                new CriterionContentId( $contentInfo->id ),
                 new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
             )
         );
@@ -319,7 +326,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
      */
-    protected function searchChildrenLocations( $parentLocationId, $sortField, $sortOrder, $offset = 0, $limit = -1 )
+    protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
         $searchCriterion = new CriterionLogicalAnd(
             array(
@@ -328,16 +335,15 @@ class LocationService implements LocationServiceInterface
             )
         );
 
+        $sortClause = null;
+        if ( $sortField !== null )
+            $sortClause = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
+
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
-            $offset,
-            $limit > 0 ? $limit : null,
-            array(
-                $this->getSortClauseBySortField(
-                    $sortField,
-                    $sortOrder
-                )
-            )
+            $offset >= 0 ? (int) $offset : 0,
+            $limit  >= 0 ? (int) $limit  : null,
+            $sortClause
         );
     }
 
@@ -355,10 +361,10 @@ class LocationService implements LocationServiceInterface
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
-    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
+    public function createLocation( APIContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         if ( !is_numeric( $contentInfo->currentVersionNo ) )
             throw new InvalidArgumentValue( "currentVersionNo", $contentInfo->currentVersionNo, "ContentInfo" );
@@ -369,7 +375,7 @@ class LocationService implements LocationServiceInterface
         if ( $locationCreateStruct->priority !== null && !is_numeric( $locationCreateStruct->priority ) )
             throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
 
-        if ( $locationCreateStruct->hidden !== null && !is_bool( $locationCreateStruct->hidden ) )
+        if ( !is_bool( $locationCreateStruct->hidden ) )
             throw new InvalidArgumentValue( "hidden", $locationCreateStruct->hidden, "LocationCreateStruct" );
 
         if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
@@ -399,30 +405,18 @@ class LocationService implements LocationServiceInterface
 
         $loadedParentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
-        // check if the content already has location below specified parent ID
-        $searchResult = $this->persistenceHandler->searchHandler()->find(
-            new CriterionLogicalAnd(
-                array(
-                    new CriterionContentId( $contentInfo->contentId ),
-                    new CriterionParentLocationId( $loadedParentLocation->id ),
-                )
-            )
-        );
-
-        if ( $searchResult->count > 0 )
-            throw new InvalidArgumentException( "contentInfo", "content is already below the specified parent" );
-
-        // check if the parent is a sub location of one of the existing content locations
-        // this also solves the situation where parent location actually one of the content locations
-        // NOTE: In 4.x it IS possible to add a location to the object below a parent which is below the existing content locations
+        // Check if the parent is a sub location of one of the existing content locations (this also solves the
+        // situation where parent location actually one of the content locations),
+        // or if the content already has location below given location create struct parent
         $existingContentLocations = $this->loadLocations( $contentInfo );
-
         if ( !empty( $existingContentLocations ) )
         {
             foreach ( $existingContentLocations as $existingContentLocation )
             {
-                if ( stripos( $existingContentLocation->pathString, $loadedParentLocation->pathString ) !== false )
+                if ( stripos( $loadedParentLocation->pathString, $existingContentLocation->pathString ) !== false )
                     throw new InvalidArgumentException( "locationCreateStruct", "specified parent is a sub location of one of the existing content locations" );
+                if ( $loadedParentLocation->id == $existingContentLocation->parentLocationId )
+                    throw new InvalidArgumentException( "locationCreateStruct", "content is already below the specified parent" );
             }
         }
 
@@ -436,19 +430,13 @@ class LocationService implements LocationServiceInterface
             $createStruct->hidden = true;
             $createStruct->invisible = true;
         }
-        else
+        elseif ( $loadedParentLocation->hidden || $loadedParentLocation->invisible )
         {
-            try
-            {
-                $parentParentLocation = $this->loadLocation( $loadedParentLocation->parentLocationId );
-                if ( $parentParentLocation->hidden || $parentParentLocation->invisible )
-                    $createStruct->invisible = true;
-            }
-            catch ( APINotFoundException $e ) {}
+            $createStruct->invisible = true;
         }
 
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
-        $createStruct->contentId = (int) $contentInfo->contentId;
+        $createStruct->contentId = (int) $contentInfo->id;
         $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
 
         // @todo: set pathIdentificationString
@@ -652,29 +640,36 @@ class LocationService implements LocationServiceInterface
      */
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
+        if ( $spiLocation->id === 1 )// Workaround for missing ContentInfo on root location
+            $contentInfo = new ContentInfo(
+                array(
+                    'id' => 0,
+                    'name' => 'Top Level Nodes',
+                    'sectionId' => 1,
+                    'mainLocationId' => 1,
+                    'contentTypeId' => 1
+                )
+            );
+        else
+            $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
 
-        $childrenLocations = $this->searchChildrenLocations(
-            $spiLocation->id,
-            $spiLocation->sortField,
-            $spiLocation->sortOrder
-        );
+        $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, null, APILocation::SORT_ORDER_ASC, 0, 0 );
 
         return new Location(
             array(
-                'contentInfo'             => $contentInfo,
-                'id'                      => $spiLocation->id,
-                'priority'                => $spiLocation->priority,
-                'hidden'                  => $spiLocation->hidden,
-                'invisible'               => $spiLocation->invisible,
-                'remoteId'                => $spiLocation->remoteId,
-                'parentLocationId'        => $spiLocation->parentId,
-                'pathString'              => $spiLocation->pathString,
-                'modifiedSubLocationDate' => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
-                'depth'                   => $spiLocation->depth,
-                'sortField'               => $spiLocation->sortField,
-                'sortOrder'               => $spiLocation->sortOrder,
-                'childCount'              => $childrenLocations->count
+                'contentInfo' => $contentInfo,
+                'id' => (int) $spiLocation->id,
+                'priority' => (int) $spiLocation->priority,
+                'hidden' => (bool) $spiLocation->hidden,
+                'invisible' => (bool) $spiLocation->invisible,
+                'remoteId' => $spiLocation->remoteId,
+                'parentLocationId' => (int) $spiLocation->parentId,
+                'pathString' => $spiLocation->pathString,
+                'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiLocation->modifiedSubLocation ),
+                'depth' => (int) $spiLocation->depth,
+                'sortField' => (int) $spiLocation->sortField,
+                'sortOrder' => (int) $spiLocation->sortOrder,
+                'childCount' => $childrenLocations->count
             )
         );
     }
@@ -693,10 +688,10 @@ class LocationService implements LocationServiceInterface
         switch ( $sortField )
         {
             case APILocation::SORT_FIELD_PATH:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
 
             case APILocation::SORT_FIELD_PUBLISHED:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateCreated( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished( $sortOrder );
 
             case APILocation::SORT_FIELD_MODIFIED:
                 return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified( $sortOrder );
@@ -729,7 +724,7 @@ class LocationService implements LocationServiceInterface
             // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
 
             default:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath( $sortOrder );
+                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
         }
     }
 }

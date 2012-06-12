@@ -1,7 +1,16 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Repository\Values\User\UserCreateStruct class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct,
+    eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used to create a new user in the repository
@@ -31,9 +40,12 @@ class UserCreateStruct extends APIUserCreateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        if ( $language === null )
-            $this->fields[$fieldDefIdentifier][$this->mainLanguageCode] = $value;
-        else
-            $this->fields[$fieldDefIdentifier][$language] = $value;
+        $this->fields[] = new Field(
+            array(
+                'fieldDefIdentifier' => $fieldDefIdentifier,
+                'value' => $value,
+                'languageCode' => $language
+            )
+        );
     }
 }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Repository\Values\Content\TrashItem class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
@@ -37,9 +45,24 @@ class TrashItem extends APITrashItem
         switch ( $property )
         {
             case 'contentId':
-                return $this->contentInfo->contentId;
+                return $this->contentInfo->id;
         }
 
         return parent::__get( $property );
+    }
+
+    /**
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'contentId' )
+            return true;
+
+        return parent::__isset( $property );
     }
 }

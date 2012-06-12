@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Media;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\PropertyNotFound;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\API\Repository\IOService,
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**
  * Value for Media field type
@@ -19,12 +19,12 @@ use eZ\Publish\Core\Repository\FieldType\ValueInterface,
  *                            (for example "44b963c9e8d1ffa80cbb08e84d576735.avi").
  * @property string $mimeType
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * BinaryFile object
      *
-     * @var \ezp\Io\BinaryFile
+     * @var \eZ\Publish\API\Repository\Values\IO\BinaryFile
      */
     public $file;
 
@@ -106,12 +106,12 @@ class Value extends BaseValue implements ValueInterface
      * $binaryValue->file = $binaryValue->getHandler()->createFromLocalPath( '/path/to/local/file.txt' );
      * </code>
      *
-     * @param null|string $file File to use
+     * @param \eZ\Publish\API\Repository\IOService $IOService
+     * @param string|null $file
      */
-    public function __construct( $file = null )
+    public function __construct( IOService $IOService, $file = null )
     {
-        $this->handler = new Handler;
-
+        $this->handler = new Handler( $IOService );
         if ( $file !== null )
         {
             $this->file = $this->handler->createFromLocalPath( $file );
@@ -121,22 +121,13 @@ class Value extends BaseValue implements ValueInterface
 
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
-     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function __toString()
     {
-        if ( !isset( $this->file->path ) )
+        if ( !isset( $this->file->id ) )
             return "";
 
-        return $this->file->path;
+        return $this->file->id;
     }
 
     /**
@@ -149,41 +140,24 @@ class Value extends BaseValue implements ValueInterface
         switch ( $name )
         {
             case 'filename':
-                return basename( $this->file->path );
+                return basename( $this->file->id );
 
             case 'mimeType':
-                return $this->file->contentType->__toString();
-
-            case 'mimeTypeCategory':
-                return $this->file->contentType->type;
-
-            case 'mimeTypePart':
-                return $this->file->contentType->subType;
+                return $this->file->mimeType;
 
             case 'filesize':
                 return $this->file->size;
 
             case 'filepath':
-                return $this->file->path;
+                return $this->file->id;
 
             default:
-                throw new PropertyNotFound( $name, get_class( $this ) );
+                throw new PropertyNotFoundException( $name, get_class( $this ) );
         }
     }
 
     /**
-     * Returns handler object.
-     * Useful manipulate {@link self::$file}
-     *
-     * @return \eZ\Publish\Core\Repository\FieldType\Media\Handler
-     */
-    public function getHandler()
-    {
-        return $this->handler;
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

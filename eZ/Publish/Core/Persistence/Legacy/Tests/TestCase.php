@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql as EzcDbHandlerPgsql,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite as EzcDbHandlerSqlite,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    ezcQuerySelect;
 
 /**
  * Base test case for database related tests
@@ -50,7 +51,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         if ( !$this->dsn )
         {
-            $this->dsn = @$_ENV['DATABASE'] ?: 'sqlite://:memory:';
+            $this->dsn = isset( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
             $this->db = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
         }
 
@@ -120,20 +121,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
         foreach ( $queries as $query )
         {
             $handler->exec( $query );
-        }
-
-        if ( $this->db === 'sqlite' )
-        {
-            // We need this trigger for SQLite, because it does not support a multi
-            // column key with one of them being set to auto-increment.
-            $handler->exec(
-                'CREATE TRIGGER my_ezcontentobject_attribute_increment
-                AFTER INSERT
-                ON ezcontentobject_attribute
-                BEGIN
-                    UPDATE ezcontentobject_attribute SET id = (SELECT MAX(id) FROM ezcontentobject_attribute) + 1  WHERE rowid = new.rowid AND id = 0;
-                END;'
-            );
         }
 
         $this->resetSequences();
@@ -266,7 +253,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * @param string $message
      * @return void
      */
-    public static function assertQueryResult( array $expectation, \ezcQuerySelect $query, $message = null )
+    public static function assertQueryResult( array $expectation, ezcQuerySelect $query, $message = null )
     {
         $statement = $query->prepare();
         $statement->execute();

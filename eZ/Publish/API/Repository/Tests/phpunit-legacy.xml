@@ -2,12 +2,12 @@
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="../../../../../bootstrap.php"
-         processIsolation="true"
+         processIsolation="false"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
     <php>
-        <env name="repositoryInit" value="../../../Core/Repository/Tests/Service/Legacy/common.php" />
+		<env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Legacy" />
         <env name="backendVersion" value="5" />
     </php>
     <testsuites>
@@ -22,6 +22,9 @@
             <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>
             <file>IOServiceTest.php</file>
+            <file>IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
+            <file>URLAliasServiceTest.php</file>
+            <file>URLWildcardServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
             <file>ContentTypeServiceAuthorizationTest.php</file>
@@ -29,7 +32,8 @@
             <file>LocationServiceAuthorizationTest.php</file>
             <file>UserServiceAuthorizationTest.php</file>
             <file>RoleServiceAuthorizationTest.php</file>
-            <directory>./Exceptions</directory>
+            <file>TrashServiceAuthorizationTest.php</file>
+            <file>URLWildcardServiceAuthorizationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

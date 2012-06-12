@@ -32,6 +32,16 @@ class LanguageServiceStub implements LanguageService
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub
+     */
+    private $contentService;
+
+    /**
+     * @var string
+     */
+    private $defaultLanguageCode;
+
+    /**
      * @var integer
      */
     private $nextId = 0;
@@ -50,10 +60,18 @@ class LanguageServiceStub implements LanguageService
      * Instantiates the language service.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub $contentService
+     * @param string $defaultLanguageCode
      */
-    public function __construct( RepositoryStub $repository )
+    public function __construct(
+        RepositoryStub $repository,
+        ContentServiceStub $contentService,
+        $defaultLanguageCode
+    )
     {
         $this->repository = $repository;
+        $this->contentService = $contentService;
+        $this->defaultLanguageCode = $defaultLanguageCode;
 
         $this->initFromFixture();
     }
@@ -72,23 +90,23 @@ class LanguageServiceStub implements LanguageService
     {
         if ( isset( $this->codes[$languageCreateStruct->languageCode] ) )
         {
-            throw new InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
         if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $language = new Language(
             array(
-                'id'            =>  ++$this->nextId,
-                'name'          =>  $languageCreateStruct->name,
-                'enabled'       =>  $languageCreateStruct->enabled,
-                'languageCode'  =>  $languageCreateStruct->languageCode
+                'id' => ++$this->nextId,
+                'name' => $languageCreateStruct->name,
+                'enabled' => $languageCreateStruct->enabled,
+                'languageCode' => $languageCreateStruct->languageCode
             )
         );
 
-        $this->languages[$language->id]       = $language;
+        $this->languages[$language->id] = $language;
         $this->codes[$language->languageCode] = $language->id;
 
         return $language;
@@ -108,15 +126,15 @@ class LanguageServiceStub implements LanguageService
     {
         if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->languages[$language->id] = new Language(
             array(
-                'id'            =>  $language->id,
-                'name'          =>  $newName,
-                'enabled'       =>  $language->enabled,
-                'languageCode'  =>  $language->languageCode
+                'id' => $language->id,
+                'name' => $newName,
+                'enabled' => $language->enabled,
+                'languageCode' => $language->languageCode
             )
         );
 
@@ -134,15 +152,15 @@ class LanguageServiceStub implements LanguageService
     {
         if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->languages[$language->id] = new Language(
             array(
-                'id'            =>  $language->id,
-                'name'          =>  $language->name,
-                'enabled'       =>  true,
-                'languageCode'  =>  $language->languageCode
+                'id' => $language->id,
+                'name' => $language->name,
+                'enabled' => true,
+                'languageCode' => $language->languageCode
             )
         );
     }
@@ -158,15 +176,15 @@ class LanguageServiceStub implements LanguageService
     {
         if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->languages[$language->id] = new Language(
             array(
-                'id'            =>  $language->id,
-                'name'          =>  $language->name,
-                'enabled'       =>  false,
-                'languageCode'  =>  $language->languageCode
+                'id' => $language->id,
+                'name' => $language->name,
+                'enabled' => false,
+                'languageCode' => $language->languageCode
             )
         );
     }
@@ -186,7 +204,7 @@ class LanguageServiceStub implements LanguageService
         {
             return $this->languages[$this->codes[$languageCode]];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -214,7 +232,7 @@ class LanguageServiceStub implements LanguageService
         {
             return $this->languages[$languageId];
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -231,7 +249,11 @@ class LanguageServiceStub implements LanguageService
     {
         if ( true !== $this->repository->hasAccess( 'content', 'translations' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+        if ( count( $this->contentService->__loadContentInfoByLanguageCode( $language->languageCode ) ) )
+        {
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
         unset( $this->languages[$language->id], $this->codes[$language->languageCode] );
     }
@@ -243,17 +265,27 @@ class LanguageServiceStub implements LanguageService
      */
     public function getDefaultLanguageCode()
     {
-        // TODO: Implement getDefaultLanguageCode() method.
+        return $this->defaultLanguageCode;
     }
 
     /**
      * instanciates an object to be used for creating languages
-     * 
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
     public function newLanguageCreateStruct()
     {
         return new LanguageCreateStruct();
+    }
+
+    /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
     }
 
     /**

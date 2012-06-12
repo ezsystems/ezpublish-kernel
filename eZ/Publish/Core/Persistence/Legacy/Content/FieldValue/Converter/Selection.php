@@ -29,7 +29,7 @@ class Selection implements Converter
     {
         $optionsFlip = array_flip( $value->fieldSettings["options"] );
         $options = array();
-        foreach ( $value->data->selection as $value )
+        foreach ( $value->data as $value )
         {
             if ( isset( $optionsFlip[$value] ) )
             {
@@ -47,14 +47,12 @@ class Selection implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new SelectionValue(
-            array_values(
-                array_intersect_key(
-                    $fieldValue->fieldSettings["options"],
-                    $value->dataText !== ""
-                        ? array_flip( explode( "-", $value->dataText ) )
-                        : array()
-                )
+        $fieldValue->data = array_values(
+            array_intersect_key(
+                $fieldValue->fieldSettings["options"],
+                $value->dataText !== ""
+                    ? array_flip( explode( "-", $value->dataText ) )
+                    : array()
             )
         );
     }

@@ -10,11 +10,10 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use \PHPUnit_Framework_TestCase;
+
 use \eZ\Publish\API\Repository\Repository;
-
-
 use \eZ\Publish\API\Repository\Values\ValueObject;
-
+use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Base class for api specific tests.
@@ -22,14 +21,19 @@ use \eZ\Publish\API\Repository\Values\ValueObject;
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var \eZ\Publish\API\Repository\Tests\SetupFactory
      */
-    private $repositoryInit;
+    private $setupFactory;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
     private $repository;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\IdManager
+     */
+    private $idManager;
 
     /**
      * @return void
@@ -40,7 +44,15 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         try
         {
-            $this->getRepository();
+            $repository = $this->getRepository();
+
+            // Set session if we are testing the REST backend to make it
+            // possible to persist data in the memory backend during multiple
+            // requests.
+            if ( $repository instanceof \eZ\Publish\API\REST\Client\Sessionable )
+            {
+                $repository->setSession( $id = md5( microtime() ) );
+            }
         }
         catch ( \Exception $e )
         {
@@ -69,6 +81,40 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns the ID generator, fitting to the repository implementation
+     *
+     * @return \eZ\Publish\API\Repository\Tests\IdManager
+     */
+    protected function getIdManager()
+    {
+        return $this->getSetupFactory()->getIdManager();
+    }
+
+    /**
+     * Generates a repository specific ID value.
+     *
+     * @param string $type
+     * @param mixed $rawId
+     * @return mixed
+     */
+    protected function generateId( $type, $rawId )
+    {
+        return $this->getIdManager()->generateId( $type, $rawId );
+    }
+
+    /**
+     * Parses a repository specific ID value.
+     *
+     * @param string $type
+     * @param mixed $id
+     * @return mixed
+     */
+    protected function parseId( $type, $id )
+    {
+        return $this->getIdManager()->parseId( $type, $id );
+    }
+
+    /**
      * Tests if the currently tested api is based on a V4 implementation.
      *
      * @return boolean
@@ -85,40 +131,38 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if ( null === $this->repository )
         {
-            $file = $this->getRepositoryInit();
-
             // Change working directory to project root. This is required by the
             // current legacy implementation.
             $count = substr_count( __NAMESPACE__, '\\' ) + 1;
 
             chdir( realpath( str_repeat( '../', $count ) ) );
 
-            $this->repository = include $file;
-
-            $userService = $this->repository->getUserService();
-            $this->repository->setCurrentUser( $userService->loadUser( 14 ) );
+            $this->repository = $this->getSetupFactory()->getRepository();
         }
         return $this->repository;
     }
 
-    private function getRepositoryInit()
+    /**
+     * @return \eZ\Publish\API\Repository\Tests\SetupFactory
+     */
+    private function getSetupFactory()
     {
-        if ( null === $this->repositoryInit )
+        if ( null === $this->setupFactory )
         {
-            if ( false === isset( $_ENV['repositoryInit'] ) )
+            if ( false === isset( $_ENV['setupFactory'] ) )
             {
-                throw new \ErrorException( 'Missing mandatory setting $_ENV["repositoryInit"].' );
+                throw new \ErrorException( 'Missing mandatory setting $_ENV["setupFactory"].' );
             }
 
-            $file = realpath( $_ENV['repositoryInit'] );
-            if ( false === file_exists( $file ) )
+            $setupClass = $_ENV['setupFactory'];
+            if ( false === class_exists( $setupClass ) )
             {
-                throw new \ErrorException( '$_ENV["repositoryInit"] does not reference an existing file.' );
+                throw new \ErrorException( '$_ENV["setupFactory"] does not reference an existing class.' );
             }
 
-            $this->repositoryInit = $file;
+            $this->setupFactory = new $setupClass;
         }
-        return $this->repositoryInit;
+        return $this->setupFactory;
     }
 
     /**
@@ -182,5 +226,99 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $actualValue,
             sprintf( 'Object property "%s" incorrect.', $propertyName )
         );
+    }
+
+    /**
+     * Create a user fixture in a variable named <b>$user</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createUserVersion1()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $editorsGroupId = 13;
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $group ) );
+        /* END: Inline */
+
+        return $user;
+    }
+
+    /**
+     * Create a user fixture in a variable named <b>$user</b>,
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createMediaUserVersion1()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        // ID of the "Users" user group in an eZ Publish demo installation
+        $usersGroupId = 4;
+
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        // Get a group create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Media Editor' );
+
+        // Create new group with media editor rights
+        $userGroup = $userService->createUserGroup(
+            $userGroupCreate,
+            $userService->loadUserGroup( $usersGroupId )
+        );
+        $roleService->assignRoleToUserGroup(
+            $roleService->loadRoleByIdentifier( 'Editor' ),
+            $userGroup,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/1/43/' )
+                )
+            )
+        );
+
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $userGroup ) );
+        /* END: Inline */
+
+        return $user;
     }
 }

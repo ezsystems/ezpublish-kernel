@@ -8,11 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\Logic,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\Logic,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -22,7 +24,6 @@ use ezp\Base\Exception\InvalidArgumentValue,
  * The in memory db store and also json representation have a one to one mapping to defined value objects.
  * But only their plain properties, associations are not handled and all data is stored in separate "buckets" similar
  * to how it would be in a RDBMS servers.
- *
  */
 class Backend
 {
@@ -57,30 +58,37 @@ class Backend
      * @param string $type
      * @param array $data
      * @param boolean $autoIncrement
+     * @param string $idColumn By default, id column is 'id', but this can be customized here (e.g. for 'contentId')
      * @return object
      * @throws InvalidArgumentValue On invalid $type
-     * @throws Logic If $autoIncrement is false but $data does not include an id
-     * @throws Logic If provided id already exists (and if defined, data contain same status property value)
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If $autoIncrement is false but $data does not include an id
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If provided id already exists (and if defined, data contain same status property value)
      */
-    public function create( $type, array $data, $autoIncrement = true )
+    public function create( $type, array $data, $autoIncrement = true, $idColumn = 'id' )
     {
         if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         if ( $autoIncrement )
         {
-            $data['id'] = $this->getNextId( $type );
+            $data[$idColumn] = $this->getNextId( $type, $idColumn );
         }
-        else if ( !$data['id'] )
+        else if ( !$data[$idColumn] )
         {
           throw new Logic( 'create', '$autoIncrement is false but no id is provided' );
         }
 
         foreach ( $this->data[$type] as $item )
         {
-            if ( $item['id'] == $data['id'] && ( !isset( $item['status'] ) || $item['status'] == $data['status'] ) )
+            if ( $item[$idColumn] == $data[$idColumn] && ( !isset( $item['status'] ) || $item['status'] == $data['status'] ) )
                 throw new Logic( 'create', 'provided id already exist' );
         }
+
+        /*foreach ( $data as $prop => $value )
+        {
+            if ( $value === null )
+                throw new InvalidArgumentValue( 'data', "'$prop' on '$type' was of value NULL" );
+        }*/
 
         $this->data[$type][] = $data;
         return $this->toValue( $type, $data );
@@ -91,12 +99,13 @@ class Backend
      *
      * @param string $type
      * @param int|string $id
+     * @param string $idColumn
      * @return object
-     * @throws InvalidArgumentValue On invalid $type
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid $type
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
-     * @throws \ezp\Base\Exception\Logic If several items exists with same id
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If several items exists with same id
      */
-    public function load( $type, $id )
+    public function load( $type, $id, $idColumn = 'id' )
     {
         if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
@@ -105,7 +114,7 @@ class Backend
         $found = false;
         foreach ( $this->data[$type] as $item )
         {
-            if ( $item['id'] != $id )
+            if ( $item[$idColumn] != $id )
                 continue;
             if ( $return )
                 throw new Logic( $type, "more than one item exist with id: {$id}" );
@@ -115,7 +124,7 @@ class Backend
         }
 
         if ( !$found )
-            throw new NotFoundException( $type, $id );
+            throw new NotFound( $type, $id );
 
         return $return;
     }
@@ -163,9 +172,9 @@ class Backend
      * @return boolean False if data does not exist and can not be updated
      * @uses updateByMatch()
      */
-    public function update( $type, $id, array $data, $union = true )
+    public function update( $type, $id, array $data, $union = true, $idColumn = 'id' )
     {
-        return $this->updateByMatch( $type, array( 'id' => $id ), $data, $union );
+        return $this->updateByMatch( $type, array( $idColumn => $id ), $data, $union, $idColumn );
     }
 
     /**
@@ -181,13 +190,19 @@ class Backend
      * @return boolean False if data does not exist and can not be updated
      * @throws InvalidArgumentValue On invalid $type
      */
-    public function updateByMatch( $type, array $match, array $data, $union = true )
+    public function updateByMatch( $type, array $match, array $data, $union = true, $idColumn = 'id' )
     {
         if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         // Make sure id isn't changed
-        unset( $data['id'] );
+        unset( $data[$idColumn] );
+
+        /*foreach ( $data as $prop => $value )
+        {
+            if ( $value === null )
+                throw new InvalidArgumentValue( 'data', "'$prop' on '$type' was of value NULL" );
+        }*/
 
         $return = false;
         foreach ( $this->data[$type] as $key => $item )
@@ -212,9 +227,9 @@ class Backend
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
      * @uses deleteByMatch()
      */
-    public function delete( $type, $id )
+    public function delete( $type, $id, $idColumn = 'id' )
     {
-        $this->deleteByMatch( $type, array( 'id' => $id ) );
+        $this->deleteByMatch( $type, array( $idColumn => $id ) );
     }
 
     /**
@@ -244,7 +259,7 @@ class Backend
         }
 
         if ( !$found )
-            throw new NotFoundException( $type, $match );
+            throw new NotFound( $type, $match );
     }
 
     /**
@@ -375,12 +390,12 @@ class Backend
      * @param $type
      * @return int
      */
-    private function getNextId( $type )
+    private function getNextId( $type, $idColumn = 'id' )
     {
         $id = 0;
         foreach ( $this->data[$type] as $item )
         {
-            $id = max( $id, $item['id'] );
+            $id = max( $id, $item[$idColumn] );
         }
         return $id + 1;
     }
@@ -404,14 +419,14 @@ class Backend
                 if ( $type === "Content\\Field" && $prop === "value" && ! $data["value"] instanceof FieldValue )
                 {
                     $fieldTypeNS = $this->getFieldTypeNamespace( $obj );
-                    $fieldValueClassName =  "$fieldTypeNS\\Value";
+                    $fieldValueClassName = "$fieldTypeNS\\Value";
                     $fieldTypeValue = new $fieldValueClassName;
                     foreach ( $data["value"] as $fieldValuePropertyName => $fieldValuePropertyValue )
                     {
                         $fieldTypeValue->$fieldValuePropertyName = $fieldValuePropertyValue;
                     }
 
-                    $fieldTypeeClassName =  "$fieldTypeNS\\Type";
+                    $fieldTypeeClassName = "$fieldTypeNS\\Type";
                     $fieldType = new $fieldTypeeClassName;
                     $value = $fieldType->toPersistenceValue( $fieldTypeValue );
                 }
@@ -423,12 +438,21 @@ class Backend
                         $value->$constraintName = $constraintValue;
                     }
                 }
+                else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "defaultValue" && !$data["defaultValue"] instanceof FieldValue )
+                {
+                    $value = new FieldValue;
+                    foreach ( $data["defaultValue"] as $propertyName => $propertyValue )
+                    {
+                        $value->$propertyName = $propertyValue;
+                    }
+                }
                 else
                 {
                     $value = $data[$prop];
                 }
             }
         }
+
         return $this->joinToValue( $obj, $joinInfo );
     }
 
@@ -446,11 +470,18 @@ class Backend
             if ( isset( $info['single'] ) && $info['single'] )
             {
                 $value =& $item->$property;
-                $value = $this->toValue(
-                    $info['type'],
-                    $value[0],
-                    ( isset( $info['sub'] ) ? $info['sub'] : array() )
-                );
+                if ( !empty( $value ) )
+                {
+                    $value = $this->toValue(
+                        $info['type'],
+                        $value[0],
+                        ( isset( $info['sub'] ) ? $info['sub'] : array() )
+                    );
+                }
+                else
+                {
+                    $value = null;
+                }
                 continue;
             }
 
@@ -482,23 +513,23 @@ class Backend
      * @var array
      */
     private $tempFieldTypeMapping = array(
-        'ezstring' => 'eZ\Publish\Core\Repository\FieldType\TextLine',
-        'ezinteger' => 'eZ\Publish\Core\Repository\FieldType\Integer',
-        'ezauthor' => 'eZ\Publish\Core\Repository\FieldType\Author',
-        'ezfloat' => 'eZ\Publish\Core\Repository\FieldType\Float',
-        'eztext' => 'eZ\Publish\Core\Repository\FieldType\TextBlock',
-        'ezboolean' => 'eZ\Publish\Core\Repository\FieldType\Checkbox',
-        'ezdatetime' => 'eZ\Publish\Core\Repository\FieldType\DateAndTime',
-        'ezkeyword' => 'eZ\Publish\Core\Repository\FieldType\Keyword',
-        'ezurl' => 'eZ\Publish\Core\Repository\FieldType\Url',
-        'ezcountry' => 'eZ\Publish\Core\Repository\FieldType\Country',
-        'ezbinaryfile' => 'eZ\Publish\Core\Repository\FieldType\BinaryFile',
-        'ezmedia' => 'eZ\Publish\Core\Repository\FieldType\Media',
-        'ezxmltext' => 'eZ\Publish\Core\Repository\FieldType\XmlText',
-        'ezobjectrelationlist' => 'eZ\Publish\Core\Repository\FieldType\RelationList',
-        'ezselection' => 'eZ\Publish\Core\Repository\FieldType\Selection',
-        'ezsrrating' => 'eZ\Publish\Core\Repository\FieldType\Rating',
-        'ezimage' => 'eZ\Publish\Core\Repository\FieldType\Image',
-        'ezobjectrelation' => 'eZ\Publish\Core\Repository\FieldType\Relation',
+        'ezstring' => 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine',
+        'ezinteger' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Integer',
+        'ezauthor' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Author',
+        'ezfloat' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Float',
+        'eztext' => 'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock',
+        'ezboolean' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox',
+        'ezdatetime' => 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime',
+        'ezkeyword' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Keyword',
+        'ezurl' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Url',
+        'ezcountry' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Country',
+        'ezbinaryfile' => 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile',
+        'ezmedia' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Media',
+        'ezxmltext' => 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText',
+        'ezobjectrelationlist' => 'eZ\\Publish\\Core\\Repository\\FieldType\\RelationList',
+        'ezselection' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Selection',
+        'ezsrrating' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Rating',
+        'ezimage' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Image',
+        'ezobjectrelation' => 'eZ\\Publish\\Core\\Repository\\FieldType\\Relation',
     );
 }

@@ -22,11 +22,11 @@ class Checkbox implements Converter
      * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = (int)$value->data->bool;
+        $storageFieldValue->dataInt = (int)$value->data;
         $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
     }
 
@@ -38,7 +38,7 @@ class Checkbox implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new CheckboxValue( (bool)$value->dataInt );
+        $fieldValue->data = (bool)$value->dataInt;
         $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
     }
 
@@ -67,7 +67,7 @@ class Checkbox implements Converter
                 'defaultValue' => $defaultValue
             )
         );
-        $fieldDef->defaultValue->data = new CheckboxValue( $defaultValue );
+        $fieldDef->defaultValue->data = $defaultValue;
     }
 
     /**

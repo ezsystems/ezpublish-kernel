@@ -4,60 +4,45 @@ Welcome to the new eZ Publish API, this code repository contains several layers 
 ##What is the Public API
 The public API will give you an easy access to the content repository of eZ Publish. The content repository is the core component which manages content, locations (former Nodes), sections, content types (former Content Classes), user groups, users and roles. It also provides a new clear interface for plugging in custom field types (former Datatypes).
 
-The public API is build on top of a layered architecture including a new persistence layer for abstracting the storage functionality. By using the public API your applications will be forward compatible to future releases based on enhanced, more scalable and more performant storage engines. Applications based on the public API are also fully backwards compatible by using the included storage engine based on the current kernel and database model.
+The public API is built on top of a layered architecture including a new persistence layer for abstracting the storage functionality. By using the public API your applications will be forward compatible to future releases based on enhanced, more scalable and more performant storage engines. Applications based on the public API are also fully backwards compatible by using the included storage engine based on the current kernel and database model ("Legacy" storage engine).
 
 ## Alpha Notice
-The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Annapurna (end of November), and fully stable by the time we release Etna (Q2 2012). But contribution is very open today, go for it !
+The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Etna, and fully stable as the core of Kilimanjaro (Q4 2012). But contribution is very open today, go for it !
 
-##Directory Overview
+##Directory Layout
+* [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interface (interfaces eZ Publish implements)*
+* [eZ/Publish/API/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/)  *Public API Repository Interfaces*
+* [eZ/Publish/API/Repository/Examples](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Examples/)  *Examples of Public API use*
+
+* [eZ/Publish/SPI](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/)  *Service provider interfaces (interfaces extensions can implement)*
+* [eZ/Publish/SPI/Persistence](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/Persistence/)  *Persistence Interface (private api for now)*
+* [eZ/Publish/SPI/IO](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/IO/)  *Io (file) Interface (private api for now)*
+
+* [eZ/Publish/Core/Base](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Base/)  *Common code needed by Core parts bellow*
+* [eZ/Publish/Core/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Repository/)  *Public API Repository implementation*
+* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine aka Persistence-handler*
+* [eZ/Publish/Core/Persistence/InMemory](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/InMemory/)  *InMemory  Storage-Engine aka Persistence-handler (for unit testing)*
+* [eZ/Publish/Core/IO/LegacyHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *Legacy Io (file) Handler*
+* [eZ/Publish/Core/IO/InMemoryHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *InMemory Io handler (for unit testing)*
+
 * [design/](/ezsystems/ezp-next/tree/master/design/)	 *Early uml class diagrams*
 * [doc/](/ezsystems/ezp-next/tree/master/doc/)  *Placeholder for bc doc and other doc that can not be on wiki or inline*
-* [doc/Stubs](/ezsystems/ezp-next/tree/master/doc/Stubs/)  *Code stubs for common code use*
-* [ezp/](/ezsystems/ezp-next/tree/master/ezp/)  *Main Namespace for eZ Publish API code*
-* [ezp/Base](/ezsystems/ezp-next/tree/master/ezp/Base/)  *Base functionality that other modules depend on*
-* [ezp/Content](/ezsystems/ezp-next/tree/master/ezp/Content/)  *Content related domain objects and services*
-* [ezp/Io](/ezsystems/ezp-next/tree/master/ezp/Io/)  *Binaryfiles related objects, services and handlers*
-* [eZ/Publish/SPI/Persistence](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/Persistence/)  *Persistence API (private api for now)*
-* [ezp/User](/ezsystems/ezp-next/tree/master/ezp/User/)  *User related domain objects and services*
-* config.php-RECOMMENDED  *Default config file (currently DEVELOPMENT config)*
-* phpunit.xml  *PHPUnit 3.5+ xml configuration*
+* config.php-DEVELOPMENT  *Default config file for development use*
+* phpunit.xml  *PHPUnit 3.6+ xml configuration*
 * Readme.md  *This text*
-* testBootstrap.php  *Bootstrap for test system and testing*
+* bootstrap.php  *System Bootstrap*
 
-##Requirements
-* php: 5.3+
-* Currently a good portion willingness to digg into the code
+##Dependencies
+* pear: PHPUnit 3.6 & eZ Components
+* PHP 5 Module: php5_sqlit
+* Database: sqlite3 if not installed by above stage
 
-##Installing on eZ Publish
-###Make ezp-next an eZ Publish extension
-In order to get the API in eZ Publish, you currently have to install it as an extension, for instance in `extension/api`:
-
-	ezpublish/extension$ git clone git://github.com/ezsystems/ezp-next.git api
-
-You can of course create a symbolic link if you want to keep the API in another directory.
-
-###Create config.php
-Copy the provided `config.php-RECOMMENDED` file as `config.php` in the cloned directory:
-
-	ezpublish/extension/api$ cp config.php-RECOMMENDED config.php
-
-Edit the file depending on your system (the various possibilities are documented inline)
-
-* eZ Components path
-* Change the value for `ezp` in the `$repositories` array:
-  `'ezp' => 'extension/api/ezp'`
-* Done
-
-### Add the API to the autoloads ignore
-Since the API contains a few classes that are stubs of the eZ Publish ones, you  need to make sure the eZ Publish autoload generator
-will ignore the API when executed.
-
-To do so, create a file named .autoloadignore at the root of your eZ Publish directory, and add the path to the API to it:
-
-	ezpublish$ echo 'extension/api' > .autoloadignore
-
-##Getting started
-<insert link and/or explain it briefly>
+##How to get started
+* Clone this repo
+* Copy config.php-DEVELOPMENT to config.php
+* Modify config.php if needed (if eZ Components is not in pear for instance)
+* Execute "$ php index.php" (cli) to verify that it manages to output some text
+* Execute "$ phpunit" to see current status of missing tests / implementations
 
 ##Bug tracker
 Submitting bug reports is possible on http://issues.ez.no/ezpublish (pick the "ezp-next" component in the right column when reporting).
@@ -68,5 +53,5 @@ eZ Publish API is a fully open source, community-driven project. If you''d like 
 ##Discussing/Exchanging##
 A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
 
-##Copyright and license
-<insert>
+##Copyright & license
+eZ Systems AS & GPL 2.0

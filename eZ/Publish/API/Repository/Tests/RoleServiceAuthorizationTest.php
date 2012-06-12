@@ -17,8 +17,6 @@ use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
  * Test case for operations in the RoleService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\RoleService
- * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest
- * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest
  */
 class RoleServiceAuthorizationTest extends BaseTest
 {
@@ -29,6 +27,7 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testCreateRoleThrowsUnauthorizedException()
     {
@@ -44,7 +43,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         // Instantiate a role create struct.
-        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
         // This call will fail with an "UnauthorizedException"
         $roleService->createRole( $roleCreate );
@@ -58,10 +57,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::loadRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadRoleThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -84,10 +84,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::loadRoleByIdentifier()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadRoleByIdentifierThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -109,6 +110,8 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::loadRoles()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoles
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testLoadRolesThrowsUnauthorizedException()
     {
@@ -135,10 +138,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testUpdateRoleThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -151,7 +155,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Get a new role update struct and set new values
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-        $roleUpdateStruct->mainLanguageCode = 'eng-GB';
+        $roleUpdateStruct->mainLanguageCode = 'eng-US';
 
         // This call will fail with an "UnauthorizedException"
         $roleService->updateRole( $role, $roleUpdateStruct );
@@ -165,10 +169,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::deleteRole()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testDeleteRole
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testDeleteRoleThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -191,10 +196,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testAddPolicyThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -220,10 +226,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdatePolicy
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testUpdatePolicyThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -233,7 +240,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Get first role policy
         $policies = $role->getPolicies();
-        $policy   = reset( $policies );
+        $policy = reset( $policies );
 
         // Set "Editor" user as current user.
         $repository->setCurrentUser( $user );
@@ -243,7 +250,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $policyUpdate->addLimitation(
             new SubtreeLimitation(
                 array(
-                    'limitationValues' => '/1/'
+                    'limitationValues' => array( '/1/' )
                 )
             )
         );
@@ -260,10 +267,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::removePolicy()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testRemovePolicy
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testRemovePolicyThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -273,7 +281,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Get first role policy
         $policies = $role->getPolicies();
-        $policy   = reset( $policies );
+        $policy = reset( $policies );
 
         // Set "Editor" user as current user.
         $repository->setCurrentUser( $user );
@@ -290,14 +298,15 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testAssignRoleToUserGroupThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -322,14 +331,15 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testAssignRoleToUserGroupThrowsUnauthorizedExceptionWithRoleLimitationParameter()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -345,7 +355,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
             array(
-                'limitationValues'  =>  '/1/2/'
+                'limitationValues' => array( '/1/2/' )
             )
         );
 
@@ -361,14 +371,15 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUnassignRoleFromUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testUnassignRoleFromUserGroupThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -396,10 +407,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testAssignRoleToUserThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -422,10 +434,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testAssignRoleToUserThrowsUnauthorizedExceptionWithRoleLimitationParameter()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -439,7 +452,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
             array(
-                'limitationValues'  =>  '/1/2/'
+                'limitationValues' => array( '/1/2/' )
             )
         );
 
@@ -455,10 +468,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUnassignRoleFromUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testUnassignRoleFromUserThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -484,10 +498,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignments()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignments
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testGetRoleAssignmentsThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -510,10 +525,11 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignmentsForUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testGetRoleAssignmentsForUserThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -536,14 +552,15 @@ class RoleServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignmentsForUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testGetRoleAssignmentsForUserGroupThrowsUnauthorizedException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -579,7 +596,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Get a role create struct instance and set properties
         $roleCreate = $roleService->newRoleCreateStruct( 'testRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+        $roleCreate->mainLanguageCode = 'eng-GB';
 
         $roleCreate->addPolicy( $policyCreate );
 
@@ -588,43 +605,5 @@ class RoleServiceAuthorizationTest extends BaseTest
         /* END: Inline */
 
         return $role;
-    }
-
-    /**
-     * Create a user fixture in a variable named <b>$user</b>,
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    private function createUserVersion1()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Inline */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
-
-        $userService = $repository->getUserService();
-
-        // Instantiate a create struct with mandatory properties
-        $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
-            'secret',
-            'eng-US'
-        );
-        $userCreate->enabled = true;
-
-        // Set some fields required by the user ContentType
-        $userCreate->setField( 'first_name', 'Example' );
-        $userCreate->setField( 'last_name', 'User' );
-
-        // Load parent group for the user
-        $group = $userService->loadUserGroup( $editorsGroupId );
-
-        // Create a new user instance.
-        $user = $userService->createUser( $userCreate, array( $group ) );
-        /* END: Inline */
-
-        return $user;
     }
 }

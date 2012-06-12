@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeGroupId class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
@@ -19,9 +27,9 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
      *
      * Content will be matched if it matches one of the contentTypeGroupId in $value
      *
-     * @param integer|array(integer) One or more contentTypeGroupId that must be matched
+     * @param integer|integer[] $value One or more contentTypeGroupId that must be matched
      *
-     * @throws InvalidArgumentException if the parameters don't match what the criterion expects
+     * @throws \InvalidArgumentException if the parameters don't match what the criterion expects
      */
     public function __construct( $value )
     {

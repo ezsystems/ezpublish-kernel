@@ -12,7 +12,6 @@ use eZ\Publish\SPI\Persistence\ValueObject,
     eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
- *
  */
 class CreateStruct extends ValueObject
 {
@@ -45,7 +44,7 @@ class CreateStruct extends ValueObject
      *
      * @var string[]
      */
-    public $description;
+    public $description = array();
 
     /**
      * String identifier of a type

@@ -8,13 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Checkbox;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
 /**
  * Value for Checkbox field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Boolean value
@@ -31,15 +30,6 @@ class Value extends BaseValue implements ValueInterface
     public function __construct( $boolValue = false )
     {
         $this->bool = $boolValue;
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     * @return \eZ\Publish\Core\Repository\FieldType\Checkbox\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        return new static( (bool)$stringValue );
     }
 
     /**

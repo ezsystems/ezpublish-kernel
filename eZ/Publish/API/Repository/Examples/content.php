@@ -50,13 +50,13 @@ $contentCreateStruct->remoteId = "12345";
 $parentLocationId = 123;
 
 
-// demonstrating transactions 
+// demonstrating transactions
 
 $repository->beginTransaction();
 try {
     $content = $contentService->createContent( $contentCreateStruct, array( $locationService->newLocationCreateStruct( $parentLocationId ) ) );
     // print the new created info data
-    $contentId = $content->contentId;
+    $contentId = $content->id;
     echo $contentId;
 
     // 4.x. the location array is empty because the location are created on publish for the first time
@@ -71,17 +71,17 @@ try {
     }
     // publish the content
     $contentService->publishContent( $content->versionInfo );
-    
+
     // now there is one location with parentId 123 in the returned array
     $locations = $locationService->getLocations( $content->contentInfo );
-    
+
     // print the fields
     foreach ( $content->getFields() as $field )
     {
         echo "Field '{$field->identifier}','{$field->language}': {$field->value}\n";
     }
     $repository->commit();
-    
+
 }
 catch(UnauthorizedException $e) {
     echo "permission denied\n" . $e.getMessage();
@@ -104,7 +104,7 @@ catch(RuntimeException $e) {
 
 // translating the content object (4.x)
 // load the content info object (note this info object differes from the one in the draft after publishing)
-$contentInfo = $contentService->loadContentInfo( $content->contentId );
+$contentInfo = $contentService->loadContentInfo( $content->id );
 
 // create a draft from the before published content
 $content = $contentService->createDraftFromContent( $contentInfo );

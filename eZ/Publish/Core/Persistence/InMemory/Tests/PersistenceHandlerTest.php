@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 
 /**
  * Test case for Persistence\Handler using in-memory storage.
- *
  */
 class PersistenceHandlerTest extends HandlerTest
 {

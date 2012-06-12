@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
@@ -81,9 +80,9 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( $this->backend->count( 'Content\\Type', array( 'groupIds' => $groupId ) ) )
         {
             throw new BadStateException( '$groupId', "Group {$groupId} still contains Types and can not be deleted" );
-        }
+                }
         $this->backend->delete( 'Content\\Type\\Group', $groupId );
-    }
+            }
 
     /**
      * @param mixed $groupId
@@ -217,6 +216,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function create( CreateStruct $contentType )
@@ -257,7 +257,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function delete( $contentTypeId, $status )
     {
-        if ( Type::STATUS_DEFINED === $status && $this->backend->count( 'Content', array( 'typeId' => $contentTypeId ) ) )
+        if ( Type::STATUS_DEFINED === $status && $this->backend->count( 'Content\\ContentInfo', array( 'contentTypeId' => $contentTypeId ) ) )
         {
             throw new BadStateException( '$contentTypeId', "Content of Type {$contentTypeId} still exists, can not delete" );
         }
@@ -394,6 +394,35 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
             array( 'id' => $contentTypeId, 'status' => $status ),
             array( 'groupIds' => array_merge( $type->groupIds, array( $groupId ) ) )
         );
+    }
+
+    /**
+     * Returns field definition for the given field definition id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field definition is not found
+     *
+     * @param mixed $id
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    public function getFieldDefinition( $id, $status )
+    {
+        $fieldDefinition = $this->backend->find(
+            "Content\\Type\\FieldDefinition",
+            array( "id" => $id, "_status" => $status )
+        );
+
+        if ( !isset( $fieldDefinition[0] ) )
+            throw new NotFound(
+                "Content\\Type\\FieldDefinition",
+                array(
+                    "id" => $id,
+                    "status" => $status
+                )
+            );
+
+        return $fieldDefinition[0];
     }
 
     /**

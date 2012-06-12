@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Fields\Storage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
-    ezp\Io\ContentType;
+    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue;
 
 /**
  * Converter for Media field type external storage
@@ -46,12 +45,12 @@ class MediaStorage implements Storage
     public function getFieldData( Field $field, array $context )
     {
         $media = $this->fetch( $field->id, $field->versionNo, $context['connection'] );
-        list( $type, $subType ) = explode( '/', $media['mime_type'] );
 
+        // @todo @fixme: a MediaValue requires an \eZ\Publish\API\Repository\IOService to be created
         $mediaValue = new MediaValue;
         $mediaValue->file = $mediaValue->getHandler()->loadFileFromContentType(
             $media['filename'],
-            new ContentType( $type, $subType )
+            $media['mime_type']
         );
         $mediaValue->file->originalFile = $mediaValue->originalFilename = $media['original_filename'];
         $mediaValue->controls = (bool)$media['controls'];
@@ -157,7 +156,7 @@ class MediaStorage implements Storage
             $q->bindValue( basename( $data->file->path ) )
         )->set(
             $dbHandler->quoteColumn( 'mime_type' ),
-            $q->bindValue( (string)$data->file->contentType )
+            $q->bindValue( $data->file->mimeType )
         )->set(
             $dbHandler->quoteColumn( 'original_filename' ),
             $q->bindValue( $data->originalFilename )
@@ -187,8 +186,7 @@ class MediaStorage implements Storage
             $q->bindValue( (int)$data->isLoop, null, \PDO::PARAM_INT )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -210,7 +208,7 @@ class MediaStorage implements Storage
             $q->bindValue( basename( $data->file->path ) )
         )->set(
             $dbHandler->quoteColumn( 'mime_type' ),
-            $q->bindValue( (string)$data->file->contentType )
+            $q->bindValue( $data->file->mimeType )
         )->set(
             $dbHandler->quoteColumn( 'original_filename' ),
             $q->bindValue( $data->originalFilename )
@@ -243,8 +241,7 @@ class MediaStorage implements Storage
             $q->expr->eq( $dbHandler->quoteColumn( 'version' ), $field->versionNo )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**

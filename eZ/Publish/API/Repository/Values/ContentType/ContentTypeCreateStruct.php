@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
@@ -86,20 +94,20 @@ abstract class ContentTypeCreateStruct extends ValueObject
 
     /**
      * AN array of names with languageCode keys
-     * 
+     *
      * @reauired - at least one name in the main language is required
-     * 
+     *
      * @var array an array of string
      */
     public $names;
 
     /**
      * An array of descriptions with languageCode keys
-     * 
+     *
      * @var array an array of string
      */
     public $descriptions;
-    
+
 
     /**
      * adds a new field definition

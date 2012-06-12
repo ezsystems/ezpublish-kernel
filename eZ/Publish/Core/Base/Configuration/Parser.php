@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Base\Configuration;
 
 /**
  * Configuration Interfaces for configuration parser & writer
- *
  */
 interface Parser
 {

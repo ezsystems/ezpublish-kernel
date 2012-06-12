@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -24,48 +24,48 @@ $legacyHandler = new LegacyPersistenceHandler(
         'dsn' => $dsn,
         'defer_type_update' => false,
         'external_storage' => array(
-            'ezauthor' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezbinaryfile' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFileStorage',
-            'ezboolean' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezcountry' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezdatetime' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezemail' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezfloat' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            //'ezimage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageStorage',
-            'ezinteger' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            //'ezkeyword' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordStorage',
-            'ezmedia' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MediaStorage',
-            //'ezobjectrelationlist' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ObjectRelationListStorage',
-            'ezpage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezselection' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezstring' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezsrrating' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'eztext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezurl' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlStorage',
-            'ezuser' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezxmltext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage'
+            'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezbinaryfile' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\BinaryFileStorage',
+            'ezboolean' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezcountry' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezdatetime' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezemail' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezfloat' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            //'ezimage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ImageStorage',
+            'ezinteger' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            //'ezkeyword' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\KeywordStorage',
+            'ezmedia' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\MediaStorage',
+            //'ezobjectrelationlist' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ObjectRelationListStorage',
+            'ezpage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezselection' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezsrrating' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'eztext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezurl' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\UrlStorage',
+            'ezuser' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'ezxmltext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage'
         ),
         'field_converter' => array(
-            'ezauthor' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezbinaryfile' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFile',
-            'ezboolean' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox',
-            'ezcountry' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country',
-            'ezdatetime' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer',
-            'ezemail' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
-            //'ezfloat' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float',
-            //'ezimage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Image',
-            'ezinteger' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer',
-            'ezkeyword' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezmedia' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media',
-            //'ezobjectrelationlist' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ObjectRelationList',
-            'ezpage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezselection' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection',
-            'ezstring' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezsrrating' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating',
-            'eztext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock',
-            'ezurl' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url',
-            'ezuser' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer',
-            'ezxmltext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText',
+            'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            'ezbinaryfile' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\BinaryFile',
+            'ezboolean' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Checkbox',
+            'ezcountry' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Country',
+            'ezdatetime' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
+            'ezemail' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            //'ezfloat' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Float',
+            //'ezimage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Image',
+            'ezinteger' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
+            'ezkeyword' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            'ezmedia' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Media',
+            //'ezobjectrelationlist' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ObjectRelationList',
+            'ezpage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            'ezselection' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Selection',
+            'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            'ezsrrating' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Rating',
+            'eztext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextBlock',
+            'ezurl' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Url',
+            'ezuser' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
+            'ezxmltext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\XmlText',
          )
     )
 );
@@ -96,7 +96,7 @@ $legacyHandler = new LegacyPersistenceHandler(
 
 // Insert some default data
     $data = require __DIR__ . '/_fixtures/full_dump.php';
-    //$data =  require __DIR__ . '/_fixtures/mini_dump.php';
+    //$data = require __DIR__ . '/_fixtures/mini_dump.php';
     foreach ( $data as $table => $rows )
     {
         // Check that at least one row exists
@@ -145,21 +145,7 @@ $legacyHandler = new LegacyPersistenceHandler(
         }
     }
 
-
-
-    if ( $db === 'sqlite' )
-    {
-        // We need trigger for SQLite, as it does not support a multicolumn key with one of them being set to auto-increment.
-        $handler->exec(
-            'CREATE TRIGGER my_ezcontentobject_attribute_increment
-            AFTER INSERT
-            ON ezcontentobject_attribute
-            BEGIN
-                UPDATE ezcontentobject_attribute SET id = (SELECT MAX(id) FROM ezcontentobject_attribute) + 1  WHERE rowid = new.rowid AND id = 0;
-            END;'
-        );
-    }
-    else if ( $db === 'pgsql' )
+    if ( $db === 'pgsql' )
     {
         // Update PostgreSQL sequences
         $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $legacyHandlerDir . '/Legacy/Tests/_fixtures/setval.pgsql.sql' ) ) );
@@ -169,4 +155,4 @@ $legacyHandler = new LegacyPersistenceHandler(
         }
     }
 
-return new Repository( $legacyHandler, new LegacyIoHandler() );
+return new Repository( $legacyHandler, new LegacyIoHandler(), ( isset( $serviceSettings ) ? $serviceSettings : array() ) );

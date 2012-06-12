@@ -28,7 +28,26 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = static::getRepository();
+        $serviceSettings = array(
+            'contentType' => array(
+                'field_type' => array(
+                    'ezauthor' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Author\Type(); },
+                    'ezdatetime' => function(){ return new \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type(); },
+                    'ezfloat' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Float\Type(); },
+                    'ezinteger' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Integer\Type(); },
+                    'ezkeyword' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Keyword\Type(); },
+                    'eztext' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextBlock\Type(); },
+                    'ezstring' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextLine\Type(); },
+                    'ezurl' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Url\Type(); },
+                    'ezxmltext' => function(){ return new \eZ\Publish\Core\Repository\FieldType\XmlText\Type(
+                        new \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Simplified(
+                            new \eZ\Publish\Core\Repository\FieldType\XmlText\Schema
+                        )
+                    ); },
+                ),
+            ),
+        );
+        $this->repository = static::getRepository( $serviceSettings );
     }
 
     /**
@@ -45,9 +64,10 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * Makes it possible to inject different Io / Persistence handlers
      *
+     * @param array $serviceSettings Array with settings that are passed to Services
      * @return \eZ\Publish\Core\Repository\Repository
      */
-    abstract protected function getRepository();
+    abstract protected function getRepository( array $serviceSettings );
 
     /**
      * Asserts that properties given in $expectedValues are correctly set in
@@ -65,20 +85,26 @@ abstract class Base extends PHPUnit_Framework_TestCase
         {
             if ( in_array( $propertyName, $skipProperties ) ) continue;
 
-            $this->assertPropertiesEqual(
+            $this->assertProperty(
                 $propertyName, $propertyValue, $actualObject->$propertyName
             );
         }
     }
 
-    protected function assertSameClassPropertiesCorrect( array $propertiesNames, ValueObject $expectedValues, ValueObject $actualObject, array $skipProperties = array() )
+    protected function assertSameClassPropertiesCorrect(
+        array $propertiesNames,
+        ValueObject $expectedValues,
+        ValueObject $actualObject,
+        array $skipProperties = array(),
+        $equal = true
+    )
     {
         foreach ( $propertiesNames as $propertyName )
         {
             if ( in_array( $propertyName, $skipProperties ) ) continue;
 
-            $this->assertPropertiesEqual(
-                $propertyName, $expectedValues->$propertyName, $actualObject->$propertyName
+            $this->assertProperty(
+                $propertyName, $expectedValues->$propertyName, $actualObject->$propertyName, $equal
             );
         }
     }
@@ -98,13 +124,13 @@ abstract class Base extends PHPUnit_Framework_TestCase
         {
             if ( in_array( $propertyName, $skipProperties ) ) continue;
 
-            $this->assertPropertiesEqual(
+            $this->assertProperty(
                 $propertyName, $propertyValue, $actualObject->$propertyName
             );
         }
     }
 
-    private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
+    private function assertProperty( $propertyName, $expectedValue, $actualValue, $equal = true )
     {
         if( $expectedValue instanceof \ArrayObject )
         {
@@ -115,10 +141,17 @@ abstract class Base extends PHPUnit_Framework_TestCase
             $actualValue = $actualValue->getArrayCopy();
         }
 
-        $this->assertEquals(
-            $expectedValue,
-            $actualValue,
-            sprintf( 'Object property "%s" incorrect.', $propertyName )
-        );
+        if ( $equal )
+            $this->assertEquals(
+                $expectedValue,
+                $actualValue,
+                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            );
+        else
+            $this->assertNotEquals(
+                $expectedValue,
+                $actualValue,
+                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            );
     }
 }

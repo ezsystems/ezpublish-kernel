@@ -8,10 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    ezp\Content\Query,
     ezcQuerySelect;
 
 /**
@@ -29,7 +27,7 @@ abstract class SortClauseHandler
     /**
      * Creates a new criterion handler
      *
-     * @param EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
     public function __construct( EzcDbHandler $dbHandler )
     {
@@ -39,7 +37,7 @@ abstract class SortClauseHandler
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
      *
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @return bool
      */
     abstract public function accept( SortClause $sortClause );
@@ -51,7 +49,7 @@ abstract class SortClauseHandler
      * used for sorting.
      *
      * @param \ezcQuerySelect $query
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      * @return string
      */
@@ -61,11 +59,13 @@ abstract class SortClauseHandler
      * applies joins to the query
      *
      * @param \ezcQuerySelect $query
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      * @return void
      */
-    abstract public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number );
+    public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )
+    {
+    }
 
     /**
      * Returns the quoted sort column name

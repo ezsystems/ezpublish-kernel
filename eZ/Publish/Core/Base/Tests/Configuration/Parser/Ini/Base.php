@@ -161,8 +161,8 @@ empty-array[]';
     {
         $iniString = '
 [test]
-conditions[ezp\\system\\Filter_Get::dev]=uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php
-conditions[$user_object->check]=ezp/system/router\\ezp\\system\\Filter_Get::dev
+conditions[eZ\\Testing\\Filter_Get::dev]=uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php
+conditions[$user_object->check]=ezp/system/router\\eZ\\Testing\\Filter_Get::dev
 conditions[]=uri\\0:§£$content
 conditions[][]=subOne
 conditions[][]=subTwo
@@ -180,17 +180,25 @@ conditions[routes][content][item][uri]=content/some/
 conditions[routes][content][item][params][id]=\d+
 conditions[routes][content][item][controller]=%contentItem-controller::doList
 
-[contentItem-controller]
-class=eZ\Publish\Core\ContentItemController
+[contentItem:controller]
+class=eZ\\Publish\\Core\\ContentItemController
 
-[-controller]
+[controller]
 public=true
+regex[]=?<name>\w+
+regex[]=?P<name>\w+
+regex[]=?\'name\'\w+
+regex[]=(?<name>\w+)
+regex[]=(?P<name>\w+)
+regex[]=(?\'name\'\w+)
+regex[]=content/location/?<name>\w+
+regex[]=content/location/{?<name>\w+}
 ';
         $expects = array(
             'test' => array(
                 'conditions' => array(
-                    'ezp\\system\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php',
-                    '$user_object->check' => 'ezp/system/router\\ezp\\system\\Filter_Get::dev',
+                    'eZ\\Testing\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php',
+                    '$user_object->check' => 'ezp/system/router\\eZ\\Testing\\Filter_Get::dev',
                     'uri\\0:§£$content',
                     array( 'subOne' ),
                     array( 'subTwo' ),
@@ -206,8 +214,20 @@ public=true
                     ) ) ),
                 )
             ),
-            'contentItem-controller' => array( 'class' => 'eZ\Publish\Core\ContentItemController' ),
-            '-controller' => array( 'public' => true ),
+            'contentItem:controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
+            'controller' => array(
+                'public' => true,
+                'regex' => array(
+                    '?<name>\w+',
+                    '?P<name>\w+',
+                    '?name\w+',
+                    '?<name>\w+',
+                    '?P<name>\w+',
+                    '?name\w+',
+                    'content/location/?<name>\w+',
+                    'content/location/{?<name>\w+}',
+                ),
+            ),
         );
 
         $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );

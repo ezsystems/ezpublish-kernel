@@ -138,8 +138,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $group->identifier )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentclassgroup', 'id' )
@@ -173,8 +172,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -264,8 +262,7 @@ class EzcDatabase extends Gateway
                     $q->bindValue( $groupId, null, \PDO::PARAM_INT )
                 )
             );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -310,18 +307,22 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Inserts a new conten type.
+     * Inserts a new content type.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     * @param mixed|null $typeId
+     *
      * @return mixed Type ID
      */
-    public function insertType( Type $type )
+    public function insertType( Type $type, $typeId = null )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass' ) );
         $q->set(
             $this->dbHandler->quoteColumn( 'id' ),
-            $this->dbHandler->getAutoIncrementValue( 'ezcontentclass', 'contentclass_id' )
+            isset( $typeId ) ?
+                $q->bindValue( $typeId, null, \PDO::PARAM_INT ) :
+                $this->dbHandler->getAutoIncrementValue( 'ezcontentclass', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $type->status, null, \PDO::PARAM_INT )
@@ -335,9 +336,12 @@ class EzcDatabase extends Gateway
         $this->setCommonTypeColumns( $q, $type );
         $q->prepare()->execute();
 
-        $type->id = $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' )
-        );
+        if ( isset( $typeId ) )
+            $type->id = $typeId;
+        else
+            $type->id = $this->dbHandler->lastInsertId(
+                $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' )
+            );
         $this->insertTypeNameData( $type->id, $type->status, $type->name );
 
         return $type->id;
@@ -402,14 +406,14 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Insert assignement of $typeId to $groupId.
+     * Insert assignment of $typeId to $groupId.
      *
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    public function insertGroupAssignement( $groupId, $typeId, $status )
+    public function insertGroupAssignment( $groupId, $typeId, $status )
     {
         $groups = $this->loadGroupData( $groupId );
         $group = $groups[0];
@@ -431,19 +435,18 @@ class EzcDatabase extends Gateway
             $q->bindValue( $group['name'] )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
-     * Deletes a group assignements for a Type.
+     * Deletes a group assignments for a Type.
      *
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    public function deleteGroupAssignement( $groupId, $typeId, $status )
+    public function deleteGroupAssignment( $groupId, $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom(
@@ -464,8 +467,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -609,8 +611,7 @@ class EzcDatabase extends Gateway
         );
         $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcontentclass_attribute', 'id' )
@@ -706,6 +707,39 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads an array with data about field definition referred $id and $status.
+     *
+     * @param mixed $id field definition id
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
+     * @return array Data rows.
+     */
+    public function loadFieldDefinition( $id, $status )
+    {
+        $q = $this->dbHandler->createSelectQuery();
+        $this->selectColumns( $q, "ezcontentclass_attribute" );
+        $q->from(
+            $this->dbHandler->quoteTable( "ezcontentclass_attribute" )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( "id", "ezcontentclass_attribute" ),
+                    $q->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( "version", "ezcontentclass_attribute" ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetch( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Deletes a field definition.
      *
      * @param mixed $typeId
@@ -736,8 +770,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -748,7 +781,6 @@ class EzcDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
-     * @todo Handle StorageFieldDefinition
      */
     public function updateFieldDefinition(
         $typeId, $status, FieldDefinition $fieldDefinition,
@@ -776,8 +808,7 @@ class EzcDatabase extends Gateway
             );
         $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -834,8 +865,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         $this->deleteTypeNameData( $typeId, $status );
         $this->insertTypeNameData( $typeId, $status, $updateStruct->name );
@@ -846,7 +876,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * @return array Data rows.
      */
     public function loadTypeData( $typeId, $status )
     {
@@ -855,11 +885,11 @@ class EzcDatabase extends Gateway
             $q->expr->lAnd(
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'id', 'ezcontentclass' ),
-                    $q->bindValue( $typeId )
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
-                    $q->bindValue( $status )
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
                 )
             )
         );
@@ -1004,10 +1034,9 @@ class EzcDatabase extends Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
-     * @param int $status @todo Remove or implement
      * @return int
      */
-    public function countInstancesOfType( $typeId, $status )
+    public function countInstancesOfType( $typeId )
     {
         $q = $this->dbHandler->createSelectQuery();
         $q->select(
@@ -1036,6 +1065,8 @@ class EzcDatabase extends Gateway
      * Deletes all field definitions of a Type.
      *
      * @param mixed $typeId
+     * @param int $status
+     *
      * @return void
      */
     public function deleteFieldDefinitionsForType( $typeId, $status )
@@ -1055,8 +1086,30 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
+    }
+
+    /**
+     * Deletes a Type completely.
+     *
+     * @param mixed $typeId
+     * @param int $status
+     * @return void
+     */
+    public function delete( $typeId, $status )
+    {
+        $this->deleteGroupAssignmentsForType(
+            $typeId, $status
+        );
+        $this->deleteFieldDefinitionsForType(
+            $typeId, $status
+        );
+        $this->deleteTypeNameData(
+            $typeId, $status
+        );
+        $this->deleteType(
+            $typeId, $status
+        );
     }
 
     /**
@@ -1065,6 +1118,8 @@ class EzcDatabase extends Gateway
      * Does no delete the field definitions!
      *
      * @param mixed $typeId
+     * @param int $status
+     *
      * @return void
      */
     public function deleteType( $typeId, $status )
@@ -1084,17 +1139,18 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
-     * Deletes all group assignements for a Type.
+     * Deletes all group assignments for a Type.
      *
      * @param mixed $typeId
+     * @param int $status
+     *
      * @return void
      */
-    public function deleteGroupAssignementsForType( $typeId, $status )
+    public function deleteGroupAssignmentsForType( $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom(
@@ -1111,8 +1167,7 @@ class EzcDatabase extends Gateway
                 )
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
     }
 
     /**
@@ -1145,8 +1200,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1167,8 +1221,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1189,8 +1242,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
 
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1211,8 +1263,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query->prepare()->execute();
     }
 
     /**

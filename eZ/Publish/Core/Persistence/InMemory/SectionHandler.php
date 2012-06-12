@@ -5,13 +5,12 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Base\Exception\Logic;
+    eZ\Publish\Core\Base\Exceptions\Logic;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
@@ -121,11 +120,12 @@ class SectionHandler implements SectionHandlerInterface
     public function assign( $sectionId, $contentId )
     {
         $this->backend->update(
-            'Content',
+            'Content\\ContentInfo',
             $contentId,
             array(
                 'sectionId' => $sectionId,
-            )
+            ),
+            true
         );
     }
 
@@ -137,6 +137,6 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function assignmentsCount( $sectionId )
     {
-        return $this->backend->count( 'Content', array( 'sectionId' => $sectionId ) );
+        return $this->backend->count( 'Content\\ContentInfo', array( 'sectionId' => $sectionId ) );
     }
 }

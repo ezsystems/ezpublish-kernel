@@ -30,14 +30,19 @@ class VersionInfoStub extends VersionInfo
      */
     protected $contentId;
 
+    /**
+     * Names
+     *
+     * @var string[]
+     */
+    protected $names = array();
+
     public function __construct( array $properties = array() )
     {
         parent::__construct( $properties );
 
         if ( $properties['status'] > 2 ) {
-            echo "\nalert(", $properties['contentId'], ")\n";
             $trace = debug_backtrace();
-            echo $trace[0]['file'], ' +', $trace[0]['line'], PHP_EOL;
         }
     }
 
@@ -60,7 +65,7 @@ class VersionInfoStub extends VersionInfo
      */
     public function getNames()
     {
-        // TODO: Implement getNames() method.
+        return $this->names;
     }
 
     /**
@@ -74,7 +79,7 @@ class VersionInfoStub extends VersionInfo
      */
     public function getName( $languageCode = null )
     {
-        // TODO: Implement getName() method.
+        return $this->name[$languageCode];
     }
 
     public function __get( $property )

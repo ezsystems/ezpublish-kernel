@@ -102,7 +102,7 @@ class Configuration
      * @param array $paths Paths to look for settings in.
      * @param array $globalConfiguration Global settings for module
      */
-    public function __construct( $moduleName = 'base', array $paths, array $globalConfiguration )
+    public function __construct( $moduleName, array $paths, array $globalConfiguration )
     {
         $this->moduleName = $moduleName;
         $this->paths = $paths;
@@ -286,6 +286,7 @@ class Configuration
      * @param array $configurationData
      * @param array $sourceFiles Optional, stored in cache to be able to check modified time in future devMode
      * @param array $sourcePaths Optional, stored in cache to be able to debug it more easily
+     * @return array
      */
     protected function generateRawData( $configurationPathsHash, array $configurationData, array $sourceFiles = array(), array $sourcePaths = array() )
     {
@@ -301,6 +302,10 @@ class Configuration
 
     /**
      * Parse configuration files
+     *
+     * Uses configured parsers to do the file parsing pr file, and then merges the result from them and:
+     * - Handles array clearing
+     * - Handles section extends ( "Section:Base" extends "Base" )
      *
      * @param array $configurationPaths
      * @param array $sourceFiles ByRef value or source files that has been/is going to be parsed
@@ -348,14 +353,44 @@ class Configuration
 
         // Post processing to unset array self::TEMP_INI_UNSET_VAR values as set by parser to indicate array clearing
         // and to merge configuration data from all configuration files
-        foreach ( $configurationFileData as $file => $data )
+        $extendedConfigurationFileData = array();
+        foreach ( $configurationFileData as $fileName => $data )
         {
             foreach ( $data as $section => $sectionArray )
             {
+                // Leave settings that extend others for second pass, key by depth
+                if ( ( $count = substr_count( $section, ':' ) ) !== 0 )
+                {
+                    $extendedConfigurationFileData[$count][$fileName][$section] = $sectionArray;
+                    continue;
+                }
+
                 if ( !isset( $configurationData[$section] ) )
                     $configurationData[$section] = array();
 
                 $this->recursiveArrayClearing( $sectionArray, $configurationData[$section] );
+            }
+        }
+
+        // Second pass post processing dealing with settings that extends others
+        ksort( $extendedConfigurationFileData, SORT_NUMERIC );
+        foreach ( $extendedConfigurationFileData as $configurationFileData )
+        {
+            foreach ( $configurationFileData as $data )
+            {
+                foreach ( $data as $section => $sectionArray )
+                {
+                    if ( !isset( $configurationData[$section] ) )
+                    {
+                        $parent = substr( $section, stripos( $section, ':' ) +1 );
+                        if ( isset( $configurationData[$parent] ) )
+                            $configurationData[$section] = $configurationData[$parent];
+                        else
+                            $configurationData[$section] = array();
+                    }
+
+                    $this->recursiveArrayClearing( $sectionArray, $configurationData[$section] );
+                }
             }
         }
 

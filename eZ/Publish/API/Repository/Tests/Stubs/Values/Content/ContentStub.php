@@ -30,7 +30,7 @@ class ContentStub extends Content
     /**
      * @var integer
      */
-    protected $contentId;
+    protected $id;
 
     /**
      * @var integer
@@ -79,12 +79,12 @@ class ContentStub extends Content
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        $contentType  = $this->getContentType();
+        $contentType = $this->getContentType();
         $translatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
 
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentType()->mainLanguageCode;
+            $languageCode = $this->getVersionInfo()->getContentInfo()->mainLanguageCode;
         }
 
         foreach ( $this->getFields() as $field )
@@ -153,7 +153,7 @@ class ContentStub extends Content
      */
     private function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+        return $this->repository->getContentService()->loadContentInfo( $this->id );
     }
 
     public function __get( $property )

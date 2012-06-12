@@ -94,32 +94,44 @@ abstract class Gateway
     abstract public function loadTypesDataForGroup( $groupId, $status );
 
     /**
-     * Inserts a new conten type.
+     * Inserts a new content type.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     * @param mixed|null $typeId
+     *
      * @return mixed Type ID
      */
-    abstract public function insertType( Type $type );
+    abstract public function insertType( Type $type, $typeId = null );
 
     /**
-     * Insert assignement of $typeId to $groupId.
+     * Insert assignment of $typeId to $groupId.
      *
      * @param mixed $typeId
      * @param int $status
      * @param mixed $groupId
      * @return void
      */
-    abstract public function insertGroupAssignement( $typeId, $status, $groupId );
+    abstract public function insertGroupAssignment( $typeId, $status, $groupId );
 
     /**
-     * Deletes a group assignements for a Type.
+     * Deletes a group assignments for a Type.
      *
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    abstract public function deleteGroupAssignement( $groupId, $typeId, $status );
+    abstract public function deleteGroupAssignment( $groupId, $typeId, $status );
+
+    /**
+     * Loads an array with data about field definition referred $id and $status.
+     *
+     * @param mixed $id field definition id
+     * @param int $status field definition status
+     *
+     * @return array Data rows.
+     */
+    abstract public function loadFieldDefinition( $id, $status );
 
     /**
      * Inserts a $fieldDefinition for $typeId.
@@ -174,7 +186,7 @@ abstract class Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * @return array Data rows.
      */
     abstract public function loadTypeData( $typeId, $status );
 
@@ -202,10 +214,20 @@ abstract class Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
-     * @param int $status
      * @return int
      */
-    abstract public function countInstancesOfType( $typeId, $status );
+    abstract public function countInstancesOfType( $typeId );
+
+    /**
+     * Deletes a Type completely.
+     *
+     * Does no delete the field definitions!
+     *
+     * @param mixed $typeId
+     * @param int $status
+     * @return void
+     */
+    abstract public function delete( $typeId, $status );
 
     /**
      * Deletes all field definitions of a Type.
@@ -228,13 +250,13 @@ abstract class Gateway
     abstract public function deleteType( $typeId, $status );
 
     /**
-     * Deletes all group assignements for a Type.
+     * Deletes all group assignments for a Type.
      *
      * @param mixed $typeId
      * @param int $status
      * @return void
      */
-    abstract public function deleteGroupAssignementsForType( $typeId, $status );
+    abstract public function deleteGroupAssignmentsForType( $typeId, $status );
 
     /**
      * Publishes the Type with $typeId from $sourceVersion to $targetVersion,

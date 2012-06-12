@@ -54,12 +54,12 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new DateAndTimeValue( $this->date );
+        $value->data = $this->date;
         $value->sortKey = array( 'sort_key_int' => $this->date->getTimestamp() );
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data->value->getTimestamp(), $storageFieldValue->dataInt );
+        self::assertSame( $value->data->getTimestamp(), $storageFieldValue->dataInt );
         self::assertSame( $value->sortKey['sort_key_int'], $storageFieldValue->sortKeyInt );
         self::assertSame( '', $storageFieldValue->sortKeyString );
     }
@@ -78,8 +78,8 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldValue->data );
-        self::assertSame( $storageFieldValue->dataInt, $fieldValue->data->value->getTimestamp() );
+        self::assertInstanceOf( 'DateTime', $fieldValue->data );
+        self::assertSame( $storageFieldValue->dataInt, $fieldValue->data->getTimestamp() );
         self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey['sort_key_int'] );
     }
 
@@ -227,8 +227,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
-        self::assertNull( $fieldDef->defaultValue->data->value );
+        self::assertNull( $fieldDef->defaultValue->data );
     }
 
     /**
@@ -248,9 +247,8 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
-        self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data->value );
-        self::assertGreaterThanOrEqual( $time, $fieldDef->defaultValue->data->value->getTimestamp() );
+        self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data );
+        self::assertGreaterThanOrEqual( $time, $fieldDef->defaultValue->data->getTimestamp() );
     }
 
     /**
@@ -275,9 +273,8 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
-        self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data->value );
-        $generatedTimestamp = $fieldDef->defaultValue->data->value->getTimestamp();
+        self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data );
+        $generatedTimestamp = $fieldDef->defaultValue->data->getTimestamp();
         self::assertGreaterThanOrEqual( $timestamp, $generatedTimestamp );
         // Giving a margin of 1 second for test execution
         self::assertLessThanOrEqual( $timestamp + 1, $generatedTimestamp );
@@ -307,9 +304,8 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fieldDef->defaultValue->data );
-        self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data->value );
-        $generatedTimestamp = $fieldDef->defaultValue->data->value->getTimestamp();
+        self::assertInstanceOf( 'DateTime', $fieldDef->defaultValue->data );
+        $generatedTimestamp = $fieldDef->defaultValue->data->getTimestamp();
         self::assertGreaterThanOrEqual( $timestamp, $generatedTimestamp );
         // Giving a margin of 1 second for test execution
         self::assertLessThanOrEqual( $timestamp + 1, $generatedTimestamp );

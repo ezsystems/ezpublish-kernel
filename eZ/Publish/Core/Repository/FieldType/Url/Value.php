@@ -8,13 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Url;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
 /**
  * Value for Url field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Link content
@@ -47,21 +46,13 @@ class Value extends BaseValue implements ValueInterface
     /**
      * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
-    public static function fromString( $stringValue )
-    {
-        return new static( $stringValue );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
     public function __toString()
     {
         return (string)$this->link;
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
      */
     public function getTitle()
     {

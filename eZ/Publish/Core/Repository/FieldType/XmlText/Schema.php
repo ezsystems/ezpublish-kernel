@@ -9,10 +9,14 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
 
-use ezp\Base\Configuration;
+use DOMElement;
+use DOMNode;
 
 /**
  * @internal
+ *
+ * @todo Change data structure of attribute and classes to include human readable name,
+ *       but those will need to be translated.
  */
 class Schema
 {
@@ -22,277 +26,256 @@ class Schema
      * @var array
      */
     private $schema = array(
-        'section'   => array( 'blockChildrenAllowed' => array( 'header', 'paragraph', 'section' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => false,
-                              'isInline' => false,
-                              'attributes' => array( 'xmlns:image', 'xmlns:xhtml', 'xmlns:custom', 'xmlns:tmp' ) ),
-
-        'embed'     => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => null,
-                              'isInline' => true,
-                              'attributes' => array( 'object_id', 'node_id', 'show_path', 'size',
-                                                     'align', 'view', 'xhtml:id', 'class', 'target' ),
-                              'attributesDefaults' => array( 'align' => '', 'view' => 'embed', 'class' => '' ) ),
-
-        'embed-inline' => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => null,
-                              'isInline' => true,
-                              'attributes' => array( 'object_id', 'node_id', 'show_path', 'size',
-                                                     'align', 'view', 'xhtml:id', 'class', 'target' ),
-                              'attributesDefaults' => array( 'align' => '', 'view' => 'embed-inline', 'class' => '' ) ),
-
-        'table'     => array( 'blockChildrenAllowed' => array( 'tr' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => array( 'class', 'width', 'border', 'align' ) ),
-
-        'tr'        => array( 'blockChildrenAllowed' => array( 'td', 'th' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => false,
-                              'isInline' => false,
-                              'attributes' => array( 'class' ) ),
-
-        'td'        => array( 'blockChildrenAllowed' => array( 'header', 'paragraph', 'section', 'table' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => false,
-                              'isInline' => false,
-                              'attributes' => array( 'class', 'align', 'xhtml:width', 'xhtml:colspan', 'xhtml:rowspan' ) ),
-
-        'th'        => array( 'blockChildrenAllowed' => array( 'header', 'paragraph', 'section', 'table' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => false,
-                              'isInline' => false,
-                              'attributes' => array( 'class', 'align', 'xhtml:width', 'xhtml:colspan', 'xhtml:rowspan' ) ),
-
-        'ol'        => array( 'blockChildrenAllowed' => array( 'li' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => array( 'class' ) ),
-
-        'ul'        => array( 'blockChildrenAllowed' => array( 'li' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => array( 'class' ) ),
-
-        'li'        => array( 'blockChildrenAllowed' => array( 'paragraph' ),
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => array( 'class' ) ),
-
-        'header'    => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => true,
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => array( 'class', 'anchor_name', 'align' ) ),
-
-        'paragraph' => array( 'blockChildrenAllowed' => array( 'line', 'link', 'embed', 'table', 'ol', 'ul', 'custom', 'literal' ),
-                              'inlineChildrenAllowed' => true,
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => array( 'class', 'align' ) ),
-
-        'line'      => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => true,
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => false ),
-
-        'literal'   => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => array( '#text' ),
-                              'childrenRequired' => true,
-                              'isInline' => false,
-                              'attributes' => array( 'class' ) ),
-
-        'strong'    => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => true,
-                              'childrenRequired' => true,
-                              'isInline' => true,
-                              'attributes' => array( 'class' ) ),
-
-        'emphasize' => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => true,
-                              'childrenRequired' => true,
-                              'isInline' => true,
-                              'attributes' => array( 'class' ) ),
-
-        'link'      => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => true,
-                              'childrenRequired' => true,
-                              'isInline' => true,
-                              'attributes' => array( 'class', 'xhtml:id', 'target', 'xhtml:title',
-                                                     'object_id', 'node_id', 'show_path', 'anchor_name',
-                                                     'url_id', 'id', 'view' ),
-                              'attributesDefaults' => array( 'target' => '_self' ) ),
-
-        'anchor'    => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => false,
-                              'isInline' => true,
-                              'attributes' => array( 'name' ) ),
-
-        'custom'    => array( 'blockChildrenAllowed' => true,
-                              'inlineChildrenAllowed' => true,
-                              'childrenRequired' => false,
-                              'isInline' => null,
-                              'attributes' => array( 'name', 'align' ) ),
-
-        '#text'     => array( 'blockChildrenAllowed' => false,
-                              'inlineChildrenAllowed' => false,
-                              'childrenRequired' => false,
-                              'isInline' => true,
-                              'attributes' => false )
+        'section' => array(
+            'blockChildrenAllowed' => array( 'header', 'paragraph', 'section' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => false,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'xmlns:image', 'xmlns:xhtml', 'xmlns:custom', 'xmlns:tmp' )
+        ),
+        'embed' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => null,
+            'isInline' => true,
+            'customAttributes' => array(),
+            'attributes' => array( 'object_id', 'node_id', 'show_path', 'size', 'align', 'view', 'xhtml:id', 'class', 'target' ),
+            'attributesDefaults' => array( 'align' => '', 'view' => 'embed', 'class' => '' )
+        ),
+        'embed-inline' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => null,
+            'isInline' => true,
+            'customAttributes' => array(),
+            'attributes' => array( 'object_id', 'node_id', 'show_path', 'size', 'align', 'view', 'xhtml:id', 'class', 'target' ),
+            'attributesDefaults' => array( 'align' => '', 'view' => 'embed-inline', 'class' => '' )
+        ),
+        'table' => array(
+            'blockChildrenAllowed' => array( 'tr' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => true,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class', 'width', 'border', 'align' )
+        ),
+        'tr' => array(
+            'blockChildrenAllowed' => array( 'td', 'th' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => false,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class' )
+        ),
+        'td' => array(
+            'blockChildrenAllowed' => array( 'header', 'paragraph', 'section', 'table' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => false,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class', 'align', 'xhtml:width', 'xhtml:colspan', 'xhtml:rowspan' )
+        ),
+        'th' => array(
+            'blockChildrenAllowed' => array( 'header', 'paragraph', 'section', 'table' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => false,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class', 'align', 'xhtml:width', 'xhtml:colspan', 'xhtml:rowspan' )
+        ),
+        'ol' => array(
+            'blockChildrenAllowed' => array( 'li' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => true,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class' )
+        ),
+        'ul' => array(
+            'blockChildrenAllowed' => array( 'li' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => true,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class' )
+        ),
+        'li' => array(
+            'blockChildrenAllowed' => array( 'paragraph' ),
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => true,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class' )
+        ),
+        'header' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => true,
+            'childrenRequired' => true,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class', 'anchor_name', 'align' )
+        ),
+        'paragraph' => array(
+            'blockChildrenAllowed' => array( 'line', 'link', 'embed', 'table', 'ol', 'ul', 'custom', 'literal' ),
+            'inlineChildrenAllowed' => true,
+            'childrenRequired' => false,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class', 'align' )
+        ),
+        'line' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => true,
+            'childrenRequired' => true,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => false
+        ),
+        'literal' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => array( '#text' ),
+            'childrenRequired' => true,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'attributes' => array( 'class' )
+        ),
+        'strong' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => true,
+            'childrenRequired' => true,
+            'isInline' => true,
+            'customAttributes' => array(),
+            'attributes' => array( 'class' )
+        ),
+        'emphasize' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => true,
+            'childrenRequired' => true,
+            'isInline' => true,
+            'customAttributes' => array(),
+            'attributes' => array( 'class' )
+        ),
+        'link' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => true,
+            'childrenRequired' => true,
+            'isInline' => true,
+            'customAttributes' => array(),
+            'attributes' => array( 'class', 'xhtml:id', 'target', 'xhtml:title', 'object_id', 'node_id', 'show_path', 'anchor_name', 'url_id', 'id', 'view' ),
+            'attributesDefaults' => array( 'target' => '_self' )
+        ),
+        'anchor' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => false,
+            'isInline' => true,
+            'customAttributes' => array(),
+            'attributes' => array( 'name' )
+        ),
+        'custom' => array(
+            'blockChildrenAllowed' => true,
+            'inlineChildrenAllowed' => true,
+            'childrenRequired' => false,
+            'isInline' => false,
+            'customAttributes' => array(),
+            'tags' => array(), // key: custom tag name, value: overrides for the custom tag props
+            'attributes' => array( 'name', 'align' )
+        ),
+        '#text' => array(
+            'blockChildrenAllowed' => false,
+            'inlineChildrenAllowed' => false,
+            'childrenRequired' => false,
+            'isInline' => true,
+            'customAttributes' => array(),
+            'attributes' => false
+        )
     );
 
     /**
-     * @var \eZ\Publish\Core\Repository\FieldType\XmlText\Schema
+     * @param array $settings
      */
-    private static $instance;
-
-    function __construct()
+    function __construct( array $settings = array() )
     {
-        $configuration = Configuration::getInstance( 'content' );
-
-        // Get inline custom tags list
-        $this->schema['custom']['isInline'] = $configuration->get( 'CustomTagSettings', 'IsInline',
-            array( 'strike' => 'true', 'sub' => true, 'sup' => true )
+        // Apply default values
+        $settings = $settings + array(
+            'customAttributes' => array(),
+            'classesList' => array(),
+            'customTags' => array( // Custom tags can override any of the base custom tags values except attributes
+                'factbox' => array(),
+                'quote' => array(),
+                'strike' => array( 'isInline' => true ),
+                'sub' => array( 'isInline' => true ),
+                'sup' => array( 'isInline' => true )
+            ),
         );
-        if ( !is_array( $this->schema['custom']['isInline'] ) )
-            $this->schema['custom']['isInline'] = array();
 
-        $this->schema['custom']['tagList'] = $configuration->get( 'CustomTagSettings', 'AvailableCustomTags',
-            array( 'factbox', 'quote', 'strike', 'sub', 'sup' )
-        );
-        if ( !is_array( $this->schema['custom']['tagList'] ) )
-            $this->schema['custom']['tagList'] = array();
+        // Apply custom tag settings
+        $this->schema['custom']['tags'] = $settings['customTags'];
 
-        $eZPublishVersion = 4.6; // eZPublishSDK::majorVersion() + eZPublishSDK::minorVersion() * 0.1;
-
-        // Get all tags available classes list
-        // @todo Implement
-        foreach ( array_keys( $this->schema ) as $tagName )
+        // Apply custom attribute settings
+        foreach ( $settings['customAttributes'] as $tagName => $customAttributes )
         {
-            if ( $configuration->has( $tagName, 'AvailableClasses' ) )
+            if ( !isset($this->schema[$tagName]) )
             {
-                $avail = $configuration->get( $tagName, 'AvailableClasses' );
-                if ( is_array( $avail ) && count( $avail ) )
-                    $this->schema[$tagName]['classesList'] = $avail;
-                else
-                    $this->schema[$tagName]['classesList'] = array();
+                throw new \Exception("Unsupported tag name in customAttributes settings: {$tagName}");
             }
-            else
-                $this->schema[$tagName]['classesList'] = array();
+
+            $this->schema[$tagName]['customAttributes'] = $customAttributes;
         }
 
-        // Fix for empty paragraphs setting
-        $allowEmptyParagraph = $configuration->get( 'paragraph', 'AllowEmpty', 'false' );
-        $this->schema['paragraph']['childrenRequired'] = $allowEmptyParagraph == 'true' ? false : true;
-
-        // Get all tags custom attributes list
-        // @todo Implement
-        foreach ( array_keys( $this->schema ) as $tagName )
+        // Apply classes allowed pr tag
+        foreach ( $settings['classesList'] as $tagName => $classesList )
         {
-            if ( $tagName == 'custom' )
-            {
-                // Custom attributes of custom tags
-                foreach ( $this->schema['custom']['tagList'] as $customTagName )
-                {
-                    if ( $configuration->has( $customTagName, 'CustomAttributes' ) )
-                    {
-                        $avail = $configuration->get( $customTagName, 'CustomAttributes' );
-                        if ( is_array( $avail ) && count( $avail ) )
-                            $this->schema['custom']['customAttributes'][$customTagName] = $avail;
-                        else
-                            $this->schema['custom']['customAttributes'][$customTagName] = array();
-                    }
-                    else
-                        $this->schema['custom']['customAttributes'][$customTagName] = array();
-                }
-            }
-            else
-            {
-                // Custom attributes of regular tags
-                if ( $configuration->has( $tagName, 'CustomAttributes' ) )
-                {
-                    $avail = $configuration->get( $tagName, 'CustomAttributes' );
-                    if ( is_array( $avail ) && count( $avail ) )
-                        $this->schema[$tagName]['customAttributes'] = $avail;
-                    else
-                        $this->schema[$tagName]['customAttributes'] = array();
-                }
-                else
-                    $this->schema[$tagName]['customAttributes'] = array();
-            }
+            if ( !isset($this->schema[$tagName]) )
+                throw new \Exception("Unsupported tag name in classesList settings: {$tagName}");
+
+            $this->schema[$tagName]['classesList'] = $classesList;
         }
     }
 
+    //
     /**
-     * Returns a shared instance of the eZXMLSchema class.
+     * Determines if the tag is inline
      *
-     * @return eZXMLSchema
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return bool
      */
-    public static function getInstance()
+    function isInline( DOMNode $element )
     {
-        if ( !self::$instance instanceof self )
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
-            self::$instance = new self;
-        }
-        return self::$instance;
-    }
-
-    // Determines if the tag is inline
-    function isInline( $element )
-    {
-        if ( is_string( $element ) )
-            $elementName = $element;
-        else
-            $elementName = $element->nodeName;
-
-        $isInline = $this->schema[$elementName]['isInline'];
-
-        // Special workaround for custom tags.
-        if ( is_array( $isInline ) && !is_string( $element ) )
-        {
-            $isInline = false;
             $name = $element->getAttribute( 'name' );
-
-            if ( isset( $this->schema['custom']['isInline'][$name] ) )
+            if ( isset($this->schema['custom']['tags'][$name]['isInline']) )
             {
-                if ( $this->schema['custom']['isInline'][$name] != 'false' )
-                    $isInline = true;
+                return $this->schema['custom']['tags'][$name]['isInline'];
             }
+            // fallback to settings on base custom tag
         }
-        return $isInline;
+        return $this->schema[$element->nodeName]['isInline'];
     }
 
     /**
      * Checks if one element is allowed to be a child of another
      *
-     * @param $parent parent element: DOMNode or string
-     * @param $child child element: DOMNode or string
+     * @param \DOMNode|\DOMElement $parent Parent element
+     * @param \DOMNode|\DOMElement|string $child Child element
      *
      * @return bool|null true if elements match schema, false if elements don't match schema, null  in case of errors
      * @todo Add exceptions
      */
-    function check( $parent, $child )
+    function check( DOMNode $parent, $child )
     {
-        if ( is_string( $parent ) )
-            $parentName = $parent;
-        else
-            $parentName = $parent->nodeName;
+        $parentName = $parent->nodeName;
 
-        if ( is_string( $child ) )
-            $childName = $child;
-        else
+        if ( $child instanceof DOMNode )
             $childName = $child->nodeName;
+        else
+            $childName = $child;
 
-        if ( isset( $this->schema[$childName] ) )
+        if ( isset($this->schema[$childName]) )
         {
             $isInline = $this->isInline( $child );
 
@@ -302,19 +285,25 @@ class Schema
             }
             elseif ( $isInline === false )
             {
-                // Special workaround for custom tags.
-                if ( $parentName == 'custom' && !is_string( $parent ) &&
-                     $parent->getAttribute( 'inline' ) != 'true' )
+                // Special logic for custom tags.
+                if ( $parentName === 'custom' &&
+                    $parent instanceof DOMElement &&
+                    $parent->getAttribute( 'inline' ) !== 'true'
+                )
                 {
                     $allowed = true;
                 }
                 else
+                {
                     $allowed = $this->schema[$parentName]['blockChildrenAllowed'];
+                }
             }
             else
+            {
                 return true;
+            }
 
-            if ( is_array( $allowed ) )
+            if ( $allowed !== false && $allowed !== true )
                 $allowed = in_array( $childName, $allowed );
 
             if ( !$allowed )
@@ -327,126 +316,184 @@ class Schema
         return true;
     }
 
-    function childrenRequired( $element )
+    /**
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return bool
+     */
+    function childrenRequired( DOMNode $element )
     {
-        //if ( !isset( $this->schema[$element->nodeName] ) )
-        //    return false;
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
+        {
+            $name = $element->getAttribute( 'name' );
+            if ( isset($this->schema['custom']['tags'][$name]['childrenRequired']) )
+            {
+                return $this->schema['custom']['tags'][$name]['childrenRequired'];
+            }
+            // fallback to settings on base custom tag
+        }
 
         return $this->schema[$element->nodeName]['childrenRequired'];
     }
 
-    function hasAttributes( $element )
+    /**
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return bool
+     */
+    function hasAttributes( DOMNode $element )
     {
-        //if ( !isset( $this->schema[$element->nodeName] ) )
-        //    return false;
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
+        {
+            $name = $element->getAttribute( 'name' );
+            if ( isset($this->schema['custom']['tags'][$name]['attributes']) )
+            {
+                return !empty($this->schema['custom']['tags'][$name]['attributes']);
+            }
+            // fallback to settings on base custom tag
+        }
 
-        return ( $this->schema[$element->nodeName]['attributes'] != false );
+        return !empty($this->schema[$element->nodeName]['attributes']);
     }
 
-    function attributes( $element )
+    /**
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return array
+     */
+    function attributes( DOMNode $element )
     {
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
+        {
+            $name = $element->getAttribute( 'name' );
+            if ( isset($this->schema['custom']['tags'][$name]['attributes']) )
+            {
+                return $this->schema['custom']['tags'][$name]['attributes'];
+            }
+            // fallback to settings on base custom tag
+        }
+
         return $this->schema[$element->nodeName]['attributes'];
     }
 
-    function customAttributes( $element )
+    /**
+     * @param \DOMNode|\DOMElement $element
+     * @param string $attributeName
+     *
+     * @return mixed
+     */
+    function attributeDefaultValue( DOMNode $element, $attributeName )
     {
-        if ( is_string( $element ) )
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
-            return $this->schema[$element]['customAttributes'];
+            $name = $element->getAttribute( 'name' );
+            if ( isset($this->schema['custom']['tags'][$name]['attributesDefaults'][$attributeName]) )
+            {
+                return $this->schema['custom']['tags'][$name]['attributesDefaults'][$attributeName];
+            }
+            // fallback to settings on base custom tag
         }
-        else
+
+        if ( isset($this->schema[$element->nodeName]['attributesDefaults'][$attributeName]) )
+            return $this->schema[$element->nodeName]['attributesDefaults'][$attributeName];
+
+        return null;
+    }
+
+    /**
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return array
+     */
+    function attributeDefaultValues( DOMNode $element )
+    {
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
-            if ( $element->nodeName == 'custom' )
+            $name = $element->getAttribute( 'name' );
+            if ( isset($this->schema['custom']['tags'][$name]['attributesDefaults']) )
             {
-                $name = $element->getAttribute( 'name' );
-                if ( $name )
-                    return $this->schema['custom']['customAttributes'][$name];
+                return $this->schema['custom']['tags'][$name]['attributesDefaults'];
             }
-            else
-            {
-                return $this->schema[$element->nodeName]['customAttributes'];
-            }
+            // fallback to settings on base custom tag
         }
+
+        if ( isset($this->schema[$element->nodeName]['attributesDefaults']) )
+            return $this->schema[$element->nodeName]['attributesDefaults'];
+
         return array();
     }
 
-    function attrDefaultValue( $tagName, $attrName )
+    /**
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return array
+     */
+    function customAttributes( DOMNode $element )
     {
-        if ( isset( $this->schema[$tagName]['attributesDefaults'][$attrName] ) )
-            return $this->schema[$tagName]['attributesDefaults'][$attrName];
-        else
-            return array();
-    }
-
-    function attrDefaultValues( $tagName )
-    {
-        if ( isset( $this->schema[$tagName]['attributesDefaults'] ) )
-            return $this->schema[$tagName]['attributesDefaults'];
-        else
-            return array();
-    }
-
-    function exists( $element )
-    {
-        if ( is_string( $element ) )
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
-            return isset( $this->schema[$element] );
-        }
-        else
-        {
-            if ( $element->nodeName == 'custom' )
+            $name = $element->getAttribute( 'name' );
+            if ( isset($this->schema['custom']['tags'][$name]['customAttributes']) )
             {
-                $name = $element->getAttribute( 'name' );
-                if ( $name )
-                    return in_array( $name, $this->schema['custom']['tagList'] );
+                return $this->schema['custom']['tags'][$name]['customAttributes'];
             }
-            else
-            {
-                return isset( $this->schema[$element->nodeName] );
-            }
+            // fallback to settings on base custom tag
         }
-        return false;
+
+        return $this->schema[$element->nodeName]['customAttributes'];
     }
 
+    /**
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return bool
+     */
+    function exists( DOMNode $element )
+    {
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
+        {
+            $name = $element->getAttribute( 'name' );
+            return $name && isset($this->schema['custom']['tags'][$name]);
+        }
+
+        return isset($this->schema[$element->nodeName]);
+    }
+
+    /**
+     * @param \DOMNode|\DOMElement $element
+     *
+     * @return array
+     */
+    function getClassesList( DOMNode $element )
+    {
+        // Use specific custom tag setting if set
+        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
+        {
+            $name = $element->getAttribute( 'name' );
+            if ( isset($this->schema['custom']['tags'][$name]['classesList']) )
+            {
+                return $this->schema['custom']['tags'][$name]['classesList'];
+            }
+            // fallback to settings on base custom tag
+        }
+
+        return $this->schema[$element->nodeName]['classesList'];
+    }
+
+
+    /**
+     * List of available classes
+     *
+     * @return array
+     */
     function availableElements()
     {
         return array_keys( $this->schema );
-    }
-
-    function getClassesList( $tagName )
-    {
-        if ( isset( $this->schema[$tagName]['classesList'] ) )
-            return $this->schema[$tagName]['classesList'];
-        else
-            return array();
-    }
-
-    function addAvailableClass( $tagName, $class )
-    {
-        if ( !isset( $this->schema[$tagName]['classesList'] ) )
-            $this->schema[$tagName]['classesList'] = array();
-
-        $this->schema[$tagName]['classesList'][] = $class;
-    }
-
-    function addCustomAttribute( $element, $attrName )
-    {
-        if ( is_string( $element ) )
-        {
-            $this->schema[$element]['customAttributes'][] = $attrName;
-        }
-        else
-        {
-            if ( $element->nodeName == 'custom' )
-            {
-                $name = $element->getAttribute( 'name' );
-                if ( $name )
-                    $this->schema['custom']['customAttributes'][$name][] = $attrName;
-            }
-            else
-            {
-                $this->schema[$element->nodeName]['customAttributes'][] = $attrName;
-            }
-        }
     }
 }

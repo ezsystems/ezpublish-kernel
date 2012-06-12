@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
 use eZ\Publish\SPI\Persistence\ValueObject,
-    ezp\Base\Exception\PropertyNotFound;
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 
 /**
  * Class representing an image alias
  *
- * @property-read \ezp\Io\ContentType $mimeType
+ * @property-read string $mimeType
  * @property-read string $filename The name of the file (for example "my_image.png").
  * @property-read string $suffix The file suffix, aka "extension" (for example "png").
  * @property-read string $dirpath The path to the image (for example "var/storage/images/test/199-2-eng-GB").
@@ -24,6 +24,8 @@ use eZ\Publish\SPI\Persistence\ValueObject,
  * @property-read int $timestamp A UNIX timestamp pinpointing the exact date/time when the alias was last modified.
  *                               For the "original" alias, the timestamp will reveal the time when the image was originally uploaded.
  * @property-read int $filesize The number of bytes that the image consumes.
+ *
+ * @todo Rewrite image fieldtype
  */
 class Alias extends ValueObject
 {
@@ -51,7 +53,7 @@ class Alias extends ValueObject
     /**
      * FileInfo object for image alias
      *
-     * @var \ezp\Io\FileInfo
+     * @var \splFileInfo
      */
     public $fileInfo;
 
@@ -121,7 +123,7 @@ class Alias extends ValueObject
      * It will typically contain EXIF information from digital cameras or information about animated GIFs.
      * If there is no information, the info will be a boolean FALSE.
      *
-     * @var \ezp\Base\Image\Data
+     * @var \eZ\Publish\Core\Repository\FieldType\Image\Data
      */
     public $info;
 
@@ -140,7 +142,7 @@ class Alias extends ValueObject
                 return $this->modified->getTimestamp();
 
             case 'mimeType':
-                return $this->fileInfo->getContentType();
+                return $this->fileInfo->getType();
 
             case 'filename':
                 return $this->fileInfo->getFilename();

@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Repository\Values\Content\VersionInfo class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
@@ -21,14 +29,14 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 class VersionInfo extends APIVersionInfo
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var array
      */
-    protected $repository;
+    protected $names;
 
     /**
-     * @var mixed
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    protected $contentId;
+    protected $contentInfo;
 
     /**
      * Content of the content this version belongs to.
@@ -37,7 +45,7 @@ class VersionInfo extends APIVersionInfo
      */
     public function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+        return $this->contentInfo;
     }
 
     /**
@@ -47,7 +55,7 @@ class VersionInfo extends APIVersionInfo
      */
     public function getNames()
     {
-        // TODO: Implement getNames() method.
+        return $this->names;
     }
 
     /**
@@ -60,16 +68,12 @@ class VersionInfo extends APIVersionInfo
      */
     public function getName( $languageCode = null )
     {
-        // TODO: Implement getName() method.
-    }
+        if ( !isset( $languageCode ) )
+            $languageCode = $this->initialLanguageCode;
 
-    public function __get( $property )
-    {
-        switch ( $property )
-        {
-            case 'contentInfo':
-                return $this->getContentInfo();
-        }
-        return parent::__get( $property );
+        if ( isset( $this->names[$languageCode] ) )
+            return $this->names[$languageCode];
+
+        return null;
     }
 }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Base\Exceptions\ContentValidationException class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException as APIContentValidationException;
@@ -8,8 +16,4 @@ use eZ\Publish\API\Repository\Exceptions\ContentValidationException as APIConten
  */
 class ContentValidationException extends APIContentValidationException
 {
-    public function getErrorCode()
-    {
-        // @todo
-    }
 }

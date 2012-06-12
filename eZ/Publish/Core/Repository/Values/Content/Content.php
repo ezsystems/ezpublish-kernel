@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Repository\Values\Content\Content class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
@@ -10,37 +18,16 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
  * this class represents a content object in a specific version
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $contentInfo->contentType
- * @property-read mixed $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $versionInfo->contentInfo->contentType
+ * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields
+ * @property-read array $fields access fields, calls getFields()
  * @property-read array $relations calls getRelations()
- *
  */
 class Content extends APIContent
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var integer
-     */
-    protected $contentId;
-
-    /**
-     * @var integer
-     */
-    protected $contentTypeId;
-
-    /**
-     * @var integer
-     */
-    protected $versionNo;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
+     * @var array an array of field values like $fields[$fieldDefIdentifier][$languageCode]
      */
     protected $fields;
 
@@ -50,16 +37,35 @@ class Content extends APIContent
     protected $relations;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    protected $versionInfo;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
+     */
+    private $internalFields;
+
+    function __construct( array $data = array() )
+    {
+        foreach ( $data as $propertyName => $propertyValue )
+        {
+            $this->$propertyName = $propertyValue;
+        }
+        foreach ( $this->internalFields as $field )
+        {
+            $this->fields[$field->fieldDefIdentifier][$field->languageCode] = $field->value;
+        }
+    }
+
+    /**
      * returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getVersionInfo()
     {
-        return $this->repository->getContentService()->loadVersionInfoById(
-            $this->contentId,
-            $this->versionNo
-        );
+        return $this->versionInfo;
     }
 
     /**
@@ -73,30 +79,18 @@ class Content extends APIContent
      * @param string $languageCode
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
+     * @todo should an exception be thrown here if nothing is found?
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        $contentType  = $this->getContentType();
-        $translatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
-
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentInfo()->mainLanguageCode;
+            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
-        foreach ( $this->getFields() as $field )
+        if ( isset( $this->fields[$fieldDefIdentifier][$languageCode] ) )
         {
-            if ( $field->fieldDefIdentifier !== $fieldDefIdentifier )
-            {
-                continue;
-            }
-
-            if ( $translatable && $field->languageCode !== $languageCode )
-            {
-                continue;
-            }
-
-            return $field->value;
+            return $this->fields[$fieldDefIdentifier][$languageCode];
         }
 
         return null;
@@ -119,13 +113,13 @@ class Content extends APIContent
      */
     public function getFields()
     {
-        return $this->fields;
+        return $this->internalFields;
     }
 
     /**
      * This method returns the fields for a given language and non translatable fields
      *
-     * If note set the initialLanguage of the content version is used.
+     * If not set the initialLanguage of the content version is used.
      *
      * @param string $languageCode
      *
@@ -134,21 +128,15 @@ class Content extends APIContent
     public function getFieldsByLanguage( $languageCode = null )
     {
         $fields = array();
-        $contentType  = $this->getContentType();
 
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentInfo()->mainLanguageCode;
+            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
         foreach ( $this->getFields() as $field )
         {
-            if ( $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable
-              && $field->languageCode !== $languageCode )
-            {
-                continue;
-            }
-
+            if ( $field->languageCode !== $languageCode ) continue;
             $fields[$field->fieldDefIdentifier] = $field;
         }
 
@@ -156,39 +144,76 @@ class Content extends APIContent
     }
 
     /**
-     * Returns the underlying ContentType for this content object.
+     * This method returns the field for a given field definition identifier and language
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * If not set the initialLanguage of the content version is used.
+     *
+     * @param $fieldDefIdentifier
+     * @param null $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
      */
-    private function getContentType()
+    public function getField( $fieldDefIdentifier, $languageCode = null )
     {
-        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
+        if ( null === $languageCode )
+        {
+            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
+        }
+
+        foreach ( $this->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $fieldDefIdentifier
+                && $field->languageCode === $languageCode )
+            {
+                return $field;
+            }
+        }
+
+        return null;
     }
 
     /**
-     * Returns the content info for this concrete content.
+     * Magic getter for retrieving convenience properties
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
      */
-    private function getContentInfo()
-    {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
-    }
-
     public function __get( $property )
     {
         switch ( $property )
         {
+            case 'id':
+                return $this->versionInfo->contentInfo->id;
+
             case 'contentType':
-                return $this->getContentType();
+                return $this->versionInfo->contentInfo->contentType;
 
             case 'contentInfo':
-                return $this->getContentInfo();
-
-            case 'versionInfo':
-                return $this->getVersionInfo();
+                return $this->versionInfo->contentInfo;
         }
 
         return parent::__get( $property );
+    }
+
+    /**
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'id' )
+            return true;
+
+        if ( $property === 'contentType' )
+            return true;
+
+        if ( $property === 'contentInfo' )
+            return true;
+
+        return parent::__isset( $property );
     }
 }

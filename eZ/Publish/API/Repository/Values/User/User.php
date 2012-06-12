@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\User\User class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -6,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 /**
  * This class represents a user value
  *
- * @property-read mixed $id the user id which is equal to the underlying content id
  * @property-read string $login
  * @property-read string $email
  * @property-read string $passwordHash
@@ -16,13 +23,6 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  */
 abstract class User extends Content
 {
-    /**
-     * User ID
-     *
-     * @var mixed
-     */
-    protected $id;
-
     /**
      * User login
      *

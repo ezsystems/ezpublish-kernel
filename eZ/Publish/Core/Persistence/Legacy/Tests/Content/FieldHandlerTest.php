@@ -10,10 +10,12 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
@@ -101,7 +103,7 @@ class FieldHandlerTest extends TestCase
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'getFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Field' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
         $fieldHandler->loadExternalFieldData( $this->getContentFixture() );
     }
@@ -141,7 +143,7 @@ class FieldHandlerTest extends TestCase
             ->method( 'storeFieldData' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
-        $fieldHandler->updateFields( $this->getUpdateStructFixture() );
+        $fieldHandler->updateFields( 42, 3, $this->getUpdateStructFixture() );
     }
 
     /**
@@ -172,7 +174,7 @@ class FieldHandlerTest extends TestCase
                 $this->isInstanceOf(
                     'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' )
+                42
             );
 
         $storageHandlerMock = $this->getStorageHandlerMock();
@@ -180,7 +182,7 @@ class FieldHandlerTest extends TestCase
             ->method( 'storeFieldData' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
-        $fieldHandler->updateFields( $this->getUpdateStructFixture() );
+        $fieldHandler->updateFields( 42, 3, $this->getUpdateStructFixture() );
     }
 
     /**
@@ -201,9 +203,9 @@ class FieldHandlerTest extends TestCase
         $storageHandlerMock->expects( $this->once() )
             ->method( 'deleteFieldData' )
             ->with(
-                $this->equalTo( 'some-type' ),
-                $this->equalTo( array( 2, 3 ) )
-            );
+            $this->equalTo( 'some-type' ),
+            $this->equalTo( array( 2, 3 ) )
+        );
 
         $contentGatewayMock->expects( $this->once() )
             ->method( 'deleteFields' )
@@ -213,26 +215,55 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
+     */
+    public function testDeleteFieldsWithSecondArgument()
+    {
+        $fieldHandler = $this->getFieldHandler();
+
+        $contentGatewayMock = $this->getContentGatewayMock();
+        $contentGatewayMock->expects( $this->once() )
+            ->method( 'getFieldIdsByType' )
+            ->with( $this->equalTo( 42 ) )
+            ->will( $this->returnValue( array( 'some-type' => array( 2, 3 ) ) ) );
+
+        $storageHandlerMock = $this->getStorageHandlerMock();
+        $storageHandlerMock->expects( $this->once() )
+            ->method( 'deleteFieldData' )
+            ->with(
+            $this->equalTo( 'some-type' ),
+            $this->equalTo( array( 2, 3 ) )
+        );
+
+        $contentGatewayMock->expects( $this->once() )
+            ->method( 'deleteFields' )
+            ->with( $this->equalTo( 42 ) );
+
+        $fieldHandler->deleteFields( 42, 2 );
+    }
+
+    /**
      * Returns a Content fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixture()
     {
-        $content = new Content();
-        $content->id = 42;
-        $content->version = new Version();
-        $content->version->versionNo = 2;
+        $content = new Content;
+        $content->contentInfo = new ContentInfo;
+        $content->contentInfo->id = 42;
+        $content->versionInfo = new VersionInfo;
+        $content->versionInfo->versionNo = 2;
 
         $firstField = new Field();
         $firstField->type = 'some-type';
         $firstField->fieldDefinitionId = 23;
         $firstField->value = new FieldValue;
-        $firstField->value->data = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
 
         $secondField = clone $firstField;
 
-        $content->version->fields = array(
+        $content->fields = array(
             $firstField, $secondField
         );
 
@@ -250,8 +281,7 @@ class FieldHandlerTest extends TestCase
 
         $content = $this->getContentFixture();
 
-        $struct->versionNo = 3;
-        $struct->fields = $content->version->fields;
+        $struct->fields = $content->fields;
 
         return $struct;
     }

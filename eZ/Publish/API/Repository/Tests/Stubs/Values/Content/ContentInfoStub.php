@@ -49,4 +49,15 @@ class ContentInfoStub extends ContentInfo
         }
         return parent::__get( $property );
     }
+
+    /**
+     * Internal helper method to modify the $mainLocationId property
+     *
+     * @param mixed $mainLocationId
+     * @return void
+     */
+    public function __setMainLocationId( $mainLocationId )
+    {
+        $this->mainLocationId = $mainLocationId;
+    }
 }

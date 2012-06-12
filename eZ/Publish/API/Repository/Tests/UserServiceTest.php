@@ -18,6 +18,7 @@ use \eZ\Publish\API\Repository\Values\User\User;
  * Test case for operations in the UserService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\UserService
+ * @group integration
  */
 class UserServiceTest extends BaseTest
 {
@@ -32,9 +33,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -56,11 +57,12 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingGroupId = $this->generateId(  'group', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
         // This call will fail with a NotFoundException
-        $userService->loadUserGroup( PHP_INT_MAX );
+        $userService->loadUserGroup( $nonExistingGroupId );
         /* END: Use Case */
     }
 
@@ -75,9 +77,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -168,7 +170,7 @@ class UserServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
-        $userService        = $repository->getUserService();
+        $userService = $repository->getUserService();
 
         // Load the default ContentType for user groups
         $groupType = $contentTypeService->loadContentTypeByIdentifier( 'user_group' );
@@ -224,12 +226,12 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'parentId'       =>  4,
-                'subGroupCount'  =>  0
+                'parentId' => $this->generateId( 'group', 4 ),
+                'subGroupCount' => 0
             ),
             array(
-                'parentId'       =>  $userGroup->parentId,
-                'subGroupCount'  =>  $userGroup->subGroupCount
+                'parentId' => $userGroup->parentId,
+                'subGroupCount' => $userGroup->subGroupCount
             )
         );
     }
@@ -244,11 +246,11 @@ class UserServiceTest extends BaseTest
      */
     public function testCreateUserGroupIncrementsParentSubGroupCount()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
-        $mainGroupId = 4;
+        $mainGroupId = $this->generateId( 'group', 4 );
 
-        $parentUserGroup  = $userService->loadUserGroup( $mainGroupId );
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
         $parentGroupCount = $parentUserGroup->subGroupCount;
 
         /* BEGIN: Use Case */
@@ -267,10 +269,33 @@ class UserServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
     public function testCreateUserGroupThrowsInvalidArgumentException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::createUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        $mainGroupId = $this->generateId( 'group', 4 );
+        /* BEGIN: Use Case */
+        // $mainGroupId is the ID of the main "Users" group
+
+        $userService = $repository->getUserService();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
+        $userGroupCreate->remoteId = '5f7f0bdb3381d6a461d8c29ff53d908f';
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // specified remoteId is already used for the "Members" user group.
+        $userService->createUserGroup(
+            $userGroupCreate,
+            $parentUserGroup
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -285,9 +310,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Use Case */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -304,6 +329,56 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createUserGroup() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateUserGroupInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        $mainGroupId = $this->generateId( 'group', 4 );
+        /* BEGIN: Use Case */
+        // $mainGroupId is the ID of the main "Users" group
+
+        $userService = $repository->getUserService();
+
+        $repository->beginTransaction();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', 'Example Group' );
+
+        // Create the new user group
+        $createdUserGroupId = $userService->createUserGroup(
+            $userGroupCreate,
+            $parentUserGroup
+        )->id;
+
+        $repository->rollback();
+
+        try
+        {
+            // Throws exception since creation of user group was rolled back
+            $loadedGroup = $userService->loadUserGroup( $createdUserGroupId );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'User group object still exists after rollback.' );
+    }
+
+    /**
      * Test for the deleteUserGroup() method.
      *
      * @return void
@@ -313,7 +388,7 @@ class UserServiceTest extends BaseTest
      */
     public function testDeleteUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -337,12 +412,13 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $membersGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $membersGroupId = 13;
+        // $membersGroupId is the ID of the "Members" user group in an eZ
+        // Publish demo installation
 
         $userGroup = $this->createUserGroupVersion1();
 
@@ -374,12 +450,13 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroupIncrementsSubGroupCountOnNewParent()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $membersGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $membersGroupId = 13;
+        // $membersGroupId is the ID of the "Members" user group in an eZ
+        // Publish demo installation
 
         $userGroup = $this->createUserGroupVersion1();
 
@@ -405,12 +482,13 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroupDecrementsSubGroupCountOnOldParent()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $membersGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Members" user group in an eZ Publish demo installation
-        $membersGroupId = 13;
+        // $membersGroupId is the ID of the "Members" user group in an eZ
+        // Publish demo installation
 
         $userGroup = $this->createUserGroupVersion1();
 
@@ -421,7 +499,7 @@ class UserServiceTest extends BaseTest
         $userService->moveUserGroup( $userGroup, $membersUserGroup );
         /* END: Use Case */
 
-        $mainUserGroup = $userService->loadUserGroup( 4 );
+        $mainUserGroup = $userService->loadUserGroup( $this->generateId( 'group', 4 ) );
 
         $this->assertEquals( 5, $mainUserGroup->subGroupCount );
     }
@@ -459,7 +537,7 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -492,7 +570,7 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserGroupWithSubContentUpdateStruct()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -516,7 +594,7 @@ class UserServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertEquals( 'Sindelfingen', $userGroup->getFieldValue( 'name' ) );
+        $this->assertEquals( 'Sindelfingen', $userGroup->getFieldValue( 'name', 'eng-US' ) );
 
         $versionInfo = $userGroup->getVersionInfo();
 
@@ -533,7 +611,7 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserGroupWithSubContentMetadataUpdateStruct()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -548,7 +626,7 @@ class UserServiceTest extends BaseTest
 
         // Create a group update struct and set content update struct
         $groupUpdate = $userService->newUserGroupUpdateStruct();
-        $groupUpdate->contentMetaDataUpdateStruct = $metadataUpdate;
+        $groupUpdate->contentMetadataUpdateStruct = $metadataUpdate;
 
         // This will update the name and the increment the group version number
         $userGroup = $userService->updateUserGroup(
@@ -574,10 +652,31 @@ class UserServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroup
      */
     public function testUpdateUserGroupThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUserGroup() is not implemented." );
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $userGroup = $this->createUserGroupVersion1();
+
+        // Load the content service
+        $contentService = $repository->getContentService();
+
+        // Create a content update struct and update the group name
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'name', null, 'eng-US' );
+
+        // Create a group update struct and set content update struct
+        $groupUpdate = $userService->newUserGroupUpdateStruct();
+        $groupUpdate->contentUpdateStruct = $contentUpdate;
+
+        // This call will fail with a "ContentValidationException", because the
+        // mandatory field "name" is set to an empty value
+        $userService->updateUserGroup( $userGroup, $groupUpdate );
+        /* END: Use Case */
     }
 
     /**
@@ -623,16 +722,16 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login'             =>  'user',
-                'email'             =>  'user@example.com',
-                'password'          =>  'secret',
-                'mainLanguageCode'  =>  'eng-US',
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'password' => 'secret',
+                'mainLanguageCode' => 'eng-US',
             ),
             array(
-                'login'             =>  $userCreate->login,
-                'email'             =>  $userCreate->email,
-                'password'          =>  $userCreate->password,
-                'mainLanguageCode'  =>  $userCreate->mainLanguageCode,
+                'login' => $userCreate->login,
+                'email' => $userCreate->email,
+                'password' => $userCreate->password,
+                'mainLanguageCode' => $userCreate->mainLanguageCode,
             )
         );
     }
@@ -656,7 +755,7 @@ class UserServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
-        $userService        = $repository->getUserService();
+        $userService = $repository->getUserService();
 
         $userType = $contentTypeService->loadContentTypeByIdentifier( 'user' );
 
@@ -708,20 +807,20 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login'             =>  'user',
-                'email'             =>  'user@example.com',
-                'passwordHash'      =>  $this->createHash(
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'passwordHash' => $this->createHash(
                     'user',
                     'secret',
                     $user->hashAlgorithm
                 ),
-                'mainLanguageCode'  =>  'eng-US'
+                'mainLanguageCode' => 'eng-US'
             ),
             array(
-                'login'             =>  $user->login,
-                'email'             =>  $user->email,
-                'passwordHash'      =>  $user->passwordHash,
-                'mainLanguageCode'  =>  $user->contentInfo->mainLanguageCode
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'mainLanguageCode' => $user->contentInfo->mainLanguageCode
             )
         );
     }
@@ -738,9 +837,10 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $editorsGroupId = $this->generateId( 'group', 13 );
         /* BEGIN: Use Case */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
 
         $userService = $repository->getUserService();
 
@@ -763,6 +863,41 @@ class UserServiceTest extends BaseTest
         // mandatory fields "first_name" and "last_name" are not set.
         $userService->createUser( $userCreate, array( $group ) );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateUserInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $repository->beginTransaction();
+
+        $user = $this->createUserVersion1();
+
+        $repository->rollback();
+
+        try
+        {
+            // Throws exception since creation of user was rolled back
+            $loadedUser = $userService->loadUser( $user->id );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'User object still exists after rollback.' );
     }
 
     /**
@@ -800,12 +935,13 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingUserId = $this->generateId( 'useer', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
         // This call will fail with a "NotFoundException", because no user with
         // an id equal to PHP_INT_MAX should exist.
-        $userService->loadUser( PHP_INT_MAX );
+        $userService->loadUser( $nonExistingUserId );
         /* END: Use Case */
     }
 
@@ -977,8 +1113,8 @@ class UserServiceTest extends BaseTest
         $userUpdate = $userService->newUserUpdateStruct();
 
         // Set new values for password and maxLogin
-        $userUpdate->password  = 'my-new-password';
-        $userUpdate->maxLogin  = 42;
+        $userUpdate->password = 'my-new-password';
+        $userUpdate->maxLogin = 42;
         $userUpdate->isEnabled = false;
 
         // Updated the user record.
@@ -1005,22 +1141,22 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login'         =>  'user',
-                'email'         =>  'user@example.com',
-                'passwordHash'  =>  $this->createHash(
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'passwordHash' => $this->createHash(
                     'user',
                     'my-new-password',
                     $user->hashAlgorithm
                 ),
-                'maxLogin'      =>  42,
-                'isEnabled'     =>  false
+                'maxLogin' => 42,
+                'isEnabled' => false
             ),
             array(
-                'login'         =>  $user->login,
-                'email'         =>  $user->email,
-                'passwordHash'  =>  $user->passwordHash,
-                'maxLogin'      =>  $user->maxLogin,
-                'isEnabled'     =>  $user->isEnabled
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'maxLogin' => $user->maxLogin,
+                'isEnabled' => $user->isEnabled
             )
         );
     }
@@ -1081,7 +1217,7 @@ class UserServiceTest extends BaseTest
         $userUpdate = $userService->newUserUpdateStruct();
 
         // Set the metadata update struct.
-        $userUpdate->contentMetaDataUpdateStruct = $metadataUpdate;
+        $userUpdate->contentMetadataUpdateStruct = $metadataUpdate;
 
         // Updated the user record.
         $userVersion2 = $userService->updateUser( $user, $userUpdate );
@@ -1117,6 +1253,9 @@ class UserServiceTest extends BaseTest
         $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
         $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
 
+        // Required field
+        $contentUpdate->setField( 'user_account', $user );
+
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();
 
@@ -1142,10 +1281,35 @@ class UserServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
     public function testUpdateUserThrowsContentValidationException()
     {
-        $this->markTestIncomplete( "@TODO: Test for UserService::updateUser() is not implemented." );
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Get the ContentService implementation
+        $contentService = $repository->getContentService();
+
+        // Create a content update struct and change the remote id.
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'first_name', null, 'eng-US' );
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set the content update struct.
+        $userUpdate->contentUpdateStruct = $contentUpdate;
+
+        // This call will fail with a "ContentValidationException" because the
+        // mandary field "first_name" is set to an empty value.
+        $userService->updateUser( $user, $userUpdate );
+
+        /* END: Use Case */
     }
 
     /**
@@ -1187,7 +1351,7 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $group = $userService->loadUserGroup( 13 );
+        $group = $userService->loadUserGroup( $this->generateId( 'group', 13 ) );
 
         /* BEGIN: Use Case */
         $this->createUserVersion1();
@@ -1214,11 +1378,12 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $administratorGroupId = $this->generateId( 'group', 12 );
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
 
-        // ID of the "Administrator" group in an eZ Publish demo installation
-        $administratorGroupId = 12;
+        $user = $this->createUserVersion1();
 
         // Assign group to newly created user
         $userService->assignUserToUserGroup(
@@ -1257,13 +1422,14 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId = 13;
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        $anonymousGroupId = $this->generateId( 'group', 42 );
 
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        // $anonymousGroupId is the ID of the "Anonymous Users" group in an eZ
+        // Publish demo installation
 
-        // ID of the "Anonymous Users" group in an eZ Publish demo installation
-        $anonymousGroupId = 42;
+        $user = $this->createUserVersion1();
 
         // Assign group to newly created user
         $userService->assignUserToUserGroup(
@@ -1301,11 +1467,11 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
+        $administratorGroupId = $this->generateId( 'group', 12 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
-
-        // ID of the "Administrator" group in an eZ Publish demo installation
-        $administratorGroupId = 12;
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
 
         // This call will fail with an "InvalidArgumentException", because the
         // user is not assigned to the "Adminstrator" group
@@ -1325,9 +1491,9 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Inline */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $userService = $repository->getUserService();
 
@@ -1346,44 +1512,6 @@ class UserServiceTest extends BaseTest
         /* END: Inline */
 
         return $userGroup;
-    }
-
-    /**
-     * Create a user fixture in a variable named <b>$user</b>,
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    private function createUserVersion1()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Inline */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
-
-        $userService = $repository->getUserService();
-
-        // Instantiate a create struct with mandatory properties
-        $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
-            'secret',
-            'eng-US'
-        );
-        $userCreate->enabled = true;
-
-        // Set some fields required by the user ContentType
-        $userCreate->setField( 'first_name', 'Example' );
-        $userCreate->setField( 'last_name', 'User' );
-
-        // Load parent group for the user
-        $group = $userService->loadUserGroup( $editorsGroupId );
-
-        // Create a new user instance.
-        $user = $userService->createUser( $userCreate, array( $group ) );
-        /* END: Inline */
-
-        return $user;
     }
 
     private function createHash( $login, $password, $type )

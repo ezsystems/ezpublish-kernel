@@ -5,12 +5,14 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
 use ezcDbHandler as ezcDbHandlerWrapped,
-    ezcQuerySelect;
+    ezcQuerySelect,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
+    ezcDbFactory;
 
 /**
  * Wrapper class for the zeta components database handler, providing some
@@ -36,6 +38,36 @@ class EzcDbHandler
     public function __construct( ezcDbHandlerWrapped $ezcDbHandler )
     {
         $this->ezcDbHandler = $ezcDbHandler;
+    }
+
+    /**
+     * Factory for getting EzcDbHandler handler object
+     *
+     * Will use postgres or sqllite specific wrappers if dsn indicates such databases.
+     *
+     * @static
+     * @param $dsn
+     * @return EzcDbHandler
+     */
+    public static function create( $dsn )
+    {
+        $connection = ezcDbFactory::create( $dsn );
+        $database = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
+
+        switch ( $database )
+        {
+            case 'pgsql':
+                $dbHandler = new Pgsql( $connection );
+                break;
+
+            case 'sqlite':
+                $dbHandler = new Sqlite( $connection );
+                break;
+
+            default:
+                $dbHandler = new self( $connection );
+        }
+        return $dbHandler;
     }
 
     /**

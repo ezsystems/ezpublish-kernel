@@ -192,6 +192,49 @@ CREATE TABLE ezbinaryfile (
     "version" integer DEFAULT 0 NOT NULL
 );
 
+DROP TABLE IF EXISTS ezcobj_state;
+CREATE TABLE ezcobj_state (
+    default_language_id integer NOT NULL DEFAULT 0,
+    group_id integer NOT NULL DEFAULT 0,
+    id integer DEFAULT nextval('ezcobj_state_s'::text) NOT NULL,
+    identifier character varying(45) NOT NULL DEFAULT ''::character varying,
+    language_mask integer NOT NULL DEFAULT 0,
+    priority integer NOT NULL DEFAULT 0
+);
+
+
+DROP TABLE IF EXISTS ezcobj_state_group;
+CREATE TABLE ezcobj_state_group (
+    default_language_id integer NOT NULL DEFAULT 0,
+    id integer DEFAULT nextval('ezcobj_state_group_s'::text) NOT NULL,
+    identifier character varying(45) NOT NULL DEFAULT ''::character varying,
+    language_mask integer NOT NULL DEFAULT 0
+);
+
+
+DROP TABLE IF EXISTS ezcobj_state_group_language;
+CREATE TABLE ezcobj_state_group_language (
+    contentobject_state_group_id integer NOT NULL DEFAULT 0,
+    description text NOT NULL,
+    language_id integer NOT NULL DEFAULT 0,
+    name character varying(45) NOT NULL DEFAULT ''::character varying
+);
+
+
+DROP TABLE IF EXISTS ezcobj_state_language;
+CREATE TABLE ezcobj_state_language (
+    contentobject_state_id integer NOT NULL DEFAULT 0,
+    description text NOT NULL,
+    language_id integer NOT NULL DEFAULT 0,
+    name character varying(45) NOT NULL DEFAULT ''::character varying
+);
+
+DROP TABLE IF EXISTS ezcobj_state_link;
+CREATE TABLE ezcobj_state_link (
+  contentobject_id integer NOT NULL DEFAULT 0,
+  contentobject_state_id integer NOT NULL DEFAULT 0
+);
+
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
     disabled integer DEFAULT 0 NOT NULL,
@@ -567,6 +610,16 @@ CREATE TABLE ezuser_setting (
     user_id integer DEFAULT 0 NOT NULL
 );
 
+CREATE UNIQUE INDEX ezcobj_state_identifier ON ezcobj_state USING btree (group_id, identifier);
+
+CREATE INDEX ezcobj_state_lmask ON ezcobj_state USING btree (language_mask);
+
+CREATE INDEX ezcobj_state_priority ON ezcobj_state USING btree (priority);
+
+CREATE UNIQUE INDEX ezcobj_state_group_identifier ON ezcobj_state_group USING btree (identifier);
+
+CREATE INDEX ezcobj_state_group_lmask ON ezcobj_state_group USING btree (language_mask);
+
 CREATE INDEX ezcontent_language_name ON ezcontent_language USING btree (name);
 
 CREATE INDEX ezcontentclass_version ON ezcontentclass USING btree ("version");
@@ -720,6 +773,21 @@ CREATE INDEX ezurlalias_ml_text_lang ON ezurlalias_ml USING btree (text, lang_ma
 CREATE INDEX ezuser_role_contentobject_id ON ezuser_role USING btree (contentobject_id);
 
 CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
+
+ALTER TABLE ONLY ezcobj_state
+    ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezcobj_state_group
+    ADD CONSTRAINT ezcobj_state_group_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezcobj_state_group_language
+    ADD CONSTRAINT ezcobj_state_group_language_pkey PRIMARY KEY (contentobject_state_group_id, language_id);
+
+ALTER TABLE ONLY ezcobj_state_language
+    ADD CONSTRAINT ezcobj_state_language_pkey PRIMARY KEY (contentobject_state_id, language_id);
+
+ALTER TABLE ONLY ezcobj_state_link
+    ADD CONSTRAINT ezcobj_state_link_pkey PRIMARY KEY (contentobject_id,contentobject_state_id);
 
 ALTER TABLE ONLY ezcontent_language
     ADD CONSTRAINT ezcontent_language_pkey PRIMARY KEY (id);

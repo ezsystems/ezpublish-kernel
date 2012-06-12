@@ -64,7 +64,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $binaryFile = $this->ioHandler->create( $struct );
 
 
-        self::assertInstanceOf( 'eZ\Publish\SPI\IO\BinaryFile', $binaryFile );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $binaryFile );
         self::assertEquals( $repositoryPath, $binaryFile->path );
         self::assertEquals( 1928, $binaryFile->size );
         self::assertInstanceOf( 'DateTime', $binaryFile->mtime );
@@ -251,7 +251,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 
         $loadedFile = $this->ioHandler->load( $repositoryPath );
 
-        self::assertInstanceOf( 'eZ\Publish\SPI\IO\BinaryFile', $loadedFile );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $loadedFile );
 
         self::assertEquals( 'var/test/storage/load.gif', $loadedFile->path );
         self::assertEquals( 1928, $loadedFile->size );

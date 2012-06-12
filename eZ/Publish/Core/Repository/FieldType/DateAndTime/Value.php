@@ -8,17 +8,16 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\DateAndTime;
-use eZ\Publish\Core\Repository\FieldType\ValueInterface,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\InvalidArgumentType,
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     Exception,
     DateTime;
 
 /**
  * Value for DateAndTime field type
  */
-class Value extends BaseValue implements ValueInterface
+class Value extends BaseValue
 {
     /**
      * Date content
@@ -38,12 +37,12 @@ class Value extends BaseValue implements ValueInterface
      * Construct a new Value object and initialize with $dateTime
      *
      * @param \DateTime|string $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
-     * @throws \ezp\Base\Exception\InvalidArgumentType If $dateTime does not comply to a valid dateTime or string
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $dateTime does not comply to a valid date format string
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid dateTime or string
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid date format string
      */
     public function __construct( $dateTime = "now" )
     {
-        if ( $dateTime !== null )
+        if ( $dateTime !== null && $dateTime !== 0 )
         {
             if ( is_string( $dateTime ) )
             {
@@ -56,30 +55,22 @@ class Value extends BaseValue implements ValueInterface
                     throw new InvalidArgumentValue( '$dateTime', $dateTime, __CLASS__, $e );
                 }
             }
+            else if ( is_int( $dateTime ) )
+            {
+                try
+                {
+                    $dateTime = new DateTime( "@{$dateTime}" );
+                }
+                catch ( Exception $e )
+                {
+                    throw new InvalidArgumentValue( '$dateTime', $dateTime, __CLASS__, $e );
+                }
+            }
 
             if ( ! $dateTime instanceof DateTime )
-                throw new InvalidArgumentType( "dateTime", "DateTime", $dateTime );
+                throw new InvalidArgumentType( '$dateTime', "DateTime", $dateTime );
 
             $this->value = $dateTime;
-        }
-    }
-
-    /**
-     * @param string $stringValue A valid date/time string.
-     *                            Valid formats are explained in {@link http://php.net/manual/en/datetime.formats.php Date and Time Formats}.
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $stringValue does not comply a valid date format
-     * @return \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
-     */
-    public static function fromString( $stringValue )
-    {
-        try
-        {
-            return new static( new DateTime( $stringValue ) );
-        }
-        catch ( Exception $e )
-        {
-            throw new InvalidArgumentValue( '$stringValue', $stringValue, __CLASS__, $e );
         }
     }
 
@@ -95,8 +86,8 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\ValueInterface::getTitle()
-     * @todo Return format taken from locale configuration
+     * @see \eZ\Publish\Core\Repository\FieldType\Value::getTitle()
+     * @todo Return format taken from locale settings (via ctor injection)
      */
     public function getTitle()
     {

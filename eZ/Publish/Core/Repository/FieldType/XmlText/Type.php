@@ -8,21 +8,18 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
-use ezp\Base\Repository,
-    ezp\Content\Field,
-    ezp\Content\Version,
-    eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Repository\FieldType\XmlText\Value as Value,
-    ezp\Content\Type\FieldDefinition,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\InvalidArgumentType;
+use eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\API\Repository\FieldTypeService,
+    eZ\Publish\Core\Repository\FieldType\FieldType,
+    eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as XMLTextInputHandler,
+    eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as XMLTextInputParserInterface,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * XmlBlock field type.
- *
- * This field
- * @package
  */
 class Type extends FieldType
 {
@@ -40,6 +37,35 @@ class Type extends FieldType
     );
 
     /**
+     * @var \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler
+     */
+    protected $inputHandler;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser $inputParser
+     */
+    public function __construct( XMLTextInputParserInterface $inputParser )
+    {
+        $this->inputHandler = new XMLTextInputHandler( $inputParser );
+    }
+
+    /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $text as value.
+     *
+     * @param string $text
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $text )
+    {
+        return new Value( $this->inputHandler, $text );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -53,7 +79,7 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
     public function getDefaultDefaultValue()
     {
@@ -63,36 +89,44 @@ class Type extends FieldType
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
 EOF;
-        return new Value( $value, Value::INPUT_FORMAT_RAW );
+        return new Value( $this->inputHandler, $value, Value::INPUT_FORMAT_RAW );
     }
 
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value',
+                $inputValue
+            );
         }
 
         if ( !is_string( $inputValue->text ) )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->text',
+                'string',
+                $inputValue->text
+            );
         }
 
         $handler = $inputValue->getInputHandler();
         if ( !$handler->isXmlValid( $inputValue->text, false ) )
         {
             // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentValue( '$inputValue->text', $inputValue->text, __CLASS__ );
         }
 
         return $inputValue;
@@ -101,30 +135,35 @@ EOF;
     /**
      * Returns sortKey information
      *
-     * @see eZ\Publish\Core\Repository\FieldType
+     * @see \eZ\Publish\Core\Repository\FieldType
+     *
+     * @param mixed $value
      *
      * @return array|bool
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         return false;
     }
 
     /**
      * Converts complex values to a Value\Raw object
+     *
      * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Field $field
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     *
      * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
-    protected function convertValueToRawValue( Value $value, Repository $repository, Field $field )
+    protected function convertValueToRawValue( Value $value, FieldTypeService $fieldTypeService, Field $field )
     {
         // we don't convert Raw to Raw, right ?
         // if ( get_class( $value ) === 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' )
         //    return $value;
 
         $handler = $value->getInputHandler( $value );
-        $handler->process( $value->text, $repository, $field->version );
+        throw new \RuntimeException( '@todo XMLText has a dependency on version id and version number, after refactoring that is not available' );
+        $handler->process( $value->text, $fieldTypeService, $field->version );
 
         $value->setRawText( $handler->getDocumentAsXml() );
     }
@@ -132,16 +171,16 @@ EOF;
     /**
      * This method is called on occuring events. Implementations can perform corresponding actions
      *
-     * @param string $event - prePublish, postPublish, preCreate, postCreate
-     * @param Repository $repository
-     * @param $fieldDef - the field definition of the field
-     * @param $field - the field for which an action is performed
+     * @param string $event prePublish, postPublish, preCreate, postCreate
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
-    public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field $field )
+    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field )
     {
         if ( $event === "preCreate" )
         {
-            $this->convertValueToRawValue( $field->value, $repository, $field );
+            $this->convertValueToRawValue( $field->value, $fieldTypeService, $field );
         }
     }
 
@@ -150,21 +189,21 @@ EOF;
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        return new Value( $this->inputHandler, $hash );
     }
 
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
         return $value->text;
     }

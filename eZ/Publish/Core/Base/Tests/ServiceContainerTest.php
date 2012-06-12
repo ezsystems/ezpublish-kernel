@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\Base\Tests;
 use eZ\Publish\Core\Base\ServiceContainer,
-    PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase,
+    Closure;
 
 /**
  * Test class
@@ -25,29 +26,12 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'BService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
-                    'public' => true,
                 )
             )
         );
         $b = $sc->get('BService');
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $b );
         self::assertFalse( $b->factoryExecuted );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testSimplePrivateService()
-    {
-        $sc = new ServiceContainer(
-            array(
-                'BService' => array(
-                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
-                )
-            )
-        );
-        $sc->get('BService');
     }
 
     /**
@@ -63,7 +47,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                  ),
                 'CService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\C',
-                    'public' => true,
                     'arguments' => array( '@BService' ),
                 )
             )
@@ -83,7 +66,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'AService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
-                    'public' => true,
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'BService' => array(
@@ -112,7 +94,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'AService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
-                    'public' => true,
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'CService' => array(
@@ -141,7 +122,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'DService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\D',
-                    'public' => true,
                     'arguments' => array( '$_SERVER', '$B' ),
                 ),
             ),
@@ -161,7 +141,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'EService' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\E',
-                    'public' => true,
                     'arguments' => array(
                         array(
                             'bool' => true,
@@ -187,7 +166,6 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'F' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\F',
-                    'public' => true,
                     'arguments' => array(
                         array(
                             'b' => '@B',
@@ -216,20 +194,18 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'G' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\G',
-                    'public' => true,
                     'arguments' => array(
-                            'lazyHServiceCall' => '%H-parent::timesTwo',
+                            'lazyHServiceCall' => '%H:parent::timesTwo',
                             'hIntValue' => 42,
-                            'lazyHService' => '%H-parent',
+                            'lazyHService' => '%H:parent',
                     ),
                 ),
-                'H-parent' => array(
+                'H:parent' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\H',
                     'shared' => false,
                     'arguments' => array(),
                 ),
-                '-parent' => array(
-                    'public' => true,
+                'parent' => array(
                     'arguments' => array( 'test' => 33 ),
                 ),
             )
@@ -241,7 +217,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::expandExtendedServices
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::getListOfExtendedServices
      */
     public function testComplexExtendedServicesUsingHash()
     {
@@ -249,21 +225,23 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'ExtendedTestCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestCheck',
-                    'public' => true,
                     'arguments' => array(
-                            'extendedTests' => '@-ExtendedTest',
+                            'extendedTests' => '@:ExtendedTest',
                     ),
                 ),
-                'ExtendedTest1-ExtendedTest' => array(
+                'ExtendedTest1:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest1',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest2-ExtendedTest' => array(
+                'ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest2',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest3-ExtendedTest' => array(
+                'ExtendedTest3:ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                '-ExtendedTest' => array(
+                'ExtendedTest' => array(
                     'arguments' => array( 'h' => '$H'),
                 ),
             ),
@@ -277,7 +255,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::expandExtendedServices
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::getListOfExtendedServices
      */
     public function testComplexLazyExtendedServicesUsingHash()
     {
@@ -285,22 +263,23 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'ExtendedTestLacyCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestLacyCheck',
-                    'public' => true,
                     'arguments' => array(
-                            'extendedTests' => '%-ExtendedTest',
+                            'extendedTests' => '%:ExtendedTest',
                     ),
                 ),
-                'ExtendedTest1-ExtendedTest' => array(
+                'ExtendedTest1:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest1',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest2-ExtendedTest' => array(
+                'ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest2',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest3-ExtendedTest' => array(
+                'ExtendedTest3:ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                '-ExtendedTest' => array(
-                    'public' => true,
+                'ExtendedTest' => array(
                     'arguments' => array( 'h' => '$H'),
                 ),
             ),
@@ -314,7 +293,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
-     * @covers \eZ\Publish\Core\Base\ServiceContainer::expandExtendedServices
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::getListOfExtendedServices
      */
     public function testComplexLazyExtendedCallbackUsingHash()
     {
@@ -322,23 +301,24 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'ExtendedTestLacyCheck' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTestLacyCheck',
-                    'public' => true,
                     'arguments' => array(
-                            'extendedTests' => '%-ExtendedTest::setTest',
+                            'extendedTests' => '%:ExtendedTest::setTest',
                             'test' => 'newValue',
                     ),
                 ),
-                'ExtendedTest1-ExtendedTest' => array(
+                'ExtendedTest1:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest1',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest2-ExtendedTest' => array(
+                'ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest2',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                'ExtendedTest3-ExtendedTest' => array(
+                'ExtendedTest3:ExtendedTest2:ExtendedTest' => array(
                     'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ExtendedTest3',
+                    'arguments' => array( 'h' => '$H' ),
                 ),
-                '-ExtendedTest' => array(
-                    'public' => true,
+                'ExtendedTest' => array(
                     'arguments' => array( 'h' => '$H' ),
                 ),
             ),
@@ -419,7 +399,7 @@ class F
 class G
 {
     public $hIntValue = null;
-    public function __construct( \Closure $lazyHServiceCall, $hIntValue, \Closure $lazyHService )
+    public function __construct( Closure $lazyHServiceCall, $hIntValue, Closure $lazyHService )
     {
         $this->hIntValue = $lazyHServiceCall( $hIntValue );
         $service = $lazyHService();
@@ -476,9 +456,10 @@ class ExtendedTestCheck
             $key++;
             if ( !$extendedTest instanceof ExtendedTest )
                 throw new \Exception( "Values in \$extendedTests must extend ExtendedTest" );
-            else if ( $extendedTestName !== "ExtendedTest{$key}" )
+            else if ( $key !== 3 && $extendedTestName !== "ExtendedTest{$key}" )
                 throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
-
+            else if ( $key === 3 && $extendedTestName !== "ExtendedTest3:ExtendedTest2" )
+                throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
         }
         $this->count = $key;
     }
@@ -502,7 +483,9 @@ class ExtendedTestLacyCheck
             $extendedTest = $extendedTest( $test );
             if ( !$extendedTest instanceof ExtendedTest )
                 throw new \Exception( "Values in \$extendedTests must extend ExtendedTest" );
-            else if ( $extendedTestName !== "ExtendedTest{$key}" )
+            else if ( $key !== 3 && $extendedTestName !== "ExtendedTest{$key}" )
+                throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
+            else if ( $key === 3 && $extendedTestName !== "ExtendedTest3:ExtendedTest2" )
                 throw new \Exception( "Keys had wrong value in \$extendedTests, got: $extendedTestName" );
             else if ( $extendedTest->test !== $test )
                 throw new \Exception( "\$extendedTest->test is supposed to be '{$test}', got: {$extendedTest->test}" );

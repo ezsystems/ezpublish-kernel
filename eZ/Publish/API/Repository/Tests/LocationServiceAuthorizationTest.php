@@ -18,6 +18,7 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
  * Test case for operations in the LocationService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\LocationService
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
  */
 class LocationServiceAuthorizationTest extends BaseTest
 {
@@ -27,10 +28,39 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testCreateLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::createLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+
+        /* BEGIN: Use Case */;
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $user = $this->createUserVersion1();
+
+        // ContentInfo for "Editors" user group
+        $contentInfo = $contentService->loadContentInfo( $editorsGroupId );
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        $locationCreate = $locationService->newLocationCreateStruct( 5 );
+        $locationCreate->priority = 23;
+        $locationCreate->hidden = true;
+        $locationCreate->remoteId = 'sindelfingen';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -39,10 +69,25 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::loadLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        $user = $this->createUserVersion1();
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->loadLocation( $editorsGroupId );
+        /* END: Use Case */
     }
 
     /**
@@ -51,10 +96,26 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      */
     public function testLoadLocationByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::loadLocationByRemoteId() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // remoteId of the "Editors" location in an eZ Publish demo installation
+        $editorsRemoteId = 'f7dda2854fc68f7c8455d9cb14bd04a9';
+
+        $locationService = $repository->getLocationService();
+
+        $user = $this->createUserVersion1();
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->loadLocationByRemoteId( $editorsRemoteId );
+        /* END: Use Case */
     }
 
     /**
@@ -63,10 +124,36 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUpdateLocation
      */
     public function testUpdateLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::updateLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+
+        /* BEGIN: Use Case */;
+        $user = $this->createUserVersion1();
+
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation( $editorsGroupId );
+
+        $locationUpdateStruct = $locationService->newLocationUpdateStruct();
+        $locationUpdateStruct->priority = 3;
+        $locationUpdateStruct->remoteId = 'c7adcbf1e96bc29bca28c2d809d0c7ef69272651';
+        $locationUpdateStruct->sortField = Location::SORT_FIELD_PRIORITY;
+        $locationUpdateStruct->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->updateLocation(
+            $originalLocation,
+            $locationUpdateStruct
+        );
+        /* END: Use Case */;
     }
 
     /**
@@ -75,10 +162,28 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadMainLocation
      */
     public function testLoadMainLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::loadMainLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+
+        /* BEGIN: Use Case */;
+        $user = $this->createUserVersion1();
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( $editorsGroupId );
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->loadMainLocation( $contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -87,10 +192,41 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testSwapLocation
      */
     public function testSwapLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::swapLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $communityLocationId = $this->generateId( 'location', 167 );
+        $supportLocationId = $this->generateId( 'location', 96 );
+        /* BEGIN: Use Case */
+        // $communityLocationId is the ID of the "Community" page location in
+        // an eZ Publish demo installation
+
+        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load first child of the "Community" location
+        $locationLeft = $locationService->loadLocationChildren(
+            $locationService->loadLocation( $communityLocationId ), 0, 1
+        );
+        $locationLeft = reset( $locationLeft );
+
+        // Load "Support" location
+        $locationRight = $locationService->loadLocation( $supportLocationId );
+
+        $user = $this->createMediaUserVersion1();
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->swapLocation( $locationLeft, $locationRight );
+        /* END: Use Case */
     }
 
     /**
@@ -99,10 +235,27 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testHideLocation
      */
     public function testHideLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::hideLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $locationService = $repository->getLocationService();
+
+        $visibleLocation = $locationService->loadLocation( $editorsGroupId );
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->hideLocation( $visibleLocation );
+        /* END: Use Case */
     }
 
     /**
@@ -111,10 +264,30 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUnhideLocation
      */
     public function testUnhideLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::unhideLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $locationService = $repository->getLocationService();
+
+        $visibleLocation = $locationService->loadLocation( $editorsGroupId );
+
+        // Hide location
+        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->unhideLocation( $hiddenLocation );
+        /* END: Use Case */
     }
 
     /**
@@ -123,10 +296,27 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
      */
     public function testDeleteLocationThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::deleteLocation() is not implemented." );
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( $editorsGroupId );
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->deleteLocation( $location );
+        /* END: Use Case */
     }
 
     /**
@@ -135,10 +325,41 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
      */
     public function testCopySubtreeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::copySubtree() is not implemented." );
+        $repository = $this->getRepository();
+
+        $communityLocationId = $this->generateId( 'location', 167 );
+        $supportLocationId = $this->generateId( 'location', 96 );
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // $communityLocationId is the ID of the "Community" page location in
+        // an eZ Publish demo installation
+
+        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to copy
+        $locationToCopy = $locationService->loadLocation( $communityLocationId );
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -147,9 +368,40 @@ class LocationServiceAuthorizationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      */
     public function testMoveSubtreeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for LocationService::moveSubtree() is not implemented." );
+        $repository = $this->getRepository();
+
+        $communityLocationId = $this->generateId( 'location', 167 );
+        $supportLocationId = $this->generateId( 'location', 96 );
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // $communityLocationId is the ID of the "Community" page location in
+        // an eZ Publish demo installation
+
+        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation( $communityLocationId );
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+        /* END: Use Case */
     }
 }

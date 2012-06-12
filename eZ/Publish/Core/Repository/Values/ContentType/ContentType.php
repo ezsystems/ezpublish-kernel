@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Repository\Values\ContentType\ContentType class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
@@ -61,6 +69,13 @@ class ContentType extends APIContentType
      */
     private $fieldDefinitionsByIdentifier;
 
+    /**
+     * Field definitions indexed by id
+     *
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
+     */
+    private $fieldDefinitionsById;
+
     function __construct( array $data = array() )
     {
         foreach ( $data as $propertyName => $propertyValue )
@@ -70,6 +85,7 @@ class ContentType extends APIContentType
         foreach ( $this->fieldDefinitions as $fieldDefinition )
         {
             $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
+            $this->fieldDefinitionsById[$fieldDefinition->id] = $fieldDefinition;
         }
     }
 
@@ -167,6 +183,22 @@ class ContentType extends APIContentType
         if ( array_key_exists( $fieldDefinitionIdentifier, $this->fieldDefinitionsByIdentifier ) )
         {
             return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
+        }
+
+        return null;
+    }
+
+    /**
+     * this method returns the field definition for the given id
+     *
+     * @param mixed $fieldDefinitionId
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     */
+    public function getFieldDefinitionById( $fieldDefinitionId )
+    {
+        if ( array_key_exists( $fieldDefinitionId, $this->fieldDefinitionsById ) )
+        {
+            return $this->fieldDefinitionsById[$fieldDefinitionId];
         }
 
         return null;

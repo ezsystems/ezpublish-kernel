@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\ContentType\FieldDefinition class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 /**
@@ -117,7 +125,7 @@ abstract class FieldDefinition extends ValueObject
 
     /**
      * this method returns the validators of this field definition supported by the field type
-     * @return array an array of {@link Validator}
+     * @return \eZ\Publish\Core\Repository\FieldType\Validator[] an array of {@link Validator}
      */
     abstract public function getValidators();
 

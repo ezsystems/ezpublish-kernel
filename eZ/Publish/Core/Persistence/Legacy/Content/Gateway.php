@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
@@ -13,7 +12,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
@@ -32,35 +33,48 @@ abstract class Gateway
      * Inserts a new content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
+     * @param mixed $currentVersionNo
+     *
      * @return int ID
      */
-    abstract public function insertContentObject( CreateStruct $struct );
+    abstract public function insertContentObject( CreateStruct $struct, $currentVersionNo = 1 );
 
     /**
      * Inserts a new version.
      *
-     * @param Version $version;
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
      * @return int ID
      */
-    abstract public function insertVersion( Version $version, array $fields, $alwaysAvailable );
+    abstract public function insertVersion( VersionInfo $versionInfo, array $fields, $alwaysAvailable );
 
     /**
-     * Updates the content object in respect to $struct
+     * Updates an existing content identified by $contentId in respect to $struct
      *
-     * @param UpdateStruct $struct
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
      * @return void
      */
-    abstract public function updateContent( UpdateStruct $struct );
+    abstract public function updateContent( $contentId, MetadataUpdateStruct $struct );
 
     /**
-     * Updates the version of a Content object in respect to $struct
+     * Updates version $versionNo for content identified by $contentId, in respect to $struct
      *
-     * @param UpdateStruct $struct
+     * @param int $contentId
+     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
      * @return void
      */
-    abstract public function updateVersion( UpdateStruct $struct );
+    abstract public function updateVersion( $contentId, $versionNo, UpdateStruct $struct );
+
+    /**
+     * Updates "always available" flag for content identified by $contentId, in respect to $isAlwaysAvailable.
+     *
+     * @param int $contentId
+     * @param bool $newAlwaysAvailable New "always available" value
+     */
+    abstract public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
@@ -80,9 +94,9 @@ abstract class Gateway
      * Only used when a new content object is created. After that, field IDs
      * need to stay the same, only the version number changes.
      *
-     * @param Content $content
-     * @param Field $field
-     * @param StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @return int ID
      */
     abstract public function insertNewField( Content $content, Field $field, StorageFieldValue $value );
@@ -99,15 +113,15 @@ abstract class Gateway
     /**
      * Updates an existing, non-translatable field
      *
-     * @param Field $field
-     * @param StorageFieldValue $value
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param int $contentId
      * @return void
      */
     abstract public function updateNonTranslatableField(
         Field $field,
         StorageFieldValue $value,
-        UpdateStruct $content );
+        $contentId );
 
     /**
      * Load data for a content object
@@ -122,12 +136,57 @@ abstract class Gateway
     abstract public function load( $contentId, $version, $translations = null );
 
     /**
+     * Loads info for content identified by $contentId.
+     * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
+     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
+     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
+     *
+     * @param int $contentId
+     * @return array
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    abstract public function loadContentInfo( $contentId );
+
+    /**
+     * Loads version info for content identified by $contentId and $versionNo.
+     * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
+     *  - names => Hash of content object names. Key is the language code, value is the name.
+     *  - languages => Hash of language ids. Key is the language code (e.g. "eng-GB"), value is the language numeric id without the always available bit.
+     *  - initial_language_code => Language code for initial language in this version.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     *
+     * @return array
+     */
+    abstract public function loadVersionInfo( $contentId, $versionNo );
+
+    /**
+     * Returns data for all versions with given status created by the given $userId
+     *
+     * @param $userId
+     * @param int $status
+     *
+     * @return string[][]
+     */
+    abstract public function listVersionsForUser( $userId, $status = VersionInfo::STATUS_DRAFT );
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
      * @return string[][]
      */
     abstract public function listVersions( $contentId );
+
+    /**
+     * Returns last version number for content identified by $contentId
+     *
+     * @param int $contentId
+     *
+     * @return int
+     */
+    abstract public function getLastVersionNumber( $contentId );
 
     /**
      * Returns all IDs for locations that refer to $contentId
@@ -138,20 +197,26 @@ abstract class Gateway
     abstract public function getAllLocationIds( $contentId );
 
     /**
-     * Returns all field IDs of $contentId grouped by their type
+     * Returns all field IDs of $contentId grouped by their type.
+     * If $versionNo is set only field IDs for that version are returned.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return int[][]
      */
-    abstract public function getFieldIdsByType( $contentId );
+    abstract public function getFieldIdsByType( $contentId, $versionNo = null );
 
     /**
-     * Deletes relations to and from $contentId
+     * Deletes relations to and from $contentId.
+     * If $versionNo is set only relations for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteRelations( $contentId );
+    abstract public function deleteRelations( $contentId, $versionNo = null );
 
     /**
      * Deletes the field with the given $fieldId
@@ -163,28 +228,37 @@ abstract class Gateway
     abstract public function deleteField( $fieldId, $version );
 
     /**
-     * Deletes all fields of $contentId in all versions
+     * Deletes all fields of $contentId in all versions.
+     * If $versionNo is set only fields for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteFields( $contentId );
+    abstract public function deleteFields( $contentId, $versionNo = null );
 
     /**
-     * Deletes all versions of $contentId
+     * Deletes all versions of $contentId.
+     * If $versionNo is set only that version is deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteVersions( $contentId );
+    abstract public function deleteVersions( $contentId, $versionNo = null );
 
     /**
-     * Deletes all names of $contentId
+     * Deletes all names of $contentId.
+     * If $versionNo is set only names for that version are deleted.
      *
      * @param int $contentId
+     * @param int|null $versionNo
+     *
      * @return void
      */
-    abstract public function deleteNames( $contentId );
+    abstract public function deleteNames( $contentId, $versionNo = null );
 
     /**
      * Sets the content object name

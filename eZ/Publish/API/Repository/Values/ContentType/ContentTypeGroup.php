@@ -2,7 +2,7 @@
 /**
  * File containing the ContentTypeGroup class
  *
- * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -20,7 +20,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $creatorId the user id of the creator of this content type group
  * @property-read mixed $modifierId the user id of the user which has last modified this content type group
  * @property-read string $mainLanguageCode 5.0, the main language of the content type group names and description used for fallback.
- *
  */
 abstract class ContentTypeGroup extends ValueObject
 {

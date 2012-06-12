@@ -508,7 +508,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             )
             ->will( $this->returnValue( 23 ) );
         $gatewayMock->expects( $this->once() )
-            ->method( 'insertGroupAssignement' )
+            ->method( 'insertGroupAssignment' )
             ->with(
                 $this->equalTo( 42 ),
                 $this->equalTo( 23 ),
@@ -610,21 +610,36 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     public function testDeleteSuccess()
     {
         $gatewayMock = $this->getGatewayMock();
-        $gatewayMock->expects( $this->once() )
-            ->method( 'countInstancesOfType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            ->will( $this->returnValue( 0 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteGroupAssignementsForType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteFieldDefinitionsForType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
 
-        $mapperMock = $this->getMapperMock();
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "loadTypeData"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        )->will(
+            $this->returnValue( array( 42 ) )
+        );
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "countInstancesOfType"
+        )->with(
+            $this->equalTo( 23 )
+        )->will(
+            $this->returnValue( 0 )
+        );
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "delete"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        );
 
         $handler = $this->getHandler();
         $res = $handler->delete( 23, 0 );
@@ -634,27 +649,61 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
-     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent
-     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent
-     * @expectedExceptionMessage Type with ID "23" in status "0" still has content instances and can therefore not be deleted.
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function testDeleteFailure()
+    public function testDeleteThrowsNotFoundException()
     {
         $gatewayMock = $this->getGatewayMock();
-        $gatewayMock->expects( $this->once() )
-            ->method( 'countInstancesOfType' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            // An instance of this type exists
-            ->will( $this->returnValue( 1 ) );
-        $gatewayMock->expects( $this->never() )
-            ->method( 'deleteGroupAssignementsForType' );
-        $gatewayMock->expects( $this->never() )
-            ->method( 'deleteFieldDefinitionsForType' );
-        $gatewayMock->expects( $this->never() )
-            ->method( 'deleteType' );
 
-        $mapperMock = $this->getMapperMock();
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "loadTypeData"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        )->will(
+            $this->returnValue( array() )
+        );
+
+        $gatewayMock->expects( $this->never() )->method( "delete" );
+
+        $handler = $this->getHandler();
+        $res = $handler->delete( 23, 0 );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\BadStateException
+     */
+    public function testDeleteThrowsBadStateException()
+    {
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "loadTypeData"
+        )->with(
+            $this->equalTo( 23 ),
+            $this->equalTo( 0 )
+        )->will(
+            $this->returnValue( array( 42 ) )
+        );
+
+        $gatewayMock->expects(
+            $this->once()
+        )->method(
+            "countInstancesOfType"
+        )->with(
+            $this->equalTo( 23 )
+        )->will(
+            $this->returnValue( 1 )
+        );
+
+        $gatewayMock->expects( $this->never() )->method( "delete" );
 
         $handler = $this->getHandler();
         $res = $handler->delete( 23, 0 );
@@ -680,7 +729,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handlerMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            array( 'load', 'create' ),
+            array( 'load', 'internalCreate' ),
             array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
         $handlerMock->expects( $this->once() )
@@ -693,7 +742,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $handlerMock->expects( $this->once() )
-            ->method( 'create' )
+            ->method( 'internalCreate' )
             ->with(
                 $this->logicalAnd(
                     $this->attributeEqualTo(
@@ -800,7 +849,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
-            ->method( 'insertGroupAssignement' )
+            ->method( 'insertGroupAssignment' )
             ->with(
                 $this->equalTo( 3 ),
                 $this->equalTo( 23 ),
@@ -830,7 +879,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             )->will( $this->returnValue( 2 ) );
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'deleteGroupAssignement' )
+            ->method( 'deleteGroupAssignment' )
             ->with(
                 $this->equalTo( 3 ),
                 $this->equalTo( 23 ),
@@ -868,6 +917,42 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = $this->getHandler();
         $res = $handler->unlink( 3, 23, 1 );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getFieldDefinition
+     */
+    public function testGetFieldDefinition()
+    {
+        $mapperMock = $this->getMapperMock(
+            array( 'extractFieldFromRow' )
+        );
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractFieldFromRow' )
+            ->with(
+                $this->equalTo( array() )
+            )->will(
+                $this->returnValue( new FieldDefinition() )
+            );
+
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadFieldDefinition' )
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( Type::STATUS_DEFINED )
+            )->will(
+                $this->returnValue( array() )
+            );
+
+        $handler = $this->getHandler();
+        $fieldDefinition = $handler->getFieldDefinition( 42, Type::STATUS_DEFINED );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition',
+            $fieldDefinition
+        );
     }
 
     /**

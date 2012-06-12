@@ -14,11 +14,14 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Version;
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase.
@@ -86,9 +89,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id' => '1',
                     'remote_id' => 'some_remote_id',
                     'language_mask' => '1',
-                    'modified' => '456',
-                    'published' => '123',
-                    'status' => Content::STATUS_DRAFT,
+                    'modified' => '0',
+                    'published' => '0',
+                    'status' => ContentInfo::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -126,7 +129,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->initialLanguageId = 1;
         $struct->remoteId = 'some_remote_id';
         $struct->alwaysAvailable = true;
-        $struct->published = 123;
         $struct->modified = 456;
         $struct->name = array(
             'always-available' => 'eng-US',
@@ -145,24 +147,27 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      */
     protected function getContentFixture()
     {
-        $content = new Content();
+        $content = new Content;
 
-        $content->typeId = 23;
-        $content->sectionId = 42;
-        $content->ownerId = 13;
-        $content->currentVersionNo = 2;
-        $content->initialLanguageId = 1;
-        $content->remoteId = 'some_remote_id';
-        $content->alwaysAvailable = true;
-        $content->published = 123;
-        $content->modified = 456;
-        $content->status = 2;
+        $content->contentInfo = new ContentInfo;
+        $content->contentInfo->contentTypeId = 23;
+        $content->contentInfo->sectionId = 42;
+        $content->contentInfo->ownerId = 13;
+        $content->contentInfo->currentVersionNo = 2;
+        $content->contentInfo->mainLanguageCode = 'eng-US';
+        $content->contentInfo->remoteId = 'some_remote_id';
+        $content->contentInfo->isAlwaysAvailable = true;
+        $content->contentInfo->publicationDate = 123;
+        $content->contentInfo->modificationDate = 456;
+        $content->contentInfo->isPublished = false;
+        $content->contentInfo->name = 'Content name';
 
-        $content->version = new Version();
-        $content->version->name = array(
+        $content->versionInfo = new VersionInfo;
+        $content->versionInfo->names = array(
             'always-available' => 'eng-US',
             'eng-US' => 'Content name',
         );
+        $content->versionInfo->status = VersionInfo::STATUS_PENDING;
         $content->locations = array();
 
         return $content;
@@ -171,21 +176,20 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a Version fixture
      *
-     * @return Version
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     protected function getVersionFixture()
     {
-        $version = new Version();
+        $version = new VersionInfo;
 
         $version->id = null;
         $version->versionNo = 1;
         $version->creatorId = 13;
         $version->status = 0;
         $version->contentId = 2342;
-        $version->fields = array();
-        $version->created = 1312278322;
-        $version->modified = 1312278323;
-        $version->initialLanguageId = 2;
+        $version->creationDate = 1312278322;
+        $version->modificationDate = 1312278323;
+        $version->initialLanguageCode = 'eng-GB';
 
         return $version;
     }
@@ -200,6 +204,20 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $version = $this->getVersionFixture();
 
         $gateway = $this->getDatabaseGateway();
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( 'eng-GB' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-GB',
+                        )
+                    )
+                )
+            );
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertQueryResult(
@@ -243,6 +261,20 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testSetStatus()
     {
         $gateway = $this->getDatabaseGateway();
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( 'eng-GB' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-GB',
+                        )
+                    )
+                )
+            );
 
         // insert content
         $struct = $this->getCreateStructFixture();
@@ -254,20 +286,20 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentId, $version->versionNo, Version::STATUS_PENDING )
+            $gateway->setStatus( $version->contentId, $version->versionNo, VersionInfo::STATUS_PENDING )
         );
 
         $this->assertQueryResult(
-            array( array( Version::STATUS_PENDING ) ),
+            array( array( VersionInfo::STATUS_PENDING ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
                 ->from( 'ezcontentobject_version' )
         );
 
-        // check that content status has been set to published
+        // check that content status has not been set to published
         $this->assertQueryResult(
-            array( array( Content::STATUS_DRAFT ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            array( array( VersionInfo::STATUS_DRAFT ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -282,6 +314,20 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testSetStatusPublished()
     {
         $gateway = $this->getDatabaseGateway();
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( 'eng-GB' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-GB',
+                        )
+                    )
+                )
+            );
 
         // insert content
         $struct = $this->getCreateStructFixture();
@@ -293,11 +339,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentId, $version->versionNo, 1 )
+            $gateway->setStatus( $version->contentId, $version->versionNo, VersionInfo::STATUS_PUBLISHED )
         );
 
         $this->assertQueryResult(
-            array( array( '1' ) ),
+            array( array( VersionInfo::STATUS_PUBLISHED ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -306,7 +352,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( '1' ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            array( array( ContentInfo::STATUS_PUBLISHED ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -339,9 +385,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
-        $updateStruct = $this->getUpdateStructFixture();
+        $metadataStruct = $this->getMetadataUpdateStructFixture();
 
-        $gateway->updateContent( $updateStruct );
+        $gateway->updateContent( 10, $metadataStruct );
 
         $this->assertQueryResult(
             array(
@@ -349,7 +395,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id' => '3',
                     'modified' => '234567',
                     'owner_id' => '42',
-                    'published' => '123456'
+                    'published' => '123456',
+                    'remote_id' => 'ghjk1234567890ghjk1234567890',
+                    'name' => 'Thoth'
                 )
             ),
             $this->getDatabaseHandler()->createSelectQuery()
@@ -357,7 +405,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id',
                     'modified',
                     'owner_id',
-                    'published'
+                    'published',
+                    'remote_id',
+                    'name'
                 )->from( 'ezcontentobject' )
                 ->where( 'id = 10' )
         );
@@ -371,14 +421,27 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     protected function getUpdateStructFixture()
     {
         $struct = new UpdateStruct();
-        $struct->id = 10;
-        $struct->versionNo = 2;
         $struct->creatorId = 23;
-        $struct->ownerId = 42;
         $struct->fields = array();
-        $struct->published = 123456;
-        $struct->modified = 234567;
+        $struct->modificationDate = 234567;
         $struct->initialLanguageId = 3;
+        return $struct;
+    }
+
+    /**
+     * Returns a MetadataUpdateStruct fixture
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct
+     */
+    protected function getMetadataUpdateStructFixture()
+    {
+        $struct = new MetadataUpdateStruct();
+        $struct->ownerId = 42;
+        $struct->publicationDate = 123456;
+        $struct->mainLanguageId = 3;
+        $struct->modificationDate = 234567;
+        $struct->remoteId = "ghjk1234567890ghjk1234567890";
+        $struct->name = "Thoth";
         return $struct;
     }
 
@@ -394,12 +457,13 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
-        $gateway->updateVersion( $this->getUpdateStructFixture() );
+        $gateway->updateVersion( 10, 2, $this->getUpdateStructFixture() );
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
             array(
                 array(
+                    'creator_id' => '23',
                     'initial_language_id' => '3',
                     'modified' => '234567',
                 )
@@ -407,6 +471,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select(
                     array(
+                        'creator_id',
                         'initial_language_id',
                         'modified',
                     )
@@ -427,8 +492,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testInsertNewField()
     {
         $content = $this->getContentFixture();
-        $content->id = 2342;
-        // $content->version->versionNo = 3;
+        $content->contentInfo->id = 2342;
+        // $content->versionInfo->versionNo = 3;
 
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
@@ -446,6 +511,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'data_text' => 'Test text',
                     'data_type_string' => 'ezstring',
                     'language_code' => 'eng-GB',
+                    'language_id' => '4',
                     'sort_key_int' => '23',
                     'sort_key_string' => 'Test',
                     'version' => '1',
@@ -463,6 +529,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'data_text',
                         'data_type_string',
                         'language_code',
+                        'language_id',
                         'sort_key_int',
                         'sort_key_string',
                         'version',
@@ -480,7 +547,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testUpdateField()
     {
         $content = $this->getContentFixture();
-        $content->id = 2342;
+        $content->contentInfo->id = 2342;
 
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
@@ -532,7 +599,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testUpdateNonTranslatableField()
     {
         $content = $this->getContentFixture();
-        $content->id = 2342;
+        $content->contentInfo->id = 2342;
 
         $fieldGb = $this->getFieldFixture();
         $fieldUs = $this->getOtherLanguageFieldFixture();
@@ -543,7 +610,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $fieldUs->id = $gateway->insertNewField( $content, $fieldUs, $value );
 
         $updateStruct = new Content\UpdateStruct();
-        $updateStruct->id = $content->id;
 
         $newValue = new StorageFieldValue(
             array(
@@ -555,7 +621,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             )
         );
 
-        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $updateStruct );
+        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $content->contentInfo->id );
 
         $this->assertQueryResult(
             array(
@@ -610,7 +676,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         foreach ( $res as $row )
         {
             $this->assertEquals(
-                11,
+                13,
                 count( $row )
             );
         }
@@ -638,6 +704,50 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::listVersionsForUser
+     */
+    public function testListVersionsForUser()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->listVersionsForUser( 14 );
+
+        $this->assertEquals(
+            2,
+            count( $res )
+        );
+
+        foreach ( $res as $row )
+        {
+            $this->assertEquals(
+                13,
+                count( $row )
+            );
+        }
+
+        $this->assertEquals(
+            677,
+            $res[0]['ezcontentobject_version_id']
+        );
+        $this->assertEquals(
+            0,
+            $res[0]['ezcontentobject_version_status']
+        );
+        $this->assertEquals(
+            678,
+            $res[1]['ezcontentobject_version_id']
+        );
+        $this->assertEquals(
+            0,
+            $res[1]['ezcontentobject_version_status']
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
@@ -648,11 +758,31 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
+
+        $this->languageHandler
+            ->expects( $this->any() )
+            ->method( 'getById' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 4,
+                            'languageCode' => 'eng-US',
+                        )
+                    )
+                )
+            );
         $res = $gateway->load( 226, 2 );
 
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_code',
             array( 'eng-US', 'eng-GB' ),
+            $res
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_id',
+            array( '2' ),
             $res
         );
     }
@@ -669,7 +799,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $resFirst  = $gateway->load( 11, 1 );
+        $resFirst = $gateway->load( 11, 1 );
         $resSecond = $gateway->load( 11, 2 );
 
         $res = array_merge( $resFirst, $resSecond );
@@ -693,8 +823,21 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
+        $this->languageHandler
+            ->expects( $this->any() )
+            ->method( 'getById' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 4,
+                            'languageCode' => 'eng-US',
+                        )
+                    )
+                )
+            );
 
-        $res = $gateway->load( 226, 1 );
+        $res = $gateway->load( 226, 2 );
 
         $res = array_merge( $res );
 
@@ -716,11 +859,29 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
+        $this->languageHandler
+            ->expects( $this->any() )
+            ->method( 'getById' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'languageCode' => 'eng-GB',
+                        )
+                    )
+                )
+            );
         $res = $gateway->load( 226, 2, array( 'eng-GB' ) );
 
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_code',
             array( 'eng-GB' ),
+            $res
+        );
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_id',
+            array( '2' ),
             $res
         );
         $this->assertEquals(
@@ -823,6 +984,26 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getFieldIdsByType
+     */
+    public function testGetFieldIdsByTypeWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $this->assertEquals(
+            array(
+                'ezstring' => array( 4001, 4002 )
+            ),
+            $gateway->getFieldIdsByType( 225, 2 )
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelations
      */
     public function testDeleteRelationsTo()
@@ -841,7 +1022,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteRelations( 149 );
 
         $this->assertEquals(
-            // yes, relates to itself!
+        // yes, relates to itself!
             array(
                 'all' => $beforeCount['all'] - 2,
                 'from' => $beforeCount['from'] - 1,
@@ -884,6 +1065,39 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 'all' => $this->countContentRelations(),
                 'from' => $this->countContentRelations( 75 ),
                 'to' => $this->countContentRelations( null, 75 )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelations
+     */
+    public function testDeleteRelationsWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentRelations(),
+            'from' => $this->countContentRelations( 225 ),
+            'to' => $this->countContentRelations( null, 225 )
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteRelations( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 1,
+                'from' => $beforeCount['from'] - 1,
+                'to' => $beforeCount['to'],
+            ),
+            array(
+                'all' => $this->countContentRelations(),
+                'from' => $this->countContentRelations( 225 ),
+                'to' => $this->countContentRelations( null, 225 )
             )
         );
     }
@@ -949,6 +1163,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteFields
+     */
+    public function testDeleteFieldsWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentFields(),
+            'this' => $this->countContentFields( 225 ),
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteFields( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 2,
+                'this' => $beforeCount['this'] - 2
+            ),
+            array(
+                'all' => $this->countContentFields(),
+                'this' => $this->countContentFields( 225 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteVersions
      */
     public function testDeleteVersions()
@@ -973,6 +1217,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             array(
                 'all' => $this->countContentVersions(),
                 'this' => $this->countContentVersions( 14 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteVersions
+     */
+    public function testDeleteVersionsWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentVersions(),
+            'this' => $this->countContentVersions( 225 )
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteVersions( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 1,
+                'this' => $beforeCount['this'] - 1,
+            ),
+            array(
+                'all' => $this->countContentVersions(),
+                'this' => $this->countContentVersions( 225 ),
             )
         );
     }
@@ -1047,6 +1321,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteNames
+     */
+    public function testDeleteNamesWithSecondArgument()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentNames(),
+            'this' => $this->countContentNames( 225 )
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteNames( 225, 2 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 1,
+                'this' => $beforeCount['this'] - 1
+            ),
+            array(
+                'all' => $this->countContentNames(),
+                'this' => $this->countContentNames( 225 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteContent
      */
     public function testDeleteContent()
@@ -1083,6 +1387,19 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
+        $this->languageHandler
+            ->expects( $this->any() )
+            ->method( 'getById' )
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 4,
+                            'languageCode' => 'eng-US',
+                        )
+                    )
+                )
+            );
 
         $this->assertEquals(
             $gateway->loadLatestPublishedData( 10 ),
@@ -1233,6 +1550,23 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/../_fixtures/relations_data.php'
+        );
+    }
+    /*
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getLastVersionNumber
+     */
+    public function testGetLastVersionNumber()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $this->assertEquals(
+            1,
+            $gateway->getLastVersionNumber( 4 )
         );
     }
 
@@ -1394,7 +1728,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $field->fieldDefinitionId = 231;
         $field->type = 'ezstring';
-        $field->language = 'eng-GB';
+        $field->languageCode = 'eng-GB';
         $field->versionNo = 1;
 
         return $field;
@@ -1408,7 +1742,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     protected function getOtherLanguageFieldFixture()
     {
         $field = $this->getFieldFixture();
-        $field->language = 'eng-US';
+        $field->languageCode = 'eng-US';
         return $field;
     }
 
@@ -1474,12 +1808,37 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     {
         if ( !isset( $this->languageHandler ) )
         {
+            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $innerLanguageHandler->expects( $this->any() )
+                ->method( 'loadAll' )
+                ->will(
+                    $this->returnValue(
+                        array(
+                            new Language( array(
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
+                            ) ),
+                            new Language( array(
+                                'id' => 4,
+                                'languageCode' => 'eng-US',
+                                'name' => 'US english'
+                            ) ),
+                            new Language( array(
+                                'id' => 8,
+                                'languageCode' => 'fre-FR',
+                                'name' => 'Français franchouillard'
+                            ) )
+                        )
+                    )
+                );
             $this->languageHandler = $this->getMock(
-                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getByLocale' ),
-                array(),
-                '',
-                false
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
+                array( 'getByLocale', 'getById' ),
+                array(
+                    $innerLanguageHandler,
+                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
+                )
             );
         }
         return $this->languageHandler;

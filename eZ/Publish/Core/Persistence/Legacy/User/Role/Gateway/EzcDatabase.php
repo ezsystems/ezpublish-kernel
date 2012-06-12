@@ -34,7 +34,7 @@ class EzcDatabase extends Gateway
     /**
      * Construct from database handler
      *
-     * @param EzcDbHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
      * @return void
      */
     public function __construct( EzcDbHandler $handler )
@@ -45,7 +45,7 @@ class EzcDatabase extends Gateway
     /**
      * Create new role
      *
-     * @param Role $role
+     * @param \eZ\Publish\SPI\Persistence\User\Role $role
      * @return Role
      */
     public function createRole( Role $role )
@@ -396,7 +396,7 @@ class EzcDatabase extends Gateway
     /**
      * Update role
      *
-     * @param RoleUpdateStruct $role
+     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role )
     {
@@ -438,7 +438,7 @@ class EzcDatabase extends Gateway
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @return void
      */
     public function addPolicy( $roleId, Policy $policy )

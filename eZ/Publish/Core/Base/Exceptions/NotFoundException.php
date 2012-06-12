@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundExcepti
  *
  * Use:
  *   throw new NotFound( 'Content', 42 );
- *
  */
 class NotFoundException extends APINotFoundException implements Httpable
 {

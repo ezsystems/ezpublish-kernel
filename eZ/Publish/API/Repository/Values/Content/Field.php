@@ -1,11 +1,19 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\Content\Field class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a field of a content object
- * 
+ *
  * @property-read mixed $id an internal id of the field
  * @property-read string $fieldDefIdentifier the field definition identifier
  * @property-read $value the value of the field

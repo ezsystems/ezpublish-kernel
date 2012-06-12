@@ -9,22 +9,103 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
+
+    eZ\Publish\API\Repository\Values\Content\Language,
+
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
+    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
     eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Language Service
- *
  */
 abstract class LanguageBase extends BaseServiceTest
 {
     /**
-     * Test service function for creating language
+     * Test a new class and default values on properties
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__construct
+     */
+    public function testNewClass()
+    {
+        $language = new Language();
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => null,
+                'languageCode' => null,
+                'name' => null,
+                'enabled' => null
+            ),
+            $language
+        );
+    }
+
+    /**
+     * Test retrieving missing property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__get
+     */
+    public function testMissingProperty()
+    {
+        try
+        {
+            $language = new Language();
+            $value = $language->notDefined;
+            self::fail( "Succeeded getting non existing property" );
+        }
+        catch( PropertyNotFound $e ) {}
+    }
+
+    /**
+     * Test setting read only property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__set
+     */
+    public function testReadOnlyProperty()
+    {
+        try
+        {
+            $language = new Language();
+            $language->id = 42;
+            self::fail( "Succeeded setting read only property" );
+        }
+        catch( PropertyReadOnlyException $e ) {}
+    }
+
+    /**
+     * Test if property exists
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__isset
+     */
+    public function testIsPropertySet()
+    {
+        $language = new Language();
+        $value = isset( $language->notDefined );
+        self::assertEquals( false, $value );
+
+        $value = isset( $language->id );
+        self::assertEquals( true, $value );
+    }
+
+    /**
+     * Test unsetting a property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Language::__unset
+     */
+    public function testUnsetProperty()
+    {
+        $language = new Language( array( "id" => 2 ) );
+        try
+        {
+            unset( $language->id );
+            self::fail( 'Unsetting read-only property succeeded' );
+        }
+        catch ( PropertyReadOnlyException $e ) {}
+    }
+
+    /**
+     * Test service method for creating language
      * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
      */
     public function testCreateLanguage()
     {
         $service = $this->repository->getContentLanguageService();
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
 
         $languageCreateStruct = $service->newLanguageCreateStruct();
         $languageCreateStruct->languageCode = 'test-TEST';
@@ -32,67 +113,258 @@ abstract class LanguageBase extends BaseServiceTest
 
         $newLanguage = $service->createLanguage( $languageCreateStruct );
 
-        self::assertEquals( $newLanguage->languageCode, 'test-TEST' );
-        self::assertEquals( $newLanguage->name, 'test' );
-        self::assertTrue( $newLanguage->enabled );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $newLanguage );
+
+        self::assertGreaterThan( 0, $newLanguage->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'languageCode' => $languageCreateStruct->languageCode,
+                'name' => $languageCreateStruct->name,
+                'enabled' => $languageCreateStruct->enabled
+            ),
+            $newLanguage
+        );
     }
 
     /**
-     * Test service function for creating language
+     * Test service method for creating language throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testCreateForbidden()
+    public function testCreateLanguageThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: Re add when permissions are re added" );
         $service = $this->repository->getContentLanguageService();
-        $service->createLanguage( 'test-TEST', 'test' );
+
+        $languageCreateStruct = $service->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = 'eng-GB';
+        $languageCreateStruct->name = 'English';
+
+        $service->createLanguage( $languageCreateStruct );
     }
 
     /**
-     * Test service function for updating language
+     * Test service method for updating language name
      * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
      */
     public function testUpdateLanguageName()
     {
-        $service = $this->repository->getContentLanguageService();
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
+        $languageService = $this->repository->getContentLanguageService();
 
-        $languageCreateStruct = $service->newLanguageCreateStruct();
-        $languageCreateStruct->languageCode = 'test-TEST';
-        $languageCreateStruct->name = 'test';
+        $language = $languageService->loadLanguage( 'eng-GB' );
+        self::assertEquals( 'English (United Kingdom)', $language->name );
 
-        $language = $service->createLanguage( $languageCreateStruct );
-        $sameLanguage = $service->updateLanguageName( $language, 'test name' );
+        $updatedLanguage = $languageService->updateLanguageName( $language, 'English' );
 
-        self::assertEquals( 'test name', $sameLanguage->name );
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $updatedLanguage );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $language->id,
+                'languageCode' => $language->languageCode,
+                'name' => 'English',
+                'enabled' => $language->enabled
+            ),
+            $updatedLanguage
+        );
     }
 
     /**
-     * Test service function for updating language
+     * Test service method for updating language name throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LanguageService::updateLanguageName
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testUpdateForbidden()
+    public function testUpdateLanguageNameThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: Re add when permissions are re added" );
+        $languageService = $this->repository->getContentLanguageService();
+
+        $language = $languageService->loadLanguage( 'eng-GB' );
+        $languageService->updateLanguageName( $language, 1 );
     }
 
     /**
-     * Test service function for deleting language
-     *
+     * Test service method for enabling language
+     * @covers \eZ\Publish\API\Repository\LanguageService::enableLanguage
+     */
+    public function testEnableLanguage()
+    {
+        $languageService = $this->repository->getContentLanguageService();
+
+        $language = $languageService->loadLanguage( 'eng-GB' );
+        self::assertEquals( true, $language->enabled );
+
+        $updatedLanguage = $languageService->disableLanguage( $language );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $updatedLanguage );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $language->id,
+                'languageCode' => $language->languageCode,
+                'name' => $language->name,
+                'enabled' => false
+            ),
+            $updatedLanguage
+        );
+
+        $finalLanguage = $languageService->enableLanguage( $updatedLanguage );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $updatedLanguage->id,
+                'languageCode' => $updatedLanguage->languageCode,
+                'name' => $updatedLanguage->name,
+                'enabled' => true
+            ),
+            $finalLanguage
+        );
+    }
+
+    /**
+     * Test service method for disabling language
+     * @covers \eZ\Publish\API\Repository\LanguageService::disableLanguage
+     */
+    public function testDisableLanguage()
+    {
+        $languageService = $this->repository->getContentLanguageService();
+
+        $language = $languageService->loadLanguage( 'eng-GB' );
+        self::assertEquals( true, $language->enabled );
+
+        $updatedLanguage = $languageService->disableLanguage( $language );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $updatedLanguage );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $language->id,
+                'languageCode' => $language->languageCode,
+                'name' => $language->name,
+                'enabled' => false
+            ),
+            $updatedLanguage
+        );
+    }
+
+    /**
+     * Test service method for loading language
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
+     */
+    public function testLoadLanguage()
+    {
+        $language = $this->repository->getContentLanguageService()->loadLanguage( 'eng-GB' );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $language );
+        self::assertGreaterThan( 0, $language->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'languageCode' => 'eng-GB',
+                'name' => 'English (United Kingdom)',
+                'enabled' => true
+            ),
+            $language
+        );
+    }
+
+    /**
+     * Test service method for loading language throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
+     */
+    public function testLoadLanguageThrowsInvalidArgumentException()
+    {
+        $this->repository->getContentLanguageService()->loadLanguage( PHP_INT_MAX );
+    }
+
+    /**
+     * Test service function for loading language throwing NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
+     */
+    public function testLoadLanguageThrowsNotFoundException()
+    {
+        $this->repository->getContentLanguageService()->loadLanguage( 'ita-FR' );
+    }
+
+    /**
+     * Test service method for loading all languages
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguages
+     */
+    public function testLoadLanguages()
+    {
+        $languageService = $this->repository->getContentLanguageService();
+
+        $languages = $languageService->loadLanguages();
+
+        self::assertInternalType( "array", $languages );
+        self::assertNotEmpty( $languages );
+
+        foreach ( $languages as $language )
+        {
+            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $language );
+        }
+    }
+
+    /**
+     * Test service method for loading language by ID
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
+     */
+    public function testLoadLanguageById()
+    {
+        $language = $this->repository->getContentLanguageService()->loadLanguageById( 4 );
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $language );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => 4,
+                'languageCode' => 'eng-GB',
+                'name' => 'English (United Kingdom)',
+                'enabled' => true
+            ),
+            $language
+        );
+    }
+
+    /**
+     * Test service method for loading language by ID throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
+     */
+    public function testLoadLanguageByIdThrowsInvalidArgumentException()
+    {
+        $this->repository->getContentLanguageService()->loadLanguageById( 'test' );
+    }
+
+    /**
+     * Test service method for loading language by ID throwing NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
+     */
+    public function testLoadLanguageByIdThrowsNotFoundException()
+    {
+        $this->repository->getContentLanguageService()->loadLanguageById( PHP_INT_MAX );
+    }
+
+    /**
+     * Test service method for deleting language
      * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
      */
-    public function testDelete()
+    public function testDeleteLanguage()
     {
-        self::markTestSkipped( "@todo: Re add when countContents method is added" );
-        $service = $this->repository->getContentLanguageService();
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $newLanguage = $service->createLanguage( 'test-TEST', 'test' );
-        $service->deleteLanguage( $newLanguage );
+        $languageService = $this->repository->getContentLanguageService();
+
+        $languageCreateStruct = $languageService->newLanguageCreateStruct();
+        $languageCreateStruct->name = 'test';
+        $languageCreateStruct->languageCode = 'test-TEST';
+
+        $newLanguage = $languageService->createLanguage( $languageCreateStruct );
+        $languageService->deleteLanguage( $newLanguage );
+
         try
         {
-            $service->loadLanguage( $newLanguage->id );
+            $languageService->loadLanguage( $languageCreateStruct->languageCode );
             self::fail( 'Language is still returned after being deleted' );
         }
         catch ( NotFoundException $e )
@@ -101,147 +373,47 @@ abstract class LanguageBase extends BaseServiceTest
     }
 
     /**
-     * Test service function for deleting language
-     *
+     * Test service method for deleting language throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LanguageService::deleteLanguage
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testDeleteForbidden()
+    public function testDeleteLanguageThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: Re add when permissions are re added" );
+        self::markTestSkipped( '@todo: Enable when functionality is implemented in LanguageService::deleteLanguage' );
+        $languageService = $this->repository->getContentLanguageService();
+
+        $language = $languageService->loadLanguage( 'eng-GB' );
+        $languageService->deleteLanguage( $language );
     }
 
     /**
-     * Test service function for loading language
-     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
-     */
-    public function testLoadLanguageById()
-    {
-        $service = $this->repository->getContentLanguageService();
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-
-        $languageCreateStruct = $service->newLanguageCreateStruct();
-        $languageCreateStruct->languageCode = 'test-TEST';
-        $languageCreateStruct->name = 'test';
-
-        $language = $service->createLanguage( $languageCreateStruct );
-        $sameLanguage = $service->loadLanguageById( $language->id );
-
-        self::assertEquals( $sameLanguage->id, $language->id );
-        self::assertEquals( $sameLanguage->languageCode, $language->languageCode );
-        self::assertEquals( $sameLanguage->name, $language->name );
-        self::assertEquals( $sameLanguage->enabled, $language->enabled );
-    }
-
-    /**
-     * Test service function for loading language
-     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
-     */
-    public function testLoadLanguageByLanguageCode()
-    {
-        $service = $this->repository->getContentLanguageService();
-        //Add when permission are done
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-
-        $languageCreateStruct = $service->newLanguageCreateStruct();
-        $languageCreateStruct->languageCode = 'test-TEST';
-        $languageCreateStruct->name = 'test';
-
-        $language = $service->createLanguage( $languageCreateStruct );
-        $sameLanguage = $service->loadLanguage( 'test-TEST' );
-
-        self::assertEquals( $language->id, $sameLanguage->id );
-        self::assertEquals( $language->languageCode, $sameLanguage->languageCode );
-        self::assertEquals( $language->name, $sameLanguage->name );
-        self::assertEquals( $language->enabled, $sameLanguage->enabled );
-    }
-
-    /**
-     * Test service function for loading language
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
-     */
-    public function testLoadLanguageByLanguageCodeNotFound()
-    {
-        $service = $this->repository->getContentLanguageService();
-        //Add when permission are done
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-
-        $service->loadLanguage( 'ita-FR' );
-    }
-
-    /**
-     * Test service function for loading all languages
-     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguages
-     */
-    public function testLoadAllLanguages()
-    {
-        $service = $this->repository->getContentLanguageService();
-        //Add when permission are done
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $languages = $service->loadLanguages();
-        foreach ( $languages as $language )
-        {
-            $service->deleteLanguage( $language );
-        }
-
-        $languageCreateStruct = $service->newLanguageCreateStruct();
-        $languageCreateStruct->languageCode = 'eng-GB';
-        $languageCreateStruct->name = 'English (United Kingdom)';
-        $languageCreateStruct->enabled = true;
-
-        $service->createLanguage( $languageCreateStruct );
-
-        $languageCreateStruct = $service->newLanguageCreateStruct();
-        $languageCreateStruct->languageCode = 'eng-US';
-        $languageCreateStruct->name = 'English (American)';
-        $languageCreateStruct->enabled = true;
-
-        $service->createLanguage( $languageCreateStruct );
-
-        $languages = $service->loadLanguages();
-
-        self::assertInternalType( 'array', $languages );
-        self::assertEquals( 2, count( $languages ) );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $languages['eng-GB'] );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $languages['eng-US'] );
-
-        self::assertEquals( $languages['eng-GB']->id * 2, $languages['eng-US']->id );
-
-        self::assertEquals( 'eng-GB', $languages['eng-GB']->languageCode );
-        self::assertEquals( 'English (United Kingdom)', $languages['eng-GB']->name );
-        self::assertTrue( $languages['eng-GB']->enabled );
-
-        self::assertEquals( 'eng-US', $languages['eng-US']->languageCode );
-        self::assertEquals( 'English (American)', $languages['eng-US']->name );
-        self::assertTrue( $languages['eng-US']->enabled );
-    }
-
-    /**
-     * Test service function for loading language
-     *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
-     */
-    public function testLoadLanguageByIdNotFound()
-    {
-        $service = $this->repository->getContentLanguageService();
-        $service->loadLanguageById( 999 );
-    }
-
-    /**
-     * Test service function getDefaultLanguageCode
-     *
+     * Test service method for fetching the default language code
      * @covers \eZ\Publish\API\Repository\LanguageService::getDefaultLanguageCode
      */
     public function testGetDefaultLanguageCode()
     {
-        $service = $this->repository->getContentLanguageService();
-        //Add when permission are done
-        //$this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-
-        $defaultLanguageCode = $service->getDefaultLanguageCode();
+        $defaultLanguageCode = $this->repository->getContentLanguageService()->getDefaultLanguageCode();
 
         self::assertEquals( 'eng-GB', $defaultLanguageCode );
+    }
+
+    /**
+     * Test service method for creating a new language create struct object
+     * @covers \eZ\Publish\API\Repository\LanguageService::newLanguageCreateStruct
+     */
+    public function testNewLanguageCreateStruct()
+    {
+        $languageCreateStruct = $this->repository->getContentLanguageService()->newLanguageCreateStruct();
+
+        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct', $languageCreateStruct );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'languageCode' => null,
+                'name' => null,
+                'enabled' => true
+            ),
+            $languageCreateStruct
+        );
     }
 }

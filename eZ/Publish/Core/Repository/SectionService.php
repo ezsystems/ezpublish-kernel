@@ -1,7 +1,13 @@
 <?php
 /**
+ * File containing the eZ\Publish\Core\Repository\SectionService class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  * @package eZ\Publish\Core\Repository
  */
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
@@ -81,7 +87,10 @@ class SectionService implements SectionServiceInterface
             if ( $existingSection !== null )
                 throw new InvalidArgumentException( "sectionCreateStruct", "section with specified identifier already exists" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
 
         $spiSection = $this->persistenceHandler->sectionHandler()->create(
             $sectionCreateStruct->name,
@@ -121,7 +130,10 @@ class SectionService implements SectionServiceInterface
                 if ( $existingSection !== null )
                     throw new InvalidArgumentException( "sectionUpdateStruct", "section with specified identifier already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( NotFoundException $e )
+            {
+                // Do nothing
+            }
         }
 
         $loadedSection = $this->loadSection( $section->id );
@@ -219,18 +231,18 @@ class SectionService implements SectionServiceInterface
      */
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
-        if ( !is_numeric( $contentInfo->contentId ) )
-            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
         if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->contentId );
+        $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->id );
         $loadedSection = $this->loadSection( $section->id );
 
         $this->persistenceHandler->sectionHandler()->assign(
             $loadedSection->id,
-            $loadedContentInfo->contentId
+            $loadedContentInfo->id
         );
     }
 
@@ -288,9 +300,9 @@ class SectionService implements SectionServiceInterface
     {
         return new Section(
             array(
-                'id'         => $spiSection->id,
+                'id' => (int) $spiSection->id,
                 'identifier' => $spiSection->identifier,
-                'name'       => $spiSection->name
+                'name' => $spiSection->name
             )
         );
     }

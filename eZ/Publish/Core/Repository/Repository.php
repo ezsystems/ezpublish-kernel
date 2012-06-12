@@ -62,10 +62,10 @@ class Repository implements RepositoryInterface
     protected $contentService;
 
     /**
-    * Instance of section service
-    *
-    * @var \eZ\Publish\API\Repository\SectionService
-    */
+     * Instance of section service
+     *
+     * @var \eZ\Publish\API\Repository\SectionService
+     */
     protected $sectionService;
 
     /**
@@ -377,6 +377,36 @@ class Repository implements RepositoryInterface
 
         $this->userService = new UserService( $this, $this->persistenceHandler, $this->serviceSettings['user'] );
         return $this->userService;
+    }
+
+    /**
+     * Get URLAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getURLAliasService()
+    {
+        throw new \Exception("@todo URLAliasService Not Implemented");
+    }
+
+    /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     */
+    public function getURLWildcardService()
+    {
+        throw new \Exception("@todo URLWildcardService Not Implemented");
+    }
+
+    /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService()
+    {
+        throw new \Exception("@todo ObjectStateService Not Implemented");
     }
 
     /**

@@ -6,6 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
+
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use eZ\Publish\API\Repository\ContentTypeService;
@@ -22,11 +23,13 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
@@ -85,15 +88,22 @@ class ContentTypeServiceStub implements ContentTypeService
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub
+     */
+    private $contentService;
+
+    /**
      * Instantiates a new content type service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub $contentService
      */
-    public function __construct( RepositoryStub $repository )
+    public function __construct( RepositoryStub $repository, ContentServiceStub $contentService )
     {
         $this->initGroupProperties();
 
         $this->repository = $repository;
+        $this->contentService = $contentService;
 
         $this->initFromFixture();
     }
@@ -133,7 +143,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $data = array();
@@ -192,7 +202,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Get a Content Type Group object by identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     * 
+     *
      * @param string $contentTypeGroupIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
@@ -229,7 +239,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         unset( $this->groups[$contentTypeGroup->identifier] );
@@ -255,20 +265,20 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Delete a Content Type Group. 
-     * 
+     * Delete a Content Type Group.
+     *
      * This method only deletes an content type group which has content types without any content instances
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $ContentTypeGroup
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup )
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( $this->groupHasTypes( $contentTypeGroup ) )
         {
@@ -303,8 +313,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Create a Content Type object. 
-     * 
+     * Create a Content Type object.
+     *
      * The content type is created in the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
@@ -430,7 +440,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->checkContentTypeUpdate( $contentTypeDraft, $contentTypeUpdateStruct );
@@ -457,25 +467,25 @@ class ContentTypeServiceStub implements ContentTypeService
     protected function getTypeAsArray( ContentType $contentType )
     {
         return array(
-            'id'                     => $contentType->id,
-            'status'                 => $contentType->status,
-            'names'                  => $contentType->names,
-            'descriptions'           => $contentType->descriptions,
-            'identifier'             => $contentType->identifier,
-            'creationDate'           => $contentType->creationDate,
-            'modificationDate'       => $contentType->modificationDate,
-            'creatorId'              => $contentType->creatorId,
-            'modifierId'             => $contentType->modifierId,
-            'remoteId'               => $contentType->remoteId,
-            'urlAliasSchema'         => $contentType->urlAliasSchema,
-            'nameSchema'             => $contentType->nameSchema,
-            'isContainer'            => $contentType->isContainer,
-            'mainLanguageCode'       => $contentType->mainLanguageCode,
+            'id' => $contentType->id,
+            'status' => $contentType->status,
+            'names' => $contentType->names,
+            'descriptions' => $contentType->descriptions,
+            'identifier' => $contentType->identifier,
+            'creationDate' => $contentType->creationDate,
+            'modificationDate' => $contentType->modificationDate,
+            'creatorId' => $contentType->creatorId,
+            'modifierId' => $contentType->modifierId,
+            'remoteId' => $contentType->remoteId,
+            'urlAliasSchema' => $contentType->urlAliasSchema,
+            'nameSchema' => $contentType->nameSchema,
+            'isContainer' => $contentType->isContainer,
+            'mainLanguageCode' => $contentType->mainLanguageCode,
             'defaultAlwaysAvailable' => $contentType->defaultAlwaysAvailable,
-            'defaultSortField'       => $contentType->defaultSortField,
-            'defaultSortOrder'       => $contentType->defaultSortOrder,
-            'contentTypeGroups'      => $contentType->contentTypeGroups,
-            'fieldDefinitions'       => $contentType->fieldDefinitions,
+            'defaultSortField' => $contentType->defaultSortField,
+            'defaultSortOrder' => $contentType->defaultSortOrder,
+            'contentTypeGroups' => $contentType->contentTypeGroups,
+            'fieldDefinitions' => $contentType->fieldDefinitions,
         );
     }
 
@@ -509,8 +519,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Adds a new field definition to an existing content type. 
-     * 
+     * Adds a new field definition to an existing content type.
+     *
      * The content type must be in state DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
@@ -523,7 +533,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         foreach ( $contentTypeDraft->fieldDefinitions as $fieldDefinition )
@@ -554,7 +564,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $data = $this->getTypeAsArray( $contentTypeDraft );
@@ -609,7 +619,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $this->checkFieldDefinitionUpdate( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct );
@@ -624,7 +634,7 @@ class ContentTypeServiceStub implements ContentTypeService
         }
         $newFieldDefinition = new FieldDefinitionStub( $fieldData );
 
-        $typeData  = $this->getTypeAsArray( $contentTypeDraft );
+        $typeData = $this->getTypeAsArray( $contentTypeDraft );
         foreach ( $typeData['fieldDefinitions'] as $index => $existingFieldDefinition )
         {
             if ( $existingFieldDefinition->id == $newFieldDefinition->id )
@@ -673,19 +683,19 @@ class ContentTypeServiceStub implements ContentTypeService
     protected function getFieldDefinitionAsArray( FieldDefinition $fieldDefinition )
     {
         return array(
-            'id'                  => $fieldDefinition->id,
-            'identifier'          => $fieldDefinition->identifier,
-            'names'               => $fieldDefinition->names,
-            'descriptions'        => $fieldDefinition->descriptions,
-            'fieldGroup'          => $fieldDefinition->fieldGroup,
-            'position'            => $fieldDefinition->position,
+            'id' => $fieldDefinition->id,
+            'identifier' => $fieldDefinition->identifier,
+            'names' => $fieldDefinition->names,
+            'descriptions' => $fieldDefinition->descriptions,
+            'fieldGroup' => $fieldDefinition->fieldGroup,
+            'position' => $fieldDefinition->position,
             'fieldTypeIdentifier' => $fieldDefinition->fieldTypeIdentifier,
-            'isTranslatable'      => $fieldDefinition->isTranslatable,
-            'isRequired'          => $fieldDefinition->isRequired,
-            'isInfoCollector'     => $fieldDefinition->isInfoCollector,
-            'validators'          => $fieldDefinition->validators,
-            'defaultValue'        => $fieldDefinition->defaultValue,
-            'isSearchable'        => $fieldDefinition->isSearchable,
+            'isTranslatable' => $fieldDefinition->isTranslatable,
+            'isRequired' => $fieldDefinition->isRequired,
+            'isInfoCollector' => $fieldDefinition->isInfoCollector,
+            'validators' => $fieldDefinition->validators,
+            'defaultValue' => $fieldDefinition->defaultValue,
+            'isSearchable' => $fieldDefinition->isSearchable,
         );
     }
 
@@ -703,7 +713,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( !isset( $this->typeDrafts[$contentTypeDraft->id] ) )
         {
@@ -752,7 +762,7 @@ class ContentTypeServiceStub implements ContentTypeService
                 return $contentType;
             }
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -773,7 +783,7 @@ class ContentTypeServiceStub implements ContentTypeService
                 return $contentType;
             }
         }
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -802,8 +812,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Creates a draft from an existing content type. 
-     * 
+     * Creates a draft from an existing content type.
+     *
      * This is a complete copy of the content
      * type wiich has the state STATUS_DRAFT.
      *
@@ -818,7 +828,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         if ( isset( $this->typeDrafts[$contentType->id] ) )
         {
@@ -829,8 +839,8 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * Delete a Content Type object. 
-     * 
+     * Delete a Content Type object.
+     *
      * Deletes a content type if it has no instances
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there exist content objects of this type
@@ -842,8 +852,13 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
+        if ( $this->contentService->__loadContentInfoByContentType( $contentType ) )
+        {
+            throw new BadStateExceptionStub( 'What error code should be used?' );
+        }
+
         unset( $this->types[$contentType->id] );
     }
 
@@ -864,7 +879,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
         $contentTypeData = $this->getTypeAsArray( $contentType );
 
@@ -873,6 +888,9 @@ class ContentTypeServiceStub implements ContentTypeService
         $contentTypeData['remoteId'] = $contentTypeData['remoteId'] . '_' . uniqid();
         $contentTypeData['creationDate'] = new \DateTime();
         $contentTypeData['modificationDate'] = new \DateTime();
+        $contentTypeData['creatorId'] = $user ? $user->id : $contentTypeData['creatorId'];
+        $contentTypeData['modifierId'] = $user ? $user->id : $contentTypeData['modifierId'];
+
 
         $newFieldDefinitions = array();
         foreach ( $contentTypeData['fieldDefinitions'] as $fieldDefinition )
@@ -901,7 +919,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $assignedGroups = $this->types[$contentType->id]->contentTypeGroups;
@@ -932,7 +950,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
-            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+            throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
         $typeData = $this->getTypeAsArray( $this->types[$contentType->id] );
@@ -1017,9 +1035,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
     {
-        $fieldDefinitionCreate =  new FieldDefinitionCreateStruct();
+        $fieldDefinitionCreate = new FieldDefinitionCreateStruct();
 
-        $fieldDefinitionCreate->identifier          = $identifier;
+        $fieldDefinitionCreate->identifier = $identifier;
         $fieldDefinitionCreate->fieldTypeIdentifier = $fieldTypeIdentifier;
 
         return $fieldDefinitionCreate;
@@ -1036,6 +1054,16 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
+     * Internal helper method to emulate a rollback.
+     *
+     * @return void
+     */
+    public function __rollback()
+    {
+        $this->initFromFixture();
+    }
+
+    /**
      * Helper method that initializes some default data from an existing legacy
      * test fixture.
      *
@@ -1043,6 +1071,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     private function initFromFixture()
     {
+        $this->groups = array();
+        $this->groupsById = array();
+
         list(
             $contentTypeGroups,
             $this->nextGroupId
@@ -1062,5 +1093,19 @@ class ContentTypeServiceStub implements ContentTypeService
 
         ++$this->nextTypeId;
         ++$this->nextFieldDefinitionId;
+    }
+
+    /**
+     * Instantiates a FieldType\Type object
+     *
+     * @todo Add to API or remove!
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup with settings injected to service
+     *
+     * @param string $type
+     * @return \eZ\Publish\SPI\FieldType\FieldType
+     */
+    public function buildFieldType( $type )
+    {
+        throw new \RuntimeException( '@TODO: test & Implement.' );
     }
 }

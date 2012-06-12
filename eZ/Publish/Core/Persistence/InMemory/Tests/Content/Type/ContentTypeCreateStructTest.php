@@ -13,7 +13,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
 
 /**
  * Test case for CreateStruct.
- *
  */
 class CreateStructTest extends \PHPUnit_Framework_TestCase
 {

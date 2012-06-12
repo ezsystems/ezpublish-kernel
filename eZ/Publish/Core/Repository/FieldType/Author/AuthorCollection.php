@@ -8,25 +8,31 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Author;
-use ezp\Base\Collection\Type as TypeCollection;
+use eZ\Publish\Core\Repository\FieldType\Author\Author,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    ArrayObject;
 
 /**
  * Author collection.
  * This collection can only hold {@link \eZ\Publish\Core\Repository\FieldType\Author\Author} objects
  */
-class AuthorCollection extends TypeCollection
+class AuthorCollection extends ArrayObject
 {
     /**
      * @var \eZ\Publish\Core\Repository\FieldType\Author\Value
      */
     protected $authorValue;
 
+    /**
+     * @param Value $authorValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Author\Author[] $elements
+     */
     public function __construct( Value $authorValue, array $elements = array() )
     {
         $this->authorValue = $authorValue;
         // Call parent constructor without $elements because all author elements
         // must be given an id by $this->offsetSet()
-        parent::__construct( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Author' );
+        parent::__construct();
         foreach ( $elements as $i => $author )
         {
             $this->offsetSet( $i, $author );
@@ -36,11 +42,21 @@ class AuthorCollection extends TypeCollection
     /**
      * Adds a new author to the collection
      *
+     * @throws InvalidArgumentType When $value is not of type Author
      * @param int $offset
      * @param \eZ\Publish\Core\Repository\FieldType\Author\Author $value
      */
     public function offsetSet( $offset, $value )
     {
+        if ( !$value instanceof Author )
+        {
+            throw new InvalidArgumentType(
+                '$value',
+                'eZ\Publish\Core\Repository\FieldType\Author\Author',
+                $value
+            );
+        }
+
         $aAuthors = $this->getArrayCopy();
         parent::offsetSet( $offset, $value );
         if ( !isset( $value->id ) || $value->id == -1 )

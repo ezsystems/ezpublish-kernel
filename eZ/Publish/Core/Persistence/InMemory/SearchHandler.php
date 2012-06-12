@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 
 use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\Search\Result,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -17,12 +19,14 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     Exception;
 
@@ -93,29 +97,45 @@ class SearchHandler extends SearchHandlerInterface
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'version' => array(
-                    'type' => 'Content\\Version',
-                    'single' => true,
-                    'match' => array( 'contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
-                    'sub' => array(
-                        'fields' => array(
-                            'type' => 'Content\\Field',
-                            'match' => array( '_contentId' => 'contentId', 'versionNo' => 'versionNo' ),
-                        )
-                    )
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'id' => 'id' ),
+                    'single' => true
+                ),
+                'versionInfo' => array(
+                    'type' => 'Content\\VersionInfo',
+                    'match' => array( 'contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                    'single' => true
                 ),
             )
         );
 
-        $result = new Result();
-        $result->count = count( $list );
+        $resultList = array();
+        foreach ( $list as $item )
+        {
+            if ( $item->contentInfo instanceof ContentInfo )
+            {
+                $item->fields = $this->backend->find(
+                    'Content\\Field',
+                    array(
+                        '_contentId' => $item->contentInfo->id,
+                        'versionNo' => $item->contentInfo->currentVersionNo
+                    )
+                );
 
-        if ( $limit === null && $offset === 0 )
-            $result->content = $list;
+                $resultList[] = $item;
+            }
+        }
+
+        $result = new Result();
+        $result->count = count( $resultList );
+
+        if ( empty( $resultList ) || ( $limit === null && $offset === 0 ) )
+            $result->content = $resultList;
         else if ( $limit === null )
-             $result->content = array_slice( $list, $offset );
+             $result->content = array_slice( $resultList, $offset );
         else
-            $result->content = array_slice( $list, $offset, $limit );
+            $result->content = array_slice( $resultList, $offset, $limit );
 
         return $result;
     }
@@ -159,21 +179,43 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $match['id'] = $criterion->value[0];
             }
-            else if ( $criterion instanceof ContentTypeId && !isset( $match['typeId'] ) )
+            else if ( $criterion instanceof ContentTypeId && !isset( $match['contentInfo']['typeId'] ) )
             {
-                $match['typeId'] = $criterion->value[0];
+                $match['contentInfo']['contentTypeId'] = $criterion->value[0];
             }
             else if ( $criterion instanceof LocationId && !isset( $match['locations']['id'] ) )
             {
                 $match['locations']['id'] = $criterion->value[0];
             }
-            else if ( $criterion instanceof RemoteId && !isset( $match['remoteId'] ) )
+            else if ( $criterion instanceof RemoteId && !isset( $match['contentInfo']['remoteId'] ) )
             {
-                $match['remoteId'] = $criterion->value[0];
+                $match['contentInfo']['remoteId'] = $criterion->value[0];
             }
-            else if ( $criterion instanceof SectionId && !isset( $match['sectionId'] ) )
+            else if ( $criterion instanceof LocationRemoteId && !isset( $match['locations']['remoteId'] ) )
             {
-                $match['sectionId'] = $criterion->value[0];
+                $match['locations']['remoteId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof SectionId && !isset( $match['contentInfo']['sectionId'] ) )
+            {
+                $match['contentInfo']['sectionId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof Status && !isset( $match['versionInfo']['status'] ) )
+            {
+                switch ( $criterion->value[0] )
+                {
+                    case Status::STATUS_ARCHIVED:
+                        $match['versionInfo']['status'] = VersionInfo::STATUS_ARCHIVED;
+                        break;
+                    case Status::STATUS_DRAFT:
+                        $match['versionInfo']['status'] = VersionInfo::STATUS_DRAFT;
+                        break;
+                    case Status::STATUS_PUBLISHED:
+                        $match['versionInfo']['status'] = VersionInfo::STATUS_PUBLISHED;
+                        break;
+                    default:
+                        throw new Exception( "Unsupported StatusCriterion->value[0]: " . $criterion->value[0] );
+
+                }
             }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
             {
@@ -187,10 +229,10 @@ class SearchHandler extends SearchHandlerInterface
             {
                 if ( $criterion instanceof UserMetadata && $criterion->target !== $criterion::MODIFIER )
                 {
-                    if ( $criterion->target === $criterion::OWNER && !isset( $match['ownerId'] ) )
+                    if ( $criterion->target === $criterion::OWNER && !isset( $match['contentInfo']['ownerId'] ) )
                         $match['ownerId'] = $criterion->value[0];
-                    else if ( $criterion->target === $criterion::CREATOR && !isset( $match['version']['creatorId'] ) )
-                        $match['version']['creatorId'] = $criterion->value[0];
+                    else if ( $criterion->target === $criterion::CREATOR && !isset( $match['versionInfo']['creatorId'] ) )
+                        $match['versionInfo']['creatorId'] = $criterion->value[0];
                     //else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
                         //$match['version']['creatorId'] = $criterion->value[0];
                     continue;

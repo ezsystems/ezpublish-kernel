@@ -1,474 +1,369 @@
 <?php
 
 return array (
-  'hebrew_transliterate_ascii' => 
-  array (
-    0 => 
-    array (
+  'hebrew_transliterate_ascii' => array (
+    0 => array (
       'type' => 12,
-      'data' => 
-      array (
+      'data' => array (
         'srcStart' => 'U+0591',
         'srcEnd' => 'U+05A1',
         'dest' => '""',
       ),
     ),
-    1 => 
-    array (
+    1 => array (
       'type' => 12,
-      'data' => 
-      array (
+      'data' => array (
         'srcStart' => 'U+05A3',
         'srcEnd' => 'U+05AF',
         'dest' => '""',
       ),
     ),
-    2 => 
-    array (
+    2 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B0',
         'dest' => '""',
       ),
     ),
-    3 => 
-    array (
+    3 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B1',
         'dest' => '"e"',
       ),
     ),
-    4 => 
-    array (
+    4 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B2',
         'dest' => '"a"',
       ),
     ),
-    5 => 
-    array (
+    5 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B3',
         'dest' => '"o"',
       ),
     ),
-    6 => 
-    array (
+    6 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B4',
         'dest' => '"i"',
       ),
     ),
-    7 => 
-    array (
+    7 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B5',
         'dest' => '"e"',
       ),
     ),
-    8 => 
-    array (
+    8 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B6',
         'dest' => '"e"',
       ),
     ),
-    9 => 
-    array (
+    9 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B7',
         'dest' => '"a"',
       ),
     ),
-    10 => 
-    array (
+    10 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B8',
         'dest' => '"e"',
       ),
     ),
-    11 => 
-    array (
+    11 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05B9',
         'dest' => '"o"',
       ),
     ),
-    12 => 
-    array (
+    12 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05BA',
         'dest' => '""',
       ),
     ),
-    13 => 
-    array (
+    13 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05BB',
         'dest' => '"u"',
       ),
     ),
-    14 => 
-    array (
+    14 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05BC',
         'dest' => '""',
       ),
     ),
-    15 => 
-    array (
+    15 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05BD',
         'dest' => '""',
       ),
     ),
-    16 => 
-    array (
+    16 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05BE',
         'dest' => '"\\\'"',
       ),
     ),
-    17 => 
-    array (
+    17 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05BF',
         'dest' => '""',
       ),
     ),
-    18 => 
-    array (
+    18 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05C0',
         'dest' => '"|"',
       ),
     ),
-    19 => 
-    array (
+    19 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05C3',
         'dest' => '":"',
       ),
     ),
-    20 => 
-    array (
+    20 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D0',
         'dest' => '"\\\'"',
       ),
     ),
-    21 => 
-    array (
+    21 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D1',
         'dest' => '"b"',
       ),
     ),
-    22 => 
-    array (
+    22 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D2',
         'dest' => '"g"',
       ),
     ),
-    23 => 
-    array (
+    23 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D3',
         'dest' => '"d"',
       ),
     ),
-    24 => 
-    array (
+    24 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D4',
         'dest' => '"h"',
       ),
     ),
-    25 => 
-    array (
+    25 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D5',
         'dest' => '"o"',
       ),
     ),
-    26 => 
-    array (
+    26 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D6',
         'dest' => '"z"',
       ),
     ),
-    27 => 
-    array (
+    27 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D7',
         'dest' => '"h"',
       ),
     ),
-    28 => 
-    array (
+    28 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D8',
         'dest' => '"t"',
       ),
     ),
-    29 => 
-    array (
+    29 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05D9',
         'dest' => '"y"',
       ),
     ),
-    30 => 
-    array (
+    30 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05DA',
         'dest' => '"k"',
       ),
     ),
-    31 => 
-    array (
+    31 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05DB',
         'dest' => '"k"',
       ),
     ),
-    32 => 
-    array (
+    32 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05DC',
         'dest' => '"l"',
       ),
     ),
-    33 => 
-    array (
+    33 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05DD',
         'dest' => '"m"',
       ),
     ),
-    34 => 
-    array (
+    34 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05DE',
         'dest' => '"m"',
       ),
     ),
-    35 => 
-    array (
+    35 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05DF',
         'dest' => '"n"',
       ),
     ),
-    36 => 
-    array (
+    36 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E0',
         'dest' => '"n"',
       ),
     ),
-    37 => 
-    array (
+    37 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E1',
         'dest' => '"s"',
       ),
     ),
-    38 => 
-    array (
+    38 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E2',
         'dest' => '"\\\'"',
       ),
     ),
-    39 => 
-    array (
+    39 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E3',
         'dest' => '"p"',
       ),
     ),
-    40 => 
-    array (
+    40 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E4',
         'dest' => '"p"',
       ),
     ),
-    41 => 
-    array (
+    41 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E5',
         'dest' => '"z"',
       ),
     ),
-    42 => 
-    array (
+    42 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E6',
         'dest' => '"z"',
       ),
     ),
-    43 => 
-    array (
+    43 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E7',
         'dest' => '"q"',
       ),
     ),
-    44 => 
-    array (
+    44 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E8',
         'dest' => '"r"',
       ),
     ),
-    45 => 
-    array (
+    45 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05E9',
         'dest' => '"s"',
       ),
     ),
-    46 => 
-    array (
+    46 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05EA',
         'dest' => '"t"',
       ),
     ),
-    47 => 
-    array (
+    47 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05F0',
         'dest' => '"ww"',
       ),
     ),
-    48 => 
-    array (
+    48 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05F1',
         'dest' => '"wy"',
       ),
     ),
-    49 => 
-    array (
+    49 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05F4',
         'dest' => '"\\""',
       ),
     ),
-    50 => 
-    array (
+    50 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05F2',
         'dest' => '"yy"',
       ),
     ),
-    51 => 
-    array (
+    51 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+05F3',
         'dest' => '"\\\'"',
       ),

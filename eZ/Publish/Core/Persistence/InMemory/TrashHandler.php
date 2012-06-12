@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
@@ -14,8 +13,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInt
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    ezp\Content\Location\Exception\ParentNotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
@@ -47,17 +45,18 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function load( $id )
+    public function loadTrashItem( $id )
     {
         return $this->backend->load( 'Content\\Location\\Trashed', $id );
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * @todo Handle field types actions
      */
-    public function trashSubtree( $locationId )
+    public function trash( $locationId )
     {
-        $trashedLocation = $this->trash( $locationId );
+        $trashedLocation = $this->trashLocation( $locationId );
 
         // Begin recursive call on children, if any
         $directChildren = $this->backend->find( 'Content\\Location', array( 'parentId' => $locationId ) );
@@ -65,7 +64,7 @@ class TrashHandler implements TrashHandlerInterface
         {
             foreach ( $directChildren as $child )
             {
-                $this->trashSubtree( $child->id );
+                $this->trash( $child->id );
             }
         }
 
@@ -75,7 +74,7 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    private function trash( $locationId )
+    private function trashLocation( $locationId )
     {
         $location = $this->handler->locationHandler()->load( $locationId );
 
@@ -101,18 +100,12 @@ class TrashHandler implements TrashHandlerInterface
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * @todo Handle field types actions
      */
-    public function untrashLocation( $trashedId, $newParentId )
+    public function recover( $trashedId, $newParentId )
     {
-        $trashedLocation = $this->load( $trashedId );
-        try
-        {
-            $newParent = $this->handler->locationHandler()->load( $newParentId );
-        }
-        catch ( NotFound $e )
-        {
-            throw new ParentNotFound( $trashedLocation->id, $newParentId, $e );
-        }
+        $trashedLocation = $this->loadTrashItem( $trashedId );
+        $newParent = $this->handler->locationHandler()->load( $newParentId );
 
         // Restore location under $newParent
         $struct = new CreateStruct;
@@ -124,7 +117,7 @@ class TrashHandler implements TrashHandlerInterface
             }
         }
 
-        $struct->parentId = $newParentId;
+        $struct->parentId = $newParent->id;
         return $this->handler->locationHandler()->create( $struct )->id;
     }
 
@@ -135,9 +128,9 @@ class TrashHandler implements TrashHandlerInterface
      *
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
+    public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {
-        return array_splice(
+        return array_slice(
             $this->backend->find( 'Content\\Location\\Trashed' ),
             $offset,
             $limit
@@ -162,7 +155,7 @@ class TrashHandler implements TrashHandlerInterface
             // Remove associated content for trashed locations
             foreach ( $contentIds as $contentId )
             {
-                $this->handler->contentHandler()->delete( $contentId );
+                $this->handler->contentHandler()->deleteContent( $contentId );
             }
 
             // Remove trashed locations
@@ -173,10 +166,10 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function emptyOne( $trashedId )
+    public function deleteTrashItem( $trashedId )
     {
-        $vo = $this->load( $trashedId );
-        $this->handler->contentHandler()->delete( $vo->contentId );
+        $vo = $this->loadTrashItem( $trashedId );
+        $this->handler->contentHandler()->deleteContent( $vo->contentId );
         $this->backend->delete( 'Content\\Location\\Trashed', $trashedId );
     }
 

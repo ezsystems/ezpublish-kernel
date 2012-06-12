@@ -12,7 +12,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     ezcQuerySelect;
@@ -52,7 +51,7 @@ class Field extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
      * @return bool
      */
     public function accept( Criterion $criterion )
@@ -118,9 +117,9 @@ class Field extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param CriteriaConverter $converter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
      * @param \ezcQuerySelect $query
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
      * @return \ezcQueryExpression
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )

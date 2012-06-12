@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- *
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
@@ -13,7 +12,8 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterf
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
@@ -55,32 +55,150 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
+     * Get all subtree locations for the given location (including), sorted by path string
+     *
+     * @param $location
+     * @param array $locations
+     *
+     * @return array
+     */
+    protected function getSubtreeLocations( $location, &$locations = array() )
+    {
+        if ( empty( $locations ) ) $locations[] = $location;
+
+        $subLocations = $this->backend->find( "Content\\Location", array( "parentId" => $location->id ) );
+        usort(
+            $subLocations,
+            function ( $subLocationA, $subLocationB )
+            {
+                return strnatcmp( $subLocationA->pathString, $subLocationB->pathString );
+            }
+        );
+        foreach ( $subLocations as $subLocation )
+        {
+            $locations[] = $subLocation;
+            $this->getSubtreeLocations( $subLocation, $locations );
+        }
+
+        return $locations;
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function copySubtree( $sourceId, $destinationParentId )
     {
-        $location = $this->load( $sourceId );
-        $contentCopy = $this->handler->contentHandler()->copy( $location->contentId, false );
-
-        $newLocation = $this->create(
-            new CreateStruct(
-                array(
-                    "contentId" => $contentCopy->id,
-                    "contentVersion" => $contentCopy->currentVersionNo,
-                    "sortField" => $location->sortField,
-                    "sortOrder" => $location->sortOrder,
-                    "parentId" => $destinationParentId,
-                )
+        $sourceLocation = $this->load( $sourceId );
+        $children = $this->getSubtreeLocations( $sourceLocation );
+        $parentLocation = $this->load( $destinationParentId );
+        $contentMap = array();
+        $locationMap = array(
+            $children[0]->parentId => array(
+                "id" => $destinationParentId,
+                "hidden" => $parentLocation->hidden,
+                "invisible" => $parentLocation->invisible
             )
         );
 
-        // Begin recursive call on children, if any
-        foreach ( $this->backend->find( "Content\\Location", array( "parentId" => $sourceId ) ) as $child )
+        $locations = array();
+        foreach ( $children as $child )
         {
-            $this->copySubtree( $child->id, $newLocation->id );
+            $locations[$child->contentId][] = $child->id;
         }
 
-        return $newLocation;
+        $time = time();
+        $mainLocations = array();
+        $mainLocationsUpdate = array();
+        foreach ( $children as $index => $child )
+        {
+            $originalContentInfo = $this->handler->contentHandler()->loadContentInfo( $child->contentId );
+
+            if ( !isset( $contentMap[$child->contentId] ) )
+            {
+                $content = $this->handler->contentHandler()->copy(
+                    $child->contentId,
+                    $originalContentInfo->currentVersionNo
+                );
+
+                $content = $this->handler->contentHandler()->publish(
+                    $content->contentInfo->id,
+                    $content->versionInfo->versionNo,
+                    new MetadataUpdateStruct(
+                        array(
+                            "publicationDate" => $time,
+                            "modificationDate" => $time
+                        )
+                    )
+                );
+
+                $contentMap[$child->contentId] = $content->contentInfo->id;
+            }
+
+            $createStruct = new CreateStruct();
+            $createStruct->contentVersion = $originalContentInfo->currentVersionNo;
+            $createStruct->hidden = $child->hidden;
+            $createStruct->pathIdentificationString = $child->pathIdentificationString;
+            $createStruct->priority = $child->priority;
+            $createStruct->remoteId = md5( uniqid( get_class( $this ), true ) );
+            $createStruct->sortField = $child->sortField;
+            $createStruct->sortOrder = $child->sortOrder;
+            $createStruct->contentId = $contentMap[$child->contentId];
+            $createStruct->parentId = $locationMap[$child->parentId]["id"];
+            $createStruct->invisible = $createStruct->hidden ||
+                $locationMap[$child->parentId]["hidden"] ||
+                $locationMap[$child->parentId]["invisible"];
+
+            // Use content main node if already set, otherwise use this node as main
+            if ( isset( $mainLocations[$child->contentId] ) )
+            {
+                $createStruct->mainLocationId = $locationMap[$mainLocations[$child->contentId]]["id"];
+            }
+            else
+            {
+                $createStruct->mainLocationId = true;
+                $mainLocations[$child->contentId] = $child->id;
+
+                // If needed mark for later update
+                if (
+                    in_array( $child->mainLocationId, $locations[$child->contentId] ) &&
+                    count( $locations[$child->contentId] ) > 1 &&
+                    $child->id !== $child->mainLocationId
+                )
+                {
+                    $mainLocationsUpdate[$child->contentId] = $child->mainLocationId;
+                }
+            }
+
+            $newLocation = $this->create( $createStruct );
+
+            $locationMap[$child->id] = array(
+                "id" => $newLocation->id,
+                "hidden" => $newLocation->hidden,
+                "invisible" => $newLocation->invisible
+            );
+            if ( $index === 0 ) $copiedSubtreeRootLocation = $newLocation;
+        }
+
+        // Update main locations
+        foreach ( $mainLocationsUpdate as $contentId => $mainLocationId )
+        {
+            $this->changeMainLocation(
+                $contentMap[$contentId],
+                $locationMap[$mainLocationId]["id"]
+            );
+        }
+
+        // If subtree root is main location for its content, update subtree section to the one of the
+        // parent location content
+        if ( $copiedSubtreeRootLocation->mainLocationId === $copiedSubtreeRootLocation->id )
+        {
+            $this->setSectionForSubtree(
+                $copiedSubtreeRootLocation->id,
+                $this->handler->contentHandler()->loadContentInfo( $this->load( $destinationParentId )->contentId )->sectionId
+            );
+        }
+
+        return $copiedSubtreeRootLocation;
     }
 
     /**
@@ -128,7 +246,7 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
-    public function markSubtreeModified( $locationId, $timeStamp = null )
+    public function markSubtreeModified( $locationId, $timestamp = null )
     {
     }
 
@@ -311,9 +429,10 @@ class LocationHandler implements LocationHandlerInterface
         }
 
         $this->backend->updateByMatch(
-            'Content',
+            'Content\\ContentInfo',
             array( 'id' => $aContentIds ),
-            array( 'sectionId' => $sectionId )
+            array( 'sectionId' => $sectionId ),
+            true
         );
     }
 
@@ -378,7 +497,7 @@ class LocationHandler implements LocationHandlerInterface
         {
             try
             {
-                $this->handler->contentHandler()->delete( $location->contentId );
+                $this->handler->contentHandler()->deleteContent( $location->contentId );
             }
             // Ignoring a NotFound exception since the content handler also takes care of removing itself and locations
             catch ( NotFound $e )
@@ -420,6 +539,35 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return void
+     */
+    public function changeMainLocation( $contentId, $locationId )
+    {
+        $this->backend->updateByMatch(
+            "Content\\Location",
+            array( "contentId" => $contentId ),
+            array( "mainLocationId" => $locationId )
+        );
+
+        $parentLocation = $this->backend->load(
+            "Content\\Location",
+            $this->backend->load( "Content\\Location", $locationId )->parentId
+        );
+        $parentContent = $this->backend->load(
+            "Content\\ContentInfo",
+            $parentLocation->contentId
+        );
+
+        $this->setSectionForSubtree( $locationId, $parentContent->sectionId );
+    }
+
+    /**
      * Updates subtree modification time for all locations starting from $startPathString
      * @param string $startPathString
      */
@@ -444,7 +592,7 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * Returns pathIdentificationString for provided location value object
-     * @param eZ\Publish\SPI\Persistence\Content\Location $vo
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $vo
      * @return string
      */
     private function getPathIdentificationString( LocationValue $vo )
@@ -473,13 +621,13 @@ class LocationHandler implements LocationHandlerInterface
     private function getStrippedContentName( LocationValue $vo )
     {
         $version = $this->backend->find(
-            "Content\\Version",
+            "Content\\VersionInfo",
             array(
                 "contentId" => $vo->contentId,
-                "versionNo" => $this->backend->load( 'Content', $vo->contentId )->currentVersionNo
+                "versionNo" => $this->backend->load( 'Content\\ContentInfo', $vo->contentId )->currentVersionNo
             )
         );
-        return isset( $version[0]->name["eng-GB"] )
+        return isset( $version[0]->names["eng-GB"] )
             ? preg_replace(
                 '`[^a-z0-9_]`i',
                 '_',
@@ -487,7 +635,7 @@ class LocationHandler implements LocationHandlerInterface
                     trim(
                         strtr(
                             // @todo Remove hardcoding of eng-GB
-                            $version[0]->name["eng-GB"],
+                            $version[0]->names["eng-GB"],
                             self::CHARS_ACCENT,
                             self::CHARS_NOACCENT
                         )

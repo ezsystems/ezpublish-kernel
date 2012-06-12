@@ -315,7 +315,7 @@ class SectionHandlerTest extends TestCase
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Section\\Gateway'
             );
         }
         return $this->gatewayMock;

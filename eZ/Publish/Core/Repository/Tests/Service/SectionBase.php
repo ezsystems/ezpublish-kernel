@@ -12,12 +12,11 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
 
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    ezp\Base\Exception\PropertyPermission,
-    ezp\Base\Exception\PropertyNotFound;
+    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 
 /**
  * Test case for Section Service using InMemory storage class
- *
  */
 abstract class SectionBase extends BaseServiceTest
 {
@@ -31,9 +30,9 @@ abstract class SectionBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => null,
+                'id' => null,
                 'identifier' => null,
-                'name'       => null
+                'name' => null
             ),
             $section
         );
@@ -66,7 +65,7 @@ abstract class SectionBase extends BaseServiceTest
             $section->id = 22;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyPermission $e ) {}
+        catch( PropertyReadOnlyException $e ) {}
     }
 
     /**
@@ -95,7 +94,7 @@ abstract class SectionBase extends BaseServiceTest
             unset( $section->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyPermission $e ) {}
+        catch ( PropertyReadOnlyException $e ) {}
     }
 
     /**
@@ -191,8 +190,8 @@ abstract class SectionBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => 1,
-                'name'       => 'Standard',
+                'id' => 1,
+                'name' => 'Standard',
                 'identifier' => 'standard'
             ),
             $section
@@ -240,8 +239,8 @@ abstract class SectionBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => 1,
-                'name'       => 'Standard',
+                'id' => 1,
+                'name' => 'Standard',
                 'identifier' => 'standard'
             ),
             $section
@@ -289,21 +288,19 @@ abstract class SectionBase extends BaseServiceTest
      */
     public function testAssignSection()
     {
-        self::markTestSkipped( '@todo: Enable when content service is implemented' );
-
         $sectionService = $this->repository->getSectionService();
         $contentService = $this->repository->getContentService();
 
-        $section = $sectionService->loadSection( 2 );
-        $contentInfo = $contentService->loadContentInfo( 57 );
+        $section = $sectionService->loadSection( 1 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
 
-        self::assertEquals( 1, $contentInfo->sectionId );
+        self::assertEquals( 2, $contentInfo->sectionId );
 
         $sectionService->assignSection( $contentInfo, $section );
 
-        $contentInfo = $contentService->loadContentInfo( 57 );
+        $contentInfo = $contentService->loadContentInfo( 4 );
 
-        self::assertEquals( 2, $contentInfo->sectionId );
+        self::assertEquals( $section->id, $contentInfo->sectionId );
     }
 
     /**
@@ -326,7 +323,10 @@ abstract class SectionBase extends BaseServiceTest
             $sectionService->loadSection( $newSection->id );
             self::fail( 'Section is still returned after being deleted' );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**
@@ -372,7 +372,7 @@ abstract class SectionBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => null,
-                'name'       => null
+                'name' => null
             ),
             $sectionCreateStruct
         );
@@ -393,7 +393,7 @@ abstract class SectionBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => null,
-                'name'       => null
+                'name' => null
             ),
             $sectionUpdateStruct
         );

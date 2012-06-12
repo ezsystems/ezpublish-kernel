@@ -55,7 +55,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new SelectionValue( array( "Choice1", "Choice2" ) );
+        $value->data = array( "Choice1", "Choice2" );
         $value->fieldSettings = new FieldSettings(
             array(
                 "isMultiple" => true,
@@ -98,11 +98,8 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $fieldValue->data );
         $this->assertEquals(
-            new SelectionValue(
-                array( "Choice0", "Choice1", "Choice3" )
-            ),
+            array( "Choice0", "Choice1", "Choice3" ),
             $fieldValue->data
         );
     }
@@ -131,11 +128,8 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $fieldValue->data );
         $this->assertEquals(
-            new SelectionValue(
-                array( "Choice0" )
-            ),
+            array( "Choice0" ),
             $fieldValue->data
         );
     }
@@ -164,9 +158,8 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $fieldValue->data );
         $this->assertEquals(
-            new SelectionValue(),
+            array(),
             $fieldValue->data
         );
     }

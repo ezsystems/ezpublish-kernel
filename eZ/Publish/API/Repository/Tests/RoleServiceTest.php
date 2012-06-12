@@ -48,7 +48,7 @@ class RoleServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleCreateStruct', $roleCreate );
     }
@@ -67,7 +67,7 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
         /* END: Use Case */
 
@@ -88,7 +88,7 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -115,12 +115,49 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'Editor' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'Editor' );
 
         // This call will fail with an InvalidArgumentException, because Editor exists
         $roleService->createRole( $roleCreate );
 
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the createRole() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::createRole()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
+     */
+    public function testCreateRoleInTransactionWithRollback()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+
+        $roleService = $repository->getRoleService();
+
+        $repository->beginTransaction();
+
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
+
+        $createdRoleId = $roleService->createRole( $roleCreate )->id;
+
+        $repository->rollback();
+
+        try
+        {
+            // This call will fail with a "NotFoundException"
+            $role = $roleService->loadRole( $createdRoleId );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            return;
+        }
+        /* END: Use Case */
+
+        $this->fail( 'Role object still exists after rollback.' );
     }
 
     /**
@@ -137,7 +174,7 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
         $roleId = $roleService->createRole( $roleCreate )->id;
 
@@ -161,12 +198,13 @@ class RoleServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $nonExistingRoleId = $this->generateId( 'role', PHP_INT_MAX );
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
 
         // This call will fail with a NotFoundException, because no such role exists.
-        $roleService->loadRole( PHP_INT_MAX );
+        $roleService->loadRole( $nonExistingRoleId );
 
         /* END: Use Case */
     }
@@ -185,7 +223,7 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
         $roleService->createRole( $roleCreate );
 
@@ -234,7 +272,7 @@ class RoleServiceTest extends BaseTest
 
         // First create a custom role
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -249,7 +287,7 @@ class RoleServiceTest extends BaseTest
             }
         }
 
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         $this->assertEquals( 'roleName', $role->identifier );
     }
@@ -275,7 +313,7 @@ class RoleServiceTest extends BaseTest
         {
             $roleNames[] = $role->identifier;
         }
-        /* BEGIN: Use Case */
+        /* END: Use Case */
 
         sort( $roleNames );
 
@@ -304,7 +342,7 @@ class RoleServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
-        $roleUpdate  = $roleService->newRoleUpdateStruct( 'newRole' );
+        $roleUpdate = $roleService->newRoleUpdateStruct( 'newRole' );
         /* END: Use Case */
 
         $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleUpdateStruct', $roleUpdate );
@@ -324,11 +362,11 @@ class RoleServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
 
         $role = $roleService->createRole( $roleCreate );
 
-        $roleUpdate             = $roleService->newRoleUpdateStruct();
+        $roleUpdate = $roleService->newRoleUpdateStruct();
         $roleUpdate->identifier = 'updatedRole';
 
         $updatedRole = $roleService->updateRole( $role, $roleUpdate );
@@ -354,11 +392,11 @@ class RoleServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
 
         $role = $roleService->createRole( $roleCreate );
 
-        $roleUpdate             = $roleService->newRoleUpdateStruct();
+        $roleUpdate = $roleService->newRoleUpdateStruct();
         $roleUpdate->identifier = 'Editor';
 
         // This call will fail with an InvalidArgumentException, because Editor is a predefined role
@@ -380,7 +418,7 @@ class RoleServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
-        $roleCreate  = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -402,7 +440,7 @@ class RoleServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $roleService  = $repository->getRoleService();
+        $roleService = $repository->getRoleService();
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
         /* END: Use Case */
 
@@ -421,7 +459,7 @@ class RoleServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $roleService  = $repository->getRoleService();
+        $roleService = $repository->getRoleService();
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
         /* END: Use Case */
 
@@ -447,7 +485,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $role       = $roleService->createRole( $roleCreate );
+        $role = $roleService->createRole( $roleCreate );
 
         $role = $roleService->addPolicy(
             $role,
@@ -463,8 +501,8 @@ class RoleServiceTest extends BaseTest
         foreach ( $role->getPolicies() as $policy )
         {
             $actual[] = array(
-                'module'    =>  $policy->module,
-                'function'  =>  $policy->function
+                'module' => $policy->module,
+                'function' => $policy->function
             );
         }
         usort( $actual, function( $p1, $p2 ) {
@@ -474,12 +512,12 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             array(
                 array(
-                    'module'    =>  'content',
-                    'function'  =>  'create',
+                    'module' => 'content',
+                    'function' => 'create',
                 ),
                 array(
-                    'module'    =>  'content',
-                    'function'  =>  'delete',
+                    'module' => 'content',
+                    'function' => 'delete',
                 )
             ),
             $actual
@@ -501,10 +539,10 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $role       = $roleService->createRole( $roleCreate );
+        $role = $roleService->createRole( $roleCreate );
 
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
-        $role         = $roleService->addPolicy( $role, $policyCreate );
+        $role = $roleService->addPolicy( $role, $policyCreate );
 
         $policy = null;
         foreach ( $role->getPolicies() as $policy )
@@ -587,12 +625,12 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             array(
                 array(
-                    'module'    =>  'content',
-                    'function'  =>  'read'
+                    'module' => 'content',
+                    'function' => 'read'
                 ),
                 array(
-                    'module'    =>  'content',
-                    'function'  =>  'translate'
+                    'module' => 'content',
+                    'function' => 'translate'
                 )
             ),
             $policies
@@ -611,7 +649,7 @@ class RoleServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $roleService  = $repository->getRoleService();
+        $roleService = $repository->getRoleService();
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         /* END: Use Case */
 
@@ -634,7 +672,7 @@ class RoleServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $roleService  = $repository->getRoleService();
+        $roleService = $repository->getRoleService();
 
         // Instantiate new policy create
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'translate' );
@@ -850,7 +888,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testAssignRoleToUser()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -879,7 +917,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testAssignRoleToUserWithRoleLimitation()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -894,7 +932,7 @@ class RoleServiceTest extends BaseTest
             $user,
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues' => array( '/1/43/' )
                 )
             )
         );
@@ -920,7 +958,7 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues' => array( '/1/43/' )
                 )
             ),
             $roleLimitation
@@ -936,7 +974,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testUnassignRoleFromUser()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -968,7 +1006,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testUnassignRoleFromUserThrowsInvalidArgumentException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -994,7 +1032,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testGetRoleAssignmentsForUser()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -1039,7 +1077,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testAssignRoleToUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -1068,7 +1106,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testAssignRoleToUserGroupWithRoleLimitation()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -1083,7 +1121,7 @@ class RoleServiceTest extends BaseTest
             $userGroup,
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues' => array( '/1/43/' )
                 )
             )
         );
@@ -1109,7 +1147,7 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             new SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/'
+                    'limitationValues' => array( '/1/43/' )
                 )
             ),
             $roleLimitation
@@ -1125,7 +1163,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testUnassignRoleFromUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -1158,7 +1196,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testUnassignRoleFromUserGroupThrowsInvalidArgumentException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -1184,7 +1222,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testGetRoleAssignmentsForUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
@@ -1229,11 +1267,11 @@ class RoleServiceTest extends BaseTest
      */
     public function testLoadPoliciesByUserId()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
 
+        $anonUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        // ID of the "Anonymous" user.
-        $anonUserId = 10;
+        // $anonUserId is the ID of the "Anonymous" user.
 
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
@@ -1294,14 +1332,15 @@ class RoleServiceTest extends BaseTest
      */
     public function testLoadPoliciesByUserIdThrowsNotFoundException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
 
+        $nonExstingUserId = $this->generateId( 'user', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
 
         // This call will fail with a "NotFoundException", because hopefully no
         // user with an ID equal to PHP_INT_MAX exists.
-        $roleService->loadPoliciesByUserId( PHP_INT_MAX );
+        $roleService->loadPoliciesByUserId( $nonExstingUserId );
         /* END: Use Case */
     }
 
@@ -1314,9 +1353,9 @@ class RoleServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $mainGroupId = $this->generateId( 'group', 4 );
         /* BEGIN: Inline */
-        // ID of the main "Users" group
-        $mainGroupId = 4;
+        // $mainGroupId is the ID of the main "Users" group
 
         $roleService = $repository->getRoleService();
         $userService = $repository->getUserService();
@@ -1336,43 +1375,5 @@ class RoleServiceTest extends BaseTest
         /* END: Inline */
 
         return $userGroup;
-    }
-
-    /**
-     * Create a user fixture in a variable named <b>$user</b>,
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    private function createUserVersion1()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Inline */
-        // ID of the "Editors" user group in an eZ Publish demo installation
-        $editorsGroupId = 13;
-
-        $userService = $repository->getUserService();
-
-        // Instantiate a create struct with mandatory properties
-        $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
-            'secret',
-            'eng-US'
-        );
-        $userCreate->enabled = true;
-
-        // Set some fields required by the user ContentType
-        $userCreate->setField( 'first_name', 'Example' );
-        $userCreate->setField( 'last_name', 'User' );
-
-        // Load parent group for the user
-        $group = $userService->loadUserGroup( $editorsGroupId );
-
-        // Create a new user instance.
-        $user = $userService->createUser( $userCreate, array( $group ) );
-        /* END: Inline */
-
-        return $user;
     }
 }

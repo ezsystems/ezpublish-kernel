@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\API\Repository\Values\Content\Language class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -15,29 +23,29 @@ class Language extends ValueObject
 {
     /**
      * The language id (auto generated)
-     * 
+     *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * the languageCode code
      *
      * @var string
      */
-    public $languageCode;
+    protected $languageCode;
 
     /**
      * Human readable name of the language
      *
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * indicates if the language is enabled or not.
      *
      * @var boolean
      */
-    public $enabled;
+    protected $enabled;
 }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * File containing the eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct,
@@ -30,17 +38,14 @@ class ContentUpdateStruct extends APIContentUpdateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        // @TODO: $this->contentType is missing
-        if ( null === $language && $this->contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable )
-        {
+        if ( !isset( $language ) )
             $language = $this->initialLanguageCode;
-        }
 
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $language
+                'fieldDefIdentifier' => $fieldDefIdentifier,
+                'value' => $value,
+                'languageCode' => $language
             )
         );
     }

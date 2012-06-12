@@ -52,6 +52,14 @@ abstract class Gateway
     abstract public function getSubtreeContent( $sourceId );
 
     /**
+     * Returns data for the first level children of the location identified by given $locationId
+     *
+     * @param mixed $locationId
+     * @return array
+     */
+    abstract public function getChildren( $locationId );
+
+    /**
      * Update path strings to move nodes in the ezcontentobject_tree table
      *
      * This query can likely be optimized to use some more advanced string
@@ -68,12 +76,14 @@ abstract class Gateway
      * Updated subtree modification time for all nodes on path
      *
      * @param string $pathString
+     * @param int|null $timestamp
+     *
      * @return void
      */
-    abstract public function updateSubtreeModificationTime( $pathString );
+    abstract public function updateSubtreeModificationTime( $pathString, $timestamp = null );
 
     /**
-     * Update node assignement table
+     * Update node assignment table
      *
      * @param int $contentObjectId
      * @param int $oldParent
@@ -133,12 +143,22 @@ abstract class Gateway
     /**
      * Create an entry in the node assignment table
      *
-     * @param CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
      * @return void
      */
     abstract public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP );
+
+    /**
+     * Deletes node assignment for given $contentId and $versionNo
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     *
+     * @return void
+     */
+    abstract public function deleteNodeAssignment( $contentId, $versionNo = null );
 
     /**
      * Updates an existing location.
@@ -150,18 +170,25 @@ abstract class Gateway
     abstract public function update( UpdateStruct $location, $locationId );
 
     /**
-     * Removes all Locations under and includin $locationId.
-     *
-     * Performs a recursive delete on the location identified by $locationId,
-     * including all of its child locations. Content which is not referred to
-     * by any other location is automatically removed. Content which looses its
-     * main Location will get the first of its other Locations assigned as the
-     * new main Location.
+     * Deletes ezcontentobject_tree row for given $locationId (node_id)
      *
      * @param mixed $locationId
-     * @return boolean
      */
-    abstract public function removeSubtree( $locationId );
+    abstract public function removeLocation( $locationId );
+
+    /**
+     * Returns id of the next in line node to be set as a new main node
+     *
+     * This returns lowest node id for content identified by $contentId, and not of
+     * the node identified by given $locationId (current main node).
+     * Assumes that content has more than one location.
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return array
+     */
+    abstract public function getFallbackMainNodeData( $contentId, $locationId );
 
     /**
      * Sends a subtree to the trash
@@ -184,7 +211,7 @@ abstract class Gateway
      *
      * @param mixed $locationId
      * @param mixed $newParentId
-     * @return boolean
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     abstract public function untrashLocation( $locationId, $newParentId = null );
 
@@ -197,6 +224,36 @@ abstract class Gateway
     abstract public function loadTrashByLocation( $locationId );
 
     /**
+     * Removes every entries in the trash.
+     * Will NOT remove associated content objects nor attributes.
+     *
+     * Basically truncates ezcontentobject_trash table.
+     *
+     * @return void
+     */
+    abstract public function cleanupTrash();
+
+    /**
+     * Lists trashed items.
+     * Returns entries from ezcontentobject_trash.
+     *
+     * @param int $offset
+     * @param int $limit
+     * @param array $sort
+     * @return array
+     */
+    abstract public function listTrashed( $offset, $limit, array $sort = null );
+
+    /**
+     * Removes trashed element identified by $id from trash.
+     * Will NOT remove associated content object nor attributes.
+     *
+     * @param int $id The trashed location Id
+     * @return void
+     */
+    abstract public function removeElementFromTrash( $id );
+
+    /**
      * Set section on all content objects in the subtree
      *
      * @param mixed $pathString
@@ -204,4 +261,28 @@ abstract class Gateway
      * @return boolean
      */
     abstract public function setSectionForSubtree( $pathString, $sectionId );
+
+    /**
+     * Returns how many locations given content object identified by $contentId has
+     *
+     * @param int $contentId
+     * @return int
+     */
+    abstract public function countLocationsByContentId( $contentId );
+
+    /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     * Updates ezcontentobject_tree table for the given $contentId and eznode_assignment table for the given
+     * $contentId, $parentLocationId and $versionNo
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     * @param mixed $versionNo version number, needed to update eznode_assignment table
+     * @param mixed $parentLocationId parent location of location identified by $locationId, needed to update
+     *        eznode_assignment table
+     *
+     * @return void
+     */
+    abstract public function changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId );
 }

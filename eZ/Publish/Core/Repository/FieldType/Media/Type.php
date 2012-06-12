@@ -8,13 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Media;
-use eZ\Publish\Core\Repository\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    ezp\Content\Field,
-    ezp\Base\Exception\InvalidArgumentType,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Observable,
-    ezp\Io\BinaryFile;
+use eZ\Publish\Core\Repository\FieldType\FieldType,
+    eZ\Publish\API\Repository\Repository,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
  * The TextLine field type.
@@ -52,6 +50,35 @@ class Type extends FieldType
     );
 
     /**
+     * @var \eZ\Publish\API\Repository\IOService
+     */
+    protected $IOService;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->IOService = $repository->getIOService();
+    }
+
+    /**
+     * Build a Value object of current FieldType
+     *
+     * Build a FiledType\Value object with the provided $file as value.
+     *
+     * @param string $file
+     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function buildValue( $file )
+    {
+        return new Value( $this->IOService, $file );
+    }
+
+    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -69,29 +96,37 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value;
+        return new Value( $this->IOService );
     }
 
     /**
      * Checks the type and structure of the $Value.
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType if the parameter is not of the supported value sub type
-     * @throws \ezp\Base\Exception\InvalidArgumentValue if the value does not match the expected structure
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Media\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value
      */
-    public function acceptValue( BaseValue $inputValue )
+    public function acceptValue( $inputValue )
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new InvalidArgumentType( 'value', 'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Value' );
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Value',
+                $inputValue
+            );
         }
 
         if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
         {
-            throw new InvalidArgumentValue( $inputValue, get_class( $this ) );
+            throw new InvalidArgumentType(
+                '$inputValue->file',
+                'eZ\Publish\API\Repository\Values\IO\BinaryFile',
+                $inputValue->file
+            );
         }
 
         return $inputValue;
@@ -102,7 +137,7 @@ class Type extends FieldType
      *
      * @return bool
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo( $value )
     {
         return false;
     }
@@ -112,22 +147,22 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\Media\Value $value
      */
     public function fromHash( $hash )
     {
         throw new \Exception( "Not implemented yet" );
-        return new Value( $hash );
+        return new Value( $this->IOService, $hash );
     }
 
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\Media\Value $value
      *
      * @return mixed
      */
-    public function toHash( BaseValue $value )
+    public function toHash( $value )
     {
         throw new \Exception( "Not implemented yet" );
         return $value->value;

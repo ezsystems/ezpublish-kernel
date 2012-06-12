@@ -8,25 +8,28 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
-use ezp\Base\Collection\Type as TypeCollection,
+use ArrayObject,
     eZ\Publish\Core\Repository\FieldType\Image\Exception\InvalidAlias,
-    eZ\Publish\Core\Repository\FieldType\Image\Exception\MissingClass,
-    ezp\Base\BinaryRepository,
-    ezp\Base\Configuration,
-    ezp\Io\BinaryFile,
-    ezp\Io\FileInfo,
-    ezp\Io\SysInfo,
-    ezp\Io\DirHandler,
-    ezp\Io\FileHandler,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Content\Version;
+    eZ\Publish\Core\Repository\FieldType\Image\Exception\MissingAlias,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\API\Repository\IOService,
+    eZ\Publish\API\Repository\Values\IO\BinaryFile,
+    splFileInfo;
 
 /**
  * Image alias collection.
  * This collection can only hold image Alias objects
+ *
+ * @todo Rewrite image fieldtype
  */
-class AliasCollection extends TypeCollection
+class AliasCollection extends ArrayObject
 {
+    /**
+     * @var string The class name (including namespace) to accept as input
+     */
+    private $type;
+
     /**
      * Image type value
      *
@@ -35,19 +38,14 @@ class AliasCollection extends TypeCollection
     protected $imageValue;
 
     /**
-     * @var \ezp\Base\BinaryRepository
+     * @var \eZ\Publish\API\Repository\IOService
      */
-    protected $binaryRepository;
+    protected $IOService;
 
     /**
      * @var \eZ\Publish\Core\Repository\FieldType\Image\Manager
      */
     protected $imageManager;
-
-    /**
-     * @var \ezp\Base\Configuration
-     */
-    protected $imageConf;
 
     /**
      * The current serial number, the value will be 1 or higher.
@@ -63,13 +61,19 @@ class AliasCollection extends TypeCollection
      */
     protected $imageSerialNumber = 0;
 
-    public function __construct( Value $imageValue, BinaryRepository $binaryRepository, array $elements = array() )
+    public function __construct( Value $imageValue, IOService $IOService, array $settings = array(), array $elements = array() )
     {
         $this->imageValue = $imageValue;
-        $this->binaryRepository = $binaryRepository;
+        $this->IOService = $IOService;
         $this->imageConf = Configuration::getInstance( 'image' );
-        $this->imageManager = new Manager( $this, $binaryRepository );
-        parent::__construct( 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Alias', $elements );
+        $this->imageManager = new Manager( $this, $IOService );
+        $this->type = 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Alias';
+        foreach ( $elements as $item )
+        {
+            if ( !$item instanceof $this->type )
+                throw new InvalidArgumentType( 'elements', $this->type, $item );
+        }
+        parent::__construct( $elements );
     }
 
     /**
@@ -93,7 +97,73 @@ class AliasCollection extends TypeCollection
             throw new MissingAlias( 'original' );
 
         $alias = $this->imageManager->createImageAlias( $aliasName );
-        parent::offsetSet( $aliasName, $alias );
+        self::offsetSet( $aliasName, $alias );
+    }
+
+    /**
+     * Overrides offsetSet to check type and allow if correct
+     *
+     * @internal
+     * @throws InvalidArgumentType On wrong type
+     * @param string|int $offset
+     * @param mixed $value
+     */
+    public function offsetSet( $offset, $value )
+    {
+        // throw if wrong type
+        if ( !$value instanceof $this->type )
+            throw new InvalidArgumentType( 'value', $this->type, $value );
+
+        // use existing $index if $value exists in collection to avoid duplicated objects
+        if ( ( $index = $this->indexOf( $value ) ) !== false )
+            $offset = $index;
+
+        parent::offsetSet( $offset, $value );
+    }
+
+    /**
+     * Returns the first index at which a given element can be found in the array, or false if it is not present.
+     *
+     * Uses strict comparison.
+     *
+     * @param mixed $item
+     * @return int|string|bool False if nothing was found
+     */
+    public function indexOf( $item )
+    {
+        if ( !$item instanceof $this->type )
+            return false;
+
+        foreach ( $this as $key => $value )
+        {
+            if ( $item->id === null )
+            {
+                if ( $value === $item )
+                    return $key;
+            }
+            else if ( $value->id === $item->id )
+            {
+                return $key;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Overloads exchangeArray() to do type checks on input.
+     *
+     * @throws InvalidArgumentType
+     * @param array $input
+     * @return array
+     */
+    public function exchangeArray( $input )
+    {
+        foreach ( $input as $item )
+        {
+            if ( !$item instanceof $this->type )
+                throw new InvalidArgumentType( 'input', $this->type, $item );
+        }
+        return parent::exchangeArray( $input );
     }
 
     /**
@@ -107,7 +177,7 @@ class AliasCollection extends TypeCollection
         if ( !file_exists( $imagePath ) )
             throw new InvalidArgumentValue( 'imagePath', $imagePath, get_class() );
 
-        $originalImageInfo = new FileInfo( $imagePath );
+        $originalImageInfo = new splFileInfo( $imagePath );
         $this->imageSerialNumber++;
 
         $destinationDir = $this->getDestinationPath( true );
@@ -117,16 +187,16 @@ class AliasCollection extends TypeCollection
         $destinationImage = $destinationDir . '/' . $this->generateTempImageName( $originalImageInfo );
         FileHandler::copy( $imagePath, $destinationImage );
 
-        $this->createOriginalAlias( new FileInfo( $destinationImage ), $originalImageInfo );
+        $this->createOriginalAlias( new splFileInfo( $destinationImage ), $originalImageInfo );
     }
 
     /**
      * Creates original image alias and resets the collection with it
      *
-     * @param \ezp\Io\FileInfo $imageInfo File info object for image file stored at the right place
-     * @param \ezp\Io\FileInfo $originalImageInfo File info object for original image (e.g. that has been uploaded)
+     * @param \splFileInfo $imageInfo File info object for image file stored at the right place
+     * @param \splFileInfo $originalImageInfo File info object for original image (e.g. that has been uploaded)
      */
-    protected function createOriginalAlias( FileInfo $imageInfo, FileInfo $originalImageInfo )
+    protected function createOriginalAlias( splFileInfo $imageInfo, splFileInfo $originalImageInfo )
     {
         $alias = $this->imageManager->createOriginalAlias( $imageInfo, $originalImageInfo->getBasename() );
         $alias->alternativeText = $this->imageValue->alternativeText;
@@ -178,10 +248,10 @@ class AliasCollection extends TypeCollection
     /**
      * Generates temporary image file name from $originalImageInfo
      *
-     * @param \ezp\Io\FileInfo $originalImageInfo
+     * @param \splFileInfo $originalImageInfo
      * @return string
      */
-    private function generateTempImageName( FileInfo $originalImageInfo )
+    private function generateTempImageName( splFileInfo $originalImageInfo )
     {
         $fileSuffix = $originalImageInfo->getExtension();
         if ( $fileSuffix )

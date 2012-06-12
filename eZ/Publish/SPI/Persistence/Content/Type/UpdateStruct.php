@@ -11,7 +11,6 @@ namespace eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
- *
  */
 class UpdateStruct extends ValueObject
 {
@@ -37,7 +36,7 @@ class UpdateStruct extends ValueObject
      *
      * @var string[]
      */
-    public $description;
+    public $description = array();
 
     /**
      * String identifier of a type

@@ -1,7 +1,13 @@
 <?php
 /**
+ * File containing the eZ\Publish\API\Repository\Repository class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  * @package eZ\Publish\API\Repository
  */
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -115,6 +121,27 @@ interface Repository
     public function getUserService();
 
     /**
+     * Get URLAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getURLAliasService();
+
+    /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     */
+    public function getURLWildcardService();
+
+    /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService();
+
+    /**
      * Get IO Service
      *
      * Get service object to perform operations on binary files
@@ -125,11 +152,11 @@ interface Repository
 
     /**
      * Get RoleService
-     * 
+     *
      * @return \eZ\Publish\API\Repository\RoleService
      */
     public function getRoleService();
-    
+
     /**
      * Begin transaction
      *

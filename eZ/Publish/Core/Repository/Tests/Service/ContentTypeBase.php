@@ -11,6 +11,10 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
+    eZ\Publish\Core\Repository\Values\User\User,
+    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator,
     eZ\Publish\API\Repository\Exceptions;
 
 /**
@@ -21,7 +25,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeGroupCreateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
      */
@@ -46,7 +50,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeGroupCreateStruct() method.
      *
      * @depends testNewContentTypeGroupCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
      * @return void
@@ -55,12 +59,12 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'identifier'       => 'new-group',
-                'creatorId'        => null,
-                'creationDate'     => null,
+                'identifier' => 'new-group',
+                'creatorId' => null,
+                'creationDate' => null,
                 'mainLanguageCode' => null,
-                'names'            => null,
-                'descriptions'     => null
+                'names' => null,
+                'descriptions' => null
             ),
             $createStruct
         );
@@ -69,7 +73,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the createContentTypeGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return array
      */
@@ -81,11 +85,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId        = 23;
-        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->creatorId = 23;
+        $groupCreate->creationDate = new \DateTime();
         $groupCreate->mainLanguageCode = 'eng-GB';
-        $groupCreate->names            = array( 'eng-US' => 'A name.' );
-        $groupCreate->descriptions     = array( 'eng-US' => 'A description.' );
+        $groupCreate->names = array( 'eng-US' => 'A name.' );
+        $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
 
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
         /* END: Use Case */
@@ -97,7 +101,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $groupCreate,
-            'actual'   => $group,
+            'actual' => $group,
         );
     }
 
@@ -105,7 +109,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeGroupCreateStruct() method.
      *
      * @depends testCreateContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param array $data
      * @return void
@@ -134,7 +138,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -147,7 +151,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return void
      * @todo remove setting creatorId when users are plugged in
@@ -161,11 +165,15 @@ abstract class ContentTypeBase extends BaseServiceTest
             'new-group'
         );
         $groupCreate->creatorId = 23;
+        $groupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        $groupCreate->descriptions = array();
         $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $secondGroupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
+        $secondGroupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        $secondGroupCreate->descriptions = array();
 
         // Throws an exception because group with identifier "new-group" already exists
         $contentTypeService->createContentTypeGroup( $secondGroupCreate );
@@ -176,7 +184,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroup() method.
      *
      * @depends testCreateContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup
      *
      * @return array
      */
@@ -187,11 +195,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId        = 23;
-        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->creatorId = 23;
+        $groupCreate->creationDate = new \DateTime();
         $groupCreate->mainLanguageCode = 'eng-GB';
-        $groupCreate->names            = array( 'eng-US' => 'A name.' );
-        $groupCreate->descriptions     = array( 'eng-US' => 'A description.' );
+        $groupCreate->names = array( 'eng-US' => 'A name.' );
+        $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
 
         $storedGroup = $contentTypeService->createContentTypeGroup( $groupCreate );
 
@@ -208,7 +216,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $storedGroup,
-            'actual'   => $loadedGroup,
+            'actual' => $loadedGroup,
         );
     }
 
@@ -216,7 +224,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroup() method.
      *
      * @depends testLoadContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup
      *
      * @param array $data
      * @return void
@@ -230,7 +238,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup
      *
      * @return void
      */
@@ -247,7 +255,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeGroupByIdentifier() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier
      *
      * @return array
      */
@@ -269,7 +277,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $storedGroup,
-            'actual'   => $loadedGroup,
+            'actual' => $loadedGroup,
     );
     }
 
@@ -277,7 +285,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroupByIdentifier() method.
      *
      * @depends testLoadContentTypeGroupByIdentifier
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $data
      *
@@ -329,7 +337,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroupByIdentifier() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier
      *
      * @return void
      */
@@ -350,7 +358,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testLoadContentTypeGroup
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroups()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroups
      *
      * @return array
      */
@@ -372,7 +380,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             $this->assertContentTypeGroupsEqual(
                 array(
                     "expected" => $contentTypeService->loadContentTypeGroup( $loadedGroup->id ),
-                    "actual"   => $loadedGroup
+                    "actual" => $loadedGroup
                 )
             );
         }
@@ -384,7 +392,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroups() method.
      *
      * @depends testLoadContentTypeGroups
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroups()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroups
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $groups
      * @return void
@@ -393,9 +401,9 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $expectedIdentifiers = array(
             'Content' => true,
-            'Users'   => true,
-            'Media'   => true,
-            'Setup'   => true
+            'Users' => true,
+            'Media' => true,
+            'Setup' => true
         );
 
         $this->assertEquals(
@@ -403,11 +411,11 @@ abstract class ContentTypeBase extends BaseServiceTest
             count( $groups )
         );
 
-        $actualIdentifiers  = array(
+        $actualIdentifiers = array(
             'Content' => false,
-            'Users'   => false,
-            'Media'   => false,
-            'Setup'   => false
+            'Users' => false,
+            'Media' => false,
+            'Setup' => false
         );
 
         foreach ( $groups as $group )
@@ -425,7 +433,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeGroupUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupUpdateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupUpdateStruct
      *
      * @return void
      */
@@ -447,7 +455,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @depends testLoadContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
      *
      * @return array
      */
@@ -486,8 +494,8 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'originalGroup' => $group,
-            'updateStruct'  => $groupUpdate,
-            'updatedGroup'  => $updatedGroup,
+            'updateStruct' => $groupUpdate,
+            'updatedGroup' => $updatedGroup,
         );
     }
 
@@ -495,7 +503,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @depends testUpdateContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
      *
      * @param array $data
      * @return void
@@ -514,14 +522,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
 
         $expectedValues = array(
-            'identifier'       => $updateStruct->identifier,
-            'creationDate'     => $originalGroup->creationDate,
+            'identifier' => $updateStruct->identifier,
+            'creationDate' => $originalGroup->creationDate,
             'modificationDate' => $updateStruct->modificationDate,
-            'creatorId'        => $originalGroup->creatorId,
-            'modifierId'       => $updateStruct->modifierId,
+            'creatorId' => $originalGroup->creatorId,
+            'modifierId' => $updateStruct->modifierId,
             'mainLanguageCode' => $updateStruct->mainLanguageCode,
-            'names'            => $updateStruct->names,
-            'descriptions'     => $updateStruct->descriptions,
+            'names' => $updateStruct->names,
+            'descriptions' => $updateStruct->descriptions,
         );
 
         $this->assertPropertiesCorrect(
@@ -543,11 +551,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId        = 23;
-        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->creatorId = 23;
+        $groupCreate->creationDate = new \DateTime();
         $groupCreate->mainLanguageCode = 'eng-US';
-        $groupCreate->names            = array( 'eng-US' => 'Name' );
-        $groupCreate->descriptions     = array( 'eng-US' => 'Description' );
+        $groupCreate->names = array( 'eng-US' => 'Name' );
+        $groupCreate->descriptions = array( 'eng-US' => 'Description' );
 
         return $contentTypeService->createContentTypeGroup( $groupCreate );
     }
@@ -556,7 +564,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
      *
      * @return void
      */
@@ -570,7 +578,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
      *
      * @return void
      */
@@ -586,6 +594,8 @@ abstract class ContentTypeBase extends BaseServiceTest
             'updated-group'
         );
         $groupCreate->creatorId = 23;
+        $groupCreate->names = array( 'eng-US' => 'Name' );
+        $groupCreate->descriptions = array( 'eng-US' => 'Description' );
         $groupToOverwrite = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
@@ -603,7 +613,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentTypeGroup
      * @depends testLoadContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup
      *
      * @return void
      */
@@ -635,7 +645,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the deleteContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup
      *
      * @return void
      */
@@ -657,7 +667,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the deleteContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup
      *
      * @return void
      */
@@ -680,11 +690,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'first-group'
         );
-        $groupCreate->creatorId        = 23;
-        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->creatorId = 23;
+        $groupCreate->creationDate = new \DateTime();
         $groupCreate->mainLanguageCode = 'de_DE';
-        $groupCreate->names            = array( 'en_US' => 'A name.' );
-        $groupCreate->descriptions     = array( 'en_US' => 'A description.' );
+        $groupCreate->names = array( 'en_US' => 'A name.' );
+        $groupCreate->descriptions = array( 'en_US' => 'A description.' );
         $groups[] = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $groupCreate->identifier = 'second-group';
@@ -696,7 +706,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
@@ -720,7 +730,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeUpdateStruct() method.
      *
      * @depends testNewContentTypeUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      * @return void
@@ -739,7 +749,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeCreateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */
@@ -765,7 +775,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeCreateStruct() method.
      *
      * @depends testNewContentTypeCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @return void
@@ -774,20 +784,20 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'identifier'             => 'new-type',
-                "mainLanguageCode"       => null,
-                "remoteId"               => null,
-                "urlAliasSchema"         => null,
-                "nameSchema"             => null,
-                "isContainer"            => false,
-                "defaultSortField"       => Location::SORT_FIELD_PUBLISHED,
-                "defaultSortOrder"       => Location::SORT_ORDER_DESC,
+                'identifier' => 'new-type',
+                "mainLanguageCode" => null,
+                "remoteId" => null,
+                "urlAliasSchema" => null,
+                "nameSchema" => null,
+                "isContainer" => false,
+                "defaultSortField" => Location::SORT_FIELD_PUBLISHED,
+                "defaultSortOrder" => Location::SORT_ORDER_DESC,
                 "defaultAlwaysAvailable" => true,
-                "names"                  => null,
-                "descriptions"           => null,
-                "creatorId"              => null,
-                "creationDate"           => null,
-                "fieldDefinitions"       => array()
+                "names" => null,
+                "descriptions" => null,
+                "creatorId" => null,
+                "creationDate" => null,
+                "fieldDefinitions" => array()
             ),
             $contentTypeCreateStruct
         );
@@ -797,7 +807,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeCreateStruct() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentValue
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct
      *
      * @return void
      */
@@ -809,7 +819,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeCreateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
@@ -836,7 +846,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeCreateStruct() method.
      *
      * @depends testNewFieldDefinitionCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      * @return void
@@ -846,18 +856,18 @@ abstract class ContentTypeBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 "fieldTypeIdentifier" => "new-fieldtype-identifier",
-                "identifier"          => "new-identifier",
-                "names"               => null,
-                "descriptions"        => null,
-                "fieldGroup"          => null,
-                "position"            => null,
-                "isTranslatable"      => null,
-                "isRequired"          => null,
-                "isInfoCollector"     => null,
-                "validators"          => null,
-                "fieldSettings"       => null,
-                "defaultValue"        => null,
-                "isSearchable"        => null
+                "identifier" => "new-identifier",
+                "names" => null,
+                "descriptions" => null,
+                "fieldGroup" => null,
+                "position" => null,
+                "isTranslatable" => null,
+                "isRequired" => null,
+                "isInfoCollector" => null,
+                "validators" => null,
+                "fieldSettings" => null,
+                "defaultValue" => null,
+                "isSearchable" => null
             ),
             $fieldDefinitionCreateStruct
         );
@@ -867,7 +877,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the deleteContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentValue
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @return void
      */
@@ -879,7 +889,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newFieldDefinitionUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionUpdateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
@@ -903,7 +913,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newFieldDefinitionUpdateStruct() method.
      *
      * @depends testNewFieldDefinitionUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      * @return void
@@ -940,12 +950,12 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American type description',
             'eng-GB' => 'British type description'
         );
-        $typeCreateStruct->remoteId             = "new-remoteid";
-        $typeCreateStruct->creatorId            = 23;
-        $typeCreateStruct->creationDate         = new \DateTime();
-        $typeCreateStruct->mainLanguageCode     = 'eng-GB';
-        $typeCreateStruct->nameSchema           = "<title>";
-        $typeCreateStruct->urlAliasSchema       = "<title>";
+        $typeCreateStruct->remoteId = "new-remoteid";
+        $typeCreateStruct->creatorId = 23;
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->nameSchema = "<title>";
+        $typeCreateStruct->urlAliasSchema = "<title>";
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'title',
@@ -959,17 +969,13 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American title field description',
             'eng-GB' => 'British title field description',
         );
-        $titleFieldCreate->fieldGroup      = 'blog-content';
-        $titleFieldCreate->position        = 1;
-        $titleFieldCreate->isTranslatable  = true;
-        $titleFieldCreate->isRequired      = true;
+        $titleFieldCreate->fieldGroup = 'blog-content';
+        $titleFieldCreate->position = 1;
+        $titleFieldCreate->isTranslatable = true;
+        $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->isSearchable    = true;
-        $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
-            )
-        );
+        $titleFieldCreate->isSearchable = true;
+        $titleFieldCreate->defaultValue = "New text line";
         //$titleFieldCreate->validators
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
@@ -986,17 +992,13 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American body field description',
             'eng-GB' => 'British body field description',
         );
-        $bodyFieldCreate->fieldGroup      = 'blog-content';
-        $bodyFieldCreate->position        = 2;
-        $bodyFieldCreate->isTranslatable  = true;
-        $bodyFieldCreate->isRequired      = false;
+        $bodyFieldCreate->fieldGroup = 'blog-content';
+        $bodyFieldCreate->position = 2;
+        $bodyFieldCreate->isTranslatable = true;
+        $bodyFieldCreate->isRequired = false;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->isSearchable    = true;
-        $bodyFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
-            )
-        );
+        $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validators
         $bodyFieldCreate->fieldSettings = array(
             "textColumns" => 80
@@ -1043,7 +1045,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the createContentTypeGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return array
      */
@@ -1062,12 +1064,12 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American type description',
             'eng-GB' => 'British type description'
         );
-        $typeCreateStruct->remoteId             = "new-remoteid";
-        $typeCreateStruct->creatorId            = 23;
-        $typeCreateStruct->creationDate         = new \DateTime();
-        $typeCreateStruct->mainLanguageCode     = 'eng-GB';
-        $typeCreateStruct->nameSchema           = "<name>";
-        $typeCreateStruct->urlAliasSchema       = "<name>";
+        $typeCreateStruct->remoteId = "new-remoteid";
+        $typeCreateStruct->creatorId = 23;
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->nameSchema = "<name>";
+        $typeCreateStruct->urlAliasSchema = "<name>";
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'title',
@@ -1081,17 +1083,13 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American title field description',
             'eng-GB' => 'British title field description',
         );
-        $titleFieldCreate->fieldGroup      = 'blog-content';
-        $titleFieldCreate->position        = 1;
-        $titleFieldCreate->isTranslatable  = true;
-        $titleFieldCreate->isRequired      = true;
+        $titleFieldCreate->fieldGroup = 'blog-content';
+        $titleFieldCreate->position = 1;
+        $titleFieldCreate->isTranslatable = true;
+        $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->isSearchable    = true;
-        $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
-            )
-        );
+        $titleFieldCreate->isSearchable = true;
+        $titleFieldCreate->defaultValue = "New text line";
         //$titleFieldCreate->validators
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
@@ -1108,17 +1106,13 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American body field description',
             'eng-GB' => 'British body field description',
         );
-        $bodyFieldCreate->fieldGroup      = 'blog-content';
-        $bodyFieldCreate->position        = 2;
-        $bodyFieldCreate->isTranslatable  = true;
-        $bodyFieldCreate->isRequired      = false;
+        $bodyFieldCreate->fieldGroup = 'blog-content';
+        $bodyFieldCreate->position = 2;
+        $bodyFieldCreate->isTranslatable = true;
+        $bodyFieldCreate->isRequired = false;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->isSearchable    = true;
-        $bodyFieldCreate->defaultValue   = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
-            )
-        );
+        $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validators
         //$bodyFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $bodyFieldCreate );
@@ -1138,8 +1132,8 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $typeCreateStruct,
-            'actual'   => $type,
-            'groups'   => $groups
+            'actual' => $type,
+            'groups' => $groups
         );
     }
 
@@ -1147,7 +1141,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeGroupCreateStruct() method.
      *
      * @depends testCreateContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param array $data
      * @return void
@@ -1166,7 +1160,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             switch ( $propertyName )
             {
                 case 'fieldDefinitions':
-                    $this->assertFieldDefinitionsCreatesCorrect(
+                    $this->assertCreatedFieldDefinitionsCorrect(
                         $typeCreate->fieldDefinitions,
                         $contentType->fieldDefinitions
                     );
@@ -1210,7 +1204,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @return void
      */
-    protected function assertFieldDefinitionsCreatesCorrect( array $expectedDefinitionCreates, array $actualDefinitions )
+    protected function assertCreatedFieldDefinitionsCorrect( array $expectedDefinitionCreates, array $actualDefinitions )
     {
         $this->assertEquals(
             count( $expectedDefinitionCreates ),
@@ -1232,7 +1226,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
                 $actualDefinitions[$key]
             );
-            $this->assertFieldDefinitionsCreatesEqual(
+            $this->assertCreatedFieldDefinitionCorrect(
                 $expectedCreate,
                 $actualDefinitions[$key]
             );
@@ -1242,23 +1236,61 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Asserts that a field definition has been correctly created.
      *
-     * Asserts that the given $actualDefinition is correctly created from the
-     * create struct in $expectedDefinitionCreate.
+     * Asserts that the given $fieldDefinition is correctly created from the
+     * create struct in $fieldDefinitionCreateStruct.
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $expectedDefinitionCreate
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $actualDefinition
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      *
      * @return void
      */
-    protected function assertFieldDefinitionsCreatesEqual( $expectedDefinitionCreate, $actualDefinition )
+    protected function assertCreatedFieldDefinitionCorrect( $fieldDefinitionCreateStruct, $fieldDefinition )
     {
-        foreach ( $expectedDefinitionCreate as $propertyName => $propertyValue )
+        foreach ( $fieldDefinitionCreateStruct as $propertyName => $propertyValue )
         {
+            switch ( $propertyName )
+            {
+                case "fieldSettings":
+                    $fieldDefinitionPropertyValue = $fieldDefinition->$propertyName ?
+                        // Cast ArrayObject to array for comparison
+                        (array) $fieldDefinition->$propertyName :
+                        null;
+                    // Sort arrays by key
+                    if ( !empty( $fieldDefinitionPropertyValue ) ) ksort( $fieldDefinitionPropertyValue );
+                    if ( !empty( $propertyValue ) ) ksort( $propertyValue );
+                    break;
+                default:
+                    $fieldDefinitionPropertyValue = $fieldDefinition->$propertyName;
+            }
+
             $this->assertEquals(
                 $propertyValue,
-                $actualDefinition->$propertyName
+                $fieldDefinitionPropertyValue,
+                "Field definition property '{$propertyName}' is not correctly created"
             );
         }
+    }
+
+    /**
+     * An array of validators data as required by
+     * {@link \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints::$validators}
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Validator[]|null $validators
+     *
+     * @return array An array of validators data
+     */
+    protected function getValidatorsConstraintsData( $validators )
+    {
+        if ( empty( $validators ) ) return null;
+        $mappedValidators = array();
+        foreach ( $validators as $validator )
+            $mappedValidators[get_class( $validator )] = $validator->getValidatorConstraints();
+        return $mappedValidators;
+    }
+
+    protected function completeDefaultValidatorConstraints( $validators )
+    {
+
     }
 
     /**
@@ -1299,7 +1331,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -1322,7 +1354,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -1337,12 +1369,12 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'new-type'
         );
-        $typeCreateStruct->remoteId             = "other-remoteid";
-        $typeCreateStruct->creatorId            = 23;
-        $typeCreateStruct->creationDate         = new \DateTime();
-        $typeCreateStruct->mainLanguageCode     = 'eng-GB';
-        $typeCreateStruct->names                = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions         = array('eng-US' => 'A description.');
+        $typeCreateStruct->remoteId = "other-remoteid";
+        $typeCreateStruct->creatorId = 23;
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->names = array('eng-US' => 'A name.');
+        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
 
         // Throws an exception because content type with identifier "new-type" already exists
         $type = $contentTypeService->createContentType(
@@ -1360,7 +1392,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -1368,18 +1400,18 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         /* BEGIN: Use Case */
         $contentTypeService = $this->repository->getContentTypeService();
-
         // Creates published content type with remoteId "new-remoteid"
         $this->createPublishedContentType();
+
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'other-type'
         );
-        $typeCreateStruct->remoteId             = "new-remoteid";
-        $typeCreateStruct->creatorId            = 23;
-        $typeCreateStruct->creationDate         = new \DateTime();
-        $typeCreateStruct->mainLanguageCode     = 'eng-GB';
-        $typeCreateStruct->names                = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions         = array('eng-US' => 'A description.');
+        $typeCreateStruct->remoteId = "new-remoteid";
+        $typeCreateStruct->creatorId = 23;
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->names = array('eng-US' => 'A name.');
+        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
 
         // Throws an exception because content type with remoteId "new-remoteid" already exists
         $type = $contentTypeService->createContentType(
@@ -1395,7 +1427,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentType() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
      *
      * @return array
      */
@@ -1423,7 +1455,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $storedContentType,
-            'actual'   => $loadedContentType,
+            'actual' => $loadedContentType,
         );
     }
 
@@ -1431,58 +1463,72 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentType() method.
      *
      * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
      *
      * @param array $data
      * @return void
      */
     public function testLoadContentTypeValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
-     * Asserts that two given ContentType objects contain the same content type data
+     * Compares two given ContentType objects
      *
      * @param array $data
-     * @param array $skipProperties
+     * @param array $properties
+     * @param array $fieldProperties
      *
      * @return void
      */
-    protected function assertLoadContentTypeValues( array $data, array $skipProperties = array(), array $skipFieldProperties = array() )
+    protected function compareContentTypes( array $data, array $properties = array(), array $fieldProperties = array() )
     {
         /** @var $storedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $storedContentType = $data['expected'];
         /** @var $loadedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $loadedContentType = $data['actual'];
 
+        $propertiesNames = array(
+            // Virtual properties
+            "names",
+            "descriptions",
+            "contentTypeGroups",
+            //"fieldDefinitions",
+            // Standard properties
+            "id",
+            "status",
+            "identifier",
+            "creationDate",
+            "modificationDate",
+            "creatorId",
+            "modifierId",
+            "remoteId",
+            "urlAliasSchema",
+            "nameSchema",
+            "isContainer",
+            "mainLanguageCode",
+            "defaultAlwaysAvailable",
+            "defaultSortField",
+            "defaultSortOrder"
+        );
+
         $this->assertSameClassPropertiesCorrect(
-            array(
-                 // Virtual properties
-                 "names",
-                 "descriptions",
-                 "contentTypeGroups",
-                 //"fieldDefinitions",
-                 // Standard properties
-                 "id",
-                 "status",
-                 "identifier",
-                 "creationDate",
-                 "modificationDate",
-                 "creatorId",
-                 "modifierId",
-                 "remoteId",
-                 "urlAliasSchema",
-                 "nameSchema",
-                 "isContainer",
-                 "mainLanguageCode",
-                 "defaultAlwaysAvailable",
-                 "defaultSortField",
-                 "defaultSortOrder"
+            array_diff(
+                $propertiesNames,
+                isset( $properties["notEqual"] ) ? $properties["notEqual"] : array()
             ),
             $storedContentType,
             $loadedContentType,
-            $skipProperties
+            isset( $properties["skip"] ) ? $properties["skip"] : array()
+        );
+
+        $this->assertSameClassPropertiesCorrect(
+            isset( $properties["notEqual"] ) ? $properties["notEqual"] : array(),
+            $storedContentType,
+            $loadedContentType,
+            isset( $properties["skip"] ) ? $properties["skip"] : array(),
+            false
         );
 
         $this->assertEquals(
@@ -1498,45 +1544,58 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
                 $actualFieldDefinition
             );
-            $this->assertFieldDefinitionsEqual(
+            $this->compareFieldDefinitions(
                 $expectedFieldDefinition,
                 $actualFieldDefinition,
-                $skipFieldProperties
+                $fieldProperties
             );
         }
     }
 
     /**
-     * Asserts that two FieldDefinition objects contain the same field data
+     * Compares two FieldDefinition objects
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $expectedFieldDefinition
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $actualFieldDefinition
-     * @param array $skip Array of field names to skip, used with createContentTypeDraft()
+     * @param array $properties Array of field names to skip or compare as not equal
      *
      * @return void
      */
-    protected function assertFieldDefinitionsEqual( $expectedFieldDefinition, $actualFieldDefinition, $skip = array() )
+    protected function compareFieldDefinitions( $expectedFieldDefinition, $actualFieldDefinition, $properties = array() )
     {
+        $propertiesNames = array(
+            "names",
+            "descriptions",
+            "fieldSettings",
+            "validators",
+            "id",
+            "identifier",
+            "fieldGroup",
+            "position",
+            "fieldTypeIdentifier",
+            "isTranslatable",
+            "isRequired",
+            "isInfoCollector",
+            "defaultValue",
+            "isSearchable"
+        );
+
         $this->assertSameClassPropertiesCorrect(
-            array(
-                 "names",
-                 "descriptions",
-                 "fieldSettings",
-                 "validators",
-                 "id",
-                 "identifier",
-                 "fieldGroup",
-                 "position",
-                 "fieldTypeIdentifier",
-                 "isTranslatable",
-                 "isRequired",
-                 "isInfoCollector",
-                 "defaultValue",
-                 "isSearchable"
+            array_diff(
+                $propertiesNames,
+                isset( $properties["notEqual"] ) ? $properties["notEqual"] : array()
             ),
             $expectedFieldDefinition,
             $actualFieldDefinition,
-            $skip
+            isset( $properties["skip"] ) ? $properties["skip"] : array()
+        );
+
+        $this->assertSameClassPropertiesCorrect(
+            isset( $properties["notEqual"] ) ? $properties["notEqual"] : array(),
+            $expectedFieldDefinition,
+            $actualFieldDefinition,
+            isset( $properties["skip"] ) ? $properties["skip"] : array(),
+            false
         );
     }
 
@@ -1544,7 +1603,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentType() method.
      *
      * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
      *
      * @return void
      */
@@ -1557,7 +1616,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentType() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
      *
      * @return void
      */
@@ -1575,7 +1634,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeByIdentifier() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
      *
      * @return array
      */
@@ -1598,7 +1657,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $storedContentType,
-            'actual'   => $loadedContentType,
+            'actual' => $loadedContentType,
         );
     }
 
@@ -1606,21 +1665,21 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @depends testLoadContentTypeByIdentifier
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
      *
      * @param array $data
      * @return void
      */
     public function testLoadContentTypeByIdentifierValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @depends testLoadContentTypeByIdentifier
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
      *
      * @return void
      */
@@ -1633,7 +1692,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
      *
      * @return void
      */
@@ -1651,7 +1710,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeByRemoteId() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId
      *
      * @return array
      */
@@ -1674,7 +1733,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $storedContentType,
-            'actual'   => $loadedContentType
+            'actual' => $loadedContentType
         );
     }
 
@@ -1682,21 +1741,21 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeByRemoteId() method.
      *
      * @depends testLoadContentTypeByRemoteId
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId
      *
      * @param array $data
      * @return void
      */
     public function testLoadContentTypeByRemoteIdValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
      * Test for the loadContentTypeByRemoteId() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId
      *
      * @return void
      */
@@ -1714,7 +1773,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
      *
      * @return array
      */
@@ -1737,7 +1796,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'expected' => $storedContentTypeDraft,
-            'actual'   => $loadedContentTypeDraft,
+            'actual' => $loadedContentTypeDraft,
         );
     }
 
@@ -1745,20 +1804,20 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeDraft() method.
      *
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
      *
      * @param array $data
      * @return array
      */
     public function testLoadContentTypeDraftValues( array $data )
     {
-        $this->assertLoadContentTypeValues( $data );
+        $this->compareContentTypes( $data );
     }
 
     /**
      * Test for the loadContentTypeDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
      *
      * @return array
      */
@@ -1771,7 +1830,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeDraft() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
      *
      * @return array
      */
@@ -1791,7 +1850,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -1825,7 +1884,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testPublishContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -1851,7 +1910,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testPublishContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -1869,7 +1928,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentTypeGroup
      * @depends testCreateContentType
      * @depends testPublishContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypes()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypes
      *
      * @todo when all fieldTypes are functional revisit this and simplify by testing against fixtures
      *
@@ -1882,11 +1941,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'test-group-1'
         );
-        $groupCreate->creatorId        = 23;
-        $groupCreate->creationDate     = new \DateTime();
-        $groupCreate->mainLanguageCode = 'de_DE';
-        $groupCreate->names            = array( 'en_US' => 'A name.' );
-        $groupCreate->descriptions     = array( 'en_US' => 'A description.' );
+        $groupCreate->creatorId = 23;
+        $groupCreate->creationDate = new \DateTime();
+        $groupCreate->mainLanguageCode = 'ger-DE';
+        $groupCreate->names = array( 'eng-US' => 'A name.' );
+        $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
@@ -1900,12 +1959,12 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American type description',
             'eng-GB' => 'British type description'
         );
-        $typeCreateStruct->remoteId             = "test-remoteid-1";
-        $typeCreateStruct->creatorId            = 23;
-        $typeCreateStruct->creationDate         = new \DateTime();
-        $typeCreateStruct->mainLanguageCode     = 'eng-GB';
-        $typeCreateStruct->nameSchema           = "<name>";
-        $typeCreateStruct->urlAliasSchema       = "<name>";
+        $typeCreateStruct->remoteId = "test-remoteid-1";
+        $typeCreateStruct->creatorId = 23;
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->nameSchema = "<name>";
+        $typeCreateStruct->urlAliasSchema = "<name>";
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'title',
@@ -1919,17 +1978,13 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'American title field description',
             'eng-GB' => 'British title field description',
         );
-        $titleFieldCreate->fieldGroup      = 'blog-content';
-        $titleFieldCreate->position        = 1;
-        $titleFieldCreate->isTranslatable  = true;
-        $titleFieldCreate->isRequired      = true;
+        $titleFieldCreate->fieldGroup = 'blog-content';
+        $titleFieldCreate->position = 1;
+        $titleFieldCreate->isTranslatable = true;
+        $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->isSearchable    = true;
-        $titleFieldCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
-            )
-        );
+        $titleFieldCreate->isSearchable = true;
+        $titleFieldCreate->defaultValue = "New text line";
         //$titleFieldCreate->validators
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
@@ -1941,7 +1996,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService->publishContentTypeDraft( $type1 );
 
         $typeCreateStruct->identifier = "test-type-2";
-        $typeCreateStruct->remoteId   = "test-remoteid-2";
+        $typeCreateStruct->remoteId = "test-remoteid-2";
         $type2 = $contentTypeService->createContentType(
             $typeCreateStruct,
             array( $group )
@@ -1964,7 +2019,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroups() method.
      *
      * @depends testLoadContentTypes
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypes()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypes
      *
      * @param array $types
      * @return void
@@ -1975,7 +2030,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         $this->assertEquals( count( $expectedIdentifiers ), count( $types ) );
 
-        $actualIdentifiers  = array( 'test-type-1' => false, 'test-type-2' => false );
+        $actualIdentifiers = array( 'test-type-1' => false, 'test-type-2' => false );
 
         foreach ( $types as $type )
         {
@@ -1994,7 +2049,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testPublishContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
      *
      * @return array
      */
@@ -2015,7 +2070,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             "expected" => $publishedType,
-            "actual"   => $draftType
+            "actual" => $draftType
         );
     }
 
@@ -2023,7 +2078,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeDraft() method.
      *
      * @depends testCreateContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
      *
      * @todo test for modifierId when users are plugged in
      *
@@ -2036,19 +2091,21 @@ abstract class ContentTypeBase extends BaseServiceTest
         /** @var $draftType \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft */
         $draftType = $data['actual'];
 
-        $skipProperties = array(
-            "id",
-            "status",
-            "modificationDate",
-            "modifierId"
+        $typeProperties = array(
+            "skip" => array(
+                "id",
+                "status",
+                "modificationDate",
+                "modifierId"
+            )
         );
-        $skipFieldProperties = array(
-            "id"
+        $fieldProperties = array(
+            "skip" => array( "id" )
         );
-        $this->assertLoadContentTypeValues(
+        $this->compareContentTypes(
             $data,
-            $skipProperties,
-            $skipFieldProperties
+            $typeProperties,
+            $fieldProperties
         );
 
         $this->assertEquals(
@@ -2067,7 +2124,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
      *
      * @return void
      */
@@ -2081,7 +2138,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
      *
      * @return void
      */
@@ -2097,7 +2154,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
      * @depends testNewContentTypeUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      *
      * @return array
      */
@@ -2111,24 +2168,24 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService = $this->repository->getContentTypeService();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
-        $typeUpdate->identifier             = 'news-article';
-        $typeUpdate->remoteId               = '4cf35f5166fd31bf0cda859dc837e095daee9833';
-        $typeUpdate->urlAliasSchema         = 'url@alias|scheme';
-        $typeUpdate->nameSchema             = '@name@scheme@';
-        $typeUpdate->isContainer            = true;
-        $typeUpdate->mainLanguageCode       = 'eng-US';
+        $typeUpdate->identifier = 'news-article';
+        $typeUpdate->remoteId = '4cf35f5166fd31bf0cda859dc837e095daee9833';
+        $typeUpdate->urlAliasSchema = 'url@alias|scheme';
+        $typeUpdate->nameSchema = '@name@scheme@';
+        $typeUpdate->isContainer = true;
+        $typeUpdate->mainLanguageCode = 'eng-US';
         $typeUpdate->defaultAlwaysAvailable = false;
-        $typeUpdate->modifierId             = 42;
-        $typeUpdate->modificationDate       = new \DateTime();
-        $typeUpdate->defaultSortField       = Location::SORT_FIELD_PUBLISHED;
-        $typeUpdate->defaultSortOrder       = Location::SORT_ORDER_ASC;
-        $typeUpdate->names                  = array(
+        $typeUpdate->modifierId = 42;
+        $typeUpdate->modificationDate = new \DateTime();
+        $typeUpdate->defaultSortField = Location::SORT_FIELD_PUBLISHED;
+        $typeUpdate->defaultSortOrder = Location::SORT_ORDER_ASC;
+        $typeUpdate->names = array(
             'eng-US' => 'News article',
             'eng-GB' => 'Nachrichten-Artikel',
         );
         $typeUpdate->descriptions = array(
             'eng-US' => 'A news article',
-            'eng-GB'  => 'Ein Nachrichten-Artikel',
+            'eng-GB' => 'Ein Nachrichten-Artikel',
         );
 
         $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
@@ -2146,7 +2203,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         return array(
             'originalType' => $contentTypeDraft,
             'updateStruct' => $typeUpdate,
-            'updatedType'  => $updatedType,
+            'updatedType' => $updatedType,
         );
     }
 
@@ -2154,7 +2211,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @depends testUpdateContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      *
      * @param array $data
      * @return void
@@ -2163,24 +2220,24 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $originalType = $data['originalType'];
         $updateStruct = $data['updateStruct'];
-        $updatedType  = $data['updatedType'];
+        $updatedType = $data['updatedType'];
 
         $this->assertPropertiesCorrect(
             array(
-                 'id'                => $originalType->id,
-                 'names'             => $updateStruct->names,
-                 'descriptions'      => $updateStruct->descriptions,
-                 'identifier'        => $updateStruct->identifier,
-                 'creationDate'      => $originalType->creationDate,
-                 'modificationDate'  => $updateStruct->modificationDate,
-                 'creatorId'         => $originalType->creatorId,
-                 'modifierId'        => $updateStruct->modifierId,
-                 'urlAliasSchema'    => $updateStruct->urlAliasSchema,
-                 'nameSchema'        => $updateStruct->nameSchema,
-                 'isContainer'       => $updateStruct->isContainer,
-                 'mainLanguageCode'  => $updateStruct->mainLanguageCode,
+                 'id' => $originalType->id,
+                 'names' => $updateStruct->names,
+                 'descriptions' => $updateStruct->descriptions,
+                 'identifier' => $updateStruct->identifier,
+                 'creationDate' => $originalType->creationDate,
+                 'modificationDate' => $updateStruct->modificationDate,
+                 'creatorId' => $originalType->creatorId,
+                 'modifierId' => $updateStruct->modifierId,
+                 'urlAliasSchema' => $updateStruct->urlAliasSchema,
+                 'nameSchema' => $updateStruct->nameSchema,
+                 'isContainer' => $updateStruct->isContainer,
+                 'mainLanguageCode' => $updateStruct->mainLanguageCode,
                  'contentTypeGroups' => $originalType->contentTypeGroups,
-                 //'fieldDefinitions'  => $originalType->fieldDefinitions,
+                 //'fieldDefinitions' => $originalType->fieldDefinitions,
             ),
             $updatedType
         );
@@ -2198,7 +2255,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
                 $actualFieldDefinition
             );
-            $this->assertFieldDefinitionsEqual(
+            $this->compareFieldDefinitions(
                 $expectedFieldDefinition,
                 $actualFieldDefinition
             );
@@ -2210,7 +2267,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2224,7 +2281,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2232,12 +2289,10 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $contentTypeDraft = $this->createDraftContentType();
 
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
         // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
 
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService = $this->repository->getContentTypeService();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
         $typeUpdate->identifier = 'folder';
@@ -2252,7 +2307,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2260,12 +2315,10 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $contentTypeDraft = $this->createDraftContentType();
 
-        $repository = $this->getRepository();
-
         /* BEGIN: Use Case */
         // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post'
 
-        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService = $this->repository->getContentTypeService();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
         $typeUpdate->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
@@ -2280,7 +2333,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2295,7 +2348,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testLoadContentTypeByIdentifier
      * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType
      *
      * @return void
      */
@@ -2325,14 +2378,20 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testDeleteContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType
      *
      * @return void
      */
     public function testDeleteContentTypeThrowsBadStateException()
     {
-        // TODO: Needs existing content objects
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
+        /* BEGIN: Use Case */
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( "folder" );
+
+        // Throws an exception because folder type still has content instances
+        $contentTypeService->deleteContentType( $commentType );
+        /* END: Use Case */
     }
 
     /**
@@ -2340,7 +2399,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testDeleteContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType
      *
      * @return void
      */
@@ -2352,27 +2411,150 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the copyContentType() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
      *
      * @return array
      * @todo needs users
      */
     public function testCopyContentType()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $time = time();
+
+        /* BEGIN: Use Case */
+        // @todo: loading user is broken because of missing ezimage converter and ezuser field type
+        $user = new User(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => 10 ) ) )
+                )
+            )
+        );
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+
+        $copiedCommentType = $contentTypeService->copyContentType( $commentType, $user );
+        /* END: Use Case */
+
+        return array(
+            'originalType' => $commentType,
+            'copiedType' => $copiedCommentType,
+            "time" => $time,
+            "userId" => 10
+        );
+    }
+
+    /**
+     * Test for the copyContentType() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     *
+     * @return array
+     * @todo needs users
+     */
+    public function testCopyContentTypeWithSecondArgument()
+    {
+        $time = time();
+
+        /* BEGIN: Use Case */
+        // @todo: loading user is broken because of missing ezimage converter and ezuser field type
+        $user = new User(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => 10 ) ) )
+                )
+            )
+        );
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $commentType = $contentTypeService->loadContentTypeByIdentifier( "comment" );
+
+        $copiedCommentType = $contentTypeService->copyContentType( $commentType, $user );
+        /* END: Use Case */
+
+        return array(
+            "originalType" => $commentType,
+            "copiedType" => $copiedCommentType,
+            "time" => $time,
+            "userId" => 10
+        );
+    }
+
+    /**
+     * Asserts that copied content type is valid copy of original content type
+     *
+     * @param array $data
+     */
+    protected function assertCopyContentTypeValues( array $data )
+    {
+        /** @var $originalType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        $originalType = $data["originalType"];
+        /** @var $copiedType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        $copiedType = $data["copiedType"];
+        $userId = $data["userId"];
+        $time = $data["time"];
+
+        $this->compareContentTypes(
+            array(
+                "expected" => $originalType,
+                "actual" => $copiedType
+            ),
+            array(
+                "notEqual" => array(
+                    "id",
+                    "identifier",
+                    "creationDate",
+                    "modificationDate",
+                    "remoteId"
+                ),
+                "skip" => array(
+                    "creatorId",
+                    "modifierId",
+                    "status"
+                )
+            ),
+            array(
+                "notEqual" => array(
+                    "id"
+                )
+            )
+        );
+
+        $this->assertGreaterThanOrEqual( $time, $copiedType->creationDate->getTimestamp() );
+        $this->assertGreaterThanOrEqual( $time, $copiedType->modificationDate->getTimestamp() );
+        $this->assertEquals( $userId, $copiedType->creatorId );
+        $this->assertEquals( $userId, $copiedType->modifierId );
+        $this->assertEquals( ContentType::STATUS_DRAFT, $copiedType->status );
     }
 
     /**
      * Test for the copyContentType() method.
      *
      * @depends testCopyContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     *
+     * @param array $data
      *
      * @return void
      */
-    public function testCopyContentTypeValues()
+    public function testCopyContentTypeValues( array $data )
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $this->assertCopyContentTypeValues( $data );
+    }
+
+    /**
+     * Test for the copyContentType() method.
+     *
+     * @depends testCopyContentTypeWithSecondArgument
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function testCopyContentTypeWithSecondArgumentValues( array $data )
+    {
+        $this->assertCopyContentTypeValues( $data );
     }
 
     /**
@@ -2380,7 +2562,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCopyContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
      *
      * @return void
      */
@@ -2395,7 +2577,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testLoadContentTypeGroupByIdentifier
      * @depends testLoadContentTypeByIdentifier
      * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup
      *
      * @return void
      */
@@ -2432,7 +2614,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testAssignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup
      *
      * @return void
      */
@@ -2446,7 +2628,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testAssignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup
      *
      * @return void
      */
@@ -2473,7 +2655,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testLoadContentTypeByIdentifier
      * @depends testLoadContentType
      * @depends testAssignContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -2484,7 +2666,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
 
-        $mediaGroup   = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
+        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
         $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
 
         // May not unassign last group
@@ -2514,7 +2696,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUnassignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -2528,7 +2710,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUnassignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Covers\Repository\ContentTypeService::unassignContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -2550,7 +2732,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUnassignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -2559,7 +2741,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $this->repository->getContentTypeService();
 
-        $folderType     = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
         $assignedGroups = $folderType->contentTypeGroups;
 
         foreach ( $assignedGroups as $assignedGroup )
@@ -2573,13 +2755,13 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the addFieldDefinition() method.
      *
-     * @depends testCreateContentType
-     * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition()
+     * @dep_ends testCreateContentType
+     * @dep_ends testLoadContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
      *
      * @return array
      */
-    public function testAddFieldDefinition()
+    public function testAddFieldDefinitionWithValidators()
     {
         $contentTypeDraft = $this->createDraftContentType();
 
@@ -2599,18 +2781,21 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'Tags of the blog post',
             'de-DE' => 'Schlagworte des Blog-Eintrages',
         );
-        $fieldDefCreate->fieldGroup      = 'blog-meta';
-        $fieldDefCreate->position        = 1;
-        $fieldDefCreate->isTranslatable  = true;
-        $fieldDefCreate->isRequired      = true;
+        $fieldDefCreate->fieldGroup = 'blog-meta';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = true;
+        $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
+        $fieldDefCreate->defaultValue = "New tags text line";
+        $validator = new StringLengthValidator();
+        $validator->initializeWithConstraints(
             array(
-                "data" => new \eZ\Publish\Core\Repository\FieldType\TextLine\Value( 'New text line' )
+                "maxStringLength" => 256,
+                "minStringLength" => 2
             )
         );
-        //$fieldDefCreate->validators
-        //$fieldDefCreate->fieldSettings
+        $fieldDefCreate->validators = array( $validator );
+        $fieldDefCreate->fieldSettings = null;
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
@@ -2623,7 +2808,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedType
         );
         return array(
-            'loadedType'     => $loadedType,
+            'loadedType' => $loadedType,
             'fieldDefCreate' => $fieldDefCreate,
         );
     }
@@ -2632,21 +2817,110 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the addFieldDefinition() method.
      *
      * @depends testAddFieldDefinition
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
      *
      * @param array $data
      * @return void
      */
-    public function testAddFieldDefinitionStructValues( array $data )
+    public function testAddFieldDefinitionWithValidatorsStructValues( array $data )
     {
-        $loadedType     = $data['loadedType'];
+        $loadedType = $data['loadedType'];
         $fieldDefCreate = $data['fieldDefCreate'];
 
         foreach ( $loadedType->fieldDefinitions as $fieldDefinition )
         {
             if ( $fieldDefinition->identifier == $fieldDefCreate->identifier )
             {
-                $this->assertFieldDefinitionsCreatesEqual( $fieldDefCreate, $fieldDefinition );
+                $this->assertCreatedFieldDefinitionCorrect( $fieldDefCreate, $fieldDefinition );
+                return;
+            }
+        }
+
+        $this->fail(
+            sprintf(
+                'Field definition with identifier "%s" not created.',
+                $fieldDefCreate->identifier
+            )
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @depends testCreateContentType
+     * @depends testLoadContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     *
+     * @return array
+     */
+    public function testAddFieldDefinitionWithSettings()
+    {
+        $contentTypeDraft = $this->createDraftContentType();
+
+        /* BEGIN: Use Case */
+        // $contentTypeDraft contains a ContentTypeDraft
+
+        $contentTypeService = $this->repository->getContentTypeService();
+
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'body2', 'ezxmltext'
+        );
+        $fieldDefCreate->names = array(
+            'eng-US' => 'Body',
+            'de-DE' => 'Körper',
+        );
+        $fieldDefCreate->descriptions = array(
+            'eng-US' => 'Body of the blog post',
+            'de-DE' => 'Körper der den Blog-Post',
+        );
+        $fieldDefCreate->fieldGroup = 'blog-content';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = true;
+        $fieldDefCreate->isRequired = false;
+        $fieldDefCreate->isInfoCollector = false;
+        $fieldDefCreate->defaultValue = "";
+        $fieldDefCreate->validators = null;
+        $fieldDefCreate->fieldSettings = array(
+            'numRows' => 10,
+            'tagPreset' => null,
+            'defaultText' => '',
+        );
+        $fieldDefCreate->isSearchable = true;
+
+        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
+        /* END: Use Case */
+
+        $loadedType = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
+            $loadedType
+        );
+        return array(
+            'loadedType' => $loadedType,
+            'fieldDefCreate' => $fieldDefCreate,
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @depends testAddFieldDefinitionVariation
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     *
+     * @param array $data
+     * @return void
+     */
+    public function testAddFieldDefinitionWithSettingsStructValues( array $data )
+    {
+        $loadedType = $data['loadedType'];
+        $fieldDefCreate = $data['fieldDefCreate'];
+
+        foreach ( $loadedType->fieldDefinitions as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier == $fieldDefCreate->identifier )
+            {
+                $this->assertCreatedFieldDefinitionCorrect( $fieldDefCreate, $fieldDefinition );
                 return;
             }
         }
@@ -2664,7 +2938,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testAddFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
      *
      * @return void
      */
@@ -2691,7 +2965,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the addFieldDefinition() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
      *
      * @return void
      */
@@ -2705,7 +2979,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
      *
      * @return array
      */
@@ -2734,7 +3008,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'removedFieldDefinition' => $bodyField,
-            'loadedType'             => $loadedType,
+            'loadedType' => $loadedType,
         );
     }
 
@@ -2742,7 +3016,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the removeFieldDefinition() method.
      *
      * @depends testRemoveFieldDefinition
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
      *
      * @param array $data
      * @return void
@@ -2771,7 +3045,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testRemoveFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
      *
      * @return void
      */
@@ -2801,7 +3075,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testRemoveFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
      *
      * @return void
      */
@@ -2815,7 +3089,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      *
      * @return array
      */
@@ -2842,18 +3116,14 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eng-US' => 'Blog post body of the blog post',
             'de-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
         );
-        $bodyUpdateStruct->fieldGroup      = 'updated-blog-content';
-        $bodyUpdateStruct->position        = 3;
-        $bodyUpdateStruct->isTranslatable  = false;
-        $bodyUpdateStruct->isRequired      = false;
+        $bodyUpdateStruct->fieldGroup = 'updated-blog-content';
+        $bodyUpdateStruct->position = 3;
+        $bodyUpdateStruct->isTranslatable = false;
+        $bodyUpdateStruct->isRequired = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->defaultValue    = new \eZ\Publish\SPI\Persistence\Content\FieldValue(
-            array(
-                 "data" => new \eZ\Publish\Core\Repository\FieldType\TextBlock\Value( '' )
-            )
-        );
+        $bodyUpdateStruct->defaultValue = "";
         //$bodyUpdateStruct->validators
-        $bodyUpdateStruct->fieldSettings   = array(
+        $bodyUpdateStruct->fieldSettings = array(
             "textColumns" => 80
         );
         $bodyUpdateStruct->isSearchable = false;
@@ -2874,8 +3144,8 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         return array(
             'originalField' => $bodyField,
-            'updatedField'  => $loadedField,
-            'updateStruct'  => $bodyUpdateStruct,
+            'updatedField' => $loadedField,
+            'updateStruct' => $bodyUpdateStruct,
         );
     }
 
@@ -2883,7 +3153,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateFieldDefinition() method.
      *
      * @depends testUpdateFieldDefinition
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      *
      * @param array $data
      * @return void
@@ -2891,24 +3161,24 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testUpdateFieldDefinitionStructValues( array $data )
     {
         $originalField = $data['originalField'];
-        $updatedField  = $data['updatedField'];
-        $updateStruct  = $data['updateStruct'];
+        $updatedField = $data['updatedField'];
+        $updateStruct = $data['updateStruct'];
 
         $this->assertPropertiesCorrect(
             array(
-                'id'                  => $originalField->id,
-                'identifier'          => $updateStruct->identifier,
-                'names'               => $updateStruct->names,
-                'descriptions'        => $updateStruct->descriptions,
-                'fieldGroup'          => $updateStruct->fieldGroup,
-                'position'            => $updateStruct->position,
+                'id' => $originalField->id,
+                'identifier' => $updateStruct->identifier,
+                'names' => $updateStruct->names,
+                'descriptions' => $updateStruct->descriptions,
+                'fieldGroup' => $updateStruct->fieldGroup,
+                'position' => $updateStruct->position,
                 'fieldTypeIdentifier' => $originalField->fieldTypeIdentifier,
-                'isTranslatable'      => $updateStruct->isTranslatable,
-                'isRequired'          => $updateStruct->isRequired,
-                'isInfoCollector'     => $updateStruct->isInfoCollector,
-                'validators'          => $updateStruct->validators,
-                'defaultValue'        => $originalField->defaultValue,
-                'isSearchable'        => $updateStruct->isSearchable,
+                'isTranslatable' => $updateStruct->isTranslatable,
+                'isRequired' => $updateStruct->isRequired,
+                'isInfoCollector' => $updateStruct->isInfoCollector,
+                'validators' => $updateStruct->validators,
+                'defaultValue' => $originalField->defaultValue,
+                'isSearchable' => $updateStruct->isSearchable,
             ),
             $updatedField
         );
@@ -2919,7 +3189,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      *
      * @return void
      */
@@ -2934,7 +3204,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
 
-        $bodyField  = $contentTypeDraft->getFieldDefinition( 'body' );
+        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
         $titleField = $contentTypeDraft->getFieldDefinition( 'title' );
 
         $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
@@ -2954,7 +3224,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      *
      * @return void
      */
@@ -2968,7 +3238,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition()
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      *
      * @return void
      */

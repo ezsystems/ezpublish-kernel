@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser;
 use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParser,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Base as BaseParser,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler,
-    ezp\Base\Configuration,
     DOMElement;
 
 /**
@@ -21,40 +20,40 @@ use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParser,
 class Simplified extends BaseParser implements InputParser
 {
     protected $InputTags = array(
-        'b'       => array( 'name' => 'strong' ),
-        'bold'    => array( 'name' => 'strong' ),
-        'i'       => array( 'name' => 'emphasize' ),
-        'em'      => array( 'name' => 'emphasize' ),
-        'h'       => array( 'name' => 'header' ),
-        'p'       => array( 'name' => 'paragraph' ),
-        'para'    => array( 'name' => 'paragraph' ),
-        'br'      => array( 'name' => 'br',
+        'b' => array( 'name' => 'strong' ),
+        'bold' => array( 'name' => 'strong' ),
+        'i' => array( 'name' => 'emphasize' ),
+        'em' => array( 'name' => 'emphasize' ),
+        'h' => array( 'name' => 'header' ),
+        'p' => array( 'name' => 'paragraph' ),
+        'para' => array( 'name' => 'paragraph' ),
+        'br' => array( 'name' => 'br',
                             'noChildren' => true ),
-        'a'       => array( 'name' => 'link' ),
-        'h1'     => array( 'nameHandler' => 'tagNameHeader' ),
-        'h2'     => array( 'nameHandler' => 'tagNameHeader' ),
-        'h3'     => array( 'nameHandler' => 'tagNameHeader' ),
-        'h4'     => array( 'nameHandler' => 'tagNameHeader' ),
-        'h5'     => array( 'nameHandler' => 'tagNameHeader' ),
-        'h6'     => array( 'nameHandler' => 'tagNameHeader' ),
+        'a' => array( 'name' => 'link' ),
+        'h1' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h2' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h3' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h4' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h5' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h6' => array( 'nameHandler' => 'tagNameHeader' ),
         );
 
     protected $OutputTags = array(
-        'section'   => array(),
+        'section' => array(),
 
-        'embed'     => array( //'parsingHandler' => 'breakInlineFlow',
+        'embed' => array( //'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerEmbed',
                               'attributes' => array( 'id' => 'xhtml:id' ),
                               'requiredInputAttributes' => array( 'href' ) ),
 
-        'embed-inline'     => array( //'parsingHandler' => 'breakInlineFlow',
+        'embed-inline' => array( //'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerEmbed',
                               'attributes' => array( 'id' => 'xhtml:id' ),
                               'requiredInputAttributes' => array( 'href' ) ),
 
-        'object'    => array( //'parsingHandler' => 'breakInlineFlow',
+        'object' => array( //'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerObject',
                               'attributes' => array( 'href' => 'image:ezurl_href',
@@ -64,56 +63,56 @@ class Simplified extends BaseParser implements InputParser
                                                      'ezurl_target' => 'image:ezurl_target' ),
                               'requiredInputAttributes' => array( 'id' ) ),
 
-        'table'     => array( 'structHandler' => 'appendParagraph' ),
+        'table' => array( 'structHandler' => 'appendParagraph' ),
 
-        'tr'        => array(),
+        'tr' => array(),
 
-        'td'        => array( 'attributes' => array( 'width' => 'xhtml:width',
+        'td' => array( 'attributes' => array( 'width' => 'xhtml:width',
                                                      'colspan' => 'xhtml:colspan',
                                                      'rowspan' => 'xhtml:rowspan' ) ),
 
-        'th'        => array( 'attributes' => array( 'width' => 'xhtml:width',
+        'th' => array( 'attributes' => array( 'width' => 'xhtml:width',
                                                      'colspan' => 'xhtml:colspan',
                                                      'rowspan' => 'xhtml:rowspan' ) ),
 
-        'ol'        => array( 'structHandler' => 'structHandlerLists' ),
+        'ol' => array( 'structHandler' => 'structHandlerLists' ),
 
-        'ul'        => array( 'structHandler' => 'structHandlerLists' ),
+        'ul' => array( 'structHandler' => 'structHandlerLists' ),
 
-        'li'        => array( 'autoCloseOn' => array( 'li' ) ),
+        'li' => array( 'autoCloseOn' => array( 'li' ) ),
 
-        'header'    => array( 'autoCloseOn' => array( 'paragraph' ),
+        'header' => array( 'autoCloseOn' => array( 'paragraph' ),
                               'structHandler' => 'structHandlerHeader' ),
 
         'paragraph' => array( 'autoCloseOn' => array( 'paragraph' ),
                               'publishHandler' => 'publishHandlerParagraph' ),
 
-        'line'      => array(),
+        'line' => array(),
 
-        'br'        => array( 'parsingHandler' => 'breakInlineFlow',
+        'br' => array( 'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'structHandlerBr',
                               'attributes' => false ),
 
-        'literal'   => array( 'parsingHandler' => 'parsingHandlerLiteral',
+        'literal' => array( 'parsingHandler' => 'parsingHandlerLiteral',
                               'structHandler' => 'appendParagraph' ),
 
-        'strong'    => array( 'structHandler' => 'appendLineParagraph' ),
+        'strong' => array( 'structHandler' => 'appendLineParagraph' ),
 
         'emphasize' => array( 'structHandler' => 'appendLineParagraph' ),
 
-        'link'      => array( 'structHandler' => 'appendLineParagraph',
+        'link' => array( 'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerLink',
                               'attributes' => array( 'title' => 'xhtml:title',
                                                      'id' => 'xhtml:id' ),
                               'requiredInputAttributes' => array( 'href' ) ),
 
-        'anchor'    => array( 'structHandler' => 'appendLineParagraph' ),
+        'anchor' => array( 'structHandler' => 'appendLineParagraph' ),
 
-        'custom'    => array( 'structHandler' => 'structHandlerCustom',
+        'custom' => array( 'structHandler' => 'structHandlerCustom',
                               'publishHandler' => 'publishHandlerCustom',
                               'requiredInputAttributes' => array( 'name' ) ),
 
-        '#text'     => array( 'structHandler' => 'structHandlerText' )
+        '#text' => array( 'structHandler' => 'structHandlerText' )
     );
 
     public function process( $xmlString, $createRootNode = true  )
@@ -453,7 +452,7 @@ class Simplified extends BaseParser implements InputParser
                 if ( $this->getOption( self::OPT_STRICT_HEADERS ) &&
                     $level - $sectionLevel > 1 )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_SCHEMA, "Incorrect headers nesting" );
+                    $this->handleError( BaseParser::ERROR_SCHEMA, "Incorrect headers nesting" );
                 }
 
                 $newParent = $parent;
@@ -882,7 +881,7 @@ class Simplified extends BaseParser implements InputParser
                 // protection from self-embedding
                 if ( $objectID == $this->contentObjectID )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
+                    $this->handleError( BaseParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
 
                     $element->removeAttribute( 'href' );
                     return $ret;
@@ -902,10 +901,10 @@ class Simplified extends BaseParser implements InputParser
                 if ( preg_match( "@^[0-9]+$@", $nodePath ) )
                 {
                     $nodeID = $nodePath;
-                    $node = eZContentObjectTreeNode::fetch( $nodeID, false, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationById( $nodeID );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Location '$nodeID' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA, "Location '$nodeID' does not exist." );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
@@ -913,25 +912,25 @@ class Simplified extends BaseParser implements InputParser
                 }
                 else
                 {
-                    $node = eZContentObjectTreeNode::fetchByURLPath( $nodePath, false );
-                    if ( !$node )
+                    $location = $this->handler->getLocationByPath( $nodePath );
+                    if ( !$location )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Location '$nodePath' does not exist." );
+                        $this->handleError( BaseParser::ERROR_DATA, "Location '$nodePath' does not exist." );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
                     }
-                    $nodeID = $node['node_id'];
+                    $nodeID = $location->id;
                     $element->setAttribute( 'show_path', 'true' );
                 }
 
                 $element->setAttribute( 'node_id', $nodeID );
-                $objectID = $node['contentobject_id'];
+                $objectID = $location->contentId;
 
                 // protection from self-embedding
                 if ( $objectID == $this->contentObjectID )
                 {
-                    $this->handleError( eZXMLInputParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
+                    $this->handleError( BaseParser::ERROR_DATA, "Object '$objectID' can not be embedded to itself." );
 
                     $element->removeAttribute( 'href' );
                     return $ret;

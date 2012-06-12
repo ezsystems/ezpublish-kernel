@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType;
-use \ArrayObject,
-    ezp\Base\Exception\PropertyPermission,
-    ezp\Base\Exception\PropertyNotFound;
+use ArrayObject,
+    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**
  * Container for field type specific properties.
@@ -24,8 +24,7 @@ class FieldSettings extends ArrayObject
      *
      * This is so that only settings specified by a field type can be set.
      *
-     * @internal
-     * @throws \ezp\Base\Exception\PropertyPermission
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException On non existing indexes
      * @param string|int $index
      * @param mixed $value
      * @return void
@@ -33,23 +32,22 @@ class FieldSettings extends ArrayObject
     public function offsetSet( $index, $value )
     {
         if ( !parent::offsetExists( $index ) )
-            throw new PropertyPermission( $index, PropertyPermission::WRITE, __CLASS__ );
+            throw new PropertyReadOnlyException( $index, __CLASS__ );
 
         parent::offsetSet( $index, $value );
     }
 
     /**
      * Returns value from internal array, identified by $index.
-     * If $index cannot be found, a {@link \ezp\Base\Exception\PropertyNotFound} exception is thrown
      *
      * @param string $index
      * @return mixed
-     * @throws \ezp\Base\Exception\PropertyNotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException If $index is not found
      */
     public function offsetGet( $index )
     {
         if ( !parent::offsetExists( $index ) )
-            throw new PropertyNotFound( $index, __CLASS__ );
+            throw new PropertyNotFoundException( $index, __CLASS__ );
 
         return parent::offsetGet( $index );
     }

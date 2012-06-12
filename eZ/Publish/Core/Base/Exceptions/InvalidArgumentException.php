@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidA
  * Invalid Argument Type Exception implementation
  *
  * @use: throw new InvalidArgumentException( 'nodes', 'array' );
- *
  */
 class InvalidArgumentException extends APIInvalidArgumentException
 {
@@ -33,16 +32,5 @@ class InvalidArgumentException extends APIInvalidArgumentException
             0,
             $previous
         );
-    }
-
-    /**
-     * Returns an additional error code which indicates why an action could not be performed
-     *
-     * @return int An error code
-     */
-    public function getErrorCode()
-    {
-        // @todo: implement
-        return 0;
     }
 }

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    ezp\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query,
     ezcQuerySelect;
 
 /**
@@ -19,11 +19,11 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
 class SortClauseConverter
 {
     /**
-     * Sort cluase handlers
+     * Sort clause handlers
      *
      * @var array(SortClauseHandler)
      */
-    protected $handler;
+    protected $handlers;
 
     /**
      * Sorting information for temporary sort columns
@@ -35,12 +35,12 @@ class SortClauseConverter
     /**
      * Construct from an optional array of sort clause handlers
      *
-     * @param array $handler
+     * @param array $handlers
      * @return void
      */
-    public function __construct( array $handler = array() )
+    public function __construct( array $handlers = array() )
     {
-        $this->handler = $handler;
+        $this->handlers = $handlers;
     }
 
     /**
@@ -55,12 +55,14 @@ class SortClauseConverter
         $sortColumn = array();
         foreach ( $sortClauses as $nr => $sortClause )
         {
-            foreach ( $this->handler as $handler )
+            foreach ( $this->handlers as $handler )
             {
                 if ( $handler->accept( $sortClause ) )
                 {
-                    $column = $handler->applySelect( $query, $sortClause, $nr );
-                    $this->sortColumns[$column] = $sortClause->direction;
+                    foreach ( (array)$handler->applySelect( $query, $sortClause, $nr ) as $column )
+                    {
+                        $this->sortColumns[$column] = $sortClause->direction;
+                    }
                     continue 2;
                 }
             }
@@ -80,7 +82,7 @@ class SortClauseConverter
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
-            foreach ( $this->handler as $handler )
+            foreach ( $this->handlers as $handler )
             {
                 if ( $handler->accept( $sortClause ) )
                 {

@@ -1,9 +1,14 @@
 <?php
 /**
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
- *
  */
+
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
@@ -41,7 +46,7 @@ abstract class Criterion
      * @param string[]|int[]|int|string $value
      *
      * @todo Add a dedicated exception
-     * @throws InvalidArgumentException if the provided operator isn't supported
+     * @throws \InvalidArgumentException if the provided operator isn't supported
      */
     public function __construct( $target, $operator, $value )
     {
@@ -112,7 +117,7 @@ abstract class Criterion
     /**
      * Returns a callback that checks the values types depending on the operator specifications
      * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
-     * @return callback
+     * @return \Closure
      */
     private function getValueTypeCheckCallback( $valueTypes )
     {

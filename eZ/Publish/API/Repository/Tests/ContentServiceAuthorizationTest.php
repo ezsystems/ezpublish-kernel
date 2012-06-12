@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 use \eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -19,11 +17,10 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentService
- * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  */
-class ContentServiceAuthorizationTest extends BaseTest
+class ContentServiceAuthorizationTest extends BaseContentServiceTest
 {
     /**
      * Test for the createContent() method.
@@ -55,10 +52,10 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         $contentService = $repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
 
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // This call will fail with a "UnauthorizedException"
@@ -101,6 +98,7 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $contentId = $this->generateId( 'object', 10 );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
@@ -110,7 +108,8 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $pseudoEditor );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentInfo( 10 );
+        // $contentId contains a content object ID not accessible for anonymous
+        $contentService->loadContentInfo( $contentId );
         /* END: Use Case */
     }
 
@@ -154,9 +153,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        // ID of the "Anonymous User" in an eZ Publish demo installation
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -185,9 +185,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        // ID of the "Anonymous User" in an eZ Publish demo installation
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -216,9 +217,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        // ID of the "Anonymous User" in an eZ Publish demo installation
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -244,9 +246,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        // ID of the "Anonymous User" in an eZ Publish demo installation
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -272,8 +275,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -302,8 +307,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -332,8 +339,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -362,8 +371,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -395,8 +406,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -428,8 +441,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -455,8 +470,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -467,6 +484,7 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContent( $anonymousUserId, array( 'eng-US' ) );
+        /* END: Use Case */
     }
 
     /**
@@ -481,8 +499,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
-        $anonymousUserId = 10;
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
 
         $contentService = $repository->getContentService();
 
@@ -493,6 +513,7 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContent( $anonymousUserId, array( 'eng-US' ), 1 );
+        /* END: Use Case */
     }
 
     /**
@@ -596,6 +617,9 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
+        // Get ContentInfo instance.
+        $contentInfo = $content->contentInfo;
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -605,15 +629,15 @@ class ContentServiceAuthorizationTest extends BaseTest
         // Creates a metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
-        $metadataUpdate->remoteId         = 'aaaabbbbccccddddeeeeffff11112222';
+        $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-US';
-        $metadataUpdate->alwaysAvailable  = false;
-        $metadataUpdate->publishedDate    = new \DateTime( '1984/01/01' );
+        $metadataUpdate->alwaysAvailable = false;
+        $metadataUpdate->publishedDate = new \DateTime( '1984/01/01' );
         $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->updateContentMetadata(
-            $content->contentInfo,
+            $contentInfo,
             $metadataUpdate
         );
         /* END: Use Case */
@@ -629,11 +653,14 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
+
+        // Get ContentInfo instance
+        $contentInfo = $contentVersion2->contentInfo;
 
         // Load the user service
         $userService = $repository->getUserService();
@@ -642,7 +669,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->deleteContent( $contentVersion2->contentInfo );
+        $contentService->deleteContent( $contentInfo );
         /* END: Use Case */
     }
 
@@ -663,6 +690,9 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
+        // Get ContentInfo instance
+        $contentInfo = $content->contentInfo;
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -670,7 +700,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->createContentDraft( $content->contentInfo );
+        $contentService->createContentDraft( $contentInfo );
         /* END: Use Case */
     }
 
@@ -691,6 +721,10 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
+        // Get ContentInfo and VersionInfo instances
+        $contentInfo = $content->contentInfo;
+        $versionInfo = $content->getVersionInfo();
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -698,10 +732,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->createContentDraft(
-            $content->contentInfo,
-            $content->getVersionInfo()
-        );
+        $contentService->createContentDraft( $contentInfo, $versionInfo );
         /* END: Use Case */
     }
 
@@ -729,6 +760,7 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContentDrafts();
+        /* END: Use Case */
     }
 
     /**
@@ -743,9 +775,10 @@ class ContentServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $administratorUserId = $this->generateId( 'user', 14 );
         /* BEGIN: Use Case */
-        // ID of the "Administrator" user in a eZ Publish demo installation.
-        $administratorUserId = 14;
+        // $administratorUserId is  the ID of the "Administrator" user in a eZ
+        // Publish demo installation.
 
         $contentService = $repository->getContentService();
 
@@ -760,6 +793,7 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContentDrafts( $administratorUser );
+        /* END: Use Case */
     }
 
     /**
@@ -772,11 +806,14 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
         $draftVersion2 = $this->createContentDraftVersion2();
+
+        // Get VersionInfo instance
+        $versionInfo = $draftVersion2->getVersionInfo();
 
         // Load the user service
         $userService = $repository->getUserService();
@@ -787,15 +824,12 @@ class ContentServiceAuthorizationTest extends BaseTest
         // Create an update struct and modify some fields
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
+        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
 
-        $contentUpdate->initialLanguageCode = 'eng-GB';
+        $contentUpdate->initialLanguageCode = 'eng-US';
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->updateContent(
-            $draftVersion2->getVersionInfo(),
-            $contentUpdate
-        );
+        $contentService->updateContent( $versionInfo, $contentUpdate );
         /* END: Use Case */
     }
 
@@ -809,7 +843,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
@@ -836,7 +870,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testDeleteVersionThrowsUnauthorizedException()
     {
-        $repository     = $this->getRepository();
+        $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
@@ -871,6 +905,9 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
+        // Get ContentInfo instance of version 2
+        $contentInfo = $contentVersion2->contentInfo;
+
         // Load the user service
         $userService = $repository->getUserService();
 
@@ -878,7 +915,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadVersions( $contentVersion2->contentInfo );
+        $contentService->loadVersions( $contentInfo );
         /* END: Use Case */
     }
 
@@ -892,15 +929,18 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testCopyContentThrowsUnauthorizedException()
     {
-        $parentLocationId = 167;
+        $parentLocationId = $this->generateId( 'location', 167 );
 
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
+
+        // Get ContentInfo instance of version 2
+        $contentInfo = $contentVersion2->contentInfo;
 
         // Load the user service
         $userService = $repository->getUserService();
@@ -911,15 +951,15 @@ class ContentServiceAuthorizationTest extends BaseTest
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $targetLocationCreate->priority  = 42;
-        $targetLocationCreate->hidden    = true;
-        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
         // This call will fail with a "UnauthorizedException"
         $contentService->copyContent(
-            $contentVersion2->contentInfo,
+            $contentInfo,
             $targetLocationCreate
         );
         /* END: Use Case */
@@ -935,11 +975,11 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testCopyContentThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $parentLocationId = 167;
+        $parentLocationId = $this->generateId( 'location', 167 );
 
         $repository = $this->getRepository();
 
-        $contentService  = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
@@ -954,9 +994,9 @@ class ContentServiceAuthorizationTest extends BaseTest
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
 
-        $targetLocationCreate->priority  = 42;
-        $targetLocationCreate->hidden    = true;
-        $targetLocationCreate->remoteId  = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
@@ -970,41 +1010,6 @@ class ContentServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the findSingle() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     */
-    public function testFindSingleThrowsUnauthorizedExceptionWithFilterByPermissionsParameter()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        // Load the user service
-        $userService = $repository->getUserService();
-
-        // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
-
-        // Load content service
-        $contentService = $repository->getContentService();
-
-        // Create a search query for content objects about "eZ Publish"
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Systems*' )
-            )
-        );
-
-        // This call will fail with a "UnauthorizedException"
-        $contentService->findSingle( $query, array(), false );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the loadRelations() method.
      *
      * @return void
@@ -1014,7 +1019,28 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testLoadRelationsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadRelations() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Remote id of the "Support" page of a eZ Publish demo installation.
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $versionInfo = $contentService->loadVersionInfo(
+            $contentService->loadContentInfoByRemoteId(
+                $supportRemoteId
+            )
+        );
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadRelations( $versionInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -1027,7 +1053,26 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::loadReverseRelations() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Remote id of the "Support" page of a eZ Publish demo installation.
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+
+        $contentInfo = $contentService->loadContentInfoByRemoteId(
+            $supportRemoteId
+        );
+
+        // Set media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadReverseRelations( $contentInfo );
+        /* END: Use Case */
     }
 
     /**
@@ -1050,6 +1095,9 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         $draft = $this->createContentDraftVersion1();
 
+        // Get the draft's version info
+        $versionInfo = $draft->getVersionInfo();
+
         // Load other content object
         $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
 
@@ -1061,7 +1109,7 @@ class ContentServiceAuthorizationTest extends BaseTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->addRelation(
-            $draft->getVersionInfo(),
+            $versionInfo,
             $support
         );
         /* END: Use Case */
@@ -1084,10 +1132,13 @@ class ContentServiceAuthorizationTest extends BaseTest
         /* BEGIN: Use Case */
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
-        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
         $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
         $draft = $this->createContentDraftVersion1();
+
+        // Get the draft's version info
+        $versionInfo = $draft->getVersionInfo();
 
         $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
         $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
@@ -1103,7 +1154,7 @@ class ContentServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->deleteRelation( $draft->getVersionInfo(), $support );
+        $contentService->deleteRelation( $versionInfo, $support );
         /* END: Use Case */
     }
 
@@ -1116,7 +1167,35 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testFindContentWithUserPermissionFilter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findContent() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
+
+        $contentService = $repository->getContentService();
+
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*ez*' )
+            )
+        );
+
+        // Search for matching content
+        $searchResultWithoutPermissions = $contentService->findContent( $query, array(), false );
+
+        // Search for matching content
+        $searchResultWithPermissions = $contentService->findContent( $query, array() );
+        /* END: Use Case */
+
+        $this->assertGreaterThan(
+            $searchResultWithPermissions->count,
+            $searchResultWithoutPermissions->count
+        );
     }
 
     /**
@@ -1128,221 +1207,66 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     public function testFindSingleWithUserPermissionFilter()
     {
-        $this->markTestIncomplete( "@TODO: Test for ContentService::findSingle() is not implemented." );
-    }
-
-    /**
-     * Creates a fresh clean content draft.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createContentDraftVersion1()
-    {
         $repository = $this->getRepository();
-        /* BEGIN: Inline */
-        // Location id of the "Home > Community" node
-        $parentLocationId = 167;
 
-        $contentService     = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $locationService    = $repository->getLocationService();
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
 
-        // Configure new location
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
-
-        $locationCreate->priority  = 23;
-        $locationCreate->hidden    = true;
-        $locationCreate->remoteId  = '0123456789abcdef0123456789abcdef';
-        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
-        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
-
-        // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
-
-        // Configure new content object
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
-        $contentCreate->remoteId        = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->sectionId       = 1;
-        $contentCreate->alwaysAvailable = true;
-
-        // Create a draft
-        $draft = $contentService->createContent( $contentCreate, array( $locationCreate ) );
-        /* END: Inline */
-
-        return $draft;
-    }
-
-    /**
-     * Creates a fresh clean published content instance.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createContentVersion1()
-    {
-        $repository = $this->getRepository();
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
 
         $contentService = $repository->getContentService();
 
-        /* BEGIN: Inline */
-        $draft = $this->createContentDraftVersion1();
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
+            )
+        );
 
-        // Publish this draft
-        $content = $contentService->publishVersion( $draft->getVersionInfo() );
-        /* END: Inline */
+        // Search for matching content
+        $content = $contentService->findSingle( $query, array(), false );
+        /* END: Use Case */
 
-        return $content;
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $content
+        );
     }
 
     /**
-     * Creates a new content draft named <b>$draftVersion2</b> from a currently
-     * published content object.
+     * Test for the findSingle() method.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
      */
-    private function createContentDraftVersion2()
+    public function testFindSingleThrowsNotFoundExceptionWithUserPermissionFilter()
     {
         $repository = $this->getRepository();
 
-        $contentService = $repository->getContentService();
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
 
-        /* BEGIN: Inline */
-        $content = $this->createContentVersion1();
-
-        // Create a new draft from the published content
-        $draftVersion2 = $contentService->createContentDraft( $content->contentInfo );
-        /* END: Inline */
-
-        return $draftVersion2;
-    }
-
-    /**
-     * Creates an updated content draft named <b>$draftVersion2</b> from
-     * a currently published content object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createUpdatedDraftVersion2()
-    {
-        $repository = $this->getRepository();
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
 
         $contentService = $repository->getContentService();
 
-        /* BEGIN: Inline */
-        $draftVersion2 = $this->createContentDraftVersion2();
-
-        // Create an update struct and modify some fields
-        $contentUpdate = $contentService->newContentUpdateStruct();
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-
-        $contentUpdate->initialLanguageCode = 'eng-GB';
-
-        // Update the content draft
-        $draftVersion2 = $contentService->updateContent(
-            $draftVersion2->getVersionInfo(),
-            $contentUpdate
-        );
-        /* END: Inline */
-
-        return $draftVersion2;
-    }
-
-    /**
-     * Creates an updated content object named <b>$contentVersion2</b> from
-     * a currently published content object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createContentVersion2()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draftVersion2 = $this->createUpdatedDraftVersion2();
-
-        // Publish the updated draft
-        $contentVersion2 = $contentService->publishVersion( $draftVersion2->getVersionInfo() );
-        /* END: Inline */
-
-        return $contentVersion2;
-    }
-
-    /**
-     * Creates an updated content draft named <b>$draft</b>.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createMultipleLanguageDraftVersion1()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draft = $this->createContentDraftVersion1();
-
-        $contentUpdate = $contentService->newContentUpdateStruct();
-
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'index_title', 'British index title...' );
-
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-US' );
-        $contentUpdate->setField( 'index_title', 'American index title...', 'eng-US' );
-
-        $contentUpdate->initialLanguageCode = 'eng-GB';
-
-        $draft = $contentService->updateContent(
-            $draft->getVersionInfo(),
-            $contentUpdate
-        );
-        /* END: Inline */
-
-        return $draft;
-    }
-
-    /**
-     * Creates a published content object with versionNo=2 named
-     * <b>$contentVersion2</b>.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    private function createMultipleLanguageContentVersion2()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Inline */
-        $draft = $this->createMultipleLanguageDraftVersion1();
-
-        // Publish this version.
-        $contentVersion1 = $contentService->publishVersion(
-            $draft->getVersionInfo()
+        // Create a search query for content objects about "eZ Publish"
+        $query = new Query();
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
+            )
         );
 
-        // Create a new draft and update with same values
-        $draftVersion2 = $contentService->createContentDraft(
-            $contentVersion1->contentInfo
-        );
-
-        $contentUpdate = $contentService->newContentUpdateStruct();
-
-        $contentService->updateContent(
-            $draftVersion2->getVersionInfo(),
-            $contentUpdate
-        );
-
-        // Finally publish version 2
-        $contentVersion2 = $contentService->publishVersion(
-            $draftVersion2->getVersionInfo()
-        );
-        /* END: Inline */
-
-        return $contentVersion2;
+        // This call will fail with a "NotFoundException", because the current
+        // user has no access to the "Admin Users" user group
+        $contentService->findSingle( $query, array(), true );
+        /* END: Use Case */
     }
 
     /**
@@ -1353,7 +1277,7 @@ class ContentServiceAuthorizationTest extends BaseTest
      */
     private function createAnonymousWithEditorRole()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
 
         /* BEGIN: Inline */
         $roleService = $repository->getRoleService();
@@ -1368,7 +1292,7 @@ class ContentServiceAuthorizationTest extends BaseTest
             $user,
             new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation(
                 array(
-                    'limitationValues'  =>  '/1/43/51/'
+                    'limitationValues' => array( '/1/43/51/' )
                 )
             )
         );

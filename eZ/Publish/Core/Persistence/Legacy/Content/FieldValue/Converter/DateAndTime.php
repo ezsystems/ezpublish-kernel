@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Repository\FieldType\DateAndTime\Type as DateAndTimeType,
     eZ\Publish\Core\Repository\FieldType\DateAndTime\Value as DateAndTimeValue,
     eZ\Publish\Core\Repository\FieldType\FieldSettings,
-    ezp\Base\Exception\InvalidArgumentType,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     DateTime,
     DateInterval,
     DOMDocument,
@@ -33,8 +33,8 @@ class DateAndTime implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataInt = 0;
-        if ( $value->data->value instanceof DateTime )
-            $storageFieldValue->dataInt = $value->data->value->getTimestamp();
+        if ( $value->data instanceof DateTime )
+            $storageFieldValue->dataInt = $value->data->getTimestamp();
 
         $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
     }
@@ -50,7 +50,7 @@ class DateAndTime implements Converter
         $date = new DateTime;
         $date->setTimestamp( $value->dataInt );
 
-        $fieldValue->data = new DateAndTimeValue( $date );
+        $fieldValue->data = $date;
         $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
     }
 
@@ -109,7 +109,7 @@ class DateAndTime implements Converter
             default:
                 $date = null;
         }
-        $fieldDef->defaultValue->data = new DateAndTimeValue( $date );
+        $fieldDef->defaultValue->data = $date;
     }
 
     /**
