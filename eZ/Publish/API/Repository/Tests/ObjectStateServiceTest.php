@@ -267,6 +267,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             ),
             $createdObjectStateGroup
         );
+        $this->assertNotNull( $createdObjectStateGroup->id );
     }
 
     /**

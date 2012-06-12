@@ -81,7 +81,7 @@ class ObjectStateServiceStub implements ObjectStateService
             $objectStateGroupCreateStruct->descriptions ?: array()
         ) ) );
 
-        $groupData['id'] = $this->nextObjectStateGroupId++;
+        $groupData['id'] = $this->nextGroupId++;
 
         $group = new Values\ObjectState\ObjectStateGroupStub( $groupData );
 
