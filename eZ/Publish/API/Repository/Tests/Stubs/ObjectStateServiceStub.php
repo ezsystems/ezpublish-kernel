@@ -260,7 +260,24 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $stateData = array();
+        foreach ( $objectStateCreateStruct as $propertyName => $propertyValue )
+        {
+            $stateData[$propertyName] = $propertyValue;
+        }
+        $stateData['id'] = $this->nextStateId++;
+        $stateData['languageCodes'] = $this->determineLanguageCodes(
+            $stateData['names'],
+            $stateData['descriptions']
+        );
+        $stateData['stateGroup'] = $objectStateGroup;
+
+        $newState = new Values\ObjectState\ObjectStateStub( $stateData );
+
+        $this->states[$newState->id] = $newState;
+        $this->groupStateMap[$objectStateGroup->id][] = $newState->id;
+
+        return $newState;
     }
 
     /**

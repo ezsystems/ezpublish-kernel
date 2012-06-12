@@ -585,18 +585,6 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
-     * Test for the deleteObjectStateGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectStateGroup()
-     *
-     */
-    public function testDeleteObjectStateGroup()
-    {
-        $this->markTestIncomplete( "Test for ObjectStateService::deleteObjectStateGroup() is not implemented." );
-    }
-
-    /**
      * Test for the createObjectState() method.
      *
      * @return void
@@ -605,7 +593,75 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testCreateObjectState()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::createObjectState() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateGroupId contains the ID of the standard object state
+        // group ez_lock.
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $objectStateGroupId
+        );
+
+        $objectStateCreateStruct = $objectStateService->newObjectStateCreateStruct(
+            'locked_and_unlocked'
+        );
+        $objectStateCreateStruct->priority = 23;
+        $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
+        $objectStateCreateStruct->names = array(
+            'eng-US' => 'Locked and Unlocked',
+        );
+        $objectStateCreateStruct->descriptions = array(
+            'eng-US' => 'A state between locked and unlocked.',
+        );
+
+        // Creates a new object state in the $loadObjectStateGroup with the
+        // data from $objectStateCreateStruct
+        $createdObjectState = $objectStateService->createObjectState(
+            $loadedObjectStateGroup,
+            $objectStateCreateStruct
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $createdObjectState
+        );
+        return array(
+            $loadedObjectStateGroup,
+            $objectStateCreateStruct,
+            $createdObjectState
+        );
+    }
+
+    /**
+     * testCreateObjectStateStructValues
+     *
+     * @param array $testData
+     * @return void
+     * @depends testCreateObjectState
+     */
+    public function testCreateObjectStateStructValues( array $testData )
+    {
+        list(
+            $loadedObjectStateGroup,
+            $objectStateCreateStruct,
+            $createdObjectState
+        ) = $testData;
+
+        $this->assertStructPropertiesCorrect(
+            $objectStateCreateStruct,
+            $createdObjectState
+        );
+
+        $this->assertNotNull( $createdObjectState->id );
+
+        $this->assertEquals(
+            $loadedObjectStateGroup,
+            $createdObjectState->getObjectStateGroup()
+        );
     }
 
     /**
@@ -716,4 +772,15 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->markTestIncomplete( "Test for ObjectStateService::getContentCount() is not implemented." );
     }
 
+    /**
+     * Test for the deleteObjectStateGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectStateGroup()
+     *
+     */
+    public function testDeleteObjectStateGroup()
+    {
+        $this->markTestIncomplete( "Test for ObjectStateService::deleteObjectStateGroup() is not implemented." );
+    }
 }
