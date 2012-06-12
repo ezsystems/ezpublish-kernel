@@ -522,7 +522,66 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testUpdateObjectStateGroup()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::updateObjectStateGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateGroupId contains the ID of the standard object state
+        // group ez_lock.
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $objectStateGroupId
+        );
+
+        $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
+        $groupUpdateStruct->identifier = 'sindelfingen';
+        $groupUpdateStruct->defaultLanguageCode = 'ger-DE';
+        $groupUpdateStruct->names = array(
+            'ger-DE' => 'Sindelfingen',
+        );
+        $groupUpdateStruct->descriptions = array(
+            'ger-DE' => 'Sindelfingen ist nicht nur eine Stadt'
+        );
+
+        // Updates the $loadObjectStateGroup with the data from
+        // $groupUpdateStruct and returns the updated group
+        $updatedObjectStateGroup = $objectStateService->updateObjectStateGroup(
+            $loadedObjectStateGroup,
+            $groupUpdateStruct
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup',
+            $updatedObjectStateGroup
+        );
+        return array(
+            $loadedObjectStateGroup,
+            $groupUpdateStruct,
+            $updatedObjectStateGroup
+        );
+    }
+
+    /**
+     * testUpdateObjectStateGroupStructValues
+     *
+     * @param array $testData
+     * @return void
+     * @depends testUpdateObjectStateGroup
+     */
+    public function testUpdateObjectStateGroupStructValues( array $testData )
+    {
+        list(
+            $loadedObjectStateGroup,
+            $groupUpdateStruct,
+            $updatedObjectStateGroup
+        ) = $testData;
+
+        $this->assertStructPropertiesCorrect(
+            $groupUpdateStruct,
+            $updatedObjectStateGroup
+        );
     }
 
     /**

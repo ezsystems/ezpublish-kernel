@@ -114,10 +114,10 @@ class ObjectStateServiceStub implements ObjectStateService
             $groupData[$propertyName] = $propertyValue;
         }
 
-        $groupData['languageCodes'] = array_unique( array_keys( array_merge(
-            $objectStateGroupCreateStruct->names ?: array(),
-            $objectStateGroupCreateStruct->descriptions ?: array()
-        ) ) );
+        $groupData['languageCodes'] = $this->determineLanguageCodes(
+            $objectStateGroupCreateStruct->names,
+            $objectStateGroupCreateStruct->descriptions
+        );
 
         $groupData['id'] = $this->nextGroupId++;
 
@@ -126,6 +126,21 @@ class ObjectStateServiceStub implements ObjectStateService
         $this->groups[$group->id] = $group;
 
         return $group;
+    }
+
+    /**
+     * Determines all available language codes from $names and $descriptions
+     *
+     * @param string[] $names
+     * @param string[] $descriptions
+     * @return string[]
+     */
+    protected function determineLanguageCodes( $names, $descriptions )
+    {
+        return array_unique( array_keys( array_merge(
+            $names ?: array(),
+            $descriptions ?: array()
+        ) ) );
     }
 
     /**
@@ -193,7 +208,29 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $data = array(
+            'id'                  => $objectStateGroup->id,
+            'identifier'          => $objectStateGroup->identifier,
+            'defaultLanguageCode' => $objectStateGroup->defaultLanguageCode,
+            'names'               => $objectStateGroup->getNames(),
+            'descriptions'        => $objectStateGroup->getDescriptions(),
+        );
+
+        foreach ( $objectStateGroupUpdateStruct as $propertyName => $propertyValue )
+        {
+            if ( $propertyValue !== null )
+            {
+                $data[$propertyName] = $propertyValue;
+            }
+        }
+
+        $data['languageCodes'] = $this->determineLanguageCodes(
+            $data['names'], $data['descriptions']
+        );
+
+        $this->groups[$objectStateGroup->id] = new Values\ObjectState\ObjectStateGroupStub( $data );
+
+        return $this->groups[$objectStateGroup->id];
     }
 
     /**
