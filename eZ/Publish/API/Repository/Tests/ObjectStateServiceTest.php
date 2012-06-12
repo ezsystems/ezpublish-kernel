@@ -344,7 +344,11 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertInternalType( 'array', $loadedObjectStateGroups );
 
-        $this->assertGroupsLoaded( $existingGroupIdentifiers, $loadedObjectStateGroups );
+        $this->assertObjectsLoadedByIdentifiers(
+            $existingGroupIdentifiers,
+            $loadedObjectStateGroups,
+            'ObjectStateGroup'
+        );
     }
 
     /**
@@ -388,27 +392,29 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @param array $loadObjectStateGroups
      * @depends testLoadObjectStateGroups
      */
-    protected function assertGroupsLoaded( array $expectedIdentifiers, array $loadedObjectStateGroups )
+    protected function assertObjectsLoadedByIdentifiers( array $expectedIdentifiers, array $loadedObjects, $class )
     {
-        foreach ( $loadedObjectStateGroups as $loadedObjectStateGroup )
+        foreach ( $loadedObjects as $loadedObject )
         {
-            if ( !isset( $expectedIdentifiers[$loadedObjectStateGroup->identifier] ) )
+            if ( !isset( $expectedIdentifiers[$loadedObject->identifier] ) )
             {
                 $this->fail(
                     sprintf(
-                        'Loaded not expected ObjectStateGroup with identifier "%s"',
-                        $loadedObjectStateGroup->identifier
+                        'Loaded not expected %s with identifier "%s"',
+                        $class,
+                        $loadedObject->identifier
                     )
                 );
             }
-            unset( $expectedIdentifiers[$loadedObjectStateGroup->identifier] );
+            unset( $expectedIdentifiers[$loadedObject->identifier] );
         }
 
         if ( count( $expectedIdentifiers ) !== 0 )
         {
             $this->fail(
                 sprintf(
-                    'Expected object state groups with identifiers "%s" not loaded.',
+                    'Expected %ss with identifiers "%s" not loaded.',
+                    $class,
                     implode( '", "', $expectedIdentifiers )
                 )
             );
@@ -436,9 +442,10 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertInternalType( 'array', $loadedObjectStateGroups );
 
-        $this->assertGroupsLoaded(
+        $this->assertObjectsLoadedByIdentifiers(
             array_slice( $existingGroupIdentifiers, 2 ),
-            $loadedObjectStateGroups
+            $loadedObjectStateGroups,
+            'ObjectStateGroup'
         );
     }
 
@@ -463,9 +470,10 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertInternalType( 'array', $loadedObjectStateGroups );
 
-        $this->assertGroupsLoaded(
+        $this->assertObjectsLoadedByIdentifiers(
             array_slice( $existingGroupIdentifiers, 1, 2 ),
-            $loadedObjectStateGroups
+            $loadedObjectStateGroups,
+            'ObjectStateGroup'
         );
     }
 
@@ -478,7 +486,31 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testLoadObjectStates()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::loadObjectStates() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateGroupId contains the ID of the standard object state
+        // group ez_lock.
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroup = $objectStateService->loadObjectStateGroup(
+            $objectStateGroupId
+        );
+
+        // Loads all object states in $objectStateGroup
+        $loadedObjectStates = $objectStateService->loadObjectStates( $objectStateGroup );
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedObjectStates
+        );
+        $this->assertObjectsLoadedByIdentifiers(
+            array( 'not_locked' => true, 'locked' => true ),
+            $loadedObjectStates,
+            'ObjectState'
+        );
     }
 
     /**
