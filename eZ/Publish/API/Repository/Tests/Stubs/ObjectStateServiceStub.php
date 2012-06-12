@@ -291,6 +291,10 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function loadObjectState( $stateId )
     {
+        if ( !isset( $this->states[$stateId] ) )
+        {
+            throw new Exceptions\NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        }
         return $this->states[$stateId];
     }
 
