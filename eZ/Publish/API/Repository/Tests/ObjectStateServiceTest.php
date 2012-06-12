@@ -14,6 +14,7 @@ use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
+use \eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
@@ -673,7 +674,52 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testLoadObjectState()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::loadObjectState() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateId = $this->generateId( 'objectstate', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateId contains the ID of the "locked" state
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectState = $objectStateService->loadObjectState(
+            $objectStateId
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $loadedObjectState
+        );
+
+        return $loadedObjectState;
+    }
+
+    /**
+     * testLoadObjectStateStructValues
+     *
+     * @param ObjectState $loadedObjectState
+     * @return void
+     * @depends testLoadObjectState
+     */
+    public function testLoadObjectStateStructValues( ObjectState $loadedObjectState )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                  => 2,
+                'identifier'          => 'locked',
+                'priority'            => 1,
+                'defaultLanguageCode' => 'eng-US',
+                'languageCodes'       => array( 0 => 'eng-US' ),
+                'names'               => array( 'eng-US' => 'Locked' ),
+                'descriptions'        => array( 'eng-US' => '' ),
+            ),
+            $loadedObjectState
+        );
+
+        $this->assertEquals(
+            $this->getRepository()->getObjectStateService()->loadObjectStateGroup( 2 ),
+            $loadedObjectState->getObjectStateGroup()
+        );
     }
 
     /**

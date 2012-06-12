@@ -291,7 +291,7 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function loadObjectState( $stateId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return $this->states[$stateId];
     }
 
     /**
