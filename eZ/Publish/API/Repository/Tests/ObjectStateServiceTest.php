@@ -449,9 +449,24 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroups($offset, $limit)
      *
      */
-    public function testLoadObjectStateGroupsWithSecondParameter()
+    public function testLoadObjectStateGroupsWithOffsetAndLimit()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::loadObjectStateGroups() is not implemented." );
+        $repository = $this->getRepository();
+
+        $existingGroupIdentifiers = $this->createObjectStateGroups();
+
+        /* BEGIN: Use Case */
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroups = $objectStateService->loadObjectStateGroups( 1, 2 );
+        /* END: Use Case */
+
+        $this->assertInternalType( 'array', $loadedObjectStateGroups );
+
+        $this->assertGroupsLoaded(
+            array_slice( $existingGroupIdentifiers, 1, 2 ),
+            $loadedObjectStateGroups
+        );
     }
 
     /**
