@@ -334,6 +334,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $repository = $this->getRepository();
 
+        $existingGroupIdentifiers = $this->createObjectStateGroups();
+
         /* BEGIN: Use Case */
         $objectStateService = $repository->getObjectStateService();
 
@@ -342,7 +344,42 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         $this->assertInternalType( 'array', $loadedObjectStateGroups );
 
-        return $loadedObjectStateGroups;
+        $this->assertGroupsLoaded( $existingGroupIdentifiers, $loadedObjectStateGroups );
+    }
+
+    /**
+     * Creates a set of object state groups and returns an array of all
+     * existing group identifiers after creation
+     *
+     * @return bool[]
+     */
+    protected function createObjectStateGroups()
+    {
+        $repository         = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $identifiersToCreate = array(
+            'first'  => true,
+            'second' => true,
+            'third'  => true,
+        );
+
+        $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct( 'dummy' );
+
+        $groupCreateStruct->defaultLanguageCode = 'eng-US';
+        $groupCreateStruct->names               = array( 'eng-US' => 'Foo' );
+        $groupCreateStruct->descriptions        = array( 'eng-US' => 'Foo Bar' );
+
+        foreach ( array_keys( $identifiersToCreate ) as $identifier )
+        {
+            $groupCreateStruct->identifier = $identifier;
+            $objectStateService->createObjectStateGroup( $groupCreateStruct );
+        }
+
+        return array_merge(
+            array( 'ez_lock' => true ),
+            $identifiersToCreate
+        );
     }
 
     /**
@@ -351,31 +388,29 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @param array $loadObjectStateGroups
      * @depends testLoadObjectStateGroups
      */
-    public function testLoadObjectStateGroupsLoadedExpectedGroups( array $loadedObjectStateGroups )
+    protected function assertGroupsLoaded( array $expectedIdentifiers, array $loadedObjectStateGroups )
     {
-        $expectedGroupIds = array(
-            $this->generateId( 'objectstategroup', 2 ) => true,
-        );
-
         foreach ( $loadedObjectStateGroups as $loadedObjectStateGroup )
         {
-            if ( !isset( $expectedGroupIds[$loadedObjectStateGroup->id] ) )
+            if ( !isset( $expectedIdentifiers[$loadedObjectStateGroup->identifier] ) )
             {
                 $this->fail(
                     sprintf(
-                        'Loaded not expected ObjectStateGroup with ID "%s"',
-                        $loadedObjectStateGroup->id
+                        'Loaded not expected ObjectStateGroup with identifier "%s"',
+                        $loadedObjectStateGroup->identifier
                     )
                 );
             }
-            unset( $expectedGroupIds[$loadedObjectStateGroup->id] );
+            unset( $expectedIdentifiers[$loadedObjectStateGroup->identifier] );
         }
 
-        if ( count( $expectedGroupIds ) !== 0 )
+        if ( count( $expectedIdentifiers ) !== 0 )
         {
             $this->fail(
-                'Expected object state groups with IDs "%s" not loaded.',
-                implode( '", "', $expectedGroupIds )
+                sprintf(
+                    'Expected object state groups with identifiers "%s" not loaded.',
+                    implode( '", "', $expectedIdentifiers )
+                )
             );
         }
     }
@@ -387,9 +422,24 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroups($offset)
      *
      */
-    public function testLoadObjectStateGroupsWithFirstParameter()
+    public function testLoadObjectStateGroupsWithOffset()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::loadObjectStateGroups() is not implemented." );
+        $repository = $this->getRepository();
+
+        $existingGroupIdentifiers = $this->createObjectStateGroups();
+
+        /* BEGIN: Use Case */
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroups = $objectStateService->loadObjectStateGroups( 2 );
+        /* END: Use Case */
+
+        $this->assertInternalType( 'array', $loadedObjectStateGroups );
+
+        $this->assertGroupsLoaded(
+            array_slice( $existingGroupIdentifiers, 2 ),
+            $loadedObjectStateGroups
+        );
     }
 
     /**

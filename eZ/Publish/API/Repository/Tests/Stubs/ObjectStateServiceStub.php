@@ -119,7 +119,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function loadObjectStateGroups( $offset = 0, $limit = -1 )
     {
-        return array_values( $this->groups );
+        return array_slice(
+            array_values( $this->groups ),
+            $offset,
+            ( $limit == -1 ? null : $limit )
+        );
     }
 
     /**
