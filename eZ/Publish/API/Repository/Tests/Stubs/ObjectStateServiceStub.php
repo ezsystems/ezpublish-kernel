@@ -43,6 +43,44 @@ class ObjectStateServiceStub implements ObjectStateService
     private $groups = array();
 
     /**
+     * Contains the next object state ID
+     *
+     * @var int
+     */
+    private $nextStateId = 0;
+
+    /**
+     * Object states
+     *
+     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
+     */
+    private $states = array();
+
+    /**
+     * Maps groups to contained states
+     *
+     * @var array
+     */
+    private $groupStateMap = array();
+
+    /**;
+     * Maps content object IDs to their state per group.
+     *
+     * <code>
+     *  array(
+     *      <objectId> => array(
+     *          <groupId> => <stateId>,
+     *          // ...
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @var array
+     */
+    private $objectStateMap = array();
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
@@ -343,5 +381,14 @@ class ObjectStateServiceStub implements ObjectStateService
         ) = $this->repository->loadFixture( 'ObjectStateGroup' );
 
         ++$this->nextGroupId;
+
+        list(
+            $this->states,
+            $this->groupStateMap,
+            $this->objectStateMap,
+            $this->nextStateId
+        ) = $this->repository->loadFixture( 'ObjectState', array( 'groups' => $this->groups ) );
+
+        ++$this->nextStateId;
     }
 }

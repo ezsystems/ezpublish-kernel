@@ -31,6 +31,7 @@ writeFixtureFile( generateContentInfoFixture( $fixture ), 'Content', $argv[2] );
 writeFixtureFile( generateLocationFixture( $fixture ), 'Location', $argv[2] );
 writeFixtureFile( generateURLAliasFixture( $fixture ), 'URLAlias', $argv[2] );
 writeFixtureFile( generateObjectStateGroupFixture( $fixture ), 'ObjectStateGroup', $argv[2] );
+writeFixtureFile( generateObjectStateFixture( $fixture ), 'ObjectState', $argv[2] );
 
 function generateContentTypeGroupFixture( array $fixture )
 {
@@ -729,6 +730,74 @@ function generateObjectStateGroupFixture( array $fixture )
 
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState\ObjectStateGroupStub', $groups ),
+        $nextId
+    );
+}
+
+function generateObjectStateFixture( array $fixture )
+{
+    $languageCodes = getLanguageCodes( $fixture );
+
+    $nextId         = 0;
+    $states         = array();
+    $groupStateMap  = array();
+    $objectStateMap = array();
+    // For internal use only
+    $stateGroupMap  = array();
+
+    foreach ( getFixtureTable( 'ezcobj_state', $fixture ) as $data )
+    {
+        $states[$data['id']] = array(
+            'id'                  => $data['id'],
+            'identifier'          => $data['identifier'],
+            'priority'            => (int) $data['priority'],
+            'defaultLanguageCode' => $languageCodes[$data['default_language_id']],
+            'languageCodes'       => resolveLanguageMask( $languageCodes, $data['language_mask'] ),
+            'stateGroup'          => '$scopeValues["groups"][' . valueToString( $data['group_id'] ) . ']',
+            'names'               => array(),
+            'descriptions'        => array(),
+        );
+        $nextId = max( $nextId, $data['id'] );
+
+        $groupId = $data['group_id'];
+        if ( !isset( $groupStateMap[$groupId] ) )
+        {
+            $groupStateMap[$groupId] = array();
+        }
+        $groupStateMap[$groupId] = $data['id'];
+
+        // For internal use only
+        $stateGroupMap[$data['id']] = $groupId;
+    }
+
+    foreach ( getFixtureTable( 'ezcobj_state_language', $fixture ) as $data );
+    {
+        $stateId  = $data['contentobject_state_id'];
+        // Set lowest bit to 0 (always_available)
+        $langCode = $languageCodes[( $data['language_id'] & -2 )];
+
+        $states[$stateId]['names'][$langCode]        = $data['name'];
+        $states[$stateId]['descriptions'][$langCode] = $data['description'];
+    }
+
+    foreach ( getFixtureTable( 'ezcobj_state_link', $fixture ) as $data )
+    {
+        $stateId  = $data['contentobject_state_id'];
+        $objectId = $data['contentobject_id'];
+
+        $groupId = $stateGroupMap[$stateId];
+
+        if ( !isset( $objectStateMap[$objectId] ) )
+        {
+            $objectStateMap[$objectId] = array();
+        }
+        $objectStateMap[$objectId][$groupId] = $stateId;
+    }
+
+    return generateReturnArray(
+        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState\ObjectStateStub', $states ),
+        var_export( $groupStateMap , true ),
+        var_export( $objectStateMap, true ),
         $nextId
     );
 }
