@@ -1025,7 +1025,28 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testDeleteObjectState()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::deleteObjectState() is not implemented." );
+        $repository = $this->getRepository();
+
+        $notLockedObjectStateId = $this->generateId( 'objectstate', 1 );
+        $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
+        /* BEGIN: Use Case */
+        // $notLockedObjectStateId is the ID of the state "not_locked"
+        $objectStateService = $repository->getObjectStateService();
+
+        $notLockedObjectState = $objectStateService->loadObjectState( $notLockedObjectStateId );
+
+        // Deletes the object state and sets all objects, which where in that
+        // state, to the first state of the same object state group
+        $objectStateService->deleteObjectState( $notLockedObjectState );
+        /* END: Use Case */
+
+        $lockedObjectState = $objectStateService->loadObjectState( $lockedObjectStateId );
+
+        // All objects transfered
+        $this->assertEquals(
+            184,
+            $objectStateService->getContentCount( $lockedObjectState )
+        );
     }
 
     /**

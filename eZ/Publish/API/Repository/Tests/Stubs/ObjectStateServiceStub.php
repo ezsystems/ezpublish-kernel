@@ -368,7 +368,34 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function deleteObjectState( ObjectState $objectState )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $groupId = $objectState->getObjectStateGroup()->id;
+
+        $newStateId   = false;
+        $minStatePrio = PHP_INT_MAX;
+
+        foreach ( $this->groupStateMap[$groupId] as $index => $stateId )
+        {
+            if ( $stateId == $objectState->id )
+            {
+                unset( $this->groupStateMap[$groupId][$index] );
+                continue;
+            }
+
+            $state = $this->states[$stateId];
+            if ( $state->priority < $minStatePrio )
+            {
+                $newStateId  = $state->id;
+                $minStatePrio = $state->priority;
+            }
+        }
+
+        foreach ( $this->objectStateMap as $contentId => $stateGroups )
+        {
+            if ( isset( $stateGroups[$groupId] ) )
+            {
+                $this->objectStateMap[$contentId][$groupId] = $newStateId;
+            }
+        }
     }
 
 
