@@ -754,7 +754,79 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testUpdateObjectState()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::updateObjectState() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateId = $this->generateId( 'objectstate', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateId contains the ID of the "locked" state
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectState = $objectStateService->loadObjectState(
+            $objectStateId
+        );
+
+        $updateStateStruct = $objectStateService->newObjectStateUpdateStruct();
+        $updateStateStruct->identifier = 'somehow_locked';
+        $updateStateStruct->defaultLanguageCode = 'ger-DE';
+        $updateStateStruct->names = array(
+            'eng-US' => 'Somehow locked',
+            'ger-DE' => 'Irgendwie gelockt',
+        );
+        $updateStateStruct->descriptions = array(
+            'eng-US' => 'The object is somehow locked',
+            'ger-DE' => 'Sindelfingen',
+        );
+
+        $updatedObjectState = $objectStateService->updateObjectState(
+            $loadedObjectState,
+            $updateStateStruct
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $updatedObjectState
+        );
+
+        return array(
+            $loadedObjectState,
+            $updateStateStruct,
+            $updatedObjectState
+        );
+    }
+
+    /**
+     * testUpdateObjectStateStructValues
+     *
+     * @param array $testData
+     * @return void
+     * @depends testUpdateObjectState
+     */
+    public function testUpdateObjectStateStructValues( array $testData )
+    {
+        list(
+            $loadedObjectState,
+            $updateStateStruct,
+            $updatedObjectState
+        ) = $testData;
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id'                  => $loadedObjectState->id,
+                'identifier'          => $updateStateStruct->identifier,
+                'priority'            => $loadedObjectState->priority,
+                'defaultLanguageCode' => $updateStateStruct->defaultLanguageCode,
+                'languageCodes'       => array( 'eng-US', 'ger-DE' ),
+                'names'               => $updateStateStruct->names,
+                'descriptions'        => $updateStateStruct->descriptions,
+            ),
+            $updatedObjectState
+        );
+
+        $this->assertEquals(
+            $loadedObjectState->getObjectStateGroup(),
+            $updatedObjectState->getObjectStateGroup()
+        );
     }
 
     /**

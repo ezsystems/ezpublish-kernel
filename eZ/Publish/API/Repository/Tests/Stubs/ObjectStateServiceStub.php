@@ -272,10 +272,21 @@ class ObjectStateServiceStub implements ObjectStateService
         );
         $stateData['stateGroup'] = $objectStateGroup;
 
+        return $this->createObjectStateFromArray( $stateData );
+    }
+
+    /**
+     * Creates and sets an object state from $stateData.
+     *
+     * @param array $stateData
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     */
+    protected function createObjectStateFromArray( array $stateData )
+    {
         $newState = new Values\ObjectState\ObjectStateStub( $stateData );
 
         $this->states[$newState->id] = $newState;
-        $this->groupStateMap[$objectStateGroup->id][] = $newState->id;
+        $this->groupStateMap[$newState->getObjectStateGroup()->id][] = $newState->id;
 
         return $newState;
     }
@@ -309,7 +320,29 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $stateData = array(
+            'id'                  => $objectState->id,
+            'identifier'          => $objectState->identifier,
+            'priority'            => $objectState->priority,
+            'defaultLanguageCode' => $objectState->defaultLanguageCode,
+            'names'               => $objectState->names,
+            'descriptions'        => $objectState->descriptions,
+            'stateGroup'          => $objectState->stateGroup,
+        );
+
+        foreach ( $objectStateUpdateStruct as $propertyName => $propertyValue )
+        {
+            if ( $propertyValue !== null )
+            {
+                $stateData[$propertyName] = $propertyValue;
+            }
+        }
+        $stateData['languageCodes'] = $this->determineLanguageCodes(
+            $stateData['names'],
+            $stateData['descriptions']
+        );
+
+        return $this->createObjectStateFromArray( $stateData );
     }
 
     /**
