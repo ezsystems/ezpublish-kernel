@@ -355,7 +355,7 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function setPriorityOfObjectState( ObjectState $objectState, $priority )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $objectState->_setPriority( $priority );
     }
 
     /**

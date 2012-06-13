@@ -108,4 +108,17 @@ class ObjectStateStub extends ObjectState
     {
         return $this->stateGroup;
     }
+
+    /**
+     * Sets the priority.
+     *
+     * ONLY FOR INTERNAL USE IN THE INTEGRATION TEST SUITE.
+     *
+     * @param int $priority
+     * @return void
+     */
+    public function _setPriority( $priority )
+    {
+        $this->priority = $priority;
+    }
 }

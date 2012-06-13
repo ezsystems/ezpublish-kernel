@@ -838,7 +838,33 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testSetPriorityOfObjectState()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::setPriorityOfObjectState() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateId = $this->generateId( 'objectstate', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateId contains the ID of the "locked" state
+        $objectStateService = $repository->getObjectStateService();
+
+        $initiallyLoadedObjectState = $objectStateService->loadObjectState(
+            $objectStateId
+        );
+
+        // Sets the given priority on $initiallyLoadedObjectState
+        $objectStateService->setPriorityOfObjectState(
+            $initiallyLoadedObjectState,
+            23
+        );
+        // $loadObjectState now has the set priority
+        $loadedObjectState = $objectStateService->loadObjectState(
+            $objectStateId
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $loadedObjectState
+        );
+        $this->assertEquals( 23, $loadedObjectState->priority );
     }
 
     /**
