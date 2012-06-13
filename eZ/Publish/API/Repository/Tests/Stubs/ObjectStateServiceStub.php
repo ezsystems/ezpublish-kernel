@@ -418,7 +418,17 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function getContentCount( ObjectState $objectState )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $groupId = $objectState->getObjectStateGroup()->id;
+
+        $contentCount = 0;
+        foreach ( $this->objectStateMap as $objectId => $stateMap )
+        {
+            if ( isset( $stateMap[$groupId] ) && $stateMap[$groupId] == $objectState->id )
+            {
+                ++$contentCount;
+            }
+        }
+        return $contentCount;
     }
 
     /**

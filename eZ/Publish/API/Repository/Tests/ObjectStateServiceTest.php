@@ -1001,7 +1001,19 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testGetContentCount()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::getContentCount() is not implemented." );
+        $repository = $this->getRepository();
+
+        $notLockedObjectStateId = $this->generateId( 'objectstate', 1 );
+        /* BEGIN: Use Case */
+        // $notLockedObjectStateId is the ID of the state "not_locked"
+        $objectStateService = $repository->getObjectStateService();
+
+        $notLockedObjectState = $objectStateService->loadObjectState( $notLockedObjectStateId );
+
+        $objectCount = $objectStateService->getContentCount( $notLockedObjectState );
+        /* END: Use Case */
+
+        $this->assertEquals( 184, $objectCount );
     }
 
     /**
