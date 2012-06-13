@@ -385,7 +385,7 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->objectStateMap[$contentInfo->id][$objectStateGroup->id] = $objectState->id;
     }
 
     /**

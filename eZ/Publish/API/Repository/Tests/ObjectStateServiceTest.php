@@ -914,18 +914,40 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testSetObjectState()
     {
-        $this->markTestIncomplete( 'First get object state.' );
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId( 'user', 10 );
+        $ezLockObjectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
         /* BEGIN: Use Case */
         // $anonymousUserId is the content ID of "Anonymous User"
+        // $ezLockObjectStateGroupId contains the ID of the "ez_lock" object
+        // state group
+        // $lockedObjectStateId is the ID of the state "locked"
         $contentService     = $repository->getContentService();
         $objectStateService = $repository->getObjectStateService();
 
         $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $ezLockObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $ezLockObjectStateGroupId
+        );
+        $lockedObjectState = $objectStateService->loadObjectState( $lockedObjectStateId );
+
+        // Sets the state of $contentInfo from "not_locked" to "locked"
+        $objectStateService->setObjectState(
+            $contentInfo,
+            $ezLockObjectStateGroup,
+            $lockedObjectState
+        );
         /* END: Use Case */
+
+        $ezLockObjectState = $objectStateService->getObjectState(
+            $contentInfo,
+            $ezLockObjectStateGroup
+        );
+
+        $this->assertEquals( 'locked', $ezLockObjectState->identifier );
     }
 
     /**
