@@ -955,11 +955,41 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setObjectState()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentExceptioon
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testSetObjectStateThrowsInvalidArgumentExceptioon()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::setObjectState() is not implemented." );
+        $repository = $this->getRepository();
+
+        $this->createObjectStateGroups();
+
+        $anonymousUserId = $this->generateId( 'user', 10 );
+        $differentObjectStateGroupId = $this->generateId( 'objectstategroup', 3 );
+        $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
+
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the content ID of "Anonymous User"
+        // $differentObjectStateGroupId contains the ID of an object state
+        // group which does not contain $lockedObjectStateId
+        // $lockedObjectStateId is the ID of the state "locked"
+        $contentService     = $repository->getContentService();
+        $objectStateService = $repository->getObjectStateService();
+
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $differentObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $differentObjectStateGroupId
+        );
+        $lockedObjectState = $objectStateService->loadObjectState( $lockedObjectStateId );
+
+        // Throws an invalid argument exception since $lockedObjectState does
+        // not belong to $differentObjectStateGroup
+        $objectStateService->setObjectState(
+            $contentInfo,
+            $differentObjectStateGroup,
+            $lockedObjectState
+        );
+        /* END: Use Case */
     }
 
     /**

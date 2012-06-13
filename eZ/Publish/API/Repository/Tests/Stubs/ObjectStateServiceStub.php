@@ -375,7 +375,7 @@ class ObjectStateServiceStub implements ObjectStateService
     /**
      * Sets the object-state of a state group to $state for the given content.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentExceptioon if the object state does not belong to the given group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state does not belong to the given group
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change the object state
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
@@ -385,6 +385,10 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
+        if ( $objectState->getObjectStateGroup() != $objectStateGroup )
+        {
+            throw new Exceptions\InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
         $this->objectStateMap[$contentInfo->id][$objectStateGroup->id] = $objectState->id;
     }
 
