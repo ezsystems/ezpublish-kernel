@@ -242,7 +242,19 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $stateIds = $this->groupStateMap[$objectStateGroup->id];
+
+        foreach ( $stateIds as $stateId )
+        {
+            unset( $this->states[$stateId] );
+        }
+
+        foreach ( $this->objectStateMap as $objectId => $stateGroups )
+        {
+            unset( $this->objectStateMap[$objectId][$objectStateGroup->id] );
+        }
+
+        unset( $this->groups[$objectStateGroup->id] );
     }
 
     /**

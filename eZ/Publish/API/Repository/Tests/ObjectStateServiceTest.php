@@ -16,6 +16,8 @@ use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use \eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
+use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
  *
@@ -1058,6 +1060,31 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testDeleteObjectStateGroup()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::deleteObjectStateGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        /* BEGIN: Use Case */
+        // $objectStateGroupId contains the ID of the standard object state
+        // group ez_lock.
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $objectStateGroupId
+        );
+
+        $objectStateService->deleteObjectStateGroup( $loadedObjectStateGroup );
+        /* END: Use Case */
+
+        try
+        {
+            $objectStateService->loadObjectStateGroup( $objectStateGroupId );
+            $this->fail(
+                sprintf(
+                    'ObjectStateGroup with ID "%s" not deleted.',
+                    $objectStateGroupId
+                )
+            );
+        }
+        catch ( NotFoundException $e ) {}
     }
 }
