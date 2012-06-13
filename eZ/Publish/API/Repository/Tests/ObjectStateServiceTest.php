@@ -868,18 +868,6 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
-     * Test for the deleteObjectState() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectState()
-     *
-     */
-    public function testDeleteObjectState()
-    {
-        $this->markTestIncomplete( "Test for ObjectStateService::deleteObjectState() is not implemented." );
-    }
-
-    /**
      * Test for the setObjectState() method.
      *
      * @return void
@@ -925,6 +913,18 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     public function testGetContentCount()
     {
         $this->markTestIncomplete( "Test for ObjectStateService::getContentCount() is not implemented." );
+    }
+
+    /**
+     * Test for the deleteObjectState() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectState()
+     *
+     */
+    public function testDeleteObjectState()
+    {
+        $this->markTestIncomplete( "Test for ObjectStateService::deleteObjectState() is not implemented." );
     }
 
     /**
