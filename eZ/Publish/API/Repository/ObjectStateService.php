@@ -153,7 +153,7 @@ interface ObjectStateService
     /**
      * Sets the object-state of a state group to $state for the given content.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentExceptioon if the object state does not belong to the given group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state does not belong to the given group
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change the object state
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
