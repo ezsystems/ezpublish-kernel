@@ -868,6 +868,44 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
+     * Test for the getObjectState() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::getObjectState()
+     *
+     */
+    public function testGetObjectState()
+    {
+        $repository = $this->getRepository();
+
+        $anonymousUserId = $this->generateId( 'user', 10 );
+        $ezLockObjectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the content ID of "Anonymous User"
+        $contentService     = $repository->getContentService();
+        $objectStateService = $repository->getObjectStateService();
+
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $ezLockObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $ezLockObjectStateGroupId
+        );
+
+        // Loads the state of $contentInfo in the "ez_lock" object state group
+        $ezLockObjectState = $objectStateService->getObjectState(
+            $contentInfo,
+            $ezLockObjectStateGroup
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $ezLockObjectState
+        );
+        $this->assertEquals( 'not_locked', $ezLockObjectState->identifier );
+    }
+
+    /**
      * Test for the setObjectState() method.
      *
      * @return void
@@ -876,7 +914,18 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      */
     public function testSetObjectState()
     {
-        $this->markTestIncomplete( "Test for ObjectStateService::setObjectState() is not implemented." );
+        $this->markTestIncomplete( 'First get object state.' );
+
+        $repository = $this->getRepository();
+
+        $anonymousUserId = $this->generateId( 'user', 10 );
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the content ID of "Anonymous User"
+        $contentService     = $repository->getContentService();
+        $objectStateService = $repository->getObjectStateService();
+
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+        /* END: Use Case */
     }
 
     /**
@@ -889,18 +938,6 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     public function testSetObjectStateThrowsInvalidArgumentExceptioon()
     {
         $this->markTestIncomplete( "Test for ObjectStateService::setObjectState() is not implemented." );
-    }
-
-    /**
-     * Test for the getObjectState() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::getObjectState()
-     *
-     */
-    public function testGetObjectState()
-    {
-        $this->markTestIncomplete( "Test for ObjectStateService::getObjectState() is not implemented." );
     }
 
     /**
