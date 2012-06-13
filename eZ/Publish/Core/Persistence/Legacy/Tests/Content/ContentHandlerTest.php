@@ -573,6 +573,16 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    public function testAddRelation()
+    {
+        self::markTestIncomplete( "@todo not implemented yet" );
+    }
+
+    public function testRemoveRelation()
+    {
+        self::markTestIncomplete( "@todo not implemented yet" );
+    }
+
     protected function getRelationFixture()
     {
         $relation = new Relation();
