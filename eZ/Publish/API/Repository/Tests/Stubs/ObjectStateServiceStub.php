@@ -108,6 +108,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $groupData = array();
         foreach ( $objectStateGroupCreateStruct as $propertyName => $propertyValue )
         {
@@ -208,6 +213,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $data = array(
             'id'                  => $objectStateGroup->id,
             'identifier'          => $objectStateGroup->identifier,
@@ -242,6 +252,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $stateIds = $this->groupStateMap[$objectStateGroup->id];
 
         foreach ( $stateIds as $stateId )
@@ -272,6 +287,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $stateData = array();
         foreach ( $objectStateCreateStruct as $propertyName => $propertyValue )
         {
@@ -332,6 +352,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $stateData = array(
             'id'                  => $objectState->id,
             'identifier'          => $objectState->identifier,
@@ -367,6 +392,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function setPriorityOfObjectState( ObjectState $objectState, $priority )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $objectState->_setPriority( $priority );
     }
 
@@ -380,6 +410,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function deleteObjectState( ObjectState $objectState )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $groupId = $objectState->getObjectStateGroup()->id;
 
         $newStateId   = false;
@@ -424,6 +459,11 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         if ( $objectState->getObjectStateGroup() != $objectStateGroup )
         {
             throw new Exceptions\InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
