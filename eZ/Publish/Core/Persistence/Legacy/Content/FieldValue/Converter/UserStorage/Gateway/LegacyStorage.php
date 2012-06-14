@@ -27,6 +27,7 @@ class LegacyStorage extends Gateway
     protected $defaultValues = array(
         'account_key'        => null,
         'has_stored_login'   => false,
+        'contentobject_id'   => null,
         'login'              => null,
         'email'              => null,
         'password_hash'      => null,
@@ -66,6 +67,7 @@ class LegacyStorage extends Gateway
      * type in eZ Publish 4:
      * - account_key
      * - has_stored_login
+     * - contentobject_id
      * - login
      * - email
      * - password_hash
@@ -145,6 +147,7 @@ class LegacyStorage extends Gateway
         $query = $this->dbHandler->createSelectQuery();
         $query
             ->select(
+                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezuser' ),
                 $this->dbHandler->quoteColumn( 'login', 'ezuser' ),
                 $this->dbHandler->quoteColumn( 'email', 'ezuser' ),
                 $this->dbHandler->quoteColumn( 'password_hash', 'ezuser' ),

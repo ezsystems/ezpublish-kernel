@@ -26,6 +26,7 @@ abstract class Gateway
      * type in eZ Publish 4:
      * - account_key
      * - has_stored_login
+     * - contentobject_id
      * - login
      * - email
      * - password_hash
