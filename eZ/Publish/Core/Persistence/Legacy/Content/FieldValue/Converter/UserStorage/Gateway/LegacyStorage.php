@@ -25,14 +25,18 @@ class LegacyStorage extends Gateway
      * @var array
      */
     protected $defaultValues = array(
-        'account_key'      => null,
-        'has_stored_login' => false,
-        'is_logged_in'     => true,
-        'is_enabled'       => false,
-        'is_locked'        => false,
-        'last_visit'       => null,
-        'login_count'      => null,
-        'max_login'        => null,
+        'account_key'        => null,
+        'has_stored_login'   => false,
+        'login'              => null,
+        'email'              => null,
+        'password_hash'      => null,
+        'password_hash_type' => null,
+        'is_logged_in'       => true,
+        'is_enabled'         => false,
+        'is_locked'          => false,
+        'last_visit'         => null,
+        'login_count'        => null,
+        'max_login'          => null,
     );
 
     /**
@@ -136,7 +140,10 @@ class LegacyStorage extends Gateway
         $query = $this->dbHandler->createSelectQuery();
         $query
             ->select(
-                $this->dbHandler->quoteColumn( 'login', 'ezuser' )
+                $this->dbHandler->quoteColumn( 'login', 'ezuser' ),
+                $this->dbHandler->quoteColumn( 'email', 'ezuser' ),
+                $this->dbHandler->quoteColumn( 'password_hash', 'ezuser' ),
+                $this->dbHandler->quoteColumn( 'password_hash_type', 'ezuser' )
             )
             ->from( $this->dbHandler->quoteTable( 'ezuser' ) )
             ->where(

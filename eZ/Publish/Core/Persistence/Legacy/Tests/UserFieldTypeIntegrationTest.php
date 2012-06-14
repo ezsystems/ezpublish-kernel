@@ -111,6 +111,10 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         return array(
             array( 'account_key', null ),
             array( 'has_stored_login', true ),
+            array( 'login', 'hans' ),
+            array( 'email', 'hans@example.com' ),
+            array( 'password_hash', '*' ),
+            array( 'password_hash_type', 0 ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', true ),
             array( 'is_locked', false ),
@@ -148,6 +152,10 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         return array(
             array( 'account_key', 'foobar' ),
             array( 'has_stored_login', true ),
+            array( 'login', 'hans' ),
+            array( 'email', 'hans@example.com' ),
+            array( 'password_hash', '*' ),
+            array( 'password_hash_type', 0 ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', false ),
             array( 'is_locked', true ),
@@ -169,6 +177,10 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         return array(
             array( 'account_key', null ),
             array( 'has_stored_login', false ),
+            array( 'login', null ),
+            array( 'email', null ),
+            array( 'password_hash', null ),
+            array( 'password_hash_type', null ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', false ),
             array( 'is_locked', false ),
