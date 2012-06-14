@@ -64,13 +64,18 @@ class LegacyStorage extends Gateway
      *
      * The User storage handles the following attributes, following the user field
      * type in eZ Publish 4:
-     *  - account_key
-     *  - has_stored_login
-     *  - is_logged_in
-     *  - is_enabled
-     *  - is_locked
-     *  - last_visit
-     *  - login_count
+     * - account_key
+     * - has_stored_login
+     * - login
+     * - email
+     * - password_hash
+     * - password_hash_type
+     * - is_logged_in
+     * - is_enabled
+     * - is_locked
+     * - last_visit
+     * - login_count
+     * - max_login
      *
      * @param mixed $fieldId
      * @param mixed $userId
