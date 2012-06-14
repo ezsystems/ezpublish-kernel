@@ -30,7 +30,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateGroupCreateStruct()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateGroupCreateStruct()
     {
@@ -76,7 +76,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateGroupUpdateStruct()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateGroupUpdateStruct()
     {
@@ -120,7 +120,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateCreateStruct()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateCreateStruct()
     {
@@ -167,7 +167,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateUpdateStruct()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateUpdateStruct()
     {
@@ -211,7 +211,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectStateGroup()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
+     * @depends testNewObjectStateGroupCreateStructValues
      */
     public function testCreateObjectStateGroup()
     {
@@ -278,7 +279,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroup()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testLoadObjectStateGroup()
     {
@@ -308,6 +309,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends testLoadObjectStateGroup
      */
     public function testLoadObjectStateGroupThrowsNotFoundException()
     {
@@ -331,7 +333,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroups()
-     *
+     * @depends testLoadObjectStateGroup
      */
     public function testLoadObjectStateGroups()
     {
@@ -429,7 +431,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroups($offset)
-     *
+     * @depends testLoadObjectStateGroups
      */
     public function testLoadObjectStateGroupsWithOffset()
     {
@@ -457,7 +459,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroups($offset, $limit)
-     *
+     * @depends testLoadObjectStateGroupsWithOffset
      */
     public function testLoadObjectStateGroupsWithOffsetAndLimit()
     {
@@ -485,7 +487,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStates()
-     *
+     * @depends testLoadObjectStateGroup
      */
     public function testLoadObjectStates()
     {
@@ -521,7 +523,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup()
-     *
+     * @depends testLoadObjectStateGroup
      */
     public function testUpdateObjectStateGroup()
     {
@@ -592,7 +594,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectState()
-     *
+     * @depends testLoadObjectStateGroup
+     * @depends testNewObjectStateCreateStruct
      */
     public function testCreateObjectState()
     {
@@ -672,7 +675,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectState()
-     *
+     * @depends testLoadObjectStateGroup
      */
     public function testLoadObjectState()
     {
@@ -730,6 +733,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends testLoadObjectState
      */
     public function testLoadObjectStateThrowsNotFoundException()
     {
@@ -752,7 +756,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectState()
-     *
+     * @depends testLoadObjectState
      */
     public function testUpdateObjectState()
     {
@@ -836,7 +840,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setPriorityOfObjectState()
-     *
+     * @depends testLoadObjectState
      */
     public function testSetPriorityOfObjectState()
     {
@@ -874,7 +878,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::getObjectState()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends testLoadObjectState
      */
     public function testGetObjectState()
     {
@@ -911,6 +916,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * testGetInitialObjectState
      *
      * @return void
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends testLoadObjectState
      */
     public function testGetInitialObjectState()
     {
@@ -972,7 +979,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setObjectState()
-     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends testLoadObjectState
      */
     public function testSetObjectState()
     {
@@ -1018,6 +1026,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends testSetObjectState
      */
     public function testSetObjectStateThrowsInvalidArgumentExceptioon()
     {
@@ -1059,7 +1068,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::getContentCount()
-     *
+     * @depens testLoadObjectState
      */
     public function testGetContentCount()
     {
@@ -1083,7 +1092,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectState()
-     *
+     * @depens testLoadObjectState
      */
     public function testDeleteObjectState()
     {
@@ -1116,7 +1125,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectStateGroup()
-     *
+     * @depens testLoadObjectStateGroup
      */
     public function testDeleteObjectStateGroup()
     {

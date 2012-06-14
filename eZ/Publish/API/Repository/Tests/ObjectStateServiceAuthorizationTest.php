@@ -28,6 +28,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectStateGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testCreateObjectStateGroup
      */
     public function testCreateObjectStateGroupThrowsUnauthorizedException()
     {
@@ -67,6 +68,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testUpdateObjectStateGroup
      */
     public function testUpdateObjectStateGroupThrowsUnauthorizedException()
     {
@@ -111,6 +113,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectStateGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testDeleteObjectStateGroup
      */
     public function testDeleteObjectStateGroupThrowsUnauthorizedException()
     {
@@ -142,6 +145,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testCreateObjectState
      */
     public function testCreateObjectStateThrowsUnauthorizedException()
     {
@@ -188,6 +192,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testUpdateObjectState
      */
     public function testUpdateObjectStateThrowsUnauthorizedException()
     {
@@ -233,6 +238,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setPriorityOfObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetPriorityOfObjectState
      */
     public function testSetPriorityOfObjectStateThrowsUnauthorizedException()
     {
@@ -266,6 +272,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testDeleteObjectState
      */
     public function testDeleteObjectStateThrowsUnauthorizedException()
     {
@@ -295,6 +302,7 @@ class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetObjectState
      */
     public function testSetObjectStateThrowsUnauthorizedException()
     {
