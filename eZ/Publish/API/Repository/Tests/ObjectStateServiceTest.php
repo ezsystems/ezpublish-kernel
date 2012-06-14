@@ -908,6 +908,66 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
+     * testGetInitialObjectState
+     *
+     * @return void
+     */
+    public function testGetInitialObjectState()
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $customObjectStateGroupId = $this->generateId( 'objectstategroup', 3 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
+
+        // Create object state group with custom state
+        $this->createObjectStateGroups();
+
+        $customGroup = $objectStateService->loadObjectStateGroup(
+            $customObjectStateGroupId
+        );
+
+        $objectStateCreateStruct = $objectStateService->newObjectStateCreateStruct(
+            'sindelfingen'
+        );
+        $objectStateCreateStruct->priority = 1;
+
+        $createdState = $objectStateService->createObjectState(
+            $customGroup,
+            $objectStateCreateStruct
+        );
+
+        // Store state ID to be used
+        $customObjectStateId = $createdState->id;
+
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the content ID of "Anonymous User"
+        // $customObjectStateGroupId is the ID of a state group, from which no
+        // state has been assigned to $anonymousUserId, yet
+        $contentService     = $repository->getContentService();
+        $objectStateService = $repository->getObjectStateService();
+
+        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+
+        $customObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $customObjectStateGroupId
+        );
+
+        // Loads the initial state of the custom state group
+        $initialObjectState = $objectStateService->getObjectState(
+            $contentInfo,
+            $customObjectStateGroup
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $initialObjectState
+        );
+        $this->assertEquals( 'sindelfingen', $initialObjectState->identifier );
+    }
+
+    /**
      * Test for the setObjectState() method.
      *
      * @return void

@@ -304,6 +304,8 @@ class ObjectStateServiceStub implements ObjectStateService
         );
         $stateData['stateGroup'] = $objectStateGroup;
 
+        // TODO: Re-assign priorities to be continuos. Rule for same
+        // priorities is not determined, yet.
         return $this->createObjectStateFromArray( $stateData );
     }
 
@@ -398,6 +400,8 @@ class ObjectStateServiceStub implements ObjectStateService
         }
 
         $objectState->_setPriority( $priority );
+        // TODO: Re-assign priorities to be continuos. Rule for same
+        // priorities is not determined, yet.
     }
 
     /**
@@ -427,22 +431,41 @@ class ObjectStateServiceStub implements ObjectStateService
                 unset( $this->groupStateMap[$groupId][$index] );
                 continue;
             }
-
-            $state = $this->states[$stateId];
-            if ( $state->priority < $minStatePrio )
-            {
-                $newStateId  = $state->id;
-                $minStatePrio = $state->priority;
-            }
         }
+
+        $newState = $this->getLowestPriorityStateFromGroup( $groupId );
 
         foreach ( $this->objectStateMap as $contentId => $stateGroups )
         {
             if ( isset( $stateGroups[$groupId] ) )
             {
-                $this->objectStateMap[$contentId][$groupId] = $newStateId;
+                $this->objectStateMap[$contentId][$groupId] = $newState->id;
             }
         }
+    }
+
+    /**
+     * Returns the state with the lowest priority from $groupId
+     *
+     * @param mixed $groupId
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     */
+    protected function getLowestPriorityStateFromGroup( $groupId )
+    {
+        $selectedState = null;
+        $minPriority   = PHP_INT_MAX;
+
+        foreach ( $this->groupStateMap[$groupId] as $index => $selectedState )
+        {
+            $state = $this->states[$selectedState];
+            if ( $state->priority < $minPriority )
+            {
+                $selectedState = $state;
+                $minPriority   = $state->priority;
+            }
+        }
+
+        return $selectedState;
     }
 
 
@@ -483,8 +506,18 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
     {
+        $contentId = $contentInfo->id;
+        $groupId   = $objectStateGroup->id;
+
+        // Assign initial object state, if none assigned, yet.
+        if ( !isset( $this->objectStateMap[$contentId][$groupId] ) )
+        {
+            $initialState = $this->getLowestPriorityStateFromGroup( $groupId );
+            $this->objectStateMap[$contentId][$groupId] = $initialState->id;
+        }
+
         return $this->states[
-            $this->objectStateMap[$contentInfo->id][$objectStateGroup->id]
+            $this->objectStateMap[$contentId][$groupId]
         ];
     }
 
