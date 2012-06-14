@@ -272,7 +272,8 @@ class LegacyStorage extends Gateway
 
         $this->storeAccountKey( $userId, $oldData, $data );
         $this->storeVisits( $userId, $oldData, $data );
-        $this->storeSettings( $userId, $oldData, $data );
+        // All other property changes are intentionally ignored. Use the user
+        // service instead.
 
         return $this->getFieldData( $fieldId, $userId );
     }
@@ -398,44 +399,6 @@ class LegacyStorage extends Gateway
                     )
                 );
         }
-
-        $stmt = $query->prepare();
-        $stmt->execute();
-    }
-
-    /**
-     * Store user settings
-     *
-     * @param mixed $userId
-     * @param array $old
-     * @param array $data
-     * @return void
-     */
-    protected function storeSettings( $userId, array $old, array $data )
-    {
-        if ( ( $data['max_login'] == $old['max_login'] ) &&
-             ( $data['is_enabled'] == $old['is_enabled'] ) )
-        {
-            return;
-        }
-
-        $query = $this->dbHandler->createUpdateQuery();
-        $query
-            ->update( $this->dbHandler->quoteTable( 'ezuser_setting' ) )
-            ->set(
-                $this->dbHandler->quoteColumn( 'max_login' ),
-                $query->bindValue( $data['max_login'] )
-            )
-            ->set(
-                $this->dbHandler->quoteColumn( 'is_enabled' ),
-                $query->bindValue( $data['is_enabled'] )
-            )
-            ->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'user_id' ),
-                    $query->bindValue( $userId )
-                )
-            );
 
         $stmt = $query->prepare();
         $stmt->execute();

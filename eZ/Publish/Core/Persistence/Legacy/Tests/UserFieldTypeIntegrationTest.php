@@ -132,11 +132,15 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     public function getUpdateFieldData()
     {
         return array(
-            'account_key' => 'foobar',
-            'is_enabled'  => false,
-            'last_visit'  => 123456789,
-            'login_count' => 23,
-            'max_login'   => 10,
+            'account_key'        => 'foobar',
+            'login'              => 'change', // Change is intended to not get through
+            'email'              => 'change', // Change is intended to not get through
+            'password_hash'      => 'change', // Change is intended to not get through
+            'password_hash_type' => 'change', // Change is intended to not get through
+            'last_visit'         => 123456789,
+            'login_count'        => 2300,
+            'is_enabled'         => 'changed', // Change is intended to not get through
+            'max_login'          => 'changed', // Change is intended to not get through
         );
     }
 
@@ -157,11 +161,11 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
             array( 'password_hash', '*' ),
             array( 'password_hash_type', 0 ),
             array( 'is_logged_in', true ),
-            array( 'is_enabled', false ),
+            array( 'is_enabled', true ),
             array( 'is_locked', true ),
             array( 'last_visit', 123456789 ),
-            array( 'login_count', 23 ),
-            array( 'max_login', 10 ),
+            array( 'login_count', 2300 ),
+            array( 'max_login', 1000 ),
         );
     }
 
