@@ -1467,6 +1467,15 @@ class EzcDatabase extends Gateway
      */
     public function deleteRelation( $relationId )
     {
-        throw new Exception( '@todo implement' );
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom( 'ezcontentobject_link' )
+        ->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $relationId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $query->prepare()->execute();
     }
 }

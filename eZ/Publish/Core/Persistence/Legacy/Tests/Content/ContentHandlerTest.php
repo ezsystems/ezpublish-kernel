@@ -618,9 +618,18 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::removeRelation
+     */
     public function testRemoveRelation()
     {
-        self::markTestIncomplete( "@todo not implemented yet" );
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteRelation' )
+            ->with( $this->equalTo( 1 ) );
+
+        $result = $this->getContentHandler()->removeRelation( 1 );
     }
 
     protected function getRelationFixture()

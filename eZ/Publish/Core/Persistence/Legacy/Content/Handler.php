@@ -539,7 +539,7 @@ class Handler implements BaseContentHandler
      */
     public function removeRelation( $relationId )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $this->contentGateway->deleteRelation( $relationId );
     }
 
     /**
