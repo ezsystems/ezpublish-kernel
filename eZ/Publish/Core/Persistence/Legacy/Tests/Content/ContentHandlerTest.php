@@ -28,6 +28,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\Handler,
+    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -575,7 +576,46 @@ class ContentHandlerTest extends TestCase
 
     public function testAddRelation()
     {
-        self::markTestIncomplete( "@todo not implemented yet" );
+        // expected relation object after creation
+        $expectedRelationObject = new Relation();
+        $expectedRelationObject->id = 42; // mocked value, not a real one
+        $expectedRelationObject->sourceContentId = 23;
+        $expectedRelationObject->sourceContentVersionNo = 1;
+        $expectedRelationObject->destinationContentId = 66;
+        $expectedRelationObject->type = RelationValue::COMMON;
+
+        // relation create struct
+        $relationCreateStruct = new Relation\CreateStruct();
+        $relationCreateStruct->destinationContentId = 66;
+        $relationCreateStruct->sourceContentId = 23;
+        $relationCreateStruct->sourceContentVersionNo = 1;
+        $relationCreateStruct->type = RelationValue::COMMON;
+
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createRelationFromCreateStruct' )
+            // @todo Connected with the todo above
+            ->with( $this->equalTo( $relationCreateStruct ) )
+            ->will( $this->returnValue( $expectedRelationObject ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertRelation' )
+            ->with( $this->equalTo( $relationCreateStruct ) )
+            ->will(
+                // @todo Should this return a row as if it was selected from the database, the id... ? Check with other, similar create methods
+                $this->returnValue( 42 )
+            );
+
+        $result = $handler->addRelation( $relationCreateStruct );
+
+        $this->assertEquals(
+            $result,
+            $expectedRelationObject
+        );
     }
 
     public function testRemoveRelation()

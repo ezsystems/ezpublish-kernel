@@ -15,7 +15,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct;
 
 /**
  * Base class for content gateways
@@ -310,4 +312,22 @@ abstract class Gateway
      * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
      */
     abstract public function loadReverseRelations( $contentId, $relationType = null );
+
+    /**
+     * Deletes the relation with the given $relationId
+     *
+     * @param int $relationId
+     *
+     * @return void
+     */
+    abstract public function deleteRelation( $relationId );
+
+    /**
+     * Inserts a new relation database record
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     *
+     * @return int ID the inserted ID
+     */
+    abstract public function insertRelation( RelationCreateStruct $struct );
 }

@@ -23,6 +23,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\Relation,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo,
     ezcQueryUpdate;
@@ -1365,7 +1368,6 @@ class EzcDatabase extends Gateway
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 
-
     /**
      * Loads data that related to $toContentId
      *
@@ -1415,5 +1417,56 @@ class EzcDatabase extends Gateway
 
         $statement->execute();
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Inserts a new relation database record
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     *
+     * @return int ID the inserted ID
+     */
+    public function insertRelation( RelationCreateStruct $struct )
+    {
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto(
+            $this->dbHandler->quoteTable( 'ezcontentobject_link' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_link', 'id' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
+            $q->bindValue( $struct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
+            $q->bindValue( $struct->sourceContentId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'from_contentobject_version' ),
+            $q->bindValue( $struct->sourceContentVersionNo, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'relation_type' ),
+            $q->bindValue( $struct->type, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
+            $q->bindValue( $struct->sourceContentId, null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
+
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentobject_link', 'id' )
+        );
+    }
+
+    /**
+     * Deletes the relation with the given $relationId
+     *
+     * @param int $relationId
+     *
+     * @return void
+     */
+    public function deleteRelation( $relationId )
+    {
+        throw new Exception( '@todo implement' );
     }
 }

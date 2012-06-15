@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\Relation,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler,
@@ -436,6 +437,26 @@ class Mapper
         $relation->sourceContentVersionNo = (int)$row['ezcontentobject_link_from_contentobject_version'];
         $relation->destinationContentId = (int)$row['ezcontentobject_link_to_contentobject_id'];
         $relation->type = (int)$row['ezcontentobject_link_relation_type'];
+
+        return $relation;
+    }
+
+    /**
+     * Creates a Content from the given $struct
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $struct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation
+     */
+    public function createRelationFromCreateStruct( RelationCreateStruct $struct )
+    {
+        $relation = new Relation();
+
+        $relation->destinationContentId = $struct->destinationContentId;
+        $relation->sourceContentId = $struct->sourceContentId;
+        $relation->sourceContentVersionNo = $struct->sourceContentVersionNo;
+        $relation->sourceFieldDefinitionId = $struct->sourceFieldDefinitionId;
+        $relation->type = $struct->type;
 
         return $relation;
     }
