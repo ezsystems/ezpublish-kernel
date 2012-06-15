@@ -21,7 +21,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\Version,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
+    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase.
@@ -1541,7 +1543,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             'ezcontentobject_link_relation_type',
             array( \eZ\Publish\API\Repository\Values\Content\Relation::COMMON ),
             $relations
-        );    }
+        );
+    }
 
     /**
      * Inserts the relation database fixture from relation_data.php
@@ -1552,6 +1555,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             __DIR__ . '/../_fixtures/relations_data.php'
         );
     }
+
     /*
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getLastVersionNumber
@@ -1567,6 +1571,42 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertEquals(
             1,
             $gateway->getLastVersionNumber( 4 )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::insertRelation
+     */
+    public function testInsertRelation()
+    {
+        $struct = $this->getRelationCreateStructFixture();
+        $gateway = $this->getDatabaseGateway();
+        $gateway->insertRelation( $struct );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'id' => 1,
+                    'from_contentobject_id' => $struct->sourceContentId,
+                    'from_contentobject_version' => $struct->sourceContentVersionNo,
+                    'contentclassattribute_id' => $struct->sourceFieldDefinitionId,
+                    'to_contentobject_id' => $struct->destinationContentId,
+                    'relation_type' => $struct->type,
+                ),
+            ),
+            $this->getDatabaseHandler()
+            ->createSelectQuery()
+            ->select(
+                array(
+                    'id',
+                    'from_contentobject_id',
+                    'from_contentobject_version',
+                    'contentclassattribute_id',
+                    'to_contentobject_id',
+                    'relation_type',
+                )
+            )->from( 'ezcontentobject_link' )
+            ->where( 'id = 1')
         );
     }
 
@@ -1866,6 +1906,24 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             ->will( $this->returnValue( $language ) );
 
         return $languageCache;
+    }
+
+    /**
+     * EzcDatabaseTest::getRelationCreateStructFixture()
+     *
+     * @return eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
+     */
+    protected function getRelationCreateStructFixture()
+    {
+        $struct = new RelationCreateStruct;
+
+        $struct->destinationContentId = 1;
+        $struct->sourceContentId = 1;
+        $struct->sourceContentVersionNo = 1;
+        $struct->sourceFieldDefinitionId = 0;
+        $struct->type = RelationValue::COMMON;
+
+        return $struct;
     }
 
     /**

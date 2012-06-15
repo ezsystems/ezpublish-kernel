@@ -181,7 +181,8 @@ class QueryBuilder
         );
 
         return $query;
-    
+    }
+
     /**
      * Creates a select query for content version objects
      *

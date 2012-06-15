@@ -1436,7 +1436,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_link', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
-            $q->bindValue( $struct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
+            $q->bindValue( (int)$struct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
             $q->bindValue( $struct->sourceContentId, null, \PDO::PARAM_INT )
@@ -1447,8 +1447,8 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'relation_type' ),
             $q->bindValue( $struct->type, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
-            $q->bindValue( $struct->sourceContentId, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn( 'to_contentobject_id' ),
+            $q->bindValue( $struct->destinationContentId, null, \PDO::PARAM_INT )
         );
 
         $q->prepare()->execute();
