@@ -1470,12 +1470,12 @@ class EzcDatabase extends Gateway
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom( 'ezcontentobject_link' )
         ->where(
-            $query->expr->eq(
+            $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
-                $query->bindValue( $relationId, null, \PDO::PARAM_INT )
+                $q->bindValue( $relationId, null, \PDO::PARAM_INT )
             )
         );
 
-        $query->prepare()->execute();
+        $q->prepare()->execute();
     }
 }

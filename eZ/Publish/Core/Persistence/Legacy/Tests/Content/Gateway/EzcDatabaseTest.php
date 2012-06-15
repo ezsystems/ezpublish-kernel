@@ -1615,7 +1615,14 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      */
     public function testDeleteRelation()
     {
-        self::markTestIncomplete( "@todo not implemented" );
+        $this->insertRelationFixture();
+
+        self::assertEquals( 4, $this->countContentRelations( 57 ) );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteRelation( 2 );
+
+        self::assertEquals( 3, $this->countContentRelations( 57 ) );
     }
 
     /**
