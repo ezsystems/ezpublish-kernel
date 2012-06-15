@@ -412,7 +412,7 @@ class Mapper
 
         foreach ( $rows as $row )
         {
-            $id = (int)$row['id'];
+            $id = (int)$row['ezcontentobject_link_id'];
             if ( !isset( $relations[$id] ) )
             {
                 $relations[$id] = $this->extractRelationFromRow( $row );
