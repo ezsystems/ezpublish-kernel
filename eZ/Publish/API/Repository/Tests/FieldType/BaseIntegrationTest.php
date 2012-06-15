@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository\Tests,
-    eZ\Publish\API\Repository,
-    eZ\Publish\SPI\Persistence\Content;
+    eZ\Publish\API\Repository;
 
 /**
  * Integration test for the legacy storage
@@ -49,13 +48,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @return string
      */
     abstract public function getTypeName();
-
-    /**
-     * Get repository with required custom field types registered
-     *
-     * @return Repository
-     */
-    abstract public function getCustomRepository();
 
     /**
      * Get field definition data values
@@ -113,18 +105,18 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * Useful, if additional stuff should be executed (like creating the actual 
      * user).
      *
-     * @param Repository $repository
-     * @param Content $content
+     * @param Repository\Repository $repository
+     * @param Repository\Values\Content\Content $content
      * @return void
      */
-    public function postCreationHook( Repository $repository, Content $content )
+    public function postCreationHook( Repository\Repository $repository, Repository\Values\Content\Content $content )
     {
         // Do nothing by default
     }
 
     public function testCreateContentType()
     {
-        $repository         = $this->getCustomRepository();
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
         $createStruct = $contentTypeService->newContentTypeCreateStruct(
@@ -181,7 +173,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $contentType = $this->testCreateContentType();
 
-        $repository         = $this->getCustomRepository();
+        $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
         return $contentTypeService->loadContentType( $contentType->id );
@@ -215,11 +207,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testLoadContentTypeField
      */
-    public function testCreateContent( $contentType )
+    public function testCreateContent()
     {
         $contentType = $this->testCreateContentType();
 
-        $repository     = $this->getCustomRepository();
+        $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
 
         $createStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
@@ -229,16 +221,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $createStruct->alwaysAvailable = true;
 
-        $content = $contentService->createContent( $createStruct );
-
-        var_dump( $content );
-
-        self::$contentId      = $content->contentInfo->id;
-        self::$contentVersion = $content->contentInfo->currentVersionNo;
-
-        $this->postCreationHook( $repository, $content );
-
-        return $content;
+        return $contentService->createContent( $createStruct );
     }
 
     /**
@@ -247,18 +230,20 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testCreatedFieldType( $content )
     {
         $this->assertSame(
-            $this->getTypeName(),
-            $content->fields[1]->type
+            'data',
+            $content->fields[2]->fieldDefIdentifier
         );
 
-        return $content->fields[1];
+        return $content->fields[2];
     }
 
     public function testLoadField()
     {
-        $repository     = $this->getCustomRepository();
+        $content = $this->testCreateContent();
+
+        $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
-        return $contentService->load( self::$contentId, self::$contentVersion );
+        return $contentService->loadContent( $content->contentInfo->id );
     }
 
     /**
@@ -267,11 +252,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testLoadFieldType( $content )
     {
         $this->assertSame(
-            $this->getTypeName(),
-            $content->fields[1]->type
+            'data',
+            $content->fields[2]->fieldDefIdentifier
         );
 
-        return $content->fields[1];
+        return $content->fields[2];
     }
 
     /**
@@ -280,36 +265,31 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testLoadExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
+        if ( !array_key_exists( $name, $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
 
         $this->assertEquals(
             $value,
-            $field->value->externalData[$name]
+            $field->value[$name]
         );
     }
 
     /**
      * @depends testLoadFieldType
      */
-    public function testUpdateField( $field )
+    public function testUpdateField()
     {
-        $repository = $this->getCustomRepository();
+        $content = $this->testCreateContent();
 
-        $field->value->externalData = $this->getUpdateFieldData();
-        $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
-            'creatorId' => 14,
-            'modificationDate' => time(),
-            'initialLanguageId' => 2,
-            'fields' => array(
-                $field,
-            )
-        ) );
-
+        $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
-        return $contentService->updateContent( self::$contentId, self::$contentVersion, $updateStruct );
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField( 'data', $this->getUpdateFieldData() );
+
+        return $contentService->updateContent( $content->versionInfo, $updateStruct );
     }
 
     /**
@@ -318,11 +298,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testUpdateFieldType( $content )
     {
         $this->assertSame(
-            $this->getTypeName(),
-            $content->fields[1]->type
+            'data',
+            $content->fields[4]->fieldDefIdentifier
         );
 
-        return $content->fields[1];
+        return $content->fields[4];
     }
 
     /**
@@ -331,14 +311,14 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
+        if ( !array_key_exists( $name, $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
 
         $this->assertEquals(
             $value,
-            $field->value->externalData[$name]
+            $field->value[$name]
         );
     }
 
@@ -347,20 +327,23 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopyField( $content )
     {
-        $repository     = $this->getCustomRepository();
+        $content = $this->testCreateContent();
+
+        $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
 
-        $copied = $contentService->copy( self::$contentId, self::$contentVersion );
+        $locationService  = $repository->getLocationService();
+        $parentLocationId = $this->generateId( 'location', 2 );
+        $locationCreate   = $locationService->newLocationCreateStruct( $parentLocationId );
+
+        $copied = $contentService->copyContent( $content->contentInfo, $locationCreate );
 
         $this->assertNotSame(
             $content->versionInfo->contentId,
             $copied->versionInfo->contentId
         );
 
-        return $contentService->load(
-            $copied->versionInfo->contentId,
-            $copied->versionInfo->versionNo
-        );
+        return $contentService->loadContent( $copied->id );
     }
 
     /**
@@ -369,11 +352,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testCopiedFieldType( $content )
     {
         $this->assertSame(
-            $this->getTypeName(),
-            $content->fields[1]->type
+            'data',
+            $content->fields[2]->fieldDefIdentifier
         );
 
-        return $content->fields[1];
+        return $content->fields[2];
     }
 
     /**
@@ -382,14 +365,14 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopiedExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
+        if ( !array_key_exists( $name, $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
 
         $this->assertEquals(
             $value,
-            $field->value->externalData[$name]
+            $field->value[$name]
         );
     }
 
@@ -399,17 +382,14 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testDeleteField( $content )
     {
-        $repository     = $this->getCustomRepository();
+        $content = $this->testCreateContent();
+
+        $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
 
-        $contentService->removeRawContent(
-            $content->versionInfo->contentId
-        );
+        $contentService->deleteContent( $content->contentInfo );
 
-        $contentService->load(
-            $content->versionInfo->contentId,
-            $content->versionInfo->versionNo
-        );
+        $contentService->loadContent( $content->contentInfo->id );
     }
 
     /**

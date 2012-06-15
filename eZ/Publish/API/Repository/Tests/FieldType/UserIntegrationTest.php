@@ -8,10 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\API\Repository;
 
 /**
  * Integration test for legacy storage field types
@@ -43,37 +40,6 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     public function getTypeName()
     {
         return 'ezuser';
-    }
-
-    /**
-     * Get repository with required custom field types registered
-     *
-     * @return Repository
-     */
-    public function getCustomRepository()
-    {
-        $repository = $this->getRepository();
-
-        // This is a dirty hack, but how else can we post-configure the
-        // persistence layer? We might want to make it the default
-        // configuration, so that this is not required any more, but this may
-        // also suck :/
-        $persistence = new \ReflectionProperty( $repository, 'persistenceHandler' );
-        $persistence->setAccessible( true );
-        $handler = $persistence->getValue( $repository );
-
-        $handler->getStorageRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
-            ) )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
-        );
-
-        return $repository;
     }
 
     /**
@@ -214,23 +180,32 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      * Useful, if additional stuff should be executed (like creating the actual 
      * user).
      *
-     * @param Repository $repository
-     * @param Content $content
+     * @param Repository\Repository $repository
+     * @param Repository\Values\Content\Content $content
      * @return void
      */
-    public function postCreationHook( Repository $repository, Content $content )
+    public function postCreationHook( Repository\Repository $repository, Repository\Values\Content\Content $content )
     {
-        $user = new User();
-        $user->id            = $content->contentInfo->id;
-        $user->login         = 'hans';
-        $user->email         = 'hans@example.com';
-        $user->passwordHash  = '*';
-        $user->hashAlgorithm = 0;
-        $user->isEnabled     = true;
-        $user->maxLogin      = 1000;
+        $userService = $repository->getUserService();
 
-        $userRepository = $repository->userRepository();
-        $userRepository->create( $user );
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'hans',
+            'hans@example.com',
+            'password',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $group = $userService->loadUserGroup( 13 );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $group ) );
     }
 }
 
