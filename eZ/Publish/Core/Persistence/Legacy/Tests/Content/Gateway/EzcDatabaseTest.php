@@ -1511,7 +1511,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $relations = $gateway->loadReverseRelations( 58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
 
-        self::assertEquals( 2, count( $relations ) );
+        self::assertEquals( 1, count( $relations ) );
 
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_id',
