@@ -35,6 +35,7 @@
             <file>TrashServiceAuthorizationTest.php</file>
             <file>URLWildcardServiceAuthorizationTest.php</file>
             <file>ObjectStateServiceAuthorizationTest.php</file>
+            <file>FieldType/UserIntegrationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
