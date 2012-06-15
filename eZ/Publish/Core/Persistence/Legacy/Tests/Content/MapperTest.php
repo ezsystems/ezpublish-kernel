@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
@@ -21,7 +22,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Test case for Mapper
@@ -535,6 +538,25 @@ class MapperTest extends TestCase
         }
     }
 
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createContentFromCreateStruct
+     */
+    public function testCreateRelationFromCreateStruct()
+    {
+        $struct = $this->getRelationCreateStructFixture();
+
+        $mapper = $this->getMapper();
+        $relation = $mapper->createRelationFromCreateStruct( $struct );
+
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Relation' , $relation );
+        foreach( $struct as $property => $value )
+        {
+            self::assertSame( $value, $relation->$property );
+        }
+    }
+
     /**
      * Returns test data for {@link testExtractVersionInfoFromRow()}
      *
@@ -751,6 +773,24 @@ class MapperTest extends TestCase
             );
         }
         return $this->languageHandler;
+    }
+
+    /**
+     * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
+     */
+    protected function getRelationCreateStructFixture()
+    {
+        $struct = new RelationCreateStruct();
+
+        $struct->destinationContentId = 0;
+        $struct->sourceContentId = 0;
+        $struct->sourceContentVersionNo = 1;
+        $struct->sourceFieldDefinitionId = 1;
+        $struct->type = RelationValue::COMMON;
+
+        return $struct;
     }
 
     /**
