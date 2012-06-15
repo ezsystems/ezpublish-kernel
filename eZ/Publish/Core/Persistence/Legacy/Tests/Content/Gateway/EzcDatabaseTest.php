@@ -1509,9 +1509,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadReverseRelations( 58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+        $relations = $gateway->loadReverseRelations( 58 );
 
-        self::assertEquals( 1, count( $relations ) );
+        self::assertEquals( 2, count( $relations ) );
 
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_id',
@@ -1523,13 +1523,13 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadReverseRelations
      */
-    public function testLoadReverseRelationsByType()
+    public function testLoadReverseRelationsWithType()
     {
         $this->insertRelationFixture();
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadReverseRelations( 58 ,\eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+        $relations = $gateway->loadReverseRelations( 58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
 
         self::assertEquals( 1, count( $relations ) );
 
@@ -1608,6 +1608,14 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             )->from( 'ezcontentobject_link' )
             ->where( 'id = 1')
         );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelation
+     */
+    public function testDeleteRelation()
+    {
+        self::markTestIncomplete( "@todo not implemented" );
     }
 
     /**
