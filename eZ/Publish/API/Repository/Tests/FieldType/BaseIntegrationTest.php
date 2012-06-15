@@ -1,14 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy,
+namespace eZ\Publish\API\Repository\Tests\FieldType;
+use eZ\Publish\API\Repository\Tests,
+    eZ\Publish\API\Repository,
     eZ\Publish\SPI\Persistence\Content;
 
 /**
@@ -19,15 +20,8 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-abstract class FieldTypeIntegrationTest extends TestCase
+abstract class BaseIntegrationTest extends Tests\BaseTest
 {
-    /**
-     * Property indicating wether the DB already has been set up
-     *
-     * @var bool
-     */
-    protected static $setUp = false;
-
     /**
      * Id of test content type
      *
@@ -57,11 +51,11 @@ abstract class FieldTypeIntegrationTest extends TestCase
     abstract public function getTypeName();
 
     /**
-     * Get handler with required custom field types registered
+     * Get repository with required custom field types registered
      *
-     * @return Handler
+     * @return Repository
      */
-    abstract public function getCustomHandler();
+    abstract public function getCustomRepository();
 
     /**
      * Get field definition data values
@@ -119,80 +113,52 @@ abstract class FieldTypeIntegrationTest extends TestCase
      * Useful, if additional stuff should be executed (like creating the actual 
      * user).
      *
-     * @param Legacy\Handler $handler
+     * @param Repository $repository
      * @param Content $content
      * @return void
      */
-    public function postCreationHook( Legacy\Handler $handler, Content $content )
+    public function postCreationHook( Repository $repository, Content $content )
     {
         // Do nothing by default
     }
 
-    /**
-     * Only set up once for these read only tests on a large fixture
-     *
-     * Skipping the reset-up, since setting up for these tests takes quite some
-     * time, which is not required to spent, since we are only reading from the
-     * database anyways.
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        if ( !self::$setUp )
-        {
-            parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/Content/SearchHandler/_fixtures/full_dump.php' );
-            self::$setUp = $this->handler;
-        }
-        else
-        {
-            $this->handler = self::$setUp;
-        }
-    }
-
     public function testCreateContentType()
     {
-        $createStruct = new Content\Type\CreateStruct( array(
-            'name'              => array( 'eng-GB' => 'Test' ),
-            'identifier'        => 'test-' . $this->getTypeName(),
-            'status'            => 0,
-            'creatorId'         => 14,
-            'created'           => time(),
-            'modifierId'        => 14,
-            'modified'          => time(),
-            'initialLanguageId' => 2,
-            'remoteId'          => 'abcdef',
-        ) );
+        $repository         = $this->getCustomRepository();
+        $contentTypeService = $repository->getContentTypeService();
 
-        $createStruct->fieldDefinitions = array(
-            new Content\Type\FieldDefinition( array(
-                'name'           => array( 'eng-GB' => 'Name' ),
-                'identifier'     => 'name',
-                'fieldGroup'     => 'main',
-                'position'       => 1,
-                'fieldType'      => 'ezstring',
-                'isTranslatable' => false,
-                'isRequired'     => true,
-            ) ),
-            new Content\Type\FieldDefinition( array(
-                'name'           => array( 'eng-GB' => 'Data' ),
-                'identifier'     => 'data',
-                'fieldGroup'     => 'main',
-                'position'       => 2,
-                'fieldType'      => $this->getTypeName(),
-                'isTranslatable' => false,
-                'isRequired'     => true,
-            ) ),
+        $createStruct = $contentTypeService->newContentTypeCreateStruct(
+            'test-' . $this->getTypeName()
         );
+        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->remoteId     = $this->getTypeName();
+        $createStruct->names        = array( 'eng-GB' => 'Test' );
+        $createStruct->creatorId    = 14;
+        $createStruct->creationDate = new \DateTime();
 
-        $handler            = $this->getCustomHandler();
-        $contentTypeHandler = $handler->contentTypeHandler();
+        $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'name', 'ezstring'
+        );
+        $nameFieldCreate->names      = array( 'eng-GB' => 'Title' );
+        $nameFieldCreate->fieldGroup = 'main';
+        $nameFieldCreate->position   = 1;
+        $createStruct->addFieldDefinition( $nameFieldCreate );
 
-        $contentType = $contentTypeHandler->create( $createStruct );
+        $dataFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'data', $this->getTypeName()
+        );
+        $dataFieldCreate->names      = array( 'eng-GB' => 'Title' );
+        $dataFieldCreate->fieldGroup = 'main';
+        $dataFieldCreate->position   = 2;
+        $createStruct->addFieldDefinition( $dataFieldCreate );
+
+        $contentGroup     = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
+        $contentTypeDraft = $contentTypeService->createContentType( $createStruct, array( $contentGroup ) );
+
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentType = $contentTypeService->loadContentType( $contentTypeDraft->id );
 
         $this->assertNotNull( $contentType->id );
-        self::$contentTypeId = $contentType->id;
 
         return $contentType;
     }
@@ -204,7 +170,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
     {
         $this->assertSame(
             $this->getTypeName(),
-            $contentType->fieldDefinitions[1]->fieldType
+            $contentType->fieldDefinitions[1]->fieldTypeIdentifier
         );
     }
 
@@ -213,10 +179,12 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testLoadContentTypeField()
     {
-        $handler            = $this->getCustomHandler();
-        $contentTypeHandler = $handler->contentTypeHandler();
+        $contentType = $this->testCreateContentType();
 
-        return $contentTypeHandler->load( self::$contentTypeId );
+        $repository         = $this->getCustomRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        return $contentTypeService->loadContentType( $contentType->id );
     }
 
     /**
@@ -226,7 +194,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
     {
         $this->assertSame(
             $this->getTypeName(),
-            $contentType->fieldDefinitions[1]->fieldType
+            $contentType->fieldDefinitions[1]->fieldTypeIdentifier
         );
 
         return $contentType->fieldDefinitions[1];
@@ -238,8 +206,6 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testLoadContentTypeFieldData( $name, $value, $field )
     {
-        $this->markTestIncomplete( "There is no property special container yet -- so there is nothing to check." );
-
         $this->assertEquals(
             $value,
             $field->$name
@@ -251,45 +217,26 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testCreateContent( $contentType )
     {
-        $createStruct = new Content\CreateStruct( array(
-            'name'              => array( 'eng-GB' => 'Test object' ),
-            'typeId'            => $contentType->id,
-            'sectionId'         => 1,
-            'ownerId'           => 14,
-            'locations'         => array( new Content\Location\CreateStruct( array( 'parentId' => 2 ) ) ),
-            'initialLanguageId' => 2,
-            'remoteId'          => 'sindelfingen',
-            'modified'          => time(),
-            'fields'            => array(
-                new Content\Field( array(
-                    'type'              => 'ezstring',
-                    'languageCode'      => 'eng-GB',
-                    'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
-                    'value'             => new Content\FieldValue( array(
-                        'data'    => 'This is just a test object',
-                        'sortKey' => array( 'sort_key_string' => 'This is just a test object' ),
-                    ) ),
-                ) ),
-                new Content\Field( array(
-                    'type'              => 'ezuser',
-                    'languageCode'      => 'eng-GB',
-                    'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
-                    'value'             => new Content\FieldValue( array(
-                        'data'         => null,
-                        'externalData' => $this->getInitialFieldData(),
-                    ) ),
-                ) ),
-            ),
-        ) );
+        $contentType = $this->testCreateContentType();
 
-        $handler = $this->getCustomHandler();
-        $contentHandler = $handler->contentHandler();
+        $repository     = $this->getCustomRepository();
+        $contentService = $repository->getContentService();
 
-        $content = $contentHandler->create( $createStruct );
+        $createStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $createStruct->setField( 'name', 'Test object' );
+        $createStruct->setField( 'data', $this->getInitialFieldData() );
+
+        $createStruct->remoteId = 'abcdef0123456789abcdef0123456789';
+        $createStruct->alwaysAvailable = true;
+
+        $content = $contentService->createContent( $createStruct );
+
+        var_dump( $content );
+
         self::$contentId      = $content->contentInfo->id;
         self::$contentVersion = $content->contentInfo->currentVersionNo;
 
-        $this->postCreationHook( $handler, $content );
+        $this->postCreationHook( $repository, $content );
 
         return $content;
     }
@@ -309,10 +256,9 @@ abstract class FieldTypeIntegrationTest extends TestCase
 
     public function testLoadField()
     {
-        $handler = $this->getCustomHandler();
-
-        $contentHandler = $handler->contentHandler();
-        return $contentHandler->load( self::$contentId, self::$contentVersion );
+        $repository     = $this->getCustomRepository();
+        $contentService = $repository->getContentService();
+        return $contentService->load( self::$contentId, self::$contentVersion );
     }
 
     /**
@@ -350,7 +296,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testUpdateField( $field )
     {
-        $handler = $this->getCustomHandler();
+        $repository = $this->getCustomRepository();
 
         $field->value->externalData = $this->getUpdateFieldData();
         $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
@@ -362,8 +308,8 @@ abstract class FieldTypeIntegrationTest extends TestCase
             )
         ) );
 
-        $contentHandler = $handler->contentHandler();
-        return $contentHandler->updateContent( self::$contentId, self::$contentVersion, $updateStruct );
+        $contentService = $repository->getContentService();
+        return $contentService->updateContent( self::$contentId, self::$contentVersion, $updateStruct );
     }
 
     /**
@@ -401,17 +347,17 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testCopyField( $content )
     {
-        $handler        = $this->getCustomHandler();
-        $contentHandler = $handler->contentHandler();
+        $repository     = $this->getCustomRepository();
+        $contentService = $repository->getContentService();
 
-        $copied = $contentHandler->copy( self::$contentId, self::$contentVersion );
+        $copied = $contentService->copy( self::$contentId, self::$contentVersion );
 
         $this->assertNotSame(
             $content->versionInfo->contentId,
             $copied->versionInfo->contentId
         );
 
-        return $contentHandler->load(
+        return $contentService->load(
             $copied->versionInfo->contentId,
             $copied->versionInfo->versionNo
         );
@@ -453,36 +399,16 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testDeleteField( $content )
     {
-        $handler        = $this->getCustomHandler();
-        $contentHandler = $handler->contentHandler();
+        $repository     = $this->getCustomRepository();
+        $contentService = $repository->getContentService();
 
-        $contentHandler->removeRawContent(
+        $contentService->removeRawContent(
             $content->versionInfo->contentId
         );
 
-        $contentHandler->load(
+        $contentService->load(
             $content->versionInfo->contentId,
             $content->versionInfo->versionNo
-        );
-    }
-
-    /**
-     * Returns the Handler
-     *
-     * @return Handler
-     */
-    protected function getHandler()
-    {
-        return new Legacy\Handler(
-            array(
-                'external_storage' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-                ),
-                'field_converter' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-                )
-            ),
-            self::$setUp
         );
     }
 

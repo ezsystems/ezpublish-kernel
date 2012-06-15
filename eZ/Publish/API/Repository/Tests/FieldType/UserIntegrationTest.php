@@ -1,14 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy,
+namespace eZ\Publish\API\Repository\Tests\FieldType;
+use eZ\Publish\API\Repository,
+    eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\User;
 
@@ -32,7 +33,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
+class UserFieldTypeIntergrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
@@ -45,13 +46,21 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get repository with required custom field types registered
      *
-     * @return Handler
+     * @return Repository
      */
-    public function getCustomHandler()
+    public function getCustomRepository()
     {
-        $handler = $this->getHandler();
+        $repository = $this->getRepository();
+
+        // This is a dirty hack, but how else can we post-configure the
+        // persistence layer? We might want to make it the default
+        // configuration, so that this is not required any more, but this may
+        // also suck :/
+        $persistence = new \ReflectionProperty( $repository, 'persistenceHandler' );
+        $persistence->setAccessible( true );
+        $handler = $persistence->getValue( $repository );
 
         $handler->getStorageRegistry()->register(
             'ezuser',
@@ -64,7 +73,7 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
             new Legacy\Content\FieldValue\Converter\User()
         );
 
-        return $handler;
+        return $repository;
     }
 
     /**
@@ -77,9 +86,11 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     public function getFieldDefinitionData()
     {
         return array(
-            // The suer field type does not have any special field definition
-            // properties
-            array( 'fieldType', 'ezuser' ),
+            // The user field type does not have any special field definition
+            // properties, so there is nothing to check for
+            array( 'fieldTypeIdentifier', 'ezuser' ),
+            array( 'fieldSettings', null ),
+            array( 'validators', null ),
         );
     }
 
@@ -203,11 +214,11 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
      * Useful, if additional stuff should be executed (like creating the actual 
      * user).
      *
-     * @param Legacy\Handler $handler
+     * @param Repository $repository
      * @param Content $content
      * @return void
      */
-    public function postCreationHook( Legacy\Handler $handler, Content $content )
+    public function postCreationHook( Repository $repository, Content $content )
     {
         $user = new User();
         $user->id            = $content->contentInfo->id;
@@ -218,8 +229,8 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         $user->isEnabled     = true;
         $user->maxLogin      = 1000;
 
-        $userHandler = $handler->userHandler();
-        $userHandler->create( $user );
+        $userRepository = $repository->userRepository();
+        $userRepository->create( $user );
     }
 }
 
