@@ -14,9 +14,6 @@ use eZ\Publish\API\Repository\Tests,
 /**
  * Integration test for the legacy storage
  *
- * @TODO: Copy content / field
- * @TODO: Delete content / field
- *
  * @group integration
  */
 abstract class BaseIntegrationTest extends Tests\BaseTest
