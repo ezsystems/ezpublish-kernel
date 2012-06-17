@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
+    eZ\Publish\Core\FieldType,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\User;
 
@@ -55,8 +56,8 @@ class UserIntergrationTest extends BaseIntegrationTest
 
         $handler->getStorageRegistry()->register(
             'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
+            new FieldType\UserStorage( array(
+                'LegacyStorage' => new FieldType\UserStorage\Gateway\LegacyStorage(),
             ) )
         );
         $handler->getFieldValueConverterRegistry()->register(

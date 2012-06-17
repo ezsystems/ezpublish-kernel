@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserStorage;
+namespace eZ\Publish\Core\FieldType\UserStorage;
 
 abstract class Gateway
 {

@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserStorage\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserStorage\Gateway;
+namespace eZ\Publish\Core\FieldType\UserStorage\Gateway;
+use eZ\Publish\Core\FieldType\UserStorage\Gateway;
 
 class LegacyStorage extends Gateway
 {

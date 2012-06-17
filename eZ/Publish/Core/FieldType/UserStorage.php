@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Fields\Storage,
     eZ\Publish\SPI\Persistence\Content\Field;
 
