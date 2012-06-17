@@ -103,7 +103,7 @@ class EzcDbHandler
     {
         return $query->alias(
             $this->quoteColumn( $columnName, $tableName ),
-            $this->ezcDbHandler->quoteIdentifier(
+            $this->quoteIdentifier(
                 ( $tableName ? $tableName . '_' : '' ) .
                 $columnName
             )
@@ -171,6 +171,20 @@ class EzcDbHandler
     public function getSequenceName( $table, $column )
     {
         return null;
+    }
+
+    /**
+     * Quotes provided SQL identifier if needed.
+     *
+     * @param string $identifier
+     * @return string
+     */
+    public function quoteIdentifier( $identifier )
+    {
+        if ( !$this->quoteIdentifiers )
+            return $identifier;
+
+        return $this->ezcDbHandler->quoteIdentifier( $identifier );
     }
 }
 
