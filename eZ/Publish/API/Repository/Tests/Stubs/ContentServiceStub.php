@@ -39,6 +39,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStu
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
 
 /**
  * @example Examples/contenttype.php
@@ -49,6 +50,13 @@ class ContentServiceStub implements ContentService
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
+
+    /**
+     * Field handle, which handles special fields
+     *
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldHandler
+     */
+    private $fieldHandler;
 
     /**
      * @var integer
@@ -87,7 +95,10 @@ class ContentServiceStub implements ContentService
      */
     public function __construct( RepositoryStub $repository )
     {
-        $this->repository = $repository;
+        $this->repository   = $repository;
+        $this->fieldHandler = new FieldHandler( array(
+            'ezuser' => new FieldHandler\User( $repository ),
+        ) );
         $this->initFromFixture();
     }
 
@@ -448,6 +459,22 @@ class ContentServiceStub implements ContentService
             )
         );
 
+        $fieldDefinitions = $contentCreateStruct->contentType->getFieldDefinitions();
+        foreach ( $allFields as $field )
+        {
+            foreach ( $fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
+                {
+                    $this->fieldHandler->handleCreate(
+                        $fieldDefinition,
+                        $field,
+                        $content
+                    );
+                }
+            }
+        }
+
         $this->content[] = $content;
         $this->contentInfo[$contentInfo->id] = $contentInfo;
         $this->versionInfo[$versionInfo->id] = $versionInfo;
@@ -553,7 +580,7 @@ class ContentServiceStub implements ContentService
             ),
             $overrides
         );
-        return new Field( $fieldData );
+        return new FieldStub( $fieldData );
     }
 
     /**
@@ -651,7 +678,7 @@ class ContentServiceStub implements ContentService
                     {
                         $fieldId = $this->getFieldId();
                         // Missing translatable field
-                        $allFields[$fieldId] = new Field(
+                        $allFields[$fieldId] = new FieldStub(
                             array(
                                 'id' => $fieldId,
                                 'value' => $fieldDefinition->defaultValue,
@@ -680,7 +707,7 @@ class ContentServiceStub implements ContentService
                     $fieldId = $this->getFieldId();
 
                     // Missing non-translatable field
-                    $allFields[$fieldId] = new Field(
+                    $allFields[$fieldId] = new FieldStub(
                         array(
                             'id' => $fieldId,
                             'value' => $fieldDefinition->defaultValue,
@@ -1026,6 +1053,22 @@ class ContentServiceStub implements ContentService
                 'repository' => $this->repository
             )
         );
+
+        $fieldDefinitions = $contentType->getFieldDefinitions();
+        foreach ( $allFields as $field )
+        {
+            foreach ( $fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
+                {
+                    $this->fieldHandler->handleCreate(
+                        $fieldDefinition,
+                        $field,
+                        $draftedContent
+                    );
+                }
+            }
+        }
 
         if ( false === ( $index = array_search( $content, $this->content ) ) )
         {
