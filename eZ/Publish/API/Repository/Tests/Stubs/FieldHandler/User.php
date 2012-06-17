@@ -57,7 +57,20 @@ class User extends FieldHandlerBase
      */
     public function handleCreate( FieldDefinition $fieldDefinition, Field $field, Content $content )
     {
-        $field->setValue( array_merge( $this->defaultValues, $field->value ) );
+
+    }
+
+    /**
+     * Handle a certain field
+     *
+     * @param FieldDefinition $fieldDefinition
+     * @param Field $field
+     * @param Content $content
+     * @return void
+     */
+    public function handleUpdate( FieldDefinition $fieldDefinition, Field $field, Content $content )
+    {
+
     }
 }
 

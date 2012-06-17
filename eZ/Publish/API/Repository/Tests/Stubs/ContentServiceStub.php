@@ -1061,7 +1061,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    $this->fieldHandler->handleCreate(
+                    $this->fieldHandler->handleUpdate(
                         $fieldDefinition,
                         $field,
                         $draftedContent

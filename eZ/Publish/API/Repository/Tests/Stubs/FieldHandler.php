@@ -53,5 +53,23 @@ class FieldHandler extends FieldHandlerBase
 
         $this->fieldHandlers[$fieldDefinition->fieldTypeIdentifier]->handleCreate( $fieldDefinition, $field, $content );
     }
+
+    /**
+     * Handle a certain field
+     *
+     * @param FieldDefinition $fieldDefinition
+     * @param Field $field
+     * @param Content $content
+     * @return void
+     */
+    public function handleUpdate( FieldDefinition $fieldDefinition, Field $field, Content $content )
+    {
+        if ( !isset( $this->fieldHandlers[$fieldDefinition->fieldTypeIdentifier] ) )
+        {
+            return false;
+        }
+
+        $this->fieldHandlers[$fieldDefinition->fieldTypeIdentifier]->handleCreate( $fieldDefinition, $field, $content );
+    }
 }
 
