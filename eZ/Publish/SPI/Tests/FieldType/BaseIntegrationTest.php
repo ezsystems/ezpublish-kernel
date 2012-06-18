@@ -7,19 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy,
+namespace eZ\Publish\SPI\Tests\FieldType;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Integration test for the legacy storage
  *
- * @TODO: Copy content / field
- * @TODO: Delete content / field
- *
  * @group integration
  */
-abstract class FieldTypeIntegrationTest extends TestCase
+abstract class BaseIntegrationTest extends TestCase
 {
     /**
      * Property indicating wether the DB already has been set up
@@ -142,7 +140,7 @@ abstract class FieldTypeIntegrationTest extends TestCase
         if ( !self::$setUp )
         {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/Content/SearchHandler/_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/full_dump.php' );
             self::$setUp = $this->handler;
         }
         else
@@ -238,8 +236,6 @@ abstract class FieldTypeIntegrationTest extends TestCase
      */
     public function testLoadContentTypeFieldData( $name, $value, $field )
     {
-        $this->markTestIncomplete( "There is no property special container yet -- so there is nothing to check." );
-
         $this->assertEquals(
             $value,
             $field->$name

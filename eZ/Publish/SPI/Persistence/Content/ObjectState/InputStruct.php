@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\ObjectState;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -17,7 +18,6 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class InputStruct extends ValueObject
 {
     /**
-     *
      * The identifier for the object state group
      *
      * @var string
@@ -31,7 +31,7 @@ class InputStruct extends ValueObject
      */
     public $defaultLanguage;
 
-     /**
+    /**
      * Human readable name of the object state
      *
      * The structure of this field is:

@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  *
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
- * @property-read string $defaultLanguage, the default language of the object state group names and description used for fallback.
+ * @property-read string $defaultLanguageCode, the default language code of the object state group names and description used for fallback.
  * @property-read string[] $languageCodes the available languages
  */
 abstract class ObjectStateGroup extends ValueObject
@@ -34,15 +34,14 @@ abstract class ObjectStateGroup extends ValueObject
      */
     protected $identifier;
 
-
     /**
-     * the default language code
+     * The default language code
      *
      * @var string
      */
     protected $defaultLanguageCode;
 
-     /**
+    /**
      * The available language codes for names an descriptions
      *
      * @var string[]
@@ -50,7 +49,6 @@ abstract class ObjectStateGroup extends ValueObject
     protected $languageCodes;
 
     /**
-     *
      * This method returns the human readable name in all provided languages
      * of the content type
      *
@@ -64,7 +62,7 @@ abstract class ObjectStateGroup extends ValueObject
     abstract public function getNames();
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
@@ -85,11 +83,11 @@ abstract class ObjectStateGroup extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     abstract public function getDescription( $languageCode );
 

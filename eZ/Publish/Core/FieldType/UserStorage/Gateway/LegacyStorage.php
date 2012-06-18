@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserStorage\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserStorage\Gateway;
+namespace eZ\Publish\Core\FieldType\UserStorage\Gateway;
+use eZ\Publish\Core\FieldType\UserStorage\Gateway;
 
 class LegacyStorage extends Gateway
 {
@@ -25,14 +25,19 @@ class LegacyStorage extends Gateway
      * @var array
      */
     protected $defaultValues = array(
-        'account_key'      => null,
-        'has_stored_login' => false,
-        'is_logged_in'     => true,
-        'is_enabled'       => false,
-        'is_locked'        => false,
-        'last_visit'       => null,
-        'login_count'      => null,
-        'max_login'        => null,
+        'account_key'        => null,
+        'has_stored_login'   => false,
+        'contentobject_id'   => null,
+        'login'              => null,
+        'email'              => null,
+        'password_hash'      => null,
+        'password_hash_type' => null,
+        'is_logged_in'       => true,
+        'is_enabled'         => false,
+        'is_locked'          => false,
+        'last_visit'         => null,
+        'login_count'        => null,
+        'max_login'          => null,
     );
 
     /**
@@ -60,13 +65,19 @@ class LegacyStorage extends Gateway
      *
      * The User storage handles the following attributes, following the user field
      * type in eZ Publish 4:
-     *  - account_key
-     *  - has_stored_login
-     *  - is_logged_in
-     *  - is_enabled
-     *  - is_locked
-     *  - last_visit
-     *  - login_count
+     * - account_key
+     * - has_stored_login
+     * - contentobject_id
+     * - login
+     * - email
+     * - password_hash
+     * - password_hash_type
+     * - is_logged_in
+     * - is_enabled
+     * - is_locked
+     * - last_visit
+     * - login_count
+     * - max_login
      *
      * @param mixed $fieldId
      * @param mixed $userId
@@ -136,7 +147,11 @@ class LegacyStorage extends Gateway
         $query = $this->dbHandler->createSelectQuery();
         $query
             ->select(
-                $this->dbHandler->quoteColumn( 'login', 'ezuser' )
+                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezuser' ),
+                $this->dbHandler->quoteColumn( 'login', 'ezuser' ),
+                $this->dbHandler->quoteColumn( 'email', 'ezuser' ),
+                $this->dbHandler->quoteColumn( 'password_hash', 'ezuser' ),
+                $this->dbHandler->quoteColumn( 'password_hash_type', 'ezuser' )
             )
             ->from( $this->dbHandler->quoteTable( 'ezuser' ) )
             ->where(
@@ -265,7 +280,8 @@ class LegacyStorage extends Gateway
 
         $this->storeAccountKey( $userId, $oldData, $data );
         $this->storeVisits( $userId, $oldData, $data );
-        $this->storeSettings( $userId, $oldData, $data );
+        // All other property changes are intentionally ignored. Use the user
+        // service instead.
 
         return $this->getFieldData( $fieldId, $userId );
     }
@@ -391,44 +407,6 @@ class LegacyStorage extends Gateway
                     )
                 );
         }
-
-        $stmt = $query->prepare();
-        $stmt->execute();
-    }
-
-    /**
-     * Store user settings
-     *
-     * @param mixed $userId
-     * @param array $old
-     * @param array $data
-     * @return void
-     */
-    protected function storeSettings( $userId, array $old, array $data )
-    {
-        if ( ( $data['max_login'] == $old['max_login'] ) &&
-             ( $data['is_enabled'] == $old['is_enabled'] ) )
-        {
-            return;
-        }
-
-        $query = $this->dbHandler->createUpdateQuery();
-        $query
-            ->update( $this->dbHandler->quoteTable( 'ezuser_setting' ) )
-            ->set(
-                $this->dbHandler->quoteColumn( 'max_login' ),
-                $query->bindValue( $data['max_login'] )
-            )
-            ->set(
-                $this->dbHandler->quoteColumn( 'is_enabled' ),
-                $query->bindValue( $data['is_enabled'] )
-            )
-            ->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'user_id' ),
-                    $query->bindValue( $userId )
-                )
-            );
 
         $stmt = $query->prepare();
         $stmt->execute();

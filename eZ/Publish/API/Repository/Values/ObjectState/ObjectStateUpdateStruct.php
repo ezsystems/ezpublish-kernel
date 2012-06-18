@@ -12,11 +12,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a value for updating object states
- *
  */
 class ObjectStateUpdateStruct extends ValueObject
 {
-
     /**
      * Readable string identifier of a group
      *
@@ -27,7 +25,7 @@ class ObjectStateUpdateStruct extends ValueObject
     public $identifier;
 
     /**
-     * the default language code
+     * The default language code
      *
      * @required
      *

@@ -23,6 +23,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\RoleService,
     eZ\Publish\Core\Repository\UserService,
     eZ\Publish\Core\Repository\IOService,
+    eZ\Publish\Core\Repository\ObjectStateService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
     RuntimeException;
@@ -118,6 +119,13 @@ class Repository implements RepositoryInterface
     protected $ioService;
 
     /**
+     * Instance of object state service
+     *
+     * @var \eZ\Publish\API\Repository\ObjectStateService
+     */
+    protected $objectStateService;
+
+    /**
      * Service settings, first level key is service name
      *
      * @var array
@@ -148,6 +156,7 @@ class Repository implements RepositoryInterface
             'language' => array(),
             'trash' => array(),
             'io' => array(),
+            'objectState' => array(),
         );
 
         if ( $user !== null )
@@ -406,7 +415,11 @@ class Repository implements RepositoryInterface
      */
     public function getObjectStateService()
     {
-        throw new \Exception("@todo ObjectStateService Not Implemented");
+        if ( $this->objectStateService !== null )
+            return $this->objectStateService;
+
+        $this->objectStateService = new ObjectStateService( $this, $this->persistenceHandler, $this->serviceSettings['objectState'] );
+        return $this->objectStateService;
     }
 
     /**

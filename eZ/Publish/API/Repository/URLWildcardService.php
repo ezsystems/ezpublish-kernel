@@ -45,7 +45,7 @@ interface URLWildcardService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove( URLWildcard $urlWildcard);
+    public function remove( URLWildcard $urlWildcard );
 
     /**
      *
@@ -57,7 +57,7 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function load($id);
+    public function load( $id );
 
     /**
      * loads all url wild card (paged)
@@ -67,7 +67,7 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
-    public function loadAll($offset = 0, $limit = -1);
+    public function loadAll( $offset = 0, $limit = -1 );
 
     /**
      * translates an url to an existing uri resource based on the
@@ -82,6 +82,6 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
-    public function translate($url);
+    public function translate( $url );
 
 }

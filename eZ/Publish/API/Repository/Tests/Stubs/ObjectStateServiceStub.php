@@ -102,22 +102,27 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
     {
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
         $groupData = array();
         foreach ( $objectStateGroupCreateStruct as $propertyName => $propertyValue )
         {
             $groupData[$propertyName] = $propertyValue;
         }
 
-        $groupData['languageCodes'] = array_unique( array_keys( array_merge(
-            $objectStateGroupCreateStruct->names ?: array(),
-            $objectStateGroupCreateStruct->descriptions ?: array()
-        ) ) );
+        $groupData['languageCodes'] = $this->determineLanguageCodes(
+            $objectStateGroupCreateStruct->names,
+            $objectStateGroupCreateStruct->descriptions
+        );
 
         $groupData['id'] = $this->nextGroupId++;
 
@@ -129,13 +134,28 @@ class ObjectStateServiceStub implements ObjectStateService
     }
 
     /**
+     * Determines all available language codes from $names and $descriptions
+     *
+     * @param string[] $names
+     * @param string[] $descriptions
+     * @return string[]
+     */
+    protected function determineLanguageCodes( $names, $descriptions )
+    {
+        return array_unique( array_keys( array_merge(
+            $names ?: array(),
+            $descriptions ?: array()
+        ) ) );
+    }
+
+    /**
      * Loads a object state group
      *
      * @param mixed $objectStateGroupId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function loadObjectStateGroup( $objectStateGroupId )
     {
@@ -153,7 +173,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * @param int $offset
      * @param int $limit
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
     public function loadObjectStateGroups( $offset = 0, $limit = -1 )
     {
@@ -167,9 +187,9 @@ class ObjectStateServiceStub implements ObjectStateService
     /**
      * This method returns the ordered list of object states of a group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState[]
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
     public function loadObjectStates( ObjectStateGroup $objectStateGroup )
     {
@@ -186,14 +206,41 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $data = array(
+            'id'                  => $objectStateGroup->id,
+            'identifier'          => $objectStateGroup->identifier,
+            'defaultLanguageCode' => $objectStateGroup->defaultLanguageCode,
+            'names'               => $objectStateGroup->getNames(),
+            'descriptions'        => $objectStateGroup->getDescriptions(),
+        );
+
+        foreach ( $objectStateGroupUpdateStruct as $propertyName => $propertyValue )
+        {
+            if ( $propertyValue !== null )
+            {
+                $data[$propertyName] = $propertyValue;
+            }
+        }
+
+        $data['languageCodes'] = $this->determineLanguageCodes(
+            $data['names'], $data['descriptions']
+        );
+
+        $this->groups[$objectStateGroup->id] = new Values\ObjectState\ObjectStateGroupStub( $data );
+
+        return $this->groups[$objectStateGroup->id];
     }
 
     /**
@@ -201,11 +248,28 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete an object state group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
     public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $stateIds = $this->groupStateMap[$objectStateGroup->id];
+
+        foreach ( $stateIds as $stateId )
+        {
+            unset( $this->states[$stateId] );
+        }
+
+        foreach ( $this->objectStateMap as $objectId => $stateGroups )
+        {
+            unset( $this->objectStateMap[$objectId][$objectStateGroup->id] );
+        }
+
+        unset( $this->groups[$objectStateGroup->id] );
     }
 
     /**
@@ -216,14 +280,49 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $stateData = array();
+        foreach ( $objectStateCreateStruct as $propertyName => $propertyValue )
+        {
+            $stateData[$propertyName] = $propertyValue;
+        }
+        $stateData['id'] = $this->nextStateId++;
+        $stateData['languageCodes'] = $this->determineLanguageCodes(
+            $stateData['names'],
+            $stateData['descriptions']
+        );
+        $stateData['stateGroup'] = $objectStateGroup;
+
+        // TODO: Re-assign priorities to be continuos. Rule for same
+        // priorities is not determined, yet.
+        return $this->createObjectStateFromArray( $stateData );
+    }
+
+    /**
+     * Creates and sets an object state from $stateData.
+     *
+     * @param array $stateData
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     */
+    protected function createObjectStateFromArray( array $stateData )
+    {
+        $newState = new Values\ObjectState\ObjectStateStub( $stateData );
+
+        $this->states[$newState->id] = $newState;
+        $this->groupStateMap[$newState->getObjectStateGroup()->id][] = $newState->id;
+
+        return $newState;
     }
 
     /**
@@ -233,11 +332,15 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function loadObjectState( $stateId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( !isset( $this->states[$stateId] ) )
+        {
+            throw new Exceptions\NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        }
+        return $this->states[$stateId];
     }
 
     /**
@@ -245,13 +348,40 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $stateData = array(
+            'id'                  => $objectState->id,
+            'identifier'          => $objectState->identifier,
+            'priority'            => $objectState->priority,
+            'defaultLanguageCode' => $objectState->defaultLanguageCode,
+            'names'               => $objectState->names,
+            'descriptions'        => $objectState->descriptions,
+            'stateGroup'          => $objectState->stateGroup,
+        );
+
+        foreach ( $objectStateUpdateStruct as $propertyName => $propertyValue )
+        {
+            if ( $propertyValue !== null )
+            {
+                $stateData[$propertyName] = $propertyValue;
+            }
+        }
+        $stateData['languageCodes'] = $this->determineLanguageCodes(
+            $stateData['names'],
+            $stateData['descriptions']
+        );
+
+        return $this->createObjectStateFromArray( $stateData );
     }
 
     /**
@@ -259,12 +389,19 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change priority on an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $priority
      */
     public function setPriorityOfObjectState( ObjectState $objectState, $priority )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $objectState->_setPriority( $priority );
+        // TODO: Re-assign priorities to be continuos. Rule for same
+        // priorities is not determined, yet.
     }
 
     /**
@@ -273,28 +410,88 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
     public function deleteObjectState( ObjectState $objectState )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        $groupId = $objectState->getObjectStateGroup()->id;
+
+        $newStateId   = false;
+        $minStatePrio = PHP_INT_MAX;
+
+        foreach ( $this->groupStateMap[$groupId] as $index => $stateId )
+        {
+            if ( $stateId == $objectState->id )
+            {
+                unset( $this->groupStateMap[$groupId][$index] );
+                continue;
+            }
+        }
+
+        $newState = $this->getLowestPriorityStateFromGroup( $groupId );
+
+        foreach ( $this->objectStateMap as $contentId => $stateGroups )
+        {
+            if ( isset( $stateGroups[$groupId] ) )
+            {
+                $this->objectStateMap[$contentId][$groupId] = $newState->id;
+            }
+        }
+    }
+
+    /**
+     * Returns the state with the lowest priority from $groupId
+     *
+     * @param mixed $groupId
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     */
+    protected function getLowestPriorityStateFromGroup( $groupId )
+    {
+        $selectedState = null;
+        $minPriority   = PHP_INT_MAX;
+
+        foreach ( $this->groupStateMap[$groupId] as $index => $selectedState )
+        {
+            $state = $this->states[$selectedState];
+            if ( $state->priority < $minPriority )
+            {
+                $selectedState = $state;
+                $minPriority   = $state->priority;
+            }
+        }
+
+        return $selectedState;
     }
 
 
     /**
      * Sets the object-state of a state group to $state for the given content.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentExceptioon if the object state does not belong to the given group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state does not belong to the given group
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change the object state
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( false === $this->repository->hasAccess( 'class', '*' ) )
+        {
+            throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        if ( $objectState->getObjectStateGroup() != $objectStateGroup )
+        {
+            throw new Exceptions\InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+        $this->objectStateMap[$contentInfo->id][$objectStateGroup->id] = $objectState->id;
     }
 
     /**
@@ -303,25 +500,47 @@ class ObjectStateServiceStub implements ObjectStateService
      * The $state is the id of the state within one group.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $contentId = $contentInfo->id;
+        $groupId   = $objectStateGroup->id;
+
+        // Assign initial object state, if none assigned, yet.
+        if ( !isset( $this->objectStateMap[$contentId][$groupId] ) )
+        {
+            $initialState = $this->getLowestPriorityStateFromGroup( $groupId );
+            $this->objectStateMap[$contentId][$groupId] = $initialState->id;
+        }
+
+        return $this->states[
+            $this->objectStateMap[$contentId][$groupId]
+        ];
     }
 
     /**
      * returns the number of objects which are in this state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
      * @return int
      */
     public function getContentCount( ObjectState $objectState )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $groupId = $objectState->getObjectStateGroup()->id;
+
+        $contentCount = 0;
+        foreach ( $this->objectStateMap as $objectId => $stateMap )
+        {
+            if ( isset( $stateMap[$groupId] ) && $stateMap[$groupId] == $objectState->id )
+            {
+                ++$contentCount;
+            }
+        }
+        return $contentCount;
     }
 
     /**

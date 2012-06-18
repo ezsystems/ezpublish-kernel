@@ -578,7 +578,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         /* END: Use Case */
 
@@ -600,7 +600,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'fieldTypeIdentifier' => 'string',
+                'fieldTypeIdentifier' => 'ezstring',
                 'identifier' => 'title',
                 'names' => null,
                 'descriptions' => null,
@@ -673,7 +673,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->creationDate = new \DateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         $titleFieldCreate->names = array(
             'eng-GB' => 'Title',
@@ -934,7 +934,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
 
         $firstFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         $typeCreate->addFieldDefinition( $firstFieldCreate );
 
@@ -1191,7 +1191,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeDraft = $this->createContentTypeDraft();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'tags', 'string'
+            'tags', 'ezstring'
         );
         $fieldDefCreate->names = array(
             'eng-GB' => 'Tags',
@@ -1275,7 +1275,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeDraft = $this->createContentTypeDraft();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
 
         // Throws an exception
@@ -2640,7 +2640,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->names = array( 'eng-GB' => 'Blog post' );
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
 
@@ -2699,7 +2699,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->names = array( 'eng-GB' => 'Blog post' );
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
 

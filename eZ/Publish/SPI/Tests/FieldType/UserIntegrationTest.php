@@ -7,8 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests;
+namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
+    eZ\Publish\Core\FieldType,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\User;
 
@@ -32,7 +33,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
+class UserIntergrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
@@ -55,8 +56,8 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
 
         $handler->getStorageRegistry()->register(
             'ezuser',
-            new Legacy\Content\FieldValue\Converter\UserStorage( array(
-                'LegacyStorage' => new Legacy\Content\FieldValue\Converter\UserStorage\Gateway\LegacyStorage(),
+            new FieldType\UserStorage( array(
+                'LegacyStorage' => new FieldType\UserStorage\Gateway\LegacyStorage(),
             ) )
         );
         $handler->getFieldValueConverterRegistry()->register(
@@ -80,6 +81,7 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
             // The suer field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezuser' ),
+            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints() ),
         );
     }
 
@@ -111,6 +113,11 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         return array(
             array( 'account_key', null ),
             array( 'has_stored_login', true ),
+            array( 'contentobject_id', 226 ),
+            array( 'login', 'hans' ),
+            array( 'email', 'hans@example.com' ),
+            array( 'password_hash', '*' ),
+            array( 'password_hash_type', 0 ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', true ),
             array( 'is_locked', false ),
@@ -128,11 +135,15 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
     public function getUpdateFieldData()
     {
         return array(
-            'account_key' => 'foobar',
-            'is_enabled'  => false,
-            'last_visit'  => 123456789,
-            'login_count' => 23,
-            'max_login'   => 10,
+            'account_key'        => 'foobar',
+            'login'              => 'change', // Change is intended to not get through
+            'email'              => 'change', // Change is intended to not get through
+            'password_hash'      => 'change', // Change is intended to not get through
+            'password_hash_type' => 'change', // Change is intended to not get through
+            'last_visit'         => 123456789,
+            'login_count'        => 2300,
+            'is_enabled'         => 'changed', // Change is intended to not get through
+            'max_login'          => 'changed', // Change is intended to not get through
         );
     }
 
@@ -148,12 +159,17 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         return array(
             array( 'account_key', 'foobar' ),
             array( 'has_stored_login', true ),
+            array( 'contentobject_id', 226 ),
+            array( 'login', 'hans' ),
+            array( 'email', 'hans@example.com' ),
+            array( 'password_hash', '*' ),
+            array( 'password_hash_type', 0 ),
             array( 'is_logged_in', true ),
-            array( 'is_enabled', false ),
+            array( 'is_enabled', true ),
             array( 'is_locked', true ),
             array( 'last_visit', 123456789 ),
-            array( 'login_count', 23 ),
-            array( 'max_login', 10 ),
+            array( 'login_count', 2300 ),
+            array( 'max_login', 1000 ),
         );
     }
 
@@ -169,6 +185,11 @@ class UserFieldTypeIntergrationTest extends FieldTypeIntegrationTest
         return array(
             array( 'account_key', null ),
             array( 'has_stored_login', false ),
+            array( 'contentobject_id', null ),
+            array( 'login', null ),
+            array( 'email', null ),
+            array( 'password_hash', null ),
+            array( 'password_hash_type', null ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', false ),
             array( 'is_locked', false ),
