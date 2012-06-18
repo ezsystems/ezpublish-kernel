@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as BaseObjectStateHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
     eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
@@ -26,13 +27,22 @@ class Handler implements BaseObjectStateHandler
     protected $objectStateGateway;
 
     /**
+     * ObjectState Mapper
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper $objectStateMapper
+     */
+    protected $objectStateMapper;
+
+    /**
      * Creates a new ObjectState Handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway $objectStateGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper $objectStateMapper
      */
-    public function __construct( Gateway $objectStateGateway  )
+    public function __construct( Gateway $objectStateGateway, Mapper $objectStateMapper  )
     {
         $this->objectStateGateway = $objectStateGateway;
+        $this->objectStateMapper = $objectStateMapper;
     }
 
     /**

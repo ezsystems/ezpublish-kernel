@@ -20,6 +20,7 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectStateMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
@@ -145,6 +146,13 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway
      */
     protected $objectStateGateway;
+
+    /**
+     * ObjectState mapper
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
+     */
+    protected $objectStateMapper;
 
     /**
      * User handler
@@ -677,14 +685,15 @@ class Handler implements HandlerInterface
         if ( !isset( $this->objectStateHandler ) )
         {
             $this->objectStateHandler = new ObjectStateHandler(
-                $this->getObjectStateGateway()
+                $this->getObjectStateGateway(),
+                $this->getObjectStateMapper()
             );
         }
         return $this->objectStateHandler;
     }
 
     /**
-     * Returns a object state gateway
+     * Returns an object state gateway
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
      */
@@ -695,6 +704,20 @@ class Handler implements HandlerInterface
             $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase( $this->getDatabase() );
         }
         return $this->objectStateGateway;
+    }
+
+    /**
+     * Returns an object state mapper
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
+     */
+    protected function getObjectStateMapper()
+    {
+        if ( !isset( $this->objectStateMapper ) )
+        {
+            $this->objectStateMapper = new ObjectStateMapper();
+        }
+        return $this->objectStateMapper;
     }
 
     /**
