@@ -102,9 +102,12 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             array( 'password_hash_type', 2 ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', true ),
+            // @TODO: Fails because of max_login problem
             array( 'is_locked', false ),
             array( 'last_visit', null ),
             array( 'login_count', null ),
+            // @TODO: Currently not editable through UserService, tests will
+            // fail
             array( 'max_login', 1000 ),
         );
     }
@@ -148,9 +151,12 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             array( 'password_hash_type', 2 ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', true ),
+            // @TODO: Fails because of max_login problem
             array( 'is_locked', true ),
             array( 'last_visit', 123456789 ),
             array( 'login_count', 2300 ),
+            // @TODO: Currently not editable through UserService, tests will
+            // fail
             array( 'max_login', 1000 ),
         );
     }
