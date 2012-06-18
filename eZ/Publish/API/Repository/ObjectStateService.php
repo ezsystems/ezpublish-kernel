@@ -32,9 +32,9 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct );
 
@@ -45,7 +45,7 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function loadObjectStateGroup( $objectStateGroupId );
 
@@ -55,16 +55,16 @@ interface ObjectStateService
      * @param int $offset
      * @param int $limit
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
     public function loadObjectStateGroups( $offset = 0, $limit = -1 );
 
     /**
      * This method returns the ordered list of object states of a group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState[]
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
     public function loadObjectStates( ObjectStateGroup $objectStateGroup );
 
@@ -73,10 +73,10 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct );
 
@@ -85,7 +85,7 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete an object state group
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
     public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup );
 
@@ -97,10 +97,10 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct );
 
@@ -111,7 +111,7 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function loadObjectState( $stateId );
 
@@ -120,10 +120,10 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct );
 
@@ -132,7 +132,7 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change priority on an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $priority
      */
     public function setPriorityOfObjectState( ObjectState $objectState, $priority );
@@ -143,7 +143,7 @@ interface ObjectStateService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete an object state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
     public function deleteObjectState( ObjectState $objectState );
 
@@ -154,8 +154,8 @@ interface ObjectStateService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change the object state
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState );
 
@@ -165,16 +165,16 @@ interface ObjectStateService
      * The $state is the id of the state within one group.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      *
-     * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup );
 
     /**
      * Returns the number of objects which are in this state
      *
-     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
      * @return int
      */

@@ -19,9 +19,9 @@ interface Handler
     /**
      * creates a new object state group
      *
-     * @param \ez\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
     public function createGroup( InputStruct $input );
 
@@ -32,7 +32,7 @@ interface Handler
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
     public function loadGroup( $groupId );
 
@@ -42,7 +42,7 @@ interface Handler
      * @param int $offset
      * @param int $limit
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group[]
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group[]
      */
     public function loadAllGroups( $offset = 0, $limit = -1 );
 
@@ -51,7 +51,7 @@ interface Handler
      *
      * @param mixed $groupId
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState[]
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState[]
      */
     public function loadObjectStates( $groupId );
 
@@ -59,9 +59,9 @@ interface Handler
      * updates an object state group
      *
      * @param mixed $groupId
-     * @param \ez\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
     public function updateGroup( $groupId, InputStruct $input );
 
@@ -79,9 +79,9 @@ interface Handler
      * set to this state.
      *
      * @param mixed $groupId
-     * @param \ez\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
     public function create( $groupId, InputStruct $input );
 
@@ -92,7 +92,7 @@ interface Handler
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
     public function load( $stateId );
 
@@ -100,9 +100,9 @@ interface Handler
      * updates an object state
      *
      * @param mixed $stateId
-     * @param \ez\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
-     * @return \ez\Publish\SPI\Persistence\Content\ObjectState
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
     public function update( $stateId, InputStruct $input );
 
