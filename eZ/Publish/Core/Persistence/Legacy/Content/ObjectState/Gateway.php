@@ -14,4 +14,36 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
  */
 abstract class Gateway
 {
+    /**
+     * Loads data for an object state
+     *
+     * @param mixed $stateId
+     * @return array
+     */
+    abstract public function loadObjectStateData( $stateId );
+
+    /**
+     * Loads data for all object states belonging to group with $groupId ID
+     *
+     * @param mixed $groupId
+     * @return array
+     */
+    abstract public function loadObjectStateListData( $groupId );
+
+    /**
+     * Loads data for an object state group
+     *
+     * @param mixed $groupId
+     * @return array
+     */
+    abstract public function loadObjectStateGroupData( $groupId );
+
+    /**
+     * Loads data for all object state groups, filtered by $offset and $limit
+     *
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
+    abstract public function loadObjectStateGroupListData( $offset, $limit );
 }

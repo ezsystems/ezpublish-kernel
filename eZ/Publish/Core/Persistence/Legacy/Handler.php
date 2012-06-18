@@ -701,7 +701,9 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->objectStateGateway ) )
         {
-            $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase( $this->getDatabase() );
+            $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase(
+                $this->getDatabase()
+            );
         }
         return $this->objectStateGateway;
     }
@@ -715,7 +717,9 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->objectStateMapper ) )
         {
-            $this->objectStateMapper = new ObjectStateMapper();
+            $this->objectStateMapper = new ObjectStateMapper(
+                $this->contentLanguageHandler()
+            );
         }
         return $this->objectStateMapper;
     }

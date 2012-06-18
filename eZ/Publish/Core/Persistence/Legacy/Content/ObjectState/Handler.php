@@ -12,7 +12,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as BaseObjectStateHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * The Object State Handler class provides managing of object states and groups
@@ -22,14 +23,14 @@ class Handler implements BaseObjectStateHandler
     /**
      * ObjectState Gateway
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway $objectStateGateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway
      */
     protected $objectStateGateway;
 
     /**
      * ObjectState Mapper
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper $objectStateMapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
      */
     protected $objectStateMapper;
 
@@ -39,7 +40,7 @@ class Handler implements BaseObjectStateHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway $objectStateGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper $objectStateMapper
      */
-    public function __construct( Gateway $objectStateGateway, Mapper $objectStateMapper  )
+    public function __construct( Gateway $objectStateGateway, Mapper $objectStateMapper )
     {
         $this->objectStateGateway = $objectStateGateway;
         $this->objectStateMapper = $objectStateMapper;
@@ -63,7 +64,17 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function loadGroup( $groupId ) {}
+    public function loadGroup( $groupId )
+    {
+        $data = $this->objectStateGateway->loadObjectStateGroupData( $groupId );
+
+        if ( empty( $data ) )
+        {
+            throw new NotFoundException( "ObjectStateGroup", $groupId );
+        }
+
+        return $this->objectStateMapper->createObjectStateGroupFromData( $data );
+    }
 
     /**
      * Loads all object state groups
@@ -73,7 +84,11 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group[]
      */
-    public function loadAllGroups( $offset = 0, $limit = -1 ) {}
+    public function loadAllGroups( $offset = 0, $limit = -1 )
+    {
+        $data = $this->objectStateGateway->loadObjectStateGroupListData( $offset, $limit );
+        return $this->objectStateMapper->createObjectStateGroupListFromData( $data );
+    }
 
     /**
      * This method returns the ordered list of object states of a group
@@ -82,7 +97,11 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState[]
      */
-    public function loadObjectStates( $groupId ) {}
+    public function loadObjectStates( $groupId )
+    {
+        $data = $this->objectStateGateway->loadObjectStateListData( $groupId );
+        return $this->objectStateMapper->createObjectStateListFromData( $data );
+    }
 
     /**
      * Updates an object state group
@@ -123,7 +142,17 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function load( $stateId ) {}
+    public function load( $stateId )
+    {
+        $data = $this->objectStateGateway->loadObjectStateData( $stateId );
+
+        if ( empty( $data ) )
+        {
+            throw new NotFoundException( "ObjectState", $stateId );
+        }
+
+        return $this->objectStateMapper->createObjectStateFromData( $data );
+    }
 
     /**
      * Updates an object state
