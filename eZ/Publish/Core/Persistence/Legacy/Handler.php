@@ -225,6 +225,7 @@ class Handler implements HandlerInterface
      * array(
      *  'dsn' =>'<database_type>://<user>:<password>@<host>/<database_name>',
      *  'defer_type_update' => <true|false>,
+     *  'quote_identifiers' => <true|false>,
      *  'external_storages' => array(
      *      '<type_name1>' => '<storage_class_1>',
      *      '<type_name2>' => '<storage_class_2>',
@@ -261,6 +262,10 @@ class Handler implements HandlerInterface
      * {@link \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish()} method is
      * called, or if a background process should be triggered (true), which is
      * then executed by the old eZ Publish core.
+     *
+     * The flag 'quote_identifiers' defines if SQL identifiers like table names should be quoted in queries.
+     * Some database vendors might need it but mostly not needed for MySQL or PostgreSQL.
+     * Putting it to false increase performance by ~10%
      *
      * In 'external_storages' a mapping of field type names to classes is
      * expected. The referred class is instantiated and the resulting object is
@@ -302,7 +307,10 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->dbHandler ) )
         {
-            $this->dbHandler = EzcDbHandler::create( $this->configurator->getDsn() );
+            $this->dbHandler = EzcDbHandler::create(
+                $this->configurator->getDsn(),
+                $this->configurator->shouldQuoteIdentifiers()
+            );
         }
         return $this->dbHandler;
     }

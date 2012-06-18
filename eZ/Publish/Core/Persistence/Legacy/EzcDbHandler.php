@@ -31,13 +31,22 @@ class EzcDbHandler
     protected $ezcDbHandler;
 
     /**
+     * Flag indicating whether to quote identifiers in SQL queries (table, columns...)
+     *
+     * @var bool
+     */
+    protected $quoteIdentifiers;
+
+    /**
      * Construct from zeta components database handler
      *
      * @param \ezcDbHandler $ezcDbHandler
+     * @param bool $quoteIdentifiers Whether to quote identifiers in SQL queries or not (default is false)
      */
-    public function __construct( ezcDbHandlerWrapped $ezcDbHandler )
+    public function __construct( ezcDbHandlerWrapped $ezcDbHandler, $quoteIdentifiers = false )
     {
         $this->ezcDbHandler = $ezcDbHandler;
+        $this->quoteIdentifiers = $quoteIdentifiers;
     }
 
     /**
@@ -94,7 +103,7 @@ class EzcDbHandler
     {
         return $query->alias(
             $this->quoteColumn( $columnName, $tableName ),
-            $this->ezcDbHandler->quoteIdentifier(
+            $this->quoteIdentifier(
                 ( $tableName ? $tableName . '_' : '' ) .
                 $columnName
             )
@@ -110,6 +119,9 @@ class EzcDbHandler
      */
     public function quoteColumn( $columnName, $tableName = null )
     {
+        if ( !$this->quoteIdentifiers )
+            return ( $tableName ? $tableName . '.' : '' ) . $columnName;
+
         // @TODO: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return
@@ -125,6 +137,9 @@ class EzcDbHandler
      */
     public function quoteTable( $tableName )
     {
+        if ( !$this->quoteIdentifiers )
+            return $tableName;
+
         // @TODO: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return $this->ezcDbHandler->quoteIdentifier( $tableName );
@@ -156,6 +171,20 @@ class EzcDbHandler
     public function getSequenceName( $table, $column )
     {
         return null;
+    }
+
+    /**
+     * Quotes provided SQL identifier if needed.
+     *
+     * @param string $identifier
+     * @return string
+     */
+    public function quoteIdentifier( $identifier )
+    {
+        if ( !$this->quoteIdentifiers )
+            return $identifier;
+
+        return $this->ezcDbHandler->quoteIdentifier( $identifier );
     }
 }
 

@@ -63,6 +63,19 @@ class Configurator
     }
 
     /**
+     * Returns if we should quote SQL identifiers in queries (like table names).
+     *
+     * @return bool
+     */
+    public function shouldQuoteIdentifiers()
+    {
+        return(
+            isset( $this->config['quote_identifiers'] )
+            && $this->config['quote_identifiers']
+        );
+    }
+
+    /**
      * Configurs the storage registry
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\StorageRegistry $registry
