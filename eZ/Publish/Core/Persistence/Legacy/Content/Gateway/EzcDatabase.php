@@ -23,6 +23,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\Relation,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo,
     ezcQueryUpdate;
@@ -42,7 +45,7 @@ class EzcDatabase extends Gateway
     /**
      * Query builder.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
     protected $queryBuilder;
 
@@ -1296,5 +1299,183 @@ class EzcDatabase extends Gateway
             );
 
         $query->prepare()->execute();
+    }
+
+    /**
+     * Loads relations from $contentId to published content, optionally only from $contentVersionNo.
+     *
+     * $relationType can also be filtered.
+     *
+     * @param int $contentId
+     * @param int $contentVersionNo
+     * @param int $relationType
+     *
+     * @return string[][] array of relation data
+     */
+    public function loadRelations( $contentId, $contentVersionNo = null, $relationType = null )
+    {
+        $query = $this->queryBuilder->createRelationFindQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        // source version number
+        if ( isset( $contentVersionNo ) )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' ),
+                    $query->bindValue( $contentVersionNo, null, \PDO::PARAM_INT  )
+                )
+            );
+        }
+        // from published version only
+        else
+        {
+            $query->from(
+                $this->dbHandler->quoteTable( 'ezcontentobject' )
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                        $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' ),
+                        $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' )
+                    )
+                )
+            );
+        }
+
+        // relation type
+        if ( isset( $relationType ) )
+        {
+            $query->where(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                )
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Loads data that related to $toContentId
+     *
+     * @param int $toContentId
+     * @param int $relationType
+     *
+     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
+     */
+    public function loadReverseRelations( $toContentId, $relationType = null )
+    {
+        $query = $this->queryBuilder->createRelationFindQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'to_contentobject_id', 'ezcontentobject_link' ),
+                $query->bindValue( $toContentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        // ezcontentobject join
+        $query->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                    $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' ),
+                    $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' )
+                )
+            )
+        );
+
+        // relation type
+        if ( isset( $relationType ) )
+        {
+            $query->where(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                )
+            );
+        }
+
+        $statement = $query->prepare();
+
+        $statement->execute();
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Inserts a new relation database record
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     *
+     * @return int ID the inserted ID
+     */
+    public function insertRelation( RelationCreateStruct $struct )
+    {
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto(
+            $this->dbHandler->quoteTable( 'ezcontentobject_link' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_link', 'id' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
+            $q->bindValue( (int)$struct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
+            $q->bindValue( $struct->sourceContentId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'from_contentobject_version' ),
+            $q->bindValue( $struct->sourceContentVersionNo, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'relation_type' ),
+            $q->bindValue( $struct->type, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'to_contentobject_id' ),
+            $q->bindValue( $struct->destinationContentId, null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
+
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentobject_link', 'id' )
+        );
+    }
+
+    /**
+     * Deletes the relation with the given $relationId
+     *
+     * @param int $relationId
+     *
+     * @return void
+     */
+    public function deleteRelation( $relationId )
+    {
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom( 'ezcontentobject_link' )
+        ->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $q->bindValue( $relationId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $q->prepare()->execute();
     }
 }

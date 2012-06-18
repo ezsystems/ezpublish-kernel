@@ -18,7 +18,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
+    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -519,21 +521,25 @@ class Handler implements BaseContentHandler
      * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
-    public function addRelation( RelationCreateStruct $relation )
+    public function addRelation( RelationCreateStruct $createStruct )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $relation = $this->mapper->createRelationFromCreateStruct( $createStruct);
+
+        $relation->id = $this->contentGateway->insertRelation( $createStruct );
+
+        return $relation;
     }
 
     /**
-     * Removes a relation by relation Id.
-     *
-     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     * Removes a relation by $relationId.
      *
      * @param mixed $relationId
+     *
+     * @return void
      */
     public function removeRelation( $relationId )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $this->contentGateway->deleteRelation( $relationId );
     }
 
     /**
@@ -549,7 +555,10 @@ class Handler implements BaseContentHandler
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $rows = $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type );
+
+        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
+        return $relationObjects;
     }
 
     /**
@@ -566,6 +575,9 @@ class Handler implements BaseContentHandler
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $rows = $this->contentGateway->loadReverseRelations( $destinationContentId, $type );
+
+        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
+        return $relationObjects;
     }
 }
