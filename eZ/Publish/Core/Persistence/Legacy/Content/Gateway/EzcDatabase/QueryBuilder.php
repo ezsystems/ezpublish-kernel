@@ -111,7 +111,7 @@ class QueryBuilder
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' ),
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
-                ),-
+                ),
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
