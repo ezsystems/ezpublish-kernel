@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 interface Handler
 {
     /**
-     * creates a new object state group
+     * Creates a new object state group
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
@@ -28,7 +28,7 @@ interface Handler
     /**
      * Loads a object state group
      *
-     * @param $groupId
+     * @param mixed $groupId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
      *
@@ -56,7 +56,7 @@ interface Handler
     public function loadObjectStates( $groupId );
 
     /**
-     * updates an object state group
+     * Updates an object state group
      *
      * @param mixed $groupId
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
@@ -73,7 +73,7 @@ interface Handler
     public function deleteGroup( $groupId );
 
     /**
-     * creates a new object state in the given group.
+     * Creates a new object state in the given group.
      * The new state gets the last priority.
      * Note: in current kernel: If it is the first state all content objects will
      * set to this state.
@@ -88,7 +88,7 @@ interface Handler
     /**
      * Loads an object state
      *
-     * @param $stateId
+     * @param mixed $stateId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
@@ -97,7 +97,7 @@ interface Handler
     public function load( $stateId );
 
     /**
-     * updates an object state
+     * Updates an object state
      *
      * @param mixed $stateId
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
@@ -107,7 +107,7 @@ interface Handler
     public function update( $stateId, InputStruct $input );
 
     /**
-     * changes the priority of the state
+     * Changes the priority of the state
      *
      * @param mixed $stateId
      * @param int $priority
@@ -123,7 +123,7 @@ interface Handler
     public function delete( $stateId );
 
     /**
-     * Sets the object-state of a state group to $state for the given content.
+     * Sets the object-state of a state group to $stateId for the given content.
      *
      * @param mixed $contentId
      * @param mixed $groupId
@@ -144,10 +144,10 @@ interface Handler
     public function getObjectState( $contentId, $stateGroupId );
 
     /**
-     * returns the number of objects which are in this state
+     * Returns the number of objects which are in this state
      *
-     * @param $state
+     * @param mixed $stateId
      */
-    public function getContentCount( $state );
+    public function getContentCount( $stateId );
 
 }

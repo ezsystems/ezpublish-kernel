@@ -47,7 +47,7 @@ class Handler implements BaseObjectStateHandler
     /**
      * Loads a object state group
      *
-     * @param $groupId
+     * @param mixed $groupId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
      *
@@ -107,7 +107,7 @@ class Handler implements BaseObjectStateHandler
     /**
      * Loads an object state
      *
-     * @param $stateId
+     * @param mixed $stateId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
@@ -142,7 +142,7 @@ class Handler implements BaseObjectStateHandler
     public function delete( $stateId ) {}
 
     /**
-     * Sets the object-state of a state group to $state for the given content.
+     * Sets the object-state of a state group to $stateId for the given content.
      *
      * @param mixed $contentId
      * @param mixed $groupId
@@ -165,8 +165,7 @@ class Handler implements BaseObjectStateHandler
     /**
      * Returns the number of objects which are in this state
      *
-     * @param $state
+     * @param mixed $stateId
      */
-    public function getContentCount( $state ) {}
-
+    public function getContentCount( $stateId ) {}
 }

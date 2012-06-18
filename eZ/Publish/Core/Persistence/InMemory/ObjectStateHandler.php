@@ -124,7 +124,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     public function delete( $stateId ) {}
 
     /**
-     * Sets the object-state of a state group to $state for the given content.
+     * Sets the object-state of a state group to $stateId for the given content.
      *
      * @param mixed $contentId
      * @param mixed $groupId
@@ -147,8 +147,8 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     /**
      * Returns the number of objects which are in this state
      *
-     * @param $state
+     * @param mixed $stateId
      */
-    public function getContentCount( $state ) {}
+    public function getContentCount( $stateId ) {}
 
 }
