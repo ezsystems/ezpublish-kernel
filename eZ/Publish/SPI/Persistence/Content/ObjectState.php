@@ -16,9 +16,8 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  */
 class ObjectState extends ValueObject
 {
-
     /**
-     * the id of the object state
+     * The id of the object state
      *
      * @var mixed
      */
@@ -32,7 +31,7 @@ class ObjectState extends ValueObject
      */
     public $identifier;
 
-     /**
+    /**
      * The id of the group this object state belongs to
      *
      * @var mixed

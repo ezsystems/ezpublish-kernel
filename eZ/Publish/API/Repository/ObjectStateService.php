@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\ObjectStateService class.
+ * File containing the eZ\Publish\API\Repository\ObjectStateService interface.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -25,12 +25,10 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
  *
  * @package eZ\Publish\API\Repository
  */
-
-
 interface ObjectStateService
 {
-     /**
-     * creates a new object state group
+    /**
+     * Creates a new object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state group
      *
@@ -50,7 +48,6 @@ interface ObjectStateService
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function loadObjectStateGroup( $objectStateGroupId );
-
 
     /**
      * Loads all object state groups
@@ -72,7 +69,7 @@ interface ObjectStateService
     public function loadObjectStates( ObjectStateGroup $objectStateGroup );
 
     /**
-     * updates an object state group
+     * Updates an object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state group
      *
@@ -93,7 +90,7 @@ interface ObjectStateService
     public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup );
 
     /**
-     * creates a new object state in the given group.
+     * Creates a new object state in the given group.
      *
      * Note: in current kernel: If it is the first state all content objects will
      * set to this state.
@@ -119,10 +116,11 @@ interface ObjectStateService
     public function loadObjectState( $stateId );
 
     /**
-     * updates an object state
+     * Updates an object state
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
      *
+     * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
      *
      * @return \ez\Publish\API\Repository\Values\ObjectState\ObjectState
@@ -130,7 +128,7 @@ interface ObjectStateService
     public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct );
 
     /**
-     * changes the priority of the state
+     * Changes the priority of the state
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change priority on an object state
      *
@@ -149,7 +147,6 @@ interface ObjectStateService
      */
     public function deleteObjectState( ObjectState $objectState );
 
-
     /**
      * Sets the object-state of a state group to $state for the given content.
      *
@@ -159,7 +156,6 @@ interface ObjectStateService
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     *
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState );
 
@@ -176,7 +172,7 @@ interface ObjectStateService
     public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup );
 
     /**
-     * returns the number of objects which are in this state
+     * Returns the number of objects which are in this state
      *
      * @param \ez\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
@@ -208,7 +204,7 @@ interface ObjectStateService
     public function newObjectStateCreateStruct( $identifier );
 
     /**
-     * Instantiates a new Object State Update Struct and sets $identifier in it.
+     * Instantiates a new Object State Update Struct.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct
      */

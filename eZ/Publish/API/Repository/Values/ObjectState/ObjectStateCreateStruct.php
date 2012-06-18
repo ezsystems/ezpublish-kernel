@@ -16,7 +16,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class ObjectStateCreateStruct extends ValueObject
 {
-
     /**
      * Readable string identifier of a group
      *
@@ -34,7 +33,7 @@ class ObjectStateCreateStruct extends ValueObject
     public $priority = false;
 
     /**
-     * the default language code
+     * The default language code
      *
      * @required
      *

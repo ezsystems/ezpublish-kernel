@@ -10,9 +10,9 @@
 namespace eZ\Publish\SPI\Persistence\Content\ObjectState;
 
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+
 /**
  * The Object State Handler interface provides managing of object states and groups
- *
  */
 interface Handler
 {
@@ -23,7 +23,7 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function createGroup( InputStruct $input);
+    public function createGroup( InputStruct $input );
 
     /**
      * Loads a object state group
@@ -34,7 +34,7 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function loadGroup( $groupId);
+    public function loadGroup( $groupId );
 
     /**
      * Loads all object state groups
@@ -44,7 +44,7 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group[]
      */
-    public function loadAllGroups($offset = 0, $limit = -1);
+    public function loadAllGroups( $offset = 0, $limit = -1 );
 
     /**
      * This method returns the ordered list of object states of a group
@@ -53,8 +53,7 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState[]
      */
-    public function loadObjectStates($groupId);
-
+    public function loadObjectStates( $groupId );
 
     /**
      * updates an object state group
@@ -64,14 +63,14 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function updateGroup( $groupId, InputStruct $input);
+    public function updateGroup( $groupId, InputStruct $input );
 
     /**
      * Deletes a object state group including all states and links to content
      *
      * @param mixed $groupId
      */
-    public function deleteGroup( $groupId);
+    public function deleteGroup( $groupId );
 
     /**
      * creates a new object state in the given group.
@@ -84,7 +83,7 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function create( $groupId, InputStruct $input);
+    public function create( $groupId, InputStruct $input );
 
     /**
      * Loads an object state
@@ -95,7 +94,7 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function load( $stateId);
+    public function load( $stateId );
 
     /**
      * updates an object state
@@ -105,7 +104,7 @@ interface Handler
      *
      * @return \ez\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function update($stateId, InputStruct $input);
+    public function update( $stateId, InputStruct $input );
 
     /**
      * changes the priority of the state
@@ -113,7 +112,7 @@ interface Handler
      * @param mixed $stateId
      * @param int $priority
      */
-    public function setPriority( $stateId, $priority);
+    public function setPriority( $stateId, $priority );
 
     /**
      * Deletes a object state. The state of the content objects is reset to the
@@ -121,8 +120,7 @@ interface Handler
      *
      * @param mixed $stateId
      */
-    public function delete($stateId);
-
+    public function delete( $stateId );
 
     /**
      * Sets the object-state of a state group to $state for the given content.
