@@ -1,14 +1,14 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Search\DocumentField class.
+ * File containing the eZ\Publish\SPI\Persistence\Content\Search\DocumentField class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\API\Repository\Values\Content\Search;
+namespace eZ\Publish\SPI\Persistence\Content\Search;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Base class for document fields
