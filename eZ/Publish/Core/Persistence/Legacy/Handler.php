@@ -19,6 +19,7 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
@@ -130,6 +131,20 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
+
+    /**
+     * ObjectState handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler
+     */
+    protected $objectStateHandler;
+
+    /**
+     * ObjectState gateway
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway
+     */
+    protected $objectStateGateway;
 
     /**
      * User handler
@@ -652,6 +667,34 @@ class Handler implements HandlerInterface
             $this->locationMapper = new LocationMapper();
         }
         return $this->locationMapper;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+     */
+    public function objectStateHandler()
+    {
+        if ( !isset( $this->objectStateHandler ) )
+        {
+            $this->objectStateHandler = new ObjectStateHandler(
+                $this->getObjectStateGateway()
+            );
+        }
+        return $this->objectStateHandler;
+    }
+
+    /**
+     * Returns a object state gateway
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     */
+    protected function getObjectStateGateway()
+    {
+        if ( !isset( $this->objectStateGateway ) )
+        {
+            $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase( $this->getDatabase() );
+        }
+        return $this->objectStateGateway;
     }
 
     /**
