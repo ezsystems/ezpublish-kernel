@@ -81,6 +81,7 @@ class UserIntergrationTest extends BaseIntegrationTest
             // The suer field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezuser' ),
+            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints() ),
         );
     }
 

@@ -236,8 +236,6 @@ abstract class BaseIntegrationTest extends TestCase
      */
     public function testLoadContentTypeFieldData( $name, $value, $field )
     {
-        $this->markTestIncomplete( "There is no property special container yet -- so there is nothing to check." );
-
         $this->assertEquals(
             $value,
             $field->$name
