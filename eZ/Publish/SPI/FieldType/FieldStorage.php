@@ -107,8 +107,11 @@ interface FieldStorage
     public function copyFieldData( Field $field, array $context );
 
     /**
+     * Get index data for external data for search backend
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\DocumentField[]
      */
     public function getIndexData( Field $field, array $context );
 }
