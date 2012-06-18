@@ -33,6 +33,13 @@ use eZ\Publish\API\Repository;
 class UserFieldTypeIntergrationTest extends BaseIntegrationTest
 {
     /**
+     * Identifier of the custom field
+     *
+     * @var string
+     */
+    protected $customFieldIdentifier = "user_account";
+
+    /**
      * Get name of tested field tyoe
      *
      * @return string
@@ -91,8 +98,8 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             array( 'contentobject_id', 226 ),
             array( 'login', 'hans' ),
             array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '*' ),
-            array( 'password_hash_type', 0 ),
+            array( 'password_hash', '680869a9873105e365d39a6d14e68e46' ),
+            array( 'password_hash_type', 2 ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', true ),
             array( 'is_locked', false ),
@@ -137,8 +144,8 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             array( 'contentobject_id', 226 ),
             array( 'login', 'hans' ),
             array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '*' ),
-            array( 'password_hash_type', 0 ),
+            array( 'password_hash', '680869a9873105e365d39a6d14e68e46' ),
+            array( 'password_hash_type', 2 ),
             array( 'is_logged_in', true ),
             array( 'is_enabled', true ),
             array( 'is_locked', true ),
@@ -174,18 +181,9 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         );
     }
 
-    /**
-     * Method called after content creation
-     *
-     * Useful, if additional stuff should be executed (like creating the actual 
-     * user).
-     *
-     * @param Repository\Repository $repository
-     * @param Repository\Values\Content\Content $content
-     * @return void
-     */
-    public function postCreationHook( Repository\Repository $repository, Repository\Values\Content\Content $content )
+    public function createContentOverwrite()
     {
+        $repository  = $this->getRepository();
         $userService = $repository->getUserService();
 
         // Instantiate a create struct with mandatory properties
@@ -195,7 +193,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             'password',
             'eng-US'
         );
-        $userCreate->enabled = true;
+        $userCreate->enabled  = true;
 
         // Set some fields required by the user ContentType
         $userCreate->setField( 'first_name', 'Example' );
@@ -206,6 +204,8 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
 
         // Create a new user instance.
         $user = $userService->createUser( $userCreate, array( $group ) );
+
+        return $user->content;
     }
 }
 

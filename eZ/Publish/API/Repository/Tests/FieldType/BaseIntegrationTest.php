@@ -19,6 +19,13 @@ use eZ\Publish\API\Repository\Tests,
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
     /**
+     * Identifier of the custom field
+     *
+     * @var string
+     */
+    protected $customFieldIdentifier = "data";
+
+    /**
      * Id of test content type
      *
      * @var string
@@ -206,6 +213,14 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreateContent()
     {
+        // @Hack: This is required to make it possible to overwrite this
+        // method, while maintaing the execution order. PHPUnit does not manage 
+        // to sort tests properly, otherwise.
+        if ( method_exists( $this, 'createContentOverwrite' ) )
+        {
+            return $this->createContentOverwrite();
+        }
+
         $contentType = $this->testCreateContentType();
 
         $repository     = $this->getRepository();
@@ -226,12 +241,15 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreatedFieldType( $content )
     {
-        $this->assertSame(
-            'data',
-            $content->fields[2]->fieldDefIdentifier
-        );
+        foreach ( $content->fields as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
 
-        return $content->fields[2];
+        $this->fail( "Custom field not found." );
     }
 
     public function testLoadField()
@@ -248,12 +266,15 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testLoadFieldType( $content )
     {
-        $this->assertSame(
-            'data',
-            $content->fields[2]->fieldDefIdentifier
-        );
+        foreach ( $content->fields as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
 
-        return $content->fields[2];
+        $this->fail( "Custom field not found." );
     }
 
     /**
@@ -283,10 +304,12 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
 
-        $updateStruct = $contentService->newContentUpdateStruct();
-        $updateStruct->setField( 'data', $this->getUpdateFieldData() );
+        $draft = $contentService->createContentDraft( $content->contentInfo );
 
-        return $contentService->updateContent( $content->versionInfo, $updateStruct );
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField( $this->customFieldIdentifier, $this->getUpdateFieldData() );
+
+        return $contentService->updateContent( $draft->versionInfo, $updateStruct );
     }
 
     /**
@@ -294,12 +317,15 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateFieldType( $content )
     {
-        $this->assertSame(
-            'data',
-            $content->fields[4]->fieldDefIdentifier
-        );
+        foreach ( $content->fields as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
 
-        return $content->fields[4];
+        $this->fail( "Custom field not found." );
     }
 
     /**
@@ -348,12 +374,15 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopiedFieldType( $content )
     {
-        $this->assertSame(
-            'data',
-            $content->fields[2]->fieldDefIdentifier
-        );
+        foreach ( $content->fields as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
 
-        return $content->fields[2];
+        $this->fail( "Custom field not found." );
     }
 
     /**
@@ -375,7 +404,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCopyField
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteField( $content )
     {

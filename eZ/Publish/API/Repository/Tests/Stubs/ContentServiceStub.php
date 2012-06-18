@@ -321,12 +321,28 @@ class ContentServiceStub implements ContentService
      */
     private function filterFieldsByLanguages( Content $content, array $languageCodes = null )
     {
+        $contentType = $content->contentType;
+
+        $fieldDefinitions = $contentType->getFieldDefinitions();
+        foreach ( $content->getFields() as $field )
+        {
+            foreach ( $fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
+                {
+                    $this->fieldHandler->handleLoad(
+                        $fieldDefinition,
+                        $field,
+                        $content
+                    );
+                }
+            }
+        }
+
         if ( null === $languageCodes || 0 === count( $languageCodes ) )
         {
             return $content;
         }
-
-        $contentType = $content->contentType;
 
         $fields = array();
         foreach ( $content->getFields() as $field )

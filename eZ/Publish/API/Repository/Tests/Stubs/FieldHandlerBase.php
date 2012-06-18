@@ -37,5 +37,15 @@ abstract class FieldHandlerBase
      * @return void
      */
     abstract public function handleUpdate( FieldDefinition $fieldDefinition, Field $field, Content $content );
+
+    /**
+     * Handle a certain field
+     *
+     * @param FieldDefinition $fieldDefinition
+     * @param Field $field
+     * @param Content $content
+     * @return void
+     */
+    abstract public function handleLoad( FieldDefinition $fieldDefinition, Field $field, Content $content );
 }
 
