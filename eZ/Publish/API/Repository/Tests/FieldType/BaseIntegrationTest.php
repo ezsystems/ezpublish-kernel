@@ -118,6 +118,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         // Do nothing by default
     }
 
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     */
     public function testCreateContentType()
     {
         $repository         = $this->getRepository();
@@ -252,6 +255,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $this->fail( "Custom field not found." );
     }
 
+    /**
+     * @depends testCreateContent
+     */
     public function testLoadField()
     {
         $content = $this->testCreateContent();
