@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Tests\Storage;
+namespace eZ\Publish\Core\IO\Tests;
 use eZ\Publish\Core\IO\LegacyHandler as Legacy,
     eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,

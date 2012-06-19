@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Tests\Storage;
+namespace eZ\Publish\Core\IO\Tests;
 use eZ\Publish\Core\IO\DispatcherHandler as Dispatcher,
     eZ\Publish\Core\IO\InMemoryHandler as InMemory,
     eZ\Publish\SPI\IO\BinaryFile,
