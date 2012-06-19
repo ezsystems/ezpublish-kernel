@@ -298,11 +298,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -321,11 +318,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 10, 42, 13, 14, 12, 11, 4 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -344,11 +338,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 11, 12, 13, 42, 10, 14 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -370,11 +361,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 42, 13, 12, 11, 10, 14 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -395,11 +383,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -420,11 +405,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 12, 13, 42, 10, 14, 11 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -445,11 +427,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -478,11 +457,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             6 => array( 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164 ),
         );
         $contentIds = array_map(
-            function ( $content )
-            {
-                return $content->contentInfo->id;
-            },
-            $result->content
+            function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+            $result->searchHits
         );
         $index = 0;
 
@@ -523,11 +499,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             "users" => array( 4, 10, 11, 12, 13, 14, 42 ),
         );
         $contentIds = array_map(
-            function ( $content )
-            {
-                return $content->contentInfo->id;
-            },
-            $result->content
+            function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+            $result->searchHits
         );
         $index = 0;
 
@@ -559,11 +532,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 14, 12, 10, 42, 57, 13, 50, 49, 41, 11, 51, 62, 4, 58, 59, 61, 60, 64, 63, 200, 66, 201 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -611,11 +581,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             "tutorials for" => array( 106 ),
         );
         $contentIds = array_map(
-            function ( $content )
-            {
-                return $content->contentInfo->id;
-            },
-            $result->content
+            function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+            $result->searchHits
         );
         $index = 0;
 
@@ -647,11 +614,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 73, 71, 72, 69 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }

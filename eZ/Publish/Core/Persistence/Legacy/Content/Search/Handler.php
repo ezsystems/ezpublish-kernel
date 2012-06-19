@@ -11,10 +11,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\Result,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query;
 
@@ -89,17 +90,19 @@ class Handler extends BaseSearchHandler
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
-        $data = $this->gateway->find( $query->criterion, $query->offset, $query->limit, $query->sortClauses, null );
+        $start = microtime( true );
+        $data  = $this->gateway->find( $query->criterion, $query->offset, $query->limit, $query->sortClauses, null );
 
-        $result = new Result();
-        $result->count = $data['count'];
-        $result->content = $this->contentMapper->extractContentFromRows(
-            $data['rows']
-        );
+        $result = new SearchResult();
+        $result->time       = microtime( true ) - $start;
+        $result->totalCount = $data['count'];
 
-        foreach ( $result->content as $content )
-        {
+        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content ) {
             $this->fieldHandler->loadExternalFieldData( $content );
+            $searchHit = new SearchHit();
+            $searchHit->valueObject = $content;
+
+            $result->searchHits[] = $searchHit;
         }
 
         return $result;
@@ -126,14 +129,15 @@ class Handler extends BaseSearchHandler
         $query->limit     = 1;
         $result = $this->findContent( $query, $fieldFilters );
 
-        if ( $result->count !== 1 )
+        if ( $result->totalCount !== 1 )
         {
             throw new Exception\InvalidObjectCount(
-                'Expected exactly one object to be found -- found ' . $result->count . '.'
+                'Expected exactly one object to be found -- found ' . $result->totalCount . '.'
             );
         }
 
-        return reset( $result->content );
+        $first = reset( $result->searchHits );
+        return $first->valueObject;
     }
 
     /**
