@@ -8,11 +8,14 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Search;
+
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This class represents a search result
  *
  */
-class SearchResult {
+class SearchResult extends ValueObject {
 
     /**
      * The facets for this search
