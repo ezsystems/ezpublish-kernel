@@ -218,6 +218,11 @@ class SearchServiceTest extends BaseTest
             );
         }
 
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult',
+            $result
+        );
+
         if ( !is_file( $fixture ) )
         {
             file_put_contents(
