@@ -158,6 +158,13 @@ interface Repository
     public function getRoleService();
 
     /**
+     * Get SearchService
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService();
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
