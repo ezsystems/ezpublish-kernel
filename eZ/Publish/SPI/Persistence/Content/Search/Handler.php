@@ -9,8 +9,9 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content;
+use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use \eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -18,39 +19,43 @@ use eZ\Publish\SPI\Persistence\Content,
  */
 abstract class Handler
 {
-    /**
-     * Returns a list of object satisfying the $criterion.
+     /**
+     * finds content objects for the given query.
      *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
+     * @TODO define structs for the field filters
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int|null $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
-     * @param string[] $translations
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null );
+    abstract public function findContent( Query $query, array $fieldFilters = array() );
 
     /**
-     * Returns a single Content object found.
+     * Performs a query for a single content object
      *
-     * Performs a {@link find()} query to find a single object. You need to
-     * ensure, that your $criterion ensure that only a single object can be
-     * retrieved.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
-     *
+     * @TODO define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string[] $translations
-     * @return \eZ\Publish\SPI\Persistence\Content
-     * @todo Define exceptions (InMemory uses NotFound while Legazy uses InvalidObjectCount)
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    abstract public function findSingle( Criterion $criterion, $translations = null );
+    abstract public function findSingle( Criterion $criterion, array $fieldFilters = array() );
+
+    /**
+     * Suggests a list of values for the given prefix
+     *
+     * @param string $prefix
+     * @param string[] $fieldpath
+     * @param int $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     */
+    abstract public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null );
 
     /**
      * Indexes a content object
