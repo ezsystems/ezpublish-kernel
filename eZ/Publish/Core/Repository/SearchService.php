@@ -66,7 +66,7 @@ class SearchService implements SearchServiceInterface
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         // @TODO: Apply permission checks
-        $result = $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
+        return $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
     }
 
     /**
