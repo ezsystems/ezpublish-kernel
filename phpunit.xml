@@ -27,20 +27,30 @@
     <whitelist>
       <directory suffix=".php">eZ</directory>
       <exclude>
+          <directory>eZ/Publish/API/Repository/Tests</directory>
+          <!-- directory>eZ/Publish/API/Repository/Tests/_fixtures</directory>
+          <file>eZ/Publish/API/Repository/Tests/common.php</file -->
+
+          <directory>eZ/Publish/API/Repository/Examples</directory>
+          <directory>eZ/Publish/API/Repository/Tutorials</directory>
+
           <directory suffix=".php">eZ/Publish/Core/Base/Tests</directory>
-          <directory suffix=".php">eZ/Publish/Core/Repository/Tests</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests</directory>
+
           <directory suffix=".php">eZ/Publish/Core/Io/Tests</directory>
-          <directory suffix=".php">eZ/Publish/API/Repository/Examples/</directory>
-          <directory suffix=".php">eZ/Publish/API/Repository/Tests/_fixtures</directory>
-          <directory suffix=".php">eZ/Publish/Core/Repository/Tests/Service/Legacy/_fixtures</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/_fixtures</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/Gateway/_fixtures</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/_fixtures</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/Content/Location/Gateway/_fixtures</directory>
-          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests/_fixtures</directory>
+
+          <directory suffix="Test.php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
+          <directory suffix="Test.php">eZ/Publish/Core/Persistence/Legacy/Tests</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/_fixtures</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/Gateway/_fixtures</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/_fixtures</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Location/Gateway/_fixtures</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/_fixtures</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/docs</directory>
+
+          <directory suffix=".php">eZ/Publish/Core/Repository/Tests</directory>
+          <directory>eZ/Publish/Core/Repository/Tests/Service/Legacy/_fixtures</directory>
+
           <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>
