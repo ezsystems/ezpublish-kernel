@@ -62,9 +62,10 @@ interface Handler
      * If no criterion is provided (null), no filter is applied
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param $offset Offset to start listing from, 0 by default
-     * @param $limit Limit for the listing. Null by default (no limit)
+     * @param int $offset Offset to start listing from, 0 by default
+     * @param int $limit Limit for the listing. Null by default (no limit)
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
     public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );

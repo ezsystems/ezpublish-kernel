@@ -39,9 +39,9 @@ class ContentUpdateStructStub extends ContentUpdateStruct
     {
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $languageCode
+                'fieldDefIdentifier' => $fieldDefIdentifier,
+                'value' => $value,
+                'languageCode' => $languageCode
             )
         );
     }

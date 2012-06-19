@@ -34,6 +34,11 @@ CREATE TABLE 'ezcobj_state_language' (
 	'name' text(45) NOT NULL DEFAULT '',
 	PRIMARY KEY ( contentobject_state_id, language_id )
 );
+CREATE TABLE 'ezcobj_state_link' (
+  'contentobject_id' integer NOT NULL DEFAULT '0',
+  'contentobject_state_id' integer NOT NULL DEFAULT '0',
+  PRIMARY KEY ( contentobject_id, contentobject_state_id )
+);
 CREATE TABLE 'ezcontent_language' (
 	'disabled' integer NOT NULL DEFAULT 0,
 	'id' integer NOT NULL DEFAULT 0,
@@ -328,6 +333,19 @@ CREATE TABLE 'ezsection' (
   'locale' text(255) DEFAULT NULL,
   'name' text(255) DEFAULT NULL,
   'navigation_part_identifier' text(100) DEFAULT 'ezcontentnavigationpart'
+);
+CREATE TABLE 'ezuservisit' (
+  'current_visit_timestamp' integer NOT NULL DEFAULT '0',
+  'failed_login_attempts' integer NOT NULL DEFAULT '0',
+  'last_visit_timestamp' integer NOT NULL DEFAULT '0',
+  'login_count' integer NOT NULL DEFAULT '0',
+  'user_id' integer NOT NULL DEFAULT '0'
+);
+CREATE TABLE 'ezuser_accountkey' (
+  'hash_key' text(255) NOT NULL DEFAULT '',
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'time' integer NOT NULL DEFAULT '0',
+  'user_id' integer NOT NULL DEFAULT '0'
 );
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
 CREATE UNIQUE INDEX 'ezcobj_state_identifier' ON 'ezcobj_state' ( 'group_id', 'identifier' );

@@ -21,7 +21,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\Version,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
+    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase.
@@ -81,17 +83,17 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'name'                => 'Content name',
-                    'contentclass_id'     => '23',
-                    'section_id'          => '42',
-                    'owner_id'            => '13',
-                    'current_version'     => '1',
+                    'name' => 'Content name',
+                    'contentclass_id' => '23',
+                    'section_id' => '42',
+                    'owner_id' => '13',
+                    'current_version' => '1',
                     'initial_language_id' => '1',
-                    'remote_id'           => 'some_remote_id',
-                    'language_mask'       => '1',
-                    'modified'            => '0',
-                    'published'           => '0',
-                    'status'              => ContentInfo::STATUS_DRAFT,
+                    'remote_id' => 'some_remote_id',
+                    'language_mask' => '1',
+                    'modified' => '0',
+                    'published' => '0',
+                    'status' => ContentInfo::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -799,7 +801,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $resFirst  = $gateway->load( 11, 1 );
+        $resFirst = $gateway->load( 11, 1 );
         $resSecond = $gateway->load( 11, 2 );
 
         $res = array_merge( $resFirst, $resSecond );
@@ -924,6 +926,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             array_values( $expectedValues ),
             true
         );
+
         $containedValues = array();
 
         foreach ( $actualRows as $row )
@@ -1407,6 +1410,153 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelations()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57 );
+
+        $this->assertEquals( 3, count( $relations ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_to_contentobject_id',
+            array( 58, 59, 60 ),
+            $relations
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_id',
+            array( 57 ),
+            $relations
+        );
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_version',
+            array( 2 ),
+            $relations
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelationsByType()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57, null, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+
+        $this->assertEquals( 1, count( $relations ), "Expecting one relation to be loaded" );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_relation_type',
+            array( \eZ\Publish\API\Repository\Values\Content\Relation::COMMON ),
+            $relations
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_to_contentobject_id',
+            array( 58 ),
+            $relations
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelationsByVersion()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57, 1 );
+
+        $this->assertEquals( 1, count( $relations ), "Expecting one relation to be loaded" );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_to_contentobject_id',
+            array( 58 ),
+            $relations
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadRelations
+     */
+    public function testLoadRelationsNoResult()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadRelations( 57, 1, \eZ\Publish\API\Repository\Values\Content\Relation::EMBED );
+
+        $this->assertEquals( 0, count( $relations ), "Expecting no relation to be loaded" );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadReverseRelations
+     */
+    public function testLoadReverseRelations()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadReverseRelations( 58 );
+
+        self::assertEquals( 2, count( $relations ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_id',
+            array( 57, 61 ),
+            $relations
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadReverseRelations
+     */
+    public function testLoadReverseRelationsWithType()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+
+        $relations = $gateway->loadReverseRelations( 58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+
+        self::assertEquals( 1, count( $relations ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_from_contentobject_id',
+            array( 57 ),
+            $relations
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_link_relation_type',
+            array( \eZ\Publish\API\Repository\Values\Content\Relation::COMMON ),
+            $relations
+        );
+    }
+
+    /**
+     * Inserts the relation database fixture from relation_data.php
+     */
+    protected function insertRelationFixture()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/relations_data.php'
+        );
+    }
+
+    /*
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getLastVersionNumber
      */
@@ -1422,6 +1572,57 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             1,
             $gateway->getLastVersionNumber( 4 )
         );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::insertRelation
+     */
+    public function testInsertRelation()
+    {
+        $struct = $this->getRelationCreateStructFixture();
+        $gateway = $this->getDatabaseGateway();
+        $gateway->insertRelation( $struct );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'id' => 1,
+                    'from_contentobject_id' => $struct->sourceContentId,
+                    'from_contentobject_version' => $struct->sourceContentVersionNo,
+                    'contentclassattribute_id' => $struct->sourceFieldDefinitionId,
+                    'to_contentobject_id' => $struct->destinationContentId,
+                    'relation_type' => $struct->type,
+                ),
+            ),
+            $this->getDatabaseHandler()
+            ->createSelectQuery()
+            ->select(
+                array(
+                    'id',
+                    'from_contentobject_id',
+                    'from_contentobject_version',
+                    'contentclassattribute_id',
+                    'to_contentobject_id',
+                    'relation_type',
+                )
+            )->from( 'ezcontentobject_link' )
+            ->where( 'id = 1')
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelation
+     */
+    public function testDeleteRelation()
+    {
+        $this->insertRelationFixture();
+
+        self::assertEquals( 4, $this->countContentRelations( 57 ) );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteRelation( 2 );
+
+        self::assertEquals( 3, $this->countContentRelations( 57 ) );
     }
 
     /**
@@ -1669,19 +1870,19 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     $this->returnValue(
                         array(
                             new Language( array(
-                                'id'            => 2,
-                                'languageCode'  => 'eng-GB',
-                                'name'          => 'British english'
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
                             ) ),
                             new Language( array(
-                                'id'            => 4,
-                                'languageCode'  => 'eng-US',
-                                'name'          => 'US english'
+                                'id' => 4,
+                                'languageCode' => 'eng-US',
+                                'name' => 'US english'
                             ) ),
                             new Language( array(
-                                'id'            => 8,
-                                'languageCode'  => 'fre-FR',
-                                'name'          => 'Français franchouillard'
+                                'id' => 8,
+                                'languageCode' => 'fre-FR',
+                                'name' => 'Français franchouillard'
                             ) )
                         )
                     )
@@ -1720,6 +1921,24 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             ->will( $this->returnValue( $language ) );
 
         return $languageCache;
+    }
+
+    /**
+     * EzcDatabaseTest::getRelationCreateStructFixture()
+     *
+     * @return eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
+     */
+    protected function getRelationCreateStructFixture()
+    {
+        $struct = new RelationCreateStruct;
+
+        $struct->destinationContentId = 1;
+        $struct->sourceContentId = 1;
+        $struct->sourceContentVersionNo = 1;
+        $struct->sourceFieldDefinitionId = 0;
+        $struct->type = RelationValue::COMMON;
+
+        return $struct;
     }
 
     /**

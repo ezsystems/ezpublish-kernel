@@ -53,7 +53,7 @@ class TrashServiceStub implements TrashService
      */
     public function __construct( RepositoryStub $repository, LocationServiceStub $locationService )
     {
-        $this->repository      = $repository;
+        $this->repository = $repository;
         $this->locationService = $locationService;
     }
 
@@ -108,20 +108,20 @@ class TrashServiceStub implements TrashService
 
         $this->trashItems[$location->id] = new TrashItemStub(
             array(
-                'id'                       =>  $location->id,
-                'childCount'               =>  $location->childCount,
-                'depth'                    =>  $location->depth,
-                'hidden'                   =>  $location->hidden,
-                'invisible'                =>  $location->invisible,
-                'modifiedSubLocationDate'  =>  $location->modifiedSubLocationDate,
-                'parentLocationId'         =>  $location->parentLocationId,
-                'pathString'               =>  $location->pathString,
-                'priority'                 =>  $location->priority,
-                'remoteId'                 =>  $location->remoteId,
-                'sortField'                =>  $location->sortField,
-                'sortOrder'                =>  $location->sortOrder,
+                'id' => $location->id,
+                'childCount' => $location->childCount,
+                'depth' => $location->depth,
+                'hidden' => $location->hidden,
+                'invisible' => $location->invisible,
+                'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+                'parentLocationId' => $location->parentLocationId,
+                'pathString' => $location->pathString,
+                'priority' => $location->priority,
+                'remoteId' => $location->remoteId,
+                'sortField' => $location->sortField,
+                'sortOrder' => $location->sortOrder,
 
-                'location'                 =>  $location
+                'location' => $location
             )
         );
 
@@ -131,16 +131,16 @@ class TrashServiceStub implements TrashService
     /**
      * Recovers the $trashedLocation at its original place if possible.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to recover the trash item at the parent location location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to recover the trash item at the parent location location
      *
      * If $newParentLocation is provided, $trashedLocation will be restored under it.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $newParentLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, LocationCreateStruct $newParentLocation = null )
+    public function recover( TrashItem $trashItem, Location $newParentLocation = null )
     {
         if ( false === $this->repository->canUser( 'content', 'edit', $trashItem ) )
         {
@@ -156,6 +156,8 @@ class TrashServiceStub implements TrashService
 
         foreach ( $this->locations[$trashItem->id] as $childLocation )
         {
+            $childLocation->contentInfo->__setMainLocationId( $location->contentInfo->mainLocationId );
+
             $this->locationService->__recoverLocation( $childLocation );
         }
 
@@ -183,7 +185,7 @@ class TrashServiceStub implements TrashService
         }
 
         $this->trashItems = array();
-        $this->locations  = array();
+        $this->locations = array();
     }
 
     /**
@@ -221,7 +223,7 @@ class TrashServiceStub implements TrashService
     {
         $contentService = $this->repository->getContentService();
 
-        $trashItems   = array();
+        $trashItems = array();
         $searchResult = $contentService->findContent( $query, array() );
 
         /* @var $item \eZ\Publish\API\Repository\Values\Content\Content */
@@ -240,9 +242,9 @@ class TrashServiceStub implements TrashService
 
         return new SearchResult(
             array(
-                'query'  =>  $query,
-                'count'  =>  count( $trashItems ),
-                'items'  =>  array_values( $trashItems ),
+                'query' => $query,
+                'count' => count( $trashItems ),
+                'items' => array_values( $trashItems ),
             )
         );
     }

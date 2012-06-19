@@ -376,7 +376,7 @@ class ContentHandler implements ContentHandlerInterface
         return $this->backend->find(
             "Content\\VersionInfo",
             array(
-                "status"    => VersionInfo::STATUS_DRAFT,
+                "status" => VersionInfo::STATUS_DRAFT,
                 "creatorId" => $userId
             )
         );
@@ -441,9 +441,9 @@ class ContentHandler implements ContentHandlerInterface
         foreach ( $versionNames as $languageCode => &$versionName )
             if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
         $versionUpdateData = array(
-            "creatorId"           => $content->creatorId,
-            "modificationDate"    => $content->modificationDate,
-            "names"               => $versionNames,
+            "creatorId" => $content->creatorId,
+            "modificationDate" => $content->modificationDate,
+            "names" => $versionNames,
             "initialLanguageCode" => $this->handler->contentLanguageHandler()
                 ->load( $content->initialLanguageId )->languageCode
         );
@@ -705,7 +705,7 @@ class ContentHandler implements ContentHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
+    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
         // Change Content currentVersionNo to the published version
         $this->backend->update(

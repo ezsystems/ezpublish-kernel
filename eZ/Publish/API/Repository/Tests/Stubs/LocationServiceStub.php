@@ -69,7 +69,7 @@ class LocationServiceStub implements LocationService
     {
         return new LocationCreateStruct(
             array(
-                'parentLocationId'  =>  $parentLocationId
+                'parentLocationId' => $parentLocationId
             )
         );
     }
@@ -114,10 +114,10 @@ class LocationServiceStub implements LocationService
 
         $data['contentInfo'] = $contentInfo;
 
-        $data['id']          = ++$this->nextLocationId;
-        $data['pathString']  = $parentLocation->pathString . $data['id'] . '/';
-        $data['depth']       = substr_count( $data['pathString'], '/' ) - 2;
-        $data['childCount']  = 0;
+        $data['id'] = ++$this->nextLocationId;
+        $data['pathString'] = $parentLocation->pathString . $data['id'] . '/';
+        $data['depth'] = substr_count( $data['pathString'], '/' ) - 2;
+        $data['childCount'] = 0;
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
@@ -321,19 +321,19 @@ class LocationServiceStub implements LocationService
     protected function locationToArray( Location $location )
     {
         return array(
-            'id'                      => $location->id,
-            'priority'                => $location->priority,
-            'hidden'                  => $location->hidden,
-            'invisible'               => $location->invisible,
-            'remoteId'                => $location->remoteId,
-            'contentInfo'             => $location->contentInfo,
-            'parentLocationId'        => $location->parentLocationId,
-            'pathString'              => $location->pathString,
+            'id' => $location->id,
+            'priority' => $location->priority,
+            'hidden' => $location->hidden,
+            'invisible' => $location->invisible,
+            'remoteId' => $location->remoteId,
+            'contentInfo' => $location->contentInfo,
+            'parentLocationId' => $location->parentLocationId,
+            'pathString' => $location->pathString,
             'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
-            'depth'                   => $location->depth,
-            'sortField'               => $location->sortField,
-            'sortOrder'               => $location->sortOrder,
-            'childCount'              => $location->childCount,
+            'depth' => $location->depth,
+            'sortField' => $location->sortField,
+            'sortOrder' => $location->sortOrder,
+            'childCount' => $location->childCount,
         );
     }
 
@@ -562,6 +562,8 @@ class LocationServiceStub implements LocationService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
+        $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
+
         $contentService = $this->repository->getContentService();
 
         unset( $this->locations[$location->id] );
@@ -657,11 +659,11 @@ class LocationServiceStub implements LocationService
         $values = array_merge(
             $this->locationToArray( $subtree ),
             array(
-                'id'                =>  ++$this->nextLocationId,
-                'remoteId'          =>  md5( uniqid( $subtree->remoteId, true ) ),
-                'depth'             =>  $targetParentLocation->depth + 1,
-                'parentLocationId'  =>  $targetParentLocation->id,
-                'pathString'        =>  "{$targetParentLocation->pathString}{$this->nextLocationId}/"
+                'id' => ++$this->nextLocationId,
+                'remoteId' => md5( uniqid( $subtree->remoteId, true ) ),
+                'depth' => $targetParentLocation->depth + 1,
+                'parentLocationId' => $targetParentLocation->id,
+                'pathString' => "{$targetParentLocation->pathString}{$this->nextLocationId}/"
             )
         );
 
@@ -738,13 +740,14 @@ class LocationServiceStub implements LocationService
         $values = array_merge(
             $this->locationToArray( $location ),
             array(
-                'depth'             =>  $newParentLocation->depth + 1,
-                'pathString'        =>  "{$newParentLocation->pathString}{$location->id}/",
-                'parentLocationId'  =>  $newParentLocation->id,
+                'depth' => $newParentLocation->depth + 1,
+                'pathString' => "{$newParentLocation->pathString}{$location->id}/",
+                'parentLocationId' => $newParentLocation->id,
             )
         );
 
-        $this->locations[$location->id] = new LocationStub( $values );
+        $newLocation = $this->locations[$location->id] = new LocationStub( $values );
+        $this->repository->getUrlAliasService()->_createAliasesForLocation( $newLocation );
 
         foreach ( $this->loadLocationChildren( $location ) as $childLocation )
         {
@@ -765,6 +768,8 @@ class LocationServiceStub implements LocationService
      */
     public function __trashLocation( Location $location, array $trashed = array() )
     {
+        $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
+
         // Decrement child count on parent location
         if ( 0 === count( $trashed ) && isset( $this->locations[$location->parentLocationId] ) )
         {
@@ -788,46 +793,27 @@ class LocationServiceStub implements LocationService
      * Internal helper method used to recover a location tree.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreate
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentlocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function __recoverLocation( Location $location, LocationCreateStruct $locationCreate = null )
+    public function __recoverLocation( Location $location, Location $newParentlocation = null )
     {
-        if ( $locationCreate )
+        if ( $newParentlocation )
         {
-            foreach ( get_object_vars( $locationCreate ) as $name => $value )
-            {
-                if ( null === $value )
-                {
-                    $locationCreate->{$name} = $location->{$name};
-                }
-            }
-
-            $contentInfo = $location->getContentInfo();
-            $newLocation = $this->createLocation( $contentInfo, $locationCreate );
-
-            // Restore child count
-            $newLocation->__setChildCount( $location->childCount );
-
-            // Update main location id
-            if ( $contentInfo->mainLocationId === $location->id )
-            {
-                $contentInfo->__setMainLocationId( $newLocation->id );
-            }
-
-            // Update child count on new parent
-            if ( isset( $this->locations[$newLocation->parentLocationId] ) )
-            {
-                $this->locations[$newLocation->parentLocationId]->__setChildCount(
-                    $this->locations[$newLocation->parentLocationId]->childCount + 1
-                );
-            }
-
-            return $newLocation;
+            $location->contentInfo->__setMainLocationId( $newParentlocation->contentInfo->mainLocationId );
+            $location->__setParentLocationId( $newParentlocation->id );
         }
-        return ( $this->locations[$location->id] = $location );
 
+        $location->__setChildCount( 0 );
+
+        $this->locations[$location->parentLocationId]->__setChildCount(
+            $this->locations[$location->parentLocationId]->childCount + 1
+        );
+
+        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
+
+        return ( $this->locations[$location->id] = $location );
     }
 
     /**
@@ -871,7 +857,7 @@ class LocationServiceStub implements LocationService
      */
     private function initFromFixture()
     {
-        $this->locations      = array();
+        $this->locations = array();
         $this->nextLocationId = 0;
 
         list(

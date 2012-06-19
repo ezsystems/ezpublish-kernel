@@ -24,6 +24,13 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     protected $contentGatewayMock;
 
     /**
+     * Content gateway mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected $contentStorageHandlerMock;
+
+    /**
      * RemoveField action to test
      *
      * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
@@ -66,6 +73,13 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 13 )
             );
 
+        $this->getContentStorageHandlerMock()->expects( $this->once() )
+            ->method( 'deleteFieldData' )
+            ->with(
+                $this->equalTo( 'ezstring' ),
+                $this->equalTo( array( 3 ) )
+            );
+
         $action->apply( $content );
     }
 
@@ -80,11 +94,13 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
         $fieldNoRemove->id = 2;
         $fieldNoRemove->versionNo = 13;
         $fieldNoRemove->fieldDefinitionId = 23;
+        $fieldNoRemove->type = 'ezstring';
 
         $fieldRemove = new Content\Field();
         $fieldRemove->id = 3;
         $fieldRemove->versionNo = 13;
         $fieldRemove->fieldDefinitionId = 42;
+        $fieldRemove->type = 'ezstring';
 
         $content = new Content();
         $content->versionInfo = new Content\VersionInfo();
@@ -113,6 +129,26 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a Content StorageHandler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected function getContentStorageHandlerMock()
+    {
+        if ( !isset( $this->contentStorageHandlerMock ) )
+        {
+            $this->contentStorageHandlerMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->contentStorageHandlerMock;
+    }
+
+    /**
      * Returns a FieldDefinition fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
@@ -137,7 +173,8 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
         {
             $this->removeFieldAction = new RemoveField(
                 $this->getContentGatewayMock(),
-                $this->getFieldDefinitionFixture()
+                $this->getFieldDefinitionFixture(),
+                $this->getContentStorageHandlerMock()
             );
         }
         return $this->removeFieldAction;

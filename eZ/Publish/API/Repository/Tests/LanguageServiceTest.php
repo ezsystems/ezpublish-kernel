@@ -57,9 +57,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English (New Zealand)';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
@@ -127,9 +127,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'Norwegian';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'Norwegian';
         $languageCreate->languageCode = 'nor-NO';
 
         $languageService->createLanguage( $languageCreate );
@@ -156,9 +156,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $languageId = $languageService->createLanguage( $languageCreate )->id;
@@ -207,9 +207,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $languageId = $languageService->createLanguage( $languageCreate )->id;
@@ -248,9 +248,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
@@ -278,9 +278,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
@@ -308,9 +308,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $languageId = $languageService->createLanguage( $languageCreate )->id;
@@ -357,14 +357,14 @@ class LanguageServiceTest extends BaseTest
         $languageService = $repository->getContentLanguageService();
 
         // Create some languages
-        $languageCreateEnglish               = $languageService->newLanguageCreateStruct();
-        $languageCreateEnglish->enabled      = false;
-        $languageCreateEnglish->name         = 'English';
+        $languageCreateEnglish = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled = false;
+        $languageCreateEnglish->name = 'English';
         $languageCreateEnglish->languageCode = 'eng-NZ';
 
-        $languageCreateFrench               = $languageService->newLanguageCreateStruct();
-        $languageCreateFrench->enabled      = false;
-        $languageCreateFrench->name         = 'French';
+        $languageCreateFrench = $languageService->newLanguageCreateStruct();
+        $languageCreateFrench->enabled = false;
+        $languageCreateFrench->name = 'French';
         $languageCreateFrench->languageCode = 'fre-FR';
 
         $languageService->createLanguage( $languageCreateEnglish );
@@ -410,9 +410,9 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreateEnglish               = $languageService->newLanguageCreateStruct();
-        $languageCreateEnglish->enabled      = false;
-        $languageCreateEnglish->name         = 'English';
+        $languageCreateEnglish = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled = false;
+        $languageCreateEnglish->name = 'English';
         $languageCreateEnglish->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreateEnglish );
@@ -448,9 +448,9 @@ class LanguageServiceTest extends BaseTest
 
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreateEnglish               = $languageService->newLanguageCreateStruct();
-        $languageCreateEnglish->enabled      = true;
-        $languageCreateEnglish->name         = 'English';
+        $languageCreateEnglish = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled = true;
+        $languageCreateEnglish->name = 'English';
         $languageCreateEnglish->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreateEnglish );
@@ -481,7 +481,7 @@ class LanguageServiceTest extends BaseTest
      */
     public function testGetDefaultLanguageCode()
     {
-        $repository      = $this->getRepository();
+        $repository = $this->getRepository();
         $languageService = $repository->getContentLanguageService();
 
         $this->assertRegExp(
@@ -501,10 +501,10 @@ class LanguageServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $languageService = $repository->getContentLanguageService();
-        $languageCreate  = $languageService->newLanguageCreateStruct();
+        $languageCreate = $languageService->newLanguageCreateStruct();
 
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-US';
 
         return $languageService->createLanguage( $languageCreate );
@@ -529,9 +529,9 @@ class LanguageServiceTest extends BaseTest
         $repository->beginTransaction();
 
         // Get create struct and set properties
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English (New Zealand)';
         $languageCreate->languageCode = 'eng-NZ';
 
         // Create new language
@@ -573,9 +573,9 @@ class LanguageServiceTest extends BaseTest
         $repository->beginTransaction();
 
         // Get create struct and set properties
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English (New Zealand)';
         $languageCreate->languageCode = 'eng-NZ';
 
         // Create new language

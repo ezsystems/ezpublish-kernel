@@ -87,7 +87,10 @@ class SectionService implements SectionServiceInterface
             if ( $existingSection !== null )
                 throw new InvalidArgumentException( "sectionCreateStruct", "section with specified identifier already exists" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
 
         $spiSection = $this->persistenceHandler->sectionHandler()->create(
             $sectionCreateStruct->name,
@@ -127,7 +130,10 @@ class SectionService implements SectionServiceInterface
                 if ( $existingSection !== null )
                     throw new InvalidArgumentException( "sectionUpdateStruct", "section with specified identifier already exists" );
             }
-            catch ( NotFoundException $e ) {}
+            catch ( NotFoundException $e )
+            {
+                // Do nothing
+            }
         }
 
         $loadedSection = $this->loadSection( $section->id );
@@ -294,9 +300,9 @@ class SectionService implements SectionServiceInterface
     {
         return new Section(
             array(
-                'id'         => (int) $spiSection->id,
+                'id' => (int) $spiSection->id,
                 'identifier' => $spiSection->identifier,
-                'name'       => $spiSection->name
+                'name' => $spiSection->name
             )
         );
     }

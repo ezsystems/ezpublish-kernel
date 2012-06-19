@@ -16,15 +16,14 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  */
 class Group extends ValueObject
 {
-     /**
-     * the id of the object state group
+    /**
+     * The id of the object state group
      *
      * @var mixed
      */
     public $id;
 
     /**
-     *
      * The identifier for the object state group
      *
      * @var string
@@ -45,7 +44,7 @@ class Group extends ValueObject
      */
     public $languageCodes;
 
-     /**
+    /**
      * Human readable name of the object state group
      *
      * The structure of this field is:

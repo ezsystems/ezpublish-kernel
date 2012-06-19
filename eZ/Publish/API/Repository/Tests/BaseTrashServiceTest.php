@@ -28,7 +28,7 @@ abstract class BaseTrashServiceTest extends BaseTest
         // remoteId of the "Community" page main location
         $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
 
-        $trashService    = $repository->getTrashService();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         // Load "Community" page location

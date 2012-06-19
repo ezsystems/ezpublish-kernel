@@ -34,11 +34,11 @@ interface URLAliasService
      * @param string $languageCode the languageCode for which this alias is valid
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createUrlAlias(Location $location, $path,  $languageCode, $forwarding = false, $alwaysAvailable = false );
+    public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false );
 
      /**
      * Create a user chosen $alias pointing to a resource in $languageName.
@@ -56,11 +56,11 @@ interface URLAliasService
      * @param string $languageName
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias(  $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false );
+    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false );
 
      /**
      * List of url aliases pointing to $location.
@@ -84,7 +84,7 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listGlobalAliases($languageCode = null, $offset = 0, $limit = -1);
+    public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 );
 
 
     /**
@@ -108,20 +108,5 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookUp($url, $languageCode = null);
-
-    /**
-     * Returns the URL alias for the given location in the given language.
-     *
-     * If $languageCode is null the method returns the url alias in the most prioritized language.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no url alias exist for the given language
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param  string $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
-     */
-    public function reverseLookup(Location $location, $languageCode = null);
-
+    public function lookUp( $url, $languageCode = null );
 }

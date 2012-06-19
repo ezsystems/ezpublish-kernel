@@ -67,7 +67,7 @@ class LocationStub extends Location
      *
      * @var mixed Location ID.
      */
-    // protected $parentId;
+    // protected $parentLocationId;
 
     /**
      * The materialized path of the location entry, eg: /1/2/
@@ -151,6 +151,17 @@ class LocationStub extends Location
     public function __setChildCount( $childCount )
     {
         $this->childCount = $childCount;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param int $parentLocationId
+     * @return void
+     */
+    public function __setParentLocationId( $parentLocationId )
+    {
+        $this->parentLocationId = $parentLocationId;
     }
 
     /**

@@ -59,7 +59,7 @@ class SectionServiceTest extends BaseTest
                 'This test cannot be executed, because the utilized ' .
                 'ContentService::loadContentInfoByRemoteId() failed with ' .
                 PHP_EOL . PHP_EOL .
-                $e->getTraceAsString()
+                $e
             );
         }
 
@@ -100,8 +100,8 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $section = $sectionService->createSection( $sectionCreate );
@@ -125,14 +125,14 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreateOne             = $sectionService->newSectionCreateStruct();
-        $sectionCreateOne->name       = 'Test section one';
+        $sectionCreateOne = $sectionService->newSectionCreateStruct();
+        $sectionCreateOne->name = 'Test section one';
         $sectionCreateOne->identifier = 'uniqueKey';
 
         $sectionService->createSection( $sectionCreateOne );
 
-        $sectionCreateTwo             = $sectionService->newSectionCreateStruct();
-        $sectionCreateTwo->name       = 'Test section two';
+        $sectionCreateTwo = $sectionService->newSectionCreateStruct();
+        $sectionCreateTwo->name = 'Test section two';
         $sectionCreateTwo->identifier = 'uniqueKey';
 
         // This will fail, because identifier uniqueKey already exists.
@@ -227,8 +227,8 @@ class SectionServiceTest extends BaseTest
 
         $section = $sectionService->loadSection( $standardSectionId );
 
-        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
-        $sectionUpdate->name       = 'New section name';
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'New section name';
         $sectionUpdate->identifier = 'newUniqueKey';
 
         $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
@@ -261,8 +261,8 @@ class SectionServiceTest extends BaseTest
 
         $sectionService = $repository->getSectionService();
 
-        $section             = $sectionService->loadSection( $standardSectionId );
-        $sectionUpdate       = $sectionService->newSectionUpdateStruct();
+        $section = $sectionService->loadSection( $standardSectionId );
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'New section name';
 
         $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
@@ -291,7 +291,7 @@ class SectionServiceTest extends BaseTest
 
         $section = $sectionService->loadSection( $standardSectionId );
 
-        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'newUniqueKey';
 
         $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
@@ -320,8 +320,8 @@ class SectionServiceTest extends BaseTest
         $sectionService = $repository->getSectionService();
 
         // Create section with conflict identifier
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Conflict section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Conflict section';
         $sectionCreate->identifier = 'conflictKey';
 
         $sectionService->createSection( $sectionCreate );
@@ -329,7 +329,7 @@ class SectionServiceTest extends BaseTest
         // Load an existing section and update to an existing identifier
         $section = $sectionService->loadSection( $standardSectionId );
 
-        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'conflictKey';
 
         // This call should fail with an InvalidArgumentException
@@ -378,44 +378,44 @@ class SectionServiceTest extends BaseTest
             array(
                 new Section(
                     array(
-                        'id'          =>  $this->generateId( 'section', 1 ),
-                        'name'        =>  'Standard',
-                        'identifier'  =>  'standard'
+                        'id' => $this->generateId( 'section', 1 ),
+                        'name' => 'Standard',
+                        'identifier' => 'standard'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  $this->generateId( 'section', 2 ),
-                        'name'        =>  'Users',
-                        'identifier'  =>  'users'
+                        'id' => $this->generateId( 'section', 2 ),
+                        'name' => 'Users',
+                        'identifier' => 'users'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  $this->generateId( 'section', 3 ),
-                        'name'        =>  'Media',
-                        'identifier'  =>  'media'
+                        'id' => $this->generateId( 'section', 3 ),
+                        'name' => 'Media',
+                        'identifier' => 'media'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  $this->generateId( 'section', 4 ),
-                        'name'        =>  'Setup',
-                        'identifier'  =>  'setup'
+                        'id' => $this->generateId( 'section', 4 ),
+                        'name' => 'Setup',
+                        'identifier' => 'setup'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  $this->generateId( 'section', 5 ),
-                        'name'        =>  'Design',
-                        'identifier'  =>  'design'
+                        'id' => $this->generateId( 'section', 5 ),
+                        'name' => 'Design',
+                        'identifier' => 'design'
                     )
                 ),
                 new Section(
                     array(
-                        'id'          =>  $this->generateId( 'section', 6 ),
-                        'name'        =>  'Protected',
-                        'identifier'  =>  'protected'
+                        'id' => $this->generateId( 'section', 6 ),
+                        'name' => 'Protected',
+                        'identifier' => 'protected'
                     )
                 ),
             ),
@@ -437,8 +437,8 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $sectionId = $sectionService->createSection( $sectionCreate )->id;
@@ -521,7 +521,7 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $sectionService   = $repository->getSectionService();
+        $sectionService = $repository->getSectionService();
         $assignedContents = $sectionService->countAssignedContents(
             $sectionService->loadSection( $this->generateId( 'section', 1 ) )
         );
@@ -533,7 +533,7 @@ class SectionServiceTest extends BaseTest
 
         // Remote ids of the "Support" and the "Community" page of a eZ Publish
         // demo installation.
-        $supportRemoteId   = 'affc99e41128c1475fa4f23dafb7159b';
+        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
         $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
 
         $contentService = $repository->getContentService();
@@ -574,8 +574,8 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $section = $sectionService->createSection( $sectionCreate );
@@ -601,8 +601,8 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $section = $sectionService->createSection( $sectionCreate );
@@ -629,8 +629,8 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         $section = $sectionService->createSection( $sectionCreate );
@@ -700,8 +700,8 @@ class SectionServiceTest extends BaseTest
         $repository->beginTransaction();
 
         // Get a create struct and set some properties
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         // Create a new section
@@ -744,8 +744,8 @@ class SectionServiceTest extends BaseTest
         $repository->beginTransaction();
 
         // Get a create struct and set some properties
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test Section';
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
         // Create a new section
@@ -784,7 +784,7 @@ class SectionServiceTest extends BaseTest
         $section = $sectionService->loadSectionByIdentifier( 'standard' );
 
         // Get an update struct and change section name
-        $sectionUpdate       = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'My Standard';
 
         // Update section
@@ -823,7 +823,7 @@ class SectionServiceTest extends BaseTest
         $section = $sectionService->loadSectionByIdentifier( 'standard' );
 
         // Get an update struct and change section name
-        $sectionUpdate       = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'My Standard';
 
         // Update section

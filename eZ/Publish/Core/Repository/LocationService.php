@@ -405,30 +405,18 @@ class LocationService implements LocationServiceInterface
 
         $loadedParentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
-        // check if the content already has location below specified parent ID
-        $searchResult = $this->persistenceHandler->searchHandler()->find(
-            new CriterionLogicalAnd(
-                array(
-                    new CriterionContentId( $contentInfo->id ),
-                    new CriterionParentLocationId( $loadedParentLocation->id ),
-                )
-            )
-        );
-
-        if ( $searchResult->count > 0 )
-            throw new InvalidArgumentException( "contentInfo", "content is already below the specified parent" );
-
-        // check if the parent is a sub location of one of the existing content locations
-        // this also solves the situation where parent location actually one of the content locations
-        // NOTE: In 4.x it IS possible to add a location to the object below a parent which is below the existing content locations
+        // Check if the parent is a sub location of one of the existing content locations (this also solves the
+        // situation where parent location actually one of the content locations),
+        // or if the content already has location below given location create struct parent
         $existingContentLocations = $this->loadLocations( $contentInfo );
-
         if ( !empty( $existingContentLocations ) )
         {
             foreach ( $existingContentLocations as $existingContentLocation )
             {
-                if ( stripos( $existingContentLocation->pathString, $loadedParentLocation->pathString ) !== false )
+                if ( stripos( $loadedParentLocation->pathString, $existingContentLocation->pathString ) !== false )
                     throw new InvalidArgumentException( "locationCreateStruct", "specified parent is a sub location of one of the existing content locations" );
+                if ( $loadedParentLocation->id == $existingContentLocation->parentLocationId )
+                    throw new InvalidArgumentException( "locationCreateStruct", "content is already below the specified parent" );
             }
         }
 
@@ -669,19 +657,19 @@ class LocationService implements LocationServiceInterface
 
         return new Location(
             array(
-                'contentInfo'             => $contentInfo,
-                'id'                      => (int) $spiLocation->id,
-                'priority'                => (int) $spiLocation->priority,
-                'hidden'                  => (bool) $spiLocation->hidden,
-                'invisible'               => (bool) $spiLocation->invisible,
-                'remoteId'                => $spiLocation->remoteId,
-                'parentLocationId'        => (int) $spiLocation->parentId,
-                'pathString'              => $spiLocation->pathString,
+                'contentInfo' => $contentInfo,
+                'id' => (int) $spiLocation->id,
+                'priority' => (int) $spiLocation->priority,
+                'hidden' => (bool) $spiLocation->hidden,
+                'invisible' => (bool) $spiLocation->invisible,
+                'remoteId' => $spiLocation->remoteId,
+                'parentLocationId' => (int) $spiLocation->parentId,
+                'pathString' => $spiLocation->pathString,
                 'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiLocation->modifiedSubLocation ),
-                'depth'                   => (int) $spiLocation->depth,
-                'sortField'               => (int) $spiLocation->sortField,
-                'sortOrder'               => (int) $spiLocation->sortOrder,
-                'childCount'              => $childrenLocations->count
+                'depth' => (int) $spiLocation->depth,
+                'sortField' => (int) $spiLocation->sortField,
+                'sortOrder' => (int) $spiLocation->sortOrder,
+                'childCount' => $childrenLocations->count
             )
         );
     }

@@ -96,7 +96,7 @@ $legacyHandler = new LegacyPersistenceHandler(
 
 // Insert some default data
     $data = require __DIR__ . '/_fixtures/full_dump.php';
-    //$data =  require __DIR__ . '/_fixtures/mini_dump.php';
+    //$data = require __DIR__ . '/_fixtures/mini_dump.php';
     foreach ( $data as $table => $rows )
     {
         // Check that at least one row exists

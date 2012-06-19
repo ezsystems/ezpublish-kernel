@@ -29,19 +29,14 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 class VersionInfo extends APIVersionInfo
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var mixed
-     */
-    protected $contentId;
-
-    /**
      * @var array
      */
     protected $names;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    protected $contentInfo;
 
     /**
      * Content of the content this version belongs to.
@@ -50,7 +45,7 @@ class VersionInfo extends APIVersionInfo
      */
     public function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+        return $this->contentInfo;
     }
 
     /**
@@ -80,37 +75,5 @@ class VersionInfo extends APIVersionInfo
             return $this->names[$languageCode];
 
         return null;
-    }
-
-    /**
-     * Magic getter for retrieving convenience properties
-     *
-     * @param string $property The name of the property to retrieve
-     *
-     * @return mixed
-     */
-    public function __get( $property )
-    {
-        switch ( $property )
-        {
-            case 'contentInfo':
-                return $this->getContentInfo();
-        }
-        return parent::__get( $property );
-    }
-
-    /**
-     * Magic isset for singaling existence of convenience properties
-     *
-     * @param string $property
-     *
-     * @return bool
-     */
-    public function __isset( $property )
-    {
-        if ( $property === 'contentInfo' )
-            return true;
-
-        return parent::__isset( $property );
     }
 }

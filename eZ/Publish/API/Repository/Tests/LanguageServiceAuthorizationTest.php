@@ -33,12 +33,12 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService     = $repository->getUserService();
+        $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English (New Zealand)';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English (New Zealand)';
         $languageCreate->languageCode = 'eng-NZ';
 
         // Set anonymous user
@@ -62,12 +62,12 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService     = $repository->getUserService();
+        $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $languageId = $languageService->createLanguage( $languageCreate )->id;
@@ -95,12 +95,12 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService     = $repository->getUserService();
+        $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = false;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = false;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
@@ -126,12 +126,12 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService     = $repository->getUserService();
+        $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreate               = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled      = true;
-        $languageCreate->name         = 'English';
+        $languageCreate = $languageService->newLanguageCreateStruct();
+        $languageCreate->enabled = true;
+        $languageCreate->name = 'English';
         $languageCreate->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreate );
@@ -157,12 +157,12 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        $userService     = $repository->getUserService();
+        $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
-        $languageCreateEnglish               = $languageService->newLanguageCreateStruct();
-        $languageCreateEnglish->enabled      = false;
-        $languageCreateEnglish->name         = 'English';
+        $languageCreateEnglish = $languageService->newLanguageCreateStruct();
+        $languageCreateEnglish->enabled = false;
+        $languageCreateEnglish->name = 'English';
         $languageCreateEnglish->languageCode = 'eng-NZ';
 
         $language = $languageService->createLanguage( $languageCreateEnglish );

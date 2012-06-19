@@ -419,14 +419,14 @@ class Backend
                 if ( $type === "Content\\Field" && $prop === "value" && ! $data["value"] instanceof FieldValue )
                 {
                     $fieldTypeNS = $this->getFieldTypeNamespace( $obj );
-                    $fieldValueClassName =  "$fieldTypeNS\\Value";
+                    $fieldValueClassName = "$fieldTypeNS\\Value";
                     $fieldTypeValue = new $fieldValueClassName;
                     foreach ( $data["value"] as $fieldValuePropertyName => $fieldValuePropertyValue )
                     {
                         $fieldTypeValue->$fieldValuePropertyName = $fieldValuePropertyValue;
                     }
 
-                    $fieldTypeeClassName =  "$fieldTypeNS\\Type";
+                    $fieldTypeeClassName = "$fieldTypeNS\\Type";
                     $fieldType = new $fieldTypeeClassName;
                     $value = $fieldType->toPersistenceValue( $fieldTypeValue );
                 }

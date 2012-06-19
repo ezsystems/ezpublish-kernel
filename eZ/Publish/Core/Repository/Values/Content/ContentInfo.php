@@ -32,14 +32,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
 class ContentInfo extends APIContentInfo
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    /**
      * @var integer
      */
-    protected $contentTypeId;
+    protected $contentType;
 
     /**
      * The content type of this content object
@@ -47,7 +42,7 @@ class ContentInfo extends APIContentInfo
      */
     public function getContentType()
     {
-        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
+        return $this->contentType;
     }
 
     /**
@@ -62,7 +57,7 @@ class ContentInfo extends APIContentInfo
         switch ( $property )
         {
             case 'contentType':
-                return $this->getContentType();
+                return $this->contentType;
         }
         return parent::__get( $property );
     }

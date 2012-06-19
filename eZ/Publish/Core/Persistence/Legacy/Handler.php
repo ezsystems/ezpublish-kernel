@@ -19,6 +19,8 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectStateMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
@@ -64,14 +66,14 @@ class Handler implements HandlerInterface
     /**
      * Storage registry
      *
-     * @var Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
      */
     protected $storageRegistry;
 
     /**
      * Storage registry
      *
-     * @var Content\StorageHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $storageHandler;
 
@@ -92,7 +94,7 @@ class Handler implements HandlerInterface
     /**
      * Content type handler
      *
-     * @var Content\Type\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
@@ -132,16 +134,37 @@ class Handler implements HandlerInterface
     protected $locationMapper;
 
     /**
+     * ObjectState handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler
+     */
+    protected $objectStateHandler;
+
+    /**
+     * ObjectState gateway
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway
+     */
+    protected $objectStateGateway;
+
+    /**
+     * ObjectState mapper
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
+     */
+    protected $objectStateMapper;
+
+    /**
      * User handler
      *
-     * @var User\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Handler
      */
     protected $userHandler;
 
     /**
      * Section handler
      *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler
      */
     protected $sectionHandler;
 
@@ -413,7 +436,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a storage handler
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\StorageHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getStorageHandler()
     {
@@ -551,7 +574,8 @@ class Handler implements HandlerInterface
                     new Type\ContentUpdater(
                         $this->searchHandler(),
                         $this->getContentGateway(),
-                        $this->getFieldValueConverterRegistry()
+                        $this->getFieldValueConverterRegistry(),
+                        $this->getStorageHandler()
                     )
                 );
             }
@@ -651,6 +675,49 @@ class Handler implements HandlerInterface
             $this->locationMapper = new LocationMapper();
         }
         return $this->locationMapper;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+     */
+    public function objectStateHandler()
+    {
+        if ( !isset( $this->objectStateHandler ) )
+        {
+            $this->objectStateHandler = new ObjectStateHandler(
+                $this->getObjectStateGateway(),
+                $this->getObjectStateMapper()
+            );
+        }
+        return $this->objectStateHandler;
+    }
+
+    /**
+     * Returns an object state gateway
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     */
+    protected function getObjectStateGateway()
+    {
+        if ( !isset( $this->objectStateGateway ) )
+        {
+            $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase( $this->getDatabase() );
+        }
+        return $this->objectStateGateway;
+    }
+
+    /**
+     * Returns an object state mapper
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
+     */
+    protected function getObjectStateMapper()
+    {
+        if ( !isset( $this->objectStateMapper ) )
+        {
+            $this->objectStateMapper = new ObjectStateMapper();
+        }
+        return $this->objectStateMapper;
     }
 
     /**

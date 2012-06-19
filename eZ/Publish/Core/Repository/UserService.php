@@ -174,7 +174,11 @@ class UserService implements UserServiceInterface
         if ( $mainGroupLocation === null )
             return array();
 
-        $searchResult = $this->searchSubGroups( $mainGroupLocation->id, $mainGroupLocation->sortField, $mainGroupLocation->sortOrder );
+        $searchResult = $this->searchSubGroups(
+            $mainGroupLocation->id,
+            $mainGroupLocation->sortField,
+            $mainGroupLocation->sortOrder
+        );
         if ( $searchResult->count == 0 )
             return array();
 
@@ -203,7 +207,7 @@ class UserService implements UserServiceInterface
         $searchQuery = new Query();
 
         $searchQuery->offset = $offset >= 0 ? (int) $offset : 0;
-        $searchQuery->limit  = $limit  >= 0 ? (int) $limit  : null;
+        $searchQuery->limit = $limit  >= 0 ? (int) $limit  : null;
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
@@ -297,7 +301,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         if ( $userGroupUpdateStruct->contentUpdateStruct === null &&
-             $userGroupUpdateStruct->contentMetaDataUpdateStruct === null )
+             $userGroupUpdateStruct->contentMetadataUpdateStruct === null )
         {
             // both update structs are empty, nothing to do
             return $userGroup;
@@ -320,11 +324,11 @@ class UserService implements UserServiceInterface
             $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
         }
 
-        if ( $userGroupUpdateStruct->contentMetaDataUpdateStruct !== null )
+        if ( $userGroupUpdateStruct->contentMetadataUpdateStruct !== null )
         {
             $publishedContent = $contentService->updateContentMetadata(
                 $publishedContent->getVersionInfo()->getContentInfo(),
-                $userGroupUpdateStruct->contentMetaDataUpdateStruct
+                $userGroupUpdateStruct->contentMetadataUpdateStruct
             );
         }
 
@@ -388,18 +392,18 @@ class UserService implements UserServiceInterface
         $spiUser = $this->persistenceHandler->userHandler()->create(
             new SPIUser(
                 array(
-                    'id'            => $publishedContent->contentId,
-                    'login'         => $userCreateStruct->login,
-                    'email'         => $userCreateStruct->email,
-                    'passwordHash'  => $this->createPasswordHash(
+                    'id' => $publishedContent->id,
+                    'login' => $userCreateStruct->login,
+                    'email' => $userCreateStruct->email,
+                    'passwordHash' => $this->createPasswordHash(
                         $userCreateStruct->login,
                         $userCreateStruct->password,
                         $this->settings['siteName'],
                         $this->settings['hashType']
                     ),
                     'hashAlgorithm' => $this->settings['hashType'],
-                    'isEnabled'     => $userCreateStruct->enabled,
-                    'maxLogin'      => 0
+                    'isEnabled' => $userCreateStruct->enabled,
+                    'maxLogin' => 0
                 )
             )
         );
@@ -552,21 +556,21 @@ class UserService implements UserServiceInterface
             $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
         }
 
-        if ( $userUpdateStruct->contentMetaDataUpdateStruct !== null )
+        if ( $userUpdateStruct->contentMetadataUpdateStruct !== null )
         {
             $contentService->updateContentMetadata(
                 $publishedContent->getVersionInfo()->getContentInfo(),
-                $userUpdateStruct->contentMetaDataUpdateStruct
+                $userUpdateStruct->contentMetadataUpdateStruct
             );
         }
 
         $this->persistenceHandler->userHandler()->update(
             new SPIUser(
                 array(
-                    'id'            => $loadedUser->id,
-                    'login'         => $loadedUser->login,
-                    'email'         => $userUpdateStruct->email ?: $loadedUser->email,
-                    'passwordHash'  => $userUpdateStruct->password ?
+                    'id' => $loadedUser->id,
+                    'login' => $loadedUser->login,
+                    'email' => $userUpdateStruct->email ?: $loadedUser->email,
+                    'passwordHash' => $userUpdateStruct->password ?
                         $this->createPasswordHash(
                             $loadedUser->login,
                             $userUpdateStruct->password,
@@ -575,8 +579,8 @@ class UserService implements UserServiceInterface
                         ) :
                         $loadedUser->passwordHash,
                     'hashAlgorithm' => $this->settings['hashType'],
-                    'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
-                    'maxLogin'      => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+                    'isEnabled' => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
+                    'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
                 )
             )
         );
@@ -761,7 +765,7 @@ class UserService implements UserServiceInterface
         foreach ( $searchResult->items as $resultItem )
         {
             /** @var $resultItem \eZ\Publish\API\Repository\Values\Content\Content */
-            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->contentId );
+            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->id );
 
             $users[] = $this->buildDomainUserObject( $spiUser, $resultItem );
         }
@@ -791,13 +795,13 @@ class UserService implements UserServiceInterface
 
         return new UserCreateStruct(
             array(
-                'contentType'      => $contentType,
+                'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
-                'login'            => $login,
-                'email'            => $email,
-                'password'         => $password,
-                'enabled'          => true,
-                'fields'           => array(),
+                'login' => $login,
+                'email' => $email,
+                'password' => $password,
+                'enabled' => true,
+                'fields' => array(),
             )
         );
     }
@@ -821,9 +825,9 @@ class UserService implements UserServiceInterface
 
         return new UserGroupCreateStruct(
             array(
-                'contentType'      => $contentType,
+                'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
-                'fields'           => array(),
+                'fields' => array(),
             )
         );
     }
@@ -869,10 +873,10 @@ class UserService implements UserServiceInterface
 
         return new UserGroup(
             array(
-                'versionInfo'   => $content->getVersionInfo(),
-                'fields'        => $content->getFields(),
-                'relations'     => $content->getRelations(),
-                'parentId'      => $mainLocation ? $mainLocation->parentLocationId : null,
+                'versionInfo' => $content->getVersionInfo(),
+                'fields' => $content->getFields(),
+                'relations' => $content->getRelations(),
+                'parentId' => $mainLocation ? $mainLocation->parentLocationId : null,
                 'subGroupCount' => $subGroupCount
             )
         );
@@ -893,15 +897,15 @@ class UserService implements UserServiceInterface
 
         return new User(
             array(
-                'versionInfo'   => $content->getVersionInfo(),
-                'fields'        => $content->getFields(),
-                'relations'     => $content->getRelations(),
-                'login'         => $spiUser->login,
-                'email'         => $spiUser->email,
-                'passwordHash'  => $spiUser->passwordHash,
+                'versionInfo' => $content->getVersionInfo(),
+                'fields' => $content->getFields(),
+                'relations' => $content->getRelations(),
+                'login' => $spiUser->login,
+                'email' => $spiUser->email,
+                'passwordHash' => $spiUser->passwordHash,
                 'hashAlgorithm' => $spiUser->hashAlgorithm,
-                'isEnabled'     => $spiUser->isEnabled,
-                'maxLogin'      => $spiUser->maxLogin,
+                'isEnabled' => $spiUser->isEnabled,
+                'maxLogin' => $spiUser->maxLogin,
             )
         );
     }

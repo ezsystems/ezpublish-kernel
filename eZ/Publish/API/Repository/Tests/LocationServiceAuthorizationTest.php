@@ -140,8 +140,8 @@ class LocationServiceAuthorizationTest extends BaseTest
         $originalLocation = $locationService->loadLocation( $editorsGroupId );
 
         $locationUpdateStruct = $locationService->newLocationUpdateStruct();
-        $locationUpdateStruct->priority  = 3;
-        $locationUpdateStruct->remoteId  = 'c7adcbf1e96bc29bca28c2d809d0c7ef69272651';
+        $locationUpdateStruct->priority = 3;
+        $locationUpdateStruct->remoteId = 'c7adcbf1e96bc29bca28c2d809d0c7ef69272651';
         $locationUpdateStruct->sortField = Location::SORT_FIELD_PRIORITY;
         $locationUpdateStruct->sortOrder = Location::SORT_ORDER_DESC;
 

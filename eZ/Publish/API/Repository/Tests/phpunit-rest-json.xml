@@ -23,6 +23,8 @@
             <file>TrashServiceTest.php</file>
             <file>IOServiceTest.php</file>
             <file>IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
+            <file>URLAliasServiceTest.php</file>
+            <file>URLWildcardServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
             <file>ContentTypeServiceAuthorizationTest.php</file>
@@ -31,6 +33,9 @@
             <file>UserServiceAuthorizationTest.php</file>
             <file>RoleServiceAuthorizationTest.php</file>
             <file>TrashServiceAuthorizationTest.php</file>
+            <file>URLWildcardServiceAuthorizationTest.php</file>
+            <file>ObjectStateServiceAuthorizationTest.php</file>
+            <file>FieldType/UserIntegrationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

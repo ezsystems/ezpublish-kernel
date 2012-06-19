@@ -26,7 +26,7 @@ class UserGroupUpdateStruct extends ValueObject
     /**
      * The update structure for the profile meta data
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct
      */
-    public $contentMetaDataUpdateStruct = null;
+    public $contentMetadataUpdateStruct = null;
 }

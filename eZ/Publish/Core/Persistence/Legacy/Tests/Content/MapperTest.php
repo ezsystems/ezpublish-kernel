@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
@@ -21,7 +22,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Test case for Mapper
@@ -457,6 +460,20 @@ class MapperTest extends TestCase
         }
     }
 
+    public function testExtractRelationsFromRows()
+    {
+        $mapper = $this->getMapper();
+
+        $rows = $this->getRelationExtractFixture();
+
+        $res = $mapper->extractRelationsFromRows( $rows );
+
+        $this->assertEquals(
+            $this->getRelationExtractReference(),
+            $res
+        );
+    }
+
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
      * @dataProvider extractContentInfoFromRowProvider
@@ -521,6 +538,25 @@ class MapperTest extends TestCase
         }
     }
 
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createContentFromCreateStruct
+     */
+    public function testCreateRelationFromCreateStruct()
+    {
+        $struct = $this->getRelationCreateStructFixture();
+
+        $mapper = $this->getMapper();
+        $relation = $mapper->createRelationFromCreateStruct( $struct );
+
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Relation' , $relation );
+        foreach( $struct as $property => $value )
+        {
+            self::assertSame( $value, $relation->$property );
+        }
+    }
+
     /**
      * Returns test data for {@link testExtractVersionInfoFromRow()}
      *
@@ -580,6 +616,68 @@ class MapperTest extends TestCase
     protected function getMultipleVersionsExtractFixture()
     {
         return require __DIR__ . '/_fixtures/extract_content_from_rows_multiple_versions.php';
+    }
+
+    /**
+     * Returns a reference result for mapping RestrictedVersion objects
+     *
+     * @return RestrictedVersion[]
+     */
+    protected function getRestrictedVersionExtractReference()
+    {
+        $versions = array();
+
+        $version = new RestrictedVersion();
+        $version->id = 675;
+        $version->name = array( "eng-US" => "Something" );
+        $version->versionNo = 1;
+        $version->modified = 1313047907;
+        $version->creatorId = 14;
+        $version->created = 1313047865;
+        $version->status = 3;
+        $version->contentId = 226;
+        $version->languageIds = array( 'eng-US' );
+
+        $versions[] = $version;
+
+        $version = new RestrictedVersion();
+        $version->id = 676;
+        $version->name = array( "eng-US" => "Something" );
+        $version->versionNo = 2;
+        $version->modified = 1313061404;
+        $version->creatorId = 14;
+        $version->created = 1313061317;
+        $version->status = 1;
+        $version->contentId = 226;
+        $version->languageIds = array( 'eng-US' );
+
+        $versions[] = $version;
+
+        return $versions;
+    }
+
+    /**
+     * Returns a fixture of database rows for relations extraction
+     *
+     * Fixture is stored in _fixtures/relations.php
+     *
+     * @return array
+     */
+    protected function getRelationExtractFixture()
+    {
+        return require __DIR__ . '/_fixtures/relations_rows.php';
+    }
+
+    /**
+     * Returns a reference result for content extraction
+     *
+     * Fixture is stored in _fixtures/relations_results.php
+     *
+     * @return Content
+     */
+    protected function getRelationExtractReference()
+    {
+        return require __DIR__ . '/_fixtures/relations_results.php';
     }
 
     /**
@@ -648,19 +746,19 @@ class MapperTest extends TestCase
                     $this->returnValue(
                         array(
                             new Language( array(
-                                'id'            => 2,
-                                'languageCode'  => 'eng-GB',
-                                'name'          => 'British english'
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
                             ) ),
                             new Language( array(
-                                'id'            => 4,
-                                'languageCode'  => 'eng-US',
-                                'name'          => 'US english'
+                                'id' => 4,
+                                'languageCode' => 'eng-US',
+                                'name' => 'US english'
                             ) ),
                             new Language( array(
-                                'id'            => 8,
-                                'languageCode'  => 'fre-FR',
-                                'name'          => 'Français franchouillard'
+                                'id' => 8,
+                                'languageCode' => 'fre-FR',
+                                'name' => 'Français franchouillard'
                             ) )
                         )
                     )
@@ -675,6 +773,24 @@ class MapperTest extends TestCase
             );
         }
         return $this->languageHandler;
+    }
+
+    /**
+     * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
+     */
+    protected function getRelationCreateStructFixture()
+    {
+        $struct = new RelationCreateStruct();
+
+        $struct->destinationContentId = 0;
+        $struct->sourceContentId = 0;
+        $struct->sourceContentVersionNo = 1;
+        $struct->sourceFieldDefinitionId = 1;
+        $struct->type = RelationValue::COMMON;
+
+        return $struct;
     }
 
     /**

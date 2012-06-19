@@ -59,18 +59,18 @@ class TrashServiceTest extends BaseTrashServiceTest
             ->loadLocationByRemoteId( $communityRemoteId );
 
         $expected = array(
-            'id'                       =>  $location->id,
-            'childCount'               =>  $location->childCount,
-            'depth'                    =>  $location->depth,
-            'hidden'                   =>  $location->hidden,
-            'invisible'                =>  $location->invisible,
-            'modifiedSubLocationDate'  =>  $location->modifiedSubLocationDate,
-            'parentLocationId'         =>  $location->parentLocationId,
-            'pathString'               =>  $location->pathString,
-            'priority'                 =>  $location->priority,
-            'remoteId'                 =>  $location->remoteId,
-            'sortField'                =>  $location->sortField,
-            'sortOrder'                =>  $location->sortOrder,
+            'id' => $location->id,
+            'childCount' => $location->childCount,
+            'depth' => $location->depth,
+            'hidden' => $location->hidden,
+            'invisible' => $location->invisible,
+            'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+            'parentLocationId' => $location->parentLocationId,
+            'pathString' => $location->pathString,
+            'priority' => $location->priority,
+            'remoteId' => $location->remoteId,
+            'sortField' => $location->sortField,
+            'sortOrder' => $location->sortOrder,
         );
 
         $trashItem = $this->createTrashItem();
@@ -147,6 +147,30 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * Test for the trash() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\TrashService::trash()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     */
+    public function testTrashDecrementsChildCountOnParentLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $homeLocationId = $this->generateId( 'location', 2 );
+
+        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
+
+        $this->createTrashItem();
+
+        $this->assertEquals(
+            $childCount - 1,
+            $locationService->loadLocation( $homeLocationId )->childCount
+        );
+    }
+
+    /**
      * Test for the loadTrashItem() method.
      *
      * @return void
@@ -155,7 +179,7 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testLoadTrashItem()
     {
-        $repository   = $this->getRepository();
+        $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
         /* BEGIN: Use Case */
@@ -207,8 +231,8 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testRecover()
     {
-        $repository      = $this->getRepository();
-        $trashService    = $repository->getTrashService();
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
@@ -245,8 +269,8 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testRecoverRestoresChildLocationsInMainStorage()
     {
-        $repository      = $this->getRepository();
-        $trashService    = $repository->getTrashService();
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         /* BEGIN: Use Case */
@@ -275,12 +299,12 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @d epends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
      */
     public function testRecoverWithLocationCreateStructParameter()
     {
-        $repository      = $this->getRepository();
-        $trashService    = $repository->getTrashService();
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         $homeLocationId = $this->generateId( 'location', 2 );
@@ -290,25 +314,25 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
-        // Get a location create without property changes.
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
-        $location = $trashService->recover( $trashItem, $locationCreate );
+        $location = $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
             array(
-                'remoteId'          =>  $trashItem->remoteId,
-                'parentLocationId'  =>  $homeLocationId,
-                'childCount'        =>  $trashItem->childCount,
-                'depth'             =>  $trashItem->depth,
-                'hidden'            =>  false,
-                'invisible'         =>  $trashItem->invisible,
-                'pathString'        =>  "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
-                'priority'          =>  0,
-                'sortField'         =>  Location::SORT_FIELD_NAME,
-                'sortOrder'         =>  Location::SORT_ORDER_ASC,
+                'remoteId' => $trashItem->remoteId,
+                'parentLocationId' => $homeLocationId,
+                'childCount' => $trashItem->childCount,
+                'depth' => $trashItem->depth,
+                'hidden' => false,
+                'invisible' => $trashItem->invisible,
+                'pathString' => "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
+                'priority' => 4,
+                'sortField' => Location::SORT_FIELD_PUBLISHED,
+                'sortOrder' => Location::SORT_ORDER_DESC,
             ),
             $location
         );
@@ -323,8 +347,8 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testRecoverWithLocationCreateStructParameterSetsNewMainLocationId()
     {
-        $repository      = $this->getRepository();
-        $trashService    = $repository->getTrashService();
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         $homeLocationId = $this->generateId( 'location', 2 );
@@ -334,15 +358,15 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
-        // Get a location create without property changes.
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
-        $location = $trashService->recover( $trashItem, $locationCreate );
+        $location = $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertEquals(
-            $location->id,
+            $newParentLocation->getContentInfo()->mainLocationId,
             $location->getContentInfo()->mainLocationId
         );
     }
@@ -356,8 +380,8 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testRecoverWithLocationCreateStructParameterIncrementsChildCountOnNewParent()
     {
-        $repository      = $this->getRepository();
-        $trashService    = $repository->getTrashService();
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         $homeLocationId = $this->generateId( 'location', 2 );
@@ -370,15 +394,15 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
-        // Get a location create without property changes.
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Recover location with new location
-        $trashService->recover( $trashItem, $locationCreate );
+        $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
 
         $this->assertEquals(
-            $childCount + 1,
+            $childCount,
             $locationService->loadLocation( $homeLocationId )->childCount
         );
     }
@@ -392,7 +416,7 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testFindTrashItems()
     {
-        $repository   = $this->getRepository();
+        $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
         /* BEGIN: Use Case */
@@ -427,7 +451,7 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testEmptyTrash()
     {
-        $repository   = $this->getRepository();
+        $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
         /* BEGIN: Use Case */
@@ -460,8 +484,8 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testDeleteTrashItem()
     {
-        $repository      = $this->getRepository();
-        $trashService    = $repository->getTrashService();
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         $supportLocationId = $this->generateId( 'location', 96 );

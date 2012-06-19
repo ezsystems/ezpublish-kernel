@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct,
-    eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+    eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
 
 /**
  * This class is used to create a new role
@@ -38,7 +38,7 @@ class RoleCreateStruct extends APIRoleCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreate
      */
-    public function addPolicy( PolicyCreateStruct $policyCreate )
+    public function addPolicy( APIPolicyCreateStruct $policyCreate )
     {
         $this->policies[] = $policyCreate;
     }

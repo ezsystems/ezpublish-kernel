@@ -1,244 +1,188 @@
 <?php
 
 return array (
-  'space_normalize' => 
-  array (
-    0 => 
-    array (
+  'space_normalize' => array (
+    0 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+202F',
         'dest' => 'U+00A0',
       ),
     ),
-    1 => 
-    array (
+    1 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+FEFF',
         'dest' => 'U+00A0',
       ),
     ),
-    2 => 
-    array (
+    2 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00A0',
         'dest' => 'U+0020',
       ),
     ),
   ),
-  'hyphen_normalize' => 
-  array (
-    0 => 
-    array (
+  'hyphen_normalize' => array (
+    0 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+007E',
         'dest' => 'U+002D',
       ),
     ),
-    1 => 
-    array (
+    1 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00AD',
         'dest' => 'remove',
       ),
     ),
   ),
-  'apostrophe_normalize' => 
-  array (
-    0 => 
-    array (
+  'apostrophe_normalize' => array (
+    0 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+0060',
         'dest' => 'U+0027',
       ),
     ),
-    1 => 
-    array (
+    1 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00B4',
         'dest' => 'U+0027',
       ),
     ),
-    2 => 
-    array (
+    2 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+02CA',
         'dest' => 'U+0027',
       ),
     ),
-    3 => 
-    array (
+    3 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+02CB',
         'dest' => 'U+0027',
       ),
     ),
-    4 => 
-    array (
+    4 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+02CF',
         'dest' => 'U+0027',
       ),
     ),
-    5 => 
-    array (
+    5 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+02CE',
         'dest' => 'U+0027',
       ),
     ),
   ),
-  'doublequote_normalize' => 
-  array (
-    0 => 
-    array (
+  'doublequote_normalize' => array (
+    0 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00AB',
         'dest' => 'U+0022',
       ),
     ),
-    1 => 
-    array (
+    1 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00BB',
         'dest' => 'U+0022',
       ),
     ),
-    2 => 
-    array (
+    2 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+02DD',
         'dest' => 'U+0027',
       ),
     ),
   ),
-  'apostrophe_to_doublequote' => 
-  array (
-    0 => 
-    array (
+  'apostrophe_to_doublequote' => array (
+    0 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+0027',
         'dest' => 'U+0022',
       ),
     ),
   ),
-  'special_decompose' => 
-  array (
-    0 => 
-    array (
+  'special_decompose' => array (
+    0 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00A9',
         'dest' => '"(C)"',
       ),
     ),
-    1 => 
-    array (
+    1 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00AE',
         'dest' => '"(R)"',
       ),
     ),
-    2 => 
-    array (
+    2 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00B1',
         'dest' => '"+-"',
       ),
     ),
-    3 => 
-    array (
+    3 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00B2',
         'dest' => '"2"',
       ),
     ),
-    4 => 
-    array (
+    4 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00B3',
         'dest' => '"3"',
       ),
     ),
-    5 => 
-    array (
+    5 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00B9',
         'dest' => '"1"',
       ),
     ),
-    6 => 
-    array (
+    6 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00BA',
         'dest' => '"1"',
       ),
     ),
-    7 => 
-    array (
+    7 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00BC',
         'dest' => '"1/4"',
       ),
     ),
-    8 => 
-    array (
+    8 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00BD',
         'dest' => '"1/2"',
       ),
     ),
-    9 => 
-    array (
+    9 => array (
       'type' => 11,
-      'data' => 
-      array (
+      'data' => array (
         'src' => 'U+00BE',
         'dest' => '"3/4"',
       ),

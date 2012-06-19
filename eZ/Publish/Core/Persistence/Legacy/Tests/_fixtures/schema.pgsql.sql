@@ -229,6 +229,12 @@ CREATE TABLE ezcobj_state_language (
     name character varying(45) NOT NULL DEFAULT ''::character varying
 );
 
+DROP TABLE IF EXISTS ezcobj_state_link;
+CREATE TABLE ezcobj_state_link (
+  contentobject_id integer NOT NULL DEFAULT 0,
+  contentobject_state_id integer NOT NULL DEFAULT 0
+);
+
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
     disabled integer DEFAULT 0 NOT NULL,
@@ -779,6 +785,9 @@ ALTER TABLE ONLY ezcobj_state_group_language
 
 ALTER TABLE ONLY ezcobj_state_language
     ADD CONSTRAINT ezcobj_state_language_pkey PRIMARY KEY (contentobject_state_id, language_id);
+
+ALTER TABLE ONLY ezcobj_state_link
+    ADD CONSTRAINT ezcobj_state_link_pkey PRIMARY KEY (contentobject_id,contentobject_state_id);
 
 ALTER TABLE ONLY ezcontent_language
     ADD CONSTRAINT ezcontent_language_pkey PRIMARY KEY (id);

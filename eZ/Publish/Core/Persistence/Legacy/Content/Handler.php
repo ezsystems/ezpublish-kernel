@@ -18,7 +18,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
+    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -112,7 +114,7 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    protected function internalCreate( CreateStruct $struct, $versionNo = 1 )
+    protected function internalCreate( CreateStruct $struct, $versionNo = 1, $copy = false )
     {
         $content = $this->mapper->createContentFromCreateStruct(
             $struct,
@@ -135,7 +137,14 @@ class Handler implements BaseContentHandler
         $content->fields = $struct->fields;
         $content->versionInfo->names = $struct->name;
 
-        $this->fieldHandler->createNewFields( $content );
+        if ( $copy )
+        {
+            $this->fieldHandler->copyFields( $content );
+        }
+        else
+        {
+            $this->fieldHandler->createNewFields( $content );
+        }
 
         // Create node assignments
         foreach ( $struct->locations as $location )
@@ -178,7 +187,7 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( $contentId, $versionNo, MetaDataUpdateStruct $metaDataUpdateStruct )
+    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
         $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct );
         $this->locationGateway->createLocationsFromNodeAssignments(
@@ -438,7 +447,7 @@ class Handler implements BaseContentHandler
     /**
      * Copy Content with Fields and Versions from $contentId in $version.
      *
-     * Copies all fields from $contentId in $version (or all versions if false)
+     * Copies all fields from $contentId in $versionNo (or all versions if null)
      * to a new object which is returned. Version numbers are maintained.
      *
      * @todo Should relations be copied? Which ones?
@@ -462,7 +471,8 @@ class Handler implements BaseContentHandler
         );
         $content = $this->internalCreate(
             $createStruct,
-            $currentVersionNo
+            $currentVersionNo,
+            true
         );
 
         // If version was not passed also copy other versions
@@ -484,7 +494,7 @@ class Handler implements BaseContentHandler
                     $versionContent->contentInfo->isAlwaysAvailable
                 );
 
-                $this->fieldHandler->createNewFields( $versionContent );
+                $this->fieldHandler->copyFields( $versionContent );
 
                 // Create name
                 foreach ( $versionContent->versionInfo->names as $language => $name )
@@ -511,21 +521,25 @@ class Handler implements BaseContentHandler
      * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
-    public function addRelation( RelationCreateStruct $relation )
+    public function addRelation( RelationCreateStruct $createStruct )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $relation = $this->mapper->createRelationFromCreateStruct( $createStruct);
+
+        $relation->id = $this->contentGateway->insertRelation( $createStruct );
+
+        return $relation;
     }
 
     /**
-     * Removes a relation by relation Id.
-     *
-     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     * Removes a relation by $relationId.
      *
      * @param mixed $relationId
+     *
+     * @return void
      */
     public function removeRelation( $relationId )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $this->contentGateway->deleteRelation( $relationId );
     }
 
     /**
@@ -541,7 +555,10 @@ class Handler implements BaseContentHandler
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $rows = $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type );
+
+        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
+        return $relationObjects;
     }
 
     /**
@@ -558,6 +575,9 @@ class Handler implements BaseContentHandler
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $rows = $this->contentGateway->loadReverseRelations( $destinationContentId, $type );
+
+        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
+        return $relationObjects;
     }
 }

@@ -17,6 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
@@ -27,6 +28,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\Handler,
+    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -118,10 +120,10 @@ class ContentHandlerTest extends TestCase
     {
         $handler = $this->getContentHandler();
 
-        $mapperMock         = $this->getMapperMock();
-        $gatewayMock        = $this->getGatewayMock();
-        $fieldHandlerMock   = $this->getFieldHandlerMock();
-        $locationMock       = $this->getLocationGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+        $locationMock = $this->getLocationGatewayMock();
 
         $mapperMock->expects( $this->once() )
             ->method( 'createContentFromCreateStruct' )
@@ -508,6 +510,139 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadRelations
+     */
+    public function testLoadRelations()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadRelations' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( null ),
+                $this->equalTo( null )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractRelationsFromRows' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( $this->getRelationFixture() ) );
+
+        $result = $handler->loadRelations( 23 );
+
+        $this->assertEquals(
+            $result,
+            $this->getRelationFixture()
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadReverseRelations
+     */
+    public function testLoadReverseRelations()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadReverseRelations' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( null )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractRelationsFromRows' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( $this->getRelationFixture() ) );
+
+        $result = $handler->loadReverseRelations( 23 );
+
+        $this->assertEquals(
+            $result,
+            $this->getRelationFixture()
+        );
+    }
+
+    public function testAddRelation()
+    {
+        // expected relation object after creation
+        $expectedRelationObject = new Relation();
+        $expectedRelationObject->id = 42; // mocked value, not a real one
+        $expectedRelationObject->sourceContentId = 23;
+        $expectedRelationObject->sourceContentVersionNo = 1;
+        $expectedRelationObject->destinationContentId = 66;
+        $expectedRelationObject->type = RelationValue::COMMON;
+
+        // relation create struct
+        $relationCreateStruct = new Relation\CreateStruct();
+        $relationCreateStruct->destinationContentId = 66;
+        $relationCreateStruct->sourceContentId = 23;
+        $relationCreateStruct->sourceContentVersionNo = 1;
+        $relationCreateStruct->type = RelationValue::COMMON;
+
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createRelationFromCreateStruct' )
+            // @todo Connected with the todo above
+            ->with( $this->equalTo( $relationCreateStruct ) )
+            ->will( $this->returnValue( $expectedRelationObject ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertRelation' )
+            ->with( $this->equalTo( $relationCreateStruct ) )
+            ->will(
+                // @todo Should this return a row as if it was selected from the database, the id... ? Check with other, similar create methods
+                $this->returnValue( 42 )
+            );
+
+        $result = $handler->addRelation( $relationCreateStruct );
+
+        $this->assertEquals(
+            $result,
+            $expectedRelationObject
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::removeRelation
+     */
+    public function testRemoveRelation()
+    {
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteRelation' )
+            ->with( $this->equalTo( 1 ) );
+
+        $result = $this->getContentHandler()->removeRelation( 1 );
+    }
+
+    protected function getRelationFixture()
+    {
+        $relation = new Relation();
+        $relation->sourceContentId = 23;
+        $relation->sourceContentVersionNo = 1;
+        $relation->destinationContentId = 69;
+
+        return $relation;
+    }
+
+    /**
      * Returns a CreateStruct fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
@@ -606,7 +741,7 @@ class ContentHandlerTest extends TestCase
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();
-        $fieldHandlerMock  = $this->getFieldHandlerMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( "deleteFields" )
@@ -637,7 +772,7 @@ class ContentHandlerTest extends TestCase
     {
         $handlerMock = $this->getPartlyMockedHandler( array( "removeRawContent" ) );
         $gatewayMock = $this->getGatewayMock();
-        $locationHandlerMock  = $this->getLocationHandlerMock();
+        $locationHandlerMock = $this->getLocationHandlerMock();
 
         $gatewayMock->expects( $this->once() )
             ->method( "getAllLocationIds" )
@@ -665,7 +800,7 @@ class ContentHandlerTest extends TestCase
 
         $gatewayMock = $this->getGatewayMock();
         $locationHandlerMock = $this->getLocationGatewayMock();
-        $fieldHandlerMock  = $this->getFieldHandlerMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
 
         $locationHandlerMock->expects( $this->once() )
             ->method( 'deleteNodeAssignment' )
@@ -837,10 +972,10 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo(
                     new VersionInfo(
                         array(
-                            "contentId"        => 24,
-                            "creationDate"     => $time,
+                            "contentId" => 24,
+                            "creationDate" => $time,
                             "modificationDate" => $time,
-                            "names"            => array( "eng-US" => "Test" )
+                            "names" => array( "eng-US" => "Test" )
                         )
                     )
                 ),
@@ -849,23 +984,23 @@ class ContentHandlerTest extends TestCase
             )->will( $this->returnValue( 42 ) );
 
         $fieldHandlerMock->expects( $this->once() )
-            ->method( "createNewFields" )
+            ->method( "copyFields" )
             ->with(
                 $this->equalTo(
                     new Content(
                         array(
                             "versionInfo" => new VersionInfo(
                                 array(
-                                    "id"               => 42,
-                                    "contentId"        => 24,
-                                    "creationDate"     => $time,
+                                    "id" => 42,
+                                    "contentId" => 24,
+                                    "creationDate" => $time,
                                     "modificationDate" => $time,
-                                    "names"            => array( "eng-US" => "Test" )
+                                    "names" => array( "eng-US" => "Test" )
                                 )
                             ),
                             "contentInfo" => new ContentInfo(
                                 array(
-                                    "id"                => 24,
+                                    "id" => 24,
                                     "isAlwaysAvailable" => true
                                 )
                             ),

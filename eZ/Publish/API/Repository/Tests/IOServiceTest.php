@@ -34,11 +34,11 @@ class IOServiceTest extends BaseTest
         // given file was not uploaded.
         $ioService->newBinaryCreateStructFromUploadedFile(
             array(
-                'tmp_name'  =>  __FILE__,
-                'name'      =>  basename( __FILE__ ),
-                'type'      =>  mime_content_type( __FILE__ ),
-                'size'      =>  filesize( __FILE__ ),
-                'error'     =>  0
+                'tmp_name' => __FILE__,
+                'name' => basename( __FILE__ ),
+                'type' => mime_content_type( __FILE__ ),
+                'size' => filesize( __FILE__ ),
+                'error' => 0
             )
         );
         /* END: Use Case */
@@ -85,10 +85,10 @@ class IOServiceTest extends BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'originalFileName'  =>  basename( __FILE__ ),
-                'uri'               =>  'file://' . __FILE__,
-                'mimeType'          =>  mime_content_type( __FILE__ ),
-                'size'              =>  filesize( __FILE__ ),
+                'originalFileName' => basename( __FILE__ ),
+                'uri' => 'file://' . __FILE__,
+                'mimeType' => mime_content_type( __FILE__ ),
+                'size' => filesize( __FILE__ ),
             ),
             $binaryCreate
         );
@@ -163,11 +163,11 @@ class IOServiceTest extends BaseTest
 
         $this->assertPropertiesCorrect(
             array(
-                'originalFile'  =>  basename( __FILE__ ),
-                'size'          =>  filesize( __FILE__ ),
-                'mimeType'   =>  mime_content_type( __FILE__ )
+                'originalFile' => basename( __FILE__ ),
+                'size' => filesize( __FILE__ ),
+                'mimeType' => mime_content_type( __FILE__ )
                 // TODO What is the uri?
-                //'uri'  =>  'file://' . __FILE__,
+                //'uri' => 'file://' . __FILE__,
             ),
             $binary
         );
@@ -219,11 +219,11 @@ class IOServiceTest extends BaseTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'originalFile'  =>  basename( __FILE__ ),
-                'size'          =>  filesize( __FILE__ ),
-                'mimeType'   =>  mime_content_type( __FILE__ )
+                'originalFile' => basename( __FILE__ ),
+                'size' => filesize( __FILE__ ),
+                'mimeType' => mime_content_type( __FILE__ )
                 // TODO What is the uri?
-                //'uri'  =>  'file://' . __FILE__,
+                //'uri' => 'file://' . __FILE__,
             ),
             $binary
         );

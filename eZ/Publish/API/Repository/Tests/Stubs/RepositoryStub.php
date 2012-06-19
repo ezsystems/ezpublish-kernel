@@ -87,6 +87,21 @@ class RepositoryStub implements Repository
     private $ioService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\URLAliasServiceStub
+     */
+    private $urlAliasService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\URLWildcardServiceStub
+     */
+    private $urlWildcardService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateService
+     */
+    private $objectStateService;
+
+    /**
      * @var integer
      */
     private $transactionDepth = 0;
@@ -105,7 +120,7 @@ class RepositoryStub implements Repository
     public function __construct( $fixtureDir, $version )
     {
         $this->fixtureDir = $fixtureDir;
-        $this->version    = $version;
+        $this->version = $version;
     }
 
     /**
@@ -414,6 +429,48 @@ class RepositoryStub implements Repository
             $this->roleService = new RoleServiceStub( $this, $this->getUserService() );
         }
         return $this->roleService;
+    }
+
+    /**
+     * Get UrlAliasService
+     *
+     * @return \eZ\Publish\API\Repository\URLAliasService
+     */
+    public function getURLAliasService()
+    {
+        if ( null === $this->urlAliasService )
+        {
+            $this->urlAliasService = new URLAliasServiceStub( $this );
+        }
+        return $this->urlAliasService;
+    }
+
+    /**
+     * Get URLWildcardService
+     *
+     * @return \eZ\Publish\API\Repository\URLWildcardService
+     */
+    public function getURLWildcardService()
+    {
+        if ( null === $this->urlWildcardService )
+        {
+            $this->urlWildcardService = new URLWildcardServiceStub( $this );
+        }
+        return $this->urlWildcardService;
+    }
+
+    /**
+     * Get ObjectStateService
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    public function getObjectStateService()
+    {
+        if ( null === $this->objectStateService )
+        {
+            $this->objectStateService = new ObjectStateServiceStub( $this );
+        }
+        return $this->objectStateService;
     }
 
     /**

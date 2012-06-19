@@ -17,14 +17,15 @@ use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
@@ -38,6 +39,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStu
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
 
 /**
  * @example Examples/contenttype.php
@@ -48,6 +50,13 @@ class ContentServiceStub implements ContentService
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
+
+    /**
+     * Field handle, which handles special fields
+     *
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldHandler
+     */
+    private $fieldHandler;
 
     /**
      * @var integer
@@ -86,7 +95,10 @@ class ContentServiceStub implements ContentService
      */
     public function __construct( RepositoryStub $repository )
     {
-        $this->repository = $repository;
+        $this->repository   = $repository;
+        $this->fieldHandler = new FieldHandler( array(
+            'ezuser' => new FieldHandler\User( $repository ),
+        ) );
         $this->initFromFixture();
     }
 
@@ -110,7 +122,7 @@ class ContentServiceStub implements ContentService
             {
                 throw new UnauthorizedExceptionStub( 'What error code should be used?' );
             }
-            return  $this->contentInfo[$contentId];
+            return $this->contentInfo[$contentId];
         }
         throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
@@ -309,12 +321,28 @@ class ContentServiceStub implements ContentService
      */
     private function filterFieldsByLanguages( Content $content, array $languageCodes = null )
     {
+        $contentType = $content->contentType;
+
+        $fieldDefinitions = $contentType->getFieldDefinitions();
+        foreach ( $content->getFields() as $field )
+        {
+            foreach ( $fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
+                {
+                    $this->fieldHandler->handleLoad(
+                        $fieldDefinition,
+                        $field,
+                        $content
+                    );
+                }
+            }
+        }
+
         if ( null === $languageCodes || 0 === count( $languageCodes ) )
         {
             return $content;
         }
-
-        $contentType = $content->contentType;
 
         $fields = array();
         foreach ( $content->getFields() as $field )
@@ -385,120 +413,87 @@ class ContentServiceStub implements ContentService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-
-        $fields = array();
-        foreach ( $contentCreateStruct->fields as $field )
-        {
-            if ( false === isset( $fields[$field->fieldDefIdentifier] ) )
-            {
-                $fields[$field->fieldDefIdentifier] = array();
-            }
-            $fields[$field->fieldDefIdentifier][] = $field;
-        }
-
-        // Now validate that all required fields
-        $allFields = array();
-        foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
-        {
-            if ( isset( $fields[$fieldDefinition->identifier] ) )
-            {
-                foreach ( $fields[$fieldDefinition->identifier] as $field )
-                {
-                    $fieldId = ++$this->fieldNextId;
-
-                    $allFields[$fieldId] = new Field(
-                        array(
-                            'id'                  =>  $fieldId,
-                            'value'               =>  $field->value,
-                            'languageCode'        =>  $field->languageCode,
-                            'fieldDefIdentifier'  =>  $fieldDefinition->identifier
-                        )
-                    );
-                }
-            }
-            else if ( $fieldDefinition->isRequired )
-            {
-                throw new ContentValidationExceptionStub(
-                    '@TODO: What error code should be used? ' . $fieldDefinition->identifier
-                );
-            }
-            else
-            {
-                $fieldId = ++$this->fieldNextId;
-
-                $allFields[$fieldId] = new Field(
-                    array(
-                        'id'                  =>  $fieldId,
-                        'value'               =>  $fieldDefinition->defaultValue,
-                        'languageCode'        =>  $contentCreateStruct->contentType->mainLanguageCode,
-                        'fieldDefIdentifier'  =>  $fieldDefinition->identifier
-                    )
-                );
-            }
-        }
-
         if ( $this->remoteIdExists( $contentCreateStruct->remoteId ) )
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
-        $languageCodes = array( $contentCreateStruct->mainLanguageCode );
-        foreach ( $allFields as $field )
-        {
-            $languageCodes[] = $field->languageCode;
-        }
-        $languageCodes = array_unique( $languageCodes );
+        $languageCodes = $this->getLanguageCodes( $contentCreateStruct->fields, $contentCreateStruct->mainLanguageCode );
+        $fields = $this->getFieldsByTypeAndLanguageCode( $contentCreateStruct->contentType, $contentCreateStruct->fields, $contentCreateStruct->mainLanguageCode );
+
+        // Validate all required fields available in each language;
+        $this->checkRequiredFields( $contentCreateStruct->contentType, $fields, $languageCodes, $contentCreateStruct->mainLanguageCode );
+
+        // Complete missing fields
+        $allFields = $this->createCompleteFields( $contentCreateStruct->contentType, $fields, $languageCodes, $contentCreateStruct->mainLanguageCode );
 
         $content = new ContentStub(
             array(
-                'id'      =>  ++$this->contentNextId,
-                'contentTypeId'  =>  $contentCreateStruct->contentType->id,
-                'fields'         =>  $allFields,
-                'relations'      =>  array(),
+                'id' => ++$this->contentNextId,
+                'contentTypeId' => $contentCreateStruct->contentType->id,
+                'fields' => $allFields,
+                'relations' => array(),
 
-                'versionNo'      =>  1,
-                'repository'     =>  $this->repository
+                'versionNo' => 1,
+                'repository' => $this->repository
             )
         );
 
         $contentInfo = new ContentInfoStub(
             array(
-                'id'         =>  $this->contentNextId,
-                'contentTypeId'     =>  $contentCreateStruct->contentType->id,
-                'remoteId'          =>  $contentCreateStruct->remoteId,
-                'sectionId'         =>  $contentCreateStruct->sectionId,
-                'alwaysAvailable'   =>  $contentCreateStruct->alwaysAvailable,
-                'currentVersionNo'  =>  1,
-                'mainLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,
-                'modificationDate'  =>  $contentCreateStruct->modificationDate,
-                'ownerId'           =>  $this->repository->getCurrentUser()->id,
-                'published'         =>  false,
-                'publishedDate'     =>  null,
-                'mainLocationId'    =>  null,
+                'id' => $this->contentNextId,
+                'contentTypeId' => $contentCreateStruct->contentType->id,
+                'remoteId' => $contentCreateStruct->remoteId,
+                'sectionId' => $contentCreateStruct->sectionId,
+                'alwaysAvailable' => $contentCreateStruct->alwaysAvailable,
+                'currentVersionNo' => 1,
+                'mainLanguageCode' => $contentCreateStruct->mainLanguageCode,
+                'modificationDate' => $contentCreateStruct->modificationDate,
+                'ownerId' => $this->repository->getCurrentUser()->id,
+                'published' => false,
+                'publishedDate' => null,
+                'mainLocationId' => null,
 
-                'repository'      =>  $this->repository
+                'repository' => $this->repository
             )
         );
 
         $versionInfo = new VersionInfoStub(
             array(
-                'id'                   =>  ++$this->versionNextId,
-                'contentId'            =>  $this->contentNextId,
-                'status'               =>  VersionInfo::STATUS_DRAFT,
-                'versionNo'            =>  1,
-                'creatorId'            =>  $this->repository->getCurrentUser()->id,
-                'creationDate'         =>  new \DateTime(),
-                'modificationDate'     =>  $contentCreateStruct->modificationDate,
-                'languageCodes'        =>  $languageCodes,
-                'initialLanguageCode'  =>  $contentCreateStruct->mainLanguageCode,
+                'id' => ++$this->versionNextId,
+                'contentId' => $this->contentNextId,
+                'status' => VersionInfo::STATUS_DRAFT,
+                'versionNo' => 1,
+                'creatorId' => $this->repository->getCurrentUser()->id,
+                'creationDate' => new \DateTime(),
+                'modificationDate' => $contentCreateStruct->modificationDate,
+                'languageCodes' => $languageCodes,
+                'initialLanguageCode' => $contentCreateStruct->mainLanguageCode,
+                'names' => $this->generateNames( $contentCreateStruct->contentType, $allFields ),
 
-                'repository'           =>  $this->repository
+                'repository' => $this->repository
             )
         );
 
-        $this->content[]                            = $content;
-        $this->contentInfo[$contentInfo->id]        = $contentInfo;
-        $this->versionInfo[$versionInfo->id]        = $versionInfo;
+        $fieldDefinitions = $contentCreateStruct->contentType->getFieldDefinitions();
+        foreach ( $allFields as $field )
+        {
+            foreach ( $fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
+                {
+                    $this->fieldHandler->handleCreate(
+                        $fieldDefinition,
+                        $field,
+                        $content
+                    );
+                }
+            }
+        }
+
+        $this->content[] = $content;
+        $this->contentInfo[$contentInfo->id] = $contentInfo;
+        $this->versionInfo[$versionInfo->id] = $versionInfo;
 
         $this->index[$contentInfo->id]['versionId'][$versionInfo->id] = $versionInfo->id;
         $this->index[$contentInfo->id]['contentId'][count( $this->content ) - 1] = count( $this->content ) - 1;
@@ -516,6 +511,295 @@ class ContentServiceStub implements ContentService
     }
 
     /**
+     * Returns all language codes used in $fields, including $mainLanguageCode
+     * if not null
+     *
+     * @param array $fields
+     * @param string $mainLanguageCode
+     * @return string[]
+     */
+    private function getLanguageCodes( array $fields, $mainLanguageCode = null )
+    {
+        $languageCodes = array();
+
+        if ( $mainLanguageCode !== null )
+        {
+            $languageCodes[$mainLanguageCode] = true;
+        }
+
+        foreach ( $fields as $field )
+        {
+            if ( $field->languageCode !== null )
+            {
+                $languageCodes[$field->languageCode] = true;
+            }
+        }
+        return array_keys( $languageCodes );
+    }
+
+    /**
+     * Returns $fields structured by type and language code
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @param string $mainLanguageCode
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     *
+     * @throw Exceptions\ContentValidationException if the language code for a
+     *        field could not be determined.
+     */
+    private function getFieldsByTypeAndLanguageCode( ContentType $contentType, array $fields, $mainLanguageCode = null )
+    {
+        $structuredFields = array();
+        foreach ( $fields as $field )
+        {
+            $languageCode = ( $field->languageCode !== null
+                ? $field->languageCode
+                : $mainLanguageCode );
+
+            if ( $languageCode === null
+                && $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
+            {
+                throw new Exceptions\ContentValidationExceptionStub(
+                    '@TODO: What error code should be used?'
+                );
+            }
+
+            $field = $this->cloneField( $field, array( 'languageCode' => $languageCode ) );
+
+            if ( false === isset( $structuredFields[$field->fieldDefIdentifier] ) )
+            {
+                $structuredFields[$field->fieldDefIdentifier] = array();
+            }
+            // Only one field of each type per langauge code
+            $structuredFields[$field->fieldDefIdentifier][$languageCode] = $field;
+        }
+        return $structuredFields;
+    }
+
+    /**
+     * Clones $field, potentially overriding specific properties from
+     * $overrides
+     *
+     * @param Field $field
+     * @param array $overrides
+     * @return Field
+     */
+    private function cloneField( Field $field, array $overrides = array() )
+    {
+        $fieldData = array_merge(
+            array(
+                'id' => $field->id,
+                'value' => $field->value,
+                'languageCode' => $field->languageCode,
+                'fieldDefIdentifier' => $field->fieldDefIdentifier,
+            ),
+            $overrides
+        );
+        return new FieldStub( $fieldData );
+    }
+
+    /**
+     * Returns $originalFieldId if not null, otherwise a new field ID
+     *
+     * @param mixed $originalFieldId
+     * @return void
+     */
+    private function getFieldId( $originalFieldId = null )
+    {
+        if ( $originalFieldId !== null )
+        {
+            return $originalFieldId;
+        }
+        return ++$this->fieldNextId;
+    }
+
+    /**
+     * Checks all fields required by $contentType are available in $fields,
+     * taking languages and non-translatable fields into account.
+     *
+     * Structure is $fields[$fieldIdentifier][$languageCode], while
+     * non-translatable fields are stored with $mainLanguageCode.
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @param array $languageCodes
+     * @param string $mainLanguageCode
+     * @return void
+     */
+    private function checkRequiredFields( ContentType $contentType, array $fields, array $languageCodes, $mainLanguageCode )
+    {
+        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( !$fieldDefinition->isRequired )
+            {
+                continue;
+            }
+
+            if ( $fieldDefinition->isTranslatable )
+            {
+                foreach ( $languageCodes as $languageCode )
+                {
+                    if ( !isset( $fields[$fieldDefinition->identifier][$languageCode] ) || empty( $fields[$fieldDefinition->identifier][$languageCode]->value ) )
+                    {
+                        throw new ContentValidationExceptionStub(
+                            '@TODO: What error code should be used? ' . $fieldDefinition->identifier . ' ' . $languageCode
+                        );
+                    }
+                }
+            }
+            else
+            {
+                if ( !isset( $fields[$fieldDefinition->identifier][$mainLanguageCode] ) || empty( $fields[$fieldDefinition->identifier][$mainLanguageCode]->value ) )
+                {
+                    throw new ContentValidationExceptionStub(
+                        '@TODO: What error code should be used? ' . $fieldDefinition->identifier
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a list of all fields, while missing non-required fields are
+     * completed
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @param array $languageCodes
+     * @param string $mainLanguageCode
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    private function createCompleteFields( ContentType $contentType, array $fields, array $languageCodes, $mainLanguageCode )
+    {
+        $allFields = array();
+        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->isTranslatable )
+            {
+                foreach ( $languageCodes as $languageCode )
+                {
+                    if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
+                    {
+                        $field = $fields[$fieldDefinition->identifier][$languageCode];
+                        $fieldId = $this->getFieldId( $field->id );
+
+                        // Existing translatable field
+                        $allFields[$fieldId] = $this->cloneField(
+                            $field,
+                            array( 'id' => $fieldId )
+                        );
+                    }
+                    else
+                    {
+                        $fieldId = $this->getFieldId();
+                        // Missing translatable field
+                        $allFields[$fieldId] = new FieldStub(
+                            array(
+                                'id' => $fieldId,
+                                'value' => $fieldDefinition->defaultValue,
+                                'languageCode' => $languageCode,
+                                'fieldDefIdentifier' => $fieldDefinition->identifier
+                            )
+                        );
+                    }
+                }
+            }
+            else
+            {
+                if ( isset( $fields[$fieldDefinition->identifier][$mainLanguageCode] ) )
+                {
+                    $field = $fields[$fieldDefinition->identifier][$mainLanguageCode];
+                    $fieldId = $this->getFieldId( $field->id );
+
+                    // Existing non-translatable field
+                    $allFields[$fieldId] = $this->cloneField(
+                        $field,
+                        array( 'id' => $fieldId )
+                    );
+                }
+                else
+                {
+                    $fieldId = $this->getFieldId();
+
+                    // Missing non-translatable field
+                    $allFields[$fieldId] = new FieldStub(
+                        array(
+                            'id' => $fieldId,
+                            'value' => $fieldDefinition->defaultValue,
+                            'languageCode' => null,
+                            'fieldDefIdentifier' => $fieldDefinition->identifier
+                        )
+                    );
+                }
+            }
+        }
+        return $allFields;
+     }
+
+    /**
+     * Generates the names based on the given $contentType and $fields
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     * @return string[]
+     */
+    private function generateNames( ContentType $contentType, array $fields )
+    {
+        $languages = array_unique(
+            array_filter(
+                array_map(
+                    function ( $field ) use ( $contentType )
+                    {
+                        $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+                        return ( $fieldDefinition->isTranslatable
+                            ? $field->languageCode
+                            : false );
+                    },
+                    $fields
+                )
+            )
+        );
+
+        $names = array();
+        foreach ( $languages as $languageCode )
+        {
+            $names[$languageCode] = preg_replace_callback(
+                '(<([^>]+)>)',
+                function ( $matches ) use ( $fields, $languageCode )
+                {
+                    $fieldIdentifiers = explode( '|', $matches[1] );
+                    foreach ( $fieldIdentifiers as $fieldIdentifier )
+                    {
+                        foreach ( $fields as $field )
+                        {
+                            if ( $field->fieldDefIdentifier == $fieldIdentifier
+                                && $field->languageCode == $languageCode )
+                            {
+                                return $field->value;
+                            }
+                        }
+                    }
+                },
+                $contentType->nameSchema
+            );
+        }
+
+        return $names;
+    }
+
+    /**
+     * Parses a name template ala "<short_name|long_name>".
+     *
+     * @param string $nameTemplate
+     * @return string[]
+     */
+    private function parseNameTemplate( $nameTemplate )
+    {
+        return explode( '|', substr( $nameTemplate, 1, strlen( $nameTemplate ) - 2 ) );
+    }
+
+    /**
      * Updates the metadata.
      *
      * (see {@link ContentMetadataUpdateStruct}) of a content object - to update fields use updateContent
@@ -528,7 +812,7 @@ class ContentServiceStub implements ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
+    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
@@ -541,20 +825,20 @@ class ContentServiceStub implements ContentService
 
         $this->contentInfo[$contentInfo->id] = new ContentInfoStub(
             array(
-                'id'                =>  $contentInfo->id,
-                'contentTypeId'     =>  $this->contentInfo[$contentInfo->id]->contentTypeId,
-                'remoteId'          =>  $contentMetadataUpdateStruct->remoteId ?: $contentInfo->remoteId,
-                'sectionId'         =>  $contentInfo->sectionId,
-                'alwaysAvailable'   =>  is_null( $contentMetadataUpdateStruct->alwaysAvailable ) ? $contentInfo->alwaysAvailable : $contentMetadataUpdateStruct->alwaysAvailable,
-                'currentVersionNo'  =>  $contentInfo->currentVersionNo,
-                'mainLanguageCode'  =>  $contentMetadataUpdateStruct->mainLanguageCode ?: $contentInfo->mainLanguageCode,
-                'modificationDate'  =>  $contentMetadataUpdateStruct->modificationDate ?: $contentInfo->modificationDate,
-                'ownerId'           =>  $contentMetadataUpdateStruct->ownerId ?: $contentInfo->ownerId,
-                'published'         =>  $contentInfo->published,
-                'publishedDate'     =>  $contentMetadataUpdateStruct->publishedDate ?: $contentInfo->publishedDate,
-                'mainLocationId'    =>  $contentInfo->mainLocationId,
+                'id' => $contentInfo->id,
+                'contentTypeId' => $this->contentInfo[$contentInfo->id]->contentTypeId,
+                'remoteId' => $contentMetadataUpdateStruct->remoteId ?: $contentInfo->remoteId,
+                'sectionId' => $contentInfo->sectionId,
+                'alwaysAvailable' => is_null( $contentMetadataUpdateStruct->alwaysAvailable ) ? $contentInfo->alwaysAvailable : $contentMetadataUpdateStruct->alwaysAvailable,
+                'currentVersionNo' => $contentInfo->currentVersionNo,
+                'mainLanguageCode' => $contentMetadataUpdateStruct->mainLanguageCode ?: $contentInfo->mainLanguageCode,
+                'modificationDate' => $contentMetadataUpdateStruct->modificationDate ?: $contentInfo->modificationDate,
+                'ownerId' => $contentMetadataUpdateStruct->ownerId ?: $contentInfo->ownerId,
+                'published' => $contentInfo->published,
+                'publishedDate' => $contentMetadataUpdateStruct->publishedDate ?: $contentInfo->publishedDate,
+                'mainLocationId' => $contentInfo->mainLocationId,
 
-                'repository'      =>  $this->repository
+                'repository' => $this->repository
             )
         );
 
@@ -635,46 +919,48 @@ class ContentServiceStub implements ContentService
         $versionNo = $versionInfo ? $versionInfo->versionNo : null;
 
         $content = $this->loadContentByContentInfo( $contentInfo, null, $versionNo );
+        $versionInfo = $content->getVersionInfo();
 
         // Select the greatest version number
-        foreach ( $this->versionInfo as $versionInfo )
+        foreach ( $this->versionInfo as $existingVersionInfo )
         {
-            if ( $versionInfo->contentId !== $contentInfo->id )
+            if ( $existingVersionInfo->contentId !== $contentInfo->id )
             {
                 continue;
             }
-            $versionNo = max( $versionNo, $versionInfo->versionNo );
+            $versionNo = max( $versionNo, $existingVersionInfo->versionNo );
         }
 
         $contentDraft = new ContentStub(
             array(
-                'id'      =>  $content->id,
-                'fields'         =>  $content->getFields(),
-                'relations'      =>  $content->getRelations(),
+                'id' => $content->id,
+                'fields' => $content->getFields(),
+                'relations' => $content->getRelations(),
 
-                'contentTypeId'  =>  $contentInfo->getContentType()->id,
-                'versionNo'      =>  $versionNo + 1,
-                'repository'     =>  $this->repository
+                'contentTypeId' => $contentInfo->getContentType()->id,
+                'versionNo' => $versionNo + 1,
+                'repository' => $this->repository
             )
         );
 
         $versionDraft = new VersionInfoStub(
             array(
-                'id'                   =>  ++$this->versionNextId,
-                'status'               =>  VersionInfo::STATUS_DRAFT,
-                'versionNo'            =>  $versionNo + 1,
-                'creatorId'            =>  $this->repository->getCurrentUser()->id,
-                'creationDate'         =>  new \DateTime(),
-                'modificationDate'     =>  new \DateTime(),
-                'languageCodes'        =>  $versionInfo->languageCodes,
-                'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
+                'id' => ++$this->versionNextId,
+                'status' => VersionInfo::STATUS_DRAFT,
+                'versionNo' => $versionNo + 1,
+                'creatorId' => $this->repository->getCurrentUser()->id,
+                'creationDate' => new \DateTime(),
+                'modificationDate' => new \DateTime(),
+                'languageCodes' => $versionInfo->languageCodes,
+                'initialLanguageCode' => $versionInfo->initialLanguageCode,
+                'names' => $versionInfo->getNames(),
 
-                'contentId'            =>  $content->id,
-                'repository'           =>  $this->repository
+                'contentId' => $content->id,
+                'repository' => $this->repository
             )
         );
 
-        $this->content[]                      = $contentDraft;
+        $this->content[] = $contentDraft;
         $this->versionInfo[$versionDraft->id] = $versionDraft;
 
         return $contentDraft;
@@ -741,74 +1027,64 @@ class ContentServiceStub implements ContentService
             throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
-        $content     = $this->loadContentByVersionInfo( $versionInfo );
+        $content = $this->loadContentByVersionInfo( $versionInfo );
         $contentType = $content->contentType;
 
-        $fieldIds = array();
-        $fields   = array();
-        foreach ( $contentUpdateStruct->fields as $field )
-        {
-            $fieldIds[$field->fieldDefIdentifier] = true;
+        $mainLanguageCode = $contentUpdateStruct->initialLanguageCode;
 
-            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+        $languageCodes = $this->getLanguageCodes( $contentUpdateStruct->fields, $mainLanguageCode );
+        $fields = $this->getFieldsByTypeAndLanguageCode( $contentType, $contentUpdateStruct->fields, $mainLanguageCode );
 
-            if ( null === $field->languageCode &&
-                 null === $contentUpdateStruct->initialLanguageCode &&
-                $fieldDefinition->isTranslatable )
-            {
-                throw new ContentValidationExceptionStub( 'What error code should be used?' );
-            }
-            if ( '' === trim( $field->value ) && $fieldDefinition->isRequired )
-            {
-                throw new ContentValidationExceptionStub( 'What error code should be used?' );
-            }
+        // Validate all required fields available in each language;
+        $this->checkRequiredFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
 
-            $fields[] = new Field(
-                array(
-                    'id'                  =>  ++$this->fieldNextId,
-                    'value'               =>  $field->value,
-                    'languageCode'        =>  $field->languageCode ?: $contentUpdateStruct->initialLanguageCode,
-                    'fieldDefIdentifier'  =>  $field->fieldDefIdentifier
-                )
-            );
-        }
-
-        foreach ( $content->getFields() as $field )
-        {
-            if ( isset( $fieldIds[$field->fieldDefIdentifier] ) )
-            {
-                continue;
-            }
-            $fields[] = $field;
-        }
+        // Complete missing fields
+        $allFields = $this->createCompleteFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
 
         $draftedContent = new ContentStub(
             array(
-                'id'      =>  $content->id,
-                'fields'         =>  $fields,
-                'relations'      =>  $content->getRelations(),
+                'id' => $content->id,
+                'fields' => $allFields,
+                'relations' => $content->getRelations(),
 
-                'contentTypeId'  =>  $content->contentTypeId,
-                'versionNo'      =>  $versionInfo->versionNo,
-                'repository'     =>  $this->repository
+                'contentTypeId' => $content->contentTypeId,
+                'versionNo' => $versionInfo->versionNo,
+                'repository' => $this->repository
             )
         );
 
         $draftedVersionInfo = new VersionInfoStub(
             array(
-                'id'                   =>  $versionInfo->id,
-                'contentId'            =>  $content->id,
-                'status'               =>  $versionInfo->status,
-                'versionNo'            =>  $versionInfo->versionNo,
-                'creatorId'            =>  $versionInfo->creatorId,
-                'creationDate'         =>  $versionInfo->creationDate,
-                'modificationDate'     =>  new \DateTime(),
-                'languageCodes'        =>  $versionInfo->languageCodes,
-                'initialLanguageCode'  =>  $contentUpdateStruct->initialLanguageCode ?: $versionInfo->initialLanguageCode,
+                'id' => $versionInfo->id,
+                'contentId' => $content->id,
+                'status' => $versionInfo->status,
+                'versionNo' => $versionInfo->versionNo,
+                'creatorId' => $versionInfo->creatorId,
+                'creationDate' => $versionInfo->creationDate,
+                'modificationDate' => new \DateTime(),
+                'languageCodes' => $languageCodes,
+                'initialLanguageCode' => $mainLanguageCode,
+                'names' => $this->generateNames( $contentType, $allFields ),
 
-                'repository'           =>  $this->repository
+                'repository' => $this->repository
             )
         );
+
+        $fieldDefinitions = $contentType->getFieldDefinitions();
+        foreach ( $allFields as $field )
+        {
+            foreach ( $fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
+                {
+                    $this->fieldHandler->handleUpdate(
+                        $fieldDefinition,
+                        $field,
+                        $draftedContent
+                    );
+                }
+            }
+        }
 
         if ( false === ( $index = array_search( $content, $this->content ) ) )
         {
@@ -816,7 +1092,7 @@ class ContentServiceStub implements ContentService
         }
 
         $this->versionInfo[$versionInfo->id] = $draftedVersionInfo;
-        $this->content[$index]               = $draftedContent;
+        $this->content[$index] = $draftedContent;
 
         return $draftedContent;
     }
@@ -851,35 +1127,36 @@ class ContentServiceStub implements ContentService
 
         $publishedContentInfo = new ContentInfoStub(
             array(
-                'id'         =>  $contentInfo->id,
-                'remoteId'          =>  $contentInfo->remoteId,
-                'sectionId'         =>  $contentInfo->sectionId,
-                'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
-                'currentVersionNo'  =>  $versionNo,
-                'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
-                'modificationDate'  =>  $contentInfo->modificationDate,
-                'ownerId'           =>  $contentInfo->ownerId,
-                'published'         =>  true,
-                'publishedDate'     =>  new \DateTime(),
-                'mainLocationId'    =>  $contentInfo->mainLocationId,
+                'id' => $contentInfo->id,
+                'remoteId' => $contentInfo->remoteId,
+                'sectionId' => $contentInfo->sectionId,
+                'alwaysAvailable' => $contentInfo->alwaysAvailable,
+                'currentVersionNo' => $versionNo,
+                'mainLanguageCode' => $contentInfo->mainLanguageCode,
+                'modificationDate' => $contentInfo->modificationDate,
+                'ownerId' => $contentInfo->ownerId,
+                'published' => true,
+                'publishedDate' => new \DateTime(),
+                'mainLocationId' => $contentInfo->mainLocationId,
 
-                'contentTypeId'     =>  $contentInfo->getContentType()->id,
-                'repository'        =>  $this->repository
+                'contentTypeId' => $contentInfo->getContentType()->id,
+                'repository' => $this->repository
             )
         );
 
         $publishedVersionInfo = new VersionInfoStub(
             array(
-                'id'                   =>  $versionInfo->id,
-                'status'               =>  VersionInfo::STATUS_PUBLISHED,
-                'versionNo'            =>  $versionNo,
-                'creatorId'            =>  $versionInfo->creatorId,
-                'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
-                'languageCodes'        =>  $versionInfo->languageCodes,
-                'modificationDate'     =>  new \DateTime(),
+                'id' => $versionInfo->id,
+                'status' => VersionInfo::STATUS_PUBLISHED,
+                'versionNo' => $versionNo,
+                'creatorId' => $versionInfo->creatorId,
+                'initialLanguageCode' => $versionInfo->initialLanguageCode,
+                'languageCodes' => $versionInfo->languageCodes,
+                'names' => $versionInfo->getNames(),
+                'modificationDate' => new \DateTime(),
 
-                'contentId'            =>  $contentInfo->id,
-                'repository'           =>  $this->repository
+                'contentId' => $contentInfo->id,
+                'repository' => $this->repository
             )
         );
 
@@ -897,22 +1174,27 @@ class ContentServiceStub implements ContentService
 
             $this->versionInfo[$versionId] = new VersionInfoStub(
                 array(
-                    'id'                   =>  $versionInfo->id,
-                    'status'               =>  VersionInfo::STATUS_ARCHIVED,
-                    'versionNo'            =>  $versionInfo->versionNo,
-                    'creatorId'            =>  $versionInfo->creatorId,
-                    'initialLanguageCode'  =>  $versionInfo->initialLanguageCode,
-                    'languageCodes'        =>  $versionInfo->languageCodes,
-                    'modificationDate'     =>  new \DateTime(),
+                    'id' => $versionInfo->id,
+                    'status' => VersionInfo::STATUS_ARCHIVED,
+                    'versionNo' => $versionInfo->versionNo,
+                    'creatorId' => $versionInfo->creatorId,
+                    'initialLanguageCode' => $versionInfo->initialLanguageCode,
+                    'languageCodes' => $versionInfo->languageCodes,
+                    'names' => $versionInfo->getNames(),
+                    'modificationDate' => new \DateTime(),
 
-                    'contentId'            =>  $contentInfo->id,
-                    'repository'           =>  $this->repository
+                    'contentId' => $contentInfo->id,
+                    'repository' => $this->repository
                 )
             );
         }
 
         $this->contentInfo[$contentInfo->id] = $publishedContentInfo;
         $this->versionInfo[$versionInfo->id] = $publishedVersionInfo;
+
+        $this->repository->getUrlAliasService()->_createAliasesForVersion(
+            $publishedVersionInfo
+        );
 
         return $this->loadContentByVersionInfo( $versionInfo );
     }
@@ -1021,20 +1303,20 @@ class ContentServiceStub implements ContentService
 
         $this->contentInfo[$this->contentNextId] = new ContentInfoStub(
             array(
-                'id'         =>  $this->contentNextId,
-                'remoteId'          =>  md5( uniqid( $contentInfo->remoteId, true ) ),
-                'sectionId'         =>  $contentInfo->sectionId,
-                'alwaysAvailable'   =>  $contentInfo->alwaysAvailable,
-                'currentVersionNo'  =>  $versionNo ? 1 : $contentInfo->currentVersionNo,
-                'mainLanguageCode'  =>  $contentInfo->mainLanguageCode,
-                'modificationDate'  =>  new \DateTime(),
-                'ownerId'           =>  $contentInfo->ownerId,
-                'published'         =>  $contentInfo->published,
-                'publishedDate'     =>  new \DateTime(),
-                'mainLocationId'    =>  $contentInfo->mainLocationId,
+                'id' => $this->contentNextId,
+                'remoteId' => md5( uniqid( $contentInfo->remoteId, true ) ),
+                'sectionId' => $contentInfo->sectionId,
+                'alwaysAvailable' => $contentInfo->alwaysAvailable,
+                'currentVersionNo' => $versionNo ? 1 : $contentInfo->currentVersionNo,
+                'mainLanguageCode' => $contentInfo->mainLanguageCode,
+                'modificationDate' => new \DateTime(),
+                'ownerId' => $contentInfo->ownerId,
+                'published' => $contentInfo->published,
+                'publishedDate' => new \DateTime(),
+                'mainLocationId' => $contentInfo->mainLocationId,
 
-                'contentTypeId'     =>  $contentInfo->getContentType()->id,
-                'repository'        =>  $this->repository
+                'contentTypeId' => $contentInfo->getContentType()->id,
+                'repository' => $this->repository
             )
         );
 
@@ -1053,17 +1335,18 @@ class ContentServiceStub implements ContentService
 
             $this->versionInfo[$this->versionNextId] = new VersionInfoStub(
                 array(
-                    'id'                   =>  $this->versionNextId,
-                    'status'               =>  VersionInfo::STATUS_DRAFT,
-                    'versionNo'            =>  $versionNo ? 1 : $versionInfoStub->versionNo,
-                    'creatorId'            =>  $versionInfoStub->creatorId,
-                    'creationDate'         =>  new \DateTime(),
-                    'modificationDate'     =>  new \DateTime(),
-                    'languageCodes'        =>  $versionInfoStub->languageCodes,
-                    'initialLanguageCode'  =>  $versionInfoStub->initialLanguageCode,
+                    'id' => $this->versionNextId,
+                    'status' => VersionInfo::STATUS_DRAFT,
+                    'versionNo' => $versionNo ? 1 : $versionInfoStub->versionNo,
+                    'creatorId' => $versionInfoStub->creatorId,
+                    'creationDate' => new \DateTime(),
+                    'modificationDate' => new \DateTime(),
+                    'languageCodes' => $versionInfoStub->languageCodes,
+                    'initialLanguageCode' => $versionInfoStub->initialLanguageCode,
+                    'names' => $versionInfoStub->getNames(),
 
-                    'contentId'            =>  $this->contentNextId,
-                    'repository'           =>  $this->repository
+                    'contentId' => $this->contentNextId,
+                    'repository' => $this->repository
                 )
             );
         }
@@ -1082,17 +1365,19 @@ class ContentServiceStub implements ContentService
             $this->content[] = $this->copyContentObject(
                 $content,
                 array(
-                    'id'  =>  $this->contentNextId,
-                    'versionNo'  =>  $versionNo ? 1 : $content->versionNo
+                    'id' => $this->contentNextId,
+                    'versionNo' => $versionNo ? 1 : $content->versionNo
                 )
             );
         }
 
         $locationService = $this->repository->getLocationService();
-        $locationService->createLocation(
+        $location = $locationService->createLocation(
             $this->contentInfo[$this->contentNextId],
             $destinationLocationCreateStruct
         );
+
+        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
 
         return $this->loadContent( $this->contentNextId );
     }
@@ -1116,7 +1401,7 @@ class ContentServiceStub implements ContentService
         {
             if ( $criteria->operator === Criterion\Operator::LIKE )
             {
-                $regexp     = '(' . str_replace( '\*', '.*', preg_quote( $criteria->value ) ) . ')i';
+                $regexp = '(' . str_replace( '\*', '.*', preg_quote( $criteria->value ) ) . ')i';
                 $identifier = $criteria->target;
 
                 $callbacks[] = function( Content $content ) use ( $identifier, $regexp ) {
@@ -1181,9 +1466,9 @@ class ContentServiceStub implements ContentService
 
         return new SearchResult(
             array(
-                'query'  =>  $query,
-                'count'  =>  count( $result ),
-                'items'  =>  $result
+                'query' => $query,
+                'count' => count( $result ),
+                'items' => $result
             )
         );
     }
@@ -1295,10 +1580,10 @@ class ContentServiceStub implements ContentService
 
         $relation = new RelationStub(
             array(
-                'id'                      =>  23,
-                'sourceContentInfo'       =>  $sourceVersion->contentInfo,
-                'destinationContentInfo'  =>  $destinationContent,
-                'type'                    =>  Relation::COMMON
+                'id' => 23,
+                'sourceContentInfo' => $sourceVersion->contentInfo,
+                'destinationContentInfo' => $destinationContent,
+                'type' => Relation::COMMON
             )
         );
 
@@ -1341,7 +1626,7 @@ class ContentServiceStub implements ContentService
             throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
-        $content   = $this->loadContentByVersionInfo( $sourceVersion );
+        $content = $this->loadContentByVersionInfo( $sourceVersion );
         $relations = $content->getRelations();
 
         $relationNotFound = true;
@@ -1374,7 +1659,7 @@ class ContentServiceStub implements ContentService
             $this->copyContentObject(
                 $content,
                 array(
-                    'relations'  =>  $relations
+                    'relations' => $relations
                 )
             )
         );
@@ -1392,11 +1677,11 @@ class ContentServiceStub implements ContentService
     {
         return new ContentCreateStructStub(
             array(
-                'contentType'       =>  $contentType,
-                'mainLanguageCode'  =>  $mainLanguageCode,
-                'modificationDate'  =>  new \DateTime(),
-                'remoteId'          =>  md5( uniqid( __CLASS__, true ) ),
-                'ownerId'           =>  $this->repository->getCurrentUser()->id
+                'contentType' => $contentType,
+                'mainLanguageCode' => $mainLanguageCode,
+                'modificationDate' => new \DateTime(),
+                'remoteId' => md5( uniqid( __CLASS__, true ) ),
+                'ownerId' => $this->repository->getCurrentUser()->id
             )
         );
     }
@@ -1408,7 +1693,7 @@ class ContentServiceStub implements ContentService
      */
     public function newContentMetadataUpdateStruct()
     {
-        return new ContentMetaDataUpdateStruct();
+        return new ContentMetadataUpdateStruct();
     }
 
     /**

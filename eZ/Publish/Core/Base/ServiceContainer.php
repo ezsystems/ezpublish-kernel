@@ -181,7 +181,7 @@ class ServiceContainer implements Container
         else // use Reflection to create a new instance, using the $args
         {
             $reflectionObj = new ReflectionClass( $settings['class'] );
-            $serviceObject =  $reflectionObj->newInstanceArgs( $arguments );
+            $serviceObject = $reflectionObj->newInstanceArgs( $arguments );
         }
 
         if ( $settings['shared'] )

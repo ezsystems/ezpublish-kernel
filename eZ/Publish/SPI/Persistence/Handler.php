@@ -40,6 +40,11 @@ interface Handler
     public function locationHandler();
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+     */
+    public function objectStateHandler();
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function trashHandler();

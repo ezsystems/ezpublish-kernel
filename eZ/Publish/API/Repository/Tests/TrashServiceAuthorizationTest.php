@@ -28,7 +28,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      */
     public function testLoadTrashItemThrowsUnauthorizedException()
     {
-        $repository   = $this->getRepository();
+        $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
         /* BEGIN: Use Case */
@@ -62,8 +62,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         // remoteId of the "Community" page main location
         $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
 
-        $userService     = $repository->getUserService();
-        $trashService    = $repository->getTrashService();
+        $userService = $repository->getUserService();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         // Load "Community" page location
@@ -90,7 +90,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      */
     public function testRecoverThrowsUnauthorizedException()
     {
-        $repository   = $this->getRepository();
+        $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
         /* BEGIN: Use Case */
@@ -116,10 +116,10 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
      */
-    public function testRecoverThrowsUnauthorizedExceptionWithLocationCreateStructParameter()
+    public function testRecoverThrowsUnauthorizedExceptionWithNewParentLocationParameter()
     {
-        $repository      = $this->getRepository();
-        $trashService    = $repository->getTrashService();
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         $homeLocationId = $this->generateId( 'location', 2 );
@@ -129,8 +129,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
-        // Get a location create without property changes.
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        // Get the new parent location
+        $newParentLocation = $locationService->loadLocation( $homeLocationId );
 
         // Load user service
         $userService = $repository->getUserService();
@@ -139,7 +139,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with an "UnauthorizedException"
-        $trashService->recover( $trashItem, $locationCreate );
+        $trashService->recover( $trashItem, $newParentLocation );
         /* END: Use Case */
     }
 
@@ -154,7 +154,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      */
     public function testEmptyTrashThrowsUnauthorizedException()
     {
-        $repository   = $this->getRepository();
+        $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
         /* BEGIN: Use Case */
@@ -182,7 +182,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      */
     public function testDeleteTrashItemThrowsUnauthorizedException()
     {
-        $repository   = $this->getRepository();
+        $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
         /* BEGIN: Use Case */

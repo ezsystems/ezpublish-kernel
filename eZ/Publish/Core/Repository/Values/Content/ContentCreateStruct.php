@@ -47,8 +47,8 @@ class ContentCreateStruct extends APIContentCreateStruct
         $this->fields[] = new Field(
             array(
                 'fieldDefIdentifier' => $fieldDefIdentifier,
-                'value'              => $value,
-                'languageCode'       => $language
+                'value' => $value,
+                'languageCode' => $language
             )
         );
     }

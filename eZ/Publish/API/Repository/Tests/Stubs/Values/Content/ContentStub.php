@@ -79,12 +79,12 @@ class ContentStub extends Content
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        $contentType  = $this->getContentType();
+        $contentType = $this->getContentType();
         $translatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
 
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentType()->mainLanguageCode;
+            $languageCode = $this->getVersionInfo()->getContentInfo()->mainLanguageCode;
         }
 
         foreach ( $this->getFields() as $field )

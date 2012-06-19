@@ -23,21 +23,21 @@ use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParser,
 class Raw extends BaseParser implements InputParser
 {
     protected $OutputTags = array(
-        'section'   => array(),
+        'section' => array(),
 
-        'embed'     => array( //'parsingHandler' => 'breakInlineFlow',
+        'embed' => array( //'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerEmbed',
                               'attributes' => array( 'id' => 'xhtml:id' ),
                               'requiredInputAttributes' => array( 'href' ) ),
 
-        'embed-inline'     => array( //'parsingHandler' => 'breakInlineFlow',
+        'embed-inline' => array( //'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerEmbed',
                               'attributes' => array( 'id' => 'xhtml:id' ),
                               'requiredInputAttributes' => array( 'href' ) ),
 
-        'object'    => array( //'parsingHandler' => 'breakInlineFlow',
+        'object' => array( //'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerObject',
                               'attributes' => array( 'href' => 'image:ezurl_href',
@@ -47,56 +47,56 @@ class Raw extends BaseParser implements InputParser
                                                      'ezurl_target' => 'image:ezurl_target' ),
                               'requiredInputAttributes' => array( 'id' ) ),
 
-        'table'     => array( 'structHandler' => 'appendParagraph' ),
+        'table' => array( 'structHandler' => 'appendParagraph' ),
 
-        'tr'        => array(),
+        'tr' => array(),
 
-        'td'        => array( 'attributes' => array( 'width' => 'xhtml:width',
+        'td' => array( 'attributes' => array( 'width' => 'xhtml:width',
                                                      'colspan' => 'xhtml:colspan',
                                                      'rowspan' => 'xhtml:rowspan' ) ),
 
-        'th'        => array( 'attributes' => array( 'width' => 'xhtml:width',
+        'th' => array( 'attributes' => array( 'width' => 'xhtml:width',
                                                      'colspan' => 'xhtml:colspan',
                                                      'rowspan' => 'xhtml:rowspan' ) ),
 
-        'ol'        => array( 'structHandler' => 'structHandlerLists' ),
+        'ol' => array( 'structHandler' => 'structHandlerLists' ),
 
-        'ul'        => array( 'structHandler' => 'structHandlerLists' ),
+        'ul' => array( 'structHandler' => 'structHandlerLists' ),
 
-        'li'        => array( 'autoCloseOn' => array( 'li' ) ),
+        'li' => array( 'autoCloseOn' => array( 'li' ) ),
 
-        'header'    => array( 'autoCloseOn' => array( 'paragraph' ),
+        'header' => array( 'autoCloseOn' => array( 'paragraph' ),
                               'structHandler' => 'structHandlerHeader' ),
 
         'paragraph' => array( 'autoCloseOn' => array( 'paragraph' ),
                               'publishHandler' => 'publishHandlerParagraph' ),
 
-        'line'      => array(),
+        'line' => array(),
 
-        'br'        => array( 'parsingHandler' => 'breakInlineFlow',
+        'br' => array( 'parsingHandler' => 'breakInlineFlow',
                               'structHandler' => 'structHandlerBr',
                               'attributes' => false ),
 
-        'literal'   => array( 'parsingHandler' => 'parsingHandlerLiteral',
+        'literal' => array( 'parsingHandler' => 'parsingHandlerLiteral',
                               'structHandler' => 'appendParagraph' ),
 
-        'strong'    => array( 'structHandler' => 'appendLineParagraph' ),
+        'strong' => array( 'structHandler' => 'appendLineParagraph' ),
 
         'emphasize' => array( 'structHandler' => 'appendLineParagraph' ),
 
-        'link'      => array( 'structHandler' => 'appendLineParagraph',
+        'link' => array( 'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerLink',
                               'attributes' => array( 'title' => 'xhtml:title',
                                                      'id' => 'xhtml:id' ),
                               'requiredInputAttributes' => array( 'href' ) ),
 
-        'anchor'    => array( 'structHandler' => 'appendLineParagraph' ),
+        'anchor' => array( 'structHandler' => 'appendLineParagraph' ),
 
-        'custom'    => array( 'structHandler' => 'structHandlerCustom',
+        'custom' => array( 'structHandler' => 'structHandlerCustom',
                               'publishHandler' => 'publishHandlerCustom',
                               'requiredInputAttributes' => array( 'name' ) ),
 
-        '#text'     => array( 'structHandler' => 'structHandlerText' )
+        '#text' => array( 'structHandler' => 'structHandlerText' )
     );
 
     public function process( $xmlString, $createRootNode = true  )

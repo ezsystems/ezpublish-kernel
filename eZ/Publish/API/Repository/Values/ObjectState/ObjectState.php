@@ -29,7 +29,7 @@ abstract class ObjectState extends ValueObject
     protected $id;
 
     /**
-     * Readable string identifier of a group
+     * Readable string identifier of the object state
      *
      * @var string
      */
@@ -43,13 +43,13 @@ abstract class ObjectState extends ValueObject
     protected $priority;
 
     /**
-     * the default language code
+     * The default language code
      *
      * @var string
      */
     protected $defaultLanguageCode;
 
-     /**
+    /**
      * The available language codes for names an descriptions
      *
      * @var string[]
@@ -57,7 +57,6 @@ abstract class ObjectState extends ValueObject
     protected $languageCodes;
 
     /**
-     *
      * This method returns the human readable name in all provided languages
      * of the content type
      *
@@ -71,7 +70,7 @@ abstract class ObjectState extends ValueObject
     abstract public function getNames();
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
@@ -92,18 +91,19 @@ abstract class ObjectState extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     abstract public function getDescription( $languageCode );
 
     /**
      * The object state group this object state belongs to
      *
-     * @return eZ\Publish\API\Repository\Values\Content\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     abstract public function getObjectStateGroup();
+
 }

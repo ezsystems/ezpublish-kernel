@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
 /**
  * A criterion that matches content based on its status
  *
- * Multiple statuses can be used, asn array of statuses
+ * Multiple statuses can be used, as an array of statuses
  */
 class Status extends Criterion implements CriterionInterface
 {

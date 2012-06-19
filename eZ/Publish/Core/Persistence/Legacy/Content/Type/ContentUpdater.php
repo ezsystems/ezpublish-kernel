@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler as SearchHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\SPI\Persistence\Content\Type,
@@ -44,20 +45,30 @@ class ContentUpdater
     protected $searchHandler;
 
     /**
+     * Storage handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     */
+    protected $storageHandler;
+
+    /**
      * Creates a new content updater
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      */
     public function __construct(
         SearchHandler $searchHandler,
         ContentGateway $contentGateway,
-        Registry $converterRegistry )
+        Registry $converterRegistry,
+        StorageHandler $storageHandler )
     {
         $this->searchHandler = $searchHandler;
         $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
+        $this->storageHandler = $storageHandler;
     }
 
     /**
@@ -77,7 +88,8 @@ class ContentUpdater
             {
                 $actions[] = new ContentUpdater\Action\RemoveField(
                     $this->contentGateway,
-                    $fieldDef
+                    $fieldDef,
+                    $this->storageHandler
                 );
             }
         }
@@ -90,7 +102,8 @@ class ContentUpdater
                     $fieldDef,
                     $this->converterRegistry->getConverter(
                         $fieldDef->fieldType
-                    )
+                    ),
+                    $this->storageHandler
                 );
             }
         }

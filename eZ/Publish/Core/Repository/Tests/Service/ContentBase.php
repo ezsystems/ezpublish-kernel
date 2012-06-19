@@ -22,7 +22,8 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\SPI\Persistence\Content\Search\Result as SPISearchResult,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator;
 
 /**
  * Test case for Content service
@@ -49,18 +50,18 @@ abstract class ContentBase extends BaseServiceTest
     {
         // Legacy fixture content ID=4 values
         return array(
-            "id"               => 4,
-            "name"             => "Users",
-            "sectionId"        => 2,
+            "id" => 4,
+            "name" => "Users",
+            "sectionId" => 2,
             "currentVersionNo" => 1,
-            "published"        => true,
-            "ownerId"          => 14,
+            "published" => true,
+            "ownerId" => 14,
             "modificationDate" => new \DateTime( "@1033917596" ),
-            "publishedDate"    => new \DateTime( "@1033917596" ),
-            "alwaysAvailable"  => true,
-            "remoteId"         => "f5c88a2209584891056f987fd965b0ba",
+            "publishedDate" => new \DateTime( "@1033917596" ),
+            "alwaysAvailable" => true,
+            "remoteId" => "f5c88a2209584891056f987fd965b0ba",
             "mainLanguageCode" => "eng-US",
-            "mainLocationId"   => 5
+            "mainLocationId" => 5
         );
     }
 
@@ -75,16 +76,16 @@ abstract class ContentBase extends BaseServiceTest
     {
         // Legacy fixture content 4 current version (1) values
         $values = array(
-            "id"                  => 4,
-            "versionNo"           => 1,
-            "modificationDate"    => new \DateTime( "@0" ),
-            "creatorId"           => 14,
-            "creationDate"        => new \DateTime( "@0" ),
-            "status"              => VersionInfo::STATUS_PUBLISHED,
+            "id" => 4,
+            "versionNo" => 1,
+            "modificationDate" => new \DateTime( "@0" ),
+            "creatorId" => 14,
+            "creationDate" => new \DateTime( "@0" ),
+            "status" => VersionInfo::STATUS_PUBLISHED,
             "initialLanguageCode" => "eng-US",
-            "languageCodes"       => array( "eng-US" ),
+            "languageCodes" => array( "eng-US" ),
             // Implementation properties
-            "names"               => array( "eng-US" => "Users" )
+            "names" => array( "eng-US" => "Users" )
         );
 
         if ( $draft )
@@ -109,7 +110,7 @@ abstract class ContentBase extends BaseServiceTest
     protected function getFieldValuesExpectedValues( array $languages = null )
     {
         // Legacy fixture content ID=4 field values
-        $fieldValues =  array(
+        $fieldValues = array(
             "eng-US" => array(
                 "name" => array( "eng-US" => "Users" ),
                 "description" => array( "eng-US" => "Main group" )
@@ -136,7 +137,7 @@ abstract class ContentBase extends BaseServiceTest
     protected function getFieldsExpectedValues( array $languages = null, $draft = false )
     {
         // Legacy fixture content ID=4 fields
-        $fields =  array(
+        $fields = array(
             "eng-US" => array(
                 new Field(
                     array(
@@ -647,7 +648,6 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentByVersionInfo()
     {
-        $this->markTestSkipped( "Enable when repository is removed from VersionInfo" );
         $contentServiceMock = $this->getPartlyMockedService(
             array( "loadContent" )
         );
@@ -769,7 +769,7 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         return array(
-            "contentType"   => $folderContentType,
+            "contentType" => $folderContentType,
             "contentCreateStruct" => $contentCreateStruct
         );
     }
@@ -785,16 +785,16 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testNewContentCreateStructValues( array $data )
     {
-        $contentType         = $data["contentType"];
+        $contentType = $data["contentType"];
         $contentCreateStruct = $data["contentCreateStruct"];
 
         $expectedValues = array(
-            "fields"           => array(),
-            "contentType"      => $contentType,
-            "sectionId"        => null,
-            "ownerId"          => null,
-            "alwaysAvailable"  => null,
-            "remoteId"         => null,
+            "fields" => array(),
+            "contentType" => $contentType,
+            "sectionId" => null,
+            "ownerId" => null,
+            "alwaysAvailable" => null,
+            "remoteId" => null,
             "mainLanguageCode" => "eng-GB",
             "modificationDate" => null
         );
@@ -858,10 +858,10 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $contentDraft );
 
         return array(
-            "expected"     => $contentCreate,
-            "actual"       => $contentDraft,
+            "expected" => $contentCreate,
+            "actual" => $contentDraft,
             "loadedActual" => $contentService->loadContent( $contentDraft->id, null, 1 ),
-            "time"         => $time
+            "time" => $time
         );
     }
 
@@ -927,22 +927,23 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                //"id"
+                "id" => $contentDraft->id,
                 // @todo
-                //"name"             => ,
-                "sectionId"        => $contentCreate->sectionId,
+                //"name" => ,
+                "sectionId" => $contentCreate->sectionId,
                 "currentVersionNo" => 1,
-                "published"        => false,
-                "ownerId"          => $contentCreate->ownerId,
+                "published" => false,
+                "ownerId" => $contentCreate->ownerId,
                 "modificationDate" => new \DateTime( "@0" ),
-                "publishedDate"    => new \DateTime( "@0" ),
-                "alwaysAvailable"  => $contentCreate->alwaysAvailable,
-                "remoteId"         => $contentCreate->remoteId,
+                "publishedDate" => new \DateTime( "@0" ),
+                "alwaysAvailable" => $contentCreate->alwaysAvailable,
+                "remoteId" => $contentCreate->remoteId,
                 "mainLanguageCode" => $contentCreate->mainLanguageCode,
                 // @todo: should be null, InMemory skips creating node assignments and creates locations right away
-                //"mainLocationId"   => null,
+                //"mainLocationId" => null,
                 // implementation properties
-                "contentTypeId"    => $contentCreate->contentType->id
+                // @todo: test content type
+                //"contentTypeId" => $contentCreate->contentType->id
             ),
             $contentDraft->contentInfo
         );
@@ -965,17 +966,18 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 //"id"
-                "versionNo"           => 1,
+                "versionNo" => 1,
                 //"creationDate"
                 //"modificationDate"
-                "creatorId"           => $contentCreate->ownerId,
-                "status"              => VersionInfo::STATUS_DRAFT,
+                "creatorId" => $contentCreate->ownerId,
+                "status" => VersionInfo::STATUS_DRAFT,
                 "initialLanguageCode" => $contentCreate->mainLanguageCode,
                 //"languageCodes"
                 // implementation properties
-                "contentId"           => $contentDraft->id,
+                // @todo: test content draft id
+                //"contentId" => $contentDraft->id,
                 // @todo
-                //"names"                =>
+                //"names" =>
             ),
             $contentDraft->versionInfo
         );
@@ -1250,7 +1252,7 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @todo expectedExceptionCode
      *
      * @return array
@@ -1278,10 +1280,31 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @todo expectedExceptionCode
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $testContentType = $this->createTestContentType();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
+        $contentCreate->setField(
+            "test_required_empty",
+            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890"
+        );
+        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate->sectionId = 1;
+        $contentCreate->ownerId = 14;
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // Throws an exception because "test_required_empty" field value is too long and fails
+        // field definition's string length validator
+        $contentService->createContent( $contentCreate );
+        /* END: Use Case */
     }
 
     /**
@@ -1328,8 +1351,8 @@ abstract class ContentBase extends BaseServiceTest
     {
         // Create one additional location for content to be set as main location
         $locationService = $this->repository->getLocationService();
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 4 );
-        $locationCreateStruct = $locationService->newLocationCreateStruct( 13 );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 12 );
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 44 );
         $locationCreateStruct->remoteId = "test-location-remote-id-1234";
         $newLocation = $locationService->createLocation(
             $contentInfo,
@@ -1348,18 +1371,18 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo( 12 );
 
         $newMainLocationId = $newLocation->id;
         $time = time();
         $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
-        $contentMetadataUpdateStruct->ownerId          = 10;
-        $contentMetadataUpdateStruct->publishedDate    = new \DateTime( "@{$time}" );
+        $contentMetadataUpdateStruct->ownerId = 10;
+        $contentMetadataUpdateStruct->publishedDate = new \DateTime( "@{$time}" );
         $contentMetadataUpdateStruct->modificationDate = new \DateTime( "@{$time}" );
         $contentMetadataUpdateStruct->mainLanguageCode = "eng-GB";
-        $contentMetadataUpdateStruct->alwaysAvailable  = false;
-        $contentMetadataUpdateStruct->remoteId         = "the-all-new-remoteid";
-        $contentMetadataUpdateStruct->mainLocationId   = $newMainLocationId;
+        $contentMetadataUpdateStruct->alwaysAvailable = false;
+        $contentMetadataUpdateStruct->remoteId = "the-all-new-remoteid";
+        $contentMetadataUpdateStruct->mainLocationId = $newMainLocationId;
 
         $content = $contentService->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
         /* END: Use Case */
@@ -1367,8 +1390,8 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
 
         return array(
-            "expected"     => $contentMetadataUpdateStruct,
-            "actual"       => $content,
+            "expected" => $contentMetadataUpdateStruct,
+            "actual" => $content,
             "newSectionId" => $newSectionId
         );
     }
@@ -1390,16 +1413,16 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                "ownerId"          => $updateStruct->ownerId,
+                "ownerId" => $updateStruct->ownerId,
                 // @todo test name change after name scheme resolver is implemented
-                //"name"             => $updateStruct->name,
-                "publishedDate"    => $updateStruct->publishedDate,
+                //"name" => $updateStruct->name,
+                "publishedDate" => $updateStruct->publishedDate,
                 "modificationDate" => $updateStruct->modificationDate,
                 "mainLanguageCode" => $updateStruct->mainLanguageCode,
-                "alwaysAvailable"  => $updateStruct->alwaysAvailable,
-                "remoteId"         => $updateStruct->remoteId,
-                "mainLocationId"   => $updateStruct->mainLocationId,
-                "sectionId"        => $data["newSectionId"]
+                "alwaysAvailable" => $updateStruct->alwaysAvailable,
+                "remoteId" => $updateStruct->remoteId,
+                "mainLocationId" => $updateStruct->mainLocationId,
+                "sectionId" => $data["newSectionId"]
             ),
             $content->contentInfo
         );
@@ -1510,7 +1533,6 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty", "eng-US" );
         $contentUpdateStruct->setField( "test_translatable", "new eng-US value for test_translatable" );
         $contentUpdateStruct->setField( "test_untranslatable", "new value for test_untranslatable" );
-
         $contentUpdateStruct->setField( "test_translatable", "new eng-GB value for test_translatable", "eng-GB" );
 
         $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
@@ -1519,10 +1541,10 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $updatedContent );
 
         return array(
-            "actual"   => $updatedContent,
+            "actual" => $updatedContent,
             "expected" => $contentUpdateStruct,
             "previous" => $content,
-            "time"     => $time
+            "time" => $time
         );
     }
 
@@ -1543,11 +1565,12 @@ abstract class ContentBase extends BaseServiceTest
         /** @var $contentDraft \eZ\Publish\API\Repository\Values\Content\Content */
         $contentDraft = $data['previous'];
 
-        $this->assertEquals(
+        // @todo
+        /*$this->assertEquals(
             $contentDraft->getVersionInfo()->languageCodes,
             $updatedContentDraft->getVersionInfo()->languageCodes,
-            "Language codes in updated content draft does not match with previous language codes"
-        );
+            "Language codes in updated content draft do not match previous language codes"
+        );*/
 
         // Check field values
         $structFields = array();
@@ -1622,7 +1645,7 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $versionInfo = $contentService->loadVersionInfoById( 14 );
+        $versionInfo = $contentService->loadVersionInfoById( 4 );
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
 
         // Throws an exception because version is not a draft
@@ -1634,11 +1657,33 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the updateContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        $this->markTestIncomplete( "Test for ContentService::testUpdateContent() is not implemented." );
+        $content = $this->createTestContent();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $versionInfo = $contentService->loadVersionInfoById(
+            $content->id,
+            $content->getVersionInfo()->versionNo
+        );
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = "eng-US";
+        $contentUpdateStruct->setField(
+            "test_required_empty",
+            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890",
+            "eng-US"
+        );
+
+        // Throws an exception because "test_required_empty" field value is too long and fails
+        // field definition's string length validator
+        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        /* END: Use Case */
     }
 
     /**
@@ -1902,7 +1947,7 @@ abstract class ContentBase extends BaseServiceTest
 
         return array(
             "draftContent" => $draftContent,
-            "time"         => $time
+            "time" => $time
         );
     }
 
@@ -1967,7 +2012,7 @@ abstract class ContentBase extends BaseServiceTest
 
         return array(
             "draftContent" => $draftContent,
-            "time"         => $time
+            "time" => $time
         );
     }
 
@@ -2014,7 +2059,7 @@ abstract class ContentBase extends BaseServiceTest
 
         return array(
             "draftContent" => $draftContent,
-            "time"         => $time
+            "time" => $time
         );
     }
 
@@ -2078,6 +2123,8 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
         $content = $contentService->loadContentDrafts();
+
+
 
         /* END: Use Case */
     }
@@ -2165,7 +2212,7 @@ abstract class ContentBase extends BaseServiceTest
 
         return array(
             "versions" => $versions,
-            "time"     => $time
+            "time" => $time
         );
     }
 
@@ -2241,7 +2288,10 @@ abstract class ContentBase extends BaseServiceTest
 
             $this->fail( "Version was not successfully deleted!" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**
@@ -2295,7 +2345,10 @@ abstract class ContentBase extends BaseServiceTest
 
             $this->fail( "Content was not successfully deleted!" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**
@@ -2312,7 +2365,6 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the copyContent() method.
      *
-     * @group current
      * @dep_ends testCreate
      * @dep_ends testLoadContentInfo
      * @dep_ends testLoadVersionInfoById
@@ -2354,7 +2406,6 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the copyContent() method.
      *
-     * @group current
      * @dep_ends testLoadVersions
      * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
      */
@@ -2510,7 +2561,7 @@ abstract class ContentBase extends BaseServiceTest
     {
         $contentService = $this->repository->getContentService();
 
-        $refObject   = new \ReflectionObject( $contentService );
+        $refObject = new \ReflectionObject( $contentService );
         $refProperty = $refObject->getProperty( 'persistenceHandler' );
         $refProperty->setAccessible( true );
         $refProperty->setValue(
@@ -2535,9 +2586,9 @@ abstract class ContentBase extends BaseServiceTest
         $contentService->findContent(
             new Query(
                 array(
-                    "criterion"   => new Criterion\ContentId( 4 ),
-                    "offset"      => 0,
-                    "limit"       => 10,
+                    "criterion" => new Criterion\ContentId( 4 ),
+                    "offset" => 0,
+                    "limit" => 10,
                     "sortClauses" => array()
                 )
             ),
@@ -2557,7 +2608,7 @@ abstract class ContentBase extends BaseServiceTest
         $query = new Query(
             array(
                 "criterion" => new Criterion\ContentId( array( 4 ) ),
-                "offset"    => 0
+                "offset" => 0
             )
         );
 
@@ -2594,7 +2645,7 @@ abstract class ContentBase extends BaseServiceTest
         $query = new Query(
             array(
                 "criterion" => new Criterion\ContentId( array( 4 ) ),
-                "offset"    => 0
+                "offset" => 0
             )
         );
 
@@ -2658,7 +2709,7 @@ abstract class ContentBase extends BaseServiceTest
             new Query(
                 array(
                     "criterion" => new Criterion\ContentId( array( 42 ) ),
-                    "offset"    => 0
+                    "offset" => 0
                 )
             ),
             array( "languages" => array( "eng-GB" ) ),
@@ -2686,7 +2737,7 @@ abstract class ContentBase extends BaseServiceTest
         $query = new Query(
             array(
                 "criterion" => new Criterion\ContentId( array( PHP_INT_MAX ) ),
-                "offset"    => 0
+                "offset" => 0
             )
         );
 
@@ -2768,18 +2819,6 @@ abstract class ContentBase extends BaseServiceTest
             true
         );
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Test for the newTranslationInfo() method.
@@ -2952,66 +2991,74 @@ abstract class ContentBase extends BaseServiceTest
             "test-type"
         );
         $typeCreateStruct->names = array( "eng-US" => "Test type name" );
-        $typeCreateStruct->descriptions     = array( "eng-GB" => "Test type description" );
-        $typeCreateStruct->remoteId         = "test-type-remoteid";
-        $typeCreateStruct->creatorId        = 23;
-        $typeCreateStruct->creationDate     = new \DateTime();
+        $typeCreateStruct->descriptions = array( "eng-GB" => "Test type description" );
+        $typeCreateStruct->remoteId = "test-type-remoteid";
+        $typeCreateStruct->creatorId = 23;
+        $typeCreateStruct->creationDate = new \DateTime();
         $typeCreateStruct->mainLanguageCode = "eng-GB";
-        $typeCreateStruct->nameSchema       = "<name>";
-        $typeCreateStruct->urlAliasSchema   = "<name>";
+        $typeCreateStruct->nameSchema = "<name>";
+        $typeCreateStruct->urlAliasSchema = "<name>";
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_required_empty", "ezstring" );
-        $fieldCreate->names           = array( "eng-GB" => "Test required empty" );
-        $fieldCreate->descriptions    = array( "eng-GB" => "Required field with empty default value" );
-        $fieldCreate->fieldGroup      = "test-field-group";
-        $fieldCreate->position        = 0;
-        $fieldCreate->isTranslatable  = false;
-        $fieldCreate->isRequired      = true;
+        $fieldCreate->names = array( "eng-GB" => "Test required empty" );
+        $fieldCreate->descriptions = array( "eng-GB" => "Required field with empty default value" );
+        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate->position = 0;
+        $fieldCreate->isTranslatable = false;
+        $fieldCreate->isRequired = true;
         $fieldCreate->isInfoCollector = false;
-        $fieldCreate->isSearchable    = true;
-        $fieldCreate->defaultValue    = "";
+        $fieldCreate->isSearchable = true;
+        $fieldCreate->defaultValue = "";
+        $validator = new StringLengthValidator();
+        $validator->initializeWithConstraints(
+            array(
+                "maxStringLength" => 64,
+                "minStringLength" => 0
+            )
+        );
+        $fieldCreate->validators = array( $validator );
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $fieldCreate );
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_required_not_empty", "ezstring" );
-        $fieldCreate->names           = array( "eng-GB" => "Test required not empty" );
-        $fieldCreate->descriptions    = array( "eng-GB" => "Required field with default value not empty" );
-        $fieldCreate->fieldGroup      = "test-field-group";
-        $fieldCreate->position        = 1;
-        $fieldCreate->isTranslatable  = false;
-        $fieldCreate->isRequired      = true;
+        $fieldCreate->names = array( "eng-GB" => "Test required not empty" );
+        $fieldCreate->descriptions = array( "eng-GB" => "Required field with default value not empty" );
+        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate->position = 1;
+        $fieldCreate->isTranslatable = false;
+        $fieldCreate->isRequired = true;
         $fieldCreate->isInfoCollector = false;
-        $fieldCreate->isSearchable    = true;
-        $fieldCreate->defaultValue    = "dummy default data";
+        $fieldCreate->isSearchable = true;
+        $fieldCreate->defaultValue = "dummy default data";
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $fieldCreate );
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_translatable", "ezstring" );
-        $fieldCreate->names           = array( "eng-GB" => "Test translatable" );
-        $fieldCreate->descriptions    = array( "eng-GB" => "Translatable field" );
-        $fieldCreate->fieldGroup      = "test-field-group";
-        $fieldCreate->position        = 2;
-        $fieldCreate->isTranslatable  = true;
-        $fieldCreate->isRequired      = false;
+        $fieldCreate->names = array( "eng-GB" => "Test translatable" );
+        $fieldCreate->descriptions = array( "eng-GB" => "Translatable field" );
+        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate->position = 2;
+        $fieldCreate->isTranslatable = true;
+        $fieldCreate->isRequired = false;
         $fieldCreate->isInfoCollector = false;
-        $fieldCreate->isSearchable    = true;
-        $fieldCreate->defaultValue    = "";
+        $fieldCreate->isSearchable = true;
+        $fieldCreate->defaultValue = "";
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $fieldCreate );
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_untranslatable", "ezstring" );
-        $fieldCreate->names           = array( "eng-GB" => "Test not translatable" );
-        $fieldCreate->descriptions    = array( "eng-GB" => "Untranslatable field" );
-        $fieldCreate->fieldGroup      = "test-field-group";
-        $fieldCreate->position        = 3;
-        $fieldCreate->isTranslatable  = false;
-        $fieldCreate->isRequired      = false;
+        $fieldCreate->names = array( "eng-GB" => "Test not translatable" );
+        $fieldCreate->descriptions = array( "eng-GB" => "Untranslatable field" );
+        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate->position = 3;
+        $fieldCreate->isTranslatable = false;
+        $fieldCreate->isRequired = false;
         $fieldCreate->isInfoCollector = false;
-        $fieldCreate->isSearchable    = true;
-        $fieldCreate->defaultValue    = "";
+        $fieldCreate->isSearchable = true;
+        $fieldCreate->defaultValue = "";
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $fieldCreate );

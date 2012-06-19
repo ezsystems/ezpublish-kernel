@@ -281,7 +281,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $user );
 
         // Instantiate a user update struct
-        $userUpdateStruct           = $userService->newUserUpdateStruct();
+        $userUpdateStruct = $userService->newUserUpdateStruct();
         $userUpdateStruct->maxLogin = 42;
 
         // This call will fail with an "UnauthorizedException"

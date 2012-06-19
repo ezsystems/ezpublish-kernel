@@ -181,7 +181,7 @@ class SearchHandler extends SearchHandlerInterface
             }
             else if ( $criterion instanceof ContentTypeId && !isset( $match['contentInfo']['typeId'] ) )
             {
-                $match['contentInfo']['typeId'] = $criterion->value[0];
+                $match['contentInfo']['contentTypeId'] = $criterion->value[0];
             }
             else if ( $criterion instanceof LocationId && !isset( $match['locations']['id'] ) )
             {
@@ -213,7 +213,7 @@ class SearchHandler extends SearchHandlerInterface
                         $match['versionInfo']['status'] = VersionInfo::STATUS_PUBLISHED;
                         break;
                     default:
-                        throw new Exception( "Unsuported StatusCriterion->value[0]: " . $criterion->value[0] );
+                        throw new Exception( "Unsupported StatusCriterion->value[0]: " . $criterion->value[0] );
 
                 }
             }

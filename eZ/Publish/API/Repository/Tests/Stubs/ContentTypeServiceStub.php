@@ -102,7 +102,7 @@ class ContentTypeServiceStub implements ContentTypeService
     {
         $this->initGroupProperties();
 
-        $this->repository     = $repository;
+        $this->repository = $repository;
         $this->contentService = $contentService;
 
         $this->initFromFixture();
@@ -467,25 +467,25 @@ class ContentTypeServiceStub implements ContentTypeService
     protected function getTypeAsArray( ContentType $contentType )
     {
         return array(
-            'id'                     => $contentType->id,
-            'status'                 => $contentType->status,
-            'names'                  => $contentType->names,
-            'descriptions'           => $contentType->descriptions,
-            'identifier'             => $contentType->identifier,
-            'creationDate'           => $contentType->creationDate,
-            'modificationDate'       => $contentType->modificationDate,
-            'creatorId'              => $contentType->creatorId,
-            'modifierId'             => $contentType->modifierId,
-            'remoteId'               => $contentType->remoteId,
-            'urlAliasSchema'         => $contentType->urlAliasSchema,
-            'nameSchema'             => $contentType->nameSchema,
-            'isContainer'            => $contentType->isContainer,
-            'mainLanguageCode'       => $contentType->mainLanguageCode,
+            'id' => $contentType->id,
+            'status' => $contentType->status,
+            'names' => $contentType->names,
+            'descriptions' => $contentType->descriptions,
+            'identifier' => $contentType->identifier,
+            'creationDate' => $contentType->creationDate,
+            'modificationDate' => $contentType->modificationDate,
+            'creatorId' => $contentType->creatorId,
+            'modifierId' => $contentType->modifierId,
+            'remoteId' => $contentType->remoteId,
+            'urlAliasSchema' => $contentType->urlAliasSchema,
+            'nameSchema' => $contentType->nameSchema,
+            'isContainer' => $contentType->isContainer,
+            'mainLanguageCode' => $contentType->mainLanguageCode,
             'defaultAlwaysAvailable' => $contentType->defaultAlwaysAvailable,
-            'defaultSortField'       => $contentType->defaultSortField,
-            'defaultSortOrder'       => $contentType->defaultSortOrder,
-            'contentTypeGroups'      => $contentType->contentTypeGroups,
-            'fieldDefinitions'       => $contentType->fieldDefinitions,
+            'defaultSortField' => $contentType->defaultSortField,
+            'defaultSortOrder' => $contentType->defaultSortOrder,
+            'contentTypeGroups' => $contentType->contentTypeGroups,
+            'fieldDefinitions' => $contentType->fieldDefinitions,
         );
     }
 
@@ -634,7 +634,7 @@ class ContentTypeServiceStub implements ContentTypeService
         }
         $newFieldDefinition = new FieldDefinitionStub( $fieldData );
 
-        $typeData  = $this->getTypeAsArray( $contentTypeDraft );
+        $typeData = $this->getTypeAsArray( $contentTypeDraft );
         foreach ( $typeData['fieldDefinitions'] as $index => $existingFieldDefinition )
         {
             if ( $existingFieldDefinition->id == $newFieldDefinition->id )
@@ -683,19 +683,19 @@ class ContentTypeServiceStub implements ContentTypeService
     protected function getFieldDefinitionAsArray( FieldDefinition $fieldDefinition )
     {
         return array(
-            'id'                  => $fieldDefinition->id,
-            'identifier'          => $fieldDefinition->identifier,
-            'names'               => $fieldDefinition->names,
-            'descriptions'        => $fieldDefinition->descriptions,
-            'fieldGroup'          => $fieldDefinition->fieldGroup,
-            'position'            => $fieldDefinition->position,
+            'id' => $fieldDefinition->id,
+            'identifier' => $fieldDefinition->identifier,
+            'names' => $fieldDefinition->names,
+            'descriptions' => $fieldDefinition->descriptions,
+            'fieldGroup' => $fieldDefinition->fieldGroup,
+            'position' => $fieldDefinition->position,
             'fieldTypeIdentifier' => $fieldDefinition->fieldTypeIdentifier,
-            'isTranslatable'      => $fieldDefinition->isTranslatable,
-            'isRequired'          => $fieldDefinition->isRequired,
-            'isInfoCollector'     => $fieldDefinition->isInfoCollector,
-            'validators'          => $fieldDefinition->validators,
-            'defaultValue'        => $fieldDefinition->defaultValue,
-            'isSearchable'        => $fieldDefinition->isSearchable,
+            'isTranslatable' => $fieldDefinition->isTranslatable,
+            'isRequired' => $fieldDefinition->isRequired,
+            'isInfoCollector' => $fieldDefinition->isInfoCollector,
+            'validators' => $fieldDefinition->validators,
+            'defaultValue' => $fieldDefinition->defaultValue,
+            'isSearchable' => $fieldDefinition->isSearchable,
         );
     }
 
@@ -883,13 +883,13 @@ class ContentTypeServiceStub implements ContentTypeService
         }
         $contentTypeData = $this->getTypeAsArray( $contentType );
 
-        $contentTypeData['id']               = $this->nextTypeId++;
-        $contentTypeData['identifier']       = $contentTypeData['identifier'] . '_' . uniqid();
-        $contentTypeData['remoteId']         = $contentTypeData['remoteId'] . '_' . uniqid();
-        $contentTypeData['creationDate']     = new \DateTime();
+        $contentTypeData['id'] = $this->nextTypeId++;
+        $contentTypeData['identifier'] = $contentTypeData['identifier'] . '_' . uniqid();
+        $contentTypeData['remoteId'] = $contentTypeData['remoteId'] . '_' . uniqid();
+        $contentTypeData['creationDate'] = new \DateTime();
         $contentTypeData['modificationDate'] = new \DateTime();
-        $contentTypeData['creatorId']        = $user ? $user->id : $contentTypeData['creatorId'];
-        $contentTypeData['modifierId']       = $user ? $user->id : $contentTypeData['modifierId'];
+        $contentTypeData['creatorId'] = $user ? $user->id : $contentTypeData['creatorId'];
+        $contentTypeData['modifierId'] = $user ? $user->id : $contentTypeData['modifierId'];
 
 
         $newFieldDefinitions = array();
@@ -1035,9 +1035,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
     {
-        $fieldDefinitionCreate =  new FieldDefinitionCreateStruct();
+        $fieldDefinitionCreate = new FieldDefinitionCreateStruct();
 
-        $fieldDefinitionCreate->identifier          = $identifier;
+        $fieldDefinitionCreate->identifier = $identifier;
         $fieldDefinitionCreate->fieldTypeIdentifier = $fieldTypeIdentifier;
 
         return $fieldDefinitionCreate;
@@ -1093,5 +1093,19 @@ class ContentTypeServiceStub implements ContentTypeService
 
         ++$this->nextTypeId;
         ++$this->nextFieldDefinitionId;
+    }
+
+    /**
+     * Instantiates a FieldType\Type object
+     *
+     * @todo Add to API or remove!
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup with settings injected to service
+     *
+     * @param string $type
+     * @return \eZ\Publish\SPI\FieldType\FieldType
+     */
+    public function buildFieldType( $type )
+    {
+        throw new \RuntimeException( '@TODO: test & Implement.' );
     }
 }

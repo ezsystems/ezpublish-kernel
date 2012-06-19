@@ -14,6 +14,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\User\User,
     eZ\Publish\Core\Repository\Values\User\UserGroup,
     eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
 
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
@@ -35,13 +36,13 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'            => null,
-                'login'         => null,
-                'email'         => null,
-                'passwordHash'  => null,
+                'id' => null,
+                'login' => null,
+                'email' => null,
+                'passwordHash' => null,
                 'hashAlgorithm' => null,
-                'maxLogin'      => null,
-                'isEnabled'     => null
+                'maxLogin' => null,
+                'isEnabled' => null
             ),
             $user
         );
@@ -53,8 +54,8 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'            => null,
-                'parentId'      => null,
+                'id' => null,
+                'parentId' => null,
                 'subGroupCount' => null
             ),
             $group
@@ -161,34 +162,34 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testCreateUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
-        $userGroupCreateStruct = $userService->newUserGroupCreateStruct( 'eng-GB' );
         $parentGroup = $userService->loadUserGroup( 4 );
-
-        $userGroupCreateStruct->setField( 'name', 'New group' );
-        $userGroupCreateStruct->setField( 'description', 'This is a new group' );
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct( "eng-GB" );
+        $userGroupCreateStruct->ownerId = 14;
+        $userGroupCreateStruct->sectionId = 1;
+        $userGroupCreateStruct->setField( "name", "New group" );
+        $userGroupCreateStruct->setField( "description", "This is a new group" );
 
         $newGroup = $userService->createUserGroup( $userGroupCreateStruct, $parentGroup );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $newGroup );
+        self::assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup", $newGroup );
     }
 
     /**
      * Test creating new user group throwing ContentFieldValidationException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @covers \eZ\Publish\API\Repository\UserService::createUserGroup
      */
-    public function testCreateUserGroupThrowsContentFieldValidationException()
+    public function testCreateUserGroupThrowsContentValidationException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
-        $userGroupCreateStruct = $userService->newUserGroupCreateStruct( 'eng-GB' );
         $parentGroup = $userService->loadUserGroup( 4 );
-
-        $userGroupCreateStruct->setField( 'name', null );
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct( "eng-GB" );
+        $userGroupCreateStruct->ownerId = 14;
+        $userGroupCreateStruct->sectionId = 1;
+        $userGroupCreateStruct->setField( "name", "" );
 
         $userService->createUserGroup( $userGroupCreateStruct, $parentGroup );
     }
@@ -198,13 +199,12 @@ abstract class UserBase extends BaseServiceTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @covers \eZ\Publish\API\Repository\UserService::createUserGroup
      */
-    public function testCreateUserGroupThrowsContentValidationException()
+    public function testCreateUserGroupThrowsContentValidationExceptionVariation()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
 
-        $userGroupCreateStruct = $userService->newUserGroupCreateStruct( 'eng-GB' );
         $parentGroup = $userService->loadUserGroup( 4 );
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct( "eng-GB" );
 
         $userService->createUserGroup( $userGroupCreateStruct, $parentGroup );
     }
@@ -237,11 +237,19 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadSubUserGroups()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
+
         $parentGroup = $userService->loadUserGroup( 4 );
+        $userGroupCreateStruct = $userService->newUserGroupCreateStruct( "eng-GB" );
+        $userGroupCreateStruct->ownerId = 14;
+        $userGroupCreateStruct->sectionId = 1;
+        $userGroupCreateStruct->setField( "name", "New group" );
+        $userGroupCreateStruct->setField( "description", "This is a new group" );
+
+        $userService->createUserGroup( $userGroupCreateStruct, $parentGroup );
 
         $subGroups = $userService->loadSubUserGroups( $parentGroup );
+
         self::assertInternalType( 'array', $subGroups );
         self::assertNotEmpty( $subGroups );
     }
@@ -255,7 +263,13 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $parentGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $parentGroup = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
         $userService->loadSubUserGroups( $parentGroup );
     }
 
@@ -265,7 +279,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testDeleteUserGroup()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $userGroup = $userService->loadUserGroup( 12 );
@@ -288,7 +302,13 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $userGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $userGroup = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
         $userService->deleteUserGroup( $userGroup );
     }
 
@@ -319,8 +339,20 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
 
-        $userGroupToMove = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
-        $parentUserGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $userGroupToMove = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
+        $parentUserGroup = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                )
+            )
+        );
         $userService->moveUserGroup( $userGroupToMove, $parentUserGroup );
     }
 
@@ -330,39 +362,41 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUpdateUserGroup()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
+        $contentService = $this->repository->getContentService();
 
-        $initialLanguageCode = "eng-GB";
+        $initialLanguageCode = "eng-US";
         $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentUpdateStruct = $contentService->newContentUpdateStruct();
         $userGroupUpdateStruct->contentUpdateStruct->initialLanguageCode = $initialLanguageCode;
         $userGroupUpdateStruct->contentUpdateStruct->setField( "name", "New anonymous group" );
 
         $userGroup = $userService->loadUserGroup( 42 );
 
         $updatedUserGroup = $userService->updateUserGroup( $userGroup, $userGroupUpdateStruct );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $updatedUserGroup );
-        self::assertEquals( $userGroupUpdateStruct->contentUpdateStruct->fields["name"][$initialLanguageCode],
-                            $updatedUserGroup->getFieldValue( "name" )
+        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup", $updatedUserGroup );
+        self::assertEquals(
+            $userGroupUpdateStruct->contentUpdateStruct->fields[0]->value,
+            $updatedUserGroup->getFieldValue( "name" )
         );
     }
 
     /**
      * Test updating a user group throwing ContentFieldValidationException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @covers \eZ\Publish\API\Repository\UserService::updateUserGroup
      */
-    public function testUpdateUserGroupThrowsContentFieldValidationException()
+    public function testUpdateUserGroupThrowsContentValidationException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
         $userService = $this->repository->getUserService();
+        $contentService = $this->repository->getContentService();
 
-        $initialLanguageCode = "eng-GB";
+        $initialLanguageCode = "eng-US";
+        $userGroup = $userService->loadUserGroup( 42 );
         $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
+        $userGroupUpdateStruct->contentUpdateStruct = $contentService->newContentUpdateStruct();
         $userGroupUpdateStruct->contentUpdateStruct->initialLanguageCode = $initialLanguageCode;
-        $userGroupUpdateStruct->contentUpdateStruct->setField( "name", null );
-
-        $userGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => 42 ) ) ) );
+        $userGroupUpdateStruct->contentUpdateStruct->setField( "name", "" );
 
         $userService->updateUserGroup( $userGroup, $userGroupUpdateStruct );
     }
@@ -372,7 +406,7 @@ abstract class UserBase extends BaseServiceTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @covers \eZ\Publish\API\Repository\UserService::updateUserGroup
      */
-    public function testUpdateUserGroupThrowsContentValidationException()
+    public function testUpdateUserGroupThrowsContentValidationExceptionVariation()
     {
         self::markTestIncomplete( "@todo: does this have sense? can we republish the user group object without specifying (modifying) any fields?" );
     }
@@ -407,14 +441,22 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testCreateUserThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $userCreateStruct = $userService->newUserCreateStruct( "new_user", "new_user@ez.no", "password", "eng-GB" );
         $userCreateStruct->setField( "first_name", "New" );
         $userCreateStruct->setField( "last_name", "User" );
 
-        $parentGroup = new UserGroup( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $parentGroup = new UserGroup(
+            array(
+                "versionInfo" => new VersionInfo(
+                    array(
+                        "contentInfo" => new ContentInfo( array( 'id' => PHP_INT_MAX ) )
+                    )
+                )
+            )
+        );
         $userService->createUser( $userCreateStruct, array( $parentGroup ) );
     }
 
@@ -425,7 +467,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testCreateUserThrowsContentFieldValidationException()
     {
-        self::markTestSkipped( "@todo: depends on content service, enable when implemented" );
+        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $userCreateStruct = $userService->newUserCreateStruct( "new_user", "new_user@ez.no", "password", "eng-GB" );
@@ -508,13 +550,13 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'            => 14,
-                'login'         => 'admin',
-                'email'         => 'kn@ez.no',
-                'passwordHash'  => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
+                'id' => 14,
+                'login' => 'admin',
+                'email' => 'kn@ez.no',
+                'passwordHash' => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
                 'hashAlgorithm' => User::PASSWORD_HASH_MD5_USER,
-                'isEnabled'     => true,
-                'maxLogin'      => 10
+                'isEnabled' => true,
+                'maxLogin' => 10
             ),
             $loadedUser
         );
@@ -561,7 +603,10 @@ abstract class UserBase extends BaseServiceTest
             $userService->loadUser( 14 );
             self::fail( "failed deleting a user" );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**
@@ -800,11 +845,11 @@ abstract class UserBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'mainLanguageCode' => 'eng-GB',
-                'login'            => 'admin',
-                'email'            => 'admin@ez.no',
-                'password'         => 'password',
-                'enabled'          => true,
-                'fields'           => array()
+                'login' => 'admin',
+                'email' => 'admin@ez.no',
+                'password' => 'password',
+                'enabled' => true,
+                'fields' => array()
             ),
             $userCreateStruct
         );
@@ -839,14 +884,14 @@ abstract class UserBase extends BaseServiceTest
         );
 
         self::assertNull( $userUpdateStruct->contentUpdateStruct );
-        self::assertNull( $userUpdateStruct->contentMetaDataUpdateStruct );
+        self::assertNull( $userUpdateStruct->contentMetadataUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(
-                'email'                       => null,
-                'password'                    => null,
-                'isEnabled'                   => null,
-                'maxLogin'                    => null
+                'email' => null,
+                'password' => null,
+                'isEnabled' => null,
+                'maxLogin' => null
             ),
             $userUpdateStruct
         );
@@ -868,6 +913,6 @@ abstract class UserBase extends BaseServiceTest
         );
 
         self::assertNull( $userGroupUpdateStruct->contentUpdateStruct );
-        self::assertNull( $userGroupUpdateStruct->contentMetaDataUpdateStruct );
+        self::assertNull( $userGroupUpdateStruct->contentMetadataUpdateStruct );
     }
 }

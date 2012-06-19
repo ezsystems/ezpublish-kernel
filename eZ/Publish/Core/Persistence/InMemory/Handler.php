@@ -80,6 +80,14 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+     */
+    public function objectStateHandler()
+    {
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ObjectStateHandler' );
+    }
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\User\Handler
      */
     public function userHandler()
@@ -129,7 +137,7 @@ class Handler implements HandlerInterface
      *
      * @param string $className
      * @return object
-     * @throws RuntimeException
+     * @throws MissingClass
      */
     protected function serviceHandler( $className )
     {

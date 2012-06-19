@@ -76,11 +76,11 @@ class IOServiceStub implements IOService
 
         return new BinaryFileCreateStruct(
             array(
-                'mimeType'          =>  $uploadedFile['type'],
-                'uri'               =>  'file://' . realpath( $uploadedFile['tmp_name'] ),
-                'originalFileName'  =>  $uploadedFile['name'],
-                'size'              =>  filesize( $uploadedFile['tmp_name'] ),
-                'inputStream'       =>  $stream
+                'mimeType' => $uploadedFile['type'],
+                'uri' => 'file://' . realpath( $uploadedFile['tmp_name'] ),
+                'originalFileName' => $uploadedFile['name'],
+                'size' => filesize( $uploadedFile['tmp_name'] ),
+                'inputStream' => $stream
             )
         );
     }
@@ -107,11 +107,11 @@ class IOServiceStub implements IOService
 
         return new BinaryFileCreateStruct(
             array(
-                'mimeType'          =>  mime_content_type( $localFile ),
-                'uri'               =>  'file://' . realpath( $localFile ),
-                'originalFileName'  =>  basename( $localFile ),
-                'size'              =>  filesize( $localFile ),
-                'inputStream'       =>  $stream
+                'mimeType' => mime_content_type( $localFile ),
+                'uri' => 'file://' . realpath( $localFile ),
+                'originalFileName' => basename( $localFile ),
+                'size' => filesize( $localFile ),
+                'inputStream' => $stream
             )
         );
     }
@@ -127,13 +127,13 @@ class IOServiceStub implements IOService
     {
         $this->binary[++$this->binaryId] = new BinaryFile(
             array(
-                'id'            =>  $this->binaryId,
-                'size'          =>  $binaryFileCreateStruct->size,
-                'ctime'         =>  time(),
-                'mtime'         =>  time(),
-                'uri'           =>  $binaryFileCreateStruct->uri,
-                'originalFile'  =>  $binaryFileCreateStruct->originalFileName,
-                'mimeType'      =>  $binaryFileCreateStruct->mimeType
+                'id' => $this->binaryId,
+                'size' => $binaryFileCreateStruct->size,
+                'ctime' => time(),
+                'mtime' => time(),
+                'uri' => $binaryFileCreateStruct->uri,
+                'originalFile' => $binaryFileCreateStruct->originalFileName,
+                'mimeType' => $binaryFileCreateStruct->mimeType
             )
         );
 
@@ -214,8 +214,8 @@ class IOServiceStub implements IOService
      */
     public function __rollback()
     {
-        $this->binary   = array();
+        $this->binary = array();
         $this->binaryId = 0;
-        $this->content  = array();
+        $this->content = array();
     }
 }

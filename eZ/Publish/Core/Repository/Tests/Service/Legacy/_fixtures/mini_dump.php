@@ -1,8 +1,7 @@
 <?php
 
 return array (
-  'ezcontent_language' => 
-  array (
+  'ezcontent_language' => array (
     0 =>
     array (
       'disabled' => '0',
@@ -56,10 +55,8 @@ return array (
         'navigation_part_identifier' => 'ezcontentnavigationpart'
     )
   ),
-  'ezcontentclass' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass' => array (
+    0 => array (
       'always_available' => '1',
       'contentobject_name' => '<short_name|name>',
       'created' => '1024392098',
@@ -79,8 +76,7 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    1 => 
-    array (
+    1 => array (
       'always_available' => '1',
       'contentobject_name' => '<name>',
       'created' => '1024392098',
@@ -100,8 +96,7 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    2 => 
-    array (
+    2 => array (
       'always_available' => '1',
       'contentobject_name' => '<first_name> <last_name>',
       'created' => '1024392098',
@@ -121,8 +116,7 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    3 => 
-    array (
+    3 => array (
       'always_available' => '0',
       'contentobject_name' => '<subject>',
       'created' => '1052385685',
@@ -206,10 +200,8 @@ return array (
       'version' => '0',
     ),
   ),
-  'ezcontentclass_attribute' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass_attribute' => array (
+    0 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -238,8 +230,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
       'version' => '0',
     ),
-    1 => 
-    array (
+    1 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '3',
@@ -268,8 +259,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
       'version' => '0',
     ),
-    2 => 
-    array (
+    2 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '3',
@@ -298,8 +288,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
       'version' => '0',
     ),
-    3 => 
-    array (
+    3 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -328,8 +317,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"First name";}',
       'version' => '0',
     ),
-    4 => 
-    array (
+    4 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -358,8 +346,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:9:"Last name";}',
       'version' => '0',
     ),
-    5 => 
-    array (
+    5 => array (
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '4',
@@ -388,8 +375,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:12:"User account";}',
       'version' => '0',
     ),
-    6 => 
-    array (
+    6 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -418,8 +404,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:7:"Summary";}',
       'version' => '0',
     ),
-    7 => 
-    array (
+    7 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -448,8 +433,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:7:"Subject";}',
       'version' => '0',
     ),
-    8 => 
-    array (
+    8 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -478,8 +462,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Author";}',
       'version' => '0',
     ),
-    9 => 
-    array (
+    9 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -508,8 +491,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:7:"Message";}',
       'version' => '0',
     ),
-    10 => 
-    array (
+    10 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -538,8 +520,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Short name";}',
       'version' => '0',
     ),
-    11 => 
-    array (
+    11 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -568,8 +549,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
       'version' => '0',
     ),
-    12 => 
-    array (
+    12 => array (
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '1',
@@ -598,8 +578,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Display sub items";}',
       'version' => '0',
     ),
-    32 => 
-    array (
+    32 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -628,8 +607,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:9:"Signature";}',
       'version' => '0',
     ),
-    33 => 
-    array (
+    33 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -688,8 +666,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Tags";}',
       'version' => '0',
     ),*/
-    35 => 
-    array (
+    35 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -718,8 +695,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:12:"Publish date";}',
       'version' => '0',
     ),
-    36 => 
-    array (
+    36 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -748,8 +724,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    37 => 
-    array (
+    37 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -778,8 +753,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Short title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    38 => 
-    array (
+    38 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -808,8 +782,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Author";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    39 => 
-    array (
+    39 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -838,8 +811,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Summary";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    40 => 
-    array (
+    40 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -868,8 +840,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Body";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    41 => 
-    array (
+    41 => array (
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '16',
@@ -898,8 +869,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:15:"Enable comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    42 => 
-    array (
+    42 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -928,8 +898,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    43 => 
-    array (
+    43 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -958,8 +927,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:15:"Caption (Image)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    44 => 
-    array (
+    44 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -988,8 +956,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"Publish date";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    45 => 
-    array (
+    45 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1078,8 +1045,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),*/
-    111 => 
-    array (
+    111 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -1108,8 +1074,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    112 => 
-    array (
+    112 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -1138,8 +1103,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    113 => 
-    array (
+    113 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -1198,8 +1162,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),*/
-    119 => 
-    array (
+    119 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '30',
@@ -1228,8 +1191,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    120 => 
-    array (
+    120 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '30',
@@ -1258,8 +1220,7 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Caption";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    121 => 
-    array (
+    121 => array (
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '30',
@@ -1319,110 +1280,94 @@ return array (
       'version' => '0',
     ),*/
   ),
-  'ezcontentclass_classgroup' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass_classgroup' => array (
+    0 => array (
       'contentclass_id' => '1',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    1 => 
-    array (
+    1 => array (
       'contentclass_id' => '3',
       'contentclass_version' => '0',
       'group_id' => '2',
       'group_name' => 'Users',
     ),
-    2 => 
-    array (
+    2 => array (
       'contentclass_id' => '4',
       'contentclass_version' => '0',
       'group_id' => '2',
       'group_name' => 'Users',
     ),
-    4 => 
-    array (
+    4 => array (
       'contentclass_id' => '14',
       'contentclass_version' => '0',
       'group_id' => '4',
       'group_name' => 'Setup',
     ),
-    6 => 
-    array (
+    6 => array (
       'contentclass_id' => '16',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    18 => 
-    array (
+    18 => array (
       'contentclass_id' => '28',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
     ),
-    20 => 
-    array (
+    20 => array (
       'contentclass_id' => '30',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
     ),
   ),
-  'ezcontentclass_name' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass_name' => array (
+    0 => array (
       'contentclass_id' => '1',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'Folder',
     ),
-    1 => 
-    array (
+    1 => array (
       'contentclass_id' => '3',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'User group',
     ),
-    2 => 
-    array (
+    2 => array (
       'contentclass_id' => '4',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'User',
     ),
-    3 => 
-    array (
+    3 => array (
       'contentclass_id' => '13',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'Comment',
     ),
-    6 => 
-    array (
+    6 => array (
       'contentclass_id' => '16',
       'contentclass_version' => '0',
       'language_id' => '5',
       'language_locale' => 'eng-GB',
       'name' => 'Article',
     ),
-    18 => 
-    array (
+    18 => array (
       'contentclass_id' => '28',
       'contentclass_version' => '0',
       'language_id' => '5',
       'language_locale' => 'eng-GB',
       'name' => 'File',
     ),
-    20 => 
-    array (
+    20 => array (
       'contentclass_id' => '30',
       'contentclass_version' => '0',
       'language_id' => '5',
@@ -1430,10 +1375,8 @@ return array (
       'name' => 'Image',
     ),
   ),
-  'ezcontentclassgroup' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclassgroup' => array (
+    0 => array (
       'created' => '1031216928',
       'creator_id' => '14',
       'id' => '1',
@@ -1441,8 +1384,7 @@ return array (
       'modifier_id' => '14',
       'name' => 'Content',
     ),
-    1 => 
-    array (
+    1 => array (
       'created' => '1031216941',
       'creator_id' => '14',
       'id' => '2',
@@ -1450,8 +1392,7 @@ return array (
       'modifier_id' => '14',
       'name' => 'Users',
     ),
-    2 => 
-    array (
+    2 => array (
       'created' => '1032009743',
       'creator_id' => '14',
       'id' => '3',
@@ -1459,8 +1400,7 @@ return array (
       'modifier_id' => '14',
       'name' => 'Media',
     ),
-    3 => 
-    array (
+    3 => array (
       'created' => '1081858024',
       'creator_id' => '14',
       'id' => '4',
@@ -1469,8 +1409,7 @@ return array (
       'name' => 'Setup',
     ),
   ),
-  'ezcontentobject' => 
-  array (
+  'ezcontentobject' => array (
     array (
       'contentclass_id' => '3',
       'current_version' => '1',
@@ -1556,8 +1495,7 @@ return array (
       'status' => '1',
     ),
   ),
-  'ezcontentobject_attribute' => 
-  array (
+  'ezcontentobject_attribute' => array (
     array (
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
@@ -1574,8 +1512,7 @@ return array (
       'version' => '1',
     ),
   ),
-  'ezcontentobject_link' => 
-  array (
+  'ezcontentobject_link' => array (
     array (
       'contentclassattribute_id' => '237',
       'from_contentobject_id' => '67',
@@ -1586,8 +1523,7 @@ return array (
       'to_contentobject_id' => '60',
     ),
   ),
-  'ezcontentobject_name' => 
-  array (
+  'ezcontentobject_name' => array (
     array (
       'content_translation' => 'eng-GB',
       'content_version' => '1',
@@ -1637,8 +1573,7 @@ return array (
       'real_translation' => 'eng-GB',
     ),
   ),
-  'ezcontentobject_tree' => 
-  array (
+  'ezcontentobject_tree' => array (
     array (
       'contentobject_id' => '0',
       'contentobject_is_published' => '1',
@@ -1766,10 +1701,8 @@ return array (
       'sort_order' => '1',
     ),
   ),
-  'ezcontentobject_version' => 
-  array (
-    0 => 
-    array (
+  'ezcontentobject_version' => array (
+    0 => array (
       'contentobject_id' => '4',
       'created' => '0',
       'creator_id' => '14',
@@ -1785,8 +1718,7 @@ return array (
   ),
   /*'eznode_assignment' =>
   array (
-    0 => 
-    array (
+    0 => array (
       'contentobject_id' => '8',
       'contentobject_version' => '2',
       'from_node_id' => '0',
@@ -1800,10 +1732,8 @@ return array (
       'sort_order' => '1',
     ),
   ),*/
-  'ezurlalias' => 
-  array (
-    0 => 
-    array (
+  'ezurlalias' => array (
+    0 => array (
       'destination_url' => 'content/view/full/2',
       'forward_to_id' => '0',
       'id' => '12',
@@ -1813,8 +1743,7 @@ return array (
       'source_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
       'source_url' => '',
     ),
-    1 => 
-    array (
+    1 => array (
       'destination_url' => 'content/view/full/5',
       'forward_to_id' => '0',
       'id' => '13',
@@ -1824,8 +1753,7 @@ return array (
       'source_md5' => '9bc65c2abec141778ffaa729489f3e87',
       'source_url' => 'users',
     ),
-    3 => 
-    array (
+    3 => array (
       'destination_url' => 'content/view/full/13',
       'forward_to_id' => '0',
       'id' => '16',
@@ -1835,8 +1763,7 @@ return array (
       'source_md5' => '1b1d79c16700fd6003ea7be233e754ba',
       'source_url' => 'users/administrator_users',
     ),
-    5 => 
-    array (
+    5 => array (
       'destination_url' => 'content/view/full/15',
       'forward_to_id' => '0',
       'id' => '18',
@@ -1857,8 +1784,7 @@ return array (
       'source_md5' => '62933a2951ef01f4eafd9bdf4d3cd2f0',
       'source_url' => 'media',
     ),*/
-    7 => 
-    array (
+    7 => array (
       'destination_url' => 'content/view/full/44',
       'forward_to_id' => '0',
       'id' => '21',
@@ -1868,8 +1794,7 @@ return array (
       'source_md5' => '3ae1aac958e1c82013689d917d34967a',
       'source_url' => 'users/anonymous_users',
     ),
-    8 => 
-    array (
+    8 => array (
       'destination_url' => 'content/view/full/45',
       'forward_to_id' => '0',
       'id' => '22',
@@ -1880,10 +1805,8 @@ return array (
       'source_url' => 'users/anonymous_users/anonymous_user',
     ),
   ),
-  'ezurlalias_ml' => 
-  array (
-    6 => 
-    array (
+  'ezurlalias_ml' => array (
+    6 => array (
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -1896,8 +1819,7 @@ return array (
       'text' => 'media2',
       'text_md5' => '50e2736330de124f6edea9b008556fe6',
     ),
-    7 => 
-    array (
+    7 => array (
       'action' => 'eznode:43',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -1910,8 +1832,7 @@ return array (
       'text' => 'Media',
       'text_md5' => '62933a2951ef01f4eafd9bdf4d3cd2f0',
     ),
-    17 => 
-    array (
+    17 => array (
       'action' => 'eznode:5',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -1924,8 +1845,7 @@ return array (
       'text' => 'Users',
       'text_md5' => '9bc65c2abec141778ffaa729489f3e87',
     ),
-    19 => 
-    array (
+    19 => array (
       'action' => 'eznode:2',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -1938,8 +1858,7 @@ return array (
       'text' => '',
       'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
     ),
-    22 => 
-    array (
+    22 => array (
       'action' => 'eznode:44',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -1952,8 +1871,7 @@ return array (
       'text' => 'Anonymous-Users',
       'text_md5' => 'c2803c3fa1b0b5423237b4e018cae755',
     ),
-    25 => 
-    array (
+    25 => array (
       'action' => 'eznode:13',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -1966,8 +1884,7 @@ return array (
       'text' => 'Administrator-users',
       'text_md5' => 'f89fad7f8a3abc8c09e1deb46a420007',
     ),
-    30 => 
-    array (
+    30 => array (
       'action' => 'eznode:13',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -1980,8 +1897,7 @@ return array (
       'text' => 'administrator_users',
       'text_md5' => 'aeb8609aa933b0899aa012c71139c58c',
     ),
-    31 => 
-    array (
+    31 => array (
       'action' => 'eznode:44',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -1994,8 +1910,7 @@ return array (
       'text' => 'anonymous_users',
       'text_md5' => 'e9e5ad0c05ee1a43715572e5cc545926',
     ),
-    32 => 
-    array (
+    32 => array (
       'action' => 'eznode:15',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -2008,8 +1923,7 @@ return array (
       'text' => 'Administrator-User',
       'text_md5' => '5a9d7b0ec93173ef4fedee023209cb61',
     ),
-    33 => 
-    array (
+    33 => array (
       'action' => 'eznode:15',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -2022,8 +1936,7 @@ return array (
       'text' => 'administrator_user',
       'text_md5' => 'a3cca2de936df1e2f805710399989971',
     ),
-    38 => 
-    array (
+    38 => array (
       'action' => 'eznode:45',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -2036,8 +1949,7 @@ return array (
       'text' => 'Anonymous-User',
       'text_md5' => 'ccb62ebca03a31272430bc414bd5cd5b',
     ),
-    39 => 
-    array (
+    39 => array (
       'action' => 'eznode:45',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -2051,18 +1963,15 @@ return array (
       'text_md5' => 'c593ec85293ecb0e02d50d4c5c6c20eb',
     ),
   ),
-  'ezuser' => 
-  array (
-    0 => 
-    array (
+  'ezuser' => array (
+    0 => array (
       'contentobject_id' => '10',
       'email' => 'nospam@ez.no',
       'login' => 'anonymous',
       'password_hash' => '4e6f6184135228ccd45f8233d72a0363',
       'password_hash_type' => '2',
     ),
-    1 => 
-    array (
+    1 => array (
       'contentobject_id' => '14',
       'email' => 'kn@ez.no',
       'login' => 'admin',
@@ -2070,18 +1979,15 @@ return array (
       'password_hash_type' => '2',
     ),
   ),
-  'ezuser_role' => 
-  array (
-    0 => 
-    array (
+  'ezuser_role' => array (
+    0 => array (
       'contentobject_id' => '12',
       'id' => '25',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '2',
     ),
-    2 => 
-    array (
+    2 => array (
       'contentobject_id' => '42',
       'id' => '31',
       'limit_identifier' => '',
@@ -2089,18 +1995,15 @@ return array (
       'role_id' => '1',
     ),
   ),
-  'ezrole' => 
-  array (
-    0 => 
-    array (
+  'ezrole' => array (
+    0 => array (
       'id' => '1',
       'is_new' => '0',
       'name' => 'Anonymous',
       'value' => '',
       'version' => '0',
     ),
-    1 => 
-    array (
+    1 => array (
       'id' => '2',
       'is_new' => '0',
       'name' => 'Administrator',
@@ -2108,10 +2011,8 @@ return array (
       'version' => '0',
     ),
   ),
-  'ezpolicy' => 
-  array (
-    0 => 
-    array (
+  'ezpolicy' => array (
+    0 => array (
       'function_name' => '*',
       'id' => '308',
       'module_name' => '*',
@@ -2128,16 +2029,13 @@ return array (
       'policy_id' => '328',
     ),
   ),*/
-  'ezuser_setting' => 
-  array (
-    0 => 
-    array (
+  'ezuser_setting' => array (
+    0 => array (
       'is_enabled' => '1',
       'max_login' => '1000',
       'user_id' => '10',
     ),
-    1 => 
-    array (
+    1 => array (
       'is_enabled' => '1',
       'max_login' => '10',
       'user_id' => '14',

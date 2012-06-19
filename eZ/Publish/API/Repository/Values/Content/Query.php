@@ -33,9 +33,16 @@ class Query extends ValueObject
     /**
      * Query sorting clauses
      *
-     * @var array an array of {@link SortClause}
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause[]
      */
     public $sortClauses;
+
+    /**
+     * An array of facet builders
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[]
+     */
+    public $facetBuilders;
 
     /**
      * Query offset
@@ -50,4 +57,11 @@ class Query extends ValueObject
      * @var integer
      */
     public $limit;
+
+    /**
+     * If true spellcheck suggestions are returned
+     *
+     * @var boolean
+     */
+    public $spellcheck;
 }

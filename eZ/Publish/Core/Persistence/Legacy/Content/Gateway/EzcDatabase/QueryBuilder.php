@@ -161,6 +161,29 @@ class QueryBuilder
     }
 
     /**
+     * Creates a select query for content relations
+     *
+     * @return ezcQuerySelect
+     */
+    public function createRelationFindQuery()
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'contentclassattribute_id', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'from_contentobject_id', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'from_contentobject_version', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'op_code', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'relation_type', 'ezcontentobject_link' ),
+            $this->dbHandler->aliasedColumn( $query, 'to_contentobject_id', 'ezcontentobject_link' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_link' )
+        );
+
+        return $query;
+    }
+
+    /**
      * Creates a select query for content version objects
      *
      * Creates a select query with all necessary joins to fetch a complete

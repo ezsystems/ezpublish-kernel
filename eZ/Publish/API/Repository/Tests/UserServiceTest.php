@@ -170,7 +170,7 @@ class UserServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
-        $userService        = $repository->getUserService();
+        $userService = $repository->getUserService();
 
         // Load the default ContentType for user groups
         $groupType = $contentTypeService->loadContentTypeByIdentifier( 'user_group' );
@@ -226,12 +226,12 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'parentId'       =>  $this->generateId( 'group', 4 ),
-                'subGroupCount'  =>  0
+                'parentId' => $this->generateId( 'group', 4 ),
+                'subGroupCount' => 0
             ),
             array(
-                'parentId'       =>  $userGroup->parentId,
-                'subGroupCount'  =>  $userGroup->subGroupCount
+                'parentId' => $userGroup->parentId,
+                'subGroupCount' => $userGroup->subGroupCount
             )
         );
     }
@@ -246,11 +246,11 @@ class UserServiceTest extends BaseTest
      */
     public function testCreateUserGroupIncrementsParentSubGroupCount()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $mainGroupId = $this->generateId( 'group', 4 );
 
-        $parentUserGroup  = $userService->loadUserGroup( $mainGroupId );
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
         $parentGroupCount = $parentUserGroup->subGroupCount;
 
         /* BEGIN: Use Case */
@@ -388,7 +388,7 @@ class UserServiceTest extends BaseTest
      */
     public function testDeleteUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -412,7 +412,7 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         $membersGroupId = $this->generateId( 'group', 13 );
@@ -450,7 +450,7 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroupIncrementsSubGroupCountOnNewParent()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         $membersGroupId = $this->generateId( 'group', 13 );
@@ -482,7 +482,7 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroupDecrementsSubGroupCountOnOldParent()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         $membersGroupId = $this->generateId( 'group', 13 );
@@ -537,7 +537,7 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserGroup()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -570,7 +570,7 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserGroupWithSubContentUpdateStruct()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -594,7 +594,7 @@ class UserServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertEquals( 'Sindelfingen', $userGroup->getFieldValue( 'name' ) );
+        $this->assertEquals( 'Sindelfingen', $userGroup->getFieldValue( 'name', 'eng-US' ) );
 
         $versionInfo = $userGroup->getVersionInfo();
 
@@ -611,7 +611,7 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserGroupWithSubContentMetadataUpdateStruct()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -626,7 +626,7 @@ class UserServiceTest extends BaseTest
 
         // Create a group update struct and set content update struct
         $groupUpdate = $userService->newUserGroupUpdateStruct();
-        $groupUpdate->contentMetaDataUpdateStruct = $metadataUpdate;
+        $groupUpdate->contentMetadataUpdateStruct = $metadataUpdate;
 
         // This will update the name and the increment the group version number
         $userGroup = $userService->updateUserGroup(
@@ -656,7 +656,7 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserGroupThrowsContentValidationException()
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
@@ -722,16 +722,16 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login'             =>  'user',
-                'email'             =>  'user@example.com',
-                'password'          =>  'secret',
-                'mainLanguageCode'  =>  'eng-US',
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'password' => 'secret',
+                'mainLanguageCode' => 'eng-US',
             ),
             array(
-                'login'             =>  $userCreate->login,
-                'email'             =>  $userCreate->email,
-                'password'          =>  $userCreate->password,
-                'mainLanguageCode'  =>  $userCreate->mainLanguageCode,
+                'login' => $userCreate->login,
+                'email' => $userCreate->email,
+                'password' => $userCreate->password,
+                'mainLanguageCode' => $userCreate->mainLanguageCode,
             )
         );
     }
@@ -755,7 +755,7 @@ class UserServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
-        $userService        = $repository->getUserService();
+        $userService = $repository->getUserService();
 
         $userType = $contentTypeService->loadContentTypeByIdentifier( 'user' );
 
@@ -807,20 +807,20 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login'             =>  'user',
-                'email'             =>  'user@example.com',
-                'passwordHash'      =>  $this->createHash(
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'passwordHash' => $this->createHash(
                     'user',
                     'secret',
                     $user->hashAlgorithm
                 ),
-                'mainLanguageCode'  =>  'eng-US'
+                'mainLanguageCode' => 'eng-US'
             ),
             array(
-                'login'             =>  $user->login,
-                'email'             =>  $user->email,
-                'passwordHash'      =>  $user->passwordHash,
-                'mainLanguageCode'  =>  $user->contentInfo->mainLanguageCode
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'mainLanguageCode' => $user->contentInfo->mainLanguageCode
             )
         );
     }
@@ -1113,8 +1113,8 @@ class UserServiceTest extends BaseTest
         $userUpdate = $userService->newUserUpdateStruct();
 
         // Set new values for password and maxLogin
-        $userUpdate->password  = 'my-new-password';
-        $userUpdate->maxLogin  = 42;
+        $userUpdate->password = 'my-new-password';
+        $userUpdate->maxLogin = 42;
         $userUpdate->isEnabled = false;
 
         // Updated the user record.
@@ -1141,22 +1141,22 @@ class UserServiceTest extends BaseTest
     {
         $this->assertEquals(
             array(
-                'login'         =>  'user',
-                'email'         =>  'user@example.com',
-                'passwordHash'  =>  $this->createHash(
+                'login' => 'user',
+                'email' => 'user@example.com',
+                'passwordHash' => $this->createHash(
                     'user',
                     'my-new-password',
                     $user->hashAlgorithm
                 ),
-                'maxLogin'      =>  42,
-                'isEnabled'     =>  false
+                'maxLogin' => 42,
+                'isEnabled' => false
             ),
             array(
-                'login'         =>  $user->login,
-                'email'         =>  $user->email,
-                'passwordHash'  =>  $user->passwordHash,
-                'maxLogin'      =>  $user->maxLogin,
-                'isEnabled'     =>  $user->isEnabled
+                'login' => $user->login,
+                'email' => $user->email,
+                'passwordHash' => $user->passwordHash,
+                'maxLogin' => $user->maxLogin,
+                'isEnabled' => $user->isEnabled
             )
         );
     }
@@ -1217,7 +1217,7 @@ class UserServiceTest extends BaseTest
         $userUpdate = $userService->newUserUpdateStruct();
 
         // Set the metadata update struct.
-        $userUpdate->contentMetaDataUpdateStruct = $metadataUpdate;
+        $userUpdate->contentMetadataUpdateStruct = $metadataUpdate;
 
         // Updated the user record.
         $userVersion2 = $userService->updateUser( $user, $userUpdate );
@@ -1252,6 +1252,9 @@ class UserServiceTest extends BaseTest
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
         $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
+
+        // Required field
+        $contentUpdate->setField( 'user_account', $user );
 
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();
@@ -1419,7 +1422,7 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
-        $editorsGroupId   = $this->generateId( 'group', 13 );
+        $editorsGroupId = $this->generateId( 'group', 13 );
         $anonymousGroupId = $this->generateId( 'group', 42 );
 
         /* BEGIN: Use Case */

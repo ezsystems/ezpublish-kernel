@@ -27,26 +27,6 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
 class Content extends APIContent
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
-     * @var integer
-     */
-    protected $contentTypeId;
-
-    /**
-     * @var integer
-     */
-    protected $versionNo;
-
-    /**
      * @var array an array of field values like $fields[$fieldDefIdentifier][$languageCode]
      */
     protected $fields;
@@ -55,6 +35,11 @@ class Content extends APIContent
      * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     protected $relations;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    protected $versionInfo;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
@@ -80,10 +65,7 @@ class Content extends APIContent
      */
     public function getVersionInfo()
     {
-        return $this->repository->getContentService()->loadVersionInfoById(
-            $this->id,
-            $this->versionNo
-        );
+        return $this->versionInfo;
     }
 
     /**
@@ -103,7 +85,7 @@ class Content extends APIContent
     {
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentInfo()->mainLanguageCode;
+            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
         if ( isset( $this->fields[$fieldDefIdentifier][$languageCode] ) )
@@ -149,7 +131,7 @@ class Content extends APIContent
 
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentInfo()->mainLanguageCode;
+            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
         foreach ( $this->getFields() as $field )
@@ -175,7 +157,7 @@ class Content extends APIContent
     {
         if ( null === $languageCode )
         {
-            $languageCode = $this->getContentInfo()->mainLanguageCode;
+            $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
         foreach ( $this->getFields() as $field )
@@ -191,26 +173,6 @@ class Content extends APIContent
     }
 
     /**
-     * Returns the underlying ContentType for this content object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
-    private function getContentType()
-    {
-        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
-    }
-
-    /**
-     * Returns the content info for this concrete content.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
-    private function getContentInfo()
-    {
-        return $this->repository->getContentService()->loadContentInfo( $this->id );
-    }
-
-    /**
      * Magic getter for retrieving convenience properties
      *
      * @param string $property The name of the property to retrieve
@@ -221,14 +183,14 @@ class Content extends APIContent
     {
         switch ( $property )
         {
+            case 'id':
+                return $this->versionInfo->contentInfo->id;
+
             case 'contentType':
-                return $this->getContentType();
+                return $this->versionInfo->contentInfo->contentType;
 
             case 'contentInfo':
-                return $this->getContentInfo();
-
-            case 'versionInfo':
-                return $this->getVersionInfo();
+                return $this->versionInfo->contentInfo;
         }
 
         return parent::__get( $property );
@@ -243,13 +205,13 @@ class Content extends APIContent
      */
     public function __isset( $property )
     {
+        if ( $property === 'id' )
+            return true;
+
         if ( $property === 'contentType' )
             return true;
 
         if ( $property === 'contentInfo' )
-            return true;
-
-        if ( $property === 'versionInfo' )
             return true;
 
         return parent::__isset( $property );

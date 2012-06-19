@@ -33,20 +33,20 @@ abstract class RoleBase extends BaseServiceTest
     {
         $this->assertPropertiesCorrect(
             array(
-                'id'               => null,
-                'identifier'       => null,
+                'id' => null,
+                'identifier' => null,
                 'mainLanguageCode' => null,
-                'policies'         => array()
+                'policies' => array()
             ),
             new Role()
         );
 
         $this->assertPropertiesCorrect(
             array(
-                'id'          => null,
-                'roleId'      => null,
-                'module'      => null,
-                'function'    => null,
+                'id' => null,
+                'roleId' => null,
+                'module' => null,
+                'function' => null,
                 'limitations' => array()
             ),
             new Policy()
@@ -181,7 +181,7 @@ abstract class RoleBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => $roleCreateStruct->identifier,
-                'policies'   => array()
+                'policies' => array()
             ),
             $createdRole,
             //@todo: enable mainLanguageCode test
@@ -361,9 +361,9 @@ abstract class RoleBase extends BaseServiceTest
 */
         $this->assertPropertiesCorrect(
             array(
-                'id'         => $role->id,
+                'id' => $role->id,
                 'identifier' => $roleUpdateStruct->identifier,
-                'policies'   => $role->getPolicies()
+                'policies' => $role->getPolicies()
             ),
             $updatedRole,
             //@todo: enable mainLanguageCode test
@@ -463,9 +463,9 @@ abstract class RoleBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'       => $policy->id,
-                'roleId'   => $policy->roleId,
-                'module'   => $policy->module,
+                'id' => $policy->id,
+                'roleId' => $policy->roleId,
+                'module' => $policy->module,
                 'function' => $policy->function
             ),
             $updatedPolicy
@@ -492,7 +492,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => 1,
+                'id' => 1,
                 'identifier' => 'Anonymous'
             ),
             $role
@@ -524,7 +524,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id'         => 1,
+                'id' => 1,
                 'identifier' => 'Anonymous'
             ),
             $role
@@ -580,7 +580,10 @@ abstract class RoleBase extends BaseServiceTest
             $roleService->loadRole( 1 );
             self::fail( 'Succeeded loading role after deleting it' );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+            // Do nothing
+        }
     }
 
     /**
@@ -803,10 +806,10 @@ abstract class RoleBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'identifier'       => "Ultimate permissions",
+                'identifier' => "Ultimate permissions",
                 'mainLanguageCode' => null,
-                'names'            => null,
-                'descriptions'     => null
+                'names' => null,
+                'descriptions' => null
             ),
             $roleCreateStruct
         );
@@ -830,7 +833,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'module'   => 'content',
+                'module' => 'content',
                 'function' => 'read'
             ),
             $policyCreateStruct
@@ -854,10 +857,10 @@ abstract class RoleBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'identifier'       => null,
+                'identifier' => null,
                 'mainLanguageCode' => null,
-                'names'            => null,
-                'descriptions'     => null
+                'names' => null,
+                'descriptions' => null
             ),
             $roleUpdateStruct
         );

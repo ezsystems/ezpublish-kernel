@@ -20,7 +20,8 @@ use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  */
@@ -306,20 +307,35 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param mixed $contentTypeId
-     * @param int $status
+     *
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
-     * @todo Add throw when type does not exist
+     *
+     * @param mixed $contentTypeId
+     * @param int $status
+     *
+     * @return boolean
      */
     public function delete( $contentTypeId, $status )
     {
-        $count = Type::STATUS_DEFINED !== $status ? 0 : $this->contentTypeGateway->countInstancesOfType(
-            $contentTypeId, $status
-        );
-        if ( $count > 0 )
+        if ( !$this->contentTypeGateway->loadTypeData( $contentTypeId, $status ) )
         {
-            throw new Exception\TypeStillHasContent( $contentTypeId, $status );
+            throw new NotFoundException(
+                "ContentType",
+                array(
+                    "id" => $contentTypeId,
+                    "status" => $status
+                )
+            );
+        }
+
+        if ( Type::STATUS_DEFINED === $status && $this->contentTypeGateway->countInstancesOfType( $contentTypeId ) )
+        {
+            throw new BadStateException(
+                "\$contentTypeId",
+                "ContentType with given id still has content instances and therefore can't be deleted"
+            );
         }
 
         $this->contentTypeGateway->delete(
@@ -366,6 +382,7 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
+        $createStruct->status = Type::STATUS_DRAFT;
         $createStruct->identifier .= '_' . ( $createStruct->remoteId = md5( uniqid( get_class( $createStruct ), true ) ) );
 
         return $this->create( $createStruct );

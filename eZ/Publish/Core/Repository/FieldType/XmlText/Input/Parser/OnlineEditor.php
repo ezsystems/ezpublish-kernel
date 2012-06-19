@@ -35,41 +35,41 @@ class OnlineEditor extends BaseParser implements InputParser
      */
     protected $InputTags = array(
         'section' => array( 'name' => 'section' ),
-        'b'       => array( 'name' => 'strong' ),
-        'bold'    => array( 'name' => 'strong' ),
-        'strong'  => array( 'name' => 'strong' ),
-        'i'       => array( 'name' => 'emphasize' ),
-        'em'      => array( 'name' => 'emphasize' ),
-        'pre'     => array( 'name' => 'literal' ),
-        'div'     => array( 'nameHandler' => 'tagNameDivnImg' ),
-        'u'       => array( 'nameHandler' => 'tagNameCustomHelper' ),
-        'sub'       => array( 'nameHandler' => 'tagNameCustomHelper' ),
-        'sup'       => array( 'nameHandler' => 'tagNameCustomHelper' ),
-        'img'     => array( 'nameHandler' => 'tagNameDivnImg',
+        'b' => array( 'name' => 'strong' ),
+        'bold' => array( 'name' => 'strong' ),
+        'strong' => array( 'name' => 'strong' ),
+        'i' => array( 'name' => 'emphasize' ),
+        'em' => array( 'name' => 'emphasize' ),
+        'pre' => array( 'name' => 'literal' ),
+        'div' => array( 'nameHandler' => 'tagNameDivnImg' ),
+        'u' => array( 'nameHandler' => 'tagNameCustomHelper' ),
+        'sub' => array( 'nameHandler' => 'tagNameCustomHelper' ),
+        'sup' => array( 'nameHandler' => 'tagNameCustomHelper' ),
+        'img' => array( 'nameHandler' => 'tagNameDivnImg',
                             'noChildren' => true ),
-        'h1'      => array( 'nameHandler' => 'tagNameHeader' ),
-        'h2'      => array( 'nameHandler' => 'tagNameHeader' ),
-        'h3'      => array( 'nameHandler' => 'tagNameHeader' ),
-        'h4'      => array( 'nameHandler' => 'tagNameHeader' ),
-        'h5'      => array( 'nameHandler' => 'tagNameHeader' ),
-        'h6'      => array( 'nameHandler' => 'tagNameHeader' ),
-        'p'       => array( 'name' => 'paragraph' ),
-        'br'      => array( 'name' => 'br',
+        'h1' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h2' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h3' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h4' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h5' => array( 'nameHandler' => 'tagNameHeader' ),
+        'h6' => array( 'nameHandler' => 'tagNameHeader' ),
+        'p' => array( 'name' => 'paragraph' ),
+        'br' => array( 'name' => 'br',
                             'noChildren' => true ),
-        'span'    => array( 'nameHandler' => 'tagNameSpan' ),
-        'table'   => array( 'nameHandler' => 'tagNameTable' ),
-        'td'      => array( 'name' => 'td' ),
-        'tr'      => array( 'name' => 'tr' ),
-        'th'      => array( 'name' => 'th' ),
-        'ol'      => array( 'name' => 'ol' ),
-        'ul'      => array( 'name' => 'ul' ),
-        'li'      => array( 'name' => 'li' ),
-        'a'       => array( 'nameHandler' => 'tagNameLink' ),
-        'link'    => array( 'nameHandler' => 'tagNameLink' ),
+        'span' => array( 'nameHandler' => 'tagNameSpan' ),
+        'table' => array( 'nameHandler' => 'tagNameTable' ),
+        'td' => array( 'name' => 'td' ),
+        'tr' => array( 'name' => 'tr' ),
+        'th' => array( 'name' => 'th' ),
+        'ol' => array( 'name' => 'ol' ),
+        'ul' => array( 'name' => 'ul' ),
+        'li' => array( 'name' => 'li' ),
+        'a' => array( 'nameHandler' => 'tagNameLink' ),
+        'link' => array( 'nameHandler' => 'tagNameLink' ),
        // Stubs for not supported tags.
-        'tbody'   => array( 'name' => '' ),
-        'thead'   => array( 'name' => '' ),
-        'tfoot'   => array( 'name' => '' )
+        'tbody' => array( 'name' => '' ),
+        'thead' => array( 'name' => '' ),
+        'tfoot' => array( 'name' => '' )
     );
 
     /**
@@ -79,77 +79,77 @@ class OnlineEditor extends BaseParser implements InputParser
      * @var array $OutputTags
      */
     protected $OutputTags = array(
-        'section'   => array(),
+        'section' => array(),
 
-        'embed'     => array( 'initHandler'    => 'transformStyles',
-                              'structHandler'  => 'appendLineParagraph',
+        'embed' => array( 'initHandler' => 'transformStyles',
+                              'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerEmbed',
-                              'attributes'     => array( 'alt' => 'size',
+                              'attributes' => array( 'alt' => 'size',
                                                          'html_id' => 'xhtml:id' ) ),
 
-        'embed-inline' => array( 'initHandler'    => 'transformStyles',
-                                 'structHandler'  => 'appendLineParagraph',
+        'embed-inline' => array( 'initHandler' => 'transformStyles',
+                                 'structHandler' => 'appendLineParagraph',
                                  'publishHandler' => 'publishHandlerEmbed',
-                                 'attributes'     => array( 'alt' => 'size',
+                                 'attributes' => array( 'alt' => 'size',
                                                             'html_id' => 'xhtml:id' ) ),
 
-        'table'     => array( 'initHandler'   => 'transformStyles',
+        'table' => array( 'initHandler' => 'transformStyles',
                               'structHandler' => 'appendParagraph',
-                              'attributes'    => array( 'border' => false,
+                              'attributes' => array( 'border' => false,
                                                         'ezborder' => 'border' ) ),
 
-        'tr'        => array(),
+        'tr' => array(),
 
-        'td'        => array( 'initHandler' => 'transformStyles',
-                              'attributes'  => array( 'width' => 'xhtml:width',
+        'td' => array( 'initHandler' => 'transformStyles',
+                              'attributes' => array( 'width' => 'xhtml:width',
                                                       'colspan' => 'xhtml:colspan',
                                                       'rowspan' => 'xhtml:rowspan' ) ),
 
-        'th'        => array( 'initHandler' => 'transformStyles',
-                              'attributes'  => array( 'width' => 'xhtml:width',
+        'th' => array( 'initHandler' => 'transformStyles',
+                              'attributes' => array( 'width' => 'xhtml:width',
                                                       'colspan' => 'xhtml:colspan',
                                                       'rowspan' => 'xhtml:rowspan' ) ),
 
-        'ol'        => array( 'structHandler' => 'structHandlerLists' ),
+        'ol' => array( 'structHandler' => 'structHandlerLists' ),
 
-        'ul'        => array( 'structHandler' => 'structHandlerLists' ),
+        'ul' => array( 'structHandler' => 'structHandlerLists' ),
 
-        'li'        => array( 'autoCloseOn' => array( 'li' ) ),
+        'li' => array( 'autoCloseOn' => array( 'li' ) ),
 
-        'header'    => array( 'initHandler'   => 'initHandlerHeader',
-                              'autoCloseOn'   => array( 'paragraph' ),
+        'header' => array( 'initHandler' => 'initHandlerHeader',
+                              'autoCloseOn' => array( 'paragraph' ),
                               'structHandler' => 'structHandlerHeader' ),
 
         'paragraph' => array( 'parsingHandler' => 'parsingHandlerParagraph',
-                              'autoCloseOn'    => array( 'paragraph' ),
-                              'initHandler'    => 'transformStyles',
-                              'structHandler'  => 'structHandlerParagraph' ),
+                              'autoCloseOn' => array( 'paragraph' ),
+                              'initHandler' => 'transformStyles',
+                              'structHandler' => 'structHandlerParagraph' ),
 
-        'line'      => array(),
+        'line' => array(),
 
-        'br'        => array( 'parsingHandler' => 'breakInlineFlow',
-                              'structHandler'  => 'structHandlerBr',
-                              'attributes'     => false ),
+        'br' => array( 'parsingHandler' => 'breakInlineFlow',
+                              'structHandler' => 'structHandlerBr',
+                              'attributes' => false ),
 
-        'literal'   => array( 'parsingHandler' => 'parsingHandlerLiteral',
-                              'structHandler'  => 'appendParagraph',
-                              'attributes'     => array( 'class' => 'class' ) ),
+        'literal' => array( 'parsingHandler' => 'parsingHandlerLiteral',
+                              'structHandler' => 'appendParagraph',
+                              'attributes' => array( 'class' => 'class' ) ),
 
-        'strong'    => array( 'structHandler' => 'appendLineParagraph' ),
+        'strong' => array( 'structHandler' => 'appendLineParagraph' ),
 
         'emphasize' => array( 'structHandler' => 'appendLineParagraph' ),
 
-        'link'      => array( 'structHandler'  => 'appendLineParagraph',
+        'link' => array( 'structHandler' => 'appendLineParagraph',
                               'publishHandler' => 'publishHandlerLink',
-                              'attributes'     => array( 'title' => 'xhtml:title',
+                              'attributes' => array( 'title' => 'xhtml:title',
                                                          'id' => 'xhtml:id' ) ),
 
-        'anchor'    => array( 'structHandler' => 'appendLineParagraph' ),
+        'anchor' => array( 'structHandler' => 'appendLineParagraph' ),
 
-        'custom'    => array( 'initHandler'   => 'initHandlerCustom',
+        'custom' => array( 'initHandler' => 'initHandlerCustom',
                               'structHandler' => 'structHandlerCustom' ),
 
-        '#text'     => array( 'structHandler' => 'structHandlerText' )
+        '#text' => array( 'structHandler' => 'structHandlerText' )
     );
 
     /**
@@ -1111,7 +1111,7 @@ class OnlineEditor extends BaseParser implements InputParser
      */
     protected function publishHandlerLink( $element, &$params )
     {
-        $ret  = null;
+        $ret = null;
         $href = $element->getAttribute( 'href' );
         if ( $href )
         {
@@ -1230,7 +1230,7 @@ class OnlineEditor extends BaseParser implements InputParser
                     // Store urlID instead of href
                     if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                     {
-                        $url   = str_replace(array('&amp;', '%28', '%29'), array('&', '(', ')'), $url );
+                        $url = str_replace(array('&amp;', '%28', '%29'), array('&', '(', ')'), $url );
                         $url = $this->handler->registerUrl( $url );
 
                         if ( $url !== false )
@@ -1403,7 +1403,7 @@ class OnlineEditor extends BaseParser implements InputParser
                     continue;
 
                 list( $name, $value ) = explode( ':', $style );
-                $name  = trim( $name );
+                $name = trim( $name );
                 $value = trim( $value );
 
                 if ( $name === 'float' || $name === 'text-align' )

@@ -8,12 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Image;
-use ezp\Base\Legacy\Carpet,
-    ezp\Base\Image\Data as ImageData,
-    ezp\Base\BinaryRepository,
+use eZ\Publish\Core\Repository\FieldType\Image\Data as ImageData,
+    eZ\Publish\API\Repository\IOService,
     eZ\Publish\Core\Repository\FieldType\Image\AliasCollection,
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     splFileInfo,
-    DateTime;
+    DateTime,
+    ReflectionClass;
 
 /**
  * Wraps eZImageManager class from old eZ Publish
@@ -21,7 +23,7 @@ use ezp\Base\Legacy\Carpet,
  * @todo This implementation is to be changed not to be dependent on the old eZImageManager
  * @todo Rewrite image fieldtype
  */
-class Manager extends Carpet
+class Manager
 {
     protected static $className = 'eZImageManager';
 
@@ -33,12 +35,12 @@ class Manager extends Carpet
     protected $aliasCollection;
 
     /**
-     * The binary repository.
+     * The IO service.
      * Can be used to store image aliases once generation is done
      *
-     * @var \ezp\Base\BinaryRepository
+     * @var \eZ\Publish\API\Repository\IOService
      */
-    protected $binaryRepository;
+    protected $IOService;
 
     /**
      * Legacy image manager class
@@ -51,12 +53,12 @@ class Manager extends Carpet
      * Constructor
      *
      * @param \eZ\Publish\Core\Repository\FieldType\Image\AliasCollection $aliasCollection The image alias collection calling this manager
-     * @param \ezp\Base\BinaryRepository $binaryRepository The binary repository
+     * @param \eZ\Publish\API\Repository\IOService $IOService The IO Service
      */
-    public function __construct( AliasCollection $aliasCollection, BinaryRepository $binaryRepository )
+    public function __construct( AliasCollection $aliasCollection, IOService $IOService )
     {
-        parent::__construct( static::$className );
         $this->aliasCollection = $aliasCollection;
+        $this->IOService = $IOService;
         // Build the legacy eZImageManager object through eZImageManager::factory()
         $this->object = forward_static_call( array( static::$className, 'factory' ) );
     }
@@ -88,7 +90,8 @@ class Manager extends Carpet
     {
         // Store in the repository as operations will be done in the repository for concurrency protection.
         // @see eZImageManager::createImageAlias(), starting from line 864
-        $imageFile = $this->binaryRepository->createFromLocalFile( $imageInfo->getPathname() );
+        $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $imageInfo->getPathname() );
+        $imageFile = $this->IOService->createBinaryFile( $createStruct );
 
         $aliasListForLegacy = array(
             'original' => array(
@@ -114,7 +117,7 @@ class Manager extends Carpet
 
         // Refetch the image file from the binary repository
         // Modification could have been made in underlying image manager
-        $imageFile = $this->binaryRepository->load( $imageInfo->getPathname() );
+        $imageFile = $this->IOService->loadBinaryFile( $imageInfo->getPathname() );
 
         // Image analysis, for advanced information like EXIF and GIF info
         // Result will be contained in $aliasListForLegacy['original']['info']
@@ -142,11 +145,11 @@ class Manager extends Carpet
     }
 
     /**
-     * Builds an {@link \ezp\Base\Image\Data} object from $imageInfo and maps properties
+     * Builds an ImageData object from $imageInfo and maps properties
      *
      * @param array $imageInfo Image info array returned by legacy image analyzer
      * @see \eZImageManager::analyzeImage()
-     * @return \ezp\Base\Image\Data
+     * @return \eZ\Publish\Core\Repository\FieldType\Image\Data
      */
     private function buildImageData( array $imageInfo )
     {
@@ -187,5 +190,106 @@ class Manager extends Carpet
         }
 
         return $imageData;
+    }
+
+    /**
+     * "Lifts the carpet and sweeps the dust under it"
+     * In other more pragmatic words, Instantiates the object to be abstracted.
+     *
+     * Note: This method makes use of Reflection if $constructorArgs contains more than 1 element.
+     * Therefore, to avoid too much performance cost, please consider extending this class
+     * and reimplement this method in order to pass the exact number of arguments
+     * to the abstracted class's constructor
+     *
+     * @param array|null $constructorArgs Arguments to pass to the constructor.
+     *                                    Set to null (default) if no argument is required
+     * @return Manager
+     *
+     * @todo Fix inclusion of class files !
+     */
+    public function lift( array $constructorArgs = null )
+    {
+        $className = self::$className;
+        if ( $constructorArgs === null )
+        {
+            $this->object = new $className;
+        }
+        else if ( isset( $constructorArgs[0] ) && !isset( $constructorArgs[1] ) )
+        {
+            $this->object = new $className( $constructorArgs[0] );
+        }
+        else
+        {
+            $refClass = new ReflectionClass( $className );
+            $this->object = $refClass->newInstanceArgs( $constructorArgs );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Access to abstracted object's property, identified by $name.
+     *
+     * @param string $name Property name
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
+     * @return mixed
+     */
+    public function __get( $name )
+    {
+        if ( !property_exists( $this->object, $name ) )
+            throw new PropertyNotFoundException( $name, static::$className );
+
+        return $this->object->$name;
+    }
+
+    /**
+     * Sets $value to abstracted object's property, identified by $name
+     *
+     * @param string $name Property name
+     * @param mixed $value Value to set
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
+     */
+    public function __set( $name, $value )
+    {
+        if ( !property_exists( $this->object, $name ) )
+            throw new PropertyNotFoundException( $name, static::$className );
+
+        $this->object->$name = $value;
+    }
+
+    /**
+     * Calls $method with $arguments on abstracted object
+     *
+     * @param string $method Method name
+     * @param array $arguments
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @return mixed
+     */
+    public function __call( $method, array $arguments )
+    {
+        if ( !method_exists( $this->object, $method ) )
+            throw new InvalidArgumentException( $method, " does not exist on " . static::$className );
+
+        return call_user_func_array( array( $this->object, $method ), $arguments );
+    }
+
+    /**
+     * Calls static $method with $arguments on abstracted object class
+     *
+     * @param string $method Method name
+     * @param array $arguments
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @return mixed
+     */
+    public static function __callStatic( $method, array $arguments )
+    {
+        if ( !method_exists( static::$className, $method ) )
+            throw new InvalidArgumentException( $method, " does not exist on " . static::$className );
+
+        return forward_static_call_array( array( static::$className, $method ), $arguments );
     }
 }

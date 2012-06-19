@@ -251,12 +251,12 @@ class IOService implements IOServiceInterface
         return new BinaryFile(
             array(
                 //@todo is setting the id of file to path correct?
-                'id'           => $spiBinaryFile->path,
-                'size'         => (int) $spiBinaryFile->size,
-                'mtime'        => $spiBinaryFile->mtime,
-                'ctime'        => $spiBinaryFile->ctime,
-                'mimeType'     => $spiBinaryFile->mimeType,
-                'uri'          => $spiBinaryFile->uri,
+                'id' => $spiBinaryFile->path,
+                'size' => (int) $spiBinaryFile->size,
+                'mtime' => $spiBinaryFile->mtime,
+                'ctime' => $spiBinaryFile->ctime,
+                'mimeType' => $spiBinaryFile->mimeType,
+                'uri' => $spiBinaryFile->uri,
                 'originalFile' => $spiBinaryFile->originalFile
             )
         );
