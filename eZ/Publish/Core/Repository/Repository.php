@@ -77,6 +77,13 @@ class Repository implements RepositoryInterface
     protected $roleService;
 
     /**
+     * Instance of search service
+     *
+     * @var \eZ\Publish\API\Repository\SearchService
+     */
+    protected $searchService;
+
+    /**
      * Instance of user service
      *
      * @var \eZ\Publish\API\Repository\UserService
@@ -157,6 +164,7 @@ class Repository implements RepositoryInterface
             'trash' => array(),
             'io' => array(),
             'objectState' => array(),
+            'search' => array(),
         );
 
         if ( $user !== null )
@@ -450,6 +458,20 @@ class Repository implements RepositoryInterface
 
         $this->roleService = new RoleService( $this, $this->persistenceHandler, $this->serviceSettings['role'] );
         return $this->roleService;
+    }
+
+    /**
+     * Get SearchService
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService()
+    {
+        if ( $this->searchService !== null )
+            return $this->searchService;
+
+        $this->searchService = new SearchService( $this, $this->persistenceHandler, $this->serviceSettings['search'] );
+        return $this->searchService;
     }
 
     /**
