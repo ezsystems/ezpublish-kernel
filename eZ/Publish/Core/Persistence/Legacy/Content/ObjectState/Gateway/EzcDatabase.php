@@ -280,7 +280,7 @@ class EzcDatabase extends Gateway
             $query->bindValue( $objectStateGroup->identifier )
         )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
-            $query->bindValue( $this->maskGenerator->generateLanguageMask( $languageCodes ) )
+            $query->bindValue( $this->maskGenerator->generateLanguageMask( $languageCodes ), null, \PDO::PARAM_INT )
         );
 
         $query->prepare()->execute();
@@ -370,7 +370,7 @@ class EzcDatabase extends Gateway
             $query->bindValue( $objectState->identifier )
         )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
-            $query->bindValue( $this->maskGenerator->generateLanguageMask( $languageCodes ) )
+            $query->bindValue( $this->maskGenerator->generateLanguageMask( $languageCodes ), null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'priority' ),
             $query->bindValue( $objectState->priority, null, \PDO::PARAM_INT )
