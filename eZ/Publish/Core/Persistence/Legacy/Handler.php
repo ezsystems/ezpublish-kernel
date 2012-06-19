@@ -704,7 +704,8 @@ class Handler implements HandlerInterface
         if ( !isset( $this->objectStateGateway ) )
         {
             $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase(
-                $this->getDatabase()
+                $this->getDatabase(),
+                $this->getLanguageMaskGenerator()
             );
         }
         return $this->objectStateGateway;

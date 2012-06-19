@@ -53,7 +53,13 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function createGroup( InputStruct $input ) {}
+    public function createGroup( InputStruct $input )
+    {
+        $objectStateGroup = $this->objectStateMapper->createObjectStateGroupFromInputStruct( $input );
+        $this->objectStateGateway->insertObjectStateGroup( $objectStateGroup );
+
+        return $objectStateGroup;
+    }
 
     /**
      * Loads a object state group
@@ -131,7 +137,13 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function create( $groupId, InputStruct $input ) {}
+    public function create( $groupId, InputStruct $input )
+    {
+        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct( $groupId, $input );
+        $this->objectStateGateway->insertObjectState( $objectState );
+
+        return $objectState;
+    }
 
     /**
      * Loads an object state

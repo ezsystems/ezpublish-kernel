@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
+use eZ\Publish\SPI\Persistence\Content\ObjectState,
+    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+
 /**
  * ObjectState Gateway
  */
@@ -46,4 +49,18 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadObjectStateGroupListData( $offset, $limit );
+
+    /**
+     * Inserts a new object state group into database
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
+     */
+    abstract public function insertObjectStateGroup( Group $objectStateGroup );
+
+    /**
+     * Inserts a new object state into database
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
+     */
+    abstract public function insertObjectState( ObjectState $objectState );
 }

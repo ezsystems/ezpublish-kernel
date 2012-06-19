@@ -9,7 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\SPI\Persistence\Content\ObjectState,
+    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * ObjectState ezcDatabase Gateway
@@ -24,13 +27,22 @@ class EzcDatabase extends Gateway
     protected $dbHandler;
 
     /**
+     * Language mask generator
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $maskGenerator;
+
+    /**
      * Creates a new EzcDatabase ObjectState Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
      */
-    public function __construct( EzcDbHandler $dbHandler )
+    public function __construct( EzcDbHandler $dbHandler, MaskGenerator $maskGenerator )
     {
         $this->dbHandler = $dbHandler;
+        $this->maskGenerator = $maskGenerator;
     }
 
     /**
@@ -236,5 +248,165 @@ class EzcDatabase extends Gateway
         }
 
         return array_values( $rows );
+    }
+
+    /**
+     * Inserts a new object state group into database
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
+     */
+    public function insertObjectStateGroup( Group $objectStateGroup )
+    {
+        $languageCodes = array();
+        foreach ( $objectStateGroup->languageCodes as $languageCode )
+        {
+            $languageCodes[$languageCode] = 1;
+        }
+        $languageCodes['always-available'] = 1;
+
+        $query = $this->dbHandler->createInsertQuery();
+        $query->insertInto(
+            $this->dbHandler->quoteTable( 'ezcobj_state_group' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcobj_state_group', 'id' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'default_language_id' ),
+            $query->bindValue(
+                $this->maskGenerator->generateLanguageIndicator( $objectStateGroup->defaultLanguage, false ),
+                null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'identifier' ),
+            $query->bindValue( $objectStateGroup->identifier )
+        )->set(
+            $this->dbHandler->quoteColumn( 'language_mask' ),
+            $query->bindValue( $this->maskGenerator->generateLanguageMask( $languageCodes ) )
+        );
+
+        $query->prepare()->execute();
+
+        $objectStateGroup->id = (int) $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcobj_state_group', 'id' )
+        );
+
+        foreach ( $objectStateGroup->languageCodes as $languageCode )
+        {
+            $query = $this->dbHandler->createInsertQuery();
+            $query->insertInto(
+                $this->dbHandler->quoteTable( 'ezcobj_state_group_language' )
+            )->set(
+                $this->dbHandler->quoteColumn( 'contentobject_state_group_id' ),
+                $query->bindValue( $objectStateGroup->id, null, \PDO::PARAM_INT )
+            )->set(
+                $this->dbHandler->quoteColumn( 'description' ),
+                $query->bindValue( $objectStateGroup->description[$languageCode] )
+            )->set(
+                $this->dbHandler->quoteColumn( 'name' ),
+                $query->bindValue( $objectStateGroup->name[$languageCode] )
+            )->set(
+                $this->dbHandler->quoteColumn( 'language_id' ),
+                $query->bindValue(
+                    $this->maskGenerator->generateLanguageIndicator(
+                        $languageCode, $languageCode === $objectStateGroup->defaultLanguage
+                    ),
+                    null, \PDO::PARAM_INT
+                )
+            );
+
+            $query->prepare()->execute();
+        }
+    }
+
+    /**
+     * Inserts a new object state into database
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
+     */
+    public function insertObjectState( ObjectState $objectState )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $query->expr->max( $this->dbHandler->quoteColumn( 'priority' ) )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcobj_state' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn(
+                    'group_id',
+                    'ezcobj_state'
+                ),
+                $query->bindValue( $objectState->groupId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $objectState->priority = (int) $statement->fetchColumn() + 1;
+
+        $languageCodes = array();
+        foreach ( $objectState->languageCodes as $languageCode )
+        {
+            $languageCodes[$languageCode] = 1;
+        }
+        $languageCodes['always-available'] = 1;
+
+        $query = $this->dbHandler->createInsertQuery();
+        $query->insertInto(
+            $this->dbHandler->quoteTable( 'ezcobj_state' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcobj_state', 'id' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'group_id' ),
+            $query->bindValue( $objectState->groupId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'default_language_id' ),
+            $query->bindValue(
+                $this->maskGenerator->generateLanguageIndicator( $objectState->defaultLanguage, false ),
+                null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'identifier' ),
+            $query->bindValue( $objectState->identifier )
+        )->set(
+            $this->dbHandler->quoteColumn( 'language_mask' ),
+            $query->bindValue( $this->maskGenerator->generateLanguageMask( $languageCodes ) )
+        )->set(
+            $this->dbHandler->quoteColumn( 'priority' ),
+            $query->bindValue( $objectState->priority, null, \PDO::PARAM_INT )
+        );
+
+        $query->prepare()->execute();
+
+        $objectState->id = (int) $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcobj_state', 'id' )
+        );
+
+        foreach ( $objectState->languageCodes as $languageCode )
+        {
+            $query = $this->dbHandler->createInsertQuery();
+            $query->insertInto(
+                $this->dbHandler->quoteTable( 'ezcobj_state_language' )
+            )->set(
+                $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
+                $query->bindValue( $objectState->id, null, \PDO::PARAM_INT )
+            )->set(
+                $this->dbHandler->quoteColumn( 'description' ),
+                $query->bindValue( $objectState->description[$languageCode] )
+            )->set(
+                $this->dbHandler->quoteColumn( 'name' ),
+                $query->bindValue( $objectState->name[$languageCode] )
+            )->set(
+                $this->dbHandler->quoteColumn( 'language_id' ),
+                $query->bindValue(
+                    $this->maskGenerator->generateLanguageIndicator(
+                        $languageCode, $languageCode === $objectState->defaultLanguage
+                    ),
+                    null, \PDO::PARAM_INT
+                )
+            );
+
+            $query->prepare()->execute();
+        }
     }
 }
