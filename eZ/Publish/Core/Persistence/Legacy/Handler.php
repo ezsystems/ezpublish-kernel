@@ -32,7 +32,9 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\User,
-    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
+    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
+    ezcDbTransactionException,
+    RuntimeException;
 
 /**
  * The repository handler for the legacy storage engine
@@ -701,7 +703,9 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->objectStateGateway ) )
         {
-            $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase( $this->getDatabase() );
+            $this->objectStateGateway = new Content\ObjectState\Gateway\EzcDatabase(
+                $this->getDatabase()
+            );
         }
         return $this->objectStateGateway;
     }
@@ -715,7 +719,9 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->objectStateMapper ) )
         {
-            $this->objectStateMapper = new ObjectStateMapper();
+            $this->objectStateMapper = new ObjectStateMapper(
+                $this->contentLanguageHandler()
+            );
         }
         return $this->objectStateMapper;
     }
@@ -778,13 +784,27 @@ class Handler implements HandlerInterface
      */
     public function commit()
     {
-        $this->getDatabase()->commit();
+        try
+        {
+            $this->getDatabase()->commit();
+        }
+        catch ( ezcDbTransactionException $e )
+        {
+            throw new RuntimeException( $e->getMessage() );
+        }
     }
 
     /**
      */
     public function rollback()
     {
-        $this->getDatabase()->rollback();
+        try
+        {
+            $this->getDatabase()->rollback();
+        }
+        catch ( ezcDbTransactionException $e )
+        {
+            throw new RuntimeException( $e->getMessage() );
+        }
     }
 }

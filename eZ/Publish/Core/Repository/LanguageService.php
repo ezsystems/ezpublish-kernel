@@ -21,7 +21,8 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
 
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\Logic;
 
 /**
  * Language service, used for language operations
@@ -217,7 +218,6 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentException( "languageCode", "language code has an invalid value" );
 
         $language = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
-
         return $this->buildDomainObject( $language );
     }
 
@@ -269,8 +269,6 @@ class LanguageService implements LanguageServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
-     *
-     * @todo implement properly when it is possible to count translation content
      */
     public function deleteLanguage( Language $language )
     {
@@ -278,7 +276,15 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentValue( "id", $language->id, "Language" );
 
         $loadedLanguage = $this->loadLanguageById( $language->id );
-        $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
+
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
+        }
+        catch ( Logic $e )
+        {
+            throw new InvalidArgumentException( "language", $e->getMessage(), $e );
+        }
     }
 
     /**

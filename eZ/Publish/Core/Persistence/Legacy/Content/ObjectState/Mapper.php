@@ -9,9 +9,139 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
+use eZ\Publish\SPI\Persistence\Content\ObjectState,
+    eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler;
+
 /**
  * Mapper for ObjectState and object state Group objects
  */
 class Mapper
 {
+    /**
+     * Caching language handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+     */
+    protected $languageHandler;
+
+    /**
+     * Creates a new mapper.
+     *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
+     */
+    public function __construct( LanguageHandler $languageHandler )
+    {
+        $this->languageHandler = $languageHandler;
+    }
+
+    /**
+     * Creates ObjectState object from provided $data
+     *
+     * @param array $data
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
+     */
+    public function createObjectStateFromData( array $data )
+    {
+        $objectState = new ObjectState();
+
+        $objectState->id = (int) $data[0]['ezcobj_state_id'];
+        $objectState->groupId = (int) $data[0]['ezcobj_state_group_id'];
+        $objectState->identifier = $data[0]['ezcobj_state_identifier'];
+        $objectState->priority = (int) $data[0]['ezcobj_state_priority'];
+        $objectState->defaultLanguage = $this->languageHandler->getById(
+            $data[0]['ezcobj_state_default_language_id']
+        )->languageCode;
+
+        $objectState->languageCodes = array();
+        $objectState->name = array();
+        $objectState->description = array();
+
+        foreach ( $data as $stateTranslation )
+        {
+            $languageCode = $this->languageHandler->getById(
+                $stateTranslation['ezcobj_state_language_language_id'] & ~1
+            )->languageCode;
+
+            $objectState->languageCodes[] = $languageCode;
+            $objectState->name[$languageCode] = $stateTranslation['ezcobj_state_language_name'];
+            $objectState->description[$languageCode] = $stateTranslation['ezcobj_state_language_description'];
+        }
+
+        return $objectState;
+    }
+
+    /**
+     * Creates ObjectState array of objects from provided $data
+     *
+     * @param array $data
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState[]
+     */
+    public function createObjectStateListFromData( array $data )
+    {
+        $objectStates = array();
+
+        foreach ( $data as $objectStateData )
+        {
+            $objectStates[] = $this->createObjectStateFromData( $objectStateData );
+        }
+
+        return $objectStates;
+    }
+
+    /**
+     * Creates ObjectStateGroup object from provided $data
+     *
+     * @param array $data
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
+     */
+    public function createObjectStateGroupFromData( array $data )
+    {
+        $objectStateGroup = new Group();
+
+        $objectStateGroup->id = (int) $data[0]['ezcobj_state_group_id'];
+        $objectStateGroup->identifier = $data[0]['ezcobj_state_group_identifier'];
+        $objectStateGroup->defaultLanguage = $this->languageHandler->getById(
+            $data[0]['ezcobj_state_group_default_language_id']
+        )->languageCode;
+
+        $objectStateGroup->languageCodes = array();
+        $objectStateGroup->name = array();
+        $objectStateGroup->description = array();
+
+        foreach ( $data as $groupTranslation )
+        {
+            $languageCode = $this->languageHandler->getById(
+                $groupTranslation['ezcobj_state_group_language_language_id'] & ~1
+            )->languageCode;
+
+            $objectStateGroup->languageCodes[] = $languageCode;
+            $objectStateGroup->name[$languageCode] = $groupTranslation['ezcobj_state_group_language_name'];
+            $objectStateGroup->description[$languageCode] = $groupTranslation['ezcobj_state_group_language_description'];
+        }
+
+        return $objectStateGroup;
+    }
+
+    /**
+     * Creates ObjectStateGroup array of objects from provided $data
+     *
+     * @param array $data
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group[]
+     */
+    public function createObjectStateGroupListFromData( array $data )
+    {
+        $objectStateGroups = array();
+
+        foreach ( $data as $objectStateGroupData )
+        {
+            $objectStateGroups[] = $this->createObjectStateGroupFromData( $objectStateGroupData );
+        }
+
+        return $objectStateGroups;
+    }
 }
