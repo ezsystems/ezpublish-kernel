@@ -9,11 +9,13 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
-use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\API\Repository\Repository as RepositoryInterface,
+    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 
 /**
  * Search service
@@ -66,7 +68,66 @@ class SearchService implements SearchServiceInterface
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         // @TODO: Apply permission checks
-        return $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
+        $result = $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
+        foreach ( $result->searchHits as $hit )
+        {
+            $hit->valueObject = $this->buildContentInfoDomainObject( $hit->valueObject->contentInfo );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Builds a ContentInfo domain object from value object returned from persistence
+     *
+     * @TODO: This is a copy from the content service. All related methods
+     * should be extracted in its own class. We cannot agregate the content
+     * service here, since the content service already requires the search
+     * service.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
+     *
+     * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
+     */
+    protected function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    {
+        $modificationDate = new \DateTime( "@{$spiContentInfo->modificationDate}" );
+        $publishedDate = new \DateTime( "@{$spiContentInfo->publicationDate}" );
+
+        // @todo: $mainLocationId should have been removed through SPI refactoring?
+        $spiContent = $this->persistenceHandler->contentHandler()->load(
+            $spiContentInfo->id,
+            $spiContentInfo->currentVersionNo
+        );
+        $mainLocationId = null;
+        foreach ( $spiContent->locations as $spiLocation )
+        {
+            if ( $spiLocation->mainLocationId === $spiLocation->id )
+            {
+                $mainLocationId = $spiLocation->mainLocationId;
+                break;
+            }
+        }
+
+        return new ContentInfo(
+            array(
+                "id" => $spiContentInfo->id,
+                "name" => $spiContentInfo->name,
+                "sectionId" => $spiContentInfo->sectionId,
+                "currentVersionNo" => $spiContentInfo->currentVersionNo,
+                "published" => $spiContentInfo->isPublished,
+                "ownerId" => $spiContentInfo->ownerId,
+                "modificationDate" => $modificationDate,
+                "publishedDate" => $publishedDate,
+                "alwaysAvailable" => $spiContentInfo->isAlwaysAvailable,
+                "remoteId" => $spiContentInfo->remoteId,
+                "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
+                "mainLocationId" => $mainLocationId,
+                "contentType" => $this->repository->getContentTypeService()->loadContentType(
+                    $spiContentInfo->contentTypeId
+                )
+            )
+        );
     }
 
     /**

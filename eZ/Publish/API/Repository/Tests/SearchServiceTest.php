@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use \eZ\Publish\Core\Repository\SearchService;
-use \eZ\Publish\SPI\Persistence\Content;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use \eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\Core\Repository\SearchService,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
  * Test case for operations in the SearchService using in memory storage.
@@ -249,8 +249,8 @@ class SearchServiceTest extends BaseTest
         {
             switch ( true )
             {
-                case $hit->valueObject instanceof Content:
-                    $hit->valueObject = $hit->valueObject->contentInfo->id;
+                case $hit->valueObject instanceof ContentInfo:
+                    $hit->valueObject = $hit->valueObject->id;
                     break;
 
                 default:
