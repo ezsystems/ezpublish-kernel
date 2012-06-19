@@ -124,7 +124,7 @@ class Handler extends BaseSearchHandler
         $query->criterion = $criterion;
         $query->offset    = 0;
         $query->limit     = 1;
-        $result = $this->find( $query, $fieldFilters );
+        $result = $this->findContent( $query, $fieldFilters );
 
         if ( $result->totalCount !== 1 )
         {
