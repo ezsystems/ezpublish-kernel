@@ -49,7 +49,7 @@ class Query extends ValueObject
      *
      * @var integer
      */
-    public $offset;
+    public $offset = 0;
 
     /**
      * Query limit
