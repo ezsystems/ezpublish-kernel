@@ -138,4 +138,15 @@ class Type extends FieldType
     {
         return array( "link" => $value->link, "text" => $value->text );
     }
+
+    /**
+     * Get index data for field data for search backend
+     *
+     * @param mixed $value
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\DocumentField[]
+     */
+    public function getIndexData( $value )
+    {
+        throw new \RuntimeExcepion( '@TODO: Implement' );
+    }
 }
