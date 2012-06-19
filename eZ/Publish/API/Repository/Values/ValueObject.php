@@ -9,8 +9,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Values;
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
-    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
+use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use IteratorAggregate;
+use ArrayIterator;
 
 /**
  * The base class for all value objects and structs
@@ -22,7 +24,7 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
  *
  * @package eZ\Publish\API\Repository\Values
  */
-abstract class ValueObject
+abstract class ValueObject implements IteratorAggregate
 {
     /**
      * Construct object optionally with a set of properties
@@ -38,6 +40,36 @@ abstract class ValueObject
         {
             $this->$property = $value;
         }
+    }
+
+    /**
+     * INTERNAL function for PHP to be able to traverse the object properties
+     *
+     * @access protected
+     * @return \Traversable
+     */
+    final public function getIterator()
+    {
+        return new ArrayIterator( $this->getProperties() );
+    }
+
+    /**
+     * Function where list of properties are returned
+     *
+     * Used by {@see getIterator()} and {@see attributes()}, override to add dynamic properties
+     * @uses __isset()
+     *
+     * @return array
+     */
+    protected function getProperties()
+    {
+        $properties = get_object_vars( $this );
+        foreach ( $properties as $property => $propertyValue )
+        {
+            if ( !$this->__isset( $property ) )
+                unset( $properties[ $property ] );
+        }
+        return $properties;
     }
 
     /**
@@ -129,7 +161,10 @@ abstract class ValueObject
     }
 
     /**
-     * @deprecated Since 5.0, available purly for eZTemplate competability
+     * Internal function for Legacy template engine compatibility to get property value
+     *
+     * @access private
+     * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      * @uses __get()
      *
      * @param $property
@@ -142,7 +177,10 @@ abstract class ValueObject
     }
 
     /**
-     * @deprecated Since 5.0, available purly for eZTemplate competability
+     * Internal function for Legacy template engine compatibility to get properties
+     *
+     * @access private
+     * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      * @uses __isset()
      *
      * @return array
@@ -159,7 +197,10 @@ abstract class ValueObject
     }
 
     /**
-     * @deprecated Since 5.0, available purly for eZTemplate competability
+     * Internal function for Legacy template engine compatibility to check existence of property
+     *
+     * @access private
+     * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      * @uses __isset()
      *
      * @param $property
