@@ -11,8 +11,10 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use \eZ\Publish\Core\Repository\SearchService;
+use \eZ\Publish\SPI\Persistence\Content;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use \eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
  * Test case for operations in the SearchService using in memory storage.
@@ -212,6 +214,7 @@ class SearchServiceTest extends BaseTest
 
         try {
             $result = $searchService->findContent( $query );
+            $this->simplifySearchResult( $result );
         } catch ( NotImplementedException $e ) {
             $this->markTestSkipped(
                 "This feature is not supported by the current search backend: " . $e->getMessage()
@@ -236,6 +239,24 @@ class SearchServiceTest extends BaseTest
             include $fixture,
             $result
         );
+    }
+
+    protected function simplifySearchResult( SearchResult $result )
+    {
+        $result->time = 1;
+
+        foreach ( $result->searchHits as $hit )
+        {
+            switch ( true )
+            {
+                case $hit->valueObject instanceof Content:
+                    $hit->valueObject = $hit->valueObject->contentInfo->id;
+                    break;
+
+                default:
+                    throw new \RuntimeException( "Unknown search result hit type: " . get_class( $hit->valueObject ) );
+            }
+        }
     }
 
     /**
