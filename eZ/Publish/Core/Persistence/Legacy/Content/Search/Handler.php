@@ -126,7 +126,7 @@ class Handler extends BaseSearchHandler
         $query->limit     = 1;
         $result = $this->findContent( $query, $fieldFilters );
 
-        if ( $result->totalCount !== 1 )
+        if ( $result->count !== 1 )
         {
             throw new Exception\InvalidObjectCount(
                 'Expected exactly one object to be found -- found ' . $result->count . '.'
