@@ -19,14 +19,14 @@ class SearchResult {
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Search\Facet[]
      */
-    public $facets;
+    public $facets = array();
 
     /**
      * The value objects found for the query
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Search\SearchHit[]
      */
-    public $searchHits;
+    public $searchHits = array();
 
     /**
      * If spellcheck is on this field contains a collated query suggestion where in the aprropriate
