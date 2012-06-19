@@ -11,7 +11,10 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
+    eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Test case for Content Type Updater.
@@ -154,13 +157,25 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
 
         $content = new Content();
 
+        $result = new SearchResult();
+
+        $hit    = new SearchHit();
+        $hit->valueObject = $content;
+        $result->searchHits[] = $hit;
+
+        $hit    = new SearchHit();
+        $hit->valueObject = clone $content;
+        $result->searchHits[] = $hit;
+
         $this->getSearchHandlerMock()
             ->expects( $this->once() )
-            ->method( 'find' )
+            ->method( 'findContent' )
             ->with(
-                $this->equalTo( new CriterionContentTypeId( 23 ) )
+                $this->equalTo( new Query( array(
+                    'criterion' => new CriterionContentTypeId( 23 )
+                ) ) )
             )->will(
-                $this->returnValue( array( $content, clone $content ) )
+                $this->returnValue( $result )
             );
 
         $updater->applyUpdates( 23, $actions );

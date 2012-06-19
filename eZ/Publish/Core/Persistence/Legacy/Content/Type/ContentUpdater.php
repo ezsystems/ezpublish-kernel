@@ -16,6 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -156,6 +157,16 @@ class ContentUpdater
      */
     protected function loadContentObjects( $contentTypeId )
     {
-        return $this->searchHandler->find( new Criterion\ContentTypeId( $contentTypeId ) );
+        $result = $this->searchHandler->findContent( new Query( array(
+            'criterion' => new Criterion\ContentTypeId( $contentTypeId )
+        ) ) );
+
+        $content = array();
+        foreach ( $result->searchHits as $hit )
+        {
+            $content[] = $hit->valueObject;
+        }
+
+        return $content;
     }
 }
