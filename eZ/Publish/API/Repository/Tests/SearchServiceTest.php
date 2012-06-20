@@ -383,6 +383,135 @@ class SearchServiceTest extends BaseTest
                 ) ),
                 $fixtureDir . '/FacetContentType.php',
             ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\SectionFacetBuilder()
+                    ),
+                ) ),
+                $fixtureDir . '/FacetSection.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\UserFacetBuilder()
+                    ),
+                ) ),
+                $fixtureDir . '/FacetContentType.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\TermFacetBuilder()
+                    ),
+                ) ),
+                $fixtureDir . '/FacetContentType.php',
+            ),
+            /* @TODO: It needs to be defined how this one is supposed to work.
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\CriterionFacetBuilder()
+                    ),
+                ) ),
+                $fixtureDir . '/FacetCriterion.php',
+            ), // */
+            /* @TODO: Add sane ranges here:
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\DateRangeFacetBuilder( array(
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetDateRange.php',
+            ), // */
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\FieldFacetBuilder( array(
+                            'fieldPaths' => array( 'article/title' ),
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetFieldSimple.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\FieldFacetBuilder( array(
+                            'fieldPaths' => array( 'article/title' ),
+                            'regex'      => '(a|b|c)',
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetFieldRegexp.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\FieldFacetBuilder( array(
+                            'fieldPaths' => array( 'article/title' ),
+                            'regex'      => '(a|b|c)',
+                            'sort'       => FacetBuilder\FieldFacetBuilder::TERM_DESC
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetFieldRegexpSortTerm.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\FieldFacetBuilder( array(
+                            'fieldPaths' => array( 'article/title' ),
+                            'regex'      => '(a|b|c)',
+                            'sort'       => FacetBuilder\FieldFacetBuilder::COUNT_DESC
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetFieldRegexpSortCount.php',
+            ),
+            /* @TODO: Add sane ranges here:
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\FieldRangeFacetBuilder( array(
+                            'fieldPath' => 'product/price',
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetFieldRegexpSortCount.php',
+            ), // */
         );
     }
 
