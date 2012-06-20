@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException,
  *
  * @see eZ\Publish\API\Repository\SearchService
  * @group integration
+ * @group search
  */
 class SearchServiceTest extends BaseTest
 {
@@ -34,20 +35,6 @@ class SearchServiceTest extends BaseTest
         return new SearchService();
     }
 
-    /**
-     * Test for the getSearchService() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\Repository::getSearchService()
-     */
-    public function testGetSearchService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\SearchService',
-            $repository->getSearchService()
-        );
-    }
 
     public function getSearches()
     {
@@ -202,7 +189,7 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends testGetSearchService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindContent( $criterion, $fixture )
     {

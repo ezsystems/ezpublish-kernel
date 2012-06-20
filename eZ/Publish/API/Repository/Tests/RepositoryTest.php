@@ -215,6 +215,22 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getSearchService() method.
+     *
+     * @return void
+     * @group search
+     * @see \eZ\Publish\API\Repository\Repository::getSearchService()
+     */
+    public function testGetSearchService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\SearchService',
+            $repository->getSearchService()
+        );
+    }
+
+    /**
      * Test for the commit() method.
      *
      * @return void
