@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
@@ -34,7 +35,6 @@ class SearchServiceTest extends BaseTest
     {
         return new SearchService();
     }
-
 
     public function getSearches()
     {
@@ -198,6 +198,170 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query();
         $query->criterion = $criterion;
+
+        try {
+            $result = $searchService->findContent( $query );
+            $this->simplifySearchResult( $result );
+        } catch ( NotImplementedException $e ) {
+            $this->markTestSkipped(
+                "This feature is not supported by the current search backend: " . $e->getMessage()
+            );
+        }
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult',
+            $result
+        );
+
+        if ( !is_file( $fixture ) )
+        {
+            file_put_contents(
+                $record = $fixture . '.recording',
+                "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
+            );
+            $this->markTestIncomplete( "No fixture available. Result recorded at $record" );
+        }
+
+        $this->assertEquals(
+            include $fixture,
+            $result
+        );
+    }
+
+    public function getSortedSearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'sortClauses' => array()
+                ) ),
+                $fixtureDir . '/SortNone.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'sortClauses' => array( new SortClause\LocationPathString( Query::SORT_DESC ) )
+                ) ),
+                $fixtureDir . '/SortPathString.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'sortClauses' => array( new SortClause\LocationDepth( Query::SORT_ASC ) )
+                ) ),
+                $fixtureDir . '/SortLocationDepth.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'sortClauses' => array(
+                        new SortClause\LocationDepth( Query::SORT_ASC ),
+                        new SortClause\LocationPathString( Query::SORT_DESC ),
+                    )
+                ) ),
+                $fixtureDir . '/SortMultiple.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'sortClauses' => array(
+                        new SortClause\LocationPriority( Query::SORT_DESC ),
+                    )
+                ) ),
+                $fixtureDir . '/SortDesc.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'sortClauses' => array(
+                        new SortClause\DatePublished(),
+                    )
+                ) ),
+                $fixtureDir . '/SortDatePublished.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                    'offset'      => 0,
+                    'limit'       => null,
+                    'sortClauses' => array(
+                        new SortClause\SectionIdentifier(),
+                    )
+                ) ),
+                $fixtureDir . '/SortSectionIdentifier.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                    'offset'      => 0,
+                    'limit'       => null,
+                    'sortClauses' => array(
+                        new SortClause\SectionName(),
+                    )
+                ) ),
+                $fixtureDir . '/SortSectionName.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 2, 3 ) ),
+                    'offset'      => 0,
+                    'limit'       => null,
+                    'sortClauses' => array(
+                        new SortClause\ContentName(),
+                    )
+                ) ),
+                $fixtureDir . '/SortContentName.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "article", "title" ),
+                    )
+                ) ),
+                $fixtureDir . '/SortFieldTitle.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "product", "price" ),
+                    )
+                ) ),
+                $fixtureDir . '/SortFieldPrice.php',
+            ),
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @dataProvider getSortedSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindAndSortContent( Query $query, $fixture )
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
 
         try {
             $result = $searchService->findContent( $query );
