@@ -554,6 +554,7 @@ class SearchServiceTest extends BaseTest
                 $record = $fixture . '.recording',
                 "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
             );
+            // @TODO: Print result in a readable way here?
             $this->markTestIncomplete( "No fixture available. Result recorded at $record" );
         }
 
