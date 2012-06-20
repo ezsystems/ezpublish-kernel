@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="../../../../../bootstrap.php"
+         processIsolation="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true">
+    <php>
+		<env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr" />
+        <env name="backendVersion" value="5" />
+        <env name="fixtureDir" value="Solr" />
+    </php>
+    <testsuites>
+        <testsuite name="eZ\Publish\API\Repository">
+            <file>RepositoryTest.php</file>
+            <!-- Only the Solr Search tests differ from the other tests, so we
+                 are skipping everything else
+            -->
+            <file>SearchServiceTest.php</file>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../</directory>
+            <exclude>
+                <directory>../Examples</directory>
+                <directory>../Tests</directory>
+                <directory>../Tutorials</directory>
+            </exclude>
+            <directory>../Tests/Stubs</directory>
+        </whitelist>
+    </filter>
+</phpunit>
