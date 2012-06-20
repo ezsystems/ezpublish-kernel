@@ -41,144 +41,180 @@ class SearchServiceTest extends BaseTest
         $fixtureDir = $this->getFixtureDir();
         return array(
             array(
-                new Criterion\ContentId(
-                    array( 1, 4, 10 )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\ContentId(
+                        array( 1, 4, 10 )
+                    ),
+                ) ),
                 $fixtureDir . 'ContentId.php',
             ),
             array(
-                new Criterion\LogicalAnd(
-                    array(
-                        new Criterion\ContentId(
-                            array( 1, 4, 10 )
-                        ),
-                        new Criterion\ContentId(
-                            array( 4, 12 )
-                        ),
-                    )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentId(
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\ContentId(
+                                array( 4, 12 )
+                            ),
+                        )
+                    ),
+                ) ),
                 $fixtureDir . 'LogicalAnd.php',
             ),
             array(
-                new Criterion\LogicalOr(
-                    array(
-                        new Criterion\ContentId(
-                            array( 1, 4, 10 )
-                        ),
-                        new Criterion\ContentId(
-                            array( 4, 12 )
-                        ),
-                    )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\LogicalOr(
+                        array(
+                            new Criterion\ContentId(
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\ContentId(
+                                array( 4, 12 )
+                            ),
+                        )
+                    ),
+                ) ),
                 $fixtureDir . 'LogicalOr.php',
             ),
             array(
-                new Criterion\LogicalAnd(
-                    array(
-                        new Criterion\ContentId(
-                            array( 1, 4, 10 )
-                        ),
-                        new Criterion\LogicalNot(
+                new Query( array(
+                    'criterion' => new Criterion\LogicalAnd(
+                        array(
                             new Criterion\ContentId(
-                                array( 10, 12 )
-                            )
-                        ),
-                    )
-                ),
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\LogicalNot(
+                                new Criterion\ContentId(
+                                    array( 10, 12 )
+                                )
+                            ),
+                        )
+                    ),
+                ) ),
                 $fixtureDir . 'LogicalNot.php',
             ),
             array(
-                new Criterion\Subtree(
-                    '/1/2/69/'
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\Subtree(
+                        '/1/2/69/'
+                    ),
+                ) ),
                 $fixtureDir . 'Subtree.php',
             ),
             array(
-                new Criterion\ContentTypeId(
-                    4
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\ContentTypeId(
+                        4
+                    ),
+                ) ),
                 $fixtureDir . 'ContentTypeId.php',
             ),
             array(
-                new Criterion\ContentTypeGroupId(
-                    2
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\ContentTypeGroupId(
+                        2
+                    ),
+                ) ),
                 $fixtureDir . 'ContentTypeGroupId.php',
             ),
             array(
-                new Criterion\DateMetadata(
-                    Criterion\DateMetadata::MODIFIED,
-                    Criterion\Operator::GT,
-                    1311154214
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::GT,
+                        1311154214
+                    ),
+                ) ),
                 $fixtureDir . 'DateMetadataGt.php',
             ),
             array(
-                new Criterion\DateMetadata(
-                    Criterion\DateMetadata::MODIFIED,
-                    Criterion\Operator::GTE,
-                    1311154214
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::GTE,
+                        1311154214
+                    ),
+                ) ),
                 $fixtureDir . 'DateMetadataGte.php',
             ),
             array(
-                new Criterion\DateMetadata(
-                    Criterion\DateMetadata::MODIFIED,
-                    Criterion\Operator::IN,
-                    array( 1311154214, 1311154215 )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::IN,
+                        array( 1311154214, 1311154215 )
+                    ),
+                ) ),
                 $fixtureDir . 'DateMetadataIn.php',
             ),
             array(
-                new Criterion\DateMetadata(
-                    Criterion\DateMetadata::MODIFIED,
-                    Criterion\Operator::BETWEEN,
-                    array( 1311154213, 1311154215 )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::BETWEEN,
+                        array( 1311154213, 1311154215 )
+                    ),
+                ) ),
                 $fixtureDir . 'DateMetadataBetween.php',
             ),
             array(
-                new Criterion\DateMetadata(
-                    Criterion\DateMetadata::CREATED,
-                    Criterion\Operator::BETWEEN,
-                    array( 1299780749, 1311154215 )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::CREATED,
+                        Criterion\Operator::BETWEEN,
+                        array( 1299780749, 1311154215 )
+                    ),
+                ) ),
                 $fixtureDir . 'DateMetadataCreated.php',
             ),
             array(
-                new Criterion\LocationId(
-                    array( 1, 2, 5 )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\LocationId(
+                        array( 1, 2, 5 )
+                    ),
+                ) ),
                 $fixtureDir . 'LocationId.php',
             ),
             array(
-                new Criterion\ParentLocationId(
-                    array( 1 )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\ParentLocationId(
+                        array( 1 )
+                    ),
+                ) ),
                 $fixtureDir . 'ParentLocationId.php',
             ),
             array(
-                new Criterion\RemoteId(
-                    array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\RemoteId(
+                        array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
+                    ),
+                ) ),
                 $fixtureDir . 'RemoteId.php',
             ),
             array(
-                new Criterion\LocationRemoteId(
-                    array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\LocationRemoteId(
+                        array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
+                    ),
+                ) ),
                 $fixtureDir . 'LocationRemoteId.php',
             ),
             array(
-                new Criterion\SectionId(
-                    array( 2 )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\SectionId(
+                        array( 2 )
+                    ),
+                ) ),
                 $fixtureDir . 'SectionId.php',
             ),
             array(
-                new Criterion\Status(
-                    array( Criterion\Status::STATUS_PUBLISHED )
-                ),
+                new Query( array(
+                    'criterion' => new Criterion\Status(
+                        array( Criterion\Status::STATUS_PUBLISHED )
+                    ),
+                ) ),
                 $fixtureDir . 'Status.php',
             ),
         );
@@ -191,13 +227,10 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFindContent( $criterion, $fixture )
+    public function testFindContent( Query $query, $fixture )
     {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
-
-        $query = new Query();
-        $query->criterion = $criterion;
 
         try {
             $result = $searchService->findContent( $query );
