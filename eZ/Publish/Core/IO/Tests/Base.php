@@ -55,7 +55,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::create
+     * @covers \eZ\Publish\SPI\IO\Handler::create
      */
     public function testCreate()
     {
@@ -73,7 +73,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::create
+     * @covers \eZ\Publish\SPI\IO\Handler::create
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreatePathExists()
@@ -86,7 +86,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::update
+     * @covers \eZ\Publish\SPI\IO\Handler::update
      */
     public function testUpdate()
     {
@@ -122,7 +122,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::update
+     * @covers \eZ\Publish\SPI\IO\Handler::update
      */
     public function testUpdateMtime()
     {
@@ -143,7 +143,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::update
+     * @covers \eZ\Publish\SPI\IO\Handler::update
      */
     public function testUpdateCtime()
     {
@@ -164,7 +164,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::update
+     * @covers \eZ\Publish\SPI\IO\Handler::update
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUpdateNonExistingSource()
@@ -176,7 +176,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::update
+     * @covers \eZ\Publish\SPI\IO\Handler::update
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateTargetExists()
@@ -200,7 +200,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::exists
+     * @covers \eZ\Publish\SPI\IO\Handler::exists
      */
     public function testExists()
     {
@@ -215,7 +215,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::delete
+     * @covers \eZ\Publish\SPI\IO\Handler::delete
      */
     public function testDelete()
     {
@@ -232,7 +232,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::delete
+     * @covers \eZ\Publish\SPI\IO\Handler::delete
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteNonExistingFile()
@@ -241,7 +241,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::load
+     * @covers \eZ\Publish\SPI\IO\Handler::load
      */
     public function testLoad()
     {
@@ -261,7 +261,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::load
+     * @covers \eZ\Publish\SPI\IO\Handler::load
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadNonExistinFile()
@@ -270,7 +270,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::getFileResource
+     * @covers \eZ\Publish\SPI\IO\Handler::getFileResource
      */
     public function testGetFileResource()
     {
@@ -287,7 +287,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::getFileResource
+     * @covers \eZ\Publish\SPI\IO\Handler::getFileResource
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetFileResourceNonExistinFile()
@@ -296,7 +296,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::getFileContents
+     * @covers \eZ\Publish\SPI\IO\Handler::getFileContents
      */
     public function testGetFileContents()
     {
@@ -308,7 +308,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Io\Handler::getFileContents
+     * @covers \eZ\Publish\SPI\IO\Handler::getFileContents
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetFileContentsNonExistingFile()

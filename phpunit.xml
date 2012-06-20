@@ -19,8 +19,8 @@
     <testsuite name="eZ\Publish\Core\Persistence\Legacy">
       <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Io">
-      <directory>eZ/Publish/Core/Io/Tests</directory>
+    <testsuite name="eZ\Publish\Core\IO">
+      <directory>eZ/Publish/Core/IO/Tests</directory>
     </testsuite>
   </testsuites>
   <filter>
@@ -36,9 +36,10 @@
 
           <directory suffix=".php">eZ/Publish/Core/Base/Tests</directory>
 
-          <directory suffix=".php">eZ/Publish/Core/Io/Tests</directory>
+          <directory suffix=".php">eZ/Publish/Core/IO/Tests</directory>
 
           <directory suffix="Test.php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
+
           <directory suffix="Test.php">eZ/Publish/Core/Persistence/Legacy/Tests</directory>
           <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/_fixtures</directory>
           <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/Gateway/_fixtures</directory>
@@ -50,6 +51,8 @@
 
           <directory suffix=".php">eZ/Publish/Core/Repository/Tests</directory>
           <directory>eZ/Publish/Core/Repository/Tests/Service/Legacy/_fixtures</directory>
+
+          <directory>eZ/Publish/SPI/Tests</directory>
 
           <directory suffix=".php">doc</directory>
       </exclude>
