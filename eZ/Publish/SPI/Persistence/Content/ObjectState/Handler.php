@@ -139,7 +139,7 @@ interface Handler
      *
      * @param mixed $contentId
      * @param mixed $stateGroupId
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
     public function getObjectState( $contentId, $stateGroupId );
 
@@ -147,6 +147,7 @@ interface Handler
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     * @return int
      */
     public function getContentCount( $stateId );
 

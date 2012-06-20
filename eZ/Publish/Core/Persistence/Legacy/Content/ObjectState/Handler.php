@@ -62,7 +62,7 @@ class Handler implements BaseObjectStateHandler
     }
 
     /**
-     * Loads a object state group
+     * Loads an object state group
      *
      * @param mixed $groupId
      *
@@ -117,14 +117,25 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function updateGroup( $groupId, InputStruct $input ) {}
+    public function updateGroup( $groupId, InputStruct $input )
+    {
+        $objectStateGroup = $this->objectStateMapper->createObjectStateGroupFromInputStruct( $input );
+        $objectStateGroup->id = (int) $groupId;
+
+        $this->objectStateGateway->updateObjectStateGroup( $objectStateGroup );
+
+        return $this->loadGroup( $objectStateGroup->id );
+    }
 
     /**
      * Deletes a object state group including all states and links to content
      *
      * @param mixed $groupId
      */
-    public function deleteGroup( $groupId ) {}
+    public function deleteGroup( $groupId )
+    {
+        $this->objectStateGateway->deleteObjectStateGroup( $groupId );
+    }
 
     /**
      * Creates a new object state in the given group.
@@ -139,8 +150,8 @@ class Handler implements BaseObjectStateHandler
      */
     public function create( $groupId, InputStruct $input )
     {
-        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct( $groupId, $input );
-        $this->objectStateGateway->insertObjectState( $objectState );
+        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct( $input );
+        $this->objectStateGateway->insertObjectState( $objectState, $groupId );
 
         return $objectState;
     }
@@ -174,7 +185,15 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function update( $stateId, InputStruct $input ) {}
+    public function update( $stateId, InputStruct $input )
+    {
+        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct( $input );
+        $objectState->id = (int) $stateId;
+
+        $this->objectStateGateway->updateObjectState( $objectState );
+
+        return $this->load( $objectState->id );
+    }
 
     /**
      * Changes the priority of the state
@@ -182,15 +201,29 @@ class Handler implements BaseObjectStateHandler
      * @param mixed $stateId
      * @param int $priority
      */
-    public function setPriority( $stateId, $priority ) {}
+    public function setPriority( $stateId, $priority )
+    {
+        // @TODO: Implement
+    }
 
     /**
      * Deletes a object state. The state of the content objects is reset to the
      * first object state in the group.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If state with $stateId doesn't exist
+     *
      * @param mixed $stateId
      */
-    public function delete( $stateId ) {}
+    public function delete( $stateId )
+    {
+        // Get the object state as we need group ID
+        // to reassign content to another state in the group
+        $objectState = $this->load( $stateId );
+
+        $this->objectStateGateway->deleteObjectState( $stateId );
+        // @todo fixup priorities of the remaining states in the group
+        $this->objectStateGateway->assignMostPrioritizedStateToContentObjects( $objectState->groupId );
+    }
 
     /**
      * Sets the object-state of a state group to $stateId for the given content.
@@ -200,7 +233,11 @@ class Handler implements BaseObjectStateHandler
      * @param mixed $stateId
      * @return boolean
      */
-    public function setObjectState( $contentId, $groupId, $stateId ) {}
+    public function setObjectState( $contentId, $groupId, $stateId )
+    {
+        $this->objectStateGateway->setObjectState( $contentId, $groupId, $stateId );
+        return true;
+    }
 
     /**
      * Gets the object-state of object identified by $contentId.
@@ -209,14 +246,22 @@ class Handler implements BaseObjectStateHandler
      *
      * @param mixed $contentId
      * @param mixed $stateGroupId
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function getObjectState( $contentId, $stateGroupId ) {}
+    public function getObjectState( $contentId, $stateGroupId )
+    {
+        $data = $this->objectStateGateway->loadObjectStateDataForContent( $contentId, $stateGroupId );
+        return $this->objectStateMapper->createObjectStateFromData( $data );
+    }
 
     /**
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     * @return int
      */
-    public function getContentCount( $stateId ) {}
+    public function getContentCount( $stateId )
+    {
+        return $this->objectStateGateway->getContentCount( $stateId );
+    }
 }

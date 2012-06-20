@@ -174,16 +174,14 @@ class Mapper
     /**
      * Creates an instance of ObjectState object from provided $input struct
      *
-     * @param int $groupId
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function createObjectStateFromInputStruct( $groupId, InputStruct $input )
+    public function createObjectStateFromInputStruct( InputStruct $input )
     {
         $objectState = new ObjectState();
 
-        $objectState->groupId = (int) $groupId;
         $objectState->identifier = $input->identifier;
         $objectState->defaultLanguage = $input->defaultLanguage;
         $objectState->name = $input->name;
