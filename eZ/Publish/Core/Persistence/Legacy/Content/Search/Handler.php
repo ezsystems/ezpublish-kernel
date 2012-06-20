@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
+    eZ\Publish\API\Repository\Exceptions\NotImplementedException,
     eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -91,6 +92,12 @@ class Handler extends BaseSearchHandler
     public function findContent( Query $query, array $fieldFilters = array() )
     {
         $start = microtime( true );
+
+        if ( count( $query->facetBuilders ) )
+        {
+            throw new NotImplementedException( "Facettes are not supported by the legacy search engine." );
+        }
+
         $data  = $this->gateway->find( $query->criterion, $query->offset, $query->limit, $query->sortClauses, null );
 
         $result = new SearchResult();
