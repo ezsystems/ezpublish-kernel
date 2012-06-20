@@ -22,6 +22,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValida
  *
  * @see eZ\Publish\API\Repository\ContentTypeService
  * @group integration
+ * @group content-type
  */
 class ContentTypeServiceTest extends BaseContentTypeServiceTest
 {

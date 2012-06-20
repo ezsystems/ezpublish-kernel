@@ -23,6 +23,7 @@ use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
  * Test case for operations in the ContentService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentService
+ * @group content
  */
 class ContentServiceTest extends BaseContentServiceTest
 {

@@ -23,6 +23,7 @@ class RepositoryTest extends BaseTest
      * Test for the getContentService() method.
      *
      * @return void
+     * @group content
      * @see \eZ\Publish\API\Repository\Repository::getContentService()
      */
     public function testGetContentService()
@@ -38,6 +39,7 @@ class RepositoryTest extends BaseTest
      * Test for the getContentLanguageService() method.
      *
      * @return void
+     * @group content-language
      * @see \eZ\Publish\API\Repository\Repository::getContentLanguageService()
      */
     public function testGetContentLanguageService()
@@ -53,6 +55,7 @@ class RepositoryTest extends BaseTest
      * Test for the getContentTypeService() method.
      *
      * @return void
+     * @group content-type
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
      */
@@ -69,6 +72,7 @@ class RepositoryTest extends BaseTest
      * Test for the getLocationService() method.
      *
      * @return void
+     * @group location
      * @see \eZ\Publish\API\Repository\Repository::getLocationService()
      *
      */
@@ -85,6 +89,7 @@ class RepositoryTest extends BaseTest
      * Test for the getTrashService() method.
      *
      * @return void
+     * @group trash
      * @see \eZ\Publish\API\Repository\Repository::getTrashService()
      *
      */
@@ -101,6 +106,7 @@ class RepositoryTest extends BaseTest
      * Test for the getSectionService() method.
      *
      * @return void
+     * @group section
      * @see \eZ\Publish\API\Repository\Repository::getSectionService()
      */
     public function testGetSectionService()
@@ -116,6 +122,7 @@ class RepositoryTest extends BaseTest
      * Test for the getUserService() method.
      *
      * @return void
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getUserService()
      */
     public function testGetUserService()
@@ -131,6 +138,7 @@ class RepositoryTest extends BaseTest
      * Test for the getRoleService() method.
      *
      * @return void
+     * @group role
      * @see \eZ\Publish\API\Repository\Repository::getRoleService()
      */
     public function testGetRoleService()
@@ -146,6 +154,7 @@ class RepositoryTest extends BaseTest
      * Test for the getUrlAliasService() method.
      *
      * @return void
+     * @group url-alias
      * @see \eZ\Publish\API\Repository\Repository::getUrlAliasService()
      */
     public function testGetURLAliasService()
@@ -161,6 +170,7 @@ class RepositoryTest extends BaseTest
      * Test for the getUrlWildcardService() method.
      *
      * @return void
+     * @group url-wildcard
      * @see \eZ\Publish\API\Repository\Repository::getUrlWildcardService()
      */
     public function testGetURLWildcardService()
@@ -176,6 +186,7 @@ class RepositoryTest extends BaseTest
      * Test for the getObjectStateService()
      *
      * @return void
+     * @group object-state
      * @see \eZ\Publish\API\Repository\Repository::getObjectStateService()
      */
     public function testGetObjectStateService()
@@ -191,6 +202,7 @@ class RepositoryTest extends BaseTest
      * Test for the getIOService() method.
      *
      * @return void
+     * @group io
      * @see \eZ\Publish\API\Repository\Repository::getIOService()
      */
     public function testGetIOService()

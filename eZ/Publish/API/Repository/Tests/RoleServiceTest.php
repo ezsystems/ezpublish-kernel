@@ -33,6 +33,7 @@ use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
  * <ul>
  *
  * @see eZ\Publish\API\Repository\RoleService
+ * @group role
  */
 class RoleServiceTest extends BaseTest
 {

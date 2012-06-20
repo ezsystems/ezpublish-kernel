@@ -22,6 +22,7 @@ use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
  * Test case for operations in the ObjectStateService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ObjectStateService
+ * @group object-state
  */
 class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 {

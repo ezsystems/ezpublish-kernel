@@ -13,6 +13,7 @@ namespace eZ\Publish\API\Repository\Tests;
  * Test case for operations in the IOService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\IOService
+ * @group io
  */
 class IOServiceTest extends BaseTest
 {

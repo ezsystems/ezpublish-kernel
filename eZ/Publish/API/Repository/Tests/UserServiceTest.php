@@ -19,6 +19,7 @@ use \eZ\Publish\API\Repository\Values\User\User;
  *
  * @see eZ\Publish\API\Repository\UserService
  * @group integration
+ * @group user
  */
 class UserServiceTest extends BaseTest
 {

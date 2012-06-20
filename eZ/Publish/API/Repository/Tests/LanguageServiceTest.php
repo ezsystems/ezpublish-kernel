@@ -17,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
  *
  * @see eZ\Publish\API\Repository\LanguageService
  * @group integration
+ * @group language
  */
 class LanguageServiceTest extends BaseTest
 {

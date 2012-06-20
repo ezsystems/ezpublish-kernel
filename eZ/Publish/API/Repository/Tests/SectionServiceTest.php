@@ -17,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\Section;
  *
  * @see eZ\Publish\API\Repository\SectionService
  * @group integration
+ * @group section
  */
 class SectionServiceTest extends BaseTest
 {

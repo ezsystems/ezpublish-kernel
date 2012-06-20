@@ -20,6 +20,7 @@ use \eZ\Publish\API\Repository\Exceptions;
  * Test case for operations in the LocationService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\LocationService
+ * @group location
  */
 class LocationServiceTest extends BaseTest
 {

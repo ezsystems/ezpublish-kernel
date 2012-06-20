@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\URLAlias;
  * Test case for operations in the URLAliasService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\URLAliasService
+ * @group url-alias
  */
 class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 {

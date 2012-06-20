@@ -18,6 +18,7 @@ use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  *
  * @see eZ\Publish\API\Repository\TrashService
  * @group integration
+ * @group trash
  */
 class TrashServiceTest extends BaseTrashServiceTest
 {
