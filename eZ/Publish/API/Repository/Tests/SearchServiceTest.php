@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
+    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
     eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
@@ -367,6 +368,36 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture( $query, $fixture );
     }
 
+    public function getFacettedSearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\ContentTypeFacetBuilder()
+                    ),
+                ) ),
+                $fixtureDir . '/FacetContentType.php',
+            ),
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @dataProvider getFacettedSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindFacettedContent( Query $query, $fixture )
+    {
+        $this->assertQueryFixture( $query, $fixture );
+    }
+
     /**
      * Assert that query result matches the given fixture.
      *
@@ -382,7 +413,7 @@ class SearchServiceTest extends BaseTest
         try {
             $result = $searchService->findContent( $query );
             $this->simplifySearchResult( $result );
-        } catch ( NotImplementedException $e ) {
+        } catch ( \eZ\Publish\API\Repository\Exceptions\NotImplementedException $e ) {
             $this->markTestSkipped(
                 "This feature is not supported by the current search backend: " . $e->getMessage()
             );
