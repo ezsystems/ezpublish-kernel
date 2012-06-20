@@ -426,7 +426,10 @@ class SearchServiceTest extends BaseTest
             switch ( true )
             {
                 case $hit->valueObject instanceof ContentInfo:
-                    $hit->valueObject = $hit->valueObject->id;
+                    $hit->valueObject = array(
+                        'id'    => $hit->valueObject->id,
+                        'title' => $hit->valueObject->name,
+                    );
                     break;
 
                 default:

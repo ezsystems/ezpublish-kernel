@@ -8,14 +8,22 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
   array (
     0 => 
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 4,
+       'valueObject' => 
+      array (
+        'id' => 4,
+        'title' => 'Users',
+      ),
        'score' => NULL,
        'index' => NULL,
        'highlight' => NULL,
     )),
     1 => 
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 65,
+       'valueObject' => 
+      array (
+        'id' => 65,
+        'title' => 'Home',
+      ),
        'score' => NULL,
        'index' => NULL,
        'highlight' => NULL,
