@@ -700,7 +700,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'body', 'text'
+            'body', 'ezstring'
         );
         $bodyFieldCreate->names = array(
             'eng-GB' => 'Body',
@@ -940,7 +940,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->addFieldDefinition( $firstFieldCreate );
 
         $secondFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'text'
+            'title', 'ezstring'
         );
         $typeCreate->addFieldDefinition( $secondFieldCreate );
 
