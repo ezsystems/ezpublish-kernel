@@ -60,8 +60,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
                 'Cannot create a repository with predefined user. ' .
                 'Check the UserService or RoleService implmenentation. ' .
                  PHP_EOL . PHP_EOL.
-                'Exception trace: ' .
-                $e->getTraceAsString()
+                'Exception: ' . $e
             );
         }
     }
