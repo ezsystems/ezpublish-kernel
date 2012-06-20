@@ -149,7 +149,7 @@ class Handler extends BaseSearchHandler
      */
     public function indexContent( Content $content )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $this->gateway->indexContent( $content );
     }
 }
 

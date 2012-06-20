@@ -9,13 +9,21 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
  * retrieve the desired content objects.
  */
-class Gateway
+abstract class Gateway
 {
+    /**
+     * Indexes a content object
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @return void
+     */
+    abstract public function indexContent( Content $content );
 }
 

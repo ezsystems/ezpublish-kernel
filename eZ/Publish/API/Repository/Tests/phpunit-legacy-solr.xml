@@ -10,6 +10,7 @@
 		<env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr" />
         <env name="backendVersion" value="5" />
         <env name="fixtureDir" value="Solr" />
+        <env name="solrServer" value="http://localhost:8983/" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">

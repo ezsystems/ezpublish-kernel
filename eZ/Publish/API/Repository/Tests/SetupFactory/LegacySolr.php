@@ -51,11 +51,38 @@ class LegacySolr extends Legacy
         $fieldHandlerMethod->setAccessible( true );
 
         $searchHandler = new Solr\Content\Search\Handler(
-            new Solr\Content\Search\Gateway(),
+            new Solr\Content\Search\Gateway\Native(
+                new Solr\Content\Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) )
+            ),
             $contentMapperMethod->invoke( $persistenceHandler ),
             $fieldHandlerMethod->invoke( $persistenceHandler )
         );
 
+        $this->indexAll( $persistenceHandler, $searchHandler );
+
         return $searchHandler;
+    }
+
+    protected function indexAll( $persistenceHandler, $searchHandler )
+    {
+        // @TODO: Is there a nicer way to get access to all content objects? We 
+        // require this to run a full index here.
+        $getDatabaseMethod = new \ReflectionMethod( $persistenceHandler, 'getDatabase' );
+        $getDatabaseMethod->setAccessible( true );
+        $db = $getDatabaseMethod->invoke( $persistenceHandler );
+
+        $query = $db->createSelectQuery()
+            ->select( 'id', 'current_version' )
+            ->from( 'ezcontentobject' );
+
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $searchHandler->indexContent(
+                $persistenceHandler->contentHandler()->load( $row['id'], $row['current_version'] )
+            );
+        }
     }
 }
