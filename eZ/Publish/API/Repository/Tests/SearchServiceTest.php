@@ -229,36 +229,7 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindContent( Query $query, $fixture )
     {
-        $repository    = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        try {
-            $result = $searchService->findContent( $query );
-            $this->simplifySearchResult( $result );
-        } catch ( NotImplementedException $e ) {
-            $this->markTestSkipped(
-                "This feature is not supported by the current search backend: " . $e->getMessage()
-            );
-        }
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult',
-            $result
-        );
-
-        if ( !is_file( $fixture ) )
-        {
-            file_put_contents(
-                $record = $fixture . '.recording',
-                "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
-            );
-            $this->markTestIncomplete( "No fixture available. Result recorded at $record" );
-        }
-
-        $this->assertEquals(
-            include $fixture,
-            $result
-        );
+        $this->assertQueryFixture( $query, $fixture );
     }
 
     public function getSortedSearches()
@@ -393,6 +364,18 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindAndSortContent( Query $query, $fixture )
     {
+        $this->assertQueryFixture( $query, $fixture );
+    }
+
+    /**
+     * Assert that query result matches the given fixture.
+     *
+     * @param Query $query
+     * @param string $fixture
+     * @return void
+     */
+    protected function assertQueryFixture( Query $query, $fixture )
+    {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -425,6 +408,15 @@ class SearchServiceTest extends BaseTest
         );
     }
 
+    /**
+     * Simplify search result
+     *
+     * This leads to saner comparisios of results, since we do not get the full 
+     * content objhects every time.
+     *
+     * @param SearchResult $result
+     * @return void
+     */
     protected function simplifySearchResult( SearchResult $result )
     {
         $result->time = 1;
