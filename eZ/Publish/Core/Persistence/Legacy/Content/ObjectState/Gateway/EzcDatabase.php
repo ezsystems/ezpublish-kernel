@@ -56,10 +56,7 @@ class EzcDatabase extends Gateway
         $query = $this->createObjectStateFindQuery();
         $query->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn(
-                    'id',
-                    'ezcobj_state'
-                ),
+                $this->dbHandler->quoteColumn( 'id', 'ezcobj_state' ),
                 $query->bindValue( $stateId, null, \PDO::PARAM_INT )
             )
         );
@@ -81,10 +78,7 @@ class EzcDatabase extends Gateway
         $query = $this->createObjectStateFindQuery();
         $query->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn(
-                    'group_id',
-                    'ezcobj_state'
-                ),
+                $this->dbHandler->quoteColumn( 'group_id', 'ezcobj_state' ),
                 $query->bindValue( $groupId, null, \PDO::PARAM_INT )
             )
         );
@@ -112,10 +106,7 @@ class EzcDatabase extends Gateway
         $query = $this->createObjectStateGroupFindQuery();
         $query->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn(
-                    'id',
-                    'ezcobj_state_group'
-                ),
+                $this->dbHandler->quoteColumn( 'id', 'ezcobj_state_group' ),
                 $query->bindValue( $groupId, null, \PDO::PARAM_INT )
             )
         );
@@ -165,10 +156,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcobj_state' )
         )->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn(
-                    'group_id',
-                    'ezcobj_state'
-                ),
+                $this->dbHandler->quoteColumn( 'group_id' ),
                 $query->bindValue( $groupId, null, \PDO::PARAM_INT )
             )
         );
@@ -194,7 +182,8 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'default_language_id' ),
             $query->bindValue(
                 $this->maskGenerator->generateLanguageIndicator( $objectState->defaultLanguage, false ),
-                null, \PDO::PARAM_INT )
+                null, \PDO::PARAM_INT
+            )
         )->set(
             $this->dbHandler->quoteColumn( 'identifier' ),
             $query->bindValue( $objectState->identifier )
@@ -236,7 +225,8 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'default_language_id' ),
             $query->bindValue(
                 $this->maskGenerator->generateLanguageIndicator( $objectState->defaultLanguage, false ),
-                null, \PDO::PARAM_INT )
+                null, \PDO::PARAM_INT
+            )
         )->set(
             $this->dbHandler->quoteColumn( 'identifier' ),
             $query->bindValue( $objectState->identifier )
@@ -309,7 +299,8 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'default_language_id' ),
             $query->bindValue(
                 $this->maskGenerator->generateLanguageIndicator( $objectStateGroup->defaultLanguage, false ),
-                null, \PDO::PARAM_INT )
+                null, \PDO::PARAM_INT
+            )
         )->set(
             $this->dbHandler->quoteColumn( 'identifier' ),
             $query->bindValue( $objectStateGroup->identifier )
@@ -342,7 +333,8 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'default_language_id' ),
             $query->bindValue(
                 $this->maskGenerator->generateLanguageIndicator( $objectStateGroup->defaultLanguage, false ),
-                null, \PDO::PARAM_INT )
+                null, \PDO::PARAM_INT
+            )
         )->set(
             $this->dbHandler->quoteColumn( 'identifier' ),
             $query->bindValue( $objectStateGroup->identifier )
@@ -491,29 +483,17 @@ class EzcDatabase extends Gateway
         $query->innerJoin(
             $this->dbHandler->quoteTable( 'ezcobj_state_link' ),
             $query->expr->eq(
-                $this->dbHandler->quoteColumn(
-                    'id',
-                    'ezcobj_state'
-                ),
-                $this->dbHandler->quoteColumn(
-                    'contentobject_state_id',
-                    'ezcobj_state_link'
-                )
+                $this->dbHandler->quoteColumn( 'id', 'ezcobj_state' ),
+                $this->dbHandler->quoteColumn( 'contentobject_state_id', 'ezcobj_state_link' )
             )
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'group_id',
-                        'ezcobj_state'
-                    ),
+                    $this->dbHandler->quoteColumn( 'group_id', 'ezcobj_state' ),
                     $query->bindValue( $stateGroupId, null, \PDO::PARAM_INT )
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'contentobject_id',
-                        'ezcobj_state_link'
-                    ),
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcobj_state_link' ),
                     $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 )
             )
@@ -581,10 +561,7 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->quoteColumn( 'group_id' ),
                 $query->bindValue( $groupId, null, \PDO::PARAM_INT )
             )
-        )->orderBy(
-            $this->dbHandler->quoteColumn( 'priority' ),
-            $query::ASC
-        );
+        )->orderBy( $this->dbHandler->quoteColumn( 'priority' ), $query::ASC );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -682,14 +659,8 @@ class EzcDatabase extends Gateway
         )->innerJoin(
             $this->dbHandler->quoteTable( 'ezcobj_state_language' ),
             $query->expr->eq(
-                $this->dbHandler->quoteColumn(
-                    'id',
-                    'ezcobj_state'
-                ),
-                $this->dbHandler->quoteColumn(
-                    'contentobject_state_id',
-                    'ezcobj_state_language'
-                )
+                $this->dbHandler->quoteColumn( 'id', 'ezcobj_state' ),
+                $this->dbHandler->quoteColumn( 'contentobject_state_id', 'ezcobj_state_language' )
             )
         );
 
@@ -719,14 +690,8 @@ class EzcDatabase extends Gateway
         )->innerJoin(
             $this->dbHandler->quoteTable( 'ezcobj_state_group_language' ),
             $query->expr->eq(
-                $this->dbHandler->quoteColumn(
-                    'id',
-                    'ezcobj_state_group'
-                ),
-                $this->dbHandler->quoteColumn(
-                    'contentobject_state_group_id',
-                    'ezcobj_state_group_language'
-                )
+                $this->dbHandler->quoteColumn( 'id', 'ezcobj_state_group' ),
+                $this->dbHandler->quoteColumn( 'contentobject_state_group_id', 'ezcobj_state_group_language' )
             )
         );
 
