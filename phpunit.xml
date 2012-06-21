@@ -36,7 +36,7 @@
 
           <directory suffix=".php">eZ/Publish/Core/Base/Tests</directory>
 
-          <directory suffix=".php">eZ/Publish/Core/IO/Tests</directory>
+          <directory>eZ/Publish/Core/IO/Tests</directory>
 
           <directory suffix="Test.php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
 
