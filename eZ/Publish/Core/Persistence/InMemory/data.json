@@ -112,8 +112,8 @@
         {"id": 9, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 3781580864 ] } }
     ],
     "Content\\ObjectState" : [
-        {"id": 1, "identifier": "not_locked", "groupId": 2, "priority": 0, "defaultLanguage": "eng-GB", "languageCodes": ["eng-GB"], "name": {"eng-GB": "Not locked"}, "description": {"eng-GB": ""}},
-        {"id": 2, "identifier": "locked", "groupId": 2, "priority": 1, "defaultLanguage": "eng-GB", "languageCodes": ["eng-GB"], "name": {"eng-GB": "Locked"}, "description": {"eng-GB": ""}}
+        {"id": 1, "identifier": "not_locked", "groupId": 2, "priority": 0, "defaultLanguage": "eng-GB", "languageCodes": ["eng-GB"], "name": {"eng-GB": "Not locked"}, "description": {"eng-GB": ""}, "_contentId": [1, 4, 10, 11, 12, 14, 42]},
+        {"id": 2, "identifier": "locked", "groupId": 2, "priority": 1, "defaultLanguage": "eng-GB", "languageCodes": ["eng-GB"], "name": {"eng-GB": "Locked"}, "description": {"eng-GB": ""}, "_contentId": []}
     ],
     "Content\\ObjectState\\Group" : [
         {"id": 2, "identifier": "ez_lock", "defaultLanguage": "eng-GB", "languageCodes": ["eng-GB"], "name": {"eng-GB": "Lock"}, "description": {"eng-GB": ""}}

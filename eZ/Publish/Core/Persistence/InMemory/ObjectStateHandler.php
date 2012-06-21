@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\ObjectState,
     eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -132,7 +133,6 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     public function deleteGroup( $groupId )
     {
         $this->backend->deleteByMatch( 'Content\\ObjectState', array( 'groupId' => $groupId ) );
-        //@todo object links?
         $this->backend->delete( 'Content\\ObjectState\\Group', $groupId );
     }
 
@@ -161,9 +161,21 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         $inputData["groupId"] = (int) $groupId;
         $inputData["priority"] = $newPriority;
 
-        return $this->backend->create( 'Content\\ObjectState', $inputData );
+        $createdState = $this->backend->create( 'Content\\ObjectState', $inputData );
 
-        // @todo object links?
+        if ( $newPriority == 0 )
+        {
+            $allContentInfos = $this->backend->find( "Content\\ContentInfo" );
+            $allContentIds = array_map(
+                function( ContentInfo $contentInfo )
+                {
+                    return $contentInfo->id;
+                },
+                $allContentInfos
+            );
+
+            $this->backend->update( "Content\\ObjectState", $createdState->id, array( "_contentId" => $allContentIds ) );
+        }
     }
 
     /**
@@ -236,8 +248,47 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      */
     public function delete( $stateId )
     {
+        // We need to load the object state as we need $groupId
+        $objectState = $this->load( $stateId );
+
+        // Find all content for the current $stateId
+        $contentList = $this->getObjectStateContentList( $stateId );
+
+        // Delete the state
         $this->backend->delete( 'Content\\ObjectState', $stateId );
-        // @todo object links?
+
+        // Update the priorities of the group states if there are any more states in the group
+        $groupStates = $this->loadObjectStates( $objectState->groupId );
+        if ( empty( $groupStates ) )
+            return;
+
+        $currentPriorityList = array();
+        foreach ( $groupStates as $groupState )
+        {
+            $currentPriorityList[$groupState->id] = $groupState->priority;
+        }
+
+        $newPriorityList = $currentPriorityList;
+        asort( $newPriorityList );
+
+        $currentPriorityList = array_keys( $currentPriorityList );
+        $newPriorityList = array_keys( $newPriorityList );
+
+        foreach ( $newPriorityList as $priority => $tempStateId )
+        {
+            if ( $currentPriorityList[$priority] == $tempStateId )
+                continue;
+
+            $this->backend->update( 'Content\\ObjectState', $tempStateId, array( "priority" => $priority ) );
+        }
+
+        // Now reassign content from old state to the first state in the group
+        $firstObjectState = current( $this->backend->find( "Content\\ObjectState", array( "priority" => 0 ) ) );
+
+        $existingContent = $this->getObjectStateContentList( $firstObjectState->id ) + $contentList;
+        $existingContent = array_values( array_unique( $existingContent ) );
+
+        $this->backend->update( 'Content\\ObjectState', $firstObjectState->id, array( "_contentId" => $existingContent ) );
     }
 
     /**
@@ -250,7 +301,30 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      */
     public function setObjectState( $contentId, $groupId, $stateId )
     {
-        //@todo implement
+        $groupStateIds = $this->getGroupStateList( $groupId );
+        if ( empty( $groupStateIds ) || !in_array( $stateId, $groupStateIds ) )
+            return false;
+
+        $contentToStateMap = $this->getContentToStateMap();
+
+        // If the content was in one of the group states,
+        // find all content for the old state and update the old state with excluded $contentId
+        $existingStateIds = array_intersect( $groupStateIds, $contentToStateMap[(int) $contentId] );
+        if ( !empty( $existingStateIds ) )
+        {
+            $oldStateContentList = $this->getObjectStateContentList( $existingStateIds[0] );
+            $oldStateContentList = array_values( array_diff( $oldStateContentList, array( $contentId ) ) );
+
+            $this->backend->update( "Content\\ObjectState", $existingStateIds[0], array( "_contentId" => $oldStateContentList ) );
+        }
+
+        // Find all content for the new state and update the new state with added $contentId
+        $newStateContentList = $this->getObjectStateContentList( $stateId );
+        $newStateContentList[] = $contentId;
+
+        $this->backend->update( "Content\\ObjectState", $stateId, array( "_contentId" => $newStateContentList ) );
+
+        return true;
     }
 
     /**
@@ -260,11 +334,28 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      *
      * @param mixed $contentId
      * @param mixed $stateGroupId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no state is found
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
     public function getObjectState( $contentId, $stateGroupId )
     {
-        //@todo implement
+        $groupStateIds = $this->getGroupStateList( $stateGroupId );
+        if ( empty( $groupStates ) )
+            throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
+
+        $contentId = (int) $contentId;
+
+        $contentToStateMap = $this->getContentToStateMap();
+        if ( !isset( $contentToStateMap[$contentId] ) )
+            throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
+
+        $foundStates = array_intersect( $groupStateIds, $contentToStateMap[$contentId] );
+        if ( empty( $foundStates ) )
+            throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
+
+        return $this->load( $foundStates[0] );
     }
 
     /**
@@ -275,7 +366,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      */
     public function getContentCount( $stateId )
     {
-        //@todo implement
+        return count( $this->getObjectStateContentList( $stateId ) );
     }
 
     /**
@@ -290,5 +381,66 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         $inputData = (array) $input;
         $inputData["languageCodes"] = array_keys( $input->name );
         return $inputData;
+    }
+
+    /**
+     * Gets a mapping array of all content and states they belong to
+     *
+     * This method serves as a hack because InMemory storage is unable to
+     * store M:N relations between content and object states as there's no
+     * value object for the link
+     *
+     * @return array
+     */
+    protected function getContentToStateMap()
+    {
+        $contentToStateMap = array();
+
+        $contentInfoArray = $this->backend->find( "Content\\ContentInfo" );
+        foreach ( $contentInfoArray as $contentInfo )
+        {
+            $objectStates = $this->backend->find( "Content\\ObjectState", array( "_contentId" => $contentInfo->id ) );
+            foreach ( $objectStates as $objectState )
+            {
+                $contentToStateMap[$contentInfo->id][] = $objectState->id;
+            }
+        }
+
+        return $contentToStateMap;
+    }
+
+    /**
+     * Returns all content IDs that belong to $stateId
+     *
+     * @param int $stateId
+     * @return array
+     */
+    protected function getObjectStateContentList( $stateId )
+    {
+        $contentList = array();
+        foreach ( $this->getContentToStateMap() as $contentId => $stateList )
+        {
+            if ( in_array( $stateId, $stateList ) )
+                $contentList[] = $contentId;
+        }
+
+        return $contentList;
+    }
+
+    /**
+     * Returns all state IDs that belong to $groupId
+     *
+     * @param int $groupId
+     * @return array
+     */
+    protected function getGroupStateList( $groupId )
+    {
+        $groupStates = $this->loadObjectStates( $groupId );
+        return array_map( function( ObjectState $objectState )
+            {
+                return $objectState->id;
+            },
+            $groupStates
+        );
     }
 }
