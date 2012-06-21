@@ -134,6 +134,13 @@ class Handler implements BaseObjectStateHandler
      */
     public function deleteGroup( $groupId )
     {
+        $objectStates = $this->loadObjectStates( $groupId );
+        foreach ( $objectStates as $objectState )
+        {
+            $this->objectStateGateway->deleteObjectStateLinks( $objectState->id );
+            $this->objectStateGateway->deleteObjectState( $objectState->id );
+        }
+
         $this->objectStateGateway->deleteObjectStateGroup( $groupId );
     }
 
@@ -237,7 +244,7 @@ class Handler implements BaseObjectStateHandler
         asort( $newPriorityList );
 
         $this->objectStateGateway->reorderPriorities( $currentPriorityList, $newPriorityList );
-        $this->objectStateGateway->assignStateToContentObjects( key( $currentPriorityList ) );
+        $this->objectStateGateway->updateObjectStateLinks( $stateId, key( $currentPriorityList ) );
     }
 
     /**
@@ -267,6 +274,8 @@ class Handler implements BaseObjectStateHandler
     {
         $data = $this->objectStateGateway->loadObjectStateDataForContent( $contentId, $stateGroupId );
         return $this->objectStateMapper->createObjectStateFromData( $data );
+
+        //@todo throw NotFound exception if no object state found? For example, if group has no states
     }
 
     /**

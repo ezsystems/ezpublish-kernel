@@ -206,7 +206,11 @@ class EzcDatabase extends Gateway
         // If this is a first state in group, assign it to all content objects
         if ( $maxPriority === null )
         {
-            $this->assignStateToContentObjects( $objectState->id );
+            // @todo Hm... How do we perform this with query object?
+            $this->dbHandler->query(
+                "INSERT INTO ezcobj_state_link (contentobject_id, contentobject_state_id)
+                SELECT id, {$objectState->id} FROM ezcontentobject"
+            );
         }
     }
 
@@ -253,19 +257,6 @@ class EzcDatabase extends Gateway
      */
     public function deleteObjectState( $stateId )
     {
-        // Delete all content object links
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable( 'ezcobj_state_link' )
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
-                $query->bindValue( $stateId, null, \PDO::PARAM_INT )
-            )
-        );
-
-        $query->prepare()->execute();
-
         $this->deleteObjectStateTranslations( $stateId );
 
         // Delete the state
@@ -275,6 +266,51 @@ class EzcDatabase extends Gateway
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $stateId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Update object state links to $newStateId
+     *
+     * @param int $oldStateId
+     * @param int $newStateId
+     */
+    public function updateObjectStateLinks( $oldStateId, $newStateId )
+    {
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteTable( 'ezcobj_state_link' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
+            $query->bindValue( $newStateId, null, \PDO::PARAM_INT )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
+                $query->bindValue( $oldStateId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Deletes object state links identified by $stateId
+     *
+     * @param int $stateId
+     */
+    public function deleteObjectStateLinks( $stateId )
+    {
+        // Delete all content object links
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcobj_state_link' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
                 $query->bindValue( $stateId, null, \PDO::PARAM_INT )
             )
         );
@@ -361,17 +397,6 @@ class EzcDatabase extends Gateway
      */
     public function deleteObjectStateGroup( $groupId )
     {
-        $data = $this->loadObjectStateListData( $groupId );
-
-        // First delete all object states, translations and links to content objects
-        if ( !empty( $data ) )
-        {
-            foreach ( $data as $objectStateData )
-            {
-                $this->deleteObjectState( $objectStateData[0]['ezcobj_state_id'] );
-            }
-        }
-
         $this->deleteObjectStateGroupTranslations( $groupId );
 
         // Delete the state group
@@ -621,20 +646,6 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Assigns the state with $stateId ID to all content objects
-     *
-     * @param int $stateId
-     */
-    public function assignStateToContentObjects( $stateId )
-    {
-        // @todo Hm... How do we perform this with query object?
-        $this->dbHandler->query(
-            "INSERT INTO ezcobj_state_link (contentobject_id, contentobject_state_id)
-            SELECT id, " . (int) $stateId . " FROM ezcontentobject"
-        );
-    }
-
-    /**
      * Creates a generalized query for fetching object state(s)
      *
      * @return \ezcQuerySelect
@@ -734,6 +745,26 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Deletes all translations of the $stateId state
+     *
+     * @param mixed $stateId
+     */
+    protected function deleteObjectStateTranslations( $stateId )
+    {
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcobj_state_language' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
+                $query->bindValue( $stateId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $query->prepare()->execute();
+    }
+
+    /**
      * Inserts object state group translations into database
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
@@ -766,26 +797,6 @@ class EzcDatabase extends Gateway
 
             $query->prepare()->execute();
         }
-    }
-
-    /**
-     * Deletes all translations of the $stateId state
-     *
-     * @param mixed $stateId
-     */
-    protected function deleteObjectStateTranslations( $stateId )
-    {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable( 'ezcobj_state_language' )
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
-                $query->bindValue( $stateId, null, \PDO::PARAM_INT )
-            )
-        );
-
-        $query->prepare()->execute();
     }
 
     /**

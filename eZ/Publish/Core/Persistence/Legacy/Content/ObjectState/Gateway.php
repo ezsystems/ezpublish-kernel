@@ -73,6 +73,21 @@ abstract class Gateway
     abstract public function deleteObjectState( $stateId );
 
     /**
+     * Update object state links from $oldStateId to $newStateId
+     *
+     * @param int $oldStateId
+     * @param int $newStateId
+     */
+    abstract public function updateObjectStateLinks( $oldStateId, $newStateId );
+
+    /**
+     * Deletes object state links identified by $stateId
+     *
+     * @param int $stateId
+     */
+    abstract public function deleteObjectStateLinks( $stateId );
+
+    /**
      * Inserts a new object state group into database
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
@@ -154,11 +169,4 @@ abstract class Gateway
      * @param array $newPriorityList
      */
     abstract public function reorderPriorities( array $currentPriorityList, array $newPriorityList );
-
-    /**
-     * Assigns the state with $stateId ID to all content objects
-     *
-     * @param int $stateId
-     */
-    abstract public function assignStateToContentObjects( $stateId );
 }
