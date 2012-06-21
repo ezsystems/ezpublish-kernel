@@ -244,7 +244,7 @@ class Handler implements BaseObjectStateHandler
         asort( $newPriorityList );
 
         $this->objectStateGateway->reorderPriorities( $currentPriorityList, $newPriorityList );
-        $this->objectStateGateway->updateObjectStateLinks( $stateId, key( $currentPriorityList ) );
+        $this->objectStateGateway->updateObjectStateLinks( $stateId, key( $newPriorityList ) );
     }
 
     /**
