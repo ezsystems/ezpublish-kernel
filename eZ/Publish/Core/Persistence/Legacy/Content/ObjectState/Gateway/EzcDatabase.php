@@ -221,7 +221,7 @@ class EzcDatabase extends Gateway
      */
     public function updateObjectState( ObjectState $objectState )
     {
-        // First update the state with new data
+        // First update the state
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( 'ezcobj_state' )
@@ -246,6 +246,8 @@ class EzcDatabase extends Gateway
 
         $query->prepare()->execute();
 
+        // And then refresh object state translations
+        // by removing existing ones and adding new ones
         $this->deleteObjectStateTranslations( $objectState->id );
         $this->insertObjectStateTranslations( $objectState );
     }
@@ -259,7 +261,6 @@ class EzcDatabase extends Gateway
     {
         $this->deleteObjectStateTranslations( $stateId );
 
-        // Delete the state
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezcobj_state' )
@@ -304,7 +305,6 @@ class EzcDatabase extends Gateway
      */
     public function deleteObjectStateLinks( $stateId )
     {
-        // Delete all content object links
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezcobj_state_link' )
@@ -361,7 +361,7 @@ class EzcDatabase extends Gateway
      */
     public function updateObjectStateGroup( Group $objectStateGroup )
     {
-        // First update the group with new data
+        // First update the group
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( 'ezcobj_state_group' )
@@ -386,6 +386,8 @@ class EzcDatabase extends Gateway
 
         $query->prepare()->execute();
 
+        // And then refresh group translations
+        // by removing old ones and adding new ones
         $this->deleteObjectStateGroupTranslations( $objectStateGroup->id );
         $this->insertObjectStateGroupTranslations( $objectStateGroup );
     }
@@ -399,7 +401,6 @@ class EzcDatabase extends Gateway
     {
         $this->deleteObjectStateGroupTranslations( $groupId );
 
-        // Delete the state group
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezcobj_state_group' )
@@ -422,7 +423,7 @@ class EzcDatabase extends Gateway
      */
     public function setObjectState( $contentId, $groupId, $stateId )
     {
-        // First find out if we have any objects related to existing states in $groupId
+        // First find out if $contentId is related to existing states in $groupId
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcobj_state' )
@@ -478,7 +479,7 @@ class EzcDatabase extends Gateway
         }
         else
         {
-            // No state assigned to content object from specified group, create assignment
+            // No state assigned to $contentId from specified group, create assignment
             $query = $this->dbHandler->createInsertQuery();
             $query->insertInto(
                 $this->dbHandler->quoteTable( 'ezcobj_state_link' )
