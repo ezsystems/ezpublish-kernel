@@ -34,6 +34,19 @@ class TrashItem extends APITrashItem
     }
 
     /**
+     * Function where list of properties are returned
+     *
+     * Override to add dynamic properties
+     * @uses parent::getProperties()
+     *
+     * @return array
+     */
+    protected function getProperties()
+    {
+        return array( 'contentId' ) + parent::getProperties();
+    }
+
+    /**
      * Magic getter for retrieving convenience properties
      *
      * @param string $property The name of the property to retrieve
