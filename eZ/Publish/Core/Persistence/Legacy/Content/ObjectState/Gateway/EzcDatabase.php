@@ -554,16 +554,26 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Assigns the most prioritized state from $groupId group to all content objects
+     * Returns the current priority list in the following format:
+     * <code>
+     *     array(
+     *         1 => 0,
+     *         4 => 1,
+     *         6 => 2
+     *     )
+     * </code>
+     *
+     * where array keys are state IDs and array values are associated priorities
      *
      * @param mixed $groupId
+     * @return array
      */
-    public function assignMostPrioritizedStateToContentObjects( $groupId )
+    public function loadCurrentPriorityList( $groupId )
     {
-        // Get the most prioritized state from the group
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn( 'id' )
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->quoteColumn( 'priority' )
         )->from(
             $this->dbHandler->quoteTable( 'ezcobj_state' )
         )->where(
@@ -574,17 +584,77 @@ class EzcDatabase extends Gateway
         )->orderBy(
             $this->dbHandler->quoteColumn( 'priority' ),
             $query::ASC
-        )->limit( 1, 0 );
+        );
 
         $statement = $query->prepare();
         $statement->execute();
 
-        $stateId = $statement->fetchColumn();
-        // If there's no states in the group, do nothing
-        if ( $stateId === null )
-            return;
+        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
 
-        $this->assignStateToContentObjects( $stateId );
+        $currentPriorityList = array();
+        foreach ( $rows as $row )
+        {
+            $currentPriorityList[(int) $row['id']] = (int) $row['priority'];
+        }
+
+        return $currentPriorityList;
+    }
+
+    /**
+     * Reorders the priority list inside a state group.
+     * Parameters need to be in the following format:
+     * <code>
+     *     array(
+     *         1 => 0,
+     *         4 => 1,
+     *         6 => 2
+     *     )
+     * </code>
+     *
+     * where array keys are state IDs and array values are associated priorities
+     *
+     * @param array $currentPriorityList
+     * @param array $newPriorityList
+     */
+    public function reorderPriorities( array $currentPriorityList, array $newPriorityList )
+    {
+        $currentPriorityList = array_keys( $currentPriorityList );
+        $newPriorityList = array_keys( $newPriorityList );
+
+        foreach ( $newPriorityList as $priority => $stateId )
+        {
+            if ( $currentPriorityList[$priority] == $stateId )
+                continue;
+
+            $query = $this->dbHandler->createUpdateQuery();
+            $query->update(
+                $this->dbHandler->quoteTable( 'ezcobj_state' )
+            )->set(
+                $this->dbHandler->quoteColumn( 'priority' ),
+                $query->bindValue( $priority, null, \PDO::PARAM_INT )
+            )->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $query->bindValue( $stateId, null, \PDO::PARAM_INT )
+                )
+            );
+
+            $query->prepare()->execute();
+        }
+    }
+
+    /**
+     * Assigns the state with $stateId ID to all content objects
+     *
+     * @param int $stateId
+     */
+    public function assignStateToContentObjects( $stateId )
+    {
+        // @todo Hm... How do we perform this with query object?
+        $this->dbHandler->query(
+            "INSERT INTO ezcobj_state_link (contentobject_id, contentobject_state_id)
+            SELECT id, " . (int) $stateId . " FROM ezcontentobject"
+        );
     }
 
     /**
@@ -661,20 +731,6 @@ class EzcDatabase extends Gateway
         );
 
         return $query;
-    }
-
-    /**
-     * Assigns the state with $stateId ID to all content objects
-     *
-     * @param int $stateId
-     */
-    protected function assignStateToContentObjects( $stateId )
-    {
-        // @todo Hm... How do we perform this with query object?
-        $this->dbHandler->query(
-            "INSERT INTO ezcobj_state_link (contentobject_id, contentobject_state_id)
-            SELECT id, " . (int) $stateId . " FROM ezcontentobject"
-        );
     }
 
     /**

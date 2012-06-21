@@ -203,7 +203,14 @@ class Handler implements BaseObjectStateHandler
      */
     public function setPriority( $stateId, $priority )
     {
-        // @TODO: Implement
+        $objectState = $this->load( $stateId );
+        $currentPriorityList = $this->objectStateGateway->loadCurrentPriorityList( $objectState->groupId );
+
+        $newPriorityList = $currentPriorityList;
+        $newPriorityList[$objectState->id] = (int) $priority;
+        asort( $newPriorityList );
+
+        $this->objectStateGateway->reorderPriorities( $currentPriorityList, $newPriorityList );
     }
 
     /**
@@ -216,13 +223,21 @@ class Handler implements BaseObjectStateHandler
      */
     public function delete( $stateId )
     {
-        // Get the object state as we need group ID
-        // to reassign content to another state in the group
+        // Get the object state first as we need group ID
+        // to reorder the priorities and reassign content to another state in the group
         $objectState = $this->load( $stateId );
 
         $this->objectStateGateway->deleteObjectState( $stateId );
-        // @todo fixup priorities of the remaining states in the group
-        $this->objectStateGateway->assignMostPrioritizedStateToContentObjects( $objectState->groupId );
+
+        $currentPriorityList = $this->objectStateGateway->loadCurrentPriorityList( $objectState->groupId );
+        if ( empty( $currentPriorityList ) )
+            return;
+
+        $newPriorityList = $currentPriorityList;
+        asort( $newPriorityList );
+
+        $this->objectStateGateway->reorderPriorities( $currentPriorityList, $newPriorityList );
+        $this->objectStateGateway->assignStateToContentObjects( key( $currentPriorityList ) );
     }
 
     /**
