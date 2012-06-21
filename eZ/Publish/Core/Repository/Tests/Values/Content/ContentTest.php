@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Values;
+namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 use eZ\Publish\Core\Repository\Values\Content\Content,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
@@ -18,32 +18,14 @@ use eZ\Publish\Core\Repository\Values\Content\Content,
 class ContentTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * setup
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        //
-    }
-
-    /**
-     * teardown
-     */
-    protected function tearDown()
-    {
-        //unset(  );
-        parent::tearDown();
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getProperties
      */
     public function testObjectProperties()
     {
-        $content = new Content( array( 'internalFields' => array() ) );
+        $object = new Content( array( 'internalFields' => array() ) );
         $properties = array();
-        foreach( $content as $property => $propValue )
+        foreach( $object as $property => $propValue )
         {
             self::assertNotEquals( 'internalFields', $property );
             $properties[] = $property;
