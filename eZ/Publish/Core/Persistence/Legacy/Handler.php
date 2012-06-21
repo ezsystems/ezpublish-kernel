@@ -775,6 +775,10 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * Begin transaction
+     *
+     * Begins an transaction, make sure you'll call commit or rollback when done,
+     * otherwise work will be lost.
      */
     public function beginTransaction()
     {
@@ -782,6 +786,11 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * Commit transaction
+     *
+     * Commit transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit()
     {
@@ -796,6 +805,11 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * Rollback transaction
+     *
+     * Rollback transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback()
     {
