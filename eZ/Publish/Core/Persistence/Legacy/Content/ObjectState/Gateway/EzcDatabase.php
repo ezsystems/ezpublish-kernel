@@ -81,7 +81,7 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->quoteColumn( 'group_id', 'ezcobj_state' ),
                 $query->bindValue( $groupId, null, \PDO::PARAM_INT )
             )
-        );
+        )->orderBy( $this->dbHandler->quoteColumn( 'priority' ), $query::ASC );
 
         $statement = $query->prepare();
         $statement->execute();
