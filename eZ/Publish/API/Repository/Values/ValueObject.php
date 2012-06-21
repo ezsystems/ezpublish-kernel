@@ -67,7 +67,7 @@ abstract class ValueObject implements IteratorAggregate
         foreach ( $properties as $property => $propertyValue )
         {
             if ( !$this->__isset( $property ) )
-                unset( $properties[ $property ] );
+                unset( $properties[$property] );
         }
         return $properties;
     }
