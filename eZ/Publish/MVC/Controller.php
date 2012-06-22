@@ -16,6 +16,11 @@ use \LogicException;
 class Controller extends BaseController
 {
     /**
+     * @var \Closure
+     */
+    private $legacyKernelClosure;
+
+    /**
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository()
@@ -24,5 +29,18 @@ class Controller extends BaseController
             throw new LogicException( 'The EzPublishCoreBundle has not been registered in your application.' );
 
         return $this->container->get( 'ezpublish.api.repository' );
+    }
+
+    /**
+     * Returns the legacy kernel object.
+     *
+     * @return \eZ\Publish\Legacy\Kernel
+     */
+    final protected function getLegacyKernel()
+    {
+        if ( !isset( $this->legacyKernelClosure ) )
+            $this->legacyKernelClosure = $this->get( 'ezpublish_legacy.kernel' );
+
+        return $this->legacyKernelClosure();
     }
 }
