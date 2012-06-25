@@ -11,8 +11,6 @@
 namespace eZ\Publish\API\Repository\Values;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
-use IteratorAggregate;
-use ArrayIterator;
 
 /**
  * The base class for all value objects and structs
@@ -24,7 +22,7 @@ use ArrayIterator;
  *
  * @package eZ\Publish\API\Repository\Values
  */
-abstract class ValueObject implements IteratorAggregate
+abstract class ValueObject
 {
     /**
      * Construct object optionally with a set of properties
@@ -43,31 +41,24 @@ abstract class ValueObject implements IteratorAggregate
     }
 
     /**
-     * INTERNAL function for PHP to be able to traverse the object properties
-     *
-     * @access protected
-     * @return \Traversable
-     */
-    final public function getIterator()
-    {
-        return new ArrayIterator( $this->getProperties() );
-    }
-
-    /**
      * Function where list of properties are returned
      *
      * Used by {@see getIterator()} and {@see attributes()}, override to add dynamic properties
      * @uses __isset()
      *
+     * @todo Make object traversable and reuse this function there (hence why this is not exposed)
+     *
+     * @param array $dynamicProperties Additional dynamic properties exposed on the object
+     *
      * @return array
      */
-    protected function getProperties()
+    protected function getProperties( $dynamicProperties = array() )
     {
-        $properties = get_object_vars( $this );
-        foreach ( $properties as $property => $propertyValue )
+        $properties = $dynamicProperties;
+        foreach ( get_object_vars( $this ) as $property => $propertyValue )
         {
-            if ( !$this->__isset( $property ) )
-                unset( $properties[$property] );
+            if ( $this->__isset( $property ) )
+                $properties[] = $property;
         }
         return $properties;
     }
@@ -187,13 +178,7 @@ abstract class ValueObject implements IteratorAggregate
      */
     final public function attributes()
     {
-        $properties = array();
-        foreach ( $this as $property => $value )
-        {
-            if ( $this->__isset( $property ) )
-                $properties[] = $property;
-        }
-        return $properties;
+        return $this->getProperties();
     }
 
     /**

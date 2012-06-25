@@ -18,6 +18,21 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
 class ContentTypeDraft extends APIContentTypeDraft
 {
     /**
+     * Function where list of properties are returned
+     *
+     * Override to add dynamic properties
+     * @uses parent::getProperties()
+     *
+     * @param array $dynamicProperties
+     *
+     * @return array
+     */
+    protected function getProperties( $dynamicProperties = array( 'contentTypeGroups', 'fieldDefinitions' ) )
+    {
+        return parent::getProperties( $dynamicProperties );
+    }
+
+    /**
      * Magic getter for ruting get's to innerContentType
      *
      * @param string $property The name of the property to retrieve

@@ -39,11 +39,13 @@ class TrashItem extends APITrashItem
      * Override to add dynamic properties
      * @uses parent::getProperties()
      *
+     * @param array $dynamicProperties
+     *
      * @return array
      */
-    protected function getProperties()
+    protected function getProperties( $dynamicProperties = array( 'contentId', 'path' ) )
     {
-        return array( 'contentId' ) + parent::getProperties();
+        return parent::getProperties( $dynamicProperties );
     }
 
     /**

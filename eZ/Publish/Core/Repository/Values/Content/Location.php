@@ -44,11 +44,13 @@ class Location extends APILocation
      * Override to add dynamic properties
      * @uses parent::getProperties()
      *
+     * @param array $dynamicProperties
+     *
      * @return array
      */
-    protected function getProperties()
+    protected function getProperties( $dynamicProperties = array( 'contentId'  ) )
     {
-        return array( 'contentId' ) + parent::getProperties();
+        return parent::getProperties( $dynamicProperties );
     }
 
     /**

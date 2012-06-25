@@ -178,11 +178,13 @@ class Content extends APIContent
      * Override to add dynamic properties
      * @uses parent::getProperties()
      *
+     * @param array $dynamicProperties
+     *
      * @return array
      */
-    protected function getProperties()
+    protected function getProperties( $dynamicProperties = array( 'id', 'contentInfo', 'contentType' ) )
     {
-        return array( 'id', 'contentInfo', 'contentType' ) + parent::getProperties();
+        return parent::getProperties( $dynamicProperties );
     }
 
     /**
