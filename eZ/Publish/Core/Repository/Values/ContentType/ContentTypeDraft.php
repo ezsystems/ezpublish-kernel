@@ -64,7 +64,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      */
     public function __isset( $property )
     {
-        return isset( $this->innerContentType->$property );
+        return $this->innerContentType->__isset( $property );
     }
 
     /**
