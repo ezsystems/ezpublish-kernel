@@ -543,7 +543,7 @@ class EzcDatabase extends Gateway
         $query->select(
             $query->alias( $query->expr->count( '*' ), 'count' )
         )->from(
-            $this->dbHandler->quoteTable( 'ezcobj_state' )
+            $this->dbHandler->quoteTable( 'ezcobj_state_link' )
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'contentobject_state_id' ),
