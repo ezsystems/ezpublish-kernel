@@ -311,7 +311,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
         // If the content was in one of the group states,
         // find all content for the old state and update the old state with excluded $contentId
-        $existingStateIds = array_intersect( $groupStateIds, $contentToStateMap[(int) $contentId] );
+        $existingStateIds = array_values( array_intersect( $groupStateIds, $contentToStateMap[(int) $contentId] ) );
         if ( !empty( $existingStateIds ) )
         {
             $oldStateContentList = $this->getObjectStateContentList( $existingStateIds[0] );
@@ -353,7 +353,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         if ( !isset( $contentToStateMap[$contentId] ) )
             throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
 
-        $foundStates = array_intersect( $groupStateIds, $contentToStateMap[$contentId] );
+        $foundStates = array_values( array_intersect( $groupStateIds, $contentToStateMap[$contentId] ) );
         if ( empty( $foundStates ) )
             throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
 
