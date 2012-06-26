@@ -344,7 +344,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     public function getObjectState( $contentId, $stateGroupId )
     {
         $groupStateIds = $this->getGroupStateList( $stateGroupId );
-        if ( empty( $groupStates ) )
+        if ( empty( $groupStateIds ) )
             throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
 
         $contentId = (int) $contentId;
