@@ -176,6 +176,8 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
             $this->backend->update( "Content\\ObjectState", $createdState->id, array( "_contentId" => $allContentIds ) );
         }
+
+        return $createdState;
     }
 
     /**
