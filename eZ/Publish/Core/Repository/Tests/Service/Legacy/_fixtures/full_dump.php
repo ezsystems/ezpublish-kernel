@@ -15,6 +15,12 @@ array (
   'locale' => 'eng-GB',
   'name' => 'English (United Kingdom)',
 ),
+2 => array (
+  'disabled' => '0',
+  'id' => '8',
+  'locale' => 'ger-DE',
+  'name' => 'German',
+),
 ),
 'ezsection' =>
 array(
@@ -45222,5 +45228,794 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'user_id' => '14',
     ),
   ),
+  'ezcobj_state_group' =>
+  array (
+    0 => array (
+      'default_language_id' => '2',
+      'id' => '2',
+      'identifier' => 'ez_lock',
+      'language_mask' => '3',
+    ),
+  ),
+  'ezcobj_state_group_language' =>
+  array (
+    0 => array (
+      'contentobject_state_group_id' => '2',
+      'description' => '',
+      'language_id' => '3',
+      'name' => 'Lock',
+    ),
+  ),
+  'ezcobj_state' =>
+  array (
+    0 => array (
+      'default_language_id' => '2',
+      'group_id' => '2',
+      'id' => '1',
+      'identifier' => 'not_locked',
+      'language_mask' => '3',
+      'priority' => '0',
+    ),
+    1 => array (
+      'default_language_id' => '2',
+      'group_id' => '2',
+      'id' => '2',
+      'identifier' => 'locked',
+      'language_mask' => '3',
+      'priority' => '1',
+    ),
+  ),
+  'ezcobj_state_language' =>
+  array (
+    0 => array (
+      'contentobject_state_id' => '1',
+      'description' => '',
+      'language_id' => '3',
+      'name' => 'Not locked',
+    ),
+    1 => array (
+      'contentobject_state_id' => '2',
+      'description' => '',
+      'language_id' => '3',
+      'name' => 'Locked',
+    ),
+  ),
+  'ezcobj_state_link' => array (
+    0 => array (
+      'contentobject_id' => '4',
+      'contentobject_state_id' => '1',
+    ),
+    1 => array (
+      'contentobject_id' => '10',
+      'contentobject_state_id' => '1',
+    ),
+    2 => array (
+      'contentobject_id' => '11',
+      'contentobject_state_id' => '1',
+    ),
+    3 => array (
+      'contentobject_id' => '12',
+      'contentobject_state_id' => '1',
+    ),
+    4 => array (
+      'contentobject_id' => '13',
+      'contentobject_state_id' => '1',
+    ),
+    5 => array (
+      'contentobject_id' => '14',
+      'contentobject_state_id' => '1',
+    ),
+    6 => array (
+      'contentobject_id' => '41',
+      'contentobject_state_id' => '1',
+    ),
+    7 => array (
+      'contentobject_id' => '42',
+      'contentobject_state_id' => '1',
+    ),
+    8 => array (
+      'contentobject_id' => '45',
+      'contentobject_state_id' => '1',
+    ),
+    9 => array (
+      'contentobject_id' => '49',
+      'contentobject_state_id' => '1',
+    ),
+    10 => array (
+      'contentobject_id' => '50',
+      'contentobject_state_id' => '1',
+    ),
+    11 => array (
+      'contentobject_id' => '51',
+      'contentobject_state_id' => '1',
+    ),
+    12 => array (
+      'contentobject_id' => '52',
+      'contentobject_state_id' => '1',
+    ),
+    13 => array (
+      'contentobject_id' => '54',
+      'contentobject_state_id' => '1',
+    ),
+    14 => array (
+      'contentobject_id' => '56',
+      'contentobject_state_id' => '1',
+    ),
+    15 => array (
+      'contentobject_id' => '57',
+      'contentobject_state_id' => '1',
+    ),
+    16 => array (
+      'contentobject_id' => '58',
+      'contentobject_state_id' => '1',
+    ),
+    17 => array (
+      'contentobject_id' => '59',
+      'contentobject_state_id' => '1',
+    ),
+    18 => array (
+      'contentobject_id' => '60',
+      'contentobject_state_id' => '1',
+    ),
+    19 => array (
+      'contentobject_id' => '61',
+      'contentobject_state_id' => '1',
+    ),
+    20 => array (
+      'contentobject_id' => '62',
+      'contentobject_state_id' => '1',
+    ),
+    21 => array (
+      'contentobject_id' => '63',
+      'contentobject_state_id' => '1',
+    ),
+    22 => array (
+      'contentobject_id' => '64',
+      'contentobject_state_id' => '1',
+    ),
+    23 => array (
+      'contentobject_id' => '65',
+      'contentobject_state_id' => '1',
+    ),
+    24 => array (
+      'contentobject_id' => '66',
+      'contentobject_state_id' => '1',
+    ),
+    25 => array (
+      'contentobject_id' => '67',
+      'contentobject_state_id' => '1',
+    ),
+    26 => array (
+      'contentobject_id' => '68',
+      'contentobject_state_id' => '1',
+    ),
+    27 => array (
+      'contentobject_id' => '69',
+      'contentobject_state_id' => '1',
+    ),
+    28 => array (
+      'contentobject_id' => '70',
+      'contentobject_state_id' => '1',
+    ),
+    29 => array (
+      'contentobject_id' => '71',
+      'contentobject_state_id' => '1',
+    ),
+    30 => array (
+      'contentobject_id' => '72',
+      'contentobject_state_id' => '1',
+    ),
+    31 => array (
+      'contentobject_id' => '73',
+      'contentobject_state_id' => '1',
+    ),
+    32 => array (
+      'contentobject_id' => '74',
+      'contentobject_state_id' => '1',
+    ),
+    33 => array (
+      'contentobject_id' => '75',
+      'contentobject_state_id' => '1',
+    ),
+    34 => array (
+      'contentobject_id' => '76',
+      'contentobject_state_id' => '1',
+    ),
+    35 => array (
+      'contentobject_id' => '77',
+      'contentobject_state_id' => '1',
+    ),
+    36 => array (
+      'contentobject_id' => '78',
+      'contentobject_state_id' => '1',
+    ),
+    37 => array (
+      'contentobject_id' => '79',
+      'contentobject_state_id' => '1',
+    ),
+    38 => array (
+      'contentobject_id' => '80',
+      'contentobject_state_id' => '1',
+    ),
+    39 => array (
+      'contentobject_id' => '81',
+      'contentobject_state_id' => '1',
+    ),
+    40 => array (
+      'contentobject_id' => '82',
+      'contentobject_state_id' => '1',
+    ),
+    41 => array (
+      'contentobject_id' => '83',
+      'contentobject_state_id' => '1',
+    ),
+    42 => array (
+      'contentobject_id' => '84',
+      'contentobject_state_id' => '1',
+    ),
+    43 => array (
+      'contentobject_id' => '85',
+      'contentobject_state_id' => '1',
+    ),
+    44 => array (
+      'contentobject_id' => '86',
+      'contentobject_state_id' => '1',
+    ),
+    45 => array (
+      'contentobject_id' => '87',
+      'contentobject_state_id' => '1',
+    ),
+    46 => array (
+      'contentobject_id' => '88',
+      'contentobject_state_id' => '1',
+    ),
+    47 => array (
+      'contentobject_id' => '89',
+      'contentobject_state_id' => '1',
+    ),
+    48 => array (
+      'contentobject_id' => '90',
+      'contentobject_state_id' => '1',
+    ),
+    49 => array (
+      'contentobject_id' => '91',
+      'contentobject_state_id' => '1',
+    ),
+    50 => array (
+      'contentobject_id' => '92',
+      'contentobject_state_id' => '1',
+    ),
+    51 => array (
+      'contentobject_id' => '93',
+      'contentobject_state_id' => '1',
+    ),
+    52 => array (
+      'contentobject_id' => '94',
+      'contentobject_state_id' => '1',
+    ),
+    53 => array (
+      'contentobject_id' => '95',
+      'contentobject_state_id' => '1',
+    ),
+    54 => array (
+      'contentobject_id' => '96',
+      'contentobject_state_id' => '1',
+    ),
+    55 => array (
+      'contentobject_id' => '97',
+      'contentobject_state_id' => '1',
+    ),
+    56 => array (
+      'contentobject_id' => '98',
+      'contentobject_state_id' => '1',
+    ),
+    57 => array (
+      'contentobject_id' => '99',
+      'contentobject_state_id' => '1',
+    ),
+    58 => array (
+      'contentobject_id' => '100',
+      'contentobject_state_id' => '1',
+    ),
+    59 => array (
+      'contentobject_id' => '101',
+      'contentobject_state_id' => '1',
+    ),
+    60 => array (
+      'contentobject_id' => '102',
+      'contentobject_state_id' => '1',
+    ),
+    61 => array (
+      'contentobject_id' => '103',
+      'contentobject_state_id' => '1',
+    ),
+    62 => array (
+      'contentobject_id' => '104',
+      'contentobject_state_id' => '1',
+    ),
+    63 => array (
+      'contentobject_id' => '105',
+      'contentobject_state_id' => '1',
+    ),
+    64 => array (
+      'contentobject_id' => '106',
+      'contentobject_state_id' => '1',
+    ),
+    65 => array (
+      'contentobject_id' => '107',
+      'contentobject_state_id' => '1',
+    ),
+    66 => array (
+      'contentobject_id' => '108',
+      'contentobject_state_id' => '1',
+    ),
+    67 => array (
+      'contentobject_id' => '109',
+      'contentobject_state_id' => '1',
+    ),
+    68 => array (
+      'contentobject_id' => '110',
+      'contentobject_state_id' => '1',
+    ),
+    69 => array (
+      'contentobject_id' => '111',
+      'contentobject_state_id' => '1',
+    ),
+    70 => array (
+      'contentobject_id' => '112',
+      'contentobject_state_id' => '1',
+    ),
+    71 => array (
+      'contentobject_id' => '113',
+      'contentobject_state_id' => '1',
+    ),
+    72 => array (
+      'contentobject_id' => '114',
+      'contentobject_state_id' => '1',
+    ),
+    73 => array (
+      'contentobject_id' => '115',
+      'contentobject_state_id' => '1',
+    ),
+    74 => array (
+      'contentobject_id' => '116',
+      'contentobject_state_id' => '1',
+    ),
+    75 => array (
+      'contentobject_id' => '117',
+      'contentobject_state_id' => '1',
+    ),
+    76 => array (
+      'contentobject_id' => '118',
+      'contentobject_state_id' => '1',
+    ),
+    77 => array (
+      'contentobject_id' => '119',
+      'contentobject_state_id' => '1',
+    ),
+    78 => array (
+      'contentobject_id' => '120',
+      'contentobject_state_id' => '1',
+    ),
+    79 => array (
+      'contentobject_id' => '121',
+      'contentobject_state_id' => '1',
+    ),
+    80 => array (
+      'contentobject_id' => '122',
+      'contentobject_state_id' => '1',
+    ),
+    81 => array (
+      'contentobject_id' => '123',
+      'contentobject_state_id' => '1',
+    ),
+    82 => array (
+      'contentobject_id' => '124',
+      'contentobject_state_id' => '1',
+    ),
+    83 => array (
+      'contentobject_id' => '125',
+      'contentobject_state_id' => '1',
+    ),
+    84 => array (
+      'contentobject_id' => '126',
+      'contentobject_state_id' => '1',
+    ),
+    85 => array (
+      'contentobject_id' => '127',
+      'contentobject_state_id' => '1',
+    ),
+    86 => array (
+      'contentobject_id' => '128',
+      'contentobject_state_id' => '1',
+    ),
+    87 => array (
+      'contentobject_id' => '129',
+      'contentobject_state_id' => '1',
+    ),
+    88 => array (
+      'contentobject_id' => '130',
+      'contentobject_state_id' => '1',
+    ),
+    89 => array (
+      'contentobject_id' => '131',
+      'contentobject_state_id' => '1',
+    ),
+    90 => array (
+      'contentobject_id' => '132',
+      'contentobject_state_id' => '1',
+    ),
+    91 => array (
+      'contentobject_id' => '133',
+      'contentobject_state_id' => '1',
+    ),
+    92 => array (
+      'contentobject_id' => '134',
+      'contentobject_state_id' => '1',
+    ),
+    93 => array (
+      'contentobject_id' => '135',
+      'contentobject_state_id' => '1',
+    ),
+    94 => array (
+      'contentobject_id' => '136',
+      'contentobject_state_id' => '1',
+    ),
+    95 => array (
+      'contentobject_id' => '137',
+      'contentobject_state_id' => '1',
+    ),
+    96 => array (
+      'contentobject_id' => '138',
+      'contentobject_state_id' => '1',
+    ),
+    97 => array (
+      'contentobject_id' => '139',
+      'contentobject_state_id' => '1',
+    ),
+    98 => array (
+      'contentobject_id' => '140',
+      'contentobject_state_id' => '1',
+    ),
+    99 => array (
+      'contentobject_id' => '141',
+      'contentobject_state_id' => '1',
+    ),
+    100 => array (
+      'contentobject_id' => '142',
+      'contentobject_state_id' => '1',
+    ),
+    101 => array (
+      'contentobject_id' => '143',
+      'contentobject_state_id' => '1',
+    ),
+    102 => array (
+      'contentobject_id' => '144',
+      'contentobject_state_id' => '1',
+    ),
+    103 => array (
+      'contentobject_id' => '145',
+      'contentobject_state_id' => '1',
+    ),
+    104 => array (
+      'contentobject_id' => '146',
+      'contentobject_state_id' => '1',
+    ),
+    105 => array (
+      'contentobject_id' => '147',
+      'contentobject_state_id' => '1',
+    ),
+    106 => array (
+      'contentobject_id' => '148',
+      'contentobject_state_id' => '1',
+    ),
+    107 => array (
+      'contentobject_id' => '149',
+      'contentobject_state_id' => '1',
+    ),
+    108 => array (
+      'contentobject_id' => '150',
+      'contentobject_state_id' => '1',
+    ),
+    109 => array (
+      'contentobject_id' => '151',
+      'contentobject_state_id' => '1',
+    ),
+    110 => array (
+      'contentobject_id' => '152',
+      'contentobject_state_id' => '1',
+    ),
+    111 => array (
+      'contentobject_id' => '153',
+      'contentobject_state_id' => '1',
+    ),
+    112 => array (
+      'contentobject_id' => '154',
+      'contentobject_state_id' => '1',
+    ),
+    113 => array (
+      'contentobject_id' => '155',
+      'contentobject_state_id' => '1',
+    ),
+    114 => array (
+      'contentobject_id' => '156',
+      'contentobject_state_id' => '1',
+    ),
+    115 => array (
+      'contentobject_id' => '157',
+      'contentobject_state_id' => '1',
+    ),
+    116 => array (
+      'contentobject_id' => '158',
+      'contentobject_state_id' => '1',
+    ),
+    117 => array (
+      'contentobject_id' => '159',
+      'contentobject_state_id' => '1',
+    ),
+    118 => array (
+      'contentobject_id' => '160',
+      'contentobject_state_id' => '1',
+    ),
+    119 => array (
+      'contentobject_id' => '161',
+      'contentobject_state_id' => '1',
+    ),
+    120 => array (
+      'contentobject_id' => '162',
+      'contentobject_state_id' => '1',
+    ),
+    121 => array (
+      'contentobject_id' => '163',
+      'contentobject_state_id' => '1',
+    ),
+    122 => array (
+      'contentobject_id' => '164',
+      'contentobject_state_id' => '1',
+    ),
+    123 => array (
+      'contentobject_id' => '165',
+      'contentobject_state_id' => '1',
+    ),
+    124 => array (
+      'contentobject_id' => '166',
+      'contentobject_state_id' => '1',
+    ),
+    125 => array (
+      'contentobject_id' => '167',
+      'contentobject_state_id' => '1',
+    ),
+    126 => array (
+      'contentobject_id' => '168',
+      'contentobject_state_id' => '1',
+    ),
+    127 => array (
+      'contentobject_id' => '169',
+      'contentobject_state_id' => '1',
+    ),
+    128 => array (
+      'contentobject_id' => '170',
+      'contentobject_state_id' => '1',
+    ),
+    129 => array (
+      'contentobject_id' => '171',
+      'contentobject_state_id' => '1',
+    ),
+    130 => array (
+      'contentobject_id' => '172',
+      'contentobject_state_id' => '1',
+    ),
+    131 => array (
+      'contentobject_id' => '173',
+      'contentobject_state_id' => '1',
+    ),
+    132 => array (
+      'contentobject_id' => '174',
+      'contentobject_state_id' => '1',
+    ),
+    133 => array (
+      'contentobject_id' => '175',
+      'contentobject_state_id' => '1',
+    ),
+    134 => array (
+      'contentobject_id' => '176',
+      'contentobject_state_id' => '1',
+    ),
+    135 => array (
+      'contentobject_id' => '177',
+      'contentobject_state_id' => '1',
+    ),
+    136 => array (
+      'contentobject_id' => '178',
+      'contentobject_state_id' => '1',
+    ),
+    137 => array (
+      'contentobject_id' => '179',
+      'contentobject_state_id' => '1',
+    ),
+    138 => array (
+      'contentobject_id' => '180',
+      'contentobject_state_id' => '1',
+    ),
+    139 => array (
+      'contentobject_id' => '181',
+      'contentobject_state_id' => '1',
+    ),
+    140 => array (
+      'contentobject_id' => '182',
+      'contentobject_state_id' => '1',
+    ),
+    141 => array (
+      'contentobject_id' => '183',
+      'contentobject_state_id' => '1',
+    ),
+    142 => array (
+      'contentobject_id' => '184',
+      'contentobject_state_id' => '1',
+    ),
+    143 => array (
+      'contentobject_id' => '185',
+      'contentobject_state_id' => '1',
+    ),
+    144 => array (
+      'contentobject_id' => '186',
+      'contentobject_state_id' => '1',
+    ),
+    145 => array (
+      'contentobject_id' => '187',
+      'contentobject_state_id' => '1',
+    ),
+    146 => array (
+      'contentobject_id' => '188',
+      'contentobject_state_id' => '1',
+    ),
+    147 => array (
+      'contentobject_id' => '189',
+      'contentobject_state_id' => '1',
+    ),
+    148 => array (
+      'contentobject_id' => '190',
+      'contentobject_state_id' => '1',
+    ),
+    149 => array (
+      'contentobject_id' => '191',
+      'contentobject_state_id' => '1',
+    ),
+    150 => array (
+      'contentobject_id' => '192',
+      'contentobject_state_id' => '1',
+    ),
+    151 => array (
+      'contentobject_id' => '193',
+      'contentobject_state_id' => '1',
+    ),
+    152 => array (
+      'contentobject_id' => '194',
+      'contentobject_state_id' => '1',
+    ),
+    153 => array (
+      'contentobject_id' => '195',
+      'contentobject_state_id' => '1',
+    ),
+    154 => array (
+      'contentobject_id' => '196',
+      'contentobject_state_id' => '1',
+    ),
+    155 => array (
+      'contentobject_id' => '197',
+      'contentobject_state_id' => '1',
+    ),
+    156 => array (
+      'contentobject_id' => '198',
+      'contentobject_state_id' => '1',
+    ),
+    157 => array (
+      'contentobject_id' => '199',
+      'contentobject_state_id' => '1',
+    ),
+    158 => array (
+      'contentobject_id' => '200',
+      'contentobject_state_id' => '1',
+    ),
+    159 => array (
+      'contentobject_id' => '201',
+      'contentobject_state_id' => '1',
+    ),
+    160 => array (
+      'contentobject_id' => '202',
+      'contentobject_state_id' => '1',
+    ),
+    161 => array (
+      'contentobject_id' => '203',
+      'contentobject_state_id' => '1',
+    ),
+    162 => array (
+      'contentobject_id' => '204',
+      'contentobject_state_id' => '1',
+    ),
+    163 => array (
+      'contentobject_id' => '205',
+      'contentobject_state_id' => '1',
+    ),
+    164 => array (
+      'contentobject_id' => '206',
+      'contentobject_state_id' => '1',
+    ),
+    165 => array (
+      'contentobject_id' => '207',
+      'contentobject_state_id' => '1',
+    ),
+    166 => array (
+      'contentobject_id' => '208',
+      'contentobject_state_id' => '1',
+    ),
+    167 => array (
+      'contentobject_id' => '209',
+      'contentobject_state_id' => '1',
+    ),
+    168 => array (
+      'contentobject_id' => '210',
+      'contentobject_state_id' => '1',
+    ),
+    169 => array (
+      'contentobject_id' => '211',
+      'contentobject_state_id' => '1',
+    ),
+    170 => array (
+      'contentobject_id' => '212',
+      'contentobject_state_id' => '1',
+    ),
+    171 => array (
+      'contentobject_id' => '213',
+      'contentobject_state_id' => '1',
+    ),
+    172 => array (
+      'contentobject_id' => '214',
+      'contentobject_state_id' => '1',
+    ),
+    173 => array (
+      'contentobject_id' => '215',
+      'contentobject_state_id' => '1',
+    ),
+    174 => array (
+      'contentobject_id' => '216',
+      'contentobject_state_id' => '1',
+    ),
+    175 => array (
+      'contentobject_id' => '217',
+      'contentobject_state_id' => '1',
+    ),
+    176 => array (
+      'contentobject_id' => '218',
+      'contentobject_state_id' => '1',
+    ),
+    177 => array (
+      'contentobject_id' => '219',
+      'contentobject_state_id' => '1',
+    ),
+    178 => array (
+      'contentobject_id' => '220',
+      'contentobject_state_id' => '1',
+    ),
+    179 => array (
+      'contentobject_id' => '221',
+      'contentobject_state_id' => '1',
+    ),
+    180 => array (
+      'contentobject_id' => '222',
+      'contentobject_state_id' => '1',
+    ),
+    181 => array (
+      'contentobject_id' => '223',
+      'contentobject_state_id' => '1',
+    ),
+    182 => array (
+      'contentobject_id' => '224',
+      'contentobject_state_id' => '1',
+    ),
+    183 => array (
+      'contentobject_id' => '225',
+      'contentobject_state_id' => '1',
+    ),
+  ),
 );
-
