@@ -266,6 +266,8 @@ class Handler implements BaseObjectStateHandler
      *
      * The $state is the id of the state within one group.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no state is found
+     *
      * @param mixed $contentId
      * @param mixed $stateGroupId
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
@@ -273,9 +275,13 @@ class Handler implements BaseObjectStateHandler
     public function getObjectState( $contentId, $stateGroupId )
     {
         $data = $this->objectStateGateway->loadObjectStateDataForContent( $contentId, $stateGroupId );
-        return $this->objectStateMapper->createObjectStateFromData( $data );
 
-        //@todo throw NotFound exception if no object state found? For example, if group has no states
+        if ( empty( $data ) )
+        {
+            throw new NotFoundException( "ObjectState", array( "groupId" => $stateGroupId ) );
+        }
+
+        return $this->objectStateMapper->createObjectStateFromData( $data );
     }
 
     /**
