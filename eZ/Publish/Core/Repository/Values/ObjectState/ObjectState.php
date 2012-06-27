@@ -23,6 +23,25 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
 class ObjectState extends APIObjectState
 {
     /**
+     * Human readable names of object state
+     *
+     * @var string[]
+     */
+    protected $names = array();
+
+    /**
+     * Human readable descriptions of object state
+     *
+     * @var string[]
+     */
+    protected $descriptions = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     */
+    protected $objectStateGroup;
+
+    /**
      * This method returns the human readable name in all provided languages
      * of the content type
      *
@@ -33,7 +52,10 @@ class ObjectState extends APIObjectState
      *
      * @return string[]
      */
-    public function getNames() {}
+    public function getNames()
+    {
+        return $this->names;
+    }
 
     /**
      * This method returns the name of the content type in the given language
@@ -42,7 +64,13 @@ class ObjectState extends APIObjectState
      *
      * @return string the name for the given language or null if none exists.
      */
-    public function getName( $languageCode ) {}
+    public function getName( $languageCode )
+    {
+        if ( !isset( $this->names[$languageCode] ) )
+            return null;
+
+        return $this->names[$languageCode];
+    }
 
     /**
      * This method returns the human readable description of the content type
@@ -54,7 +82,10 @@ class ObjectState extends APIObjectState
      *
      * @return string[]
      */
-    public function getDescriptions() {}
+    public function getDescriptions()
+    {
+        return $this->descriptions;
+    }
 
     /**
      * This method returns the name of the content type in the given language
@@ -63,12 +94,21 @@ class ObjectState extends APIObjectState
      *
      * @return string the description for the given language or null if none exists.
      */
-    public function getDescription( $languageCode ) {}
+    public function getDescription( $languageCode )
+    {
+        if ( !isset( $this->descriptions[$languageCode] ) )
+            return null;
+
+        return $this->descriptions[$languageCode];
+    }
 
     /**
      * The object state group this object state belongs to
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function getObjectStateGroup() {}
+    public function getObjectStateGroup()
+    {
+        return $this->objectStateGroup;
+    }
 }
