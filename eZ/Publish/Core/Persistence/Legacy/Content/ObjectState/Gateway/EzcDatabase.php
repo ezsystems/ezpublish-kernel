@@ -560,6 +560,30 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Updates the object state priority to provided value
+     *
+     * @param mixed $stateId
+     * @param int $priority
+     */
+    public function updateObjectStatePriority( $stateId, $priority )
+    {
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteTable( 'ezcobj_state' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'priority' ),
+            $query->bindValue( $priority, null, \PDO::PARAM_INT )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $stateId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $query->prepare()->execute();
+    }
+
+    /**
      * Returns the current priority list in the following format:
      * <code>
      *     array(

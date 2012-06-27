@@ -437,20 +437,25 @@ class ObjectStateHandlerTest extends TestCase
         $mapperMock->expects( $this->once() )
             ->method( 'createObjectStateFromData' )
             ->with( $this->equalTo( array( array() ) ) )
-            ->will( $this->returnValue( new ObjectState( array( 'groupId' => 2 ) ) ) );
+            ->will( $this->returnValue( new ObjectState( array( 'id' => 1, 'groupId' => 2 ) ) ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteObjectState' )
             ->with( $this->equalTo( 1 ) );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'loadCurrentPriorityList' )
+        $gatewayMock->expects( $this->any() )
+            ->method( 'loadObjectStateListData' )
             ->with( $this->equalTo( 2 ) )
-            ->will( $this->returnValue( array( 2 => 1 ) ) );
+            ->will( $this->returnValue( array( array() ) ) );
+
+        $mapperMock->expects( $this->any() )
+            ->method( 'createObjectStateListFromData' )
+            ->with( $this->equalTo( array( array() ) ) )
+            ->will( $this->returnValue( array( new ObjectState( array( 'id' => 2, 'groupId' => 2 ) ) ) ) );
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'reorderPriorities' )
-            ->with( $this->equalTo( array( 2 => 1 ) ), $this->equalTo( array( 2 => 1 ) ) );
+            ->method( 'updateObjectStatePriority' )
+            ->with( $this->equalTo( 2 ), $this->equalTo( 0 ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'updateObjectStateLinks' )
@@ -467,7 +472,6 @@ class ObjectStateHandlerTest extends TestCase
     public function testDeleteThrowsNotFoundException()
     {
         $handler = $this->getObjectStateHandler();
-        $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )

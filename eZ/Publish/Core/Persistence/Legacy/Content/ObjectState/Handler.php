@@ -234,17 +234,25 @@ class Handler implements BaseObjectStateHandler
         // to reorder the priorities and reassign content to another state in the group
         $objectState = $this->load( $stateId );
 
-        $this->objectStateGateway->deleteObjectState( $stateId );
+        $this->objectStateGateway->deleteObjectState( $objectState->id );
 
-        $currentPriorityList = $this->objectStateGateway->loadCurrentPriorityList( $objectState->groupId );
-        if ( empty( $currentPriorityList ) )
+        $remainingStates = $this->loadObjectStates( $objectState->groupId );
+        if ( empty( $remainingStates ) )
+        {
+            // If there are no more states in the group, just remove the state links
+            $this->objectStateGateway->deleteObjectStateLinks( $objectState->id );
             return;
+        }
 
-        $newPriorityList = $currentPriorityList;
-        asort( $newPriorityList );
+        $priority = 0;
+        foreach ( $remainingStates as $remainingState )
+        {
+            $this->objectStateGateway->updateObjectStatePriority( $remainingState->id, $priority );
+            $priority++;
+        }
 
-        $this->objectStateGateway->reorderPriorities( $currentPriorityList, $newPriorityList );
-        $this->objectStateGateway->updateObjectStateLinks( $stateId, key( $newPriorityList ) );
+        $remainingStates = $this->loadObjectStates( $objectState->groupId );
+        $this->objectStateGateway->updateObjectStateLinks( $objectState->id, current( $remainingStates )->id );
     }
 
     /**

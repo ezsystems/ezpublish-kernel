@@ -513,6 +513,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStatePriority
+     */
+    public function testUpdateObjectStatePriority()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $gateway->updateObjectStatePriority( 1, 10 );
+
+        $objectStateData = $gateway->loadObjectStateData( 1 );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'ezcobj_state_default_language_id' => 2,
+                    'ezcobj_state_group_id' => 2,
+                    'ezcobj_state_id' => 1,
+                    'ezcobj_state_identifier' => 'not_locked',
+                    'ezcobj_state_language_mask' => 3,
+                    'ezcobj_state_priority' => 10,
+                    'ezcobj_state_language_description' => '',
+                    'ezcobj_state_language_language_id' => 3,
+                    'ezcobj_state_language_name' => 'Not locked'
+                )
+            ),
+            $objectStateData
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadCurrentPriorityList
      */
     public function testLoadCurrentPriorityList()

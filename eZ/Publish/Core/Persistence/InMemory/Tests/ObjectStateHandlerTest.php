@@ -274,17 +274,20 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
-        $this->handler->delete( 2 );
+        $this->handler->delete( 1 );
 
         try
         {
-            $this->handler->load( 2 );
+            $this->handler->load( 1 );
             $this->fail( 'Successfully loaded deleted object state' );
         }
         catch( NotFoundException $e )
         {
             // Do nothing
         }
+
+        $this->assertEquals( 0, $this->handler->getContentCount( 1 ) );
+        $this->assertEquals( 7, $this->handler->getContentCount( 2 ) );
     }
 
     /**

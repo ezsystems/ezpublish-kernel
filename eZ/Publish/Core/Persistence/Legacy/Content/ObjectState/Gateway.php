@@ -136,6 +136,14 @@ abstract class Gateway
     abstract public function getContentCount( $stateId );
 
     /**
+     * Updates the object state priority to provided value
+     *
+     * @param mixed $stateId
+     * @param int $priority
+     */
+    abstract public function updateObjectStatePriority( $stateId, $priority );
+
+    /**
      * Returns the current priority list in the following format:
      * <code>
      *     array(

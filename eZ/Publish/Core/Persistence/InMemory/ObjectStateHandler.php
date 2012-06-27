@@ -264,24 +264,11 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         if ( empty( $groupStates ) )
             return;
 
-        $currentPriorityList = array();
+        $priority = 0;
         foreach ( $groupStates as $groupState )
         {
-            $currentPriorityList[$groupState->id] = $groupState->priority;
-        }
-
-        $newPriorityList = $currentPriorityList;
-        asort( $newPriorityList );
-
-        $currentPriorityList = array_keys( $currentPriorityList );
-        $newPriorityList = array_keys( $newPriorityList );
-
-        foreach ( $newPriorityList as $priority => $tempStateId )
-        {
-            if ( $currentPriorityList[$priority] == $tempStateId )
-                continue;
-
-            $this->backend->update( 'Content\\ObjectState', $tempStateId, array( "priority" => $priority ) );
+            $this->backend->update( 'Content\\ObjectState', $groupState->id, array( "priority" => $priority ) );
+            $priority++;
         }
 
         // Now reassign content from old state to the first state in the group
