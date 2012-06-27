@@ -232,7 +232,7 @@ class ObjectStateService implements ObjectStateServiceInterface
                 (int) $objectStateCreateStruct->priority
             );
 
-            // Reload the object state to update the priority,
+            // Reload the object state to have the updated priority,
             // considering that priorities are always incremental within a group
             $spiObjectState = $this->persistenceHandler->objectStateHandler()->load( $spiObjectState->id );
         }
