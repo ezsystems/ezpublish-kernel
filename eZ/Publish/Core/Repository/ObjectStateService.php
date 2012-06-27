@@ -14,13 +14,21 @@ use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
 
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct,
     eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct,
+    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct,
+    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct,
     eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectState,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
+    eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState,
+    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup,
+    eZ\Publish\Core\Repository\Values\ObjectState\ObjectState,
+    eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup,
+    eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState,
+    eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup,
+    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * ObjectStateService service
@@ -69,7 +77,18 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct ) {}
+    public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
+    {
+        $inputStruct = $this->buildInputStruct(
+            $objectStateGroupCreateStruct->identifier,
+            $objectStateGroupCreateStruct->defaultLanguageCode,
+            $objectStateGroupCreateStruct->names,
+            $objectStateGroupCreateStruct->descriptions
+        );
+
+        $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->createGroup( $inputStruct );
+        return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
+    }
 
     /**
      * Loads a object state group
@@ -80,7 +99,15 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function loadObjectStateGroup( $objectStateGroupId ) {}
+    public function loadObjectStateGroup( $objectStateGroupId )
+    {
+        if ( !is_numeric( $objectStateGroupId ) )
+            throw new InvalidArgumentValue( "objectStateGroupId", $objectStateGroupId );
+
+        $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->loadGroup( $objectStateGroupId );
+
+        return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
+    }
 
     /**
      * Loads all object state groups
@@ -90,7 +117,18 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
-    public function loadObjectStateGroups( $offset = 0, $limit = -1 ) {}
+    public function loadObjectStateGroups( $offset = 0, $limit = -1 )
+    {
+        $spiObjectStateGroups = $this->persistenceHandler->objectStateHandler()->loadAllGroups( $offset, $limit );
+
+        $objectStateGroups = array();
+        foreach ( $spiObjectStateGroups as $spiObjectStateGroup )
+        {
+            $objectStateGroups[] = $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
+        }
+
+        return $objectStateGroups;
+    }
 
     /**
      * This method returns the ordered list of object states of a group
@@ -99,7 +137,21 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function loadObjectStates( ObjectStateGroup $objectStateGroup ) {}
+    public function loadObjectStates( APIObjectStateGroup $objectStateGroup )
+    {
+        if ( !is_numeric( $objectStateGroup->id ) )
+            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
+
+        $spiObjectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates( $objectStateGroup->id );
+
+        $objectStates = array();
+        foreach ( $spiObjectStates as $spiObjectState )
+        {
+            $objectStates[] = $this->buildDomainObjectStateObject( $spiObjectState, $objectStateGroup );
+        }
+
+        return $objectStates;
+    }
 
     /**
      * Updates an object state group
@@ -111,7 +163,26 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct ) {}
+    public function updateObjectStateGroup( APIObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
+    {
+        if ( !is_numeric( $objectStateGroup->id ) )
+            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
+
+        $loadedObjectStateGroup = $this->loadObjectStateGroup( $objectStateGroup->id );
+
+        $inputStruct = $this->buildInputStruct(
+            $objectStateGroupUpdateStruct->identifier,
+            $objectStateGroupUpdateStruct->defaultLanguageCode,
+            $objectStateGroupUpdateStruct->names,
+            $objectStateGroupUpdateStruct->descriptions
+        );
+
+        $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->updateGroup(
+            $loadedObjectStateGroup->id,
+            $inputStruct
+        );
+        return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
+    }
 
     /**
      * Deletes a object state group including all states and links to content
@@ -120,7 +191,15 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
-    public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup ) {}
+    public function deleteObjectStateGroup( APIObjectStateGroup $objectStateGroup )
+    {
+        if ( !is_numeric( $objectStateGroup->id ) )
+            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
+
+        $loadedObjectStateGroup = $this->loadObjectStateGroup( $objectStateGroup->id );
+
+        $this->persistenceHandler->objectStateHandler()->deleteGroup( $loadedObjectStateGroup->id );
+    }
 
     /**
      * Creates a new object state in the given group.
@@ -135,7 +214,31 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct ) {}
+    public function createObjectState( APIObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct )
+    {
+        $inputStruct = $this->buildInputStruct(
+            $objectStateCreateStruct->identifier,
+            $objectStateCreateStruct->defaultLanguageCode,
+            $objectStateCreateStruct->names,
+            $objectStateCreateStruct->descriptions
+        );
+
+        $spiObjectState = $this->persistenceHandler->objectStateHandler()->create( $objectStateGroup->id, $inputStruct );
+
+        if ( is_numeric( $objectStateCreateStruct->priority ) )
+        {
+            $this->persistenceHandler->objectStateHandler()->setPriority(
+                $spiObjectState->id,
+                (int) $objectStateCreateStruct->priority
+            );
+
+            // Reload the object state to update the priority,
+            // considering that priorities are always incremental within a group
+            $spiObjectState = $this->persistenceHandler->objectStateHandler()->load( $spiObjectState->id );
+        }
+
+        return $this->buildDomainObjectStateObject( $spiObjectState );
+    }
 
     /**
      * Loads an object state
@@ -146,7 +249,15 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function loadObjectState( $stateId ) {}
+    public function loadObjectState( $stateId )
+    {
+        if ( !is_numeric( $stateId ) )
+            throw new InvalidArgumentValue( "stateId", $stateId );
+
+        $spiObjectState = $this->persistenceHandler->objectStateHandler()->load( $stateId );
+
+        return $this->buildDomainObjectStateObject( $spiObjectState );
+    }
 
     /**
      * Updates an object state
@@ -158,7 +269,26 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct ) {}
+    public function updateObjectState( APIObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
+    {
+        if ( !is_numeric( $objectState->id ) )
+            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        $loadedObjectState = $this->loadObjectState( $objectState->id );
+
+        $inputStruct = $this->buildInputStruct(
+            $objectStateUpdateStruct->identifier,
+            $objectStateUpdateStruct->defaultLanguageCode,
+            $objectStateUpdateStruct->names,
+            $objectStateUpdateStruct->descriptions
+        );
+
+        $spiObjectState = $this->persistenceHandler->objectStateHandler()->update(
+            $loadedObjectState->id,
+            $inputStruct
+        );
+        return $this->buildDomainObjectStateObject( $spiObjectState );
+    }
 
     /**
      * Changes the priority of the state
@@ -168,7 +298,21 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $priority
      */
-    public function setPriorityOfObjectState( ObjectState $objectState, $priority ) {}
+    public function setPriorityOfObjectState( APIObjectState $objectState, $priority )
+    {
+        if ( !is_numeric( $objectState->id ) )
+            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        if ( !is_numeric( $priority ) )
+            throw new InvalidArgumentValue( "priority", $priority );
+
+        $loadedObjectState = $this->loadObjectState( $objectState->id );
+
+        $this->persistenceHandler->objectStateHandler()->setPriority(
+            $loadedObjectState->id,
+            (int) $priority
+        );
+    }
 
     /**
      * Deletes a object state. The state of the content objects is reset to the
@@ -178,7 +322,15 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function deleteObjectState( ObjectState $objectState ) {}
+    public function deleteObjectState( APIObjectState $objectState )
+    {
+        if ( !is_numeric( $objectState->id ) )
+            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        $loadedObjectState = $this->loadObjectState( $objectState->id );
+
+        $this->persistenceHandler->objectStateHandler()->delete( $loadedObjectState->id );
+    }
 
     /**
      * Sets the object-state of a state group to $state for the given content.
@@ -190,7 +342,28 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState ) {}
+    public function setObjectState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
+    {
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
+
+        if ( !is_numeric( $objectStateGroup->id ) )
+            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
+
+        if ( !is_numeric( $objectState->id ) )
+            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        $loadedObjectState = $this->loadObjectState( $objectState->id );
+
+        if ( $loadedObjectState->getObjectStateGroup()->id != $objectStateGroup->id )
+            throw new InvalidArgumentException( "objectState", "Object state does not belong to the given group" );
+
+        $this->persistenceHandler->objectStateHandler()->setObjectState(
+            $contentInfo->id,
+            $objectStateGroup->id,
+            $loadedObjectState->id
+        );
+    }
 
     /**
      * Gets the object-state of object identified by $contentId.
@@ -202,7 +375,21 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup ) {}
+    public function getObjectState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup )
+    {
+        if ( !is_numeric( $contentInfo->id ) )
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
+
+        if ( !is_numeric( $objectStateGroup->id ) )
+            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
+
+        $spiObjectState = $this->persistenceHandler->objectStateHandler()->getObjectState(
+            $contentInfo->id,
+            $objectStateGroup->id
+        );
+
+        return $this->buildDomainObjectStateObject( $spiObjectState );
+    }
 
     /**
      * Returns the number of objects which are in this state
@@ -211,7 +398,15 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return int
      */
-    public function getContentCount( ObjectState $objectState ) {}
+    public function getContentCount( APIObjectState $objectState )
+    {
+        if ( !is_numeric( $objectState->id ) )
+            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        return $this->persistenceHandler->objectStateHandler()->getContentCount(
+            $objectState->id
+        );
+    }
 
     /**
      * Instantiates a new Object State Group Create Struct and sets $identified in it.
@@ -219,14 +414,23 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param string $identifier
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */
-    public function newObjectStateGroupCreateStruct( $identifier ) {}
+    public function newObjectStateGroupCreateStruct( $identifier )
+    {
+        $objectStateGroupCreateStruct = new ObjectStateGroupCreateStruct();
+        $objectStateGroupCreateStruct->identifier = $identifier;
+
+        return $objectStateGroupCreateStruct;
+    }
 
     /**
      * Instantiates a new Object State Group Update Struct.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct
      */
-    public function newObjectStateGroupUpdateStruct() {}
+    public function newObjectStateGroupUpdateStruct()
+    {
+        return new ObjectStateGroupUpdateStruct();
+    }
 
     /**
      * Instantiates a new Object State Create Struct and sets $identifier in it.
@@ -234,12 +438,124 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param string $identifier
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
-    public function newObjectStateCreateStruct( $identifier ) {}
+    public function newObjectStateCreateStruct( $identifier )
+    {
+        $objectStateCreateStruct = new ObjectStateCreateStruct();
+        $objectStateCreateStruct->identifier = $identifier;
+
+        return $objectStateCreateStruct;
+    }
 
     /**
      * Instantiates a new Object State Update Struct.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct
      */
-    public function newObjectStateUpdateStruct() {}
+    public function newObjectStateUpdateStruct()
+    {
+        return new ObjectStateUpdateStruct();
+    }
+
+    /**
+     * Converts the object state SPI value object to API value object
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $spiObjectState
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
+     *
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     */
+    protected function buildDomainObjectStateObject( SPIObjectState $spiObjectState, APIObjectStateGroup $objectStateGroup = null )
+    {
+        $objectStateGroup = $objectStateGroup ?: $this->loadObjectStateGroup( $spiObjectState->groupId );
+
+        return new ObjectState(
+            array(
+                'id' => (int) $spiObjectState->id,
+                'identifier' => $spiObjectState->identifier,
+                'priority' => (int) $spiObjectState->priority,
+                'defaultLanguageCode' => $spiObjectState->defaultLanguage,
+                'languageCodes' => $spiObjectState->languageCodes,
+                'names' => $spiObjectState->name,
+                'descriptions' => $spiObjectState->description,
+                'objectStateGroup' => $objectStateGroup
+            )
+        );
+    }
+
+    /**
+     * Converts the object state group SPI value object to API value object
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $spiObjectStateGroup
+     *
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     */
+    protected function buildDomainObjectStateGroupObject( SPIObjectStateGroup $spiObjectStateGroup )
+    {
+        return new ObjectStateGroup(
+            array(
+                'id' => (int) $spiObjectStateGroup->id,
+                'identifier' => $spiObjectStateGroup->identifier,
+                'defaultLanguageCode' => $spiObjectStateGroup->defaultLanguage,
+                'languageCodes' => $spiObjectStateGroup->languageCodes,
+                'names' => $spiObjectStateGroup->name,
+                'descriptions' => $spiObjectStateGroup->description
+            )
+        );
+    }
+
+    /**
+     * Validates input for creating object states/groups and builds the InputStruct object
+     *
+     * @param string $identifier
+     * @param string $defaultLanguageCode
+     * @param string[] $names
+     * @param string[] $descriptions
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct
+     */
+    protected function buildInputStruct( $identifier, $defaultLanguageCode, $names, $descriptions )
+    {
+        if ( !is_string( $identifier ) || empty( $identifier ) )
+            throw new InvalidArgumentValue( "identifier", $identifier );
+
+        if ( !is_string( $defaultLanguageCode ) || empty( $defaultLanguageCode ) )
+            throw new InvalidArgumentValue( "defaultLanguageCode", $defaultLanguageCode );
+
+        if ( !is_array( $names ) || empty( $names ) )
+            throw new InvalidArgumentValue( "names", $names );
+
+        if ( !isset( $names[$defaultLanguageCode] ) )
+            throw new InvalidArgumentValue( "names", $names );
+
+        foreach ( $names as $languageCode => $name )
+        {
+            try
+            {
+                $this->repository->getContentLanguageService()->loadLanguage( $languageCode );
+            }
+            catch ( NotFoundException $e )
+            {
+                throw new InvalidArgumentValue( "names", $names );
+            }
+
+            if ( !is_string( $name ) || empty( $name ) )
+                throw new InvalidArgumentValue( "names", $names );
+        }
+
+        $inputStruct = new InputStruct();
+        $inputStruct->identifier = $identifier;
+        $inputStruct->defaultLanguage = $defaultLanguageCode;
+        $inputStruct->name = $names;
+
+        $inputStruct->description = array();
+        foreach ( $names as $languageCode => $name )
+        {
+            if ( !empty( $descriptions[$languageCode] ) )
+                $inputStruct->description[$languageCode] = $descriptions[$languageCode];
+            else
+                $inputStruct->description[$languageCode] = "";
+        }
+
+        return $inputStruct;
+    }
 }
