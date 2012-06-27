@@ -542,53 +542,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadCurrentPriorityList
-     */
-    public function testLoadCurrentPriorityList()
-    {
-        $gateway = $this->getDatabaseGateway();
-
-        $result = $gateway->loadCurrentPriorityList( 2 );
-
-        $this->assertEquals(
-            array(
-                1 => 0,
-                2 => 1
-            ),
-            $result
-        );
-    }
-
-    /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::reorderPriorities
-     */
-    public function testReorderPriorities()
-    {
-        $gateway = $this->getDatabaseGateway();
-
-        $gateway->reorderPriorities(
-            array(
-                1 => 0,
-                2 => 1
-            ),
-            array(
-                2 => 0,
-                1 => 1
-            )
-        );
-
-        $this->assertEquals(
-            array(
-                2 => 0,
-                1 => 1
-            ),
-            $gateway->loadCurrentPriorityList( 2 )
-        );
-    }
-
-    /**
      * Returns an object state fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState

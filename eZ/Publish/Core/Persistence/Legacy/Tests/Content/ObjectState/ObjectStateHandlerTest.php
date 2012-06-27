@@ -407,14 +407,29 @@ class ObjectStateHandlerTest extends TestCase
             ->with( $this->equalTo( array( array() ) ) )
             ->will( $this->returnValue( new ObjectState( array( 'id' => 2, 'groupId' => 2 ) ) ) );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'loadCurrentPriorityList' )
+        $gatewayMock->expects( $this->any() )
+            ->method( 'loadObjectStateListData' )
             ->with( $this->equalTo( 2 ) )
-            ->will( $this->returnValue( array( 1 => 0, 2 => 1 ) ) );
+            ->will( $this->returnValue( array( array() ) ) );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'reorderPriorities' )
-            ->with( $this->equalTo( array( 1 => 0, 2 => 1 ) ), $this->equalTo( array( 2 => 0, 1 => 0 ) ) );
+        $mapperMock->expects( $this->any() )
+            ->method( 'createObjectStateListFromData' )
+            ->with( $this->equalTo( array( array() ) ) )
+            ->will( $this->returnValue( array(
+                    new ObjectState( array( 'id' => 1, 'groupId' => 2 ) ),
+                    new ObjectState( array( 'id' => 2, 'groupId' => 2 ) )
+                ) ) );
+
+        $gatewayMock->expects( $this->exactly( 2 ) )
+            ->method( 'updateObjectStatePriority' );
+
+        $gatewayMock->expects( $this->at( 2 ) )
+            ->method( 'updateObjectStatePriority' )
+            ->with( $this->equalTo( 2 ), $this->equalTo( 0 ) );
+
+        $gatewayMock->expects( $this->at( 3 ) )
+            ->method( 'updateObjectStatePriority' )
+            ->with( $this->equalTo( 1 ), $this->equalTo( 1 ) );
 
         $handler->setPriority( 2, 0 );
     }

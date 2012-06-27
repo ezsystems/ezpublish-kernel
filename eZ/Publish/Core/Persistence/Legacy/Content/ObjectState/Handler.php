@@ -211,13 +211,21 @@ class Handler implements BaseObjectStateHandler
     public function setPriority( $stateId, $priority )
     {
         $objectState = $this->load( $stateId );
-        $currentPriorityList = $this->objectStateGateway->loadCurrentPriorityList( $objectState->groupId );
+        $groupStates = $this->loadObjectStates( $objectState->groupId );
 
-        $newPriorityList = $currentPriorityList;
-        $newPriorityList[$objectState->id] = (int) $priority;
-        asort( $newPriorityList );
+        $priorityList = array();
+        foreach ( $groupStates as $index => $groupState )
+        {
+            $priorityList[$groupState->id] = $index;
+        }
 
-        $this->objectStateGateway->reorderPriorities( $currentPriorityList, $newPriorityList );
+        $priorityList[$objectState->id] = (int) $priority;
+        asort( $priorityList );
+
+        foreach ( array_keys( $priorityList ) as $objectStatePriority => $objectStateId )
+        {
+            $this->objectStateGateway->updateObjectStatePriority( $objectStateId, $objectStatePriority );
+        }
     }
 
     /**

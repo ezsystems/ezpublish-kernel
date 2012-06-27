@@ -142,39 +142,4 @@ abstract class Gateway
      * @param int $priority
      */
     abstract public function updateObjectStatePriority( $stateId, $priority );
-
-    /**
-     * Returns the current priority list in the following format:
-     * <code>
-     *     array(
-     *         1 => 0,
-     *         4 => 1,
-     *         6 => 2
-     *     )
-     * </code>
-     *
-     * where array keys are state IDs and array values are associated priorities
-     *
-     * @param mixed $groupId
-     * @return array
-     */
-    abstract public function loadCurrentPriorityList( $groupId );
-
-    /**
-     * Reorders the priority list inside a state group.
-     * Parameters need to be in the following format:
-     * <code>
-     *     array(
-     *         1 => 0,
-     *         4 => 1,
-     *         6 => 2
-     *     )
-     * </code>
-     *
-     * where array keys are state IDs and array values are associated priorities
-     *
-     * @param array $currentPriorityList
-     * @param array $newPriorityList
-     */
-    abstract public function reorderPriorities( array $currentPriorityList, array $newPriorityList );
 }

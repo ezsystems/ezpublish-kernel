@@ -217,28 +217,20 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     public function setPriority( $stateId, $priority )
     {
         $objectState = $this->load( $stateId );
-
         $groupStates = $this->loadObjectStates( $objectState->groupId );
 
-        $currentPriorityList = array();
-        foreach ( $groupStates as $groupState )
+        $priorityList = array();
+        foreach ( $groupStates as $index => $groupState )
         {
-            $currentPriorityList[$groupState->id] = $groupState->priority;
+            $priorityList[$groupState->id] = $index;
         }
 
-        $newPriorityList = $currentPriorityList;
-        $newPriorityList[$objectState->id] = (int) $priority;
-        asort( $newPriorityList );
+        $priorityList[$objectState->id] = (int) $priority;
+        asort( $priorityList );
 
-        $currentPriorityList = array_keys( $currentPriorityList );
-        $newPriorityList = array_keys( $newPriorityList );
-
-        foreach ( $newPriorityList as $priority => $stateId )
+        foreach ( array_keys( $priorityList ) as $objectStatePriority => $objectStateId )
         {
-            if ( $currentPriorityList[$priority] == $stateId )
-                continue;
-
-            $this->backend->update( 'Content\\ObjectState', $stateId, array( "priority" => $priority ) );
+            $this->backend->update( 'Content\\ObjectState', $objectStateId, array( "priority" => $objectStatePriority ) );
         }
     }
 
