@@ -209,6 +209,28 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::create
+     */
+    public function testCreateInEmptyGroup()
+    {
+        $createdGroup = $this->handler->createGroup( $this->getInputStructFixture() );
+        $createdState = $this->handler->create( $createdGroup->id, $this->getInputStructFixture() );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $createdState );
+
+        $this->assertEquals( 3, $createdState->id );
+        $this->assertEquals( $createdGroup->id, $createdState->groupId );
+        $this->assertEquals( 'test', $createdState->identifier );
+        $this->assertEquals( 'eng-GB', $createdState->defaultLanguage );
+        $this->assertEquals( array( 'eng-GB' ), $createdState->languageCodes );
+        $this->assertEquals( array( 'eng-GB' => 'Test' ), $createdState->name );
+        $this->assertEquals( array( 'eng-GB' => 'Test description' ), $createdState->description );
+        $this->assertEquals( 0, $createdState->priority );
+
+        $this->assertEquals( 7, $this->handler->getContentCount( $createdState->id ) );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::load
      */
     public function testLoad()
