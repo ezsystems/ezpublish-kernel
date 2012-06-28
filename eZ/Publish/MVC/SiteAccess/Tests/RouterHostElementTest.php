@@ -1,0 +1,110 @@
+<?php
+/**
+ * File containing the eZ\Publish\MVC\SiteAccess\Tests\RouterHostElementTest class
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
+namespace eZ\Publish\MVC\SiteAccess\Tests;
+use PHPUnit_Framework_TestCase,
+    eZ\Publish\MVC\SiteAccess\Router;
+
+class RouterHostElementTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @covers \eZ\Publish\MVC\SiteAccess\Router::__construct
+     */
+    public function testConstruct()
+    {
+        return new Router(
+            "default_sa",
+            array(
+                "HostElement" => 2,
+                "Map\\URI" => array(
+                    "first_sa" => "first_sa",
+                    "second_sa" => "second_sa",
+                ),
+                "Map\\Host" => array(
+                    "first_sa" => "first_sa",
+                    "first_siteaccess" => "first_sa",
+                    "second_sa" => "second_sa",
+                ),
+            )
+        );
+    }
+
+    /**
+     * @depends testConstruct
+     * @dataProvider matchProvider
+     * @covers \eZ\Publish\MVC\SiteAccess\Router::match
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map::__construct
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map::match
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\URI::__construct
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::__construct
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\HostElement::__construct
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\HostElement::match
+     */
+    public function testMatch( $url, $siteAccess, $router )
+    {
+        $this->assertSame( $siteAccess, $router->match( $url ) );
+    }
+
+    public function matchProvider()
+    {
+        return array(
+            array( "http://www.example.com", "example" ),
+            array( "https://www.example.com", "example" ),
+            array( "http://www.example.com/", "example" ),
+            array( "https://www.example.com/", "example" ),
+            array( "http://www.example.com//", "example" ),
+            array( "https://www.example.com//", "example" ),
+            array( "http://www.example.com:8080/", "example" ),
+            array( "http://www.example.com/first_siteaccess/", "example" ),
+            array( "http://www.example.com/?first_siteaccess", "example" ),
+            array( "http://www.example.com/?first_sa", "example" ),
+            array( "http://www.example.com/first_salt", "example" ),
+            array( "http://www.example.com/first_sa.foo", "example" ),
+            array( "http://www.example.com/test", "example" ),
+            array( "http://www.example.com/test/foo/", "example" ),
+            array( "http://www.example.com/test/foo/bar/", "example" ),
+            array( "http://www.example.com/test/foo/bar/first_sa", "example" ),
+            array( "http://www.example.com/default_sa", "example" ),
+
+            array( "http://www.example.com/first_sa", "example" ),
+            array( "http://www.example.com/first_sa/", "example" ),
+            array( "http://www.example.com//first_sa//", "example" ),
+            array( "http://www.example.com///first_sa///test", "example" ),
+            array( "http://www.example.com//first_sa//foo/bar", "example" ),
+            array( "http://www.example.com/first_sa/foo", "example" ),
+            array( "http://www.example.com:82/first_sa/", "example" ),
+            array( "http://third_siteaccess/first_sa/", "first_sa" ),
+            array( "http://first_sa/", "first_sa" ),
+            array( "https://first_sa/", "first_sa" ),
+            array( "http://first_sa:81/", "first_sa" ),
+            array( "http://first_sa/", "first_sa" ),
+            array( "http://first_sa:82/", "first_sa" ),
+            array( "http://first_sa:83/", "first_sa" ),
+            array( "http://first_sa/foo/", "first_sa" ),
+            array( "http://first_sa:82/foo/", "first_sa" ),
+            array( "http://first_sa:83/foo/", "first_sa" ),
+            array( "http://first_sa/foobar/", "first_sa" ),
+            array( "http://second_sa:82/", "second_sa" ),
+            array( "http://second_sa:83/", "second_sa" ),
+            array( "http://second_sa/foo/", "second_sa" ),
+            array( "http://second_sa:82/foo/", "second_sa" ),
+            array( "http://second_sa:83/foo/", "second_sa" ),
+            array( "http://second_sa/foobar/", "second_sa" ),
+
+            array( "http://dev.example.com/second_sa", "example" ),
+            array( "http://dev.example.com/second_sa/", "example" ),
+            array( "http://dev.example.com/second_sa?param1=foo", "example" ),
+            array( "http://dev.example.com/second_sa/foo/", "example" ),
+            array( "http://dev.example.com:82/second_sa/", "example" ),
+            array( "http://dev.example.com:83/second_sa/", "example" ),
+            array( "http://first_siteaccess:82/second_sa/", "second_sa" ),
+            array( "http://first_siteaccess:83/second_sa/", "second_sa" ),
+        );
+    }
+}

@@ -22,6 +22,9 @@
     <testsuite name="eZ\Publish\Core\IO">
       <directory>eZ/Publish/Core/IO/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\MVC\SiteAccess">
+      <directory>eZ/Publish/MVC/SiteAccess/Tests</directory>
+    </testsuite>
   </testsuites>
   <filter>
     <whitelist>
@@ -53,8 +56,19 @@
           <directory>eZ/Publish/Core/Repository/Tests/Service/Legacy/_fixtures</directory>
 
           <directory>eZ/Publish/SPI/Tests</directory>
+          <directory>eZ/Publish/Legacy/</directory>
+          <directory>eZ/Bundle</directory>
 
           <directory suffix=".php">doc</directory>
+
+          <directory suffix="Test.php">eZ/Publish/MVC/SiteAccess/Tests</directory>
+
+          <!-- Depends on Symfony Components but autoloader don't know about them -->
+          <directory>eZ/Publish/MVC/Controller</directory>
+          <directory>eZ/Publish/MVC/Routing</directory>
+          <directory>eZ/Publish/MVC/Templating</directory>
+          <file>eZ/Publish/MVC/Controller.php</file>
+          <file>eZ/Publish/MVC/HttpKernel.php</file>
       </exclude>
     </whitelist>
   </filter>
