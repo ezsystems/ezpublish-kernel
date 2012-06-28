@@ -22,11 +22,16 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 
 require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
 $loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'] );
+if ( isset( $settings['base']['ClassLoader']['ClassMap'] ) )
+    $loader->registerClassMap( $settings['base']['ClassLoader']['ClassMap'] );
 spl_autoload_register( array( $loader, 'load' ) );
 
-// Zeta Components
-require $settings['base']['ClassLoader']['ezcBase'];
-spl_autoload_register( array( 'ezcBase', 'autoload' ) );
+// Zeta Components, if using ezcBase loader
+if ( isset( $settings['base']['ClassLoader']['ezcBase'] ) )
+{
+    require $settings['base']['ClassLoader']['ezcBase'];
+    spl_autoload_register( array( 'ezcBase', 'autoload' ) );
+}
 
 
 $configManager = new ConfigurationManager(

@@ -53,6 +53,13 @@ class ClassLoader
     protected $lazyClassLoaders;
 
     /**
+     * Hash indexed by class FQN. Value is the file path (should be absolute)
+     *
+     * @var array
+     */
+    protected $classMap;
+
+    /**
      * Construct a loader instance
      *
      * @param array $paths Containing class/namespace prefix as key and sub path as value
@@ -73,6 +80,18 @@ class ClassLoader
         $this->paths = $paths;
         $this->mode = $mode;
         $this->lazyClassLoaders = $lazyClassLoaders;
+        $this->classMap = array();
+    }
+
+    /**
+     * Registers a class map for autoloading.
+     * Key is the class FQN, value is the corresponding file path (should be absolute).
+     *
+     * @param array $classMap
+     */
+    public function registerClassMap( array $classMap )
+    {
+        $this->classMap += $classMap;
     }
 
     /**
@@ -87,6 +106,13 @@ class ClassLoader
     {
         if ( $className[0] === '\\' )
             $className = substr( $className, 1 );
+
+        // Try to match against the class map
+        if ( isset( $this->classMap[$className] ) )
+        {
+            require $this->classMap[$className];
+            return true;
+        }
 
         foreach ( $this->paths as $prefix => $subPath )
         {
