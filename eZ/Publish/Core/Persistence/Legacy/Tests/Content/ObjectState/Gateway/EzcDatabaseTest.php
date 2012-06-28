@@ -44,6 +44,10 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         parent::setUp();
 
         $this->insertDatabaseFixture(
+            __DIR__ . '/../../_fixtures/contentobjects.php'
+        );
+
+        $this->insertDatabaseFixture(
             __DIR__ . '/../../_fixtures/objectstates.php'
         );
     }
@@ -226,7 +230,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      */
     public function testInsertObjectStateInEmptyGroup()
     {
-        $this->markTestSkipped( '@todo: This test fails, related to todo in gateway impl' );
         $gateway = $this->getDatabaseGateway();
 
         $gateway->insertObjectStateGroup( $this->getObjectStateGroupFixture() );
