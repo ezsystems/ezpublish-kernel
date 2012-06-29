@@ -11,8 +11,40 @@ namespace eZ\Publish\MVC\SiteAccess;
 
 class Router
 {
+    /**
+     * Name of the default siteaccess
+     *
+     * @var string
+     */
     protected $defaultSiteAccess;
 
+    /**
+     * The configuration for siteaccess matching.
+     * Consists in an hash indexed by matcher type class.
+     * Value is a hash where index is what to match against and value is the corresponding siteaccess name.
+     *
+     * Example:
+     * <code>
+     * array(
+     *     // Using built-in URI matcher. Key is the prefix that matches the siteaccess, in the value
+     *     "Map\\URI" => array(
+     *         "ezdemo_site" => "ezdemo_site",
+     *         "ezdemo_site_admin" => "ezdemo_site_admin",
+     *     ),
+     *     // Using built-in HOST matcher. Key is the hostname, value is the siteaccess name
+     *     "Map\\Host" => array(
+     *         "ezpublish.dev" => "ezdemo_site",
+     *         "ezpublish.admin.dev" => "ezdemo_site_admin",
+     *     ),
+     *     // Using a custom matcher (class must begin with a '\', as a full qualifed class name).
+     *     // The custom matcher must implement eZ\Publish\MVC\SiteAccess\Matcher interface.
+     *     "\\My\\Custom\\Matcher" => array(
+     *         "something_to_match_against" => "siteaccess_name"
+     *     )
+     * )
+     * </code>
+     * @var array
+     */
     protected $siteAccessesConfiguration;
 
     /**
