@@ -31,6 +31,7 @@ abstract class Map implements Matcher
      * Constructor.
      *
      * @param array $map Map used for matching.
+     * @param string $key Key that will be used for matching against $map
      */
     public function __construct( array $map, $key )
     {
