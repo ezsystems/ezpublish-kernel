@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\MVC\SiteAccess;
+use eZ\Publish\MVC\SiteAccess;
 
 class Router
 {
@@ -72,6 +73,7 @@ class Router
             return $_SERVER["SITEACCESS"];
 
         $urlElements = parse_url( $url );
+        $siteaccess = new SiteAccess;
 
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
@@ -82,10 +84,16 @@ class Router
 
             $matcher = new $matchingClass( $urlElements, $matchingConfiguration );
 
-            if ( ( $siteaccess = $matcher->match() ) !== false )
+            if ( ( $siteaccessName = $matcher->match() ) !== false )
+            {
+                $siteaccess->name = $siteaccessName;
+                $siteaccess->matchingType = $matchingClass;
                 return $siteaccess;
+            }
         }
 
-        return $this->defaultSiteAccess;
+        $siteaccess->name = $this->defaultSiteAccess;
+        $siteaccess->matchingType = 'default';
+        return $siteaccess;
     }
 }
