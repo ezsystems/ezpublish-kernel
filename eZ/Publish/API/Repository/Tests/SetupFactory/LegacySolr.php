@@ -17,6 +17,8 @@ use eZ\Publish\Core\Persistence\Solr;
  */
 class LegacySolr extends Legacy
 {
+    protected static $indexed = false;
+
     /**
      * Returns a configured repository for testing.
      *
@@ -65,6 +67,11 @@ class LegacySolr extends Legacy
 
     protected function indexAll( $persistenceHandler, $searchHandler )
     {
+        if ( self::$indexed )
+        {
+            return;
+        }
+
         // @TODO: Is there a nicer way to get access to all content objects? We 
         // require this to run a full index here.
         $getDatabaseMethod = new \ReflectionMethod( $persistenceHandler, 'getDatabase' );
@@ -84,5 +91,7 @@ class LegacySolr extends Legacy
                 $persistenceHandler->contentHandler()->load( $row['id'], $row['current_version'] )
             );
         }
+
+        self::$indexed = true;
     }
 }
