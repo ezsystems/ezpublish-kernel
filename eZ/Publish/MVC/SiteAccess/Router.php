@@ -51,7 +51,7 @@ class Router
             $matcher = new $matchingClass( $urlElements, $matchingConfiguration );
 
             if ( ( $siteaccess = $matcher->match() ) !== false )
-                        return $siteaccess;
+                return $siteaccess;
         }
 
         return $this->defaultSiteAccess;
