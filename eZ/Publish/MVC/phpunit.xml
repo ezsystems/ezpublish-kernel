@@ -1,0 +1,22 @@
+<phpunit
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  bootstrap="bootstrap.php"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  >
+  <testsuites>
+    <testsuite name="SiteAccess">
+      <directory>SiteAccess/Tests</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist>
+      <directory suffix=".php">.</directory>
+      <exclude>
+          <directory suffix="Test.php">SiteAccess/Tests</directory>
+      </exclude>
+    </whitelist>
+  </filter>
+</phpunit>
