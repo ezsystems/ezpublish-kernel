@@ -57,6 +57,7 @@ $repository = new Client\IntegrationTestRepository(
                 'application/vnd.ez.api.SectionList'  => new Client\Input\Parser\SectionList(),
                 'application/vnd.ez.api.Section'      => new Client\Input\Parser\Section(),
                 'application/vnd.ez.api.ErrorMessage' => new Client\Input\Parser\ErrorMessage(),
+                'application/vnd.ez.api.RoleList'     => new Client\Input\Parser\RoleList(),
                 'application/vnd.ez.api.Role'         => new Client\Input\Parser\Role(),
             )
         ),
@@ -93,7 +94,7 @@ $repository = new Client\IntegrationTestRepository(
     $authenticator
 );
 
-// Force sets the used user. This will be refactored most likely, since this is 
+// Force sets the used user. This will be refactored most likely, since this is
 // not really valid for a REST client.
 $repository->setCurrentUser(
     new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(

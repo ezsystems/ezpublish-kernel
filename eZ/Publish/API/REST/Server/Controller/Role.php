@@ -61,7 +61,7 @@ class Role
     }
 
     /**
-     * Create new section
+     * Create new role
      *
      * @param RMF\Request $request
      * @return mixed
@@ -75,6 +75,19 @@ class Role
                     $request->body
                 ) )
             ) )
+        );
+    }
+
+    /**
+     * Load list of roles
+     *
+     * @param RMF\Request $request
+     * @return mixed
+     */
+    public function listRoles( RMF\Request $request )
+    {
+        return new Values\RoleList(
+            $this->roleService->loadRoles()
         );
     }
 }

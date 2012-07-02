@@ -182,7 +182,7 @@ class Visitor
      * Visit struct returned by controllers
      *
      * @param mixed $data
-     * @return string
+     * @return \eZ\Publish\API\REST\Common\Message
      */
     public function visit( $data )
     {

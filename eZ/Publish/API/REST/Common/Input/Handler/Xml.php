@@ -31,6 +31,9 @@ class Xml extends Handler
         'SectionList' => array(
             'Section',
         ),
+        'RoleList' => array(
+            'Role',
+        ),
     );
 
     /**

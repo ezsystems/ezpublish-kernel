@@ -19,7 +19,7 @@ require __DIR__ . '/../bootstrap.php';
 
 /*
  * This is a very simple session handling for the repository, which allows the
- * integration tests to run multiple requests against a continuos repository
+ * integration tests to run multiple requests against a continuous repository
  * state. This is needed in many test methods, e.g. in
  * SectionServiceTest::testUpdateSection() where there is 1. the section loaded
  * and 2. updated.
@@ -129,8 +129,9 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
 
+    '\\eZ\\Publish\\API\\REST\\Server\\Values\\RoleList'              => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Role'           => new Output\ValueObjectVisitor\Role( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'           => new Output\ValueObjectVisitor\Role( $urlHandler ),
 );
 
 /*
@@ -170,6 +171,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
         ),
         '(^/user/roles$)' => array(
+            'GET' => array( $roleController, 'listRoles' ),
             'POST' => array( $roleController, 'createRole' ),
         ),
     ) ),
@@ -202,7 +204,7 @@ $dispatcher = new AuthenticatingDispatcher(
 
 $request = new RMF\Request\HTTP();
 $request->addHandler( 'body', new RMF\Request\PropertyHandler\RawBody() );
-$request->addHandler( 'contentType', new RMF\Request\PropertyHandler\Server( 'HTTP_CONTENT_TYPE' ) );
+$request->addHandler( 'contentType', new RMF\Request\PropertyHandler\Server( 'CONTENT_TYPE' ) );
 $request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
     new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
     new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),

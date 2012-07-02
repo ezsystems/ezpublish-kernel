@@ -15,7 +15,7 @@ use \eZ\Publish\API\Repository\Values\User\Policy;
 use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\Role;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
@@ -60,6 +60,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     private $urlHandler;
 
     /**
+     * @param \eZ\Publish\API\REST\Client\UserService $userService
      * @param \eZ\Publish\API\REST\Client\HttpClient $client
      * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
@@ -79,7 +80,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * Only for testing
      *
-     * @param mixed tringid
+     * @param mixed $id
      * @return void
      * @private
      */
@@ -101,7 +102,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function createRole( RoleCreateStruct $roleCreateStruct )
+    public function createRole( APIRoleCreateStruct $roleCreateStruct )
     {
         $inputMessage = $this->outputVisitor->visit( $roleCreateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Role' );
@@ -216,7 +217,15 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function loadRoles()
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'roles' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleList' ) )
+            )
+        );
+
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
