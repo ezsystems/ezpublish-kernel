@@ -24,7 +24,7 @@ use Qafoo\RMF;
  * This is, by now, just an untested stub.
  * @todo Test
  */
-class IntegrationTest extends Authenticator
+class BasicAuth extends Authenticator
 {
     /**
      * Creates an new Authenticator to $repository
