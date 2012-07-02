@@ -54,7 +54,9 @@ class RouterPortHostURITest extends PHPUnit_Framework_TestCase
      */
     public function testMatch( $url, $siteAccess, $router )
     {
-        $this->assertSame( $siteAccess, $router->match( $url ) );
+        $sa = $router->match( $url );
+        $this->assertInstanceOf( 'eZ\\Publish\\MVC\\SiteAccess', $sa );
+        $this->assertSame( $siteAccess, $sa->name );
     }
 
     public function matchProvider()
