@@ -13,9 +13,9 @@ use eZ\Publish\API\REST\Common\Message;
 use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
 
-use \eZ\Publish\API\Repository\RoleService;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\API\Repository\RoleService;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 
 use Qafoo\RMF;
 
@@ -63,7 +63,7 @@ class Role
      * Create new role
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\API\REST\Server\Values\CreatedRole
      */
     public function createRole( RMF\Request $request )
     {
@@ -81,7 +81,7 @@ class Role
      * Load list of roles
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\API\REST\Server\Values\RoleList
      */
     public function listRoles( RMF\Request $request )
     {
@@ -94,7 +94,7 @@ class Role
      * Load role
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     public function loadRole( RMF\Request $request )
     {
@@ -106,13 +106,51 @@ class Role
      * Load role by identifier
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\API\REST\Server\Values\RoleList
      */
     public function loadRoleByIdentifier( RMF\Request $request )
     {
         return new Values\RoleList(
             array(
                 $this->roleService->loadRoleByIdentifier( $request->variables['identifier'] )
+            )
+        );
+    }
+
+    /**
+     * Updates a section
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     */
+    public function updateRole( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'role', $request->path );
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+        return $this->roleService->updateRole(
+            $this->roleService->loadRole( $values['role'] ),
+            $this->mapToUpdateStruct( $createStruct )
+        );
+    }
+
+    /**
+     * Maps a RoleCreateStruct to a RoleUpdateStruct.
+     *
+     * Needed since both structs are encoded into the same media type on input.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $createStruct
+     * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
+     */
+    protected function mapToUpdateStruct( RoleCreateStruct $createStruct )
+    {
+        return new RoleUpdateStruct(
+            array(
+                'identifier' => $createStruct->identifier
             )
         );
     }

@@ -129,7 +129,17 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $roleUpdateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Role' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        $result = $this->client->request(
+            'POST',
+            $role->id,
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**
@@ -412,6 +422,6 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function newRoleUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new RoleUpdateStruct();
     }
 }

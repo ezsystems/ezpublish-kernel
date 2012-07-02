@@ -179,6 +179,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/user/roles/[0-9]+$)' => array(
             'GET'    => array( $roleController, 'loadRole' ),
+            'PATCH'  => array( $roleController, 'updateRole' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

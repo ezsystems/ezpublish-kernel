@@ -88,6 +88,7 @@ $repository = new Client\IntegrationTestRepository(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct'                        => new Client\Output\ValueObjectVisitor\RoleCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct'                        => new Client\Output\ValueObjectVisitor\RoleUpdateStruct( $urlHandler ),
         )
     ),
     $urlHandler,
