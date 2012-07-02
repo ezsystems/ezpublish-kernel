@@ -27,7 +27,7 @@ class Section
     /**
      * Input dispatcher
      *
-     * @var \eZ\Publish\API\REST\Server\InputDispatcher
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
      */
     protected $inputDispatcher;
 
@@ -48,10 +48,9 @@ class Section
     /**
      * Construct controller
      *
-     * @param Input\Dispatcher $inputDispatcher
-     * @param UrlHandler $urlHandler
-     * @param SectionService $sectionService
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
     public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, SectionService $sectionService )
     {
@@ -74,7 +73,7 @@ class Section
     }
 
     /**
-     * Load section by indentifier
+     * Load section by identifier
      *
      * @param RMF\Request $request
      * @return mixed

@@ -22,7 +22,8 @@ class SectionInput extends Base
      * Parse input structure
      *
      * @param array $data
-     * @return SectionCreateStruct
+     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

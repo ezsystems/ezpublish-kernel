@@ -33,7 +33,6 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
      * @param RMF\Router $router
      * @param RMF\View $view
      * @param \eZ\Publish\API\REST\Server\Authenticator $authenticator
-     * @return void
      */
     public function __construct( RMF\Router $router, RMF\View $view, Authenticator $authenticator )
     {
@@ -44,7 +43,7 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
     /**
      * Performs authentication and dispatches the request
      *
-     * @param Request $request
+     * @param RMF\Request $request
      * @return void
      */
     public function dispatch( RMF\Request $request )

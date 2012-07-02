@@ -37,10 +37,9 @@ class Pattern implements UrlHandler
     const PATTERN_REGEXP ='\{([A-Za-z-_]+)\}';
 
     /**
-     * COnstruct from optional initial map
+     * Construct from optional initial map
      *
      * @param array $map
-     * @return void
      */
     public function __construct( array $map = array() )
     {
@@ -95,7 +94,7 @@ class Pattern implements UrlHandler
     }
 
     /**
-     * COmpiles a given pattern to a PCRE regular expression
+     * Compiles a given pattern to a PCRE regular expression
      *
      * @param string $pattern
      * @return string

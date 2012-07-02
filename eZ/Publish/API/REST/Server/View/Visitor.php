@@ -20,15 +20,14 @@ class Visitor extends RMF\View
     /**
      * JSON visitor
      *
-     * @var \eZ\Publish\API\REST\Server\Visitor
+     * @var \eZ\Publish\API\REST\Common\Output\Visitor
      */
     protected $visitor;
 
     /**
      * Construct
      *
-     * @param Visitor $visitor
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $visitor
      */
     public function __construct( Common\Output\Visitor $visitor )
     {

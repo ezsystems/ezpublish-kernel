@@ -29,8 +29,7 @@ class BasicAuth extends Authenticator
     /**
      * Creates an new Authenticator to $repository
      *
-     * @param Repository $repository
-     * @return void
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
     public function __construct( Repository $repository )
     {
@@ -44,7 +43,7 @@ class BasicAuth extends Authenticator
      * authenticated user into the $repository. Returns true on success, false
      * of authentication was not possible or did not succeed.
      *
-     * @param Request $request
+     * @param RMF\Request $request
      * @return bool
      */
     public function authenticate( RMF\Request $request )
@@ -63,7 +62,7 @@ class BasicAuth extends Authenticator
         }
         catch ( NotFoundException $e )
         {
-            throw Exceptions\AuthenticationFailedException();
+            throw new Exceptions\AuthenticationFailedException();
         }
     }
 }

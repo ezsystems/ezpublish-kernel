@@ -22,10 +22,9 @@ class ContentList
     public $contents;
 
     /**
-     * Csonstruct
+     * Construct
      *
      * @param array $contents
-     * @return void
      */
     public function __construct( array $contents )
     {

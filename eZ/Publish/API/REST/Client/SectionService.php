@@ -70,7 +70,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      *
      * Only for testing
      *
-     * @param mixed tringid
+     * @param mixed $id
      * @return void
      * @private
      */
@@ -124,7 +124,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         // Should originally be PATCH, but PHP's shiny new internal web server
-        // dies with it. m(
+        // dies with it.
         $result = $this->client->request(
             'POST',
             $section->id,
@@ -140,7 +140,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @param int $sectionId
+     * @param mixed $sectionId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
@@ -278,7 +278,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     }
 
     /**
-     * instanciates a new SectionCreateStruct
+     * instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -288,7 +288,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     }
 
     /**
-     * instanciates a new SectionUpdateStruct
+     * instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */

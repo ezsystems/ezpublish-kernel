@@ -13,7 +13,7 @@ use eZ\Publish\API\REST\Common\UrlHandler;
 use eZ\Publish\API\REST\Common\Exceptions;
 
 /**
- * Pattern based URL Handler preconfigured for eZPusblish
+ * Pattern based URL Handler pre-configured for eZ Publish
  */
 class eZPublish extends Pattern
 {

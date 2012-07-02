@@ -22,10 +22,9 @@ class SectionList
     public $sections;
 
     /**
-     * Csonstruct
+     * Construct
      *
      * @param array $sections
-     * @return void
      */
     public function __construct( array $sections )
     {

@@ -25,7 +25,6 @@ class RoleList
      * Construct
      *
      * @param array $roles
-     * @return void
      */
     public function __construct( array $roles )
     {

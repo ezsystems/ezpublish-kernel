@@ -13,7 +13,7 @@ use eZ\Publish\API\REST\Common\UrlHandler;
 use eZ\Publish\API\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\RoleService;
 
-use eZ\Publish\API\Repository\Values\Content\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 
 /**
  * Base class for input parser
@@ -30,9 +30,8 @@ class RoleInput extends Base
     /**
      * Construct from role service
      *
-     * @param UrlHandler $urlHandler
-     * @param RoleService $roleService
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\API\Repository\RoleService $roleService
      */
     public function __construct( UrlHandler $urlHandler, RoleService $roleService )
     {
@@ -44,7 +43,8 @@ class RoleInput extends Base
      * Parse input structure
      *
      * @param array $data
-     * @return RoleCreateStruct
+     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

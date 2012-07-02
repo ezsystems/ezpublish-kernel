@@ -14,8 +14,8 @@ use eZ\Publish\API\REST\Common\Input;
 use eZ\Publish\API\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\RoleService;
-use \eZ\Publish\API\Repository\Values\Content\RoleCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\RoleUpdateStruct;
+use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 
 use Qafoo\RMF;
 
@@ -27,7 +27,7 @@ class Role
     /**
      * Input dispatcher
      *
-     * @var \eZ\Publish\API\REST\Server\InputDispatcher
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
      */
     protected $inputDispatcher;
 
@@ -48,10 +48,9 @@ class Role
     /**
      * Construct controller
      *
-     * @param Input\Dispatcher $inputDispatcher
-     * @param UrlHandler $urlHandler
-     * @param RoleService $roleService
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\API\Repository\RoleService $roleService
      */
     public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, RoleService $roleService )
     {

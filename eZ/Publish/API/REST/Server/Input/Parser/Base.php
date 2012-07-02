@@ -23,8 +23,7 @@ abstract class Base extends Parser
     /**
      * Creates a new parser.
      *
-     * @param UrlHandler $urlHandler
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( UrlHandler $urlHandler )
     {

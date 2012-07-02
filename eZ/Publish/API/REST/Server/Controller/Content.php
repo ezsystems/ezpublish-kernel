@@ -28,7 +28,7 @@ class Content
     /**
      * Input dispatcher
      *
-     * @var \eZ\Publish\API\REST\Server\InputDispatcher
+     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
      */
     protected $inputDispatcher;
 
@@ -47,13 +47,19 @@ class Content
     protected $contentService;
 
     /**
+     * Section service
+     *
+     * @var \eZ\Publish\API\Repository\SectionService
+     */
+    protected $sectionService;
+
+    /**
      * Construct controller
      *
-     * @param Input\Dispatcher $inputDispatcher
-     * @param UrlHandler $urlHandler
-     * @param ContentService $contentService
-     * @param SectionService $sectionService
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
     public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, SectionService $sectionService )
     {
@@ -64,7 +70,7 @@ class Content
     }
 
     /**
-     * Load a content infor by remote ID
+     * Load a content info by remote ID
      *
      * @param RMF\Request $request
      * @return Content

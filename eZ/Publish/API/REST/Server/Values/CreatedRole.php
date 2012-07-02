@@ -18,7 +18,7 @@ class CreatedRole extends ValueObject
     /**
      * The created role
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Role
+     * @var \eZ\Publish\API\Repository\Values\User\Role
      */
     public $role;
 }

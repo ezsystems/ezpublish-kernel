@@ -70,11 +70,10 @@ class Exception extends ValueObjectVisitor
     );
 
     /**
-     * COnstruct from debug flag
+     * Construct from debug flag
      *
-     * @param UrlHandler $urlHandler
-     * @param mixed $debug
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param boolean $debug
      */
     public function __construct( UrlHandler $urlHandler, $debug = false )
     {
@@ -95,10 +94,9 @@ class Exception extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers
      *
-     * @param Visitor $visitor
-     * @param Generator $generator
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\API\REST\Common\Output\Generator $generator
      * @param mixed $data
-     * @return void
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {

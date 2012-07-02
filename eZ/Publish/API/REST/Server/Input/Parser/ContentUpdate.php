@@ -22,7 +22,8 @@ class ContentUpdate extends Base
      * Parse input structure
      *
      * @param array $data
-     * @return SectionIncludingContentMetadataUpdateStruct
+     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

@@ -16,7 +16,7 @@ namespace eZ\Publish\API\REST;
  */
 
 // Set communication encoding depending on environment defined in the
-// phpuni.xml files. This defines what encoding will be generated and thus send
+// phpunit.xml files. This defines what encoding will be generated and thus send
 // to the server.
 $generator = getenv( 'backendEncoding' ) === 'xml' ?
     new Common\Output\Generator\Xml() :

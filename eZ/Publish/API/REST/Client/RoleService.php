@@ -164,7 +164,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitaions are replaced by the ones in $roleUpdateStruct
+     * the limitations are replaced by the ones in $roleUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to u�date a policy
      *
@@ -355,7 +355,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * instanciates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      *
@@ -367,7 +367,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * instanciates a policy create class
+     * Instantiates a policy create class
      *
      * @param string $module
      * @param string $function
@@ -380,7 +380,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * instanciates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
@@ -390,7 +390,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * instanciates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
