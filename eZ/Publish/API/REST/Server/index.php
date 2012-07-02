@@ -131,7 +131,7 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\RoleList'              => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'           => new Output\ValueObjectVisitor\Role( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'              => new Output\ValueObjectVisitor\Role( $urlHandler ),
 );
 
 /*
@@ -173,6 +173,12 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),
             'POST' => array( $roleController, 'createRole' ),
+        ),
+        '(^/user/roles\?identifier=.*$)' => array(
+            'GET'  => array( $roleController, 'loadRoleByIdentifier' ),
+        ),
+        '(^/user/roles/[0-9]+$)' => array(
+            'GET'    => array( $roleController, 'loadRole' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

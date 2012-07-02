@@ -89,4 +89,31 @@ class Role
             $this->roleService->loadRoles()
         );
     }
+
+    /**
+     * Load role
+     *
+     * @param RMF\Request $request
+     * @return mixed
+     */
+    public function loadRole( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'role', $request->path );
+        return $this->roleService->loadRole( $values['role'] );
+    }
+
+    /**
+     * Load role by identifier
+     *
+     * @param RMF\Request $request
+     * @return mixed
+     */
+    public function loadRoleByIdentifier( RMF\Request $request )
+    {
+        return new Values\RoleList(
+            array(
+                $this->roleService->loadRoleByIdentifier( $request->variables['identifier'] )
+            )
+        );
+    }
 }

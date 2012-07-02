@@ -190,7 +190,14 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function loadRole( $id )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $id,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Role' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -205,7 +212,16 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function loadRoleByIdentifier( $name )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'roleByIdentifier', array( 'role' => $name ) ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleList' ) )
+            )
+        );
+
+        $result = $this->inputDispatcher->parse( $response );
+        return reset( $result );
     }
 
     /**

@@ -31,6 +31,7 @@ class Role extends Parser
     {
         return new Client\Values\User\Role(
             array(
+                'id' => $data['_href'],
                 'identifier' => $data['identifier'],
             )
         );
