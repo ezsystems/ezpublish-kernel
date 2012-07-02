@@ -237,7 +237,7 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
             }
             catch ( RouteNotFoundException $e )
             {
-                // Do nothing, hust let the next router handle it
+                // Do nothing, just let the next router handle it
             }
         }
 
