@@ -87,7 +87,7 @@ class Router
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {
                 $siteaccess->name = $siteaccessName;
-                $siteaccess->matchingType = $matchingClass;
+                $siteaccess->matchingType = $matcher->getName();
                 $siteaccess->matcher = $matcher;
                 return $siteaccess;
             }
