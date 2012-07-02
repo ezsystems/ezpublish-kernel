@@ -5,7 +5,7 @@ parameters:
 services:
     ezpublish.chain_router:
         class: %ezpublish.chain_router.class%
-        arguments: [@router.request_context]
+        arguments: [@router.request_context, @ezpublish.siteaccess_router]
 
     ezpublish.siteaccess_router:
         class: %ezpublish.siteaccess_router.class%

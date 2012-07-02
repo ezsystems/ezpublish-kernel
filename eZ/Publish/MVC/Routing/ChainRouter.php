@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\MVC\SiteAccess;
 use eZ\Publish\MVC\SiteAccess\URIFixer;
+use eZ\Publish\MVC\SiteAccess\Router as SiteAccessRouter;
 
 /**
  * The ChainRouter is an aggregation of valid routers and allows URL matching against multiple routers.
@@ -49,9 +50,15 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
      */
     protected $routeCollection;
 
-    public function __construct( RequestContext $context = null )
+    /**
+     * @var \eZ\Publish\MVC\SiteAccess\Router
+     */
+    protected $siteAccessRouter;
+
+    public function __construct( RequestContext $context = null, SiteAccessRouter $siteAccessRouter )
     {
         $this->context = $context ?: new RequestContext();
+        $this->siteAccessRouter = $siteAccessRouter;
     }
 
     /**
@@ -166,6 +173,17 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
      */
     public function matchRequest( Request $request )
     {
+        if ( !$request->attributes->has( 'siteaccess' ) )
+        {
+            $request->attributes->add(
+                array(
+                     'siteaccess' => $this->siteAccessRouter->match(
+                         $request->getScheme() . '://' . $request->getHttpHost() . $request->getPathInfo()
+                     )
+                )
+            );
+        }
+
         $httpMethodMismatch = null;
         $pathinfo = $request->getPathInfo();
         $siteaccess = $request->attributes->get( 'siteaccess' );
