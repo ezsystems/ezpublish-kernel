@@ -20,7 +20,7 @@ class ArrayObject extends \ArrayObject
     /**
      * Reference to the parent node
      *
-     * @var Object
+     * @var \eZ\Publish\API\REST\Common\Output\Generator\Json\Object
      */
     protected $_ref_parent;
 
@@ -28,7 +28,6 @@ class ArrayObject extends \ArrayObject
      * Construct from optional parent node
      *
      * @param mixed $_ref_parent
-     * @return void
      */
     public function __construct( $_ref_parent )
     {
@@ -38,7 +37,7 @@ class ArrayObject extends \ArrayObject
     /**
      * Get Parent of current node
      *
-     * @return Object
+     * @return \eZ\Publish\API\REST\Common\Output\Generator\Json\Object
      */
     public function getParent()
     {

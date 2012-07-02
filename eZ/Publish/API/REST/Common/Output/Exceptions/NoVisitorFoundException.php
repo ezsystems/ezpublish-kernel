@@ -10,7 +10,7 @@
 namespace eZ\Publish\API\REST\Common\Output\Exceptions;
 
 /**
- * No putput visitor found exception
+ * No output visitor found exception
  */
 class NoVisitorFoundException extends \RuntimeException
 {
@@ -18,7 +18,6 @@ class NoVisitorFoundException extends \RuntimeException
      * Construct from tested classes
      *
      * @param array $classes
-     * @return void
      */
     public function __construct( array $classes )
     {

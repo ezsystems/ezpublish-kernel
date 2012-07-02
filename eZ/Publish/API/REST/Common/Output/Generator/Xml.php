@@ -26,7 +26,6 @@ class Xml extends Generator
      * Start document
      *
      * @param mixed $data
-     * @return void
      */
     public function startDocument( $data )
     {
@@ -59,7 +58,6 @@ class Xml extends Generator
      *
      * @param string $name
      * @param string $mediaTypeName
-     * @return void
      */
     public function startElement( $name, $mediaTypeName = null )
     {
@@ -77,7 +75,6 @@ class Xml extends Generator
      * End element
      *
      * @param string $name
-     * @return void
      */
     public function endElement( $name )
     {
@@ -91,7 +88,6 @@ class Xml extends Generator
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     public function startValueElement( $name, $value )
     {
@@ -105,7 +101,6 @@ class Xml extends Generator
      * End value element
      *
      * @param string $name
-     * @return void
      */
     public function endValueElement( $name )
     {
@@ -118,7 +113,6 @@ class Xml extends Generator
      * Start list
      *
      * @param string $name
-     * @return void
      */
     public function startList( $name )
     {
@@ -129,7 +123,6 @@ class Xml extends Generator
      * End list
      *
      * @param string $name
-     * @return void
      */
     public function endList( $name )
     {
@@ -141,7 +134,6 @@ class Xml extends Generator
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     public function startAttribute( $name, $value )
     {
@@ -155,7 +147,6 @@ class Xml extends Generator
      * End attribute
      *
      * @param string $name
-     * @return void
      */
     public function endAttribute( $name )
     {

@@ -18,7 +18,6 @@ class InvalidTypeException extends \RuntimeException
      * Construct from invalid data
      *
      * @param mixed $data
-     * @return void
      */
     public function __construct( $data )
     {

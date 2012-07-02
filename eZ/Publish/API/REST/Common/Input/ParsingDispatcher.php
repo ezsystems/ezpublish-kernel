@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Pasring Dispatcher class
+ * File containing the Parsing Dispatcher class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -36,7 +36,6 @@ class ParsingDispatcher
      * Construct from optional parsers array
      *
      * @param array $parsers
-     * @return void
      */
     public function __construct( array $parsers = array() )
     {
@@ -50,8 +49,7 @@ class ParsingDispatcher
      * Add another parser for the given Content Type
      *
      * @param string $contentType
-     * @param Parser $parser
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Input\Parser $parser
      */
     public function addParser( $contentType, Parser $parser )
     {
@@ -63,7 +61,7 @@ class ParsingDispatcher
      *
      * @param array $data
      * @param string $mediaType
-     * @return ValueObject
+     * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     public function parse( array $data, $mediaType )
     {

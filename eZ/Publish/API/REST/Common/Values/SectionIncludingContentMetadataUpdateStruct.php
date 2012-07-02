@@ -18,7 +18,7 @@ class SectionIncludingContentMetadataUpdateStruct
     /**
      * ID of the section to assign.
      *
-     * Leave null to not change section assignement.
+     * Leave null to not change section assignment.
      *
      * @var mixed
      */

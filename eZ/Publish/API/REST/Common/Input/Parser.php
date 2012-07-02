@@ -18,8 +18,8 @@ abstract class Parser
      * Parse input structure
      *
      * @param array $data
-     * @param ParsingDispatcher $parsingDispatcher
-     * @return ValueObject
+     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     abstract public function parse( array $data, ParsingDispatcher $parsingDispatcher );
 }

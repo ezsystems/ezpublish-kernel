@@ -54,7 +54,6 @@ class Pattern implements UrlHandler
      *
      * @param string $type
      * @param string $pattern
-     * @return void
      */
     public function addPattern( $type, $pattern )
     {

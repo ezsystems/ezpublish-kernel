@@ -32,7 +32,7 @@ class Visitor
     /**
      * Generator
      *
-     * @var Generator
+     * @var \eZ\Publish\API\REST\Common\Output\Generator
      */
     protected $generator;
 
@@ -109,9 +109,8 @@ class Visitor
     /**
      * Construct from Generator and an array of concrete view model visitors
      *
-     * @param Generator $generator
+     * @param \eZ\Publish\API\REST\Common\Output\Generator $generator
      * @param array $visitors
-     * @return void
      */
     public function __construct( Generator $generator, array $visitors )
     {
@@ -126,8 +125,7 @@ class Visitor
      * Add a new visitor for the given class
      *
      * @param string $class
-     * @param ValueObjectVisitor $visitor
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Output\ValueObjectVisitor $visitor
      */
     public function addVisitor( $class, ValueObjectVisitor $visitor )
     {
@@ -147,7 +145,6 @@ class Visitor
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     public function setHeader( $name, $value )
     {
@@ -163,7 +160,6 @@ class Visitor
      * Note that headers are generally not overwritten!
      *
      * @param int $statusCode
-     * @return void
      */
     public function setStatus( $statusCode )
     {
@@ -204,10 +200,9 @@ class Visitor
     /**
      * Visit struct returned by controllers
      *
-     * Should be called from sub-vistors to visit nested objects.
+     * Should be called from sub-visitors to visit nested objects.
      *
      * @param mixed $data
-     * @return void
      */
     public function visitValueObject( $data )
     {

@@ -26,8 +26,6 @@ abstract class Generator
 
     /**
      * Reset output visitor to a virgin state
-     *
-     * @return void
      */
     public function reset()
     {
@@ -38,7 +36,6 @@ abstract class Generator
      * Start document
      *
      * @param mixed $data
-     * @return void
      */
     abstract public function startDocument( $data );
 
@@ -46,14 +43,13 @@ abstract class Generator
      * Check start document
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkStartDocument( $data )
     {
         if ( count( $this->stack ) )
         {
             throw new Exceptions\OutputGeneratorException(
-                "Starting a document may only be the very first opertation."
+                "Starting a document may only be the very first operation."
             );
         }
 
@@ -74,7 +70,6 @@ abstract class Generator
      * Check end document
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkEndDocument( $data )
     {
@@ -86,7 +81,6 @@ abstract class Generator
      *
      * @param string $name
      * @param string $mediaTypeName
-     * @return void
      */
     abstract public function startElement( $name, $mediaTypeName = null );
 
@@ -94,7 +88,6 @@ abstract class Generator
      * Check start element
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkStartElement( $data )
     {
@@ -118,7 +111,6 @@ abstract class Generator
      * End element
      *
      * @param string $name
-     * @return void
      */
     abstract public function endElement( $name );
 
@@ -126,7 +118,6 @@ abstract class Generator
      * Check end element
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkEndElement( $data )
     {
@@ -138,7 +129,6 @@ abstract class Generator
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     abstract public function startValueElement( $name, $value );
 
@@ -146,7 +136,6 @@ abstract class Generator
      * Check start value element
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkStartValueElement( $data )
     {
@@ -157,7 +146,6 @@ abstract class Generator
      * End value element
      *
      * @param string $name
-     * @return void
      */
     abstract public function endValueElement( $name );
 
@@ -165,7 +153,6 @@ abstract class Generator
      * Check end value element
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkEndValueElement( $data )
     {
@@ -176,7 +163,6 @@ abstract class Generator
      * Start list
      *
      * @param string $name
-     * @return void
      */
     abstract public function startList( $name );
 
@@ -184,7 +170,6 @@ abstract class Generator
      * Check start list
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkStartList( $data )
     {
@@ -195,7 +180,6 @@ abstract class Generator
      * End list
      *
      * @param string $name
-     * @return void
      */
     abstract public function endList( $name );
 
@@ -203,7 +187,6 @@ abstract class Generator
      * Check end list
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkEndList( $data )
     {
@@ -215,7 +198,6 @@ abstract class Generator
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     abstract public function startAttribute( $name, $value );
 
@@ -223,7 +205,6 @@ abstract class Generator
      * Check start attribute
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkStartAttribute( $data )
     {
@@ -234,7 +215,6 @@ abstract class Generator
      * End attribute
      *
      * @param string $name
-     * @return void
      */
     abstract public function endAttribute( $name );
 
@@ -242,7 +222,6 @@ abstract class Generator
      * Check end attribute
      *
      * @param mixed $data
-     * @return void
      */
     protected function checkEndAttribute( $data )
     {
@@ -275,7 +254,6 @@ abstract class Generator
      * @param string $type
      * @param mixed $data
      * @param array $validParents
-     * @return void
      */
     protected function checkStart( $type, $data, array $validParents )
     {
@@ -310,7 +288,6 @@ abstract class Generator
      *
      * @param string $type
      * @param mixed $data
-     * @return void
      */
     protected function checkEnd( $type, $data )
     {

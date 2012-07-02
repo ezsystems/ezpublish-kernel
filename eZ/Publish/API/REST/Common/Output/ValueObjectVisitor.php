@@ -23,10 +23,9 @@ abstract class ValueObjectVisitor
     protected $urlHandler;
 
     /**
-     * COnstruct from used URL handler
+     * Construct from used URL handler
      *
-     * @param UrlHandler $urlHandler
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( UrlHandler $urlHandler )
     {
@@ -36,10 +35,9 @@ abstract class ValueObjectVisitor
     /**
      * Visit struct returned by controllers
      *
-     * @param Visitor $visitor
-     * @param Generator $generator
+     * @param \eZ\Publish\API\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\API\REST\Common\Output\Generator $generator
      * @param mixed $data
-     * @return void
      */
     abstract public function visit( Visitor $visitor, Generator $generator, $data );
 }

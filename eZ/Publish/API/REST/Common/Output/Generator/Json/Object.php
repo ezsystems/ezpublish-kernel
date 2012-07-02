@@ -12,7 +12,7 @@ namespace eZ\Publish\API\REST\Common\Output\Generator\Json;
 /**
  * Json object
  *
- * Special JSON object (/Stdclass) implementation, which allows to access the
+ * Special JSON object (\stdClass) implementation, which allows to access the
  * parent object it is assigned to again.
  */
 class Object
@@ -20,7 +20,7 @@ class Object
     /**
      * Reference to the parent node
      *
-     * @var Object
+     * @var \eZ\Publish\API\REST\Common\Output\Generator\Json\Object
      */
     protected $_ref_parent;
 
@@ -28,7 +28,6 @@ class Object
      * Construct from optional parent node
      *
      * @param mixed $_ref_parent
-     * @return void
      */
     public function __construct( $_ref_parent = null )
     {
@@ -38,7 +37,7 @@ class Object
     /**
      * Get Parent of current node
      *
-     * @return Object
+     * @return \eZ\Publish\API\REST\Common\Output\Generator\Json\Object
      */
     public function getParent()
     {

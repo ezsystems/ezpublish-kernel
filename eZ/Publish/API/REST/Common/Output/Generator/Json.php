@@ -26,7 +26,6 @@ class Json extends Generator
      * Start document
      *
      * @param mixed $data
-     * @return void
      */
     public function startDocument( $data )
     {
@@ -88,7 +87,6 @@ class Json extends Generator
      *
      * @param string $name
      * @param string $mediaTypeName
-     * @return void
      */
     public function startElement( $name, $mediaTypeName = null )
     {
@@ -117,7 +115,6 @@ class Json extends Generator
      * End element
      *
      * @param string $name
-     * @return void
      */
     public function endElement( $name )
     {
@@ -131,7 +128,6 @@ class Json extends Generator
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     public function startValueElement( $name, $value )
     {
@@ -144,7 +140,6 @@ class Json extends Generator
      * End value element
      *
      * @param string $name
-     * @return void
      */
     public function endValueElement( $name )
     {
@@ -155,7 +150,6 @@ class Json extends Generator
      * Start list
      *
      * @param string $name
-     * @return void
      */
     public function startList( $name )
     {
@@ -171,7 +165,6 @@ class Json extends Generator
      * End list
      *
      * @param string $name
-     * @return void
      */
     public function endList( $name )
     {
@@ -185,7 +178,6 @@ class Json extends Generator
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     public function startAttribute( $name, $value )
     {
@@ -198,7 +190,6 @@ class Json extends Generator
      * End attribute
      *
      * @param string $name
-     * @return void
      */
     public function endAttribute( $name )
     {
@@ -209,7 +200,6 @@ class Json extends Generator
      * Get media type
      *
      * @param string $name
-     * @param string $type
      * @return string
      */
     public function getMediaType( $name )

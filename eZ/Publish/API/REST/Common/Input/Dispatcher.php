@@ -33,16 +33,15 @@ class Dispatcher
     protected $handlers = array();
 
     /**
-     * @var ParsingDispatcher
+     * @var \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
      */
     protected $parsingDispatcher;
 
     /**
      * Construct from optional parsers array
      *
-     * @param ParsingDispatcher $parsingDispatcher
-     * @param array $parsers
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param array $handlers
      */
     public function __construct( ParsingDispatcher $parsingDispatcher, array $handlers = array() )
     {
@@ -57,8 +56,7 @@ class Dispatcher
      * Add another handler for the given Content Type
      *
      * @param string $type
-     * @param Handler $handler
-     * @return void
+     * @param \eZ\Publish\API\REST\Common\Input\Handler $handler
      */
     public function addHandler( $type, Handler $handler )
     {
@@ -68,7 +66,7 @@ class Dispatcher
     /**
      * Parse provided request
      *
-     * @param Message $message
+     * @param \eZ\Publish\API\REST\Common\Message $message
      * @return mixed
      */
     public function parse( Message $message )
