@@ -16,14 +16,15 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class FallbackRouter implements RouterInterface
 {
+    /**
+     * @var \Symfony\Component\Routing\RequestContext
+     */
     private $context;
 
     /**
      * Sets the request context.
      *
-     * @param RequestContext $context The context
-     *
-     * @api
+     * @param \Symfony\Component\Routing\RequestContext $context The context
      */
     public function setContext( RequestContext $context )
     {
@@ -33,9 +34,7 @@ class FallbackRouter implements RouterInterface
     /**
      * Gets the request context.
      *
-     * @return RequestContext The context
-     *
-     * @api
+     * @return \Symfony\Component\Routing\RequestContext The context
      */
     public function getContext()
     {
