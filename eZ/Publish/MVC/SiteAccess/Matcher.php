@@ -17,4 +17,12 @@ interface Matcher
      * @return string|false Siteaccess matched of false
      */
     public function match();
+
+    /**
+     * Returns the name of the matcher.
+     * This information will be stored in the SiteAccess object itself to quickly be able to identify the matcher type.
+     *
+     * @return string
+     */
+    public function getName();
 }

@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Tests;
 use PHPUnit_Framework_TestCase,
-    eZ\Publish\MVC\SiteAccess\Router;
+    eZ\Publish\MVC\SiteAccess\Router,
+    eZ\Publish\MVC\SiteAccess\Matcher\Map\Host as HostMapMatcher;
 
 class RouterHostElementTest extends PHPUnit_Framework_TestCase
 {
@@ -108,5 +109,14 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
             array( "http://first_siteaccess:82/second_sa/", "second_sa" ),
             array( "http://first_siteaccess:83/second_sa/", "second_sa" ),
         );
+    }
+
+    /**
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::getName
+     */
+    public function testGetName()
+    {
+        $matcher = new HostMapMatcher( array( 'host' => 'foo' ), array() );
+        $this->assertSame( 'host:map', $matcher->getName() );
     }
 }

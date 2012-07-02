@@ -88,6 +88,7 @@ class Router
             {
                 $siteaccess->name = $siteaccessName;
                 $siteaccess->matchingType = $matchingClass;
+                $siteaccess->matcher = $matcher;
                 return $siteaccess;
             }
         }

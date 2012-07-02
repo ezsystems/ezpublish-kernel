@@ -30,4 +30,9 @@ class URIText extends Regex implements Matcher
             1
         );
     }
+
+    public function getName()
+    {
+        return 'uri:text';
+    }
 }

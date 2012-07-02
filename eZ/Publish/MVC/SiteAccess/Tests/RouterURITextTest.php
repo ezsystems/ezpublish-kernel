@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Tests;
 use PHPUnit_Framework_TestCase,
-    eZ\Publish\MVC\SiteAccess\Router;
+    eZ\Publish\MVC\SiteAccess\Router,
+    eZ\Publish\MVC\SiteAccess\Matcher\URIText as URITextMatcher;
 
 class RouterURITextTest extends PHPUnit_Framework_TestCase
 {
@@ -112,5 +113,14 @@ class RouterURITextTest extends PHPUnit_Framework_TestCase
             array( "http://first_siteaccess:82/second_sa/", "second_sa" ),
             array( "http://first_siteaccess:83/second_sa/", "second_sa" ),
         );
+    }
+
+    /**
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIText::getName
+     */
+    public function testGetName()
+    {
+        $matcher = new URITextMatcher( array(), array() );
+        $this->assertSame( 'uri:text', $matcher->getName() );
     }
 }

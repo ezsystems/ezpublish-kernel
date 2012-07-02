@@ -64,4 +64,9 @@ class URIElement implements Matcher
 
         return implode( "_", $elements );
     }
+
+    public function getName()
+    {
+        return 'uri:element';
+    }
 }

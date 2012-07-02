@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Tests;
 use PHPUnit_Framework_TestCase,
-    eZ\Publish\MVC\SiteAccess\Router;
+    eZ\Publish\MVC\SiteAccess\Router,
+    eZ\Publish\MVC\SiteAccess\Matcher\Map\Port as PortMatcher;
 
 class RouterSpecialPortsTest extends PHPUnit_Framework_TestCase
 {
@@ -118,5 +119,14 @@ class RouterSpecialPortsTest extends PHPUnit_Framework_TestCase
             array( "https://example.com:82/", "fourth_sa" ),
             array( "https://example.com:82/foo", "fourth_sa" ),
         );
+    }
+
+    /**
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Port::getName
+     */
+    public function testGetName()
+    {
+        $matcher = new PortMatcher( array( 'port' => '8080', 'scheme' => 'http' ), array() );
+        $this->assertSame( 'port', $matcher->getName() );
     }
 }

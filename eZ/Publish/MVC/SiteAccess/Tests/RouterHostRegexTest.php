@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Tests;
 use PHPUnit_Framework_TestCase,
-    eZ\Publish\MVC\SiteAccess\Router;
+    eZ\Publish\MVC\SiteAccess\Router,
+    eZ\Publish\MVC\SiteAccess\Matcher\Regex\Host as HostRegexMatcher;
 
 class RouterHostRegexTest extends PHPUnit_Framework_TestCase
 {
@@ -111,5 +112,14 @@ class RouterHostRegexTest extends PHPUnit_Framework_TestCase
             array( "http://first_siteaccess:82/second_sa/", "second_sa" ),
             array( "http://first_siteaccess:83/second_sa/", "second_sa" ),
         );
+    }
+
+    /**
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Regex\Host::getName
+     */
+    public function testGetName()
+    {
+        $matcher = new HostRegexMatcher( array( 'host' => 'foo' ), array() );
+        $this->assertSame( 'host:regexp', $matcher->getName() );
     }
 }

@@ -25,4 +25,9 @@ class URI extends Map implements Matcher
         sscanf( isset( $URIElements["path"] ) ? $URIElements["path"] : "", "/%[^/]", $key );
         parent::__construct( $siteAccessesConfiguration, $key );
     }
+
+    public function getName()
+    {
+        return 'uri:map';
+    }
 }

@@ -50,4 +50,9 @@ class HostElement implements Matcher
 
         return isset( $elements[$this->elementNumber - 1] ) ? $elements[$this->elementNumber - 1] : false;
     }
+
+    public function getName()
+    {
+        return 'host:element';
+    }
 }

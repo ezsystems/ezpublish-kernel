@@ -42,4 +42,9 @@ class Port extends Map implements Matcher
 
         parent::__construct( $siteAccessesConfiguration, $key );
     }
+
+    public function getName()
+    {
+        return 'port';
+    }
 }

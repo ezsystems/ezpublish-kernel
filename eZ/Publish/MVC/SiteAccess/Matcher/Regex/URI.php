@@ -28,4 +28,9 @@ class URI extends Regex implements Matcher
             isset( $siteAccessesConfiguration["itemNumber"] ) ? (int)$siteAccessesConfiguration["itemNumber"] : 1
         );
     }
+
+    public function getName()
+    {
+        return 'uri:regexp';
+    }
 }

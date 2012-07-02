@@ -31,4 +31,9 @@ class HostText extends Regex implements Matcher
             1
         );
     }
+
+    public function getName()
+    {
+        return 'host:text';
+    }
 }

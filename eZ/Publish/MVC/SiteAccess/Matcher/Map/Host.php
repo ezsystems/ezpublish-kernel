@@ -24,4 +24,9 @@ class Host extends Map implements Matcher
     {
         parent::__construct( $siteAccessesConfiguration, $URIElements["host"] );
     }
+
+    public function getName()
+    {
+        return 'host:map';
+    }
 }

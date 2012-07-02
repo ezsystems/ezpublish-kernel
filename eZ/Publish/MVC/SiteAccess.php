@@ -28,4 +28,11 @@ class SiteAccess
      * @var string
      */
     public $matchingType;
+
+    /**
+     * The matcher instance that has been used to discover the siteaccess.
+     *
+     * @var \eZ\Publish\MVC\SiteAccess\Matcher
+     */
+    public $matcher;
 }
