@@ -16,12 +16,16 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\MVC\SiteAccess;
+use eZ\Publish\MVC\SiteAccess\URIFixer;
 
 /**
  * The ChainRouter is an aggregation of valid routers and allows URL matching against multiple routers.
  * This can be particularly useful in the case of static + dynamic routes (i.e. that need to be fetched from a content repository)
  */
-class ChainRouter implements RouterInterface, WarmableInterface
+class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherInterface
 {
     /**
      * @var \Symfony\Component\Routing\RequestContext
@@ -127,6 +131,52 @@ class ChainRouter implements RouterInterface, WarmableInterface
     public function match( $pathinfo )
     {
         $httpMethodMismatch = null;
+
+        foreach ( $this->getAllRouters() as $router )
+        {
+            try
+            {
+                return $router->match( $pathinfo );
+            }
+            catch ( ResourceNotFoundException $e )
+            {
+                // Do nothing, just let the next router handle it.
+            }
+            catch ( MethodNotAllowedException $e )
+            {
+                // MethodNotAllowedException is a bit more specific, since the route has been matched, but HTTP method hasn't
+                // So we keep it in case no other router is able to match the same route with this method.
+                $httpMethodMismatch = $e;
+            }
+        }
+
+        // Finally throw a ResourceNotFoundException since the chain router couldn't find any valid router for current route
+        throw $httpMethodMismatch ?: new ResourceNotFoundException( "Couldn't find any router able to match '$pathinfo'" );
+    }
+
+    /**
+     * Loop against registered routers and tries to match $request
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request The request to match
+     *
+     * @return array An array of parameters
+     *
+     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no matching resource could be found
+     * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException If a matching resource was found but the request method is not allowed
+     */
+    public function matchRequest( Request $request )
+    {
+        $httpMethodMismatch = null;
+        $pathinfo = $request->getPathInfo();
+        $siteaccess = $request->attributes->get( 'siteaccess' );
+        if ( $siteaccess instanceof SiteAccess )
+        {
+            // Fix up the pathinfo if necessary since it might contain the siteaccess (i.e. like in URI mode)
+            if ( $siteaccess->matcher instanceof URIFixer )
+            {
+                $pathinfo = $siteaccess->matcher->fixupURI( $pathinfo );
+            }
+        }
 
         foreach ( $this->getAllRouters() as $router )
         {
