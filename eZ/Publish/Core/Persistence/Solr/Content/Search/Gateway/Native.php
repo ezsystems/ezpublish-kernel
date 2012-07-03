@@ -45,7 +45,47 @@ class Native extends Gateway
      */
     public function indexContent( Content $content )
     {
-        // @TODO: Implement.
+        $document = $this->mapContent( $content );
+        $update   = $this->createUpdate( $document );
+        $result   = $this->client->request(
+            'POST',
+            '/update?wt=json',
+            new Message(
+                array(
+                    'Content-Type: text/xml',
+                ),
+                $update
+            )
+        );
+
+        var_dump( $result );
+    }
+
+    /**
+     * Create document update XML
+     *
+     * @param Document $document
+     * @return string
+     */
+    protected function createUpdate( Document $document )
+    {
+        $xml = new \XmlWriter();
+        $xml->openMemory();
+        $xml->startElement( 'add' );
+        $xml->startElement( 'doc' );
+
+        foreach ( $document as $field )
+        {
+            $xml->startElement( 'field' );
+            $xml->writeAttribute( 'name', $field->type );
+            $xml->text( $field->value );
+            $xml->endElement();
+        }
+
+        $xml->endElement();
+        $xml->endElement();
+
+        return $xml->outputMemory( true );
     }
 }
 
