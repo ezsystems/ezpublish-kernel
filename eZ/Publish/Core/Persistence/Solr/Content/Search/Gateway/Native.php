@@ -49,7 +49,7 @@ class Native extends Gateway
         $update   = $this->createUpdate( $document );
         $result   = $this->client->request(
             'POST',
-            '/update?wt=json',
+            '/solr/update?commit=true&wt=json',
             new Message(
                 array(
                     'Content-Type: text/xml',
@@ -59,6 +59,25 @@ class Native extends Gateway
         );
 
         var_dump( $result );
+    }
+
+    /**
+     * Purges all contents from the index
+     *
+     * @return void
+     */
+    public function purgeIndex()
+    {
+        $this->client->request(
+            'POST',
+            '/solr/update?commit=true&wt=json',
+            new Message(
+                array(
+                    'Content-Type: text/xml',
+                ),
+                '<delete><query>*:*</query></delete>'
+            )
+        );
     }
 
     /**

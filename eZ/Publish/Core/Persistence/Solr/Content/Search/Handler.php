@@ -151,5 +151,17 @@ class Handler extends BaseSearchHandler
     {
         $this->gateway->indexContent( $content );
     }
+
+    /**
+     * Purges all contents from the index
+     *
+     * @TODO: Make this public API?
+     *
+     * @return void
+     */
+    public function purgeIndex()
+    {
+        $this->gateway->purgeIndex();
+    }
 }
 
