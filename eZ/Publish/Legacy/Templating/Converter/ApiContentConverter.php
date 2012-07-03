@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Legacy\Templating\Converter;
 
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZContentObject;
 use eZContentObjectTreeNode;
 
