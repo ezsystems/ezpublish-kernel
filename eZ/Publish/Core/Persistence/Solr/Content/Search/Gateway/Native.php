@@ -11,7 +11,9 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
     eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+    eZ\Publish\SPI\Persistence\Content\Search\DocumentField,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -27,14 +29,44 @@ class Native extends Gateway
     protected $client;
 
     /**
+     * Field valu mapper
+     *
+     * @var FieldValueMapper
+     */
+    protected $fieldValueMapper;
+
+    /**
+     * Simple mapping for our internal field types
+     *
+     * We implement this mapping, because those dynamic fields are common to
+     * Solr configurations.
+     *
+     * @var array
+     */
+    protected $fieldNameMapping = array(
+        "ez_integer"  => "i",
+        "ez_string"   => "s",
+        "ez_long"     => "l",
+        "ez_text"     => "t",
+        "ez_html"     => "h",
+        "ez_boolean"  => "b",
+        "ez_float"    => "f",
+        "ez_double"   => "d",
+        "ez_date"     => "dt",
+        "ez_point"    => "p",
+        "ez_currency" => "c",
+    );
+
+    /**
      * Construct from HTTP client
      *
      * @param HttpClient $client
      * @return void
      */
-    public function __construct( HttpClient $client )
+    public function __construct( HttpClient $client, FieldValueMapper $fieldValueMapper )
     {
-        $this->client = $client;
+        $this->client           = $client;
+        $this->fieldValueMapper = $fieldValueMapper;
     }
 
     /**
@@ -58,7 +90,7 @@ class Native extends Gateway
             )
         );
 
-        var_dump( $result );
+        // @TODO: Add error handling
     }
 
     /**
@@ -81,12 +113,52 @@ class Native extends Gateway
     }
 
     /**
+     * Map content to document.
+     *
+     * A document is an array of fields
+     *
+     * @param Content $content
+     * @return array
+     */
+    protected function mapContent( Content $content )
+    {
+        return array(
+            new DocumentField\StringField( array(
+                'name'  => 'id',
+                'value' => $content->contentInfo->id,
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'name',
+                'value' => $content->contentInfo->name,
+            ) ),
+            new DocumentField\DateField( array(
+                'name'  => 'modified',
+                'value' => $content->contentInfo->modificationDate,
+            ) ),
+            new DocumentField\DateField( array(
+                'name'  => 'published',
+                'value' => $content->contentInfo->publicationDate,
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'location',
+                'value' => array_map(
+                    function ( $location )
+                    {
+                        return $location->pathString;
+                    },
+                    $content->locations
+                ),
+            ) ),
+        );
+    }
+
+    /**
      * Create document update XML
      *
-     * @param Document $document
+     * @param array $document
      * @return string
      */
-    protected function createUpdate( Document $document )
+    protected function createUpdate( array $document )
     {
         $xml = new \XmlWriter();
         $xml->openMemory();
@@ -95,16 +167,53 @@ class Native extends Gateway
 
         foreach ( $document as $field )
         {
-            $xml->startElement( 'field' );
-            $xml->writeAttribute( 'name', $field->type );
-            $xml->text( $field->value );
-            $xml->endElement();
+            $values = (array) $this->fieldValueMapper->map( $field );
+            foreach ( $values as $value )
+            {
+                $xml->startElement( 'field' );
+                $xml->writeAttribute(
+                    'name',
+                    $this->mapFieldType( $field->name, $field->type )
+                );
+                $xml->text( $value );
+                $xml->endElement();
+            }
         }
 
         $xml->endElement();
         $xml->endElement();
 
         return $xml->outputMemory( true );
+    }
+
+    /**
+     * Map field type
+     *
+     * For Solr indexing the follwing scheme will always be used for names:
+     * {name}_{type}.
+     *
+     * Using dynamic fields this allows to define fields either depending on
+     * types, or names.
+     *
+     * Only the field with the name ID remains untouched.
+     *
+     * @param string $name
+     * @param string $type
+     * @return string
+     */
+    protected function mapFieldType( $name, $type )
+    {
+        if ( $name === "id" )
+        {
+            return $name;
+        }
+
+        if ( isset( $this->fieldNameMapping[$type] ) )
+        {
+            $type = $this->fieldNameMapping[$type];
+        }
+
+        return $name . '_' . $type;
     }
 }
 
