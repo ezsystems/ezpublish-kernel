@@ -85,6 +85,7 @@ class LegacySolr extends Legacy
         $stmt = $query->prepare();
         $stmt->execute();
 
+        $searchHandler->purgeIndex();
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) )
         {
             $searchHandler->indexContent(
