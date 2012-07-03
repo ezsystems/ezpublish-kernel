@@ -43,4 +43,9 @@ class SiteAccess
      * @var \eZ\Publish\MVC\SiteAccess\Matcher
      */
     public $matcher;
+
+    public function __toString()
+    {
+        return "$this->name (matched by '$this->matchingType')";
+    }
 }
