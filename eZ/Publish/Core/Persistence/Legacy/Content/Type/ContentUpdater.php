@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler as SearchHandler,
+    eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
