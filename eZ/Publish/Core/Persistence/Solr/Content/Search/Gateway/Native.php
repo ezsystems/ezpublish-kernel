@@ -18,6 +18,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
+    eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
     eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 /**
@@ -39,6 +40,13 @@ class Native extends Gateway
      * @var CriterionVisitor
      */
     protected $criterionVisitor;
+
+    /**
+     * Sort cluase visitor
+     *
+     * @var SortClauseVisitor
+     */
+    protected $sortClauseVisitor;
 
     /**
      * Field valu mapper
@@ -82,12 +90,13 @@ class Native extends Gateway
      * @param HttpClient $client
      * @return void
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler )
+    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler )
     {
-        $this->client           = $client;
-        $this->criterionVisitor = $criterionVisitor;
-        $this->fieldValueMapper = $fieldValueMapper;
-        $this->contentHandler   = $contentHandler;
+        $this->client            = $client;
+        $this->criterionVisitor  = $criterionVisitor;
+        $this->sortClauseVisitor = $sortClauseVisitor;
+        $this->fieldValueMapper  = $fieldValueMapper;
+        $this->contentHandler    = $contentHandler;
     }
 
      /**
@@ -106,9 +115,13 @@ class Native extends Gateway
         $response = $this->client->request(
             'GET',
             '/solr/select?' . http_build_query( array(
-                'q'  => $this->criterionVisitor->visit( $query->criterion ),
-                'fl' => '*,score',
-                'wt' => 'json',
+                'q'    => $this->criterionVisitor->visit( $query->criterion ),
+                'sort' => implode( ', ', array_map(
+                    array( $this->sortClauseVisitor, 'visit' ),
+                    $query->sortClauses
+                ) ),
+                'fl'   => '*,score',
+                'wt'   => 'json',
             ) )
         );
         // @TODO: Error handling?
