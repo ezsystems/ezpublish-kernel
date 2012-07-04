@@ -1042,8 +1042,8 @@ class LocationServiceTest extends BaseTest
         $originalLocation = $locationService->loadLocation( $locationId );
 
         $updateStruct = $locationService->newLocationUpdateStruct();
-        // Remote ID of the root location
-        $updateStruct->remoteId = '629709ba256fe317c3ddcee35453a96a';
+        // Remote ID of an existing location
+        $updateStruct->remoteId = 'f3e90596361e31d496d4026eb624c983';
 
         // Throws exception, since remote ID is already taken
         $locationService->updateLocation(
