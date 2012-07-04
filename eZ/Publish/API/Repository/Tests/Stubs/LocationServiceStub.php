@@ -807,7 +807,6 @@ class LocationServiceStub implements LocationService
     {
         if ( $newParentlocation )
         {
-            $location->contentInfo->__setMainLocationId( $newParentlocation->contentInfo->mainLocationId );
             $location->__setParentLocationId( $newParentlocation->id );
         }
 
@@ -816,6 +815,13 @@ class LocationServiceStub implements LocationService
         $this->locations[$location->parentLocationId]->__setChildCount(
             $this->locations[$location->parentLocationId]->childCount + 1
         );
+
+        // If the main location of the restored content is also trashed /
+        // deleted
+        if ( !isset( $this->locations[$location->getContentInfo()->mainLocationId] ) )
+        {
+            $location->getContentInfo()->__setMainLocationId( $location->id );
+        }
 
         $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
 

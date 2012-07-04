@@ -267,31 +267,45 @@ class TrashServiceTest extends BaseTrashServiceTest
      * @see \eZ\Publish\API\Repository\TrashService::recover()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
      */
-    public function testRecoverRestoresChildLocationsInMainStorage()
+    public function testRecoverDoesNotRestoreChildLocations()
     {
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        /* BEGIN: Use Case */
         $remoteIds = $this->createRemoteIdList();
+
+        // Unset remote ID of actually restored location
+        unset( $remoteIds[array_search( '3f6d92f8044aed134f32153517850f5a', $remoteIds )] );
 
         $trashItem = $this->createTrashItem();
 
         $trashService->recover( $trashItem );
-
-        // All child locations will be available again
-        foreach ( $remoteIds as $remoteId )
-        {
-            $locationService->loadLocationByRemoteId( $remoteId );
-        }
-        /* END: Use Case */
 
         $this->assertGreaterThan(
             0,
             count( $remoteIds ),
             "There should be at least one 'Community' child location."
         );
+
+        // None of the child locations will be available again
+        foreach ( $remoteIds as $remoteId )
+        {
+            try
+            {
+                $locationService->loadLocationByRemoteId( $remoteId );
+                $this->fail(
+                    sprintf(
+                        'Location with remote ID "%s" unexpectedly restored.',
+                        $remoteId
+                    )
+                );
+            }
+            catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+            {
+                // All well
+            }
+        }
     }
 
     /**
@@ -325,8 +339,9 @@ class TrashServiceTest extends BaseTrashServiceTest
             array(
                 'remoteId' => $trashItem->remoteId,
                 'parentLocationId' => $homeLocationId,
-                'childCount' => $trashItem->childCount,
-                'depth' => $trashItem->depth,
+                // Not the full sub tree is restored
+                'childCount' => 0,
+                'depth' => $newParentLocation->depth + 1,
                 'hidden' => false,
                 'invisible' => $trashItem->invisible,
                 'pathString' => "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
@@ -345,28 +360,45 @@ class TrashServiceTest extends BaseTrashServiceTest
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter
      */
-    public function testRecoverWithLocationCreateStructParameterSetsNewMainLocationId()
+    public function testRecoverWithLocationParameterSetsNewMainLocationId()
     {
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
         $homeLocationId = $this->generateId( 'location', 2 );
+        $usersLocationRemoteId = '3f6d92f8044aed134f32153517850f5a';
         /* BEGIN: Use Case */
         // $homeLocationId is the ID of the "Home" location in an eZ Publish
         // demo installation
+        // $usersLocationRemoteId is the ID of the "Community" location in an eZ Publish
+        // demo installation
 
-        $trashItem = $this->createTrashItem();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
 
-        // Get the new parent location
-        $newParentLocation = $locationService->loadLocation( $homeLocationId );
+        // Load "Community" page location
+        $usersLocation = $locationService->loadLocationByRemoteId(
+            $usersLocationRemoteId
+        );
 
-        // Recover location with new location
-        $location = $trashService->recover( $trashItem, $newParentLocation );
+        // Create a seconf Location for the content
+        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
+        $newLocation = $locationService->createLocation(
+            $usersLocation->getContentInfo(),
+            $locationCreate
+        );
+
+        // Trash the both locations
+        $newTrashItem = $trashService->trash( $newLocation );
+        $usersTrashItem = $trashService->trash( $usersLocation );
+
+        // Recover thew ne Location, which now becomes the main location
+        $location = $trashService->recover( $newTrashItem );
         /* END: Use Case */
 
         $this->assertEquals(
-            $newParentLocation->getContentInfo()->mainLocationId,
+            $newLocation->id,
             $location->getContentInfo()->mainLocationId
         );
     }
@@ -439,7 +471,8 @@ class TrashServiceTest extends BaseTrashServiceTest
             $searchResult
         );
 
-        $this->assertEquals( 1, $searchResult->count );
+        // 23 trashed locations from the sub tree
+        $this->assertEquals( 23, $searchResult->count );
     }
 
     /**
@@ -515,8 +548,18 @@ class TrashServiceTest extends BaseTrashServiceTest
         $searchResult = $trashService->findTrashItems( $query );
         /* END: Use Case */
 
-        $this->assertEquals( 1, $searchResult->count );
-        $this->assertEquals( $supportLocationId, reset( $searchResult->items )->id );
+        $foundIds = array_map(
+            function ( $trashItem )
+            {
+                return $trashItem->id;
+            },
+            $searchResult->items
+        );
+
+        $this->assertEquals( 33, $searchResult->count );
+        $this->assertTrue(
+            array_search( $supportLocationId, $foundIds ) !== false
+        );
     }
 
     /**
