@@ -57,6 +57,7 @@ class LegacySolr extends Legacy
                 new Solr\Content\Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
                 new Solr\Content\Search\CriterionVisitor\Aggregate( array(
                     new Solr\Content\Search\CriterionVisitor\ContentIdIn(),
+                    new Solr\Content\Search\CriterionVisitor\LogicalAnd(),
                 ) ),
                 new Solr\Content\Search\FieldValueMapper\Aggregate( array(
                     new Solr\Content\Search\FieldValueMapper\StringMapper(),
