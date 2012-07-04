@@ -60,6 +60,7 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\LogicalAnd(),
                     new Solr\Content\Search\CriterionVisitor\LogicalOr(),
                     new Solr\Content\Search\CriterionVisitor\LogicalNot(),
+                    new Solr\Content\Search\CriterionVisitor\SubtreeIn(),
                 ) ),
                 new Solr\Content\Search\FieldValueMapper\Aggregate( array(
                     new Solr\Content\Search\FieldValueMapper\StringMapper(),
