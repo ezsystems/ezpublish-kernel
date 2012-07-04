@@ -187,9 +187,23 @@ function generateSectionFixture( array $fixture )
         $nextId = max( $nextId, $data['id'] );
     }
 
+    $assignedContents = array();
+
+    foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
+    {
+        $sectionId = (int) $data['section_id'];
+
+        if ( !isset( $assignedContents[$sectionId] ) )
+        {
+            $assignedContents[$sectionId] = array();
+        }
+        $assignedContents[$sectionId][(int) $data['id']] = true;
+    }
+
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Section', $sections ),
         generateMapping( $identifiers ),
+        generateMapping( $assignedContents ),
         $nextId
     );
 }

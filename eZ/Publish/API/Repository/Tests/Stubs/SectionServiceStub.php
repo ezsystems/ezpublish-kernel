@@ -307,6 +307,7 @@ class SectionServiceStub implements SectionService
         list(
             $this->sections,
             $this->identifiers,
+            $this->assignedContents,
             $this->nextId
         ) = $this->repository->loadFixture( 'Section' );
     }
