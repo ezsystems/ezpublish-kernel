@@ -35,14 +35,14 @@ class Query extends ValueObject
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause[]
      */
-    public $sortClauses;
+    public $sortClauses = array();
 
     /**
      * An array of facet builders
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[]
      */
-    public $facetBuilders;
+    public $facetBuilders = array();
 
     /**
      * Query offset
