@@ -191,6 +191,10 @@ class Native extends Gateway
                 'value' => $content->contentInfo->id,
             ) ),
             new DocumentField\StringField( array(
+                'name'  => 'type',
+                'value' => $content->contentInfo->contentTypeId,
+            ) ),
+            new DocumentField\StringField( array(
                 'name'  => 'version',
                 'value' => $content->versionInfo->versionNo,
             ) ),
