@@ -70,9 +70,11 @@ class LegacySolr extends Legacy
                 ) ),
                 new Solr\Content\Search\SortClauseVisitor\Aggregate( array(
                     new Solr\Content\Search\SortClauseVisitor\LocationPathString(),
+                    new Solr\Content\Search\SortClauseVisitor\LocationDepth(),
                 ) ),
                 new Solr\Content\Search\FieldValueMapper\Aggregate( array(
                     new Solr\Content\Search\FieldValueMapper\StringMapper(),
+                    new Solr\Content\Search\FieldValueMapper\IntegerMapper(),
                     new Solr\Content\Search\FieldValueMapper\DateMapper(),
                 ) ),
                 $persistenceHandler->contentHandler()

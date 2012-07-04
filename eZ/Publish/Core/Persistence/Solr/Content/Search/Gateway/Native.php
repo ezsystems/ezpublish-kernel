@@ -255,6 +255,16 @@ class Native extends Gateway
                     $content->locations
                 ),
             ) ),
+            new DocumentField\IntegerField( array(
+                'name'  => 'depth',
+                'value' => array_map(
+                    function ( $location )
+                    {
+                        return $location->depth;
+                    },
+                    $content->locations
+                ),
+            ) ),
             new DocumentField\StringField( array(
                 'name'  => 'location_parent',
                 'value' => array_map(
