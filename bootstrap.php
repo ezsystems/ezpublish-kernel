@@ -11,28 +11,43 @@
 
 
 use eZ\Publish\Core\Base\ClassLoader,
-    eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer;
+eZ\Publish\Core\Base\ConfigurationManager,
+eZ\Publish\Core\Base\ServiceContainer;
 
 // Setup autoloaders
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
-    die( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+    throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
 }
 
-require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
-$loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'] );
-if ( isset( $settings['base']['ClassLoader']['ClassMap'] ) )
-    $loader->registerClassMap( $settings['base']['ClassLoader']['ClassMap'] );
-spl_autoload_register( array( $loader, 'load' ) );
+// Generic composer autoloader
+$autoloadFile = __DIR__ . '/vendor/autoload.php';
+if ( !file_exists( $autoloadFile ) )
+    throw new \RuntimeException( 'Install dependencies with composer to run the test suites' );
+include $autoloadFile;
 
-// Zeta Components, if using ezcBase loader
-if ( isset( $settings['base']['ClassLoader']['ezcBase'] ) )
+// Autoloader for eZ Publish legacy
+if ( isset( $settings['base']['Legacy']['RootPath'] ) )
 {
-    require $settings['base']['ClassLoader']['ezcBase'];
-    spl_autoload_register( array( 'ezcBase', 'autoload' ) );
-}
+    require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
+    $legacyPath = $settings['base']['Legacy']['RootPath'];
+    $legacyClassMap = require $legacyPath . '/autoload/ezp_kernel.php';
+    array_walk(
+        $legacyClassMap,
+        function ( &$val ) use ( $legacyPath )
+        {
+            $val = "$legacyPath/$val";
+        }
+    );
 
+    $loader = new ClassLoader( array() );
+    $loader->registerClassMap( $legacyClassMap );
+    spl_autoload_register( array( $loader, 'load' ) );
+}
+else
+{
+    throw new \RuntimeException( 'Please define your eZ Publish legacy root path in config.php' );
+}
 
 $configManager = new ConfigurationManager(
     $settings,
@@ -57,8 +72,8 @@ $configManager->setGlobalDirs( $paths, 'modules' );*/
 $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
     array(
-        '$classLoader' => $loader,
-        '$configurationManager' => $configManager,
+         '$classLoader' => $loader,
+         '$configurationManager' => $configManager,
     )
 );
 
