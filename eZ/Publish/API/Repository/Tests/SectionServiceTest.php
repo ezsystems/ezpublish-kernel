@@ -471,19 +471,59 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
-     * Test for the assignSection() method.
+     * Test for the countAssignedContents() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::assignSection()
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
      */
-    public function testAssignSection()
+    public function testCountAssignedContents()
     {
         $repository = $this->getRepository();
+
+        $sectionService = $repository->getSectionService();
 
         $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
+
+        $standardSection = $sectionService->loadSection( $standardSectionId );
+
+        $numberOfAssignedContent = $sectionService->countAssignedContents(
+            $standardSection
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            147, // Taken from the fixture
+            $numberOfAssignedContent
+        );
+    }
+
+    /**
+     * Test for the assignSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::assignSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCountAssignedContents
+     */
+    public function testAssignSection()
+    {
+        $repository = $this->getRepository();
+        $sectionService = $repository->getSectionService();
+
+        $standardSectionId = $this->generateId( 'section', 1 );
+        $mediaSectionId = $this->generateId( 'section', 3 );
+
+        $beforeStandardCount = $sectionService->countAssignedContents(
+            $sectionService->loadSection( $standardSectionId )
+        );
+        $beforeMediaCount = $sectionService->countAssignedContents(
+            $sectionService->loadSection( $mediaSectionId )
+        );
+
+        /* BEGIN: Use Case */
+        // $mediaSectionId contains the ID of the "Media" section in a eZ
         // Publish demo installation.
 
         // RemoteId of the "Support" page of an eZ Publish demo installation
@@ -497,67 +537,24 @@ class SectionServiceTest extends BaseTest
             $supportRemoteId
         );
 
-        // Load the "Standard" section
-        $section = $sectionService->loadSection( $standardSectionId );
+        // Load the "Media" section
+        $section = $sectionService->loadSection( $mediaSectionId );
 
         // Assign Section to ContentInfo
         $sectionService->assignSection( $contentInfo, $section );
         /* END: Use Case */
 
-        // TODO: What to assert here? countAssignedContents() is not good, because that test depends on this test
         $this->assertEquals(
-            1,
-            $sectionService->countAssignedContents( $section )
+            $beforeStandardCount - 1,
+            $sectionService->countAssignedContents(
+                $sectionService->loadSection( $standardSectionId )
+            )
         );
-    }
-
-    /**
-     * Test for the countAssignedContents() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testAssignSection
-     */
-    public function testCountAssignedContents()
-    {
-        $repository = $this->getRepository();
-
-        $sectionService = $repository->getSectionService();
-        $assignedContents = $sectionService->countAssignedContents(
-            $sectionService->loadSection( $this->generateId( 'section', 1 ) )
-        );
-
-        $standardSectionId = $this->generateId( 'section', 1 );
-        /* BEGIN: Use Case */
-        // $standardSectionId contains the ID of the "Standard" section in a eZ
-        // Publish demo installation.
-
-        // Remote ids of the "Support" and the "Community" page of a eZ Publish
-        // demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
-        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
-
-        $contentService = $repository->getContentService();
-        $sectionService = $repository->getSectionService();
-
-        // Load "Support" and "Community" ContentInfo objects
-        $contentInfoSupport = $contentService->loadContentInfoByRemoteId(
-            $supportRemoteId
-        );
-        $contentInfoCommunity = $contentService->loadContentInfoByRemoteId(
-            $communityRemoteId
-        );
-
-        // Load standard section
-        $section = $sectionService->loadSection( $standardSectionId );
-
-        $sectionService->assignSection( $contentInfoSupport, $section );
-        $sectionService->assignSection( $contentInfoCommunity, $section );
-        /* END: Use Case */
-
         $this->assertEquals(
-            $assignedContents + 2,
-            $sectionService->countAssignedContents( $section )
+            $beforeMediaCount + 1,
+            $sectionService->countAssignedContents(
+                $sectionService->loadSection( $mediaSectionId )
+            )
         );
     }
 
