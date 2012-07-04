@@ -424,7 +424,8 @@ class LocationServiceStub implements LocationService
             {
                 if ( $a->priority == $b->priority )
                 {
-                    return 0;
+                    // Sort by ID for same priorities
+                    return ( $a->id < $b->id ) ? -1 : 1;
                 }
                 return ( $a->priority < $b->priority ) ? -1 : 1;
             }

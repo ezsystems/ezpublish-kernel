@@ -771,11 +771,11 @@ class LocationServiceTest extends BaseTest
         $this->assertEquals(
             array(
                 $this->generateId( 'location', 69 ),
-                $this->generateId( 'location', 153 ),
-                $this->generateId( 'location', 96 ),
-                $this->generateId( 'location', 107 ),
                 $this->generateId( 'location', 77 ),
                 $this->generateId( 'location', 86 ),
+                $this->generateId( 'location', 96 ),
+                $this->generateId( 'location', 107 ),
+                $this->generateId( 'location', 153 ),
                 $this->generateId( 'location', 156 ),
                 $this->generateId( 'location', 167 ),
                 $this->generateId( 'location', 190 ),
@@ -841,10 +841,10 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals(
             array(
+                $this->generateId( 'location', 86 ),
                 $this->generateId( 'location', 96 ),
                 $this->generateId( 'location', 107 ),
-                $this->generateId( 'location', 77 ),
-                $this->generateId( 'location', 86 ),
+                $this->generateId( 'location', 153 ),
                 $this->generateId( 'location', 156 ),
                 $this->generateId( 'location', 167 ),
                 $this->generateId( 'location', 190 ),
@@ -911,9 +911,9 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals(
             array(
+                $this->generateId( 'location', 86 ),
                 $this->generateId( 'location', 96 ),
                 $this->generateId( 'location', 107 ),
-                $this->generateId( 'location', 77 ),
             ),
             array_map(
                 function ( Location $location )
