@@ -555,12 +555,14 @@ class SearchServiceTest extends BaseTest
                 "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
             );
             // @TODO: Print result in a readable way here?
-            $this->markTestIncomplete( "No fixture available. Result recorded at $record" );
+            $this->markTestIncomplete( "No fixture available. Result recorded at $record." );
         }
 
         $this->assertEquals(
             include $fixture,
-            $result
+            $result,
+            "Search results do not match.",
+            .1 // Be quite generous regarding delat -- most important for scores
         );
     }
 
