@@ -143,7 +143,7 @@ class LocationServiceTest extends BaseTest
             array(
                 'priority' => $locationCreate->priority,
                 'hidden' => $locationCreate->hidden,
-                'invisible' => null,
+                'invisible' => $locationCreate->hidden,
                 'remoteId' => $locationCreate->remoteId,
                 'contentInfo' => $contentInfo,
                 'parentLocationId' => $locationCreate->parentLocationId,
