@@ -50,4 +50,3 @@ class Role extends ValueObjectVisitor
         $generator->endElement( 'Role' );
     }
 }
-

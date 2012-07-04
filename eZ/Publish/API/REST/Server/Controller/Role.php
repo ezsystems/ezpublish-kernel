@@ -139,6 +139,39 @@ class Role
     }
 
     /**
+     * Adds a policy to role
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     */
+    public function addPolicy( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policies', $request->path );
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $role = $this->roleService->addPolicy(
+            $this->roleService->loadRole( $values['role'] ),
+            $createStruct
+        );
+
+        $policies = $role->getPolicies();
+
+        $policyToReturn = $policies[0];
+        for ( $i = 1, $count = count( $policies ); $i < $count; $i++ )
+        {
+            if ( $policies[$i]->id > $policyToReturn->id )
+                $policyToReturn = $policies[$i];
+        }
+
+        return $policyToReturn;
+    }
+
+    /**
      * Maps a RoleCreateStruct to a RoleUpdateStruct.
      *
      * Needed since both structs are encoded into the same media type on input.

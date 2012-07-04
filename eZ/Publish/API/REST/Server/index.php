@@ -74,6 +74,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.RoleInput'     => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
         'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler ),
         'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
+        'application/vnd.ez.api.PolicyCreate'  => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
     ) ),
     $handler
 );
@@ -132,6 +133,8 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\RoleList'              => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
     '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'              => new Output\ValueObjectVisitor\Role( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'            => new Output\ValueObjectVisitor\Policy( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'        => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
 );
 
 /*
@@ -180,6 +183,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/roles/[0-9]+$)' => array(
             'GET'    => array( $roleController, 'loadRole' ),
             'PATCH'  => array( $roleController, 'updateRole' ),
+        ),
+        '(^/user/roles/[0-9]+/policies$)' => array(
+            'PATCH'  => array( $roleController, 'addPolicy' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
@@ -237,4 +243,3 @@ if ( $sessionFile )
 {
     file_put_contents( $sessionFile, serialize( $repository ) );
 }
-

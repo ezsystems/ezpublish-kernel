@@ -12,13 +12,16 @@ namespace eZ\Publish\API\REST\Client;
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use \eZ\Publish\API\Repository\Values\User\Policy;
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\Role;
+use \eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
+
+use \eZ\Publish\API\REST\Client\Values\User\PolicyCreateStruct;
+use \eZ\Publish\API\REST\Client\Values\User\Role;
 
 use \eZ\Publish\API\REST\Common\UrlHandler;
 use \eZ\Publish\API\REST\Common\Input;
@@ -127,7 +130,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct )
+    public function updateRole( APIRole $role, RoleUpdateStruct $roleUpdateStruct )
     {
         $inputMessage = $this->outputVisitor->visit( $roleUpdateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Role' );
@@ -152,9 +155,33 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct )
+    public function addPolicy( APIRole $role, APIPolicyCreateStruct $policyCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $policyCreateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        $result = $this->client->request(
+            'POST',
+            $role->id . '/policies',
+            $inputMessage
+        );
+
+        $createdPolicy = $this->inputDispatcher->parse( $result );
+
+        $existingPolicies = $role->getPolicies();
+        $existingPolicies[] = $createdPolicy;
+
+        return new Role(
+            array(
+                'id' => $role->id,
+                'identifier' => $role->identifier,
+                'mainLanguageCode' => $role->mainLanguageCode,
+                'names' => $role->getNames(),
+                'descriptions' => $role->getDescriptions(),
+            ),
+            $existingPolicies
+        );
     }
 
     /**
@@ -167,7 +194,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
      */
-    public function removePolicy( Role $role, Policy $policy )
+    public function removePolicy( APIRole $role, Policy $policy )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -261,7 +288,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      */
-    public function deleteRole( Role $role )
+    public function deleteRole( APIRole $role )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -289,7 +316,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUserGroup( Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
+    public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -303,7 +330,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      */
-    public function unassignRoleFromUserGroup( Role $role, UserGroup $userGroup )
+    public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -319,7 +346,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUser( Role $role, User $user, RoleLimitation $roleLimitation = null )
+    public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -333,7 +360,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function unassignRoleFromUser( Role $role, User $user )
+    public function unassignRoleFromUser( APIRole $role, User $user )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -347,7 +374,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link RoleAssignment}
      */
-    public function getRoleAssignments( Role $role )
+    public function getRoleAssignments( APIRole $role )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -402,7 +429,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function newPolicyCreateStruct( $module, $function )
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new PolicyCreateStruct( $module, $function );
     }
 
     /**

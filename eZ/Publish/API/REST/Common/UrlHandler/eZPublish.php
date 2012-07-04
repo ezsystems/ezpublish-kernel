@@ -67,7 +67,7 @@ class eZPublish extends Pattern
         'role'                => '/user/roles/{role}',
         'roleByIdentifier'    => '/user/roles?identifier={role}',
         'policies'            => '/user/roles/{role}/policies',
-        ''                    => '/user/roles/{role}/policies/{policy}',
+        'policy'              => '/user/roles/{role}/policies/{policy}',
         ''                    => '/user/users',
         'user'                => '/user/users/{user}',
         ''                    => '/user/users/{user}/drafts',

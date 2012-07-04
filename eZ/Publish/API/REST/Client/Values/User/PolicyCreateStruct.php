@@ -20,6 +20,13 @@ use \eZ\Publish\API\Repository\Values\User\Limitation;
 class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
 {
     /**
+     * List of limitations added to policy
+     *
+     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    protected $limitations = array();
+
+    /**
      * Instantiates a policy create struct.
      *
      * @param string $module
@@ -42,7 +49,7 @@ class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCr
      */
     public function getLimitations()
     {
-        // TODO: Implement getLimitations() method.
+        return $this->limitations;
     }
 
     /**
@@ -53,7 +60,8 @@ class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCr
      */
     public function addLimitation( Limitation $limitation )
     {
-        // TODO: Implement addLimitation() method.
+        $limitationIdentifier = $limitation->getIdentifier();
+        $this->limitations[$limitationIdentifier] = $limitation;
     }
 
 }
