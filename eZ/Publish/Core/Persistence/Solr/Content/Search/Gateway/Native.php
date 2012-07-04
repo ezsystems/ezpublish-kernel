@@ -199,8 +199,20 @@ class Native extends Gateway
                 'value' => $content->versionInfo->versionNo,
             ) ),
             new DocumentField\StringField( array(
+                'name'  => 'status',
+                'value' => $content->versionInfo->status,
+            ) ),
+            new DocumentField\StringField( array(
                 'name'  => 'name',
                 'value' => $content->contentInfo->name,
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'section',
+                'value' => $content->contentInfo->sectionId,
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'remote_id',
+                'value' => $content->contentInfo->remoteId,
             ) ),
             new DocumentField\DateField( array(
                 'name'  => 'modified',
@@ -216,6 +228,26 @@ class Native extends Gateway
                     function ( $location )
                     {
                         return $location->pathString;
+                    },
+                    $content->locations
+                ),
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'location_parent',
+                'value' => array_map(
+                    function ( $location )
+                    {
+                        return $location->parentId;
+                    },
+                    $content->locations
+                ),
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'location_remote_id',
+                'value' => array_map(
+                    function ( $location )
+                    {
+                        return $location->remoteId;
                     },
                     $content->locations
                 ),
