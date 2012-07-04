@@ -110,7 +110,6 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::trash()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
      */
     public function testTrashRemovesChildLocationsFromMainStorage()
@@ -134,9 +133,9 @@ class TrashServiceTest extends BaseTrashServiceTest
                 $locationService->loadLocationByRemoteId( $remoteId );
                 $this->fail( "Location '{$remoteId}' should exist.'" );
             }
-            catch ( \eZ\Publish\Core\Base\Exceptions\NotFoundException $e )
+            catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
             {
-                echo $e->getFile(), ' +', $e->getLine(), PHP_EOL;
+                // echo $e->getFile(), ' +', $e->getLine(), PHP_EOL;
             }
         }
 
