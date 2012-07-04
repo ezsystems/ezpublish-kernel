@@ -63,6 +63,7 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\SubtreeIn(),
                     new Solr\Content\Search\CriterionVisitor\ContentTypeIdIn(),
                     new Solr\Content\Search\CriterionVisitor\LocationIdIn(),
+                    new Solr\Content\Search\CriterionVisitor\ParentLocationIdIn(),
                     new Solr\Content\Search\CriterionVisitor\SectionIn(),
                     new Solr\Content\Search\CriterionVisitor\RemoteIdIn(),
                     new Solr\Content\Search\CriterionVisitor\LocationRemoteIdIn(),
