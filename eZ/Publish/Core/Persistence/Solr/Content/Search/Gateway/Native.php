@@ -11,8 +11,13 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler,
     eZ\Publish\SPI\Persistence\Content\Search\DocumentField,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
     eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 /**
@@ -29,11 +34,25 @@ class Native extends Gateway
     protected $client;
 
     /**
+     * Query visitor
+     *
+     * @var CriterionVisitor
+     */
+    protected $criterionVisitor;
+
+    /**
      * Field valu mapper
      *
      * @var FieldValueMapper
      */
     protected $fieldValueMapper;
+
+    /**
+     * Content Handler
+     *
+     * @var ContentHandler
+     */
+    protected $contentHandler;
 
     /**
      * Simple mapping for our internal field types
@@ -63,10 +82,54 @@ class Native extends Gateway
      * @param HttpClient $client
      * @return void
      */
-    public function __construct( HttpClient $client, FieldValueMapper $fieldValueMapper )
+    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler )
     {
         $this->client           = $client;
+        $this->criterionVisitor = $criterionVisitor;
         $this->fieldValueMapper = $fieldValueMapper;
+        $this->contentHandler   = $contentHandler;
+    }
+
+     /**
+     * finds content objects for the given query.
+     *
+     * @TODO define structs for the field filters
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    public function findContent( Query $query, array $fieldFilters = array() )
+    {
+        $response = $this->client->request(
+            'GET',
+            '/solr/select?' . http_build_query( array(
+                'q'  => $this->criterionVisitor->visit( $query->criterion ),
+                'fl' => '*,score',
+                'wt' => 'json',
+            ) )
+        );
+        // @TODO: Error handling?
+        $data = json_decode( $response->body );
+
+        $result = new SearchResult( array(
+            'time'       => $data->responseHeader->QTime / 1000,
+            'maxScore'   => $data->response->maxScore,
+            'totalCount' => $data->response->numFound,
+        ) );
+
+        foreach ( $data->response->docs as $doc )
+        {
+            $searchHit = new SearchHit( array(
+                'score'       => $doc->score,
+                'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_s )
+            ) );
+            $result->searchHits[] = $searchHit;
+        }
+
+        return $result;
     }
 
     /**
@@ -128,6 +191,10 @@ class Native extends Gateway
                 'value' => $content->contentInfo->id,
             ) ),
             new DocumentField\StringField( array(
+                'name'  => 'version',
+                'value' => $content->versionInfo->versionNo,
+            ) ),
+            new DocumentField\StringField( array(
                 'name'  => 'name',
                 'value' => $content->contentInfo->name,
             ) ),
@@ -150,6 +217,8 @@ class Native extends Gateway
                 ),
             ) ),
         );
+
+        // @TODO: Handle fields
     }
 
     /**

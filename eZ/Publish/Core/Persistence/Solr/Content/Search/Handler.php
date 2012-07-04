@@ -91,9 +91,7 @@ class Handler extends BaseSearchHandler
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
-        $result = new SearchResult();
-
-        return $result;
+        return $this->gateway->findContent( $query, $fieldFilters );
     }
 
     /**

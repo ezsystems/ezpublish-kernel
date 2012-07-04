@@ -55,10 +55,14 @@ class LegacySolr extends Legacy
         $searchHandler = new Solr\Content\Search\Handler(
             new Solr\Content\Search\Gateway\Native(
                 new Solr\Content\Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
+                new Solr\Content\Search\CriterionVisitor\Aggregate( array(
+                    new Solr\Content\Search\CriterionVisitor\ContentIdIn(),
+                ) ),
                 new Solr\Content\Search\FieldValueMapper\Aggregate( array(
                     new Solr\Content\Search\FieldValueMapper\StringMapper(),
                     new Solr\Content\Search\FieldValueMapper\DateMapper(),
-                ) )
+                ) ),
+                $persistenceHandler->contentHandler()
             ),
             $contentMapperMethod->invoke( $persistenceHandler ),
             $fieldHandlerMethod->invoke( $persistenceHandler )
