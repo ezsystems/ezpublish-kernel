@@ -438,7 +438,7 @@ function generateLocationFixture( array $fixture )
             ) ),
             'parentLocationId' => $data['parent_node_id'],
             'pathString' => $data['path_string'],
-            'modifiedSubLocationDate' => $data['modified_subnode'],
+            'modifiedSubLocationDate' => 'new \\DateTime( "@' . $data['modified_subnode'] . '" )',
             'depth' => $data['depth'],
             'sortField' => $data['sort_field'],
             'sortOrder' => $data['sort_order'],
