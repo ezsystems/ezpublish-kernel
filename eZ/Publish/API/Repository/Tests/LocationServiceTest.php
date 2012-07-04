@@ -21,6 +21,8 @@ use \eZ\Publish\API\Repository\Exceptions;
  *
  * @see eZ\Publish\API\Repository\LocationService
  * @group location
+ *
+ * @TODO: Tests for Location::$modifiedSubLocationDate property behavior.
  */
 class LocationServiceTest extends BaseTest
 {
@@ -148,7 +150,6 @@ class LocationServiceTest extends BaseTest
                 'contentInfo' => $contentInfo,
                 'parentLocationId' => $locationCreate->parentLocationId,
                 'pathString' => '/1/5/' . $this->parseId( 'location', $createdLocation->id ) . '/',
-                'modifiedSubLocationDate' => null, // TODO: Should be DateTime
                 'depth' => 2,
                 'childCount' => 0,
                 'sortField' => $locationCreate->sortField,
@@ -158,6 +159,7 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertNotNull( $createdLocation->id );
+        $this->assertInstanceOf( 'DateTime', $createdLocation->modifiedSubLocationDate );
     }
 
     /**
@@ -370,7 +372,7 @@ class LocationServiceTest extends BaseTest
                 'remoteId' => '3f6d92f8044aed134f32153517850f5a',
                 'parentLocationId' => $this->generateId( 'location', 1 ),
                 'pathString' => '/1/5/',
-                'modifiedSubLocationDate' => 1311154216,
+                'modifiedSubLocationDate' => new \DateTime( "@1311154216" ),
                 'depth' => 1,
                 'sortField' => 1,
                 'sortOrder' => 1,
@@ -1012,7 +1014,6 @@ class LocationServiceTest extends BaseTest
                 'contentInfo' => $originalLocation->contentInfo,
                 'parentLocationId' => $originalLocation->parentLocationId,
                 'pathString' => $originalLocation->pathString,
-                'modifiedSubLocationDate' => $originalLocation->modifiedSubLocationDate,
                 'depth' => $originalLocation->depth,
                 'sortField' => $updateStruct->sortField,
                 'sortOrder' => $updateStruct->sortOrder,
@@ -1020,6 +1021,8 @@ class LocationServiceTest extends BaseTest
             ),
             $updatedLocation
         );
+
+        $this->assertInstanceOf( 'DateTime', $updatedLocation->modifiedSubLocationDate );
     }
 
     /**
