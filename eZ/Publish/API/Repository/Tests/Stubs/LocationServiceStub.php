@@ -451,11 +451,13 @@ class LocationServiceStub implements LocationService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $parentLocation1 = $this->loadLocation( $location1->parentLocationId );
-        $parentLocation2 = $this->loadLocation( $location2->parentLocationId );
+        // Although the method is named swapLocation(), this method should
+        // actually swap the content nodes. This is intentionally.
+        $contentInfo1 = $location1->getContentInfo();
+        $contentInfo2 = $location2->getContentInfo();
 
-        $this->moveSubtree( $location1, $parentLocation2 );
-        $this->moveSubtree( $location2, $parentLocation1 );
+        $location1->__setContentInfo( $contentInfo2 );
+        $location2->__setContentInfo( $contentInfo1 );
     }
 
     /**

@@ -210,14 +210,11 @@ class LocationServiceAuthorizationTest extends BaseTest
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        // Load first child of the "Community" location
-        $locationLeft = $locationService->loadLocationChildren(
-            $locationService->loadLocation( $communityLocationId ), 0, 1
-        );
-        $locationLeft = reset( $locationLeft );
+        $communityLocation = $locationService->loadLocation( $communityLocationId );
+        $supportLocation = $locationService->loadLocation( $supportLocationId );
 
-        // Load "Support" location
-        $locationRight = $locationService->loadLocation( $supportLocationId );
+        // Swaps the content referred to by the locations
+        $locationService->swapLocation( $communityLocation, $supportLocation );
 
         $user = $this->createMediaUserVersion1();
 
@@ -225,7 +222,7 @@ class LocationServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $user );
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->swapLocation( $locationLeft, $locationRight );
+        $locationService->swapLocation( $communityLocation, $supportLocation );
         /* END: Use Case */
     }
 

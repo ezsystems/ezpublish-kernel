@@ -1065,9 +1065,14 @@ class LocationServiceTest extends BaseTest
     public function testSwapLocation()
     {
         $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
 
         $communityLocationId = $this->generateId( 'location', 167 );
         $supportLocationId = $this->generateId( 'location', 96 );
+
+        $communityContentInfo = $locationService->loadLocation( $communityLocationId )->getContentInfo();
+        $supportContentInfo = $locationService->loadLocation( $supportLocationId )->getContentInfo();
+
         /* BEGIN: Use Case */
         // $communityLocationId is the ID of the "Community" page location in
         // an eZ Publish demo installation
@@ -1078,119 +1083,20 @@ class LocationServiceTest extends BaseTest
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        // Load first child of the "Community" location
-        $locationLeft = $locationService->loadLocationChildren(
-            $locationService->loadLocation( $communityLocationId ), 0, 1
-        );
-        $locationLeft = reset( $locationLeft );
+        $communityLocation = $locationService->loadLocation( $communityLocationId );
+        $supportLocation = $locationService->loadLocation( $supportLocationId );
 
-        // Load "Support" location
-        $locationRight = $locationService->loadLocation( $supportLocationId );
-
-        // Swap both locations
-        $locationService->swapLocation( $locationLeft, $locationRight );
-
-        // Reload the swapped locations
-        $locationLeftReloaded = $locationService->loadLocation( $locationLeft->id );
-        $locationRightReloaded = $locationService->loadLocation( $locationRight->id );
-        /* END: Use Case */
-
-        $pathStringLeft = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
-        $pathStringRight = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationRight->pathString );
-
-        $this->assertPropertiesCorrect(
-            array(
-                'depth' => $locationLeft->depth,
-                'parentLocationId' => $locationLeft->parentLocationId,
-                'pathString' => "{$pathStringLeft}" . $this->parseId( 'location', $locationRight->id ) . "/"
-            ),
-            $locationRightReloaded
-        );
-
-        $this->assertPropertiesCorrect(
-            array(
-                'depth' => $locationRight->depth,
-                'parentLocationId' => $locationRight->parentLocationId,
-                'pathString' => "{$pathStringRight}" . $this->parseId( 'location', $locationLeft->id ) . "/"
-            ),
-            $locationLeftReloaded
-        );
-    }
-
-    /**
-     * Test for the swapLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
-     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testSwapLocation
-     */
-    public function testSwapLocationUpdatesSubtreeProperties()
-    {
-        $repository = $this->getRepository();
-
-        $locationService = $repository->getLocationService();
-
-        $locationId = $this->generateId( 'location', 167 );
-        $secondLocationId = $this->generateId( 'location', 96 );
-        // Load first child of the "Community" location
-        $locationLeft = $locationService->loadLocationChildren(
-            $locationService->loadLocation( $locationId ), 0, 1
-        );
-        $locationLeft = reset( $locationLeft );
-
-        // Load "Support" location
-        $locationRight = $locationService->loadLocation( $secondLocationId );
-
-        $pathStringLeft = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationLeft->pathString );
-        $pathStringRight = preg_replace( '(^(.*/)\d+/$)', '\\1', $locationRight->pathString );
-
-        $expectedLeft = $this->loadSubtreeProperties( $locationLeft );
-        foreach ( $expectedLeft as $i => $properties )
-        {
-            $expectedLeft[$i]['depth']      -= 1;
-            $expectedLeft[$i]['pathString'] = str_replace( $pathStringLeft, $pathStringRight, $properties['pathString'] );
-        }
-
-        $expectedRight = $this->loadSubtreeProperties( $locationRight );
-        foreach ( $expectedRight as $i => $properties )
-        {
-            $expectedRight[$i]['depth']      += 1;
-            $expectedRight[$i]['pathString'] = str_replace( $pathStringRight, $pathStringLeft, $properties['pathString'] );
-        }
-
-        $communityLocationId = $this->generateId(  'location', 167 );
-        $supportLocationId = $this->generateId( 'location', 96 );
-        /* BEGIN: Use Case */
-        // $communityLocationId is the ID of the "Community" page location in
-        // an eZ Publish demo installation
-
-        // $supportLocationId is the ID of the "Support" page location in an eZ
-        // Publish demo installation
-
-        // Load the location service
-        $locationService = $repository->getLocationService();
-
-        // Load first child of the "Community" location
-        $locationLeft = $locationService->loadLocationChildren(
-            $locationService->loadLocation( $communityLocationId ), 0, 1
-        );
-        $locationLeft = reset( $locationLeft );
-
-        // Load "Support" location
-        $locationRight = $locationService->loadLocation( $supportLocationId );
-
-        // Swap both locations
-        $locationService->swapLocation( $locationLeft, $locationRight );
+        // Swaps the content referred to by the locations
+        $locationService->swapLocation( $communityLocation, $supportLocation );
         /* END: Use Case */
 
         $this->assertEquals(
-            $expectedLeft,
-            $this->loadSubtreeProperties( $locationLeft )
+            $communityContentInfo,
+            $locationService->loadLocation( $supportLocationId )->getContentInfo()
         );
-
         $this->assertEquals(
-            $expectedRight,
-            $this->loadSubtreeProperties( $locationRight )
+            $supportContentInfo,
+            $locationService->loadLocation( $communityLocationId )->getContentInfo()
         );
     }
 
