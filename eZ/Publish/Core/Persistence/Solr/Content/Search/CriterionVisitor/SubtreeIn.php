@@ -46,7 +46,7 @@ class SubtreeIn extends CriterionVisitor
                 array_map(
                     function( $value )
                     {
-                        return 'location_s:' . $value . '*';
+                        return 'path_s:' . $value . '*';
                     },
                     $criterion->value
                 )

@@ -223,11 +223,21 @@ class Native extends Gateway
                 'value' => $content->contentInfo->publicationDate,
             ) ),
             new DocumentField\StringField( array(
-                'name'  => 'location',
+                'name'  => 'path',
                 'value' => array_map(
                     function ( $location )
                     {
                         return $location->pathString;
+                    },
+                    $content->locations
+                ),
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'location',
+                'value' => array_map(
+                    function ( $location )
+                    {
+                        return $location->id;
                     },
                     $content->locations
                 ),
