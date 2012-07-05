@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\ValueObject,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * This class is used to perform a query
