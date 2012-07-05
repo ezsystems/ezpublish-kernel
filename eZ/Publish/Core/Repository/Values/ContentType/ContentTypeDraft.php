@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentT
 class ContentTypeDraft extends APIContentTypeDraft
 {
     /**
-     * Magic getter for ruting get's to innerContentType
+     * Magic getter for routing get calls to innerContentType
      *
      * @param string $property The name of the property to retrieve
      *
@@ -30,7 +30,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * Magic set for ruting set calls to innerContentType
+     * Magic set for routing set calls to innerContentType
      *
      * @param string $property
      * @param mixed $propertyValue
@@ -41,7 +41,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * Magic isset for ruting isset calls to innerContentType
+     * Magic isset for routing isset calls to innerContentType
      *
      * @param string $property
      *
@@ -132,13 +132,25 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     *
      * this method returns the field definition for the given identifier
+     *
      * @param string $fieldDefinitionIdentifier
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
         return $this->innerContentType->getFieldDefinition( $fieldDefinitionIdentifier );
+    }
+
+    /**
+     * this method returns the field definition for the given id
+     *
+     * @param mixed $fieldDefinitionId
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     */
+    public function getFieldDefinitionById( $fieldDefinitionId )
+    {
+        return $this->innerContentType->getFieldDefinition( $fieldDefinitionId );
     }
 }

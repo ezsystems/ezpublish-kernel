@@ -79,7 +79,6 @@ class Content extends APIContent
      * @param string $languageCode
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
-     * @todo should an exception be thrown here if nothing is found?
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {

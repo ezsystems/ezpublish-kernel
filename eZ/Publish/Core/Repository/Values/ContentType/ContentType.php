@@ -67,14 +67,14 @@ class ContentType extends APIContentType
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    private $fieldDefinitionsByIdentifier;
+    protected $fieldDefinitionsByIdentifier;
 
     /**
      * Field definitions indexed by id
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    private $fieldDefinitionsById;
+    protected $fieldDefinitionsById;
 
     function __construct( array $data = array() )
     {
@@ -113,7 +113,7 @@ class ContentType extends APIContentType
      */
     public function getName( $languageCode )
     {
-        if ( array_key_exists( $languageCode, $this->names ) )
+        if ( isset( $this->names[$languageCode] ) )
         {
             return $this->names[$languageCode];
         }
@@ -144,7 +144,7 @@ class ContentType extends APIContentType
      */
     public function getDescription( $languageCode )
     {
-        if ( array_key_exists( $languageCode, $this->descriptions ) )
+        if ( isset( $languageCode, $this->descriptions ) )
         {
             return $this->descriptions[$languageCode];
         }
@@ -180,7 +180,7 @@ class ContentType extends APIContentType
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
-        if ( array_key_exists( $fieldDefinitionIdentifier, $this->fieldDefinitionsByIdentifier ) )
+        if ( isset( $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier] ) )
         {
             return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
         }
@@ -196,7 +196,7 @@ class ContentType extends APIContentType
      */
     public function getFieldDefinitionById( $fieldDefinitionId )
     {
-        if ( array_key_exists( $fieldDefinitionId, $this->fieldDefinitionsById ) )
+        if ( isset( $this->fieldDefinitionsById[$fieldDefinitionId] ) )
         {
             return $this->fieldDefinitionsById[$fieldDefinitionId];
         }
