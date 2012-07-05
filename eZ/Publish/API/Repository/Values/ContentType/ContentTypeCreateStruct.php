@@ -108,7 +108,6 @@ abstract class ContentTypeCreateStruct extends ValueObject
      */
     public $descriptions;
 
-
     /**
      * adds a new field definition
      *
