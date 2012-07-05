@@ -14,7 +14,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
     eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
- * Visits the LocationId facetBuilder
+ * Visits the ContentType facet builder
  */
 class ContentType extends FacetBuilderVisitor
 {
@@ -45,7 +45,7 @@ class ContentType extends FacetBuilderVisitor
     }
 
     /**
-     * CHeck if visitor is applicable to current facetBuilder
+     * Check if visitor is applicable to current facet builder
      *
      * @param FacetBuilder $facetBuilder
      * @return bool
