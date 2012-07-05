@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
     eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
+    eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
     eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 /**
@@ -47,6 +48,13 @@ class Native extends Gateway
      * @var SortClauseVisitor
      */
     protected $sortClauseVisitor;
+
+    /**
+     * Facet builder visitor
+     *
+     * @var FacetBuilderVisitor
+     */
+    protected $facetBuilderVisitor;
 
     /**
      * Field valu mapper
@@ -88,15 +96,21 @@ class Native extends Gateway
      * Construct from HTTP client
      *
      * @param HttpClient $client
+     * @param CriterionVisitor $criterionVisitor
+     * @param SortClauseVisitor $sortClauseVisitor
+     * @param FacetBuilderVisitor $facetBuilderVisitor
+     * @param FieldValueMapper $fieldValueMapper
+     * @param ContentHandler $contentHandler
      * @return void
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler )
+    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler )
     {
-        $this->client            = $client;
-        $this->criterionVisitor  = $criterionVisitor;
-        $this->sortClauseVisitor = $sortClauseVisitor;
-        $this->fieldValueMapper  = $fieldValueMapper;
-        $this->contentHandler    = $contentHandler;
+        $this->client              = $client;
+        $this->criterionVisitor    = $criterionVisitor;
+        $this->sortClauseVisitor   = $sortClauseVisitor;
+        $this->facetBuilderVisitor = $facetBuilderVisitor;
+        $this->fieldValueMapper    = $fieldValueMapper;
+        $this->contentHandler      = $contentHandler;
     }
 
      /**
@@ -114,15 +128,21 @@ class Native extends Gateway
     {
         $response = $this->client->request(
             'GET',
-            '/solr/select?' . http_build_query( array(
-                'q'    => $this->criterionVisitor->visit( $query->criterion ),
-                'sort' => implode( ', ', array_map(
-                    array( $this->sortClauseVisitor, 'visit' ),
-                    $query->sortClauses
-                ) ),
-                'fl'   => '*,score',
-                'wt'   => 'json',
-            ) )
+            '/solr/select?' .
+                http_build_query( array(
+                    'q'    => $this->criterionVisitor->visit( $query->criterion ),
+                    'sort' => implode( ', ', array_map(
+                        array( $this->sortClauseVisitor, 'visit' ),
+                        $query->sortClauses
+                    ) ),
+                    'fl'   => '*,score',
+                    'wt'   => 'json',
+                ) ) .
+                ( count( $query->facetBuilders ) ? '&facet=true' : '' ) .
+                implode( '', array_map(
+                    array( $this->facetBuilderVisitor, 'visit' ),
+                    $query->facetBuilders
+                ) )
         );
         // @TODO: Error handling?
         $data = json_decode( $response->body );
@@ -140,6 +160,14 @@ class Native extends Gateway
                 'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_s )
             ) );
             $result->searchHits[] = $searchHit;
+        }
+
+        if ( isset( $data->facet_counts ) )
+        {
+            foreach ( $data->facet_counts->facet_fields as $field => $facet )
+            {
+                $result->facets[] = $this->facetBuilderVisitor->map( $field, $facet );
+            }
         }
 
         return $result;
