@@ -389,6 +389,32 @@ class SearchServiceTest extends BaseTest
                     'offset'      => 0,
                     'limit'       => 10,
                     'facetBuilders' => array(
+                        new FacetBuilder\ContentTypeFacetBuilder( array(
+                            'minCount' => 10,
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetContentTypeMinCount.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
+                        new FacetBuilder\ContentTypeFacetBuilder( array(
+                            'limit' => 5,
+                        ) )
+                    ),
+                ) ),
+                $fixtureDir . '/FacetContentTypeMinLimit.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'offset'      => 0,
+                    'limit'       => 10,
+                    'facetBuilders' => array(
                         new FacetBuilder\SectionFacetBuilder()
                     ),
                 ) ),

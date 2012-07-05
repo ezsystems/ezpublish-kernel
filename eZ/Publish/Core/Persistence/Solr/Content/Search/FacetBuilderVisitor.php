@@ -48,5 +48,24 @@ abstract class FacetBuilderVisitor
      * @return void
      */
     abstract public function visit( FacetBuilder $facetBuilder );
+
+    /**
+     * Map Solr return array into a sane hash map
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function mapData( array $data )
+    {
+        $values = array();
+        reset( $data );
+        while ( $key = current( $data ) )
+        {
+            $values[$key] = next( $data );
+            next( $data );
+        }
+
+        return $values;
+    }
 }
 

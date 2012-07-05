@@ -38,11 +38,9 @@ class ContentType extends FacetBuilderVisitor
      */
     public function map( $field, array $data )
     {
-        $data = array_filter( array_map( 'intval', $data ) );
-        arsort( $data );
         return new Facet\ContentTypeFacet( array(
             'name'    => 'type',
-            'entries' => $data,
+            'entries' => $this->mapData( $data ),
         ) );
     }
 
@@ -65,10 +63,10 @@ class ContentType extends FacetBuilderVisitor
      */
     public function visit( FacetBuilder $facetBuilder )
     {
-        return '&' . http_build_query( array(
-            'facet.field'           => 'type_s',
-            'facet.type_s.limit'    => $facetBuilder->limit,
-            'facet.type_s.mincount' => $facetBuilder->minCount,
+        return http_build_query( array(
+            'facet.field'             => 'type_s',
+            'f.type_s.facet.limit'    => $facetBuilder->limit,
+            'f.type_s.facet.mincount' => $facetBuilder->minCount,
         ) );
     }
 }

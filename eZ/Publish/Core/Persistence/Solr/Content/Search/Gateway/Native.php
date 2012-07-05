@@ -138,8 +138,8 @@ class Native extends Gateway
                     'fl'   => '*,score',
                     'wt'   => 'json',
                 ) ) .
-                ( count( $query->facetBuilders ) ? '&facet=true' : '' ) .
-                implode( '', array_map(
+                ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
+                implode( '&', array_map(
                     array( $this->facetBuilderVisitor, 'visit' ),
                     $query->facetBuilders
                 ) )
