@@ -332,6 +332,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
+                    // @TODO: Refactore out of here for clarity!
                     $this->pseudoExternalStorage->handleLoad(
                         $fieldDefinition,
                         $field,
