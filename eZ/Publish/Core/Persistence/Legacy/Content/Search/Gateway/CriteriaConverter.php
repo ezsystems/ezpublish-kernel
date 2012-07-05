@@ -20,14 +20,14 @@ class CriteriaConverter
     /**
      * Criterion handlers
      *
-     * @var array(CriterionHandler)
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler[]
      */
     protected $handler;
 
     /**
      * Construct from an optional array of Criterion handlers
      *
-     * @param array $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler[] $handler
      * @return void
      */
     public function __construct( array $handler )
