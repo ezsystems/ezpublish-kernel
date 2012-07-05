@@ -168,14 +168,15 @@ class MapperTest extends TestCase
             $content,
             1,
             $content->fields,
-            $content->versionInfo->initialLanguageCode
+            $content->versionInfo->initialLanguageCode,
+            14
         );
 
         $this->assertPropertiesCorrect(
             array(
                 'id' => null,
                 'versionNo' => 1,
-                'creatorId' => 13,
+                'creatorId' => 14,
                 'status' => 0,
                 'contentId' => 2342,
                 'initialLanguageCode' => 'eng-GB',
