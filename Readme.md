@@ -25,6 +25,10 @@ The API is still very much work in progress, and so is documentation, hence why 
 * [eZ/Publish/Core/IO/LegacyHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *Legacy Io (file) Handler*
 * [eZ/Publish/Core/IO/InMemoryHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *InMemory Io handler (for unit testing)*
 
+* [eZ/Publish/MVC](/ezsystems/ezp-next/tree/master/eZ/Publish/MVC/)  *MVC components that integrate with Symfony*
+* [eZ/Publish/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Legacy/)  *eZ Publish Legacy components integration*
+* [eZ/Bundle](/ezsystems/ezp-next/tree/master/eZ/Bundle/)  *Bundles that wrap eZ Publish components into Symfony*
+
 * [design/](/ezsystems/ezp-next/tree/master/design/)	 *Early uml class diagrams*
 * [doc/](/ezsystems/ezp-next/tree/master/doc/)  *Placeholder for bc doc and other doc that can not be on wiki or inline*
 * config.php-DEVELOPMENT  *Default config file for development use*
@@ -33,16 +37,21 @@ The API is still very much work in progress, and so is documentation, hence why 
 * bootstrap.php  *System Bootstrap*
 
 ##Dependencies
-* pear: PHPUnit 3.6 & eZ Components
-* PHP 5 Module: php5_sqlit
-* Database: sqlite3 if not installed by above stage
+* **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
+* **PHPUnit 3.6**
+* **PHP 5 Modules**: php5_sqlite
+* **Database**: sqlite3 if not installed by above stage
+* **eZ Publish 4 (aka *legacy*)**: Get the latest sources from [ezpublish5-integration branch](https://github.com/ezsystems/ezpublish/tree/ezpublish5-integration).
+  Rather clone it or directly [download the zip package from Github](https://github.com/ezsystems/ezpublish/zipball/ezpublish5-integration).
 
 ##How to get started
 * Clone this repo
+* Install dependencies with **Composer**: `php composer.phar install`
 * Copy config.php-DEVELOPMENT to config.php
-* Modify config.php if needed (if eZ Components is not in pear for instance)
-* Execute "$ php index.php" (cli) to verify that it manages to output some text
-* Execute "$ phpunit" to see current status of missing tests / implementations
+* Modify `config.php` and adjust the path to eZ Publish Legacy root
+> Remember: eZ Publish Legacy must have been taken from [ezpublish5-integration branch](https://github.com/ezsystems/ezpublish/tree/ezpublish5-integration).
+* Execute `php index.php` (cli) to verify that it manages to output some text
+* Execute `phpunit` to see current status of missing tests / implementations
 
 ##Bug tracker
 Submitting bug reports is possible on http://issues.ez.no/ezpublish (pick the "ezp-next" component in the right column when reporting).
