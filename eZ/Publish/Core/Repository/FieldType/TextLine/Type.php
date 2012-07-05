@@ -9,7 +9,10 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\TextLine;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The TextLine field type.
@@ -19,7 +22,7 @@ use eZ\Publish\Core\Repository\FieldType\FieldType,
 class Type extends FieldType
 {
     protected $allowedValidators = array(
-        'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator'
+        "StringLengthValidator"
     );
 
     /**
@@ -27,9 +30,11 @@ class Type extends FieldType
      *
      * Build a FiledType\Value object with the provided $text as value.
      *
-     * @param string $text
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param string $text
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
      */
     public function buildValue( $text )
     {

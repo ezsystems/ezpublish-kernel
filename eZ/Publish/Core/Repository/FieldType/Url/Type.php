@@ -56,7 +56,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value( $this->fieldSettings["defaultText"] );
+        return new Value( "" );
     }
 
     /**

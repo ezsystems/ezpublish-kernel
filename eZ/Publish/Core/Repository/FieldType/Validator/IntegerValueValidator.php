@@ -7,7 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\FieldType\Integer;
+namespace eZ\Publish\Core\Repository\FieldType\Validator;
+
 use eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 
@@ -30,7 +31,7 @@ class IntegerValueValidator extends Validator
      * Will return true when all constraints are matched. If one or more
      * constraints fail, the method will return false.
      *
-     * When a check against aconstaint has failed, an entry will be added to the
+     * When a check against a constraint has failed, an entry will be added to the
      * $errors array.
      *
      * @param \eZ\Publish\Core\Repository\FieldType\Integer\Value $value

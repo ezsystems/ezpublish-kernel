@@ -9,14 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\InvalidValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
-    eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
-    DOMDocument;
+    eZ\Publish\Core\Repository\FieldType\FieldSettings;
 
 class Country implements Converter
 {
@@ -25,7 +22,6 @@ class Country implements Converter
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
-     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\InvalidValue if a value cannot be converted
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {

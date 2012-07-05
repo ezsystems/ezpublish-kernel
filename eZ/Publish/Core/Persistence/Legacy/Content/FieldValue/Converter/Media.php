@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
 class Media implements Converter
 {
-    const FILESIZE_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator';
+    const FILESIZE_VALIDATOR_IDENTIFIER = "FileSizeValidator";
 
     /**
      * Converts data from $value to $storageFieldValue.
@@ -51,9 +51,9 @@ class Media implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_IDENTIFIER]['maxFileSize'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_IDENTIFIER]['maxFileSize'];
         }
 
         $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'];
@@ -70,7 +70,7 @@ class Media implements Converter
         if ( !empty( $storageDef->dataInt1 ) )
         {
             $fieldDef->fieldTypeConstraints->validators = array(
-                self::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => $storageDef->dataInt1 )
+                self::FILESIZE_VALIDATOR_IDENTIFIER => array( 'maxFileSize' => $storageDef->dataInt1 )
             );
         }
 

@@ -22,7 +22,7 @@ class Type extends FieldType
      * @see eZ\Publish\Core\Repository\FieldType::$allowedValidators
      */
     protected $allowedValidators = array(
-        'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator'
+        "FileSizeValidator"
     );
 
     /**

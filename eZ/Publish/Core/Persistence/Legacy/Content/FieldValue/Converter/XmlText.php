@@ -67,6 +67,7 @@ class XmlText implements Converter
                 'defaultText' => $storageDefinition->dataText1
             )
         );
+        $fieldDefinition->defaultValue->data = isset( $storageDefinition->dataText1 ) ? $storageDefinition->dataText1 : '';
     }
 
     /**

@@ -103,7 +103,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->validators = array(
             // Setting max file size to 1MB (1.048.576 bytes)
-            MediaTypeConverter::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => 1048576 )
+            MediaTypeConverter::FILESIZE_VALIDATOR_IDENTIFIER => array( 'maxFileSize' => 1048576 )
         );
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
@@ -120,7 +120,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
         self::assertSame(
-            $fieldDef->fieldTypeConstraints->validators[MediaTypeConverter::FILESIZE_VALIDATOR_FQN],
+            $fieldDef->fieldTypeConstraints->validators[MediaTypeConverter::FILESIZE_VALIDATOR_IDENTIFIER],
             array( 'maxFileSize' => $storageFieldDef->dataInt1 )
         );
         self::assertSame(
@@ -147,7 +147,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertSame(
             array(
-                MediaTypeConverter::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => $storageDef->dataInt1 )
+                MediaTypeConverter::FILESIZE_VALIDATOR_IDENTIFIER => array( 'maxFileSize' => $storageDef->dataInt1 )
             ),
             $fieldDef->fieldTypeConstraints->validators
         );

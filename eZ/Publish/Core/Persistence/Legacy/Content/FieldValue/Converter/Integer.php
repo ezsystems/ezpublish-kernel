@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
 class Integer implements Converter
 {
-    const INTEGER_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\IntegerValueValidator';
+    const FLOAT_VALIDATOR_IDENTIFIER = "IntegerValueValidator";
 
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;
@@ -56,14 +56,14 @@ class Integer implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['minIntegerValue'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['minIntegerValue'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'];
         }
 
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['maxIntegerValue'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] ) )
         {
-            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['maxIntegerValue'];
+            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'];
         }
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
@@ -82,19 +82,19 @@ class Integer implements Converter
         if ( $storageDef->dataInt4 !== self::NO_MIN_MAX_VALUE )
         {
             $fieldDef->fieldTypeConstraints->validators = array(
-                self::INTEGER_VALIDATOR_FQN => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
+                self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
             );
 
             if ( !empty( $storageDef->dataInt1 ) )
             {
                 $fieldDef->fieldTypeConstraints
-                         ->validators[self::INTEGER_VALIDATOR_FQN]['minIntegerValue'] = $storageDef->dataInt1;
+                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
             }
 
             if ( !empty( $storageDef->dataInt2 ) )
             {
                 $fieldDef->fieldTypeConstraints
-                         ->validators[self::INTEGER_VALIDATOR_FQN]['maxIntegerValue'] = $storageDef->dataInt2;
+                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
             }
         }
 

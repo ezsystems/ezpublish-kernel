@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
 class TextLine implements Converter
 {
-    const STRING_LENGTH_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator';
+    const STRING_LENGTH_VALIDATOR_IDENTIFIER = "StringLengthValidator";
 
     /**
      * Converts data from $value to $storageFieldValue
@@ -55,23 +55,13 @@ class TextLine implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]['maxStringLength'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]['maxStringLength'];
         }
         else
         {
             $storageDef->dataInt1 = 0;
-        }
-
-        // @todo: temporary to fix the tests
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['minStringLength'] ) )
-        {
-            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['minStringLength'];
-        }
-        else
-        {
-            $storageDef->dataInt2 = 0;
         }
 
         $storageDef->dataText1 = $fieldDef->defaultValue->data;
@@ -85,24 +75,14 @@ class TextLine implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $validatorConstraints = array();
+
         if ( !empty( $storageDef->dataInt1 ) )
         {
-            $fieldDef->fieldTypeConstraints->validators = array(
-                self::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => $storageDef->dataInt1 )
-            );
+            $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["maxStringLength"] = $storageDef->dataInt1;
         }
 
-        // @todo: temporary to fix the tests
-        if ( !empty( $storageDef->dataInt2 ) )
-        {
-            if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN] ) )
-                $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]["minStringLength"] = $storageDef->dataInt2;
-            else
-                $fieldDef->fieldTypeConstraints->validators = array(
-                    self::STRING_LENGTH_VALIDATOR_FQN => array( 'minStringLength' => $storageDef->dataInt2 )
-                );
-        }
-
+        $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
         $fieldDef->defaultValue->data = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
     }
 

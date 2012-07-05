@@ -30,7 +30,7 @@ class Type extends FieldType
           TYPE_HTML5_AUDIO = 'html5_audio';
 
     protected $allowedValidators = array(
-        'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator'
+        "FileSizeValidator"
     );
 
     /*

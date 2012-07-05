@@ -23,9 +23,10 @@ class FileSizeValidator extends Validator
     );
 
     /**
-     * Checks if $binaryFile has the appropriate size
+     * Checks if $value->file has the appropriate size
      *
      * @param \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value $value
+     *
      * @return bool
      */
     public function validate( BaseValue $value )

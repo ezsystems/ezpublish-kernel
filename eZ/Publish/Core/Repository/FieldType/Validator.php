@@ -59,7 +59,7 @@ abstract class Validator
     /**
      * Return array of messages on performed validations.
      *
-     * When no validation errors occured, the returned array should be empty.
+     * When no validation errors occurred, the returned array should be empty.
      *
      * @return array
      */
@@ -91,11 +91,16 @@ abstract class Validator
      */
     public final function initializeWithConstraints( array $constraints )
     {
+        // Reset errors
+        $this->errors = array();
+        // Set existing constraint values to false
+        foreach ( $this->constraints as &$value ) $value = false;
+        // Initialize constraints with new values
         foreach ( $constraints as $constraint => $value )
         {
             if ( !isset( $this->constraints[$constraint] ) )
             {
-                throw new PropertyNotFound( "The constraint, {$constraint}, is not valid for this validator." );
+                throw new PropertyNotFound( "The constraint '{$constraint}' is not valid for this validator." );
             }
 
             $this->constraints[$constraint] = $value;
@@ -113,7 +118,7 @@ abstract class Validator
     public function __get( $name )
     {
         if ( !isset( $this->constraints[$name] ) )
-            throw new PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
+            throw new PropertyNotFound( "The constraint '{$name}' is not valid for this validator." );
 
         return $this->constraints[$name];
     }
@@ -129,7 +134,7 @@ abstract class Validator
     public function __set( $name, $value )
     {
         if ( !isset( $this->constraints[$name] ) )
-            throw new PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
+            throw new PropertyNotFound( "The constraint '{$name}' is not valid for this validator." );
 
         $this->constraints[$name] = $value;
     }

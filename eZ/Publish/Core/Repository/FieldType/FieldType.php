@@ -10,7 +10,9 @@
 namespace eZ\Publish\Core\Repository\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\FieldTypeService,
+    eZ\Publish\API\Repository\ValidatorService,
     eZ\Publish\Core\Repository\FieldType\Validator,
+    eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
     eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
@@ -63,6 +65,11 @@ abstract class FieldType implements FieldTypeInterface
     protected $allowedValidators = array();
 
     /**
+     * @var \eZ\Publish\Core\Repository\FieldType\Validator[]
+     */
+    protected $validators = array();
+
+    /**
      * Constructs field type object, initializing internal data structures.
      */
     public function __construct()
@@ -70,7 +77,7 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * This method is called on occuring events. Implementations can perform corresponding actions
+     * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
@@ -87,7 +94,7 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function allowedSettings()
     {
-        return array_keys( $this->allowedSettings );
+        return $this->allowedSettings;
     }
 
     /**
@@ -98,6 +105,32 @@ abstract class FieldType implements FieldTypeInterface
     public function allowedValidators()
     {
         return $this->allowedValidators;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\ValidatorService $validatorService
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return array And array of field validation errors if there were any
+     */
+    public final function validate( ValidatorService $validatorService, FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $errors = array();
+        foreach ( (array)$fieldDefinition->getValidators() as $validatorRepresentation )
+        {
+            $validator = $validatorService->getValidator( $validatorRepresentation->identifier );
+            $validator->initializeWithConstraints( $validatorRepresentation->constraints );
+            if ( !$validator->validate( $fieldValue ) )
+            {
+                $errors[] = $validator->getMessage();
+            }
+        }
+        return $errors;
     }
 
     /**
@@ -128,28 +161,6 @@ abstract class FieldType implements FieldTypeInterface
      * @return array|bool Array with sortInfo, or false if the Type doesn't support sorting
      */
     abstract protected function getSortInfo( $value );
-
-    /**
-     * Used by the FieldDefinition to populate the $fieldTypeConstraints->validators field.
-     *
-     * If validator is not allowed for a given field type, no data from that
-     * validator is populated to $constraints.
-     *
-     * @internal
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints $fieldTypeConstraints
-     * @param \eZ\Publish\Core\Repository\FieldType\Validator $validator
-     * @return void
-     */
-    public final function fillConstraintsFromValidator( FieldTypeConstraints $fieldTypeConstraints, Validator $validator )
-    {
-        $validatorClass = get_class( $validator );
-        if ( !in_array( $validatorClass, $this->allowedValidators() ) )
-            throw new InvalidArgumentException( '$validator', implode( ', ', $this->allowedValidators() ) );
-
-        $fieldTypeConstraints->validators = array(
-            $validatorClass => $validator->getValidatorConstraints()
-        ) + $fieldTypeConstraints->validators;
-    }
 
     /**
      * Converts a $value to a persistence value

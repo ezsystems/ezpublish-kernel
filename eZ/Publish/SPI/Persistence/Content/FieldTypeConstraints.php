@@ -14,7 +14,7 @@ class FieldTypeConstraints extends ValueObject
 {
     /**
      * Array of validators.
-     * Key is the FQN fo the validator class.
+     * Key is the FQN for the validator class.
      * Value is a hash like described in {@link \eZ\Publish\Core\Repository\FieldType\Validator::$constraints}
      *
      * @see \eZ\Publish\Core\Repository\FieldType\Validator::$constraints

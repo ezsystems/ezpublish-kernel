@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
 class Float implements Converter
 {
-    const FLOAT_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\Float\\FloatValueValidator';
+    const FLOAT_VALIDATOR_IDENTIFIER = "FloatValueValidator";
 
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;
@@ -56,14 +56,14 @@ class Float implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['minFloatValue'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minFloatValue'] ) )
         {
-            $storageDef->dataFloat1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['minFloatValue'];
+            $storageDef->dataFloat1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minFloatValue'];
         }
 
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['maxFloatValue'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxFloatValue'] ) )
         {
-            $storageDef->dataFloat2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['maxFloatValue'];
+            $storageDef->dataFloat2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxFloatValue'];
         }
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
@@ -84,14 +84,14 @@ class Float implements Converter
             if ( !empty( $storageDef->dataFloat1 ) )
             {
                 $fieldDef->fieldTypeConstraints->validators = array(
-                    self::FLOAT_VALIDATOR_FQN => array( 'minFloatValue' => $storageDef->dataFloat1 )
+                    self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minFloatValue' => $storageDef->dataFloat1 )
                 );
             }
 
             if ( !empty( $storageDef->dataFloat2 ) )
             {
                 $fieldDef->fieldTypeConstraints->validators = array(
-                    self::FLOAT_VALIDATOR_FQN => array( 'maxFloatValue' => $storageDef->dataFloat2 )
+                    self::FLOAT_VALIDATOR_IDENTIFIER => array( 'maxFloatValue' => $storageDef->dataFloat2 )
                 );
             }
         }

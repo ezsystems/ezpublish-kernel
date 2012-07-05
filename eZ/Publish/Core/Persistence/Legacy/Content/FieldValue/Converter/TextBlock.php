@@ -51,7 +51,7 @@ class TextBlock implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['textColumns'];
+        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["textRows"];
     }
 
     /**
@@ -64,7 +64,7 @@ class TextBlock implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'textColumns' => $storageDef->dataInt1
+                "textRows" => $storageDef->dataInt1
             )
         );
         $fieldDef->defaultValue->data = "";

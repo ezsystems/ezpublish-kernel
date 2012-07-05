@@ -90,7 +90,7 @@ EOT;
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'textColumns' => 15
+                "textRows" => 15
             )
         );
         $fieldDef = new PersistenceFieldDefinition(
@@ -125,7 +125,7 @@ EOT;
         self::assertNull( $fieldDef->fieldTypeConstraints->validators );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
-            array( 'textColumns' => 20 ),
+            array( "textRows" => 20 ),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
         );
     }

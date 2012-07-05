@@ -19,7 +19,7 @@ use eZ\Publish\Core\Repository\FieldType\FieldType,
 class Type extends FieldType
 {
     protected $allowedValidators = array(
-        'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\IntegerValueValidator'
+        "IntegerValueValidator"
     );
 
     protected $allowedSettings = array(
@@ -58,7 +58,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value( $this->fieldSettings['defaultValue'] );
+        return new Value( 0 );
     }
 
     /**
