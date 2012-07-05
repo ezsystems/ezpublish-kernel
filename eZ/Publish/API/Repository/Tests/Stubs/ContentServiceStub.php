@@ -52,11 +52,11 @@ class ContentServiceStub implements ContentService
     private $repository;
 
     /**
-     * Field handle, which handles special fields
+     * Exmulation of external storages in the in-memory stub.
      *
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldHandler
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage
      */
-    private $fieldHandler;
+    private $pseudoExternalStorage;
 
     /**
      * @var integer
@@ -96,9 +96,11 @@ class ContentServiceStub implements ContentService
     public function __construct( RepositoryStub $repository )
     {
         $this->repository   = $repository;
-        $this->fieldHandler = new FieldHandler( array(
-            'ezuser' => new FieldHandler\User( $repository ),
-        ) );
+        $this->pseudoExternalStorage = new PseudoExternalStorage\StorageDispatcher(
+            array(
+                'ezuser' => new PseudoExternalStorage\User( $repository ),
+            )
+        );
         $this->initFromFixture();
     }
 
@@ -330,7 +332,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    $this->fieldHandler->handleLoad(
+                    $this->pseudoExternalStorage->handleLoad(
                         $fieldDefinition,
                         $field,
                         $content
@@ -482,7 +484,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    $this->fieldHandler->handleCreate(
+                    $this->pseudoExternalStorage->handleCreate(
                         $fieldDefinition,
                         $field,
                         $content
@@ -1077,7 +1079,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    $this->fieldHandler->handleUpdate(
+                    $this->pseudoExternalStorage->handleUpdate(
                         $fieldDefinition,
                         $field,
                         $draftedContent
