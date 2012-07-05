@@ -84,7 +84,7 @@ CREATE TABLE 'ezcontentclass_attribute' (
 	'data_text4' text(255),
 	'data_text5' clob,
 	'data_type_string' text(50) NOT NULL,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'id' integer NOT NULL DEFAULT 0,
 	'identifier' text(50) NOT NULL,
 	'is_information_collector' integer NOT NULL DEFAULT 0,
 	'is_required' integer NOT NULL DEFAULT 0,
