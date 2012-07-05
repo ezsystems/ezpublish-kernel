@@ -70,9 +70,9 @@ class Configurator
      */
     public function configureExternalStorages( StorageRegistry $registry )
     {
-        if ( isset( $this->config['external_storages'] ) )
+        if ( isset( $this->config['external_storage'] ) )
         {
-            foreach ( $this->config['external_storages'] as $typeName => $class )
+            foreach ( $this->config['external_storage'] as $typeName => $class )
             {
                 $registry->register( $typeName, new $class() );
             }
