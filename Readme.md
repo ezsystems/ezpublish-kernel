@@ -49,7 +49,9 @@ The API is still very much work in progress, and so is documentation, hence why 
 * Install dependencies with **Composer**: `php composer.phar install`
 * Copy config.php-DEVELOPMENT to config.php
 * Modify `config.php` and adjust the path to eZ Publish Legacy root
+
 > Remember: eZ Publish Legacy must have been taken from [ezpublish5-integration branch](https://github.com/ezsystems/ezpublish/tree/ezpublish5-integration).
+
 * Execute `php index.php` (cli) to verify that it manages to output some text
 * Execute `phpunit` to see current status of missing tests / implementations
 
