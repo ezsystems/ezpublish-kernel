@@ -9,9 +9,10 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
- *
  * This class represents a field definition
+ *
  * @property-read $fieldSettings calls getFieldSettings()
  * @property-read $validators calls getValidators()
  * @property-read mixed $id the id of the field definition
@@ -19,7 +20,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $fieldGroup the field group name
  * @property-read int $position the position of the field definition in the content typr
  * @property-read string $fieldTypeIdentifier String identifier of the field type
- * @property-read boolean $isTranslatable indicatats if fields of this definition are translatable
+ * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
  * @property-read boolean $isRequired indicates if this field is required in the content object
  * @property-read boolean $isSearchable indicates if the field is searchable
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
@@ -125,7 +126,7 @@ abstract class FieldDefinition extends ValueObject
 
     /**
      * this method returns the validators of this field definition supported by the field type
-     * @return \eZ\Publish\Core\Repository\FieldType\Validator[] an array of {@link Validator}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\Validator[] an array of {@link Validator}
      */
     abstract public function getValidators();
 

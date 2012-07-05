@@ -87,7 +87,7 @@ class FieldDefinitionCreateStruct extends ValueObject
     /**
      * An array of validators
      *
-     * @var array an array of {@link eZ\Publish\API\Repository\Values\ContentType\Validator}
+     * @var \eZ\Publish\API\Repository\Values\ContentType\Validator[]
      */
     public $validators;
 
