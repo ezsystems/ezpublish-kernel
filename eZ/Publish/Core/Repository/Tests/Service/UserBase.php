@@ -441,7 +441,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testCreateUserThrowsNotFoundException()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $userCreateStruct = $userService->newUserCreateStruct( "new_user", "new_user@ez.no", "password", "eng-GB" );
@@ -500,7 +500,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUser()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $loadedUser = $userService->loadUser( 14 );
@@ -527,7 +527,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadAnonymousUser()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $loadedUser = $userService->loadAnonymousUser();
@@ -542,7 +542,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserByCredentials()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $loadedUser = $userService->loadUserByCredentials( 'admin', 'publish' );
@@ -592,7 +592,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testDeleteUser()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $user = $userService->loadUser( 14 );
@@ -676,7 +676,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testAssignUserToUserGroup()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
@@ -711,7 +711,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUnAssignUserFromUserGroup()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
@@ -757,7 +757,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUnAssignUserFromUserGroupThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $user = $userService->loadUser( 14 );
@@ -771,7 +771,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUserGroupsOfUser()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
@@ -805,7 +805,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testLoadUsersOfUserGroup()
     {
-        self::markTestSkipped( "@todo: enable when content service is completed" );
+        //self::markTestSkipped( "@todo: enable when content service is completed" );
         $userService = $this->repository->getUserService();
         $locationService = $this->repository->getLocationService();
 
@@ -836,7 +836,7 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testNewUserCreateStruct()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $userService = $this->repository->getUserService();
 
         $userCreateStruct = $userService->newUserCreateStruct( "admin", "admin@ez.no", "password", "eng-GB" );
