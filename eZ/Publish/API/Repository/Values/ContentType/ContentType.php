@@ -184,8 +184,8 @@ abstract class ContentType extends ValueObject
     protected $mainLanguageCode;
 
     /**
-     * if an instance of acontent type is created the always available flag is set
-     * by default this this value.
+     * if an instance of a content type is created the always available flag is set
+     * by default to this value.
      *
      * @var boolean
      */
