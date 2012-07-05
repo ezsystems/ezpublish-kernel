@@ -226,7 +226,6 @@ class Handler implements BaseContentTypeHandler
     protected function loadFromRows( array $rows, $typeIdentifier, $status )
     {
         $types = $this->mapper->extractTypesFromRows( $rows );
-
         if ( count( $types ) !== 1 )
         {
             throw new Exception\TypeNotFound( $typeIdentifier, $status );
@@ -246,11 +245,12 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @todo $contentTypeId is used to create draft from existing content type (called by self::createDraft()).
-     *       This is a temporary solution until self::createDraft is fixed not to reuse this method.
+     * Internal method for creating ContentType
+     *
+     * Used by self::create(), self::createDraft() and self::copy()
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
-     * @param mixed|null $contentTypeId
+     * @param mixed|null $contentTypeId Used by self::createDraft() to retain ContentType id in the draft
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
@@ -384,8 +384,11 @@ class Handler implements BaseContentTypeHandler
         $createStruct->creatorId = $userId;
         $createStruct->status = Type::STATUS_DRAFT;
         $createStruct->identifier .= '_' . ( $createStruct->remoteId = md5( uniqid( get_class( $createStruct ), true ) ) );
+        // Set FieldDefinition ids to null to trigger creating new id
+        foreach ( $createStruct->fieldDefinitions as $fieldDefinition )
+            $fieldDefinition->id = null;
 
-        return $this->create( $createStruct );
+        return $this->internalCreate( $createStruct );
     }
 
     /**

@@ -792,7 +792,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handlerMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            array( 'load', 'create' ),
+            array( 'load', 'internalCreate' ),
             array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
         $handlerMock->expects( $this->once() )
@@ -805,7 +805,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $handlerMock->expects( $this->once() )
-            ->method( 'create' )
+            ->method( 'internalCreate' )
             ->with(
                 $this->logicalAnd(
                     $this->attributeEqualTo(
