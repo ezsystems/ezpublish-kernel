@@ -36,7 +36,9 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException;
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
+
+    DateTime;
 
 /**
  * Location service, used for complex subtree operations
@@ -665,13 +667,27 @@ class LocationService implements LocationServiceInterface
                 'remoteId' => $spiLocation->remoteId,
                 'parentLocationId' => (int) $spiLocation->parentId,
                 'pathString' => $spiLocation->pathString,
-                'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiLocation->modifiedSubLocation ),
+                'modifiedSubLocationDate' => $this->getDateTime( $spiLocation->modifiedSubLocation ),
                 'depth' => (int) $spiLocation->depth,
                 'sortField' => (int) $spiLocation->sortField,
                 'sortOrder' => (int) $spiLocation->sortOrder,
                 'childCount' => $childrenLocations->count
             )
         );
+    }
+
+    /**
+     *
+     *
+     * @param int|null $timestamp
+     *
+     * @return \DateTime|null
+     */
+    protected function getDateTime( $timestamp )
+    {
+        $dateTime = new DateTime();
+        $dateTime->setTimestamp( $timestamp );
+        return $dateTime;
     }
 
     /**
