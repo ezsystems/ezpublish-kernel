@@ -11,8 +11,8 @@
 
 
 use eZ\Publish\Core\Base\ClassLoader,
-eZ\Publish\Core\Base\ConfigurationManager,
-eZ\Publish\Core\Base\ServiceContainer;
+    eZ\Publish\Core\Base\ConfigurationManager,
+    eZ\Publish\Core\Base\ServiceContainer;
 
 // Setup autoloaders
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
@@ -29,20 +29,11 @@ include $autoloadFile;
 // Autoloader for eZ Publish legacy
 if ( isset( $settings['base']['Legacy']['RootPath'] ) )
 {
-    require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
     $legacyPath = $settings['base']['Legacy']['RootPath'];
-    $legacyClassMap = require $legacyPath . '/autoload/ezp_kernel.php';
-    array_walk(
-        $legacyClassMap,
-        function ( &$val ) use ( $legacyPath )
-        {
-            $val = "$legacyPath/$val";
-        }
-    );
-
-    $loader = new ClassLoader( array() );
-    $loader->registerClassMap( $legacyClassMap );
-    spl_autoload_register( array( $loader, 'load' ) );
+    // Deactivate eZComponents loading from legacy autoload.php as they are already loaded with Composer
+    if ( !defined( 'EZCBASE_ENABLED' ) )
+        define( 'EZCBASE_ENABLED', false );
+    require "$legacyPath/autoload.php";
 }
 else
 {
@@ -69,6 +60,7 @@ foreach ( $settings['base']['ClassLoader']['Repositories'] as $ns => $nsPath )
 
 $configManager->setGlobalDirs( $paths, 'modules' );*/
 
+$loader = new ClassLoader( array() );
 $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
     array(
