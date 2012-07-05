@@ -167,6 +167,13 @@ interface Repository
     public function getRoleService();
 
     /**
+     * Get ValidatorService
+     *
+     * @return \eZ\Publish\API\Repository\ValidatorService
+     */
+    public function getValidatorService();
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
