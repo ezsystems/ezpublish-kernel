@@ -38,7 +38,7 @@ class EzcDatabase extends Gateway
     /**
      * Zeta Components database handler.
      *
-     * @var EzcDbHandler
+     * @var \EzcDbHandler
      */
     protected $dbHandler;
 
@@ -340,11 +340,17 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'creator_id' ),
             $q->bindValue( $struct->creatorId, null, \PDO::PARAM_INT )
         )->set(
+            $this->dbHandler->quoteColumn( 'modified' ),
+            $q->bindValue( $struct->modificationDate, null, \PDO::PARAM_INT )
+        )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
             $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteColumn( 'modified' ),
-            $q->bindValue( $struct->modificationDate, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn( 'language_mask' ),
+            $q->expr->bitOr(
+                $this->dbHandler->quoteColumn( 'language_mask' ),
+                $q->bindValue( $this->generateLanguageMask( $struct->fields, false ), null, \PDO::PARAM_INT )
+            )
         )->where(
             $q->expr->lAnd(
                 $q->expr->eq(
@@ -519,6 +525,9 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
             $q->bindValue( ContentInfo::STATUS_PUBLISHED, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'current_version' ),
+            $q->bindValue( $version, null, \PDO::PARAM_INT )
         )->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
