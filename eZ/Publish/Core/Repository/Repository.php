@@ -26,6 +26,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\ObjectStateService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
+    Exception,
     RuntimeException;
 
 /**
@@ -124,6 +125,13 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\API\Repository\ObjectStateService
      */
     protected $objectStateService;
+
+    /**
+     * Instance of object state service
+     *
+     * @var \eZ\Publish\API\Repository\ValidatorService
+     */
+    protected $validatorService;
 
     /**
      * Service settings, first level key is service name
@@ -465,6 +473,20 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get ValidatorService
+     *
+     * @return \eZ\Publish\API\Repository\ValidatorService
+     */
+    public function getValidatorService()
+    {
+        if ( $this->validatorService !== null )
+            return $this->validatorService;
+
+        $this->validatorService = new ValidatorService( $this, $this->persistenceHandler, $this->serviceSettings['validator'] );
+        return $this->validatorService;
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -484,7 +506,14 @@ class Repository implements RepositoryInterface
      */
     public function commit()
     {
-        $this->persistenceHandler->commit();
+        try
+        {
+            $this->persistenceHandler->commit();
+        }
+        catch ( Exception $e )
+        {
+            throw new RuntimeException( $e->getMessage(), 0, $e );
+        }
     }
 
     /**
@@ -496,6 +525,13 @@ class Repository implements RepositoryInterface
      */
     public function rollback()
     {
-        $this->persistenceHandler->rollback();
+        try
+        {
+            $this->persistenceHandler->rollback();
+        }
+        catch ( Exception $e )
+        {
+            throw new RuntimeException( $e->getMessage(), 0, $e );
+        }
     }
 }
