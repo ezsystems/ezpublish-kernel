@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
-use PHPUnit_Framework_TestCase;
-use eZ\Publish\API\Repository\Values\ValueObject;
+use PHPUnit_Framework_TestCase,
+    eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * Base test case for tests on services
@@ -38,6 +38,8 @@ abstract class Base extends PHPUnit_Framework_TestCase
                     'ezkeyword' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Keyword\Type(); },
                     'eztext' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextBlock\Type(); },
                     'ezstring' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextLine\Type(); },
+                    'ezimage' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Integer\Type(); },
+                    'ezuser' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Integer\Type(); },
                     'ezurl' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Url\Type(); },
                     'ezxmltext' => function(){ return new \eZ\Publish\Core\Repository\FieldType\XmlText\Type(
                         new \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Simplified(
@@ -48,6 +50,42 @@ abstract class Base extends PHPUnit_Framework_TestCase
             ),
         );
         $this->repository = static::getRepository( $serviceSettings );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Repository\Values\User\User
+     */
+    protected function createUserVersion1()
+    {
+        $repository = $this->repository;
+
+        /* BEGIN: Inline */
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $editorsGroupId = 13;
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // Create a new user instance.
+        $user = $userService->createUser( $userCreate, array( $group ) );
+        /* END: Inline */
+
+        return $user;
     }
 
     /**
@@ -153,5 +191,12 @@ abstract class Base extends PHPUnit_Framework_TestCase
                 $actualValue,
                 sprintf( 'Object property "%s" incorrect.', $propertyName )
             );
+    }
+
+    protected function getDateTime( $timestamp )
+    {
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp( $timestamp );
+        return $dateTime;
     }
 }
