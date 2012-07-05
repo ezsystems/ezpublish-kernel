@@ -126,7 +126,7 @@ class ConfiguratorTest extends TestCase
         );
 
         $config = array(
-            'external_storages' => array(
+            'external_storage' => array(
                 'foo' => 'SomeFanvyStorageMockClass',
                 'bar' => 'SomeFanvyStorageMockClass',
             ),
