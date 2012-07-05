@@ -11,8 +11,12 @@ namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\FieldTypeService,
+    eZ\Publish\API\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldType\Validator,
+    eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The field type interface which all field types have to implement.
@@ -29,7 +33,7 @@ interface FieldType
     public function getFieldTypeIdentifier();
 
     /**
-     * This method is called on occuring events. Implementations can perform corresponding actions
+     * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
@@ -73,12 +77,15 @@ interface FieldType
     /**
      * Validates a field based on the validators in the field definition
      *
-     * @todo Implementing this in all FieldTypes
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
+     * @param \eZ\Publish\API\Repository\ValidatorService $validatorService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
+     *
+     * @return array And array of field validation errors if there were any
      */
-    //public function validate( FieldDefinition $fieldDef, Field $field );
+    public function validate( ValidatorService $validatorService, FieldDefinition $fieldDef, $field );
 
     /**
      * Indicates if the field type supports indexing and sort keys for searching
