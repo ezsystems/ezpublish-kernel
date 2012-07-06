@@ -94,7 +94,7 @@ abstract class Validator
         // Reset errors
         $this->errors = array();
         // Set existing constraint values to false
-        foreach ( $this->constraints as &$value ) $value = false;
+        foreach ( $this->constraints as $constraint => $value ) $this->constraints[$constraint] = false;
         // Initialize constraints with new values
         foreach ( $constraints as $constraint => $value )
         {

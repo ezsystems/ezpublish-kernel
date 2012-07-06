@@ -24,7 +24,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     {
         $ft = new TextLine();
         self::assertSame(
-            array( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator' ),
+            array( 'StringLengthValidator' ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\FieldType\Float;
+namespace eZ\Publish\Core\Repository\FieldType\Validator;
 use eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
 

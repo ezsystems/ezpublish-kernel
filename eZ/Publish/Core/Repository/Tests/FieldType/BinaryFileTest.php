@@ -54,7 +54,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     {
         $ft = new BinaryFileType( $this->repository );
         self::assertSame(
-            array( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator' ),
+            array( 'FileSizeValidator' ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );

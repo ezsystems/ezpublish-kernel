@@ -39,7 +39,9 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     {
         $ft = new Checkbox();
         self::assertSame(
-            array( 'defaultValue' ),
+            array(
+                'defaultValue' => false
+            ),
             $ft->allowedSettings(),
             "The set of allowed settings does not match what is expected."
         );

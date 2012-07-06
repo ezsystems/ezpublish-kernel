@@ -54,7 +54,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     {
         $ft = new MediaType( $this->repository );
         self::assertSame(
-            array( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator' ),
+            array( 'FileSizeValidator' ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );
@@ -69,7 +69,9 @@ class MediaTest extends PHPUnit_Framework_TestCase
     {
         $ft = new MediaType( $this->repository );
         self::assertSame(
-            array( 'mediaType' ),
+            array(
+                'mediaType' => 'html5_video'
+            ),
             $ft->allowedSettings(),
             "The set of allowed settings does not match what is expected."
         );

@@ -23,7 +23,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
     {
         $ft = new Float();
         self::assertSame(
-            array( "eZ\\Publish\\Core\\Repository\\FieldType\\Float\\FloatValueValidator" ),
+            array( "FloatValueValidator" ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );

@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\ContentType\Validator;
  *
  * @property-read string $identifier The unique identifier of the validator
  * @property int $maxStringLength The maximum allowed length of the string.
+ * @property int $minStringLength The minimum allowed length of the string.
  */
 class StringLengthValidator extends Validator
 {

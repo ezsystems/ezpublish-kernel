@@ -29,7 +29,11 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     {
         $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' ) );
         self::assertSame(
-            array( 'numRows', 'tagPreset', 'defaultText' ),
+            array(
+                'numRows' => 10,
+                'tagPreset' => null,
+                'defaultText' => ''
+            ),
             $ft->allowedSettings(),
             "The set of allowed settings does not match what is expected."
         );

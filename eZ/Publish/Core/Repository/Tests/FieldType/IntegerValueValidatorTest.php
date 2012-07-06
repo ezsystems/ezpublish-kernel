@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
-    eZ\Publish\Core\Repository\FieldType\Integer\IntegerValueValidator,
+    eZ\Publish\Core\Repository\FieldType\Validator\IntegerValueValidator,
     PHPUnit_Framework_TestCase;
 
 class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase

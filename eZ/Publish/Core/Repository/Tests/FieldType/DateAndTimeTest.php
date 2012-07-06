@@ -40,7 +40,11 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     {
         $ft = new DateAndTime();
         self::assertSame(
-            array( 'useSeconds', 'defaultType', 'dateInterval' ),
+            array(
+                'useSeconds' => false,
+                'defaultType' => 0,
+                'dateInterval' => null
+            ),
             $ft->allowedSettings(),
             "The set of allowed settings does not match what is expected."
         );
