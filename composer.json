@@ -5,7 +5,8 @@
         "zetacomponents/cache": "dev-master",
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/configuration": "dev-master",
-        "zetacomponents/database": "dev-master"
+        "zetacomponents/database": "dev-master",
+        "zetacomponents/mail": "1.7"
     },
     "autoload": {
         "psr-0": {
