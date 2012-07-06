@@ -12,7 +12,8 @@
 
 use eZ\Publish\Core\Base\ClassLoader,
     eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer;
+    eZ\Publish\Core\Base\ServiceContainer,
+    eZ\Publish\Legacy\Kernel as LegacyKernel;
 
 // Setup autoloaders
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
@@ -27,18 +28,24 @@ if ( !file_exists( $autoloadFile ) )
 include $autoloadFile;
 
 // Autoloader for eZ Publish legacy
-if ( isset( $settings['base']['Legacy']['RootPath'] ) )
-{
-    $legacyPath = $settings['base']['Legacy']['RootPath'];
-    // Deactivate eZComponents loading from legacy autoload.php as they are already loaded with Composer
-    if ( !defined( 'EZCBASE_ENABLED' ) )
-        define( 'EZCBASE_ENABLED', false );
-    require "$legacyPath/autoload.php";
-}
-else
+if ( !isset( $settings['base']['Legacy']['RootPath'] ) )
 {
     throw new \RuntimeException( 'Please define your eZ Publish legacy root path in config.php' );
 }
+$legacyPath = $settings['base']['Legacy']['RootPath'];
+
+// Deactivate eZComponents loading from legacy autoload.php as they are already loaded with Composer
+if ( !defined( 'EZCBASE_ENABLED' ) )
+    define( 'EZCBASE_ENABLED', false );
+require "$legacyPath/autoload.php";
+
+// Avoid notices from legacy kernel about REQUEST_URI.
+// TODO: Remove this dirty workaround when able to properly legacy kernel in CLI mode
+$_SERVER['REQUEST_URI'] = null;
+$legacyKernel = new LegacyKernel( $legacyPath, __DIR__ );
+// Exposing in env variables in order be able to use them in test cases.
+$_ENV['legacyKernel'] = $legacyKernel;
+$_ENV['legacyPath'] = $legacyPath;
 
 $configManager = new ConfigurationManager(
     $settings,
@@ -66,6 +73,7 @@ $sc = new ServiceContainer(
     array(
          '$classLoader' => $loader,
          '$configurationManager' => $configManager,
+         '@legacyKernel' => $legacyKernel
     )
 );
 
