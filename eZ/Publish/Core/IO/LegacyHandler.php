@@ -15,6 +15,8 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Legacy\LegacyKernelAware,
+    eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZClusterFileHandler,
     DateTime,
     finfo;
@@ -27,7 +29,7 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
  * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
 
-class LegacyHandler implements IoHandlerInterface
+class LegacyHandler implements IoHandlerInterface, LegacyKernelAware
 {
     /**
      * File resource provider
@@ -40,6 +42,32 @@ class LegacyHandler implements IoHandlerInterface
      * @var \eZClusterFileHandlerInterface
      */
     private $clusterHandler = null;
+
+    /**
+     * @var \eZ\Publish\Legacy\Kernel
+     */
+    private $legacyKernel;
+
+    /**
+     * Injects the legacy kernel instance.
+     *
+     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
+     * @return void
+     */
+    public function setLegacyKernel( LegacyKernel $legacyKernel )
+    {
+        $this->legacyKernel = $legacyKernel;
+    }
+
+    /**
+     * Gets the legacy kernel instance.
+     *
+     * @return \eZ\Publish\Legacy\Kernel
+     */
+    public function getLegacyKernel()
+    {
+        return $this->legacyKernel;
+    }
 
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
