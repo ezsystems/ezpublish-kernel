@@ -2093,20 +2093,17 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         /* BEGIN: Use Case */
-        // Remote ids of the "Support" and the "Community" page of a eZ Publish
-        // demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
-        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+        // Remote ids of the "Users" user group of a eZ Publish demo installation.
+        $usersUserGroupRemoteId = 'f5c88a2209584891056f987fd965b0ba';
+        $membersUserGroupRemoteId = '5f7f0bdb3381d6a461d8c29ff53d908f';
 
-        // "Support" article content object
-        $supportContentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
-
-        // "Community" article content object
-        $communityContentInfo = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
+        // "Users" user group content object
+        $usersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId( $usersUserGroupRemoteId );
+        $membersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId( $membersUserGroupRemoteId );
 
         // Create some drafts
-        $contentService->createContentDraft( $supportContentInfo );
-        $contentService->createContentDraft( $communityContentInfo );
+        $contentService->createContentDraft( $usersUserGroupContentInfo );
+        $contentService->createContentDraft( $membersUserGroupContentInfo );
 
         // Now $contentDrafts should contain two drafted versions
         $draftedVersions = $contentService->loadContentDrafts();
@@ -2124,8 +2121,8 @@ abstract class ContentBase extends BaseServiceTest
             array(
                 VersionInfo::STATUS_DRAFT,
                 VersionInfo::STATUS_DRAFT,
-                $communityRemoteId,
-                $supportRemoteId,
+                $membersUserGroupRemoteId,
+                $usersUserGroupRemoteId,
             ),
             $actual
         );
