@@ -115,21 +115,21 @@ class Handler implements HandlerInterface
      */
     public function beginTransaction()
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        //throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
      */
     public function commit()
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        //throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
      */
     public function rollback()
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        //throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
