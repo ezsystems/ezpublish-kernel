@@ -26,7 +26,16 @@ class LegacyTest extends BaseHandlerTest
      */
     protected function getIoHandler()
     {
-        return new Legacy();
+        if ( !isset( $_ENV['legacyKernel'] ) )
+        {
+            self::markTestSkipped(
+                'Legacy kernel is needed to run these tests. Please ensure that "legacyKernel" environment variable is properly set with a eZ\\Publish\\Legacy\\Kernel instance'
+            );
+        }
+
+        $handler = new Legacy();
+        $handler->setLegacyKernel( $_ENV['legacyKernel'] );
+        return $handler;
     }
 
     protected function tearDown()
