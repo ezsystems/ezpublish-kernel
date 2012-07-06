@@ -474,7 +474,7 @@ class UserHandler implements UserHandlerInterface
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 )
-            throw new NotFound( 3, $groupId );
+            throw new NotFound( "Content with TypeId:3", $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( in_array( $groupId, $role->groupIds ) )
