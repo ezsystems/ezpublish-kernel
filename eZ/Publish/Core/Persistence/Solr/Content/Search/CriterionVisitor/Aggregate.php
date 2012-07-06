@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the criterion tree into a Solr query
@@ -76,7 +77,7 @@ class Aggregate extends CriterionVisitor
             }
         }
 
-        throw new \OutOfRangeException( "No visitor avialable for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator );
+        throw new NotImplementedException( "No visitor avialable for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator );
     }
 }
 

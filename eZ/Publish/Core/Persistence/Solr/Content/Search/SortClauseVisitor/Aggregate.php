@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
+    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the sortClause tree into a Solr query
@@ -76,7 +77,7 @@ class Aggregate extends SortClauseVisitor
             }
         }
 
-        throw new \OutOfRangeException( "No visitor avialable for: " . get_class( $sortClause ) . ' with operator ' . $sortClause->operator );
+        throw new NotImplementedException( "No visitor avialable for: " . get_class( $sortClause ) );
     }
 }
 

@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper,
-    eZ\Publish\SPI\Persistence\Content\Search\DocumentField;
+    eZ\Publish\SPI\Persistence\Content\Search\DocumentField,
+    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -76,7 +77,7 @@ class Aggregate extends FieldValueMapper
             }
         }
 
-        throw new \OutOfRangeException( "No mapper avialable for: " . get_class( $field ) );
+        throw new NotImplementedException( "No mapper avialable for: " . get_class( $field ) );
     }
 }
 

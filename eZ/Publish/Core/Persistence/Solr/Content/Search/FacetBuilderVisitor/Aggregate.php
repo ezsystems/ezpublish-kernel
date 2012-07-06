@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
+    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the facet builder tree into a Solr query
@@ -107,7 +108,7 @@ class Aggregate extends FacetBuilderVisitor
             }
         }
 
-        throw new \OutOfRangeException( "No visitor avialable for: " . get_class( $facetBuilder ) );
+        throw new NotImplementedException( "No visitor avialable for: " . get_class( $facetBuilder ) );
     }
 }
 
