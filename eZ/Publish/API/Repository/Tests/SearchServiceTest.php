@@ -429,7 +429,7 @@ class SearchServiceTest extends BaseTest
                         new FacetBuilder\UserFacetBuilder()
                     ),
                 ) ),
-                $fixtureDir . '/FacetContentType.php',
+                $fixtureDir . '/FacetUser.php',
             ),
             array(
                 new Query( array(
@@ -440,7 +440,7 @@ class SearchServiceTest extends BaseTest
                         new FacetBuilder\TermFacetBuilder()
                     ),
                 ) ),
-                $fixtureDir . '/FacetContentType.php',
+                $fixtureDir . '/FacetTerm.php',
             ),
             /* @TODO: It needs to be defined how this one is supposed to work.
             array(
