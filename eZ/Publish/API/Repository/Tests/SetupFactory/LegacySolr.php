@@ -71,6 +71,7 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedIn(),
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedBetween(),
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedBetween(),
+                    new Solr\Content\Search\CriterionVisitor\StatusIn(),
                 ) ),
                 new Solr\Content\Search\SortClauseVisitor\Aggregate( array(
                     new Solr\Content\Search\SortClauseVisitor\LocationPathString(),
