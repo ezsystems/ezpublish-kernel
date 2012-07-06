@@ -75,7 +75,7 @@ class Kernel extends ezpKernel
     /**
      * Runs a callback function (closure) in the legacy environment.
      *
-     * @param closure $callback
+     * @param \Closure $callback
      * @return mixed Depends on $callback's returned value
      */
     public function runCallback( $callback )
