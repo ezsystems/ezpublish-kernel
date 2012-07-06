@@ -126,6 +126,7 @@ class Native extends Gateway
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
+        // @TODO: Extract method
         $response = $this->client->request(
             'GET',
             '/solr/select?' .
@@ -147,6 +148,7 @@ class Native extends Gateway
         // @TODO: Error handling?
         $data = json_decode( $response->body );
 
+        // @TODO: Extract method
         $result = new SearchResult( array(
             'time'       => $data->responseHeader->QTime / 1000,
             'maxScore'   => $data->response->maxScore,
@@ -246,6 +248,10 @@ class Native extends Gateway
             new DocumentField\StringField( array(
                 'name'  => 'name',
                 'value' => $content->contentInfo->name,
+            ) ),
+            new DocumentField\StringField( array(
+                'name'  => 'creator',
+                'value' => $content->versionInfo->creatorId,
             ) ),
             new DocumentField\StringField( array(
                 'name'  => 'section',

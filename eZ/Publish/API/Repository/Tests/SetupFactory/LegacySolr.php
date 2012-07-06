@@ -75,6 +75,7 @@ class LegacySolr extends Legacy
                 new Solr\Content\Search\FacetBuilderVisitor\Aggregate( array(
                     new Solr\Content\Search\FacetBuilderVisitor\ContentType(),
                     new Solr\Content\Search\FacetBuilderVisitor\Section(),
+                    new Solr\Content\Search\FacetBuilderVisitor\User(),
                 ) ),
                 new Solr\Content\Search\FieldValueMapper\Aggregate( array(
                     new Solr\Content\Search\FieldValueMapper\StringMapper(),
