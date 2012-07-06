@@ -131,7 +131,7 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
-    public function createDraftFromVersion( $contentId, $srcVersion )
+    public function createDraftFromVersion( $contentId, $srcVersion, $userId )
     {
         $content = $this->load( $contentId, $srcVersion );
         $fields = $content->fields;
@@ -152,8 +152,7 @@ class ContentHandler implements ContentHandlerInterface
             'Content\\VersionInfo',
             array(
                 'modificationDate' => $time,
-                // @todo: implement real user
-                'creatorId' => $aVersion[0]->creatorId,
+                'creatorId' => $userId,
                 'creationDate' => $time,
                 'contentId' => $contentId,
                 'status' => VersionInfo::STATUS_DRAFT,

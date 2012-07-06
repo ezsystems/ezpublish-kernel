@@ -459,7 +459,7 @@ class ContentHandlerTest extends HandlerTest
         $content = $contentHandler->copy( 1, 1 );
         $this->contentToDelete[] = $content;
 
-        $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->id, 1 );
+        $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->id, 1, 10 );
 
         self::assertSame( $content->contentInfo->currentVersionNo + 1, $draft->versionInfo->versionNo );
         self::assertGreaterThanOrEqual( $time, $draft->versionInfo->creationDate );
