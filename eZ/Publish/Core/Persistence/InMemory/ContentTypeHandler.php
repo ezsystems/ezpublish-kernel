@@ -296,7 +296,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         {
             $contentTypeObj->fieldDefinitions[] = $this->backend->create(
                 'Content\\Type\\FieldDefinition',
-                array( '_typeId' => $contentTypeObj->id, '_status' => $contentTypeObj->status ) + (array)$field
+                array(
+                    '_typeId' => $contentTypeObj->id,
+                    '_status' => $contentTypeObj->status
+                ) + (array)$field,
+                false
             );
         }
         return $contentTypeObj;

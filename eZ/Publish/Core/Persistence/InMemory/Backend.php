@@ -80,7 +80,9 @@ class Backend
 
         foreach ( $this->data[$type] as $item )
         {
-            if ( $item[$idColumn] == $data[$idColumn] && ( !isset( $item['status'] ) || $item['status'] == $data['status'] ) )
+            if ( $item[$idColumn] == $data[$idColumn]
+                && ( ( isset( $item['status'] ) && $item['status'] == $data['status'] )
+                    || ( isset( $item['_status'] ) && $item['_status'] == $data['_status'] ) ) )
                 throw new Logic( 'create', 'provided id already exist' );
         }
 
