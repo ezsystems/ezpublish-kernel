@@ -44,7 +44,7 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
      *
      * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
      *
@@ -75,7 +75,7 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Deletes the existing BinaryFile with path $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the file doesn't exist
      *
      * @param string $path
      */
@@ -92,8 +92,8 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Updates the file identified by $path with data from $updateFile
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the source path doesn't exist
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
      *
      * @param string $path
      * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
@@ -155,7 +155,7 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Loads the BinaryFile identified by $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
      *
      * @param string $path
      *
@@ -201,8 +201,6 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
-     *
      * @param string $path
      *
      * @return resource
@@ -215,7 +213,7 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException if the file couldn't be found
      *
      * @param string $path
      *
@@ -234,7 +232,8 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
-     * @return \eZ\Publish\Core\IO\Legacy\FileResourceProvider
+     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
+     * @throws \Exception
      */
     private function getFileResourceProvider()
     {
@@ -266,7 +265,7 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns a mimeType from a file path, using fileinfo
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If file does not exist
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If file does not exist
      *
      * @param string $path
      *
