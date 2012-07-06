@@ -13,7 +13,7 @@ use \ezpKernel;
 /**
  * Class wrapping the legacy kernel
  */
-final class Kernel extends ezpKernel
+class Kernel extends ezpKernel
 {
     /**
      * Legacy root directory
