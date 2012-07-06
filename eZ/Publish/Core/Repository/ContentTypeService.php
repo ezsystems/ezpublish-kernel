@@ -773,8 +773,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             SPIContentType::STATUS_DRAFT
         );
 
-        $currentUser = $this->repository->getCurrentUser();
-        if ( $spiContentType->modifierId !== $currentUser->id )
+        if ( $spiContentType->modifierId != $this->repository->getCurrentUser()->id )
         {
             throw new NotFoundException( "ContentType", $contentTypeId );
         }
