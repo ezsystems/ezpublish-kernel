@@ -2138,7 +2138,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $this->repository->getContentTypeService()->createContentTypeDraft( $publishedType );
         // Change user
         $this->repository->setCurrentUser(
-            $this->createUserVersion1()
+            $this->getStubbedUser( 4096 )
         );
 
         /* BEGIN: Use case */
@@ -2341,7 +2341,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionNoDraftForAuthenticatedUser()
     {
-        $contentTypeDraft = $this->createContentType( false, $this->createUserVersion1()->id );
+        $contentTypeDraft = $this->createContentType( false, $this->getStubbedUser( 28 )->id );
 
         /* BEGIN: Use Case */
         // $contentTypeDraft contains a ContentTypeDraft with identifier 'blog-post', belonging to the user with id=28
@@ -2460,7 +2460,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $time = time();
 
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        $user = $this->getStubbedUser( 4096 );
         $contentTypeService = $this->repository->getContentTypeService();
 
         $commentType = $contentTypeService->loadContentTypeByIdentifier( "comment" );

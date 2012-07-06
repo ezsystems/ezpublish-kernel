@@ -9,7 +9,10 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use PHPUnit_Framework_TestCase,
-    eZ\Publish\API\Repository\Values\ValueObject;
+    eZ\Publish\API\Repository\Values\ValueObject,
+    eZ\Publish\Core\Repository\Values\User\User,
+    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 /**
  * Base test case for tests on services
@@ -50,6 +53,26 @@ abstract class Base extends PHPUnit_Framework_TestCase
             ),
         );
         $this->repository = static::getRepository( $serviceSettings );
+    }
+
+    /**
+     * Returns User stub with $id as User/Content id
+     *
+     * @param $id
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function getStubbedUser( $id )
+    {
+        return new User(
+            array(
+                'versionInfo' => new VersionInfo(
+                    array(
+                        'contentInfo' => new ContentInfo( array( 'id' => $id ) )
+                    )
+                )
+            )
+        );
     }
 
     /**
