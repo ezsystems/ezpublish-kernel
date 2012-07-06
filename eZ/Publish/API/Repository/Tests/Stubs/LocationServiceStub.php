@@ -596,7 +596,7 @@ class LocationServiceStub implements LocationService
     /**
      * Returns if a location for the given $contentInfo exists.
      *
-     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @return boolean
      */
     protected function hasLocation( ContentInfo $contentInfo )
