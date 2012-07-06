@@ -228,6 +228,71 @@ class SearchServiceTest extends BaseTest
                 ) ),
                 $fixtureDir . 'Status.php',
             ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\Field(
+                        'name',
+                        Criterion\Operator::EQ,
+                        'members'
+                    ),
+                ) ),
+                $fixtureDir . 'Field.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\Field(
+                        'name',
+                        Criterion\Operator::IN,
+                        array( 'members', 'anonymous users' )
+                    ),
+                ) ),
+                $fixtureDir . 'FieldIn.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\Field(
+                        'price',
+                        Criterion\Operator::BETWEEN,
+                        array( 10000, 1000000 )
+                    ),
+                ) ),
+                $fixtureDir . 'FieldBetween.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\LogicalOr(
+                        array(
+                            new Criterion\Field(
+                                'name',
+                                Criterion\Operator::EQ,
+                                'members'
+                            ),
+                            new Criterion\Field(
+                                'price',
+                                Criterion\Operator::BETWEEN,
+                                array( 10000, 1000000 )
+                            )
+                        )
+                    ),
+                ) ),
+                $fixtureDir . 'FieldOr.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\FullText(
+                        'applied webpage'
+                    ),
+                ) ),
+                $fixtureDir . 'FullText.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\FullText(
+                        'applie*'
+                    ),
+                ) ),
+                $fixtureDir . 'FullTextWildcard.php',
+            ),
         );
     }
 
