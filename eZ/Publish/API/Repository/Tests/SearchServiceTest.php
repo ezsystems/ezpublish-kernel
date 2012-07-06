@@ -144,6 +144,16 @@ class SearchServiceTest extends BaseTest
                 new Query( array(
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::LTE,
+                        1311154215
+                    ),
+                ) ),
+                $fixtureDir . 'DateMetadataLte.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::IN,
                         array( 1311154214, 1311154215 )
                     ),

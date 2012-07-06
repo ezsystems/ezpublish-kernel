@@ -67,6 +67,10 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\SectionIn(),
                     new Solr\Content\Search\CriterionVisitor\RemoteIdIn(),
                     new Solr\Content\Search\CriterionVisitor\LocationRemoteIdIn(),
+                    new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedIn(),
+                    new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedIn(),
+                    new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedBetween(),
+                    new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedBetween(),
                 ) ),
                 new Solr\Content\Search\SortClauseVisitor\Aggregate( array(
                     new Solr\Content\Search\SortClauseVisitor\LocationPathString(),
