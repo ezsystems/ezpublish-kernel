@@ -118,7 +118,7 @@ class LegacyKernelController
         }
 
         return new Response(
-            $result["content"]
+            $result->content
         );
     }
 }

@@ -4,6 +4,7 @@ parameters:
     #ezpublish_legacy.root_dir: ~
 
     ezpublish_legacy.kernel.lazy_loader.class: eZ\Publish\Legacy\KernelLoader
+    ezpublish_legacy.kernel_handler.web.class: ezpKernelWeb
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
 
@@ -15,12 +16,21 @@ services:
         class: Closure
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernel
+        arguments: [@ezpublish_legacy.kernel_handler]
+
+    ezpublish_legacy.kernel.lazy_loader:
+        class: %ezpublish_legacy.kernel.lazy_loader.class%
         arguments:
             - %ezpublish_legacy.root_dir%
             - %webroot_dir%
 
-    ezpublish_legacy.kernel.lazy_loader:
-        class: %ezpublish_legacy.kernel.lazy_loader.class%
+    ezpublish_legacy.kernel_handler.web:
+        class: %ezpublish_legacy.kernel_handler.web.class%
+        factory_service: ezpublish_legacy.kernel.lazy_loader
+        factory_method: buildLegacyKernelHandlerWeb
+
+    ezpublish_legacy.kernel_handler:
+        alias: ezpublish_legacy.kernel_handler.web
 
     ezpublish_legacy.controller:
         class: %ezpublish_legacy.controller.class%

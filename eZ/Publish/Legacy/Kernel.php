@@ -8,7 +8,8 @@
  */
 
 namespace eZ\Publish\Legacy;
-use \ezpKernel;
+use \ezpKernel,
+    \ezpKernelHandler;
 
 /**
  * Class wrapping the legacy kernel
@@ -29,13 +30,13 @@ class Kernel extends ezpKernel
      */
     private $webrootDir;
 
-    public function __construct( $legacyRootDir, $webrootDir )
+    public function __construct( ezpKernelHandler $kernelHandler, $legacyRootDir, $webrootDir )
     {
         $this->legacyRootDir = $legacyRootDir;
         $this->webrootDir = $webrootDir;
 
         $this->enterLegacyRootDir();
-        parent::__construct();
+        parent::__construct( $kernelHandler );
         $this->leaveLegacyRootDir();
         $this->setUseExceptions( true );
     }
@@ -78,7 +79,7 @@ class Kernel extends ezpKernel
      * @param \Closure $callback
      * @return mixed Depends on $callback's returned value
      */
-    public function runCallback( $callback )
+    public function runCallback( \Closure $callback )
     {
         $this->enterLegacyRootDir();
         $return = parent::runCallback( $callback );

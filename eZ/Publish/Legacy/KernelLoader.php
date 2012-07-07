@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Legacy;
 
-use eZ\Publish\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Legacy\Kernel as LegacyKernel,
+    \ezpKernelHandler,
+    \ezpKernelWeb;
 
 /**
  * Legacy kernel loader
@@ -17,21 +19,65 @@ use eZ\Publish\Legacy\Kernel as LegacyKernel;
 class KernelLoader
 {
     /**
+     * @var string $legacyRootDir Absolute path to the legacy root directory (eZPublish 4 install dir)
+     */
+    protected $legacyRootDir;
+
+    /**
+     * @var string Absolute path to the new webroot directory (web/)
+     */
+    protected $webrootDir;
+
+    public function __construct( $legacyRootDir, $webrootDir )
+    {
+        $this->legacyRootDir = $legacyRootDir;
+        $this->webrootDir = $webrootDir;
+    }
+
+    /**
      * Builds up the legacy kernel and encapsulates it inside a closure, allowing lazy loading.
      *
-     * @param string $legacyRootDir Absolute path to the legacy root directory (eZPublish 4 install dir)
-     * @param string $webrootDir Absolute path to the new webroot directory (web/)
+     * @param \ezpKernelHandler|\Closure A kernel handler instance or a closure returning a kernel handler instance
      * @return \Closure
      */
-    public function buildLegacyKernel( $legacyRootDir, $webrootDir )
+    public function buildLegacyKernel( $legacyKernelHandler )
     {
-        return function() use ( $legacyRootDir, $webrootDir )
+        $legacyRootDir = $this->legacyRootDir;
+        $webrootDir = $this->webrootDir;
+        return function () use ( $legacyKernelHandler, $legacyRootDir, $webrootDir )
         {
             static $legacyKernel;
             if ( !$legacyKernel instanceof LegacyKernel )
-                $legacyKernel = new LegacyKernel( $legacyRootDir, $webrootDir );
+            {
+                if ( $legacyKernelHandler instanceof \Closure )
+                    $legacyKernelHandler = $legacyKernelHandler();
+                $legacyKernel = new LegacyKernel( $legacyKernelHandler, $legacyRootDir, $webrootDir );
+            }
 
             return $legacyKernel;
+        };
+    }
+
+    /**
+     * Builds up the legacy kernel web handler and encapsulates it inside a closure, allowing lazy loading.
+     *
+     * @return \Closure
+     */
+    public function buildLegacyKernelHandlerWeb()
+    {
+        $legacyRootDir = $this->legacyRootDir;
+        $webrootDir = $this->webrootDir;
+        return function () use ( $legacyRootDir, $webrootDir )
+        {
+            static $webHandler;
+            if ( !$webHandler instanceof ezpKernelWeb )
+            {
+                chdir( $legacyRootDir );
+                $webHandler = new ezpKernelWeb();
+                chdir( $webrootDir );
+            }
+
+            return $webHandler;
         };
     }
 }
