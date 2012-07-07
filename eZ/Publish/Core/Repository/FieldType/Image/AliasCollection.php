@@ -170,6 +170,7 @@ class AliasCollection extends ArrayObject
      * Initializes the collection from an image path.
      * $imagePath will be considered as the original alias and will be moved to the appropriate storage directory.
      *
+     * @todo Change/Remove, violation of layers, & IO service should be used for accessing files / aliases
      * @param string $imagePath Real (absolute) path to the image.
      */
     public final function initializeFromLocalImage( $imagePath )
