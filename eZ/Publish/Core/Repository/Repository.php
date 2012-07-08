@@ -28,7 +28,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\Legacy\LegacyKernelAware,
     eZ\Publish\Legacy\Kernel as LegacyKernel,
-    eZ\Publish\Legacy\KernelLoader as LegacyKernelLoader,
+    eZ\Publish\Legacy\Kernel\Loader as LegacyKernelLoader,
     Exception,
     RuntimeException;
 

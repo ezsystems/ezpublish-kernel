@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the KernelLoader class.
+ * File containing the legacy kernel Loader class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy;
+namespace eZ\Publish\Legacy\Kernel;
 
 use eZ\Publish\Legacy\Kernel as LegacyKernel,
     \ezpKernelHandler,
@@ -16,7 +16,7 @@ use eZ\Publish\Legacy\Kernel as LegacyKernel,
 /**
  * Legacy kernel loader
  */
-class KernelLoader
+class Loader
 {
     /**
      * @var string $legacyRootDir Absolute path to the legacy root directory (eZPublish 4 install dir)
@@ -79,5 +79,14 @@ class KernelLoader
 
             return $webHandler;
         };
+    }
+
+    public function buildLegacyKernelHandlerCLI( array $settings = array() )
+    {
+        chdir( $this->legacyRootDir );
+        $cliHandler = new CLIHandler( $settings );
+        chdir( $this->webrootDir );
+
+        return $cliHandler;
     }
 }

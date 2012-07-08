@@ -3,7 +3,7 @@ parameters:
     #ezpublish_legacy.enabled: false
     #ezpublish_legacy.root_dir: ~
 
-    ezpublish_legacy.kernel.lazy_loader.class: eZ\Publish\Legacy\KernelLoader
+    ezpublish_legacy.kernel.lazy_loader.class: eZ\Publish\Legacy\Kernel\Loader
     ezpublish_legacy.kernel_handler.web.class: ezpKernelWeb
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
