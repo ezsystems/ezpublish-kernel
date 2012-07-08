@@ -54,7 +54,7 @@ class Kernel extends ezpKernel
     /**
      * Leaves the legacy root dir and switches back to the initial webroot dir.
      */
-    protected function leaveLegacyRootDir()
+    public function leaveLegacyRootDir()
     {
         if ( getcwd() == $this->legacyRootDir )
             chdir( $this->webrootDir );
