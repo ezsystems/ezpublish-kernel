@@ -21,6 +21,9 @@ use eZ\Publish\Core\IO\LegacyHandler as Legacy,
  */
 class LegacyTest extends BaseHandlerTest
 {
+    protected $legacyPath;
+    protected $originalDir;
+
     /**
      * @return \eZ\Publish\SPI\IO\Handler
      */
@@ -38,12 +41,21 @@ class LegacyTest extends BaseHandlerTest
         return $handler;
     }
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->legacyPath = $_ENV['legacyPath'];
+        $this->originalDir = getcwd();
+    }
+
     protected function tearDown()
     {
+        chdir( $this->legacyPath );
         if ( file_exists( 'var/test' ) )
         {
             ezcBaseFile::removeRecursive( 'var/test' );
         }
+        chdir( $this->originalDir );
         parent::tearDown();
     }
 

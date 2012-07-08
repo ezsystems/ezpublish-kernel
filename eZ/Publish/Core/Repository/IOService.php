@@ -21,7 +21,10 @@ use eZ\Publish\API\Repository\IOService as IOServiceInterface,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+
+    eZ\Publish\Legacy\LegacyKernelAware,
+    eZ\Publish\Legacy\Kernel as LegacyKernel;
 
 
 /**
@@ -29,7 +32,7 @@ use eZ\Publish\API\Repository\IOService as IOServiceInterface,
  *
  * @package eZ\Publish\Core\Repository
  */
-class IOService implements IOServiceInterface
+class IOService implements IOServiceInterface, LegacyKernelAware
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -47,6 +50,11 @@ class IOService implements IOServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Legacy\Kernel
+     */
+    protected $legacyKernel;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -58,6 +66,27 @@ class IOService implements IOServiceInterface
         $this->repository = $repository;
         $this->ioHandler = $handler;
         $this->settings = $settings;
+    }
+
+    /**
+     * Injects the legacy kernel instance.
+     *
+     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
+     * @return void
+     */
+    public function setLegacyKernel( LegacyKernel $legacyKernel )
+    {
+        $this->legacyKernel = $legacyKernel;
+    }
+
+    /**
+     * Gets the legacy kernel instance.
+     *
+     * @return \eZ\Publish\Legacy\Kernel
+     */
+    public function getLegacyKernel()
+    {
+        return $this->legacyKernel;
     }
 
     /**

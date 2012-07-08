@@ -548,6 +548,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     public function setLegacyKernel( LegacyKernel $legacyKernel )
     {
         $this->serviceSettings['legacy']['kernel'] = $legacyKernel;
+        if ( $this->ioHandler instanceof LegacyKernelAware )
+            $this->ioHandler->setLegacyKernel( $legacyKernel );
     }
 
     /**
@@ -586,7 +588,7 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             }
 
             $kernelClosure = $this->serviceSettings['legacy']['kernel_loader']->buildLegacyKernel( $this->serviceSettings['legacy']['kernel_handler'] );
-            $this->serviceSettings['legacy']['kernel'] = $kernelClosure();
+            $this->setLegacyKernel( $kernelClosure() );
         }
 
         return $this->serviceSettings['legacy']['kernel'];
