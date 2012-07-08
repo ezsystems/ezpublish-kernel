@@ -28,7 +28,8 @@ class RepositoryTest extends BaseServiceTest
     protected function getRepository( array $serviceSettings )
     {
         $serviceSettings['legacy'] = array(
-            'legacy_root_dir'   => getcwd()
+            'legacy_root_dir'   => getcwd(),
+            'kernel_handler'    => $this->getMock( 'ezpKernelHandler' )
         );
 
         return new Repository(
@@ -74,6 +75,22 @@ class RepositoryTest extends BaseServiceTest
         $refServiceSettings->setAccessible( true );
         $serviceSettings = $refServiceSettings->getValue( $this->repository );
         unset( $serviceSettings['legacy']['legacy_root_dir'] );
+        $refServiceSettings->setValue( $this->repository, $serviceSettings );
+
+        $this->repository->getLegacyKernel();
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Repository\Repository::getLegacyKernel
+     * @expectedException eZ\Publish\Core\Base\Exceptions\BadConfiguration
+     */
+    public function testGetLegacyKernelFailNoHandler()
+    {
+        $refRepository = new \ReflectionObject( $this->repository );
+        $refServiceSettings = $refRepository->getProperty( 'serviceSettings' );
+        $refServiceSettings->setAccessible( true );
+        $serviceSettings = $refServiceSettings->getValue( $this->repository );
+        unset( $serviceSettings['legacy']['kernel_handler'] );
         $refServiceSettings->setValue( $this->repository, $serviceSettings );
 
         $this->repository->getLegacyKernel();

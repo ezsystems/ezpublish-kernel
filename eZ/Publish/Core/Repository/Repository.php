@@ -560,9 +560,6 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     {
         if ( !isset( $this->serviceSettings['legacy']['kernel'] ) )
         {
-            if ( !isset( $this->serviceSettings['legacy']['kernel_loader'] ) )
-                $this->serviceSettings['legacy']['kernel_loader'] = new LegacyKernelLoader();
-
             if ( !isset( $this->serviceSettings['legacy']['legacy_root_dir'] ) )
             {
                 throw new BadConfiguration(
@@ -572,10 +569,23 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             }
 
             $originalRootDir = isset( $this->serviceSettings['legacy']['webroot_dir'] ) ? $this->serviceSettings['legacy']['webroot_dir'] : getcwd();
-            $kernelClosure = $this->serviceSettings['legacy']['kernel_loader']->buildLegacyKernel(
-                $this->serviceSettings['legacy']['legacy_root_dir'],
-                $originalRootDir
-            );
+            if ( !isset( $this->serviceSettings['legacy']['kernel_loader'] ) )
+            {
+                $this->serviceSettings['legacy']['kernel_loader'] = new LegacyKernelLoader(
+                    $this->serviceSettings['legacy']['legacy_root_dir'],
+                    $originalRootDir
+                );
+            }
+
+            if ( !isset( $this->serviceSettings['legacy']['kernel_handler'] ) )
+            {
+                throw new BadConfiguration(
+                    "serviceSettings['legacy']['kernel_handler']",
+                    "You need to provide a legacy kernel handler"
+                );
+            }
+
+            $kernelClosure = $this->serviceSettings['legacy']['kernel_loader']->buildLegacyKernel( $this->serviceSettings['legacy']['kernel_handler'] );
             $this->serviceSettings['legacy']['kernel'] = $kernelClosure();
         }
 

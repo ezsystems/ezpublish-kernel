@@ -13,7 +13,8 @@
 use eZ\Publish\Core\Base\ClassLoader,
     eZ\Publish\Core\Base\ConfigurationManager,
     eZ\Publish\Core\Base\ServiceContainer,
-    eZ\Publish\Legacy\Kernel as LegacyKernel;
+    eZ\Publish\Legacy\Kernel as LegacyKernel,
+    eZ\Publish\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
 // Setup autoloaders
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
@@ -39,10 +40,7 @@ if ( !defined( 'EZCBASE_ENABLED' ) )
     define( 'EZCBASE_ENABLED', false );
 require "$legacyPath/autoload.php";
 
-// Avoid notices from legacy kernel about REQUEST_URI.
-// TODO: Remove this dirty workaround when able to properly legacy kernel in CLI mode
-$_SERVER['REQUEST_URI'] = null;
-$legacyKernel = new LegacyKernel( $legacyPath, __DIR__ );
+$legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, __DIR__ );
 // Exposing in env variables in order be able to use them in test cases.
 $_ENV['legacyKernel'] = $legacyKernel;
 $_ENV['legacyPath'] = $legacyPath;

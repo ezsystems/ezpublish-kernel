@@ -74,15 +74,19 @@ class Kernel extends ezpKernel
     }
 
     /**
-     * Runs a callback function (closure) in the legacy environment.
+     * Runs a callback function in the legacy kernel environment.
+     * This is useful to run eZ Publish 4.x code from a non-related context (like eZ Publish 5)
      *
      * @param \Closure $callback
-     * @return mixed Depends on $callback's returned value
+     * @param bool $postReinitialize Default is true.
+     *                               If set to false, the kernel environment will not be reinitialized.
+     *                               This can be useful to optimize several calls to the kernel within the same context.
+     * @return mixed The result of the callback
      */
-    public function runCallback( \Closure $callback )
+    public function runCallback( \Closure $callback, $postReinitialize = true )
     {
         $this->enterLegacyRootDir();
-        $return = parent::runCallback( $callback );
+        $return = parent::runCallback( $callback, $postReinitialize );
         $this->leaveLegacyRootDir();
         return $return;
     }
