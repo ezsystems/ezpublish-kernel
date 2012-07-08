@@ -253,6 +253,7 @@ class LegacyHandler implements IoHandlerInterface, LegacyKernelAware
                 }
 
                 $file->uri = $file->path;
+                $file->originalFile = basename( $file->path );
 
                 return $file;
             },

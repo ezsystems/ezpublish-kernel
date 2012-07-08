@@ -245,16 +245,17 @@ abstract class IOBase extends BaseServiceTest
         $filePath = __DIR__ . '/ezplogo.png';
 
         $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
+        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
 
         $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
 
         $this->assertPropertiesCorrect(
             array(
                 //@todo: is binary file ID equal to path?
-                'id' => $filePath,
+                'id' => $binaryCreateStruct->uri,
                 'size' => $binaryCreateStruct->size,
                 'mimeType' => $binaryCreateStruct->mimeType,
-                'uri' => null,
+                'uri' => $binaryCreateStruct->uri,
                 'originalFile' => $binaryCreateStruct->originalFileName
             ),
             $binaryFile,
@@ -276,6 +277,7 @@ abstract class IOBase extends BaseServiceTest
         $filePath = __DIR__ . '/ezplogo.png';
 
         $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
+        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
 
         $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
 
@@ -305,6 +307,7 @@ abstract class IOBase extends BaseServiceTest
         $filePath = __DIR__ . '/ezplogo.png';
 
         $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
+        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
 
         $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
 
@@ -349,6 +352,7 @@ abstract class IOBase extends BaseServiceTest
         $filePath = __DIR__ . '/ezplogo.png';
 
         $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
+        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
 
         $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
 
@@ -368,6 +372,7 @@ abstract class IOBase extends BaseServiceTest
         $filePath = __DIR__ . '/ezplogo.png';
 
         $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
+        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
 
         $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
 

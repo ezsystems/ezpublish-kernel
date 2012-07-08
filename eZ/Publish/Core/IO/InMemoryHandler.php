@@ -71,6 +71,7 @@ class InMemoryHandler implements IoHandlerInterface
 
         $binaryFile = new BinaryFile();
         $binaryFile->path = $createFilestruct->path;
+        $binaryFile->uri = $createFilestruct->path;
         $binaryFile->mimeType = $createFilestruct->mimeType;
         $binaryFile->ctime = new DateTime;
         $binaryFile->mtime = clone $binaryFile->ctime;
