@@ -183,16 +183,33 @@ interface FieldType
     public function toHash( $value );
 
     /**
-     * Converts a $value to a persistence value
+     * Converts a $value to a persistence value.
      *
-     * @param mixed $value
+     * In this method the field type puts the data which is stored in the field of content in the repository
+     * into the property FieldValue::data. The format of $data is a primitive, an array (map) or an object, which
+     * is then canonically converted to e.g. json/xml structures by future storage engines without
+     * further conversions. For mapping the $data to the legacy database an appropriate Converter
+     * (implementing eZ\Publish\Core\Persistence\Legacy\FieldValue\Converter) has implemented for the field
+     * type. Note: $data should only hold data which is actually stored in the field. It must not
+     * hold data which is stored externally.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     * The $externalData property in the FieldValue is used for storing data externally by the
+     * FieldStorage interface method storeFieldData.
+     *
+     * The FieldValuer::sortKey is build by the field type for using by sort operations.
+     *
+     * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
+     *
+     * @param mixed $value The value of the field type
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
     public function toPersistenceValue( $value );
 
     /**
      * Converts a persistence $fieldValue to a Value
+     *
+     * This method builds a field type value from the $data and $externalData properties.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
