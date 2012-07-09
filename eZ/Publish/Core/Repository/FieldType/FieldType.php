@@ -127,12 +127,12 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return array And array of field validation errors if there were any
      */
-    public final function validate( ValidatorService $validatorService, FieldDefinition $fieldDefinition, $fieldValue )
+    public final function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $errors = array();
         foreach ( (array)$fieldDefinition->getValidators() as $validatorRepresentation )
         {
-            $validator = $validatorService->getValidator( $validatorRepresentation->identifier );
+            $validator = $this->validatorService->getValidator( $validatorRepresentation->identifier );
             $validator->initializeWithConstraints( $validatorRepresentation->constraints );
             if ( !$validator->validate( $fieldValue ) )
             {

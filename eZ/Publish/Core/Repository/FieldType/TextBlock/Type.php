@@ -18,8 +18,6 @@ use eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
  */
 class Type extends TextLine
 {
-    protected $allowedValidators = array();
-
     protected $settingSchema = array( "textRows" => 10 );
 
     /**
