@@ -49,7 +49,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @var array
      */
-    protected $settingSchema = array();
+    protected $settingsSchema = array();
 
     /**
      * Validators which are supported for this field type.
@@ -103,7 +103,7 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function getSettingsSchema()
     {
-        return $this->settingSchema;
+        return $this->settingsSchema;
     }
 
     /**

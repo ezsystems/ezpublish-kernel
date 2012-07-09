@@ -30,7 +30,7 @@ class Type extends FieldType
      *
      * @var array
      */
-    protected $settingSchema = array(
+    protected $settingsSchema = array(
         'numRows' => 10,
         'tagPreset' => null,
         'defaultText' => '',

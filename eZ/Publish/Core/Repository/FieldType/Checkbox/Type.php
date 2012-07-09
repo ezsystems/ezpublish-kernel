@@ -18,7 +18,7 @@ use eZ\Publish\Core\Repository\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $settingSchema = array(
+    protected $settingsSchema = array(
         'defaultValue' => false
     );
 

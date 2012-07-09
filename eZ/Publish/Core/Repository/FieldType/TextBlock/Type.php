@@ -18,7 +18,7 @@ use eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
  */
 class Type extends TextLine
 {
-    protected $settingSchema = array( "textRows" => 10 );
+    protected $settingsSchema = array( "textRows" => 10 );
 
     /**
      * Build a Value object of current FieldType

@@ -34,7 +34,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingSchema
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingsSchema
      */
     public function testDateAndTimeAllowedSettings()
     {
@@ -45,7 +45,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
                 'defaultType' => 0,
                 'dateInterval' => null
             ),
-            $ft->getSettingSchema(),
+            $ft->getSettingsSchema(),
             "The set of allowed settings does not match what is expected."
         );
     }

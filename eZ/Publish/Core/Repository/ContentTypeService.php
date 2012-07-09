@@ -560,22 +560,22 @@ class ContentTypeService implements ContentTypeServiceInterface
             $validatorConstraints[$validator->identifier] = $validator->constraints;
         }
 
-        $settingSchema = $fieldType->getSettingSchema();
+        $settingsSchema = $fieldType->getSettingsSchema();
         $fieldSettingsConstraints = array();
         foreach ( (array)$fieldSettings as $settingName => $settingValue )
         {
-            if ( !array_key_exists( $settingName, $settingSchema ) )
+            if ( !array_key_exists( $settingName, $settingsSchema ) )
             {
                 throw new InvalidArgumentException(
                     "\$validator",
-                    "Field setting '{$settingName}' is not allowed: " . implode( ", ", $settingSchema )
+                    "Field setting '{$settingName}' is not allowed: " . implode( ", ", $settingsSchema )
                 );
             }
             $fieldSettingsConstraints[$settingName] = $settingValue;
         }
 
         $fieldTypeConstraints->validators = $validatorConstraints;
-        $fieldTypeConstraints->fieldSettings = $fieldSettingsConstraints + $settingSchema;
+        $fieldTypeConstraints->fieldSettings = $fieldSettingsConstraints + $settingsSchema;
     }
 
     /**
