@@ -12,7 +12,26 @@ use eZ\Publish\API\Repository\Tests,
     eZ\Publish\API\Repository;
 
 /**
- * Integration test for the legacy storage
+ * Integration test for legacy storage field types
+ *
+ * This abstract base test case is supposed to be the base for field type
+ * integration tests. It basically calls all involved methods in the field type 
+ * ``Converter`` and ``Storage`` implementations. Fo get it working implement
+ * the abstract methods in a sensible way.
+ *
+ * The following actions are performed by this test using the custom field
+ * type:
+ *
+ * - Create a new content type with the given field type
+ * - Load created content type
+ * - Create content object of new content type
+ * - Load created content
+ * - @TODO: Publish created content
+ * - @TODO: Update content
+ * - Copy created content
+ * - Remove copied content
+ * - @TODO: Test toHash()?
+ * - @TODO: Test fromHash()?
  *
  * @group integration
  */
@@ -108,6 +127,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      *
      * Useful, if additional stuff should be executed (like creating the actual 
      * user).
+     *
+     * We cannot just overwrite the testCreateContent method, since this messes 
+     * up PHPUnits @depends sorting of tests, so everything will be skipped.
      *
      * @param Repository\Repository $repository
      * @param Repository\Values\Content\Content $content
