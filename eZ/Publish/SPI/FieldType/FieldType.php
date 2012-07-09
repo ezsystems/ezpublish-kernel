@@ -29,6 +29,7 @@ interface FieldType
      * Return the field type identifier for this field type
      *
      * @return string
+     * @TODO Expose to Public API.
      */
     public function getFieldTypeIdentifier();
 
@@ -39,29 +40,73 @@ interface FieldType
      * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
+     * @TODO Add VersionInfo parameter
      */
     public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field );
 
     /**
-     * Returns a map of allowed setting including a default value used when not given in the field definition
+     * Returns a schema for the settings expected by the FieldType
      *
-     * @return array
+     * Returns an arbitrary value, representing a schema for the settings of
+     * the FieldType.
+     *
+     * Explanation: There are no possible generic schemas for defining settings
+     * input, which is why no schema for the return value of this method is
+     * defined. It is up to the implementor to define and document a schema for
+     * the return value and document it. In addition, it is necessary that all
+     * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
+     * provide plugin mechanisms to hook adapters for the specific FieldType
+     * into. These adapters then need to be either shipped with the FieldType
+     * or need to be implemented by a third party. If there is no adapter
+     * available for a specific FieldType, it will not be usable with the
+     * consumer.
+     *
+     * @return mixed
+     * @TODO Expose to Public API.
      */
-    public function allowedSettings();
+    public function getSettingsSchema();
 
     /**
-     * The method returns the validators which are supported for this field type.
-     * Full Qualified Class Name should be registered here.
-     * Example:
+     * Returns a schema for the validator configuration expected by the FieldType
+     *
+     * Returns an arbitrary value, representing a schema for the validator
+     * configuration of the FieldType.
+     *
+     * Explanation: There are no possible generic schemas for defining settings
+     * input, which is why no schema for the return value of this method is
+     * defined. It is up to the implementor to define and document a schema for
+     * the return value and document it. In addition, it is necessary that all
+     * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
+     * provide plugin mechanisms to hook adapters for the specific FieldType
+     * into. These adapters then need to be either shipped with the FieldType
+     * or need to be implemented by a third party. If there is no adapter
+     * available for a specific FieldType, it will not be usable with the
+     * consumer.
+     *
+     * Best practice:
+     *
+     * It is considered best practice to return a hash map, which contains
+     * rudimentary settings structures, like e.g. for the "ezstring" FieldType
+     *
      * <code>
-     * array(
-     *     "eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator"
-     * );
+     *  array(
+     *      'stringLength' => array(
+     *          'minStringLength' => array(
+     *              'type'    => 'int',
+     *              'default' => 0,
+     *          ),
+     *          'maxStringLength' => array(
+     *              'type'    => 'int'
+     *              'default' => null,
+     *          )
+     *      ),
+     *  );
      * </code>
      *
-     * @return array
+     * @return mixed
+     * @TODO Expose to Public API.
      */
-    public function allowedValidators();
+    public function getValidatorConfigurationSchema();
 
     /**
      * Build a Value object of current FieldType
@@ -79,18 +124,18 @@ interface FieldType
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
-     * @param \eZ\Publish\API\Repository\ValidatorService $validatorService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      *
-     * @return array And array of field validation errors if there were any
+     * @return array An array of field validation errors if there were any
      */
-    public function validate( ValidatorService $validatorService, FieldDefinition $fieldDef, $field );
+    public function validate( FieldDefinition $fieldDef, $field );
 
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
      * @return bool
+     * @TODO Expose to Public API.
      */
     public function isSearchable();
 
@@ -99,6 +144,7 @@ interface FieldType
      * value is provided in the field definition in content types.
      *
      * @return mixed
+     * @TODO Expose to Public API.
      */
     public function getDefaultDefaultValue();
 
@@ -120,6 +166,8 @@ interface FieldType
      * @param mixed $hash
      *
      * @return mixed
+     * @TODO Expose to Public API.
+     * @TODO May support different formats, but best practice is only 1
      */
     public function fromHash( $hash );
 
@@ -129,6 +177,8 @@ interface FieldType
      * @param mixed $value
      *
      * @return mixed
+     * @TODO Expose to Public API.
+     * @TODO May support different formats, but best practice is only 1
      */
     public function toHash( $value );
 

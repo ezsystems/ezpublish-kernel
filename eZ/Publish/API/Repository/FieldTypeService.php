@@ -16,7 +16,14 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 /**
  * This class provides service methods available to FieldTypes
  *
+ * This interface cannot be retrieved through the Public API and is not meant to be
+ * used by its users. It is only available to {@link
+ * eZ\Publish\SPI\FieldType\FieldType} implementors through the {@link
+ * eZ\Publish\SPI\FieldType\FieldType::handleEvent()} method.
+ *
  * @package eZ\Publish\API\Repository
+ * @todo Rename to FieldTypeTools
+ * @todo Add deleteRelation() method?
  */
 interface FieldTypeService
 {

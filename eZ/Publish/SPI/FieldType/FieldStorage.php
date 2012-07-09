@@ -103,6 +103,7 @@ interface FieldStorage
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     * @TODO Remove
      */
     public function copyFieldData( Field $field, array $context );
 
