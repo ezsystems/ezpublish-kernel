@@ -138,14 +138,7 @@ class Handler implements BaseContentHandler
         $content->fields = $struct->fields;
         $content->versionInfo->names = $struct->name;
 
-        if ( $copy )
-        {
-            $this->fieldHandler->copyFields( $content );
-        }
-        else
-        {
-            $this->fieldHandler->createNewFields( $content );
-        }
+        $this->fieldHandler->createNewFields( $content );
 
         // Create node assignments
         foreach ( $struct->locations as $location )
