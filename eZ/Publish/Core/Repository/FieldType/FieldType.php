@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\FieldTypeService,
+    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\API\Repository\ValidatorService,
     eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
@@ -70,21 +70,30 @@ abstract class FieldType implements FieldTypeInterface
     protected $validators = array();
 
     /**
-     * Constructs field type object, initializing internal data structures.
+     * Tool object for field types
+     *
+     * @var \eZ\Publish\API\Repository\FieldTypeTools
      */
-    public function __construct()
+    protected $fieldTypeTools;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
+     */
+    public function __construct( FieldTypeTools $fieldTypeTools )
     {
+        $this->fieldTypeTools = $fieldTypeTools;
     }
 
     /**
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      */
-    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field )
+    public function handleEvent( $event, FieldDefinition $fieldDef, Field $field )
     {
     }
 
