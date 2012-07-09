@@ -504,7 +504,7 @@ class Handler implements BaseContentHandler
                     $versionContent->contentInfo->isAlwaysAvailable
                 );
 
-                $this->fieldHandler->copyFields( $versionContent );
+                $this->fieldHandler->createNewFields( $versionContent );
 
                 // Create name
                 foreach ( $versionContent->versionInfo->names as $language => $name )
