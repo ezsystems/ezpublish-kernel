@@ -15,7 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The field type interface which all field types have to implement.
