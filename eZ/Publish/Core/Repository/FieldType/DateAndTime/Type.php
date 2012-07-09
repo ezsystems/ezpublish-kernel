@@ -21,7 +21,7 @@ class Type extends FieldType
           DEFAULT_CURRENT_DATE = 1,
           DEFAULT_CURRENT_DATE_ADJUSTED = 2;
 
-    protected $allowedSettings = array(
+    protected $settingSchema = array(
         'useSeconds' => false,
         // One of the DEFAULT_* class constants
         'defaultType' => self::DEFAULT_EMPTY,

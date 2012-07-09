@@ -23,7 +23,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingSchema
      */
     public function testAllowedSettings()
     {
@@ -34,7 +34,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
                 'tagPreset' => null,
                 'defaultText' => ''
             ),
-            $ft->allowedSettings(),
+            $ft->getSettingSchema(),
             "The set of allowed settings does not match what is expected."
         );
     }

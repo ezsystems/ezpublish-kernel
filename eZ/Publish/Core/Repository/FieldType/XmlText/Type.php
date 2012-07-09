@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText;
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\FieldTypeService,
+    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\Repository\FieldType\FieldType,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as XMLTextInputHandler,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as XMLTextInputParserInterface,
@@ -30,7 +30,7 @@ class Type extends FieldType
      *
      * @var array
      */
-    protected $allowedSettings = array(
+    protected $settingSchema = array(
         'numRows' => 10,
         'tagPreset' => null,
         'defaultText' => '',
@@ -150,12 +150,11 @@ EOF;
      * Converts complex values to a Value\Raw object
      *
      * @param \eZ\Publish\Core\Repository\FieldType\XmlText\Value $value
-     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      *
      * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Value
      */
-    protected function convertValueToRawValue( Value $value, FieldTypeService $fieldTypeService, Field $field )
+    protected function convertValueToRawValue( Value $value, Field $field )
     {
         // we don't convert Raw to Raw, right ?
         // if ( get_class( $value ) === 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' )
@@ -163,24 +162,22 @@ EOF;
 
         $handler = $value->getInputHandler( $value );
         throw new \RuntimeException( '@todo XMLText has a dependency on version id and version number, after refactoring that is not available' );
-        $handler->process( $value->text, $fieldTypeService, $field->version );
+        $handler->process( $value->text, $this->fieldTypeTools, $field->version );
 
         $value->setRawText( $handler->getDocumentAsXml() );
     }
 
     /**
-     * This method is called on occuring events. Implementations can perform corresponding actions
+     * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\SPI\FieldType\Event $event
      */
-    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field )
+    public function handleEvent( Event $event );
     {
-        if ( $event === "preCreate" )
+        if ( $event instanceof PreCreateEvent )
         {
-            $this->convertValueToRawValue( $field->value, $fieldTypeService, $field );
+            $this->convertValueToRawValue( $event->field->value, $field );
         }
     }
 

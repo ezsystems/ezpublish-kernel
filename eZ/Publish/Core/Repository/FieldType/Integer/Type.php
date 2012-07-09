@@ -22,7 +22,7 @@ class Type extends FieldType
         "IntegerValueValidator"
     );
 
-    protected $allowedSettings = array(
+    protected $settingSchema = array(
         'defaultValue' => 0
     );
 

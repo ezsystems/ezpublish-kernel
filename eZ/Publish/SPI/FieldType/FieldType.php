@@ -10,13 +10,13 @@
 namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\API\Repository\ValidatorService,
     eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The field type interface which all field types have to implement.
@@ -37,12 +37,9 @@ interface FieldType
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
-     * @TODO Add VersionInfo parameter
+     * @param \eZ\Publish\SPI\FieldType\Event $event
      */
-    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field );
+    public function handleEvent( Event $event );
 
     /**
      * Returns a schema for the settings expected by the FieldType
@@ -183,16 +180,33 @@ interface FieldType
     public function toHash( $value );
 
     /**
-     * Converts a $value to a persistence value
+     * Converts a $value to a persistence value.
      *
-     * @param mixed $value
+     * In this method the field type puts the data which is stored in the field of content in the repository
+     * into the property FieldValue::data. The format of $data is a primitive, an array (map) or an object, which
+     * is then canonically converted to e.g. json/xml structures by future storage engines without
+     * further conversions. For mapping the $data to the legacy database an appropriate Converter
+     * (implementing eZ\Publish\Core\Persistence\Legacy\FieldValue\Converter) has implemented for the field
+     * type. Note: $data should only hold data which is actually stored in the field. It must not
+     * hold data which is stored externally.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     * The $externalData property in the FieldValue is used for storing data externally by the
+     * FieldStorage interface method storeFieldData.
+     *
+     * The FieldValuer::sortKey is build by the field type for using by sort operations.
+     *
+     * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
+     *
+     * @param mixed $value The value of the field type
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
     public function toPersistenceValue( $value );
 
     /**
      * Converts a persistence $fieldValue to a Value
+     *
+     * This method builds a field type value from the $data and $externalData properties.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
