@@ -76,4 +76,14 @@ class CLIHandler implements ezpKernelHandler
     public function setUseExceptions( $useExceptions )
     {
     }
+
+    /**
+     * Reinitializes the kernel environment.
+     *
+     * @return void
+     */
+    public function reInitialize()
+    {
+        $this->script->setIsInitialized( false );
+    }
 }
