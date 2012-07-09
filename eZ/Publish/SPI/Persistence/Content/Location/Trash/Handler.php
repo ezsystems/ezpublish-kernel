@@ -52,7 +52,7 @@ interface Handler
      * @param mixed $trashedId
      * @param mixed $newParentId
      * @return int Newly restored location id
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $newParentId is invalid
      */
     public function recover( $trashedId, $newParentId );
 
