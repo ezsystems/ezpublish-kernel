@@ -33,14 +33,14 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingSchema
      */
     public function testTextLineAllowedSettings()
     {
         $ft = new TextLine();
         self::assertSame(
             array(),
-            $ft->allowedSettings(),
+            $ft->getSettingSchema(),
             "The set of allowed settings does not match what is expected."
         );
     }

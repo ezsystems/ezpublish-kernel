@@ -20,7 +20,7 @@ class Type extends TextLine
 {
     protected $allowedValidators = array();
 
-    protected $allowedSettings = array( "textRows" => 10 );
+    protected $settingSchema = array( "textRows" => 10 );
 
     /**
      * Build a Value object of current FieldType

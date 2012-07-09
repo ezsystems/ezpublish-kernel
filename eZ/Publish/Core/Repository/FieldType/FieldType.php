@@ -48,7 +48,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @var array
      */
-    protected $allowedSettings = array();
+    protected $settingSchema = array();
 
     /**
      * Validators which are supported for this field type.
@@ -101,9 +101,9 @@ abstract class FieldType implements FieldTypeInterface
      * Keys of settings which are available on this fieldtype.
      * @return array
      */
-    public function allowedSettings()
+    public function getSettingSchema()
     {
-        return $this->allowedSettings;
+        return $this->settingSchema;
     }
 
     /**

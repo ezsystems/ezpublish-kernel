@@ -33,7 +33,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingSchema
      */
     public function testCheckboxAllowedSettings()
     {
@@ -42,7 +42,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
             array(
                 'defaultValue' => false
             ),
-            $ft->allowedSettings(),
+            $ft->getSettingSchema(),
             "The set of allowed settings does not match what is expected."
         );
     }

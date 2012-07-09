@@ -63,7 +63,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingSchema
      */
     public function testMediaAllowedSettings()
     {
@@ -72,7 +72,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
             array(
                 'mediaType' => 'html5_video'
             ),
-            $ft->allowedSettings(),
+            $ft->getSettingSchema(),
             "The set of allowed settings does not match what is expected."
         );
     }

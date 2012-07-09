@@ -45,7 +45,7 @@ class Type extends FieldType
      *
      * Default value for ezmedia is a media of HTML5 video type
      */
-    protected $allowedSettings = array(
+    protected $settingSchema = array(
         'mediaType' => self::TYPE_HTML5_VIDEO
     );
 
