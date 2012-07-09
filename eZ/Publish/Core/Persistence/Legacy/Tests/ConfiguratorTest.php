@@ -118,7 +118,7 @@ class ConfiguratorTest extends TestCase
     {
         $storageRegistry = new Content\StorageRegistry();
         $storageMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Fields\\Storage',
+            'eZ\\Publish\\SPI\\FieldType\\FieldStorage',
             array(),
             array(),
             'SomeFanvyStorageMockClass',

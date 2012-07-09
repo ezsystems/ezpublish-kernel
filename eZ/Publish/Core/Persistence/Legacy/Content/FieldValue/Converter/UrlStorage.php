@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\SPI\Persistence\Fields\Storage,
+use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Repository\FieldType\Url\Value as UrlValue;
@@ -16,12 +16,12 @@ use eZ\Publish\SPI\Persistence\Fields\Storage,
 /**
  * Converter for Url field type external storage
  */
-class UrlStorage implements Storage
+class UrlStorage implements FieldStorage
 {
     const URL_TABLE = "ezurl";
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
     public function storeFieldData( Field $field, array $context )
     {

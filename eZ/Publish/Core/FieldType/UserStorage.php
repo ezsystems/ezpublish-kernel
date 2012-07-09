@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\SPI\Persistence\Fields\Storage,
+use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
@@ -37,7 +37,7 @@ use eZ\Publish\SPI\Persistence\Fields\Storage,
  *  - last_visit
  *  - login_count
  */
-class UserStorage implements Storage
+class UserStorage implements FieldStorage
 {
     /**
      * Gateways

@@ -268,7 +268,7 @@ class Handler implements HandlerInterface
      * expected. The referred class is instantiated and the resulting object is
      * used to store/restore/delete/… data in external storages (e.g. another
      * database or a web service). The classes must comply to the
-     * {@link \eZ\Publish\SPI\Persistence\Fields\Storage} interface. Note that due to the
+     * {@link \eZ\Publish\SPI\FieldType\FieldStorage} interface. Note that due to the
      * configuration mechanism and missing proper DI, the classes may not
      * expect any constructor parameters!
      *

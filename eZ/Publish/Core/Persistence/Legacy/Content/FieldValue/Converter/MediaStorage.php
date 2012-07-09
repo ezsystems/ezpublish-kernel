@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\SPI\Persistence\Fields\Storage,
+use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue;
@@ -16,12 +16,12 @@ use eZ\Publish\SPI\Persistence\Fields\Storage,
 /**
  * Converter for Media field type external storage
  */
-class MediaStorage implements Storage
+class MediaStorage implements FieldStorage
 {
     const MEDIA_TABLE = 'ezmedia';
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
     public function storeFieldData( Field $field, array $context )
     {

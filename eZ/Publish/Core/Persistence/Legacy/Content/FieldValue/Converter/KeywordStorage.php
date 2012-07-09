@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\SPI\Persistence\Fields\Storage,
+use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Base\Exceptions\Logic,
     PDO;
@@ -16,10 +16,10 @@ use eZ\Publish\SPI\Persistence\Fields\Storage,
 /**
  * Converter for Keyword field type external storage
  */
-class KeywordStorage implements Storage
+class KeywordStorage implements FieldStorage
 {
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
     public function storeFieldData( Field $field, array $context )
     {

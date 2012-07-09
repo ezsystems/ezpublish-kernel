@@ -8,13 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\SPI\Persistence\Fields\Storage,
+use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Description of BinaryFileStorage
  */
-class BinaryFileStorage implements Storage
+class BinaryFileStorage implements FieldStorage
 {
     /**
      * Allows custom field types to store data in an external source (e.g. another DB table).

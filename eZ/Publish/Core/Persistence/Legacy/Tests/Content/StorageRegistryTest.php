@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
-    eZ\Publish\SPI\Persistence\Fields\Storage;
+    eZ\Publish\SPI\FieldType\FieldStorage;
 
 /**
  * Test case for StorageRegistry
@@ -79,7 +79,7 @@ class StorageRegistryTest extends TestCase
     protected function getStorageMock()
     {
         return $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Fields\\Storage'
+            'eZ\\Publish\\SPI\\FieldType\\FieldStorage'
         );
     }
 

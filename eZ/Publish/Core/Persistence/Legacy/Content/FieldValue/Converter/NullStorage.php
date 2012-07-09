@@ -8,16 +8,16 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\SPI\Persistence\Fields\Storage,
+use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Description of NullStorage
  */
-class NullStorage implements Storage
+class NullStorage implements FieldStorage
 {
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage::storeFieldData()
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()
      */
     public function storeFieldData( Field $field, array $context )
     {
@@ -25,7 +25,7 @@ class NullStorage implements Storage
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage::getFieldData()
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage::getFieldData()
      */
     public function getFieldData( Field $field, array $context )
     {
@@ -33,7 +33,7 @@ class NullStorage implements Storage
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage::deleteFieldData()
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage::deleteFieldData()
      * @return bool
      */
     public function deleteFieldData( array $fieldId, array $context )
@@ -42,7 +42,7 @@ class NullStorage implements Storage
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage::hasFieldData()
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage::hasFieldData()
      * @return bool
      */
     public function hasFieldData()
@@ -51,7 +51,7 @@ class NullStorage implements Storage
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage::copyFieldData()
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage::copyFieldData()
      */
     public function copyFieldData( Field $field, array $context )
     {
@@ -59,7 +59,7 @@ class NullStorage implements Storage
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Fields\Storage::getIndexData()
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage::getIndexData()
      */
     public function getIndexData( Field $field, array $context )
     {

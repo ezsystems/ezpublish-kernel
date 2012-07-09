@@ -36,7 +36,7 @@ class StorageHandlerTest extends TestCase
     /**
      * Mock for external storage
      *
-     * @var \eZ\Publish\SPI\Persistence\Fields\Storage
+     * @var \eZ\Publish\SPI\FieldType\FieldStorage
      */
     protected $storageMock;
 
@@ -200,14 +200,14 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns a Storage mock
      *
-     * @return \eZ\Publish\SPI\Persistence\Fields\Storage
+     * @return \eZ\Publish\SPI\FieldType\FieldStorage
      */
     protected function getStorageMock()
     {
         if ( !isset( $this->storageMock ) )
         {
             $this->storageMock = $this->getMock(
-                'eZ\\Publish\\SPI\\Persistence\\Fields\\Storage'
+                'eZ\\Publish\\SPI\\FieldType\\FieldStorage'
             );
         }
         return $this->storageMock;

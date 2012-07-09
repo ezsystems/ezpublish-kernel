@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\SPI\Persistence\Fields\Storage,
+use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage;
 
@@ -28,10 +28,10 @@ class StorageRegistry
      * Register a storage
      *
      * @param string $typeName
-     * @param Storage $storage
+     * @param \eZ\Publish\SPI\FieldType\FieldStorage $storage
      * @return void
      */
-    public function register( $typeName, Storage $storage )
+    public function register( $typeName, FieldStorage $storage )
     {
         $this->storageMap[$typeName] = $storage;
     }
@@ -40,7 +40,7 @@ class StorageRegistry
      * Returns the storage for $typeName
      *
      * @param string $typeName
-     * @return Storage
+     * @return \eZ\Publish\SPI\FieldType\FieldStorage
      */
     public function getStorage( $typeName )
     {
