@@ -41,6 +41,13 @@ if ( !defined( 'EZCBASE_ENABLED' ) )
 require "$legacyPath/autoload.php";
 
 $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, __DIR__ );
+// Avoid "Fatal error" text from legacy kernel if not called
+$legacyKernel->runCallback(
+    function ()
+    {
+        eZExecution::setCleanExit();
+    }
+);
 // Exposing in env variables in order be able to use them in test cases.
 $_ENV['legacyKernel'] = $legacyKernel;
 $_ENV['legacyPath'] = $legacyPath;
