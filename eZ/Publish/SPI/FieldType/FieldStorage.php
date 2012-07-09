@@ -90,12 +90,11 @@ interface FieldStorage
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context );
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param array $fieldId Array of field Ids
      * @param array $context
      * @return boolean
      */
-    public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context );
+    public function deleteFieldData( array $fieldId, array $context );
 
     /**
      * Checks if field type has external data to deal with
