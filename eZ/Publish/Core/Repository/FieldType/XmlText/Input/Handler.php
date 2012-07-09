@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\XmlText\Input;
 
-use eZ\Publish\API\Repository\FieldTypeService,
+use eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\API\Repository\Values\Content\Relation,
     eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser as InputParserInterface,
@@ -86,12 +86,12 @@ class Handler
      * Processes $xmlString and indexes the external data it references
      *
      * @param string $xmlString
-     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return bool
      */
-    public function process( $xmlString, FieldTypeService $fieldTypeService, Content $content )
+    public function process( $xmlString, FieldTypeTools $fieldTypeTools, Content $content )
     {
         $this->parser->setOption( BaseInputParser::OPT_CHECK_EXTERNAL_DATA, true );
 
@@ -107,7 +107,7 @@ class Handler
         // related content
         foreach ( $this->parser->getRelatedContentIdArray() as $embedRelatedContentId )
         {
-            $fieldTypeService->addRelation(
+            $fieldTypeTools->addRelation(
                 Relation::EMBED,
                 $versionInfo,
                 $embedRelatedContentId
@@ -117,7 +117,7 @@ class Handler
         // linked content
         foreach ( $this->parser->getLinkedContentIdArray() as $linkContentId )
         {
-            $fieldTypeService->addRelation(
+            $fieldTypeTools->addRelation(
                 Relation::LINK,
                 $versionInfo,
                 $linkContentId

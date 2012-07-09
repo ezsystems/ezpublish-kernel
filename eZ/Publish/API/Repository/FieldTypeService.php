@@ -9,42 +9,38 @@
  */
 
 namespace eZ\Publish\API\Repository;
-
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\FieldType;
 
 /**
- * This class provides service methods available to FieldTypes
- *
- * This interface cannot be retrieved through the Public API and is not meant to be
- * used by its users. It is only available to {@link
- * eZ\Publish\SPI\FieldType\FieldType} implementors through the {@link
- * eZ\Publish\SPI\FieldType\FieldType::handleEvent()} method.
+ * An implementation of this class provides access to FieldTypes
  *
  * @package eZ\Publish\API\Repository
- * @todo Rename to FieldTypeTools
- * @todo Add deleteRelation() method?
+ * @see eZ\Publish\API\Repository\FieldType
  */
 interface FieldTypeService
 {
     /**
-     * Adds a relation
+     * Returns a list of all field types.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $relationType has an unsupported value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If there is a mismatch between $relationType and provided values.
-     *
-     * The source of the relation is the content and version
-     * referenced by $sourceVersion.
-     *
-     * @param int $relationType One of Relation::COMMON, Relation::EMBED, Relation::LINK or Relation::FIELD
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
-     * @param mixed $destinationContentId
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|null $fieldDefinition
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation The newly created relation
+     * @return \eZ\Publish\API\Repository\FieldType[]
      */
-    public function addRelation( $relationType,
-                                 VersionInfo $sourceVersion,
-                                 $destinationContentId,
-                                 FieldDefinition $fieldDefinition = null );
+    public function getFieldTypes();
+
+    /**
+     * Returns the FieldType registered with the given identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\API\Repository\FieldType
+     * @throws \eZ\Publish\API\Exceptions\NotFoundException
+     *         if there is no FieldType registered with $identifier
+     */
+    public function getFieldType( $identifier );
+
+    /**
+     * Returns if there is a FieldType registered under $identifier
+     *
+     * @param string $identifier
+     * @return bool
+     */
+    public function hasFieldType( $identifier );
 }
