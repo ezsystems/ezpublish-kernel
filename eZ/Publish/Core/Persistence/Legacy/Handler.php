@@ -73,7 +73,7 @@ class Handler implements HandlerInterface
     protected $storageRegistry;
 
     /**
-     * Storage registry
+     * Storage handler
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
