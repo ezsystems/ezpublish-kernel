@@ -17,7 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\SPI\FieldType\Event;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -90,10 +91,9 @@ abstract class FieldType implements FieldTypeInterface
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\SPI\FieldType\Event $event
      */
-    public function handleEvent( $event, FieldDefinition $fieldDef, Field $field )
+    public function handleEvent( Event $event )
     {
     }
 

@@ -168,17 +168,16 @@ EOF;
     }
 
     /**
-     * This method is called on occuring events. Implementations can perform corresponding actions
+     * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\SPI\FieldType\Event $event
      */
-    public function handleEvent( $event, FieldDefinition $fieldDef, Field $field )
+    public function handleEvent( Event $event );
     {
-        if ( $event === "preCreate" )
+        if ( $event instanceof PreCreateEvent )
         {
-            $this->convertValueToRawValue( $field->value, $field );
+            $this->convertValueToRawValue( $event->field->value, $field );
         }
     }
 
