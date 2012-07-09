@@ -10,6 +10,7 @@
 
 namespace eZ\Publish\SPI\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Interface for setting field type data.
@@ -68,11 +69,12 @@ interface FieldStorage
      * This method might return true if $field needs to be updated after storage done here (to store a PK for instance).
      * In any other case, this method must not return anything (null).
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return null|true
      */
-    public function storeFieldData( Field $field, array $context );
+    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context );
 
     /**
      * Populates $field value property based on the external data.
@@ -80,18 +82,20 @@ interface FieldStorage
      * This value holds the data as a {@link eZ\Publish\Core\Repository\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\Repository\FieldType\TextLine\Value} object).
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return void
      */
-    public function getFieldData( Field $field, array $context );
+    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context );
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param array $fieldId Array of field Ids
      * @param array $context
      * @return boolean
      */
-    public function deleteFieldData( array $fieldId, array $context );
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context );
 
     /**
      * Checks if field type has external data to deal with
@@ -101,15 +105,9 @@ interface FieldStorage
     public function hasFieldData();
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     * @TODO Remove
-     */
-    public function copyFieldData( Field $field, array $context );
-
-    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function getIndexData( Field $field, array $context );
+    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context );
 }
