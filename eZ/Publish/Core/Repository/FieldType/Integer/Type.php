@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Integer;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
+    ez\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -25,6 +26,23 @@ class Type extends FieldType
     protected $settingSchema = array(
         'defaultValue' => 0
     );
+
+    /**
+     * Holds an instance of validator service
+     *
+     * @var \eZ\Publish\Core\Repository\ValidatorService
+     */
+    protected $validatorService;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
+     */
+    public function __construct( ValidatorService $validatorService )
+    {
+        $this->validatorService = $validatorService;
+    }
 
     /**
      * Build a Value object of current FieldType

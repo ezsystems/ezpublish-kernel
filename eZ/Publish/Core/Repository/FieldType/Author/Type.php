@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Author;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
+    eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**

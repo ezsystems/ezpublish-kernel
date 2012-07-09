@@ -13,8 +13,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class represents a field definition
  *
- * @property-read $fieldSettings calls getFieldSettings()
- * @property-read $validators calls getValidators()
+ * @property-read mixed $fieldSettings calls getFieldSettings()
+ * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
  * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
@@ -125,14 +125,16 @@ abstract class FieldDefinition extends ValueObject
     protected $isInfoCollector;
 
     /**
-     * this method returns the validators of this field definition supported by the field type
-     * @return \eZ\Publish\API\Repository\Values\ContentType\Validator[] an array of {@link Validator}
+     * this method returns the validator configuration of this field definition supported by the field type
+     *
+     * @return mixed
      */
-    abstract public function getValidators();
+    abstract public function getValidatorConfiguration();
 
     /**
      * this method returns settings for the field definition supported by the field type
-     * @return array
+     *
+     * @return mixed
      */
     abstract public function getFieldSettings();
 

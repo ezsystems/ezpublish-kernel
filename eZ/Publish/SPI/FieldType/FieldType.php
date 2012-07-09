@@ -124,9 +124,27 @@ interface FieldType
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      *
-     * @return array An array of field validation errors if there were any
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validate( FieldDefinition $fieldDef, $field );
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfirguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfirguration);
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings );
 
     /**
      * Indicates if the field type supports indexing and sort keys for searching

@@ -10,14 +10,22 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\ValidatorService as ValidatorServiceInterface;
-
 /**
  * @internal
  * @package eZ\Publish\Core\Repository
  */
-class ValidatorService implements ValidatorServiceInterface
+class ValidatorService
 {
+    /**
+     * The namespace under which concrete validator classes reside
+     */
+    const CONCRETE_VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\Repository\\FieldType\\Validator";
+
+    /**
+     * The namespace under which public domain validator classes reside
+     */
+    const PUBLIC_VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\Repository\\Values\\ContentType\\Validator";
+
     /**
      * Holds concrete validator objects, indexed by their FQN
      *

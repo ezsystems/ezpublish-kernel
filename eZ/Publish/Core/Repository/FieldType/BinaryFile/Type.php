@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\BinaryFile;
 use eZ\Publish\Core\Repository\FieldType\FieldType,
+    eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\API\Repository\Values\IO\BinaryFile;
@@ -30,13 +31,21 @@ class Type extends FieldType
     protected $IOService;
 
     /**
+     * Holds an instance of validator service
+     *
+     * @var \eZ\Publish\Core\Repository\ValidatorService
+     */
+    protected $validatorService;
+
+    /**
      * Constructs field type object, initializing internal data structures.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct( Repository $repository, ValidatorService $validatorService )
     {
         $this->IOService = $repository->getIOService();
+        $this->validatorService = $validatorService;
     }
 
     /**
