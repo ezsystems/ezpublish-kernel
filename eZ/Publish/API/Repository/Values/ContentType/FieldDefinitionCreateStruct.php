@@ -85,16 +85,16 @@ class FieldDefinitionCreateStruct extends ValueObject
     public $isInfoCollector;
 
     /**
-     * An array of validators
+     * The validator configuration supported by the field type
      *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\Validator[]
+     * @var \mixed
      */
-    public $validators;
+    public $validatorConfiguration;
 
     /**
-     * An array of field settings
+     * The settings supported by the field type
      *
-     * @var array an array of mixed
+     * @var mixed
      */
     public $fieldSettings;
 
