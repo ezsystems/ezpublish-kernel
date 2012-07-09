@@ -31,7 +31,7 @@ interface FieldTypeService
      *
      * @param string $identifier
      * @return \eZ\Publish\API\Repository\FieldType
-     * @throws \eZ\Publish\API\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
      */
     public function getFieldType( $identifier );

@@ -134,7 +134,7 @@ class Repository implements RepositoryInterface, LegacyKernelAware
      *
      * @var \eZ\Publish\API\Repository\ValidatorService
      */
-    protected $validatorService;
+    protected $fieldTypeService;
 
     /**
      * Service settings, first level key is service name
@@ -477,17 +477,17 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     }
 
     /**
-     * Get ValidatorService
+     * Get FieldTypeService
      *
-     * @return \eZ\Publish\API\Repository\ValidatorService
+     * @return \eZ\Publish\API\Repository\FieldTypeService
      */
-    public function getValidatorService()
+    public function getFieldTypeService()
     {
-        if ( $this->validatorService !== null )
-            return $this->validatorService;
+        if ( $this->fieldTypeService !== null )
+            return $this->fieldTypeService;
 
-        $this->validatorService = new ValidatorService( $this, $this->persistenceHandler, $this->serviceSettings['validator'] );
-        return $this->validatorService;
+        $this->fieldTypeService = new ValidatorService( $this, $this->persistenceHandler, $this->serviceSettings['contentType']['field_type'] );
+        return $this->fieldTypeService;
     }
 
     /**
