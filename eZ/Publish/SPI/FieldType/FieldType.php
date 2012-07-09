@@ -10,7 +10,6 @@
 namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\API\Repository\ValidatorService,
     eZ\Publish\Core\Repository\FieldType\Validator,
     eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
@@ -37,12 +36,11 @@ interface FieldType
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
      * @TODO Add VersionInfo parameter
      */
-    public function handleEvent( $event, FieldTypeService $fieldTypeService, FieldDefinition $fieldDef, Field $field );
+    public function handleEvent( $event, FieldDefinition $fieldDef, Field $field );
 
     /**
      * Returns a schema for the settings expected by the FieldType
