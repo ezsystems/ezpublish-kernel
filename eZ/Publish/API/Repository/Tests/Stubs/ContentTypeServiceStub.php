@@ -693,7 +693,7 @@ class ContentTypeServiceStub implements ContentTypeService
             'isTranslatable' => $fieldDefinition->isTranslatable,
             'isRequired' => $fieldDefinition->isRequired,
             'isInfoCollector' => $fieldDefinition->isInfoCollector,
-            'validators' => $fieldDefinition->validators,
+            'validatorConfiguration' => $fieldDefinition->validatorConfiguration,
             'defaultValue' => $fieldDefinition->defaultValue,
             'isSearchable' => $fieldDefinition->isSearchable,
         );

@@ -156,7 +156,7 @@ function getContentTypeFieldDefinition( array $fixture )
             'names' => $names,
             'descriptions' => $description,
             'fieldSettings' => array(),
-            'validators' => array(),
+            'validatorConfiguration' => array(),
         );
 
         $nextFieldId = max( $nextFieldId, $data['id'] );

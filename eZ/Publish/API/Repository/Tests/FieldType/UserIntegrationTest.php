@@ -63,7 +63,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             // properties, so there is nothing to check for
             array( 'fieldTypeIdentifier', 'ezuser' ),
             array( 'fieldSettings', null ),
-            array( 'validators', null ),
+            array( 'validatorConfiguration', null ),
         );
     }
 

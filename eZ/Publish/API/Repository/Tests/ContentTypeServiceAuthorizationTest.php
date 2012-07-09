@@ -213,8 +213,17 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $fieldDefCreate->validatorConfiguration = array(
+            'stringLength' => array(
+                'minStringLength' => array(
+                    'type'    => 'int',
+                    'default' => 0,
+                ),
+                'maxStringLength' => array(
+                    'type'    => 'int',
+                    'default' => null,
+                )
+            )
         );
         $fieldDefCreate->fieldSettings = array(
             'textblockheight' => 10
@@ -300,7 +309,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isTranslatable = false;
         $bodyUpdateStruct->isRequired = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->validators = array();
+        $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
             'textblockheight' => 60
         );
