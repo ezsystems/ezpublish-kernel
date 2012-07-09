@@ -37,4 +37,11 @@ abstract class Event
      * @var \eZ\Publish\API\Repository\Values\Content\Field
      */
     public $field;
+
+    /**
+     * VersionInfo of the Content the affected field belongs to
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     */
+    public $versionInfo;
 }
