@@ -36,11 +36,9 @@ interface FieldType
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
-     * @TODO Add VersionInfo parameter
+     * @param \eZ\Publish\SPI\FieldType\Event $event
      */
-    public function handleEvent( $event, FieldDefinition $fieldDef, Field $field );
+    public function handleEvent( Event $event );
 
     /**
      * Returns a schema for the settings expected by the FieldType
