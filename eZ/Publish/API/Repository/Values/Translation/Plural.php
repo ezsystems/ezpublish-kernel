@@ -20,12 +20,23 @@ namespace eZ\Publish\API\Repository\Values\Translation;
  * strings provided should be english and will be translated depending on the
  * environment language.
  *
+ * This interface follows the interfaces of XLiff, gettext, Symfony2
+ * Translations and Zend_Translate. For singular forms you just provide a plain 
+ * string (with optional placeholders without effects on the plural forms). For 
+ * potential plural forms you always provide a singular variant and an english
+ * simple plural variant. No implementation supports multiple different plural
+ * forms in one single message.
+ *
+ * The singular / plural string could, for Symfony2, for example be converted
+ * to "$singular|$plural", and you would call gettext like: ngettext(
+ * $singular, $plural, $count ).
+ *
  * @package eZ\Publish\API\Repository\Values
  */
 class Plural extends Translation
 {
     /**
-     * Singular string. Might use replacements like %foo%, which are replaced by 
+     * Singular string. Might use replacements like %foo%, which are replaced by
      * the values specfied in the values array.
      *
      * @var string
