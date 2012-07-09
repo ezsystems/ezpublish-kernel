@@ -101,7 +101,7 @@ abstract class FieldType implements FieldTypeInterface
      * Keys of settings which are available on this fieldtype.
      * @return array
      */
-    public function getSettingSchema()
+    public function getSettingsSchema()
     {
         return $this->settingSchema;
     }
@@ -121,7 +121,6 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
-     * @param \eZ\Publish\API\Repository\ValidatorService $validatorService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
      * @param \eZ\Publish\Core\Repository\FieldType\Value $fieldValue The field for which an action is performed
      *
