@@ -161,13 +161,23 @@ class Type extends FieldType
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
     public function toPersistenceValue( $value ) {
+        if ( $value === null )
+        {
+            return new FieldValue( array(
+                "data"         => array(),
+                "externalData" => null,
+                "sortKey"      => null,
+            ) );
+        }
+
         return new FieldValue(
             array(
                 "data" => array('urlId' => 0, 'text' => $value->text),
                 "externalData" => $value->link,
                 "sortKey" => $this->getSortInfo( $value ),
             )
-        );    }
+        );
+    }
 
     /**
      * Converts a persistence $fieldValue to a Value

@@ -19,6 +19,8 @@ use eZ\Publish\Core\Repository\Repository,
 $dsn = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
 $db = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
 
+
+
 $legacyHandler = new LegacyPersistenceHandler(
     array(
         'dsn' => $dsn,
@@ -157,5 +159,55 @@ $legacyHandler = new LegacyPersistenceHandler(
             $handler->exec( $query );
         }
     }
+
+$serviceSettings = array(
+    'fieldType' => array(
+        'ezauthor' => function(){ return new \eZ\Publish\Core\FieldType\Author\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezdatetime' => function(){ return new \eZ\Publish\Core\FieldType\DateAndTime\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezfloat' => function(){ return new \eZ\Publish\Core\FieldType\Float\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezinteger' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezkeyword' => function(){ return new \eZ\Publish\Core\FieldType\Keyword\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'eztext' => function(){ return new \eZ\Publish\Core\FieldType\TextBlock\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezstring' => function(){ return new \eZ\Publish\Core\FieldType\TextLine\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezimage' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezuser' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezurl' => function(){ return new \eZ\Publish\Core\FieldType\Url\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezxmltext' => function(){ return new \eZ\Publish\Core\FieldType\XmlText\Type(
+            new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified(
+                new \eZ\Publish\Core\FieldType\XmlText\Schema
+            )
+        ); },
+    )
+);
 
 return new Repository( $legacyHandler, new LegacyIoHandler(), ( isset( $serviceSettings ) ? $serviceSettings : array() ) );

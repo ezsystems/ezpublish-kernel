@@ -175,7 +175,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             'trash' => array(),
             'io' => array(),
             'objectState' => array(),
-            'legacy' => array()
+            'legacy' => array(),
+            'fieldType' => array(),
         );
 
         if ( $user !== null )
@@ -493,7 +494,7 @@ class Repository implements RepositoryInterface, LegacyKernelAware
         if ( $this->fieldTypeService !== null )
             return $this->fieldTypeService;
 
-        $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['contentType']['field_type'] );
+        $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['fieldType'] );
         return $this->fieldTypeService;
     }
 

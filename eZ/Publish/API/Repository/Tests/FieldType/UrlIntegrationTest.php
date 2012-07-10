@@ -42,8 +42,8 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
             // The url field type does not have any special field definition
             // properties, so there is nothing to check for
             array( 'fieldTypeIdentifier', 'ezurl' ),
-            array( 'fieldSettings', null ),
-            array( 'validatorConfiguration', null ),
+            array( 'fieldSettings', array() ),
+            array( 'validatorConfiguration', array() ),
         );
     }
 
@@ -79,10 +79,7 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getUpdateFieldData()
     {
-        return array(
-            array( 'link', 'http://example.com/2' ),
-            array( 'text', 'Example 2' ),
-        );
+        return new UrlValue( 'http://example.com/2', 'Example  2' );
     }
 
     /**

@@ -75,7 +75,7 @@ class Backend
         }
         else if ( !$data[$idColumn] )
         {
-          throw new LogicException( '\'create\' logic error, $autoIncrement is false but no id is provided' );
+            throw new LogicException( '\'create\' logic error, $autoIncrement is false but no id is provided' );
         }
 
         foreach ( $this->data[$type] as $item )

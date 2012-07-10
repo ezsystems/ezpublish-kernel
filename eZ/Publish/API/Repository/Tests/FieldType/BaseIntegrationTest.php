@@ -171,7 +171,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->mainLanguageCode = 'eng-GB';
         $createStruct->remoteId     = $this->getTypeName();
         $createStruct->names        = array( 'eng-GB' => 'Test' );
-        $createStruct->creatorId    = 14;
+        $createStruct->creatorId    = 10;
         $createStruct->creationDate = new \DateTime();
 
         $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
@@ -283,7 +283,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreatedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -317,7 +317,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testPublishedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -345,7 +345,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testLoadFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -383,7 +383,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateField()
     {
-        $content = $this->testCreateContent();
+        $content = $this->testPublishContent();
 
         $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -401,7 +401,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -451,8 +451,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $copied = $contentService->copyContent( $content->contentInfo, $locationCreate );
 
         $this->assertNotSame(
-            $content->versionInfo->contentId,
-            $copied->versionInfo->contentId
+            $content->contentInfo->id,
+            $copied->contentInfo->id
         );
 
         return $contentService->loadContent( $copied->id );
@@ -463,7 +463,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopiedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -502,7 +502,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testDeleteContent( $content )
     {
-        $content = $this->testCreateContent();
+        $content = $this->testPublishContent();
 
         $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -526,7 +526,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
         $contentType = $contentTypeService->loadContentType( $content->contentTypeId );
 
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
