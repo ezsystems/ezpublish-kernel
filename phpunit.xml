@@ -36,6 +36,7 @@
       <directory suffix=".php">eZ</directory>
       <exclude>
           <directory>eZ/Publish/*/Tests</directory>
+          <directory>eZ/Publish/*/*/Tests</directory>
           <directory>eZ/Bundle/*/Tests</directory>
           <directory>eZ/Bundle/*/_fixtures</directory>
           <directory>eZ/Publish/Core/Persistence/Legacy/docs</directory>
