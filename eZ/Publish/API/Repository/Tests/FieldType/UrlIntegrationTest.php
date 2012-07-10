@@ -79,10 +79,7 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getUpdateFieldData()
     {
-        return array(
-            array( 'link', 'http://example.com/2' ),
-            array( 'text', 'Example 2' ),
-        );
+        return new UrlValue( 'http://example.com/2', 'Example  2' );
     }
 
     /**
