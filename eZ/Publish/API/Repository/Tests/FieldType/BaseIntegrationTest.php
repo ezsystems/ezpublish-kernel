@@ -26,7 +26,7 @@ use eZ\Publish\API\Repository\Tests,
  * - Load created content type
  * - Create content object of new content type
  * - Load created content
- * - @TODO: Publish created content
+ * - Publish created content
  * - Update content
  * - Copy created content
  * - Remove copied content
@@ -267,6 +267,39 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreatedFieldType( $content )
     {
+        foreach ( $content->fields as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
+
+        $this->fail( "Custom field not found." );
+    }
+
+    /**
+     * @depends testCreateContent
+     */
+    public function testPublishContent( $draft )
+    {
+        if ( $draft->getVersionInfo()->status !== Repository\Values\Content\VersionInfo::STATUS_DRAFT )
+        {
+            $this->markTestSkipped( "Provided content object is not a draft." );
+        }
+
+        $repository     = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        return $contentService->publishVersion( $draft->getVersionInfo() );
+    }
+
+    /**
+     * @depends testPublishContent
+     */
+    public function testPublishedFieldType( $content )
+    {
+        var_dump( $content );
         foreach ( $content->fields as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
