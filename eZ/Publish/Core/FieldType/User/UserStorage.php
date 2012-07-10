@@ -165,17 +165,6 @@ class UserStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
-    {
-        // @TODO: What do we actually want to do in here?
-        $gateway = $this->getGateway( $context );
-        $field->value->externalData = $gateway->copyFieldData( $field->id );
-    }
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
         // @TODO: How to call this function? Yet undefined.
