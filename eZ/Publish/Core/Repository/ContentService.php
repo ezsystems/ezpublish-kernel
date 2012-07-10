@@ -968,7 +968,6 @@ class ContentService implements ContentServiceInterface
                 }
 
                 $fieldErrors = $fieldType->validate(
-                    $this->repository->getValidatorService(),
                     $fieldDefinition,
                     $fieldValue
                 );
