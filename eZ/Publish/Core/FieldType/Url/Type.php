@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Url;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -25,7 +26,7 @@ class Type extends FieldType
     /**
      * Build a Value object of current FieldType
      *
-     * Build a FiledType\Value object with the provided $link as value.
+     * Build a FieldType\Value object with the provided $link as value.
      *
      * @param string $link
      * @return \eZ\Publish\Core\FieldType\Url\Value
@@ -50,13 +51,11 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @todo Is a default value really possible with this type?
-     *       Shouldn't an exception be used?
      * @return \eZ\Publish\Core\FieldType\Url\Value
      */
     public function getDefaultDefaultValue()
     {
-        return new Value( "" );
+        return null;
     }
 
     /**
@@ -109,7 +108,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return false;
+        return array('sort_key_string' => '');
     }
 
     /**
@@ -138,4 +137,71 @@ class Type extends FieldType
     {
         return array( "link" => $value->link, "text" => $value->text );
     }
+    
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfirguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration ){
+        return array();
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings ) {
+        return array();
+    }  
+    
+     /**
+     * Converts a $value to a persistence value.
+     *
+     * In this method the field type puts the data which is stored in the field of content in the repository
+     * into the property FieldValue::data. The format of $data is a primitive, an array (map) or an object, which
+     * is then canonically converted to e.g. json/xml structures by future storage engines without
+     * further conversions. For mapping the $data to the legacy database an appropriate Converter
+     * (implementing eZ\Publish\Core\Persistence\Legacy\FieldValue\Converter) has implemented for the field
+     * type. Note: $data should only hold data which is actually stored in the field. It must not
+     * hold data which is stored externally.
+     *
+     * The $externalData property in the FieldValue is used for storing data externally by the
+     * FieldStorage interface method storeFieldData.
+     *
+     * The FieldValuer::sortKey is build by the field type for using by sort operations.
+     *
+     * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
+     *
+     * @param mixed $value The value of the field type
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
+     */
+    public function toPersistenceValue( $value ) {
+        return new FieldValue(
+            array(
+                "data" => array('urlId' => 0, 'text' => $value->text),
+                "externalData" => $value->link,
+                "sortKey" => $this->getSortInfo( $value ),
+            )
+        );    }
+
+    /**
+     * Converts a persistence $fieldValue to a Value
+     *
+     * This method builds a field type value from the $data and $externalData properties.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue ) {
+        return new Value($fieldValue->externalData,$fieldValue->data['text']);
+    }
+    
 }
