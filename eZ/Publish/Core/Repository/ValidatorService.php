@@ -19,7 +19,7 @@ class ValidatorService
     /**
      * The namespace under which concrete validator classes reside
      */
-    const CONCRETE_VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\Repository\\FieldType\\Validator";
+    const CONCRETE_VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\FieldType\\Validator";
 
     /**
      * The namespace under which public domain validator classes reside
@@ -53,18 +53,18 @@ class ValidatorService
     }
 
     /**
-     * Returns public domain validator representation object from given validator identifier
+     * Returns validator configuration from given validator $identifier and $constraints
      *
      * @param string $identifier
      * @param array $constraints
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\Validator
+     * @return mixed
      */
-    public function buildValidatorDomainObject( $identifier, array $constraints )
+    public function getValidatorConfiguration( $identifier, array $constraints )
     {
-        $validatorFQN = $this->getPublicDomainValidatorFQN( $identifier );
-        $validator = new $validatorFQN( array( "constraints" => $constraints ) );
-        return $validator;
+        return array(
+            $identifier => $constraints
+        );
     }
 
     /**
