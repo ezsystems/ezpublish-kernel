@@ -417,7 +417,12 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value ) )
+        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
+        {
+            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
+        }
+
+        if ( !isset( $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
