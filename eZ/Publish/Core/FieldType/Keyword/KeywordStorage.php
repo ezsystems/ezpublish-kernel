@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Keyword;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     LogicException,
@@ -16,108 +17,82 @@ use eZ\Publish\SPI\FieldType\FieldStorage,
 
 /**
  * Converter for Keyword field type external storage
+ *
+ * The keyword storage ships a list (array) of keywords in
+ * $field->value->externalData. $field->value->data is simply empty, because no
+ * internal data is store.
  */
 class KeywordStorage implements FieldStorage
 {
+    /**
+     * Gateways
+     *
+     * @var \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway[]
+     */
+    protected $gateways;
+
+    /**
+     * SPI Persistence handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Handler
+     */
+    protected $persistenceHandler;
+
+    /**
+     * Construct from gateways
+     *
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway[] $gateways
+     */
+    public function __construct( PersistenceHandler $persistenceHandler, array $gateways )
+    {
+        $this->persistenceHandler = $persistenceHandler;
+        foreach ( $gateways as $identifier => $gateway )
+        {
+            $this->addGateway( $identifier, $gateway );
+        }
+    }
+
+    /**
+     * Add gateway
+     *
+     * @param string $identifier
+     * @param \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway $gateway
+     * @return void
+     */
+    public function addGateway( $identifier, KeywordStorage\Gateway $gateway )
+    {
+        $this->gateways[$identifier] = $gateway;
+    }
+
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        // If there is no keywords, there is nothing to store.
-        if ( empty( $field->value->data ) )
+        if ( empty( $field->value->externalData ) )
+        {
             return;
-
-        $dbHandler = $context["connection"];
-
-        // Retrieving the Content Type ID which is required in ezkeyword table
-        // but that isn't (and probably shouldn't be) available directly from
-        // $field.
-        $q = $dbHandler->createSelectQuery();
-        $q->select( "contentclass_id" )
-            ->from( $dbHandler->quoteTable( "ezcontentclass_attribute" ) )
-            ->where(
-                $q->expr->eq( "id", $field->fieldDefinitionId )
-            );
-
-        $statement = $q->prepare();
-        $statement->execute();
-
-        $row = $statement->fetch( PDO::FETCH_ASSOC );
-
-        if ( $row === false )
-            throw new LogicException( "Content Type ID can't be retrieved based on the field definition ID" );
-
-        $contentTypeID = $row["contentclass_id"];
-
-        // Retrieving potentially existing keywords
-        $q = $dbHandler->createSelectQuery();
-        $q->select( "id", "keyword" )
-            ->from( $dbHandler->quoteTable( "ezkeyword" ) )
-            ->where(
-                $q->expr->lAnd(
-                    $q->expr->in(
-                        "keyword",
-                        $field->value->data
-                    ),
-                    $q->expr->eq( "class_id", $contentTypeID )
-                )
-            );
-        $statement = $q->prepare();
-        $statement->execute();
-
-        // Hash of keyword IDs, indexed by the keyword
-        $keywordsIds = array_fill_keys( $field->value->data, true );
-        // Set of keywords that will have to be inserted
-        $keywordsToInsert = $keywordsIds;
-        foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
-        {
-            $keywordsIds[$row["keyword"]] = $row["id"];
-            unset( $keywordsToInsert[$row["keyword"]] );
         }
 
-        // Inserting keywords not yet registered
-        if ( !empty( $keywordsToInsert ) )
-        {
-            $insertQuery = $dbHandler->createInsertQuery();
-            $insertQuery->insertInto(
-                $dbHandler->quoteTable( "ezkeyword" )
-            )->set(
-                $dbHandler->quoteColumn( "class_id" ),
-                $insertQuery->bindValue( $contentTypeID, null, PDO::PARAM_INT )
-            )->set(
-                $dbHandler->quoteColumn( "keyword" ),
-                $insertQuery->bindParam( $keyword )
-            );
+        $contentTypeID = $this->getContentTypeID( $field->type );
 
-            $statement = $insertQuery->prepare();
+        $gateway = $this->getGateway( $context );
+        return $gateway->storeFieldData( $field, $contentTypeID );
+    }
 
-            foreach ( array_keys( $keywordsToInsert ) as $keyword )
-            {
-                $statement->execute();
-                $keywordsIds[$keyword] = $dbHandler->lastInsertId();
-            }
-            unset( $keyword );
-        }
-
-        // Linking keywords to the field
-        $insertQuery = $dbHandler->createInsertQuery();
-        $insertQuery->insertInto(
-            $dbHandler->quoteTable( "ezkeyword_attribute_link" )
-        )->set(
-            $dbHandler->quoteColumn( "keyword_id" ),
-            $insertQuery->bindParam( $keywordId )
-        )->set(
-            $dbHandler->quoteColumn( "objectattribute_id" ),
-            $insertQuery->bindValue( $field->id )
+    /**
+     * Returns the content type ID for $fieldDefinitionId
+     *
+     * @param string $typeIdentifier
+     * @return mixed
+     */
+    protected function getContentTypeID( $typeIdentifier )
+    {
+        $contentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
+            $typeIdentifier
         );
-
-        $statement = $insertQuery->prepare();
-
-        foreach ( $field->value->data as $keyword ) {
-            $keywordId = $keywordsIds[$keyword];
-            $statement->execute();
-        }
+        return $contentType->id;
     }
 
     /**
@@ -132,33 +107,9 @@ class KeywordStorage implements FieldStorage
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        $dbHandler = $context["connection"];
-
-        $q = $dbHandler->createSelectQuery();
-        $q->select( "keyword" )
-            ->from( $dbHandler->quoteTable( "ezkeyword" ) )
-            ->innerJoin(
-                $dbHandler->quoteTable( "ezkeyword_attribute_link" ),
-                $q->expr->eq(
-                    $dbHandler->quoteColumn( "id", "ezkeyword" ),
-                    $dbHandler->quoteColumn( "keyword_id", "ezkeyword_attribute_link" )
-                )
-            )
-            ->where(
-                $q->expr->eq(
-                    $dbHandler->quoteColumn( "objectattribute_id", "ezkeyword_attribute_link" ),
-                    $field->id
-                )
-            );
-
-        $statement = $q->prepare();
-        $statement->execute();
-
-        $keywords = $statement->fetchAll( PDO::FETCH_COLUMN, 0 );
-        if ( $keywords === false )
-            throw new LogicException( "Fetching keywords data failed" );
-
-        $field->value->data = $keywords;
+        $gateway = $this->getGateway( $context );
+        // @TODO: This should already retrieve the ContentType ID
+        return $gateway->getFieldData( $field );
     }
 
     /**
@@ -168,6 +119,7 @@ class KeywordStorage implements FieldStorage
      */
     public function deleteFieldData( array $fieldId, array $context )
     {
+        // @TODO: What about deleting keywords?
     }
 
     /**
@@ -184,15 +136,8 @@ class KeywordStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
-    {
-    }
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
+        return null;
     }
 }
