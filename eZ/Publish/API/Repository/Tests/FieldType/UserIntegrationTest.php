@@ -29,6 +29,7 @@ use eZ\Publish\API\Repository;
  * - Remove copied content
  *
  * @group integration
+ * @group field-type
  */
 class UserFieldTypeIntergrationTest extends BaseIntegrationTest
 {

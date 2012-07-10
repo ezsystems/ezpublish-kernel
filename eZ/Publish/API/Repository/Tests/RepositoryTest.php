@@ -56,6 +56,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @group content-type
+     * @group field-type
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
      */

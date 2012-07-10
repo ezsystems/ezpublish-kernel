@@ -34,6 +34,7 @@ use eZ\Publish\API\Repository\Tests,
  * - @TODO: Test fromHash()?
  *
  * @group integration
+ * @group field-type
  */
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
