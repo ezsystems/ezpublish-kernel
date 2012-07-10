@@ -131,4 +131,17 @@ class Type extends TextLine
     {
         return true;
     }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        //TODO: validate the field settings
+        return array();
+    }
 }

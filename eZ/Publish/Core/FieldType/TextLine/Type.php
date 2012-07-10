@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\TextLine;
 use eZ\Publish\Core\FieldType\FieldType,
-    ez\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+ez\Publish\Core\Repository\ValidatorService,
+eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+eZ\Publish\API\Repository\Values\Content\Field,
+eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The TextLine field type.
@@ -22,26 +22,12 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        "StringLengthValidator"
+    protected $validatorConfigurationSchema = array(
+        "StringLengthValidator" => array(
+            "minStringLength" => array( "type" => int, "default" => 0 ),
+            "maxStringLength" => array( "type" => int, "default" => 100 )
+        )
     );
-
-    /**
-     * Holds an instance of validator service
-     *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
-     */
-    protected $validatorService;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     */
-    public function __construct( ValidatorService $validatorService )
-    {
-        $this->validatorService = $validatorService;
-    }
 
     /**
      * Build a Value object of current FieldType
@@ -97,7 +83,7 @@ class Type extends FieldType
             throw new InvalidArgumentType(
                 '$inputValue',
                 'eZ\\Publish\\Core\\FieldType\\TextLine\\Value',
-                $inputValue
+            $inputValue
             );
         }
 
@@ -106,7 +92,7 @@ class Type extends FieldType
             throw new InvalidArgumentType(
                 '$inputValue->text',
                 'string',
-                $inputValue->text
+            $inputValue->text
             );
         }
 
@@ -156,5 +142,18 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfirguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        //TODO: validate the field definition validator configuration
+        return array();
     }
 }
