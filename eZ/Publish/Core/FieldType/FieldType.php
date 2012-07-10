@@ -10,9 +10,8 @@
 namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\FieldTypeTools,
-    eZ\Publish\API\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
     eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
@@ -63,7 +62,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @var array
      */
-    protected $allowedValidators = array();
+    protected $validatorConfigurationSchema = array();
 
     /**
      * @var \eZ\Publish\Core\FieldType\Validator[]
@@ -78,13 +77,21 @@ abstract class FieldType implements FieldTypeInterface
     protected $fieldTypeTools;
 
     /**
+     * Holds an instance of validator service
+     *
+     * @var \eZ\Publish\Core\Repository\ValidatorService
+     */
+    protected $validatorService;
+
+    /**
      * Constructs field type object, initializing internal data structures.
      *
      * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      */
-    public function __construct( FieldTypeTools $fieldTypeTools )
+    public function __construct( FieldTypeTools $fieldTypeTools, ValidatorService $validatorService )
     {
         $this->fieldTypeTools = $fieldTypeTools;
+        $this->validatorService = $validatorService;
     }
 
     /**
@@ -111,9 +118,9 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return array
      */
-    public function allowedValidators()
+    public function getValidatorConfigurationSchema()
     {
-        return $this->allowedValidators;
+        return $this->validatorConfigurationSchema;
     }
 
     /**
@@ -129,7 +136,7 @@ abstract class FieldType implements FieldTypeInterface
     public final function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $errors = array();
-        foreach ( (array)$fieldDefinition->getValidators() as $validatorRepresentation )
+        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorRepresentation )
         {
             $validator = $this->validatorService->getValidator( $validatorRepresentation->identifier );
             $validator->initializeWithConstraints( $validatorRepresentation->constraints );
@@ -140,6 +147,24 @@ abstract class FieldType implements FieldTypeInterface
         }
         return $errors;
     }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfirguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    abstract public function validateValidatorConfiguration( $validatorConfiguration );
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    abstract public function validateFieldSettings( $fieldSettings );
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.

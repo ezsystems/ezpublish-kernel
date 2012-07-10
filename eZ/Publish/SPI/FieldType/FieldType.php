@@ -12,7 +12,6 @@ namespace eZ\Publish\SPI\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
@@ -135,7 +134,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfirguration);
+    public function validateValidatorConfiguration( $validatorConfiguration );
 
     /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
