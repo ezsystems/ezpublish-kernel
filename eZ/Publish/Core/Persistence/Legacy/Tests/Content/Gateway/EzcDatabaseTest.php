@@ -1768,7 +1768,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     {
         file_put_contents(
             $file,
-            "<?php\n\nreturn " . str_replace( " \n", "", var_export( $fixture, true ) ) . ";\n"
+            "<?php\n\nreturn " . str_replace( " \n", "\n", var_export( $fixture, true ) ) . ";\n"
         );
     }
 
