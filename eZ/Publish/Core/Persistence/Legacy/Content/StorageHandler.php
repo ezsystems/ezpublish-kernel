@@ -51,7 +51,7 @@ class StorageHandler
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
-        return $this->storageRegistry->getStorage( $field->type )->storeFieldData( $field, $this->context );
+        return $this->storageRegistry->getStorage( $field->type )->storeFieldData( $versionInfo, $field, $this->context );
     }
 
     /**
@@ -66,7 +66,7 @@ class StorageHandler
         $storage = $this->storageRegistry->getStorage( $field->type );
         if ( $storage->hasFieldData() )
         {
-            $storage->getFieldData( $field, $this->context );
+            $storage->getFieldData( $versionInfo, $field, $this->context );
         }
     }
 
