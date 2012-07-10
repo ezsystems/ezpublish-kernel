@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Validator;
 use eZ\Publish\Core\FieldType\Validator,
+    eZ\Publish\API\Repository\Values\Translation\Message,
     eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
@@ -42,13 +43,15 @@ class IntegerValueValidator extends Validator
 
         if ( $this->constraints['maxIntegerValue'] !== false && $value->value > $this->constraints['maxIntegerValue'] )
         {
-            $this->errors[] = "The value can not be higher than {$this->constraints['maxIntegerValue']}.";
+            $this->errors[] = new Message("The value cannot be higher than %size%.",
+                                          array('size' => $this->constraints['maxIntegerValue']));
             $isValid = false;
         }
 
         if ( $this->constraints['minIntegerValue'] !== false && $value->value < $this->constraints['minIntegerValue'] )
         {
-            $this->errors[] = "The value can not be lower than {$this->constraints['minIntegerValue']}.";
+            $this->errors[] = new Message("The value cannot be lower than %size%.",
+                                          array('size' => $this->constraints['minIntegerValue']));
             $isValid = false;
         }
 

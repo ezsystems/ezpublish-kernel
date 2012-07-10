@@ -51,23 +51,11 @@ abstract class FieldType implements FieldTypeInterface
     protected $settingsSchema = array();
 
     /**
-     * Validators which are supported for this field type.
-     * Full Qualified Class Name should be registered here.
-     * Example:
-     * <code>
-     * protected $allowedValidators = array(
-     *     "eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator"
-     * );
-     * </code>
-     *
+     * a two dimensional map with validator identifiers and parameters
+     * 
      * @var array
      */
     protected $validatorConfigurationSchema = array();
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\Validator[]
-     */
-    protected $validators = array();
 
     /**
      * Tool object for field types
@@ -97,7 +85,6 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
-     * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\SPI\FieldType\Event $event
      */
     public function handleEvent( Event $event )
@@ -105,8 +92,13 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Keys of settings which are available on this fieldtype.
-     * @return array
+     * Returns a schema for the settings expected by the FieldType
+     * 
+     * This implementation returns an array.
+     * where the key is the setting name, and the value is the default value for given
+     * setting and set to null if no particular default should be set.
+     * 
+     * @return mixed
      */
     public function getSettingsSchema()
     {
@@ -114,10 +106,30 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Return an array of allowed validators to operate on this field type.
-     *
-     * @return array
-     */
+     * Returns a schema for supported validator configurations.
+     * 
+     * This implementation returns a three dimensional map containing for each validator configuration
+     * referenced by identifier a map of supported parameters which are difined by a type and a default value
+     * (see example). 
+     * Example:
+     * <code>
+     *  array(
+     *      'stringLength' => array(
+     *          'minStringLength' => array(
+     *              'type'    => 'int',
+     *              'default' => 0,
+     *          ),
+     *          'maxStringLength' => array(
+     *              'type'    => 'int'
+     *              'default' => null,
+     *          )
+     *      ),
+     *  );
+     * </code>
+     * The validator identifier is mapped to a Validator class which can be retrieved via the
+     * ValidatorService. 
+     * 
+     */   
     public function getValidatorConfigurationSchema()
     {
         return $this->validatorConfigurationSchema;
@@ -131,15 +143,15 @@ abstract class FieldType implements FieldTypeInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
      * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
      *
-     * @return array And array of field validation errors if there were any
+     * @return \eZ\Publish\SPI\FieldType\ValidatonError[]
      */
     public final function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $errors = array();
-        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorRepresentation )
+        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
         {
-            $validator = $this->validatorService->getValidator( $validatorRepresentation->identifier );
-            $validator->initializeWithConstraints( $validatorRepresentation->constraints );
+            $validator = $this->validatorService->getValidator( $validatorIdentifier );
+            $validator->initializeWithConstraints( $parameters );
             if ( !$validator->validate( $fieldValue ) )
             {
                 $errors[] = $validator->getMessage();

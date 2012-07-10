@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Validator;
 use eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\Core\FieldType\Value as BaseValue;
+eZ\Publish\API\Repository\Values\Translation\Plural,
+eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Validator for checking max. size of binary files.
@@ -35,7 +36,9 @@ class FileSizeValidator extends Validator
 
         if ( $this->constraints['maxFileSize'] !== false && $value->file->size > $this->constraints['maxFileSize'] )
         {
-            $this->errors[] = "The file size can not exceed {$this->constraints['maxFileSize']} bytes.";
+            $this->errors[] = new Plural("The file size cannot exceed %size%  byte.",
+                                         "The file size cannot exceed %size%  bytes.",
+                                         array('size' => $this->constraints['maxFileSize']));
             $isValid = false;
         }
 

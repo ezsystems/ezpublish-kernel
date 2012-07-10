@@ -35,7 +35,6 @@ interface FieldType
     /**
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
-     * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\SPI\FieldType\Event $event
      */
     public function handleEvent( Event $event );

@@ -16,6 +16,11 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNo
  */
 abstract class Validator
 {
+    /**
+     * The errors collected during validation
+     * 
+     * @var \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
     protected $errors = array();
 
     /**
@@ -51,8 +56,10 @@ abstract class Validator
      * $errors array.
      *
      * @abstract
+     * 
      * @param \eZ\Publish\Core\FieldType\Value $value
-     * @return bool
+     * 
+     * @return boolean
      */
     abstract public function validate( Value $value );
 
@@ -66,19 +73,6 @@ abstract class Validator
     public function getMessage()
     {
         return $this->errors;
-    }
-
-    /**
-     * Combines configurable constraints in the validator and creates a map.
-     *
-     * This map is then supposed to be used inside a FieldDefinition.
-     *
-     * @internal
-     * @return array
-     */
-    public function getValidatorConstraints()
-    {
-        return $this->constraints;
     }
 
     /**
