@@ -500,7 +500,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @depends testCopyField
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testDeleteField( $content )
+    public function testDeleteContent( $content )
     {
         $content = $this->testCreateContent();
 
