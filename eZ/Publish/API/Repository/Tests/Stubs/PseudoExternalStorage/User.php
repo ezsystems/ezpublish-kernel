@@ -15,6 +15,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
 use \eZ\Publish\API\Repository\Values\Content\Field;
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use \eZ\Publish\Core\FieldType\User\Value;
 
 /**
  * Handles external storage of the "user" field type.
@@ -27,19 +28,19 @@ class User extends PseudoExternalStorage
      * @var array
      */
     protected $defaultValues = array(
-        'account_key'        => null,
-        'has_stored_login'   => false,
-        'contentobject_id'   => null,
-        'login'              => null,
-        'email'              => null,
-        'password_hash'      => null,
-        'password_hash_type' => null,
-        'is_logged_in'       => true,
-        'is_enabled'         => false,
-        'is_locked'          => false,
-        'last_visit'         => null,
-        'login_count'        => null,
-        'max_login'          => null,
+        'accountKey'       => null,
+        'hasStoredLogin'   => false,
+        'contentobjectId'  => null,
+        'login'            => null,
+        'email'            => null,
+        'passwordHash'     => null,
+        'passwordHashType' => null,
+        'isLoggedIn'       => true,
+        'isEnabled'        => false,
+        'isLocked'         => false,
+        'lastVisit'        => null,
+        'loginCount'       => null,
+        'maxLogin'         => null,
     );
 
     /**
@@ -48,9 +49,9 @@ class User extends PseudoExternalStorage
      * @var array
      */
     protected $editable = array(
-        'account_key'        => true,
-        'last_visit'         => true,
-        'login_count'        => true,
+        'accountKey' => true,
+        'lastVisit'  => true,
+        'loginCount' => true,
     );
 
     /**
@@ -207,16 +208,16 @@ class User extends PseudoExternalStorage
      */
     protected function joinUserData( $data, $userData )
     {
-        $data['contentobject_id']   = $userData->id;
-        $data['has_stored_login']   = true;
+        $data['contentobjectId']   = $userData->id;
+        $data['hasStoredLogin']   = true;
         $data['login']              = $userData->login;
         $data['email']              = $userData->email;
-        $data['password_hash']      = $userData->passwordHash;
-        $data['password_hash_type'] = $userData->hashAlgorithm;
-        $data['is_enabled']         = $userData->isEnabled;
-        $data['is_locked']          = $data['login_count'] < $userData->maxLogin;
+        $data['passwordHash']      = $userData->passwordHash;
+        $data['passwordHashType'] = $userData->hashAlgorithm;
+        $data['isEnabled']         = $userData->isEnabled;
+        $data['isLocked']          = $data['loginCount'] < $userData->maxLogin;
 
-        return $data;
+        return new Value( $data );
     }
 }
 
