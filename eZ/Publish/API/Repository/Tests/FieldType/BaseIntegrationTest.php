@@ -502,7 +502,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testDeleteContent( $content )
     {
-        $content = $this->testCreateContent();
+        $content = $this->testPublishContent();
 
         $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
