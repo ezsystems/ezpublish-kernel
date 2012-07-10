@@ -8,7 +8,7 @@
  * @package eZ\Publish\API\Repository
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\Values;
 use eZ\Publish\API\Repository\FieldType as FieldTypeInterface;
 
 /**
