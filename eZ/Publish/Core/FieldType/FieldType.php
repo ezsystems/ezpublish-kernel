@@ -167,7 +167,8 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfiguration ) {
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
         return array();
     }
 
@@ -178,7 +179,8 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings ) {
+    public function validateFieldSettings( $fieldSettings )
+    {
         return array();
     }
 
