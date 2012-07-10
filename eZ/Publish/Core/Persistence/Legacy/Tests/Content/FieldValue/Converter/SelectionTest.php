@@ -304,7 +304,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertTrue(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
@@ -336,7 +336,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertFalse(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );

@@ -60,7 +60,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $ft = new DateAndTime();
         $value = $ft->getDefaultDefaultValue();
         self::assertInstanceOf(
-            'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value',
+            'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
             $value
         );
         self::assertInstanceOf( 'DateTime', $value->value );
@@ -79,7 +79,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
+        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
     /**

@@ -125,7 +125,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Value',
+                'eZ\\Publish\\Core\\FieldType\\Media\\Value',
                 $inputValue
             );
         }

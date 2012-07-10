@@ -27,7 +27,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAllowedSettings()
     {
-        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' ) );
+        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
         self::assertSame(
             array(
                 'numRows' => 10,
@@ -45,8 +45,8 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidType()
     {
-        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' ) );
-        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
+        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
+        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
     /**
@@ -56,7 +56,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidFormat( $text, $format )
     {
-        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' );
+        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' );
         $parserMock->expects( $this->once() )
                     ->method( 'process' )
                     ->with( $text )
@@ -72,7 +72,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormat( $text, $format )
     {
-        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' );
+        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' );
         $parserMock->expects( $this->once() )
                     ->method( 'process' )
                     ->with( $text )
@@ -88,7 +88,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     public function testToPersistenceValue()
     {
         // @todo Do one per value class
-        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XMLText\\Input\\Parser' ) );
+        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
         $value = $ft->buildValue( '', XmlTextValue::INPUT_FORMAT_PLAIN );
 
         $fieldValue = $ft->toPersistenceValue( $value );

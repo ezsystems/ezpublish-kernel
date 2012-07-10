@@ -123,7 +123,7 @@ EOT;
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertNull( $fieldDef->fieldTypeConstraints->validators );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
             array( "textRows" => 20 ),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()

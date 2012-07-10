@@ -71,7 +71,7 @@ class StorageDispatcher extends PseudoExternalStorage
             return false;
         }
 
-        $this->pseudoStorages[$fieldDefinition->fieldTypeIdentifier]->handleCreate( $fieldDefinition, $field, $content );
+        $this->pseudoStorages[$fieldDefinition->fieldTypeIdentifier]->handleUpdate( $fieldDefinition, $field, $content );
     }
 
     /**

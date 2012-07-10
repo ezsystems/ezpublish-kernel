@@ -66,7 +66,7 @@ class StorageRegistryTest extends TestCase
     {
         $registry = new StorageRegistry();
         self::assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'eZ\\Publish\\Core\\FieldType\\NullStorage',
             $registry->getStorage( 'not-found' )
         );
     }

@@ -58,7 +58,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     public function testAcceptValueInvalidType()
     {
         $ft = new AuthorType;
-        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
+        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
     /**
@@ -93,7 +93,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     public function testBuildFieldValueWithoutParam()
     {
         $value = new AuthorValue;
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection', $value->authors );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection', $value->authors );
         self::assertSame( array(), $value->authors->getArrayCopy() );
     }
 
@@ -103,7 +103,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     public function testBuildFieldValueWithParam()
     {
         $value = new AuthorValue( $this->authors );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection', $value->authors );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection', $value->authors );
         self::assertSame( $this->authors, $value->authors->getArrayCopy() );
     }
 

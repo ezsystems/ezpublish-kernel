@@ -151,7 +151,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ),
             $fieldDef->fieldTypeConstraints->validators
         );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
             array( 'mediaType' => MediaType::TYPE_HTML5_VIDEO ),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()

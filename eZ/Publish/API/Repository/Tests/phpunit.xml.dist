@@ -36,6 +36,7 @@
             <file>URLWildcardServiceAuthorizationTest.php</file>
             <file>ObjectStateServiceAuthorizationTest.php</file>
             <file>FieldType/UserIntegrationTest.php</file>
+            <file>FieldType/UrlIntegrationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

@@ -73,7 +73,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Value',
+                'eZ\\Publish\\Core\\FieldType\\Checkbox\\Value',
                 $inputValue
             );
         }

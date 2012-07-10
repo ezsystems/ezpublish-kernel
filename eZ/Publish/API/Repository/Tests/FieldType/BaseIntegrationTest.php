@@ -297,8 +297,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testCreateContent
      */
-    public function testPublishContent( $draft )
+    public function testPublishContent()
     {
+        $draft = $this->testCreateContent();
+
         if ( $draft->getVersionInfo()->status !== Repository\Values\Content\VersionInfo::STATUS_DRAFT )
         {
             $this->markTestSkipped( "Provided content object is not a draft." );
@@ -315,7 +317,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testPublishedFieldType( $content )
     {
-        var_dump( $content );
         foreach ( $content->fields as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
@@ -479,14 +480,19 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopiedExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value ) )
+        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
+        {
+            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
+        }
+
+        if ( !isset( $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
 
         $this->assertEquals(
             $value,
-            $field->value[$name]
+            $field->value->$name
         );
     }
 
@@ -494,7 +500,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @depends testCopyField
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testDeleteField( $content )
+    public function testDeleteContent( $content )
     {
         $content = $this->testCreateContent();
 

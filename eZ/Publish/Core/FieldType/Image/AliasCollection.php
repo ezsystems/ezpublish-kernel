@@ -67,7 +67,7 @@ class AliasCollection extends ArrayObject
         $this->IOService = $IOService;
         $this->imageConf = Configuration::getInstance( 'image' );
         $this->imageManager = new Manager( $this, $IOService );
-        $this->type = 'eZ\\Publish\\Core\\Repository\\FieldType\\Image\\Alias';
+        $this->type = 'eZ\\Publish\\Core\\FieldType\\Image\\Alias';
         foreach ( $elements as $item )
         {
             if ( !$item instanceof $this->type )

@@ -71,7 +71,7 @@ class Type extends TextLine
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\TextBlock\\Value',
+                'eZ\\Publish\\Core\\FieldType\\TextBlock\\Value',
                 $inputValue
             );
         }

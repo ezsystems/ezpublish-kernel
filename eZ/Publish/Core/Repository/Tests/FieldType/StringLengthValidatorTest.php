@@ -23,30 +23,9 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Validator",
+            "eZ\\Publish\\Core\\FieldType\\Validator",
             new StringLengthValidator
         );
-    }
-
-    /**
-     * Tests setting and getting constraints
-     *
-     * @group fieldType
-     * @group validator
-     * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
-     * @covers \eZ\Publish\Core\FieldType\Validator::getValidatorConstraints
-     */
-    public function testInitializeConstraints()
-    {
-        $constraints = array(
-            "minStringLength" => 5,
-            "maxStringLength" => 10,
-        );
-        $validator = new StringLengthValidator;
-        $validator->initializeWithConstraints(
-            $constraints
-        );
-        $this->assertEquals( $constraints, $validator->getValidatorConstraints() );
     }
 
     /**

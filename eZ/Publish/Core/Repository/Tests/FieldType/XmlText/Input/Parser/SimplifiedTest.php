@@ -25,7 +25,7 @@ class SimplifiedTest extends PHPUnit_Framework_TestCase
     {
         $this->parser = new Parser( new Schema );
         $handler = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Handler' )
+            ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Handler' )
             ->setConstructorArgs( array( $this->parser ) )
             ->getMock();
     }
