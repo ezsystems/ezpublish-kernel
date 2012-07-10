@@ -11,6 +11,8 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\Core\FieldType,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\User;
 
 /**
@@ -69,6 +71,17 @@ class UserIntergrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Returns the FieldTypeConstraints to be used to create a field definition
+     * of the FieldType under test.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints
+     */
+    public function getTypeConstraints()
+    {
+        return new FieldTypeConstraints();
+    }
+
+    /**
      * Get field definition data values
      *
      * This is a PHPUnit data provider
@@ -102,29 +115,36 @@ class UserIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get externals field data values
+     * Asserts that the loaded field data is correct
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * Performs assertions on the loaded field, mainly checking that the
+     * $field->value->externalData is loaded correctly. If the loading of
+     * external data manipulates other aspects of $field, their correctness
+     * also needs to be asserted. Make sure you implement this method agnostic
+     * to the used SPI\Persistence implementation!
      */
-    public function getExternalsFieldData()
+    public function assertLoadedFieldDataCorrect( Field $field )
     {
-        return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '*' ),
-            array( 'password_hash_type', 0 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
-            array( 'max_login', 1000 ),
+        $expectedValues = array(
+            'account_key' => null,
+            'has_stored_login' => true,
+            'contentobject_id' => 226,
+            'login' => 'hans',
+            'email' => 'hans@example.com',
+            'password_hash' => '*',
+            'password_hash_type' => 0,
+            'is_logged_in' => true,
+            'is_enabled' => true,
+            'is_locked' => false,
+            'last_visit' => null,
+            'login_count' => null,
+            'max_login' => 1000,
         );
+
+        foreach ( $expectedValues as $key => $value )
+        {
+            $this->assertEquals( $value, $field->value->externalData[$key] );
+        }
     }
 
     /**
@@ -148,55 +168,39 @@ class UserIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get externals updated field data values
+     * Asserts that the updated field data is loaded correct
      *
-     * This is a PHPUnit data provider
+     * Performs assertions on the loaded field after it has been updated,
+     * mainly checking that the $field->value->externalData is loaded
+     * correctly. If the loading of external data manipulates other aspects of
+     * $field, their correctness also needs to be asserted. Make sure you
+     * implement this method agnostic to the used SPI\Persistence
+     * implementation!
      *
-     * @return array
+     * @return void
      */
-    public function getUpdatedExternalsFieldData()
+    public function assertUpdatedFieldDataCorrect( Field $field )
     {
-        return array(
-            array( 'account_key', 'foobar' ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '*' ),
-            array( 'password_hash_type', 0 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            array( 'is_locked', true ),
-            array( 'last_visit', 123456789 ),
-            array( 'login_count', 2300 ),
-            array( 'max_login', 1000 ),
+        $expectedValues = array(
+            'account_key' => 'foobar',
+            'has_stored_login' => true,
+            'contentobject_id' => 226,
+            'login' => 'hans',
+            'email' => 'hans@example.com',
+            'password_hash' => '*',
+            'password_hash_type' => 0,
+            'is_logged_in' => true,
+            'is_enabled' => true,
+            'is_locked' => true,
+            'last_visit' => 123456789,
+            'login_count' => 2300,
+            'max_login' => 1000,
         );
-    }
 
-    /**
-     * Get externals copied field data values
-     *
-     * This is a PHPUnit data provider
-     *
-     * @return array
-     */
-    public function getCopiedExternalsFieldData()
-    {
-        return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', false ),
-            array( 'contentobject_id', null ),
-            array( 'login', null ),
-            array( 'email', null ),
-            array( 'password_hash', null ),
-            array( 'password_hash_type', null ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', false ),
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
-            array( 'max_login', null ),
-        );
+        foreach ( $expectedValues as $key => $value )
+        {
+            $this->assertEquals( $value, $field->value->externalData[$key] );
+        }
     }
 
     /**

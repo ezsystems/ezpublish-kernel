@@ -10,7 +10,8 @@
 namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\SPI\Persistence\Content;
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Integration test for the legacy storage
@@ -48,21 +49,33 @@ abstract class BaseIntegrationTest extends TestCase
     protected static $contentVersion;
 
     /**
-     * Get name of tested field tyoe
+     * Returns the identifier of the FieldType under test
      *
      * @return string
      */
     abstract public function getTypeName();
 
     /**
-     * Get handler with required custom field types registered
+     * Returns the Handler with all necessary objects registered
      *
-     * @return Handler
+     * Returns an instance of the Persistence Handler where the
+     * FieldTypy\Storage has been registered.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     abstract public function getCustomHandler();
 
     /**
-     * Get field definition data values
+     * Returns the FieldTypeConstraints to be used to create a field definition
+     * of the FieldType under test.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints
+     */
+    abstract public function getTypeConstraints();
+
+    /**
+     * Returns the field definition data expected after loading the newly
+     * created field definition with the FieldType under test
      *
      * This is a PHPUnit data provider
      *
@@ -71,45 +84,37 @@ abstract class BaseIntegrationTest extends TestCase
     abstract public function getFieldDefinitionData();
 
     /**
-     * Get initial field externals data
+     * Returns the initial data to be stored in FieldValue->externalData when
+     * creating the content field of the FieldType under test
      *
-     * @return array
+     * @return mixed
      */
     abstract public function getInitialFieldData();
 
     /**
-     * Get externals field data values
+     * Asserts that the loaded field data is correct
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * Performs assertions on the loaded field, mainly checking that the
+     * $field->value->externalData is loaded correctly. If the loading of
+     * external data manipulates other aspects of $field, their correctness
+     * also needs to be asserted. Make sure you implement this method agnostic
+     * to the used SPI\Persistence implementation!
      */
-    abstract public function getExternalsFieldData();
+    abstract public function assertLoadedFieldDataCorrect( Field $field );
 
     /**
-     * Get update field externals data
+     * Asserts that the updated field data is loaded correct
      *
-     * @return array
+     * Performs assertions on the loaded field after it has been updated,
+     * mainly checking that the $field->value->externalData is loaded
+     * correctly. If the loading of external data manipulates other aspects of
+     * $field, their correctness also needs to be asserted. Make sure you
+     * implement this method agnostic to the used SPI\Persistence
+     * implementation!
+     *
+     * @return void
      */
-    abstract public function getUpdateFieldData();
-
-    /**
-     * Get externals updated field data values
-     *
-     * This is a PHPUnit data provider
-     *
-     * @return array
-     */
-    abstract public function getUpdatedExternalsFieldData();
-
-    /**
-     * Get externals copied field data values
-     *
-     * This is a PHPUnit data provider
-     *
-     * @return array
-     */
-    abstract public function getCopiedExternalsFieldData();
+    abstract public function assertUpdatedFieldDataCorrect( Field $field );
 
     /**
      * Method called after content creation
@@ -181,6 +186,7 @@ abstract class BaseIntegrationTest extends TestCase
                 'fieldType'      => $this->getTypeName(),
                 'isTranslatable' => false,
                 'isRequired'     => true,
+                'fieldTypeConstraints' => $this->getTypeConstraints(),
             ) ),
         );
 
@@ -270,7 +276,7 @@ abstract class BaseIntegrationTest extends TestCase
                     ) ),
                 ) ),
                 new Content\Field( array(
-                    'type'              => 'ezuser',
+                    'type'              => $this->getTypeName(),
                     'languageCode'      => 'eng-GB',
                     'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
                     'value'             => new Content\FieldValue( array(
@@ -329,19 +335,10 @@ abstract class BaseIntegrationTest extends TestCase
 
     /**
      * @depends testLoadFieldType
-     * @dataProvider getExternalsFieldData
      */
-    public function testLoadExternalData( $name, $value, $field )
+    public function testLoadExternalData( $field )
     {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
+        $this->assertLoadedFieldDataCorrect( $field );
     }
 
     /**
@@ -380,19 +377,10 @@ abstract class BaseIntegrationTest extends TestCase
 
     /**
      * @depends testUpdateFieldType
-     * @dataProvider getUpdatedExternalsFieldData
      */
-    public function testUpdateExternalData( $name, $value, $field )
+    public function testUpdateExternalData( $field )
     {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
+        $this->assertUpdatedFieldDataCorrect( $field );
     }
 
     /**
@@ -427,23 +415,6 @@ abstract class BaseIntegrationTest extends TestCase
         );
 
         return $content->fields[1];
-    }
-
-    /**
-     * @depends testCopiedFieldType
-     * @dataProvider getCopiedExternalsFieldData
-     */
-    public function testCopiedExternalData( $name, $value, $field )
-    {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
     }
 
     /**
