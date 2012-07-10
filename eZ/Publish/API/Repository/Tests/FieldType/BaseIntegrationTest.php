@@ -451,8 +451,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $copied = $contentService->copyContent( $content->contentInfo, $locationCreate );
 
         $this->assertNotSame(
-            $content->versionInfo->contentId,
-            $copied->versionInfo->contentId
+            $content->contentInfo->id,
+            $copied->contentInfo->id
         );
 
         return $contentService->loadContent( $copied->id );
