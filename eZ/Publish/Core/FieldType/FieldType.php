@@ -74,9 +74,11 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Constructs field type object, initializing internal data structures.
      *
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
+     * @param ValidatorService $validatorService
+     * @param FieldTypeTools $fieldTypeTools
+     * @return void
      */
-    public function __construct( FieldTypeTools $fieldTypeTools, ValidatorService $validatorService )
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools )
     {
         $this->fieldTypeTools = $fieldTypeTools;
         $this->validatorService = $validatorService;
