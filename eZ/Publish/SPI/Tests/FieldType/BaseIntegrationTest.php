@@ -475,7 +475,7 @@ abstract class BaseIntegrationTest extends TestCase
         return new Legacy\Handler(
             array(
                 'external_storage' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+                    'ezstring' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
                 ),
                 'field_converter' => array(
                     'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
