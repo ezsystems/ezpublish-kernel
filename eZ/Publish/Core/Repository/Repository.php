@@ -130,11 +130,18 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     protected $objectStateService;
 
     /**
-     * Instance of object state service
+     * Instance of field type service
      *
-     * @var \eZ\Publish\API\Repository\ValidatorService
+     * @var \eZ\Publish\API\Repository\FieldTypeService
      */
     protected $fieldTypeService;
+
+    /**
+     * Instance of object state service
+     *
+     * @var \eZ\Publish\Core\Repository\ValidatorService
+     */
+    protected $validatorService;
 
     /**
      * Service settings, first level key is service name
@@ -486,8 +493,22 @@ class Repository implements RepositoryInterface, LegacyKernelAware
         if ( $this->fieldTypeService !== null )
             return $this->fieldTypeService;
 
-        $this->fieldTypeService = new ValidatorService( $this, $this->persistenceHandler, $this->serviceSettings['contentType']['field_type'] );
+        $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['contentType']['field_type'] );
         return $this->fieldTypeService;
+    }
+
+    /**
+     * Get ValidatorService
+     *
+     * @return \eZ\Publish\Core\Repository\ValidatorService
+     */
+    public function getValidatorService()
+    {
+        if ( $this->validatorService !== null )
+            return $this->validatorService;
+
+        $this->validatorService = new ValidatorService();
+        return $this->validatorService;
     }
 
     /**
