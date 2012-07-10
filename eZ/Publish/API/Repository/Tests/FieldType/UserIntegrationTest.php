@@ -11,22 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository;
 
 /**
- * Integration test for legacy storage field types
- *
- * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
- * ``Converter`` and ``Storage`` implementations. Fo get it working implement
- * the abstract methods in a sensible way.
- *
- * The following actions are performed by this test using the custom field
- * type:
- *
- * - Create a new content type with the given field type
- * - Load create content type
- * - Create content object of new content type
- * - Load created content
- * - Copy created content
- * - Remove copied content
+ * Integration test for use field type
  *
  * @group integration
  * @group field-type
