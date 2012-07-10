@@ -252,7 +252,10 @@ abstract class BaseIntegrationTest extends TestCase
             'typeId'            => $contentType->id,
             'sectionId'         => 1,
             'ownerId'           => 14,
-            'locations'         => array( new Content\Location\CreateStruct( array( 'parentId' => 2 ) ) ),
+            'locations'         => array( new Content\Location\CreateStruct( array(
+                'parentId' => 2,
+                'remoteId' => 'sindelfingen',
+            ) ) ),
             'initialLanguageId' => 2,
             'remoteId'          => 'sindelfingen',
             'modified'          => time(),
