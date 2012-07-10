@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Media;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\FieldType\Media\Value as MediaValue;
@@ -23,7 +24,7 @@ class MediaStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
-    public function storeFieldData( Field $field, array $context )
+    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $dbHandler = $context['connection'];
         if ( $this->mediaExists( $field->id, $field->versionNo, $dbHandler ) )
@@ -42,7 +43,7 @@ class MediaStorage implements FieldStorage
      * @param array $context
      * @return void
      */
-    public function getFieldData( Field $field, array $context )
+    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $media = $this->fetch( $field->id, $field->versionNo, $context['connection'] );
 
@@ -89,7 +90,7 @@ class MediaStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function copyFieldData( Field $field, array $context )
+    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
 
     }
@@ -98,7 +99,7 @@ class MediaStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function getIndexData( Field $field, array $context )
+    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
 
     }
@@ -138,7 +139,7 @@ class MediaStorage implements FieldStorage
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return void
      */
-    private function insert( Field $field, EzcDbHandler $dbHandler )
+    private function insert( VersionInfo $versionInfo, Field $field, EzcDbHandler $dbHandler )
     {
         $data = $field->value->data;
         $q = $dbHandler->createInsertQuery();
@@ -196,7 +197,7 @@ class MediaStorage implements FieldStorage
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return void
      */
-    private function update( Field $field, EzcDbHandler $dbHandler )
+    private function update( VersionInfo $versionInfo, Field $field, EzcDbHandler $dbHandler )
     {
         $data = $field->value->data;
         $q = $dbHandler->createUpdateQuery();

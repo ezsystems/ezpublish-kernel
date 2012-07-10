@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
-use eZ\Publish\Core\FieldType\UserStorage\Gateway;
+use eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 
 class LegacyStorage extends Gateway
 {

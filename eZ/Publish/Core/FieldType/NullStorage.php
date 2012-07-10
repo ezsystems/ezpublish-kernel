@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
@@ -19,7 +20,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()
      */
-    public function storeFieldData( Field $field, array $context )
+    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         return;
     }
@@ -27,7 +28,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::getFieldData()
      */
-    public function getFieldData( Field $field, array $context )
+    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         return;
     }
@@ -53,7 +54,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::copyFieldData()
      */
-    public function copyFieldData( Field $field, array $context )
+    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         return;
     }
@@ -61,7 +62,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::getIndexData()
      */
-    public function getIndexData( Field $field, array $context )
+    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
         return false;
     }

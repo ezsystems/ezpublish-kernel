@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\User;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
@@ -112,7 +113,7 @@ class UserStorage implements FieldStorage
      * @param array $context
      * @return null|true
      */
-    public function storeFieldData( Field $field, array $context )
+    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $gateway = $this->getGateway( $context );
         $field->value->externalData = $gateway->storeFieldData( $field->id, $field->value->externalData );
@@ -128,7 +129,7 @@ class UserStorage implements FieldStorage
      * @param array $context
      * @return void
      */
-    public function getFieldData( Field $field, array $context )
+    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $gateway = $this->getGateway( $context );
         $field->value->externalData = $gateway->getFieldData( $field->id );
@@ -164,7 +165,7 @@ class UserStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function copyFieldData( Field $field, array $context )
+    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         // @TODO: What do we actually want to do in here?
         $gateway = $this->getGateway( $context );
@@ -175,7 +176,7 @@ class UserStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function getIndexData( Field $field, array $context )
+    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
         // @TODO: How to call this function? Yet undefined.
         echo __METHOD__, PHP_EOL;

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Media;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
@@ -54,7 +55,7 @@ class BinaryFileStorage implements FieldStorage
      * @return void
      * @todo Check if it's insert or update query
      */
-    public function storeFieldData( Field $field, array $context )
+    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $dbHandler = $context['connection'];
         $file = $field->value->data->file;
@@ -98,7 +99,7 @@ class BinaryFileStorage implements FieldStorage
      * @param array $context
      * @return void
      */
-    public function getFieldData( Field $field, array $context )
+    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
 
     }
@@ -127,7 +128,7 @@ class BinaryFileStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function copyFieldData( Field $field, array $context )
+    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
 
     }
@@ -136,7 +137,7 @@ class BinaryFileStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function getIndexData( Field $field, array $context )
+    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
 
     }

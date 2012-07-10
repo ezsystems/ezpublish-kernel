@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Keyword;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Base\Exceptions\Logic,
     PDO;
@@ -21,7 +22,7 @@ class KeywordStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
-    public function storeFieldData( Field $field, array $context )
+    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         // If there is no keywords, there is nothing to store.
         if ( empty( $field->value->data ) )
@@ -129,7 +130,7 @@ class KeywordStorage implements FieldStorage
      * @param array $context
      * @return void
      */
-    public function getFieldData( Field $field, array $context )
+    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $dbHandler = $context["connection"];
 
@@ -183,7 +184,7 @@ class KeywordStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function copyFieldData( Field $field, array $context )
+    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
     }
 
@@ -191,7 +192,7 @@ class KeywordStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function getIndexData( Field $field, array $context )
+    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
     }
 }

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Media;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\FieldType\Url\Value as UrlValue;
@@ -23,7 +24,7 @@ class UrlStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
-    public function storeFieldData( Field $field, array $context )
+    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $dbHandler = $context["connection"];
         if ( ( $row = $this->fetchByLink( $field->value->externalData, $dbHandler ) ) !== false )
@@ -47,7 +48,7 @@ class UrlStorage implements FieldStorage
      * @param array $context
      * @return void
      */
-    public function getFieldData( Field $field, array $context )
+    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $url = $this->fetchById( $field->value->data["urlId"], $context["connection"] );
 
@@ -77,7 +78,7 @@ class UrlStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function copyFieldData( Field $field, array $context )
+    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
     }
 
@@ -85,7 +86,7 @@ class UrlStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function getIndexData( Field $field, array $context )
+    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
     }
 
@@ -150,7 +151,7 @@ class UrlStorage implements FieldStorage
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return mixed
      */
-    private function insert( Field $field, EzcDbHandler $dbHandler )
+    private function insert( VersionInfo $versionInfo, Field $field, EzcDbHandler $dbHandler )
     {
         $time = time();
         $q = $dbHandler->createInsertQuery();
