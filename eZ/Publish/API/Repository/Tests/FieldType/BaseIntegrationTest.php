@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Tests,
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -142,10 +142,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * Method called after content creation
      *
-     * Useful, if additional stuff should be executed (like creating the actual 
+     * Useful, if additional stuff should be executed (like creating the actual
      * user).
      *
-     * We cannot just overwrite the testCreateContent method, since this messes 
+     * We cannot just overwrite the testCreateContent method, since this messes
      * up PHPUnits @depends sorting of tests, so everything will be skipped.
      *
      * @param Repository\Repository $repository
@@ -256,7 +256,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testCreateContent()
     {
         // @Hack: This is required to make it possible to overwrite this
-        // method, while maintaing the execution order. PHPUnit does not manage 
+        // method, while maintaing the execution order. PHPUnit does not manage
         // to sort tests properly, otherwise.
         if ( method_exists( $this, 'createContentOverwrite' ) )
         {

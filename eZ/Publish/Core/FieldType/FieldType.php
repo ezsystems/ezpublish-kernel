@@ -52,7 +52,7 @@ abstract class FieldType implements FieldTypeInterface
 
     /**
      * a two dimensional map with validator identifiers and parameters
-     * 
+     *
      * @var array
      */
     protected $validatorConfigurationSchema = array();
@@ -93,11 +93,11 @@ abstract class FieldType implements FieldTypeInterface
 
     /**
      * Returns a schema for the settings expected by the FieldType
-     * 
+     *
      * This implementation returns an array.
      * where the key is the setting name, and the value is the default value for given
      * setting and set to null if no particular default should be set.
-     * 
+     *
      * @return mixed
      */
     public function getSettingsSchema()
@@ -107,10 +107,10 @@ abstract class FieldType implements FieldTypeInterface
 
     /**
      * Returns a schema for supported validator configurations.
-     * 
+     *
      * This implementation returns a three dimensional map containing for each validator configuration
      * referenced by identifier a map of supported parameters which are difined by a type and a default value
-     * (see example). 
+     * (see example).
      * Example:
      * <code>
      *  array(
@@ -127,9 +127,9 @@ abstract class FieldType implements FieldTypeInterface
      *  );
      * </code>
      * The validator identifier is mapped to a Validator class which can be retrieved via the
-     * ValidatorService. 
-     * 
-     */   
+     * ValidatorService.
+     *
+     */
     public function getValidatorConfigurationSchema()
     {
         return $this->validatorConfigurationSchema;

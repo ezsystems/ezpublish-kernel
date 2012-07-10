@@ -171,7 +171,7 @@ class LegacyStorage extends Gateway
     /**
      * Fetch account key data
      *
-     * Naturally this would be a RIGHT OUTER JOIN, but this is not supported by 
+     * Naturally this would be a RIGHT OUTER JOIN, but this is not supported by
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId
@@ -202,7 +202,7 @@ class LegacyStorage extends Gateway
     /**
      * Fetch user settings
      *
-     * Naturally this would be a RIGHT OUTER JOIN, but this is not supported by 
+     * Naturally this would be a RIGHT OUTER JOIN, but this is not supported by
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId
@@ -234,7 +234,7 @@ class LegacyStorage extends Gateway
     /**
      * Fetch user visits
      *
-     * Naturally this would be a RIGHT OUTER JOIN, but this is not supported by 
+     * Naturally this would be a RIGHT OUTER JOIN, but this is not supported by
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId

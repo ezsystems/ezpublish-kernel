@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -202,7 +202,7 @@ class UserIntergrationTest extends BaseIntegrationTest
     /**
      * Method called after content creation
      *
-     * Useful, if additional stuff should be executed (like creating the actual 
+     * Useful, if additional stuff should be executed (like creating the actual
      * user).
      *
      * @param Legacy\Handler $handler

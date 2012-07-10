@@ -21,7 +21,7 @@ namespace eZ\Publish\API\Repository\Values\Translation;
 class Message extends Translation
 {
     /**
-     * Message string. Might use replacements like %foo%, which are replaced by 
+     * Message string. Might use replacements like %foo%, which are replaced by
      * the values specfied in the values array.
      *
      * @var string

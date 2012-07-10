@@ -21,8 +21,8 @@ namespace eZ\Publish\API\Repository\Values\Translation;
  * environment language.
  *
  * This interface follows the interfaces of XLiff, gettext, Symfony2
- * Translations and Zend_Translate. For singular forms you just provide a plain 
- * string (with optional placeholders without effects on the plural forms). For 
+ * Translations and Zend_Translate. For singular forms you just provide a plain
+ * string (with optional placeholders without effects on the plural forms). For
  * potential plural forms you always provide a singular variant and an english
  * simple plural variant. No implementation supports multiple different plural
  * forms in one single message.
@@ -44,7 +44,7 @@ class Plural extends Translation
     protected $singular;
 
     /**
-     * Message string. Might use replacements like %foo%, which are replaced by 
+     * Message string. Might use replacements like %foo%, which are replaced by
      * the values specfied in the values array.
      *
      * @var string

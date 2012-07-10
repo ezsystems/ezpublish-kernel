@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository;
 
 /**
  * Interface implemented by everything which should be translatable. This
- * should for example be implemented by any exception, which might bubble up to 
+ * should for example be implemented by any exception, which might bubble up to
  * a user, or validation errors.
  *
  * @package eZ\Publish\API\Repository

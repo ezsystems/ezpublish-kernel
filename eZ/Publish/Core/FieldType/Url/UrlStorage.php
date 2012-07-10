@@ -17,7 +17,7 @@ use eZ\Publish\SPI\FieldType\FieldStorage,
 /**
  * Converter for Url field type external storage
  * @TODO indroduce persistence layer (gateways)
- * 
+ *
  */
 class UrlStorage implements FieldStorage
 {

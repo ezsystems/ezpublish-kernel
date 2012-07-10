@@ -114,7 +114,7 @@ abstract class BaseIntegrationTest extends TestCase
     /**
      * Method called after content creation
      *
-     * Useful, if additional stuff should be executed (like creating the actual 
+     * Useful, if additional stuff should be executed (like creating the actual
      * user).
      *
      * @param Legacy\Handler $handler

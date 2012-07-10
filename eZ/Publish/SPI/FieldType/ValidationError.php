@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Translatable;
  * Interface for validation errors.
  *
  * Enforces to return a translatable message, since it will be necessary t
- * present validation errors to the user. Thus we need plural form handling and 
+ * present validation errors to the user. Thus we need plural form handling and
  * replacements of placeholders and so on.
  *
  * @package FieldTypeProviderInterface

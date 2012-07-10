@@ -137,7 +137,7 @@ class Type extends FieldType
     {
         return array( "link" => $value->link, "text" => $value->text );
     }
-    
+
      /**
      * Converts a $value to a persistence value.
      *
@@ -181,5 +181,5 @@ class Type extends FieldType
     public function fromPersistenceValue( FieldValue $fieldValue ) {
         return new Value($fieldValue->externalData,$fieldValue->data['text']);
     }
-    
+
 }

@@ -18,7 +18,7 @@ abstract class Validator
 {
     /**
      * The errors collected during validation
-     * 
+     *
      * @var \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     protected $errors = array();
@@ -56,9 +56,9 @@ abstract class Validator
      * $errors array.
      *
      * @abstract
-     * 
+     *
      * @param \eZ\Publish\Core\FieldType\Value $value
-     * 
+     *
      * @return boolean
      */
     abstract public function validate( Value $value );

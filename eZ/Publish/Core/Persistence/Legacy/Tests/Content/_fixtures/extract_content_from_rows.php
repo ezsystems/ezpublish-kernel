@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  0 => 
+  0 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -54,13 +54,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  1 => 
+  1 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -113,13 +113,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  2 => 
+  2 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -172,13 +172,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  3 => 
+  3 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -233,13 +233,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  4 => 
+  4 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -294,13 +294,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  5 => 
+  5 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -355,13 +355,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  6 => 
+  6 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -414,13 +414,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  7 => 
+  7 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -475,13 +475,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  8 => 
+  8 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -536,13 +536,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  9 => 
+  9 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -595,13 +595,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  10 => 
+  10 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -654,13 +654,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  11 => 
+  11 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -713,13 +713,13 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
     'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
-  12 => 
+  12 =>
   array (
     'ezcontentobject_id' => '226',
     'ezcontentobject_contentclass_id' => '16',
@@ -772,7 +772,7 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_always_available' => true,
     'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' => 
+    'ezcontentobject_version_languages' =>
     array (
       0 => 2,
     ),
