@@ -889,6 +889,14 @@ class ContentServiceStub implements ContentService
 
         unset( $this->contentInfo[$contentInfo->id] );
 
+        // @HACK: See Asana TODO -- drafts and locations are not handled
+        // correctly
+        if ( ( $versionInfo->status === VersionInfo::STATUS_DRAFT ) &&
+             ( $versionInfo->versionNo === 1 ) )
+        {
+            return;
+        }
+
         // Delete all locations for the given $contentInfo
         $locations = $locationService->loadLocations( $contentInfo );
         foreach ( $locations as $location )
