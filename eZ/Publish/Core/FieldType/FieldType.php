@@ -145,7 +145,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidatonError[]
      */
-    public final function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $errors = array();
         foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
