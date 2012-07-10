@@ -1540,12 +1540,9 @@ class ContentService implements ContentServiceInterface
                 array(
                     "id" => $spiField->id,
                     //$this->newFieldTypeValue( $spiField->type, $spiField->value->data ),
-                    "value" => $spiField->value->data,
-                    /*
                     "value" => $this->repository->getFieldTypeService()->buildFieldType(
                         $spiField->type
                     )->fromPersistenceValue( $spiField->value ),
-                    */
                     "languageCode" => $spiField->languageCode,
                     "fieldDefIdentifier" => $this->persistenceHandler->contentTypeHandler()->getFieldDefinition(
                         $spiField->fieldDefinitionId,
