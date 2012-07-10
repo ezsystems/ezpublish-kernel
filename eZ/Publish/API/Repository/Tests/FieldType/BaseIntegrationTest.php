@@ -27,7 +27,7 @@ use eZ\Publish\API\Repository\Tests,
  * - Create content object of new content type
  * - Load created content
  * - @TODO: Publish created content
- * - @TODO: Update content
+ * - Update content
  * - Copy created content
  * - Remove copied content
  * - @TODO: Test toHash()?
