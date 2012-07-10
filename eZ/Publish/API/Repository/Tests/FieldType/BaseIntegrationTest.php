@@ -283,7 +283,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreatedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -317,7 +317,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testPublishedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -345,7 +345,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testLoadFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -401,7 +401,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -463,7 +463,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopiedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -526,7 +526,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
         $contentType = $contentTypeService->loadContentType( $content->contentTypeId );
 
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
