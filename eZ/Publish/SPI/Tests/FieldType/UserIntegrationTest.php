@@ -62,7 +62,7 @@ class UserIntergrationTest extends BaseIntegrationTest
         );
         $handler->getFieldValueConverterRegistry()->register(
             'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
+            new Legacy\Content\FieldValue\Converter\Null()
         );
 
         return $handler;
