@@ -18,9 +18,12 @@ use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\MVC\SiteAccess;
 use eZ\Publish\MVC\SiteAccess\URIFixer;
 use eZ\Publish\MVC\SiteAccess\Router as SiteAccessRouter;
+use eZ\Publish\MVC\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\MVC\MVCEvents;
 
 /**
  * The ChainRouter is an aggregation of valid routers and allows URL matching against multiple routers.
@@ -55,10 +58,16 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
      */
     protected $siteAccessRouter;
 
-    public function __construct( RequestContext $context = null, SiteAccessRouter $siteAccessRouter )
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct( SiteAccessRouter $siteAccessRouter, EventDispatcherInterface $eventDispatcher, RequestContext $context = null )
     {
         $this->context = $context ?: new RequestContext();
         $this->siteAccessRouter = $siteAccessRouter;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -189,11 +198,13 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
         $siteaccess = $request->attributes->get( 'siteaccess' );
         if ( $siteaccess instanceof SiteAccess )
         {
+            $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request );
+            $this->eventDispatcher->dispatch( MVCEvents::SITEACCESS, $siteAccessEvent );
             // Fix up the pathinfo if necessary since it might contain the siteaccess (i.e. like in URI mode)
-            if ( $siteaccess->matcher instanceof URIFixer )
-            {
-                $pathinfo = $siteaccess->matcher->fixupURI( $pathinfo );
-            }
+            if ( $siteAccessEvent->hasPathinfo() )
+                $pathinfo = $siteAccessEvent->getPathinfo();
+
+            unset( $siteAccessEvent );
         }
 
         foreach ( $this->getAllRouters() as $router )

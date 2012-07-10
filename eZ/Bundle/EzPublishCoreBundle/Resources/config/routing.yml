@@ -1,12 +1,18 @@
 parameters:
     ezpublish.chain_router.class: eZ\Publish\MVC\Routing\ChainRouter
     ezpublish.siteaccess_router.class: eZ\Publish\MVC\SiteAccess\Router
+    ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
 
 services:
     ezpublish.chain_router:
         class: %ezpublish.chain_router.class%
-        arguments: [@router.request_context, @ezpublish.siteaccess_router]
+        arguments: [@ezpublish.siteaccess_router, @event_dispatcher, @router.request_context]
 
     ezpublish.siteaccess_router:
         class: %ezpublish.siteaccess_router.class%
         arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.config%]
+
+    ezpublish.siteaccess_listener:
+        class: %ezpublish.siteaccess_listener.class%
+        tags:
+            - { name: kernel.event_subscriber }
