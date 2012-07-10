@@ -16,7 +16,8 @@ use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\SPI\FieldType\Event;
 
 /**
  * XmlBlock field type.
@@ -173,7 +174,7 @@ EOF;
      * @param string $event prePublish, postPublish, preCreate, postCreate
      * @param \eZ\Publish\SPI\FieldType\Event $event
      */
-    public function handleEvent( Event $event );
+    public function handleEvent( Event $event )
     {
         if ( $event instanceof PreCreateEvent )
         {
