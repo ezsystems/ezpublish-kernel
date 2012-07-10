@@ -34,27 +34,6 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
-     * @covers \eZ\Publish\Core\FieldType\Validator::getValidatorConstraints
-     */
-    public function testInitializeConstraints()
-    {
-        $constraints = array(
-            "minFloatValue" => 0.5,
-            "maxFloatValue" => 22/7,
-        );
-        $validator = new FloatValueValidator;
-        $validator->initializeWithConstraints(
-            $constraints
-        );
-        $this->assertEquals( $constraints, $validator->getValidatorConstraints() );
-    }
-
-    /**
-     * Tests setting and getting constraints
-     *
-     * @group fieldType
-     * @group validator
-     * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
     public function testConstraintsInitializeGet()

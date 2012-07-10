@@ -34,27 +34,6 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
-     * @covers \eZ\Publish\Core\FieldType\Validator::getValidatorConstraints
-     */
-    public function testInitializeConstraints()
-    {
-        $constraints = array(
-            "minIntegerValue" => 0,
-            "maxIntegerValue" => 100,
-        );
-        $validator = new IntegerValueValidator;
-        $validator->initializeWithConstraints(
-            $constraints
-        );
-        $this->assertEquals( $constraints, $validator->getValidatorConstraints() );
-    }
-
-    /**
-     * Tests setting and getting constraints
-     *
-     * @group fieldType
-     * @group validator
-     * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
     public function testConstraintsInitializeGet()
