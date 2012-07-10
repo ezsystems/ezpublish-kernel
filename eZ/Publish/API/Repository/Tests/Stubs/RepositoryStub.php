@@ -486,6 +486,16 @@ class RepositoryStub implements Repository
     }
 
     /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService()
+    {
+        throw new \RuntimeException( '@TODO: Implement.' );
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
