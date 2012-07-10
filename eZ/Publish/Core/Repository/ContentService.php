@@ -486,6 +486,7 @@ class ContentService implements ContentServiceInterface
         $allFieldErrors = array();
         foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
+            /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
             $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
                 $fieldDefinition->fieldTypeIdentifier
             );

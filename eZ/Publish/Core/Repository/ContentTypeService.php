@@ -467,13 +467,23 @@ class ContentTypeService implements ContentTypeServiceInterface
                 //"defaultValue"
             )
         );
-        $fieldType = $this->buildFieldType( $fieldDefinitionCreateStruct->fieldTypeIdentifier );
-        $this->fillFieldTypeConstraints(
-            $spiFieldDefinition->fieldTypeConstraints,
-            $fieldType,
-            $fieldDefinitionCreateStruct->validators,
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier
+        );
+
+        $validationErrors = $fieldType->validateValidatorConfiguration(
+            $fieldDefinitionCreateStruct->validatorConfiguration
+        );
+        $validationErrors = $fieldType->validateFieldSettings(
             $fieldDefinitionCreateStruct->fieldSettings
         );
+
+        $spiFieldDefinition->fieldTypeConstraints->validators =
+            $fieldDefinitionCreateStruct->validatorConfiguration;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings =
+            $fieldDefinitionCreateStruct->fieldSettings;
+
         isset( $fieldDefinitionCreateStruct->defaultValue ) ?
             $spiFieldDefinition->defaultValue->data = $fieldDefinitionCreateStruct->defaultValue :
             $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getDefaultDefaultValue() );
@@ -510,72 +520,28 @@ class ContentTypeService implements ContentTypeServiceInterface
                 //"defaultValue"
             )
         );
-        $fieldType = $this->buildFieldType( $fieldDefinition->fieldTypeIdentifier );
-        $this->fillFieldTypeConstraints(
-            $spiFieldDefinition->fieldTypeConstraints,
-            $fieldType,
-            $fieldDefinitionUpdateStruct->validators,
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldDefinition->fieldTypeIdentifier
+        );
+
+        $validationErrors = $fieldType->validateValidatorConfiguration(
+            $fieldDefinitionUpdateStruct->validatorConfiguration
+        );
+        $validationErrors = $fieldType->validateFieldSettings(
             $fieldDefinitionUpdateStruct->fieldSettings
         );
+
+        $spiFieldDefinition->fieldTypeConstraints->validators =
+            $fieldDefinitionUpdateStruct->validatorConfiguration;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings =
+            $fieldDefinitionUpdateStruct->fieldSettings;
+
         isset( $fieldDefinitionUpdateStruct->defaultValue ) ?
             $spiFieldDefinition->defaultValue->data = $fieldDefinitionUpdateStruct->defaultValue :
             $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getDefaultDefaultValue() );
 
         return $spiFieldDefinition;
-    }
-
-    /**
-     * Used by the FieldDefinition to populate the $fieldTypeConstraints field properties.
-     *
-     * If validator or setting is not allowed for a given field type, InvalidArgumentException
-     * will be thrown
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints $fieldTypeConstraints
-     * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
-     * @param \eZ\Publish\API\Repository\Values\ContentType\Validator[]|null $validatorss
-     * @param array|null $fieldSettings
-     *
-     * @return void
-     */
-    protected function fillFieldTypeConstraints(
-        FieldTypeConstraints $fieldTypeConstraints,
-        $fieldType,
-        $validators,
-        $fieldSettings
-    )
-    {
-        $allowedValidators = $fieldType->allowedValidators();
-        $validatorConstraints = array();
-        foreach ( (array)$validators as $validator )
-        {
-            if ( !in_array( $validator->identifier, $allowedValidators ) )
-            {
-                throw new InvalidArgumentException(
-                    "\$validator",
-                    "Validator '{$validator->identifier}' is not allowed: " . implode( ", ", $allowedValidators )
-                );
-            }
-            $validatorConstraints[$validator->identifier] = $validator->constraints;
-        }
-
-        $settingsSchema = $fieldType->getSettingsSchema();
-        $fieldSettingsConstraints = array();
-        foreach ( (array)$fieldSettings as $settingName => $settingValue )
-        {
-            if ( !array_key_exists( $settingName, $settingsSchema ) )
-            {
-                throw new InvalidArgumentException(
-                    "\$validator",
-                    "Field setting '{$settingName}' is not allowed: " . implode( ", ", $settingsSchema )
-                );
-            }
-            $fieldSettingsConstraints[$settingName] = $settingValue;
-        }
-
-        $fieldTypeConstraints->validators = $validatorConstraints;
-        $fieldTypeConstraints->fieldSettings = $fieldSettingsConstraints + $settingsSchema;
     }
 
     /**
@@ -639,10 +605,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $validators = array();
         foreach ( (array)$spiFieldDefinition->fieldTypeConstraints->validators as $identifier => $constraints )
         {
-            $validators[] = $this->repository->getValidatorService()->buildValidatorDomainObject(
+            $validators = $this->repository->getValidatorService()->getValidatorConfiguration(
                 $identifier,
                 (array)$constraints
-            );
+            ) + $validators;
         }
         $fieldDefinition = new FieldDefinition(
             array(
@@ -658,8 +624,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isInfoCollector" => $spiFieldDefinition->isInfoCollector,
                 "defaultValue" => $spiFieldDefinition->defaultValue->data,
                 "isSearchable" => $spiFieldDefinition->isSearchable,
-                "fieldSettings" => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,// ?: null,
-                "validators" => $validators,// ?: null
+                "fieldSettings" => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
+                "validatorConfiguration" => $validators,
             )
         );
 
