@@ -1,7 +1,8 @@
 <?php
 
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
-use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
+use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway,
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 class LegacyStorage extends Gateway
 {
@@ -44,9 +45,11 @@ class LegacyStorage extends Gateway
     {
         $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $field->fieldDefinitionId );
 
-        $keywordsToInsert = $this->getKeywordsToInsert( $field->value->externalData, $existingKeywordMap );
+        $keywordsToInsert = $this->getKeywordsToInsert( $existingKeywordMap, $field->value->externalData );
 
-        $insertedKeywordMap = $this->insertKeywords( $keywordsToInsert, $field->fieldDefinitionId );
+        $insertedKeywordMap = $this->insertKeywords( $keywordsToInsert, $contentTypeID );
+
+        $this->deleteOldKeywordAssignements( $field );
 
         $keywordsToAssignMap = array_merge( $existingKeywordMap, $insertedKeywordMap );
 
@@ -87,14 +90,14 @@ class LegacyStorage extends Gateway
             ->where(
                 $query->expr->eq(
                     $dbHandler->quoteColumn( "objectattribute_id", "ezkeyword_attribute_link" ),
-                    $field->id
+                    $fieldId
                 )
             );
 
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( PDO::FETCH_COLUMN, 0 );
+        return $statement->fetchAll( \PDO::FETCH_COLUMN, 0 );
     }
 
 
@@ -119,7 +122,7 @@ class LegacyStorage extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $row = $statement->fetch( PDO::FETCH_ASSOC );
+        $row = $statement->fetch( \PDO::FETCH_ASSOC );
 
         if ( $row === false )
             throw new Logic( 'Content Type ID cannot be retrieved based on the field definition ID' );
@@ -154,7 +157,7 @@ class LegacyStorage extends Gateway
                 $q->expr->lAnd(
                     $q->expr->in(
                         "keyword",
-                        $field->value->externalData
+                        $keywordList
                     ),
                     $q->expr->eq( "class_id", $contentTypeID )
                 )
@@ -164,7 +167,7 @@ class LegacyStorage extends Gateway
 
         $existingKeywordMap = array();
 
-        foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
         {
             $existingKeywordMap[$row["keyword"]] = $row["id"];
         }
@@ -217,7 +220,7 @@ class LegacyStorage extends Gateway
      * @param mixed $fieldDefinitionId
      * @return mixed[]
      */
-    protected function insertKeywords( array $keywordsToInsert, $fieldDefinitionId )
+    protected function insertKeywords( array $keywordsToInsert, $contentTypeID )
     {
         $dbHandler = $this->getConnection();
 
@@ -231,7 +234,7 @@ class LegacyStorage extends Gateway
                 $dbHandler->quoteTable( "ezkeyword" )
             )->set(
                 $dbHandler->quoteColumn( "class_id" ),
-                $insertQuery->bindValue( $contentTypeID, null, PDO::PARAM_INT )
+                $insertQuery->bindValue( $contentTypeID, null, \PDO::PARAM_INT )
             )->set(
                 $dbHandler->quoteColumn( "keyword" ),
                 $insertQuery->bindParam( $keyword )
@@ -242,12 +245,32 @@ class LegacyStorage extends Gateway
             foreach ( array_keys( $keywordsToInsert ) as $keyword )
             {
                 $statement->execute();
-                $keywordsIds[$keyword] = $dbHandler->lastInsertId();
+                $keywordIdMap[$keyword] = $dbHandler->lastInsertId(
+                    $dbHandler->getSequenceName( 'ezkeyword', 'id' )
+                );
             }
             unset( $keyword );
         }
 
         return $keywordIdMap;
+    }
+
+    protected function deleteOldKeywordAssignements( Field $field )
+    {
+        $dbHandler = $this->getConnection();
+
+        $deleteQuery = $dbHandler->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $dbHandler->quoteTable( "ezkeyword_attribute_link" )
+        )->where(
+            $deleteQuery->expr->eq(
+                $dbHandler->quoteColumn( "objectattribute_id", "ezkeyword_attribute_link" ),
+                $deleteQuery->bindValue( $field->id, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $deleteQuery->prepare();
+        $statement->execute();
     }
 
     /**
@@ -284,9 +307,9 @@ class LegacyStorage extends Gateway
 
         $statement = $insertQuery->prepare();
 
-        foreach ( $field->value->data as $keyword )
+        foreach ( $keywordMap as $keyword => $keywordId )
         {
-            $keywordId = $keywordsIds[$keyword];
+            $keywordId = $keywordMap[$keyword];
             $statement->execute();
         }
     }

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Keyword;
 use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     LogicException,
@@ -75,7 +75,7 @@ class KeywordStorage implements FieldStorage
             return;
         }
 
-        $contentTypeID = $this->getContentTypeID( $field->type );
+        $contentTypeID = $this->getContentTypeID( $versionInfo );
 
         $gateway = $this->getGateway( $context );
         return $gateway->storeFieldData( $field, $contentTypeID );
@@ -87,10 +87,13 @@ class KeywordStorage implements FieldStorage
      * @param string $typeIdentifier
      * @return mixed
      */
-    protected function getContentTypeID( $typeIdentifier )
+    protected function getContentTypeID( VersionInfo $versionInfo )
     {
-        $contentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
-            $typeIdentifier
+        $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo(
+            $versionInfo->contentId
+        );
+        $contentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $contentInfo->contentTypeId
         );
         return $contentType->id;
     }
@@ -139,5 +142,24 @@ class KeywordStorage implements FieldStorage
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
         return null;
+    }
+
+    /**
+     * Get gateway for given context
+     *
+     * @param array $context
+     * @return UserStorage\Gateway
+     */
+    protected function getGateway( array $context )
+    {
+        if ( !isset( $this->gateways[$context['identifier']] ) )
+        {
+            throw new \OutOfBoundsException( "No gateway for ${context['identifier']} available." );
+        }
+
+        $gateway = $this->gateways[$context['identifier']];
+        $gateway->setConnection( $context['connection'] );
+
+        return $gateway;
     }
 }

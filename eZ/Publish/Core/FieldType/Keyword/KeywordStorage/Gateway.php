@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 abstract class Gateway
 {
@@ -29,7 +30,7 @@ abstract class Gateway
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()
      */
-    abstract public function storeFieldData( Field $field );
+    abstract public function storeFieldData( Field $field, $contentTypeID );
 
     /**
      * Sets the list of assigned keywords into $field->value->externalData
