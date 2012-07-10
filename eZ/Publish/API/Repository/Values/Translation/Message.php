@@ -10,6 +10,8 @@
 
 namespace eZ\Publish\API\Repository\Values\Translation;
 
+use eZ\Publish\API\Repository\Values\Translation;
+
 /**
  * Class for translatable messages, which only occur in singular form.
  *
