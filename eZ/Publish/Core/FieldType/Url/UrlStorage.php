@@ -32,7 +32,7 @@ class UrlStorage implements FieldStorage
         if ( ( $row = $this->fetchByLink( $field->value->externalData, $dbHandler ) ) !== false )
             $urlId = $row["id"];
         else
-            $urlId = $this->insert( $field->value->externalData, $dbHandler );
+            $urlId = $this->insert( $versionInfo, $field, $dbHandler );
 
         $field->value->data["urlId"] = $urlId;
 
@@ -54,7 +54,7 @@ class UrlStorage implements FieldStorage
     {
         $url = $this->fetchById( $field->value->data["urlId"], $context["connection"] );
 
-        $field->value->externalData = $url["link"];
+        $field->value->externalData = $url["url"];
     }
 
     /**
@@ -103,12 +103,12 @@ class UrlStorage implements FieldStorage
         $statement = $q->prepare();
         $statement->execute();
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        if ( !empty( $rows ) )
+        if ( count( $rows ) )
         {
             return $rows[0];
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -125,17 +125,17 @@ class UrlStorage implements FieldStorage
         $q->select( "*" )
             ->from( $dbHandler->quoteTable( self::URL_TABLE ) )
             ->where(
-                $e->eq( "link", $q->bindValue( $link ) )
+                $e->eq( "url", $q->bindValue( $link ) )
             );
         $statement = $q->prepare();
         $statement->execute();
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        if ( !empty( $rows ) )
+        if ( count( $rows ) )
         {
             return $rows[0];
         }
 
-        return null;
+        return false;
     }
 
     /**
