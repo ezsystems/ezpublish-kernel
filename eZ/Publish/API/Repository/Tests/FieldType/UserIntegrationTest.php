@@ -173,6 +173,30 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         );
     }
 
+    /**
+     * Get expectation for the toHash call on our field value
+     *
+     * @return mixed
+     */
+    public function getToHashExpectation()
+    {
+        return 'toBeDefined';
+    }
+
+    /**
+     * Get hashes and their respective converted values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
+     */
+    public function getHashes()
+    {
+        return array(
+            array( 'toBeDefined', array() ),
+        );
+    }
+
     public function createContentOverwrite()
     {
         $repository  = $this->getRepository();

@@ -30,8 +30,8 @@ use eZ\Publish\API\Repository\Tests,
  * - Update content
  * - Copy created content
  * - Remove copied content
- * - @TODO: Test toHash()?
- * - @TODO: Test fromHash()?
+ * - Test toHash
+ * - Test fromHash
  *
  * @group integration
  * @group field-type
@@ -122,6 +122,22 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @return array
      */
     abstract public function getCopiedExternalsFieldData();
+
+    /**
+     * Get expectation for the toHash call on our field value
+     *
+     * @return mixed
+     */
+    abstract public function getToHashExpectation();
+
+    /**
+     * Get hashes and their respective converted values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
+     */
+    abstract public function getHashes();
 
     /**
      * Method called after content creation
@@ -478,6 +494,53 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $contentService->deleteContent( $content->contentInfo );
 
         $contentService->loadContent( $content->contentInfo->id );
+    }
+
+    /**
+     * @depends testCreateContent
+     */
+    public function testToHash()
+    {
+        $content = $this->testCreateContent();
+
+        $repository         = $this->getRepository();
+        $contentService     = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $fieldTypeService   = $repository->getFieldTypeService();
+
+        $contentType = $contentTypeService->loadContentType( $content->contentTypeId );
+
+        foreach ( $content->fields as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+                $fieldType       = $fieldTypeService->getFieldType( $fieldDefinition->fieldTypeIdentifier );
+
+                $this->assertEquals(
+                    $this->getToHashExpectation(),
+                    $fieldType->toHash( $field->value )
+                );
+            }
+        }
+    }
+
+    /**
+     * @depends testCreateContent
+     * @dataProvider getHashes
+     */
+    public function testFromHash( $hash, $expected )
+    {
+        $content = $this->testCreateContent();
+
+        $repository       = $this->getRepository();
+        $fieldTypeService = $repository->getFieldTypeService();
+        $fieldType        = $fieldTypeService()->getFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $expocted,
+            $fieldType->fromHash( $hash )
+        );
     }
 
     /**
