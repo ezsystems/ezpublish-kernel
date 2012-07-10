@@ -26,20 +26,20 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
 class UserHandler implements UserHandlerInterface
 {
     /**
-     * @var Handler
+     * @var \eZ\Publish\Core\Persistence\InMemory\Handler
      */
     protected $handler;
 
     /**
-     * @var Backend
+     * @var \eZ\Publish\Core\Persistence\InMemory\Backend
      */
     protected $backend;
 
     /**
      * Setups current handler instance with reference to Handler object that created it.
      *
-     * @param Handler $handler
-     * @param Backend $backend The storage engine backend
+     * @param \eZ\Publish\Core\Persistence\InMemory\Handler $handler
+     * @param \eZ\Publish\Core\Persistence\InMemory\Backend $backend The storage engine backend
      */
     public function __construct( Handler $handler, Backend $backend )
     {
