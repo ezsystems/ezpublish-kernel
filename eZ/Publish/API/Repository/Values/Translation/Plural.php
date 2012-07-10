@@ -60,14 +60,14 @@ class Plural extends Translation
     protected $values;
 
     /**
-     * Construct singular only message from string and optional value array
+     * Construct plural message from singular, plural and value array
      *
      * @param string $singular
      * @param string $plural
      * @param array $values
      * @return void
      */
-    public function __construct( $singular, $plural, array $values = array() )
+    public function __construct( $singular, $plural, array $values )
     {
         $this->singular = $singular;
         $this->plural   = $plural;
