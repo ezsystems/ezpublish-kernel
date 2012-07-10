@@ -347,6 +347,20 @@ CREATE TABLE 'ezuser_accountkey' (
   'time' integer NOT NULL DEFAULT '0',
   'user_id' integer NOT NULL DEFAULT '0'
 );
+
+CREATE TABLE 'ezkeyword' (
+  'class_id' integer NOT NULL DEFAULT '0',
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'keyword' text(255) DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS 'ezkeyword_attribute_link';
+CREATE TABLE 'ezkeyword_attribute_link' (
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'keyword_id' integer NOT NULL DEFAULT '0',
+  'objectattribute_id' integer NOT NULL DEFAULT '0'
+);
+
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
 CREATE UNIQUE INDEX 'ezcobj_state_identifier' ON 'ezcobj_state' ( 'group_id', 'identifier' );
 CREATE INDEX 'ezcobj_state_lmask' ON 'ezcobj_state' ( 'language_mask' );
@@ -435,3 +449,10 @@ CREATE INDEX 'ezsearch_object_word_link_object' ON 'ezsearch_object_word_link' (
 CREATE INDEX 'ezsearch_object_word_link_word' ON 'ezsearch_object_word_link' ( 'word_id' );
 CREATE INDEX 'ezsearch_word_obj_count' ON 'ezsearch_word' ( 'object_count' );
 CREATE INDEX 'ezsearch_word_word_i' ON 'ezsearch_word' ( 'word' );
+
+CREATE INDEX 'ezkeyword_keyword' ON 'ezkeyword' ( 'keyword' );
+CREATE INDEX 'ezkeyword_id' ON 'ezkeyword' ( 'keyword', 'id' );
+
+CREATE INDEX 'ezkeyword_attr_link_keyword_id' ON 'ezkeyword_attribute_link' ( 'keyword_id' );
+CREATE INDEX 'ezkeyword_attr_link_kid_oaid' ON 'ezkeyword_attribute_link' ( 'keyword_id', 'objectattribute_id' );
+CREATE INDEX 'ezkeyword_attr_link_oaid' ON 'ezkeyword_attribute_link' ( 'objectattribute_id' );
