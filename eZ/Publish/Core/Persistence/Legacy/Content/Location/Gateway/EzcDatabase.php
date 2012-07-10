@@ -17,7 +17,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    RuntimeException;
 
 /**
  * Location gateway implementation using the zeta database component.
@@ -1111,8 +1112,7 @@ class EzcDatabase extends Gateway
                     // require data aggregation which is not sensible here.
                     // Since also criteria are yet ignored, because they are
                     // simply not used yet in eZ Publish, we skip that for now.
-                    throw new \RuntimeException( 'Unhandled sort clause: ' . get_class( $condition ) );
-                    break;
+                    throw new RuntimeException( 'Unhandled sort clause: ' . get_class( $condition ) );
             }
         }
 

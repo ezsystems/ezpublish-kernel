@@ -14,7 +14,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    ezcQuerySelect;
+    ezcQuerySelect,
+    RuntimeException;
 
 /**
  * Field criterion handler
@@ -168,7 +169,7 @@ class Field extends CriterionHandler
                     break;
 
                 default:
-                    throw new \RuntimeException( 'Unknown operator.' );
+                    throw new RuntimeException( 'Unknown operator.' );
             }
 
             $whereExpressions[] = $subSelect->expr->lAnd(

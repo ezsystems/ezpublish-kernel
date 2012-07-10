@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
+use RuntimeException;
+
 /**
  * Parser for transformation specifications
  *
@@ -122,7 +124,7 @@ class TransformationParser
 
             if ( $section === null )
             {
-                throw new \RuntimeException( "Expected section." );
+                throw new RuntimeException( "Expected section." );
             }
 
             $ast[$section][] = $token;
@@ -168,7 +170,7 @@ class TransformationParser
                 continue 2;
             }
 
-            throw new \RuntimeException( "Parse error in line $line: " . substr( $string, 0, 100 ) );
+            throw new RuntimeException( "Parse error in line $line: " . substr( $string, 0, 100 ) );
         }
 
         return $tokens;

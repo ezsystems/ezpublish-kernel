@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
-    eZ\Publish\Core\Base\Exceptions\MissingClass,
-    RuntimeException;
+    eZ\Publish\Core\Base\Exceptions\MissingClass;
 
 /**
  * The main handler for in memory Storage Engine

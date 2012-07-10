@@ -10,8 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Country;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\Country\Exception\InvalidValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    RuntimeException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The Country field type.

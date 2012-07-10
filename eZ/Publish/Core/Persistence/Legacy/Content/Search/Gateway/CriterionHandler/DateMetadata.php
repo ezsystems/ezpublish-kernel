@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHan
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    ezcQuerySelect;
+    ezcQuerySelect,
+    RuntimeException;
 
 /**
  * Date metadata criterion handler
@@ -73,7 +74,7 @@ class DateMetadata extends CriterionHandler
                 );
 
             default:
-                throw new \RuntimeException( 'Unknown operator.' );
+                throw new RuntimeException( 'Unknown operator.' );
         }
 
     }

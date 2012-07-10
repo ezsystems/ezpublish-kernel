@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as BaseSectionHandler,
     eZ\Publish\SPI\Persistence\Content\Section,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    RuntimeException;
 
 /**
  * Section Handler
@@ -168,7 +169,7 @@ class Handler implements BaseSectionHandler
 
         if ( $contentCount > 0 )
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 "Section with ID '{$id}' still has content assigned."
             );
         }
