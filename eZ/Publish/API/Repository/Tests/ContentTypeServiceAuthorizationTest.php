@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
-
 /**
  * Test case for operations in the ContentTypeServiceAuthorization using in memory storage.
  *
