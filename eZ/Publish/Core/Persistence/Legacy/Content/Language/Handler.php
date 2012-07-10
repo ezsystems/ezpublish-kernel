@@ -12,7 +12,7 @@ use eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\Logic;
+    LogicException;
 
 /**
  * Language Handler
@@ -127,13 +127,13 @@ class Handler implements BaseLanguageHandler
      *
      * @param mixed $id
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If language could not be deleted
+     * @throws LogicException If language could not be deleted
      */
     public function delete( $id )
     {
         if ( !$this->languageGateway->canDeleteLanguage( $id ) )
         {
-            throw new Logic( "Deleting language", "some content still references that language and therefore it can't be deleted" );
+            throw new LogicException( "Deleting language logic error, some content still references that language and therefore it can't be deleted" );
         }
 
         $this->languageGateway->deleteLanguage( $id );

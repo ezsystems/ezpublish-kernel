@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
@@ -30,6 +29,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZ\Publish\Legacy\Kernel\Loader as LegacyKernelLoader,
     Exception,
+    LogicException,
     RuntimeException;
 
 /**
@@ -256,8 +256,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             {
                 if ( !isset( $functions[$function][$limitationKey]['compare'] ) )
                 {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    throw new LogicException(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
                         "could not find limitation compare function on {$className}::definition()"
                     );
                 }
@@ -265,8 +265,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
                 $limitationCompareFn = $functions[$function][$limitationKey]['compare'];
                 if ( !is_callable( $limitationCompareFn ) )
                 {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    throw new LogicException(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
                         "compare function from {$className}::definition() is not callable"
                     );
                 }

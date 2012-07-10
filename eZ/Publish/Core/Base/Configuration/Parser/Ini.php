@@ -12,9 +12,9 @@
 namespace eZ\Publish\Core\Base\Configuration\Parser;
 use eZ\Publish\Core\Base\Configuration,
     eZ\Publish\Core\Base\Configuration\Parser,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     ezcConfiguration,
-    ezcConfigurationIniReader;
+    ezcConfigurationIniReader,
+    LogicException;
 
 /**
  * Configuration Ini Parser / writer
@@ -392,7 +392,7 @@ class Ini implements Parser
     {
         if ( !is_writable( $fileName ) )
         {
-            throw new Logic( "{$fileName} is not writable", "can not save configuration data!" );
+            throw new LogicException( "{$fileName} is not writable", "can not save configuration data!" );
         }
 
         if ( strpos( $fileName, '.php', 1 ) !== false )

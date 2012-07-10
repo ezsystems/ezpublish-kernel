@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\Logic;
+    LogicException;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
@@ -101,7 +101,7 @@ class SectionHandler implements SectionHandlerInterface
         if ( empty( $list ) )
             throw new NotFound( 'Section', $identifier );
         if ( isset( $list[1] ) )
-            throw new Logic( 'several Sections with same identifier' );
+            throw new LogicException( 'Several Sections with same identifier' );
 
         return $list[0];
     }

@@ -16,9 +16,9 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\Core\Persistence\InMemory\Handler,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+    eZ\Publish\Core\Persistence\InMemory\Backend,
+    LogicException;
 
 /**
  * Storage Engine handler for user module
@@ -55,7 +55,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      * @return \eZ\Publish\SPI\Persistence\User
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If no id was provided or if it already exists
+     * @throws LogicException If no id was provided or if it already exists
      */
     public function create( User $user )
     {
@@ -398,7 +398,7 @@ class UserHandler implements UserHandlerInterface
                 );
 
                 if ( isset( $list[1] ) )
-                    throw new Logic( 'content tree', 'there is more then one item with parentId:' . $parentId );
+                    throw new LogicException( "'content tree' logic error, there is more than one item with parentId: $parentId" );
                 if ( $list )
                     $this->getPermissionsForObject( $list[0], 3, $policies );
             }

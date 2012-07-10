@@ -8,16 +8,16 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image\Exception;
-use eZ\Publish\Core\Base\Exceptions\Logic,
-    Exception as PHPException;
+use LogicException,
+    Exception;
 
-class MissingAlias extends Logic
+class MissingAlias extends LogicException
 {
     public $aliasName;
 
-    public function __construct( $aliasName, PHPException $previous = null )
+    public function __construct( $aliasName, Exception $previous = null )
     {
         $this->aliasName = $aliasName;
-        parent::__construct( 'Image\\Manager', "Mandatory alias '$aliasName' cannot be used", $previous );
+        parent::__construct( "'Image\\Manager' has a logic error, mandatory alias '$aliasName' cannot be used", $previous );
     }
 }

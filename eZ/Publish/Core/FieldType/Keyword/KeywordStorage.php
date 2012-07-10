@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\Keyword;
 use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\Base\Exceptions\Logic,
+    LogicException,
     PDO;
 
 /**
@@ -46,7 +46,7 @@ class KeywordStorage implements FieldStorage
         $row = $statement->fetch( PDO::FETCH_ASSOC );
 
         if ( $row === false )
-            throw new Logic( "Content Type ID can't be retrieved based on the field definition ID" );
+            throw new LogicException( "Content Type ID can't be retrieved based on the field definition ID" );
 
         $contentTypeID = $row["contentclass_id"];
 
@@ -156,7 +156,7 @@ class KeywordStorage implements FieldStorage
 
         $keywords = $statement->fetchAll( PDO::FETCH_COLUMN, 0 );
         if ( $keywords === false )
-            throw new Logic( "Fetching keywords data failed" );
+            throw new LogicException( "Fetching keywords data failed" );
 
         $field->value->data = $keywords;
     }

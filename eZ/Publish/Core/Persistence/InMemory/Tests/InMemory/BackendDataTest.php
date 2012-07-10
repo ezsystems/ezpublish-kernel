@@ -380,7 +380,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     /**
      * Test finding content with results using join and deep matching where match collides with join
      *
-     * @expectedException eZ\Publish\Core\Base\Exceptions\Logic
+     * @expectedException LogicException
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
      * @group inMemoryBackend
      */
@@ -531,7 +531,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     /**
      * Test count content with results using join and deep matching where match collides with join
      *
-     * @expectedException eZ\Publish\Core\Base\Exceptions\Logic
+     * @expectedException LogicException
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
      * @group inMemoryBackend
      */

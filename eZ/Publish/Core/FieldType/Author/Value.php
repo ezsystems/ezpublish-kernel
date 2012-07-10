@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Author;
-use eZ\Publish\Core\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Base\Exceptions\Logic;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Value for Author field type

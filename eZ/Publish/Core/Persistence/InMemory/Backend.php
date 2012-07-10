@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\ValueObject;
+    eZ\Publish\SPI\Persistence\ValueObject,
+    LogicException;
 
 /**
  * The Storage Engine backend for in memory storage
@@ -61,8 +61,8 @@ class Backend
      * @param string $idColumn By default, id column is 'id', but this can be customized here (e.g. for 'contentId')
      * @return object
      * @throws InvalidArgumentValue On invalid $type
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If $autoIncrement is false but $data does not include an id
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If provided id already exists (and if defined, data contain same status property value)
+     * @throws LogicException If $autoIncrement is false but $data does not include an id
+     * @throws LogicException If provided id already exists (and if defined, data contain same status property value)
      */
     public function create( $type, array $data, $autoIncrement = true, $idColumn = 'id' )
     {
@@ -75,7 +75,7 @@ class Backend
         }
         else if ( !$data[$idColumn] )
         {
-          throw new Logic( 'create', '$autoIncrement is false but no id is provided' );
+          throw new LogicException( '\'create\' logic error, $autoIncrement is false but no id is provided' );
         }
 
         foreach ( $this->data[$type] as $item )
@@ -83,7 +83,7 @@ class Backend
             if ( $item[$idColumn] == $data[$idColumn]
                 && ( ( isset( $item['status'] ) && $item['status'] == $data['status'] )
                     || ( isset( $item['_status'] ) && $item['_status'] == $data['_status'] ) ) )
-                throw new Logic( 'create', 'provided id already exist' );
+                throw new LogicException( "'create' logic error, provided id already exist" );
         }
 
         /*foreach ( $data as $prop => $value )
@@ -105,7 +105,7 @@ class Backend
      * @return object
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid $type
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If several items exists with same id
+     * @throws LogicException If several items exists with same id
      */
     public function load( $type, $id, $idColumn = 'id' )
     {
@@ -119,7 +119,7 @@ class Backend
             if ( $item[$idColumn] != $id )
                 continue;
             if ( $return )
-                throw new Logic( $type, "more than one item exist with id: {$id}" );
+                throw new LogicException( "Logic error, more than one item exist with id: {$id}" );
 
             $return = $this->toValue( $type, $item );
             $found = true;
@@ -290,7 +290,7 @@ class Backend
      * @param array $joinInfo See {@link find()}
      * @return array[]
      * @throws InvalidArgumentValue On invalid $type
-     * @throws Logic When there is a collision between match rules in $joinInfo and $match
+     * @throws LogicException When there is a collision between match rules in $joinInfo and $match
      */
     protected function rawFind( $type, array $match = array(), array $joinInfo = array() )
     {
@@ -306,7 +306,7 @@ class Backend
                 {
                     $joinItem['match'][$joinMatchKey] = $item[$joinMatchProperty];
                     if ( isset( $match[$joinProperty][$joinMatchKey] ) )
-                        throw new Logic( "\$match[$joinProperty][$joinMatchKey]", "collision with match in \$joinInfo" );
+                        throw new LogicException( "\$match[$joinProperty][$joinMatchKey] logic error, collision with match in \$joinInfo" );
                 }
                 $item[$joinProperty] = $this->rawFind(
                     $joinItem['type'],
